@@ -2,6 +2,7 @@
 @(require "../style/style.rkt")
 @(require scribble-math)
 @(require scribble-math/asymptote)
+@(require scriblib/footnote)
 
 @section[#:style 'unnumbered #:tag "pf"]{前言}
 
@@ -153,11 +154,16 @@ Python, Ruby等等）都足以完成本书练习。@linebreak{}
 练习 0.1 [*] 我们常说“某语言具有某属性”。为每种说法找出一种或多种具有该属性的
 语言，以及一种或多种不具有该属性的语言。请随意搜索这些信息，不拘任何编程语言的介
 绍性书籍（比如Scott(2005), Sebesta (2007)，或者Pratt & Zelkowitz(2001)）。
+@linebreak{}
 
-@linebreak{}这是本手册：本书讨论的一切都可在通常的大学课程限度内完成。因为函数式
-语言的抽象特性尤其适合这类编程，我们可以写出大量语言处理系统，既简洁，又能以适当
-的努力掌握。
+这是本手册：本书讨论的一切都可在通常的大学课程限度内完成。因为函数式语言的抽象特
+性尤其适合这类编程，我们可以写出大量语言处理系统，既简洁，又能以适当的努力掌握。
 
 网站由出版者提供，包含本书所有解释器和分析器的完整Scheme代码。代码用PLT Scheme写
-成。我们选择这种Scheme实现，因为它的模块系统和编程环境于学生大有裨益。代码多半兼
-容于R@superscript{5}RS，当能轻易移植到任何功能完整的Scheme实现。
+成。@pf-note{本书网站已迁移至@url{http://www.eopl3.com/}，代码改用Racket实现，网
+址为@url{https://github.com/mwand/eopl3}。}我们选择这种Scheme实现，因为它的模块
+系统和编程环境对学生助益良多。代码多半兼容于R@superscript{5}RS，当能轻易移植到任
+何功能完整的Scheme实现。
+
+@define-footnote[pf-note pf-nt]
+@pf-nt[]
