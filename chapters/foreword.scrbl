@@ -106,5 +106,5 @@ Lisp的统一语法和数据抽象能力，以及Algol的词法定界和块状�
 何创造带给语言生命的解释器。这些是你能从本书学到的技能。@linebreak{}
 
 @elem[#:style right]{Hal Abelson}
-@elem[#:style right]{剑桥，马塞诸塞州}
+@elem[#:style right]{剑桥，马萨诸塞州}
 @elem[#:style right]{2007年9月}

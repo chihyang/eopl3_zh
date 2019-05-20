@@ -136,6 +136,7 @@ label("6", shift(2)*(shift(8.2, w*1.2)*a_label));
 label("7", shift(8.2,-1.8*w)*a_label);
 label("8", shift(2,0.6*w)*(shift(8.2,-1.8*w)*a_label));
 label("9", shift(2,-0.6*w)*(shift(8.2,-1.8*w)*a_label));
+shipout(currentpicture.fit());
 }
 }
 
