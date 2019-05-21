@@ -1,7 +1,7 @@
 #lang scribble/book
 @(require "../style/style.rkt")
 
-@section[#:style 'unnumbered #:tag "fw"]{序}
+@title[#:style 'unnumbered #:tag "fw"]{序}
 
 本书引你直面计算机编程中最基本的思想：
 
@@ -77,7 +77,7 @@ Lisp的统一语法和数据抽象能力，以及Algol的词法定界和块状�
 如果你这样做了，你对编程和身为程序员的自己看法定会不同。你将自视为语言的设计师，
 而不仅是语言的用户。你将自视为语言组成规则的决策者，而不仅是他人所选规则的随从。
 
-@subsection[#:style 'unnumbered #:tag "fw-s"]{三版附识}
+@section[#:style '(unnumbered) #:tag "fw-s"]{三版附识}
 
 上述序言写于短短七年之前。自此以来，信息应用和服务已遍及寰宇，其方式在九十年代看
 来几无可能。它们由持续增长的编程语言和编程框架驱动——这一切都基于不断壮大的解释器

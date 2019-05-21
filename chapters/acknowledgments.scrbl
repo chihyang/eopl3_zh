@@ -2,7 +2,7 @@
 @(require scribble/manual)
 @(require "../style/style.rkt")
 
-@section[#:style 'unnumbered #:tag "awk"]{鸣谢}
+@title[#:style 'unnumbered #:tag "awk"]{鸣谢}
 
 感谢无数同事同学，他们使用和评论了本书的前两版，又为第三版的漫长筹备提供了无价帮
 助。特别感激以下诸君的贡献，对他们我们深表谢忱。Oliver Danvy鼓励我们思考一阶组合
@@ -22,12 +22,12 @@ Bogaerts、Albert Rossi、Craig Citro、Christopher Dutchyn、Jeremy Siek和Neil
 Ching也认真阅读并进行了评论。
 
 一些人为本书帮助我们，值得特别感谢。我们感谢Neil Ching编制了索引。在我们尝试设计
-@racket[define-datatype]和@racket[cases]语法扩展时，Jonathan Sobel和Erik
+@racket[define-datatype] 和 @racket[cases] 语法扩展时，Jonathan Sobel和Erik
 Hilsdale完成了一些原型实现，贡献了很多想法。编程语言小组，尤其是Matthias
 Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮助提供和
 DrScheme系统的兼容性。Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书的作
 者已使用多年。Will Byrd在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐
-我们兼容DrScheme的模块系统，这在位于@url{http://www.eopl3.com/}的实现中显而易见。
+我们兼容DrScheme的模块系统，这在位于 @url{http://www.eopl3.com} 的实现中显而易见。
 
 一些人因他们的深思和对我们健康的关心值得特别提及。George Springer和Larry
 Finkelstein提供了无价的支持。Bob Prior，我们MIT出版社的优秀编辑，因他鼓励我们攻
