@@ -23,7 +23,7 @@ Ching也认真阅读并进行了评论。
 
 一些人为本书帮助我们，值得特别感谢。我们感谢Neil Ching编制了索引。在我们尝试设计
 @racket[define-datatype] 和 @racket[cases] 语法扩展时，Jonathan Sobel和Erik
-Hilsdale完成了一些原型实现，贡献了很多想法。编程语言小组，尤其是Matthias
+Hilsdale完成了一些原型实现，贡献了很多想法。程序语言小组，尤其是Matthias
 Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮助提供和
 DrScheme系统的兼容性。Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书的作
 者已使用多年。Will Byrd在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐

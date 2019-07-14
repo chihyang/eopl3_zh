@@ -1,6 +1,8 @@
 #lang scribble/book
 @(require "../style/style.rkt")
-@title[#:style '(toc)]{编程语言要旨}
+@title[#:style '(toc)]{程序语言要素}
+@author{Daniel P. Friedman}
+@author{Mitchell Wand}
 
 @table-of-contents[]
 
