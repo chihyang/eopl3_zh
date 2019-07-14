@@ -4,7 +4,7 @@
 @(require scribble/manual)
 @(require scribble-math)
 
-@title[#:style 'numbered #:tag "isd"]{归纳数据集}
+@title[#:style 'numbered #:tag "isd"]{归纳式数据集}
 
 解释器，检查器以及类似程序是程序语言处理器的核心，本章介绍编写它们的基本编程工
 具。
@@ -24,13 +24,13 @@
 归纳式定义法是定义值集合的有力方法。为解释这一方法，我们用它来描述自然数 @${N =
 {0,1,2,...}} 的某一子集@${S}。
 
-@; @mdef{
+@; there should be new macro for definition
 自然数@${n}属于@${S}，当且仅当：
 
 @itemlist[#:style 'ordered
 @item{@${{n = 0}}，或}
 @item{@${n - 3 \in S}}]
-@; }
+@;
 
 让我们看看如何用这一定义判断哪些自然数属于@${S}。我们知道@${0 \in S}。因此@${3
 \in S}，因为@${(3 - 3) = 0}，而且@${0 \in S}。同样地，@${6 \in S}，因为@${(6 -
@@ -69,11 +69,13 @@
 
 这里是定义@${S}的另一种方式。
 
-定义 1.1.2 定义集合@${S}为@${N}所包含的最小集合，满足如下两条性质：
+@; there should be new macro for definition
+定义集合@${S}为@${N}所包含的最小集合，满足如下两条性质：
 
 @itemlist[#:style 'ordered
 @item{@${0 \in S}，且}
 @item{如果@${n \in S}，则@${n + 3 \in S}。}]
+@;
 
 “最小集合”是指该集合满足性质1和2，并且是其他任何满足性质1和2集合的子集。易知只
 能有一个这样的集合：如果@${S_1}和@${S_2}都满足性质1和2，并且都为最小，那么@${S_1
@@ -82,3 +84,16 @@
 件（见练习1.3）。
 
 这里是另一种表示定义的方式：
+
+@; there should be new syntax for writing rule of inference, but for now let's
+@; use prefix and infer directly
+@$${\infer{0 \in S}{}}
+
+@$${\infer{(n + 3) \in S}{n \in S}}
+
+这只是前一种定义的简便表示。每个条目称为一条@emph{推理规则}，或称@emph{规则}；水
+平线读作"若-则"。线上部分称作@emph{假设}或者@emph{前件}；线下部分称作@emph{结论}
+或者@emph{后件}。要罗列两个或更多假设，用“和”连接（见定义1.1.5）。没有假设的规
+则称作@emph{公理}。我们写公理时通常不加水平线，如：
+
+@$${0 \in S}

@@ -38,13 +38,13 @@ Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮忙
 我们感谢Christopher T. Haynes在前两版中的合作。很不幸，他已志不在此，没有继续同
 我们参与本版的编写。
 
-最后，感谢我们的家人，包容我们完成写作本书时的热情。谢谢你，Rob、Shannon、Rachel、
+最后，感谢我们的家人，包容我们写作本书时的热情。谢谢你，Rob、Shannon、Rachel、
 Sara，还有Mary；谢谢你，Rebecca和Joshua，Jennifer和Stephen，Joshua和Georgia，还
 有，Barbara。
 
-本版筹备良久，我们可能忽视了一路帮助过我们的人。我们为任何忽视道歉。读者总在书中
-看到这样的话，可能会奇怪为什么有人会这样写。当然，你得为任何忽视道歉。但是，当你
-有了一众帮手（得装满一村），你确实有种责任感：任何人都不容忽视。所以，如果您被忽
-视了，我们深表歉意。@linebreak{}
+本版筹备良久，我们可能忽视了一路帮助过我们的人。我们为任何忽视道歉。您总在书中看
+到这样的话，可能会奇怪为什么有人会这样写。当然，你会为任何忽视道歉。但是，当你有
+了一众帮手（得装满一村），你确实有种责任感：任何人都不容忽视。所以，如果您被忽视
+了，我们深表歉意。@linebreak{}
 
 @elem[#:style right]{—— D.P.F，M.W.}
