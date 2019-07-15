@@ -21,7 +21,7 @@ Gregor Kiczales、Marlene Miller、Galen Williamson、Dipanwita Sarkar、Steven
 Bogaerts、Albert Rossi、Craig Citro、Christopher Dutchyn、Jeremy Siek和Neil
 Ching也认真阅读并进行了评论。
 
-特别感谢以下诸君对本书的帮助。我们感谢Neil Ching编制了索引。在我们尝试设计
+尤其感谢这几位对本书的帮助。感谢Neil Ching编制了索引。在我们尝试设计
 @racket[define-datatype] 和 @racket[cases] 语法扩展时，Jonathan Sobel和Erik
 Hilsdale完成了一些原型实现，贡献了很多想法。程序语言小组，尤其是Matthias
 Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮忙兼容他们
