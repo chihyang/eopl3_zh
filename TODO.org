@@ -22,3 +22,8 @@
   - [X] 当前已使用latex完成此格式
   - [ ] 需要完成html格式的试验
   - [ ] 需要提供scribble语法，完成两种格式的转换
+** DOING 处理定义
+- State "DOING"      from              [2019-07-16 二 23:45] \\
+  - [X] 当前使用latex宏包exercise已实现定义格式
+  - [ ] 需要完成html格式的试验
+  - [ ] 需要提供scribble语法，完成两种格式的转换
