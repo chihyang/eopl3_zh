@@ -52,7 +52,7 @@
 @; there should be new macro for writing contracts and usage, for now let's use
 @; comment directly
 ; in-S? : N -> Bool
-; 用法： (in-S? n) = #t 若 n 属于 S, 否则 #f
+; 用法 : (in-S? n) = #t 若 n 属于 S, 否则 #f
 @;
 (define in-S?
   (lambda (n)
@@ -61,9 +61,9 @@
             (in-S? (- n 3))
             #f))))}
 
-根据这里的定义，我们用Scheme编写了一个递归函数。符号@racket[in-S? : N -> Bool]是
-一条注释，称为该函数的@italic{合约}。它表示@racket[in-S?]应为一函数，取一自然数，
-产生一布尔值。这样的注释对阅读和编写代码很有帮助。
+此处根据定义，我们用Scheme编写了一个递归函数。符号 @racket[in-S? : N -> Bool] 是
+一条注释，称为该函数的@italic{合约}。它表示 @racket[in-S?] 应为一函数，取一自然
+数，产生一布尔值。这样的注释对阅读和编写代码很有帮助。
 
 要确定是否@${n \in S}，我们首先发问是否@${n = 0}。如果是，那么答案为真。否则，我
 们需要查看是否@${n - 3 \in S}。欲知此，我们首先判断是否@${(n - 3) \geqslant 0}。
