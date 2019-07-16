@@ -1,0 +1,24 @@
+* 待处理格式
+** DOING 引入‘文前页’，‘正文’，‘附录’分区表，对 ~latex~ 以及 ~xelatex~ 选项生效。
+- State "DOING"      from "TODO"       [2019-07-16 二 22:36] \\
+  - [X] 当前已使用latex完成此格式
+  - [ ] 需要提供scribble语法，完成此种格式转换
+** DOING 引入‘习题’格式，对 ~html~, ~latex~, ~markdown~, ~xelatex~ 选项生效。
+- State "DOING"      from "TODO"       [2019-07-16 二 22:34] \\
+  - [X] 当前使用latex宏包exercise已实现习题格式
+  - [ ] 需要完成html格式的试验
+  - [ ] 需要提供scribble语法，完成两种格式的转换
+** DOING 处理逻辑推理规则。
+- State "DOING"      from "TODO"       [2019-07-16 二 22:36] \\
+  - [X] 当前已使用latex完成此格式
+  - [ ] 需要提供scribble语法，完成此种格式转换
+** TODO 处理索引。
+** DONE 处理Latex子章节书签跳转问题。
+- State "DONE"       from "TODO"       [2019-07-16 二 23:07] \\
+  - [ ] 已解决，见[[https://stackoverflow.com/questions/782187/latex-table-of-contents-links-to-wrong-section][此]]链接，以及[[https://www.tug.org/applications/hyperref/manual.html#x1-460005.27][此]]链接，需要更新scribble生成的无序号子章节宏，为子
+    章节标题添加停驻点
+** DOING 合约注释格式需要特殊处理，与原书保持一致
+- State "DOING"      from "TODO"       [2019-07-16 二 23:12] \\
+  - [X] 当前已使用latex完成此格式
+  - [ ] 需要完成html格式的试验
+  - [ ] 需要提供scribble语法，完成两种格式的转换
