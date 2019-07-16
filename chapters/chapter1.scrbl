@@ -29,7 +29,8 @@
 
 @itemlist[#:style 'ordered
 @item{@${{n = 0}}，或}
-@item{@${n - 3 \in S}}]
+@item{@${n - 3 \in S}。}
+]
 @;
 
 让我们看看如何用这一定义判断哪些自然数属于@${S}。我们知道@${0 \in S}。因此@${3
@@ -77,7 +78,7 @@
 
 @itemlist[#:style 'ordered
 @item{@${0 \in S}，且}
-@item{如果@${n \in S}，则@${n + 3 \in S}。}]
+@item{若@${n \in S}，则@${n + 3 \in S}。}]
 @;
 
 “最小集合”是指该集合满足性质1和2，并且是其他任何满足性质1和2的集合的子集。易知
