@@ -107,8 +107,12 @@ in-S? : N -> Bool
 
 这里是另一种表示定义的方式：
 
+@; infer should be implemented in scribble rather than use \infer directly
+@; infer: (infer conclusion hypothesis ...)
+@; @infer[${0 \in S}]
 @$${\infer{0 \in S}{}}
 
+@; @infer[${(n + 3) \in S}]{$@{n \in S}}
 @$${\infer{(n + 3) \in S}{n \in S}}
 
 这只是前一种定义的简便表示。每个条目称为一条@emph{推理规则}，或称@emph{规则}；水
