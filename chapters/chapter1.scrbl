@@ -3,6 +3,7 @@
 @(require latex-utils/scribble/theorem)
 @(require scribble/manual)
 @(require scribble-math)
+@(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
 
 @title[#:style 'numbered #:tag "isd"]{归纳式数据集}
 
@@ -29,8 +30,11 @@
 自然数@${n}属于@${S}，当且仅当：
 
 @itemlist[#:style 'ordered
-@item{@${{n = 0}}，或}
-@item{@${n - 3 \in S}。}
+
+ @item{@${{n = 0}}，或}
+
+ @item{@${n - 3 \in S}。}
+
 ]
 @;
 @; }
@@ -82,8 +86,12 @@ in-S? : N -> Bool
 定义集合@${S}为@${N}所包含的最小集合，满足如下两条性质：
 
 @itemlist[#:style 'ordered
-@item{@${0 \in S}，且}
-@item{若@${n \in S}，则@${n + 3 \in S}。}]
+
+ @item{@${0 \in S}，且}
+
+ @item{若@${n \in S}，则@${n + 3 \in S}。}
+
+]
 @;
 
 “最小集合”是指该集合满足性质1和2，并且是其他任何满足性质1和2的集合的子集。易知
@@ -120,8 +128,12 @@ in-S? : N -> Bool
 Scheme列表是整数列表，当且仅当
 
 @itemlist[#:style 'ordered
-@item{列表为空，或}
-@item{列表为序对，首项为整数，余项为整数列表。}]
+
+ @item{列表为空，或}
+
+ @item{列表为序对，首项为整数，余项为整数列表。}
+
+]
 @;
 
 我们用@${Int}表示所有整数的集合，用@List-of-Int[]表示所有整数列表
@@ -134,10 +146,13 @@ Scheme列表是整数列表，当且仅当
 集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
 
 @itemlist[#:style 'ordered
-@item{@${() \in @List-of-Int{}}，或}
 
-@item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @${(n . l) \in
-@List-of-Int{}}。}]
+ @item{@${() \in @List-of-Int{}}，或}
+
+ @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @${(n . l) \in
+       @List-of-Int{}}。}
+
+]
 @;
 
 这里，我们用中缀“.”代表Scheme中 @racket[cons] 操作的结果。式子@${(n . l)}代表
@@ -155,31 +170,28 @@ Scheme序对的首项为@${n}，余项为@${l}。
 这三个定义等价。来看看如何用它们生成一些@List-of-Int[]的元素。
 
 @itemlist[#:style 'ordered
-@item{由定义1.1.4，性质1，或定义1.1.5，规则1，@tt{()}是整数列表。}
 
-@item{由定义1.1.4，性质2，@tt{(14 . ())}是整数列表。因为@tt{14}是整数，
-@tt{()}是整数列表。写成@List-of-Int[]第二规则的实例，就是
+ @item{由定义1.1.4，性质1，或定义1.1.5，规则1，@tt{()}是整数列表。}
 
-@$${\infer{@tt{(14 . ())} \in @List-of-Int{}}
-          {@tt{14} \in Int & @tt{()} \in @List-of-Int{}}}
-}
+ @item{由定义1.1.4，性质2，@tt{(14 . ())}是整数列表。因为@tt{14}是整数，@tt{()}
+       是整数列表。写成@List-of-Int[]第二规则的实例，就是
 
-@item{由性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，
-@tt{(14 . ())}是整数列表。仍写成@List-of-Int[]的第二规则实例，
-是
+       @$${\infer{@tt{(14 . ())} \in @List-of-Int{}} {@tt{14} \in Int & @tt{()}
+          \in @List-of-Int{}}} }
 
-@$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int{}}
-         {@tt{3} \in Int & @tt{(14 . ())} \in @List-of-Int{}}}
-}
+ @item{由性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，@tt{(14
+        . ())}是整数列表。仍写成@List-of-Int[]的第二规则实例，是
 
-@item{由性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为@tt{-7}是整数，
-@tt{(3 . (14 . ()))}是整数列表。再次写成@List-of-Int[]的第二规则实例，是
+       @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int{}} {@tt{3} \in Int &
+         @tt{(14 . ())} \in @List-of-Int{}}} }
 
-@$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}}
-          {@tt{-7} \in Int & @tt{(3 . (14 . ()))}\in @List-of-Int{}}}
-}
+ @item{由性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为@tt{-7}是整数，@tt{(3
+       . (14 . ()))}是整数列表。再次写成@List-of-Int[]的第二规则实例，是
 
-@item{不按照这种方式得到的都不是整数列表。}
+       @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}} {@tt{-7} \in
+          Int & @tt{(3 . (14 . ()))}\in @List-of-Int{}}} }
+
+ @item{不按照这种方式得到的都不是整数列表。}
 
 ]
 
