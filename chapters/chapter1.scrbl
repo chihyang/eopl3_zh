@@ -25,18 +25,21 @@
 归纳式定义法是定义值集合的有力方法。为解释这一方法，我们用它来描述自然数 @${N =
 {0,1,2,...}} 的某一子集@${S}。
 
-@; {
-@; definition
-自然数@${n}属于@${S}，当且仅当：
+@; definition: (def #:title title #:tag tag)
+@; @def {
 
-@itemlist[#:style 'ordered
+ 自然数@${n}属于@${S}，当且仅当：
 
- @item{@${{n = 0}}，或}
+ @itemlist[#:style 'ordered
 
- @item{@${n - 3 \in S}。}
+  @item{@${{n = 0}}，或}
+
+  @item{@${n - 3 \in S}。
+
+ }
 
 ]
-@;
+
 @; }
 
 让我们看看如何用这一定义判断哪些自然数属于@${S}。我们知道@${0 \in S}。因此@${3
@@ -82,17 +85,19 @@ in-S? : N -> Bool
 
 这里是定义@${S}的另一种方式。
 
-@; definition
-定义集合@${S}为@${N}所包含的最小集合，满足如下两条性质：
+@; @def {
 
-@itemlist[#:style 'ordered
+ 定义集合@${S}为@${N}所包含的最小集合，满足如下两条性质：
 
- @item{@${0 \in S}，且}
+ @itemlist[#:style 'ordered
 
- @item{若@${n \in S}，则@${n + 3 \in S}。}
+  @item{@${0 \in S}，且}
 
-]
-@;
+  @item{若@${n \in S}，则@${n + 3 \in S}。}
+
+ ]
+
+@; }
 
 “最小集合”是指该集合满足性质1和2，并且是其他任何满足性质1和2的集合的子集。易知
 只能有一个这样的集合：如果@${S_1}和@${S_2}都满足性质1和2，并且都为最小，那么
@@ -121,51 +126,57 @@ in-S? : N -> Bool
 
 让我们看些例子，如何使用这些规则。
 
-@; definition, with name
-@; name
+@; @def[ #:title
 （整数列表，自顶向下）
-@;
-Scheme列表是整数列表，当且仅当
+@; ]
+@; {
+ Scheme列表是整数列表，当且仅当
 
-@itemlist[#:style 'ordered
+ @itemlist[#:style 'ordered
 
- @item{列表为空，或}
+  @item{列表为空，或}
 
- @item{列表为序对，首项为整数，余项为整数列表。}
+  @item{列表为序对，首项为整数，余项为整数列表。}
 
 ]
-@;
+
+@; }
 
 我们用@${Int}表示所有整数的集合，用@List-of-Int[]表示所有整数列表
 的集合。
 
-@; definition, with name
-@; name
+@; @def[ #:title
 （整数列表，自底向上）
-@;
-集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
+@; ]
+@; {
 
-@itemlist[#:style 'ordered
+ 集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
 
- @item{@${() \in @List-of-Int{}}，或}
+ @itemlist[#:style 'ordered
 
- @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @${(n . l) \in
-       @List-of-Int{}}。}
+  @item{@${() \in @List-of-Int{}}，或}
 
-]
-@;
+  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @${(n . l) \in
+        @List-of-Int{}}。}
+
+ ]
+
+@; }
+
 
 这里，我们用中缀“.”代表Scheme中 @racket[cons] 操作的结果。式子@${(n . l)}代表
 Scheme序对的首项为@${n}，余项为@${l}。
 
-@; definition, with name
-@; name
+@; @def[ #:title
 （整数列表，推理规则）
-@;
-@$${\infer{() \in @List-of-Int{}}{}}
+@; ]
+@; {
 
-@$${\infer{(n . l) \in @List-of-Int{}}{n \in Int & l \in @List-of-Int{}}}
-@;
+ @$${\infer{() \in @List-of-Int{}}{}}
+
+ @$${\infer{(n . l) \in @List-of-Int{}}{n \in Int & l \in @List-of-Int{}}}
+
+@; }
 
 这三个定义等价。来看看如何用它们生成一些@List-of-Int[]的元素。
 
