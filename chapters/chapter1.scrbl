@@ -207,3 +207,59 @@ Scheme序对的首项为@${n}，余项为@${l}。
                  {@tt{3} \in N & \infer{@tt{(14 . ())} \in @List-of-Int{}}
                                        {@tt{14} \in N & @tt{()} \in @List-of-Int{}}}
           }}
+
+@; exercise: (exercise #:difficulty difficulty #:tag tag body ...)
+@; @exercise[#:difficulty 1 #:tag "e1.1"]{
+
+ 写出下列集合的归纳式定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
+ 义。用你的规则证明，给每个集合的一些元素例子写出推理。
+
+ @itemlist[#:style 'ordered
+
+  @item{@${\{ 3n+2 \mid n \in N \}}}
+
+  @item{@${\{ 2n + 3m + 1 \mid n, m \in N \}}}
+
+  @item{@${\{ (n, 2n + 1) \mid n \in N \}}}
+
+  @item{@${\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示，想想方
+        程@${ (n + 1) ^ 2 = n ^ 2 + 2n + 1}。}
+
+ ]
+
+@; }
+@;
+
+@; @exercise[#:difficulty 2 #:tag "e1.2"]{
+
+ 下面的几对规则分别定义了什么集合？解释原因。
+
+ @itemlist[#:style 'ordered
+
+  @item{@${(0, 1) \in S \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
+
+  @item{@${(0, 1) \in S \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
+
+  @item{@${(0, 0, 1) \in S \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
+
+  @; difficulty: (difficulty 3)
+  @item{@elem{[}@${\star\star\star}@elem{]} @${(0, 1, 0) \in S \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+
+ ]
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.3"]{
+
+ 找出自然数的集合 @${T}，使 @${0 \in T}，且对任何 @${n \in T}，都有 @${n + 3 \in
+ T}，但 @${ T \neq S}， @${S} 是定义 1.1.2 中指定的集合。
+
+@; }
+
+@subsection[#:tag "dsug"]{用语法定义集合}
+
+前述例子较为直观，但是不难想象，描述更为复杂的数据类型时，此过程将十分棘手。为便
+利计，我们展示如何用 @emph{语法} 定义集合。语法通常用来指定字符串的集合，但是我
+们也可以用它来定义值的集合。
+
+例如，可以用语法定义集合 @List-of-Int[]：
