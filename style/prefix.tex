@@ -6,7 +6,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{emptypage}
 
-% use package proof for now
+% use package proof
 \usepackage{proof}
 
 % no indent at first paragraph
@@ -24,6 +24,15 @@
 \fancyhead[RE]{\leftmark}
 \fancyhead[LO]{\rightmark}
 
+% use exercise package for exercise
+\usepackage{exercise}
+\renewcommand\DifficultyMarker{$\star$}
+\renewcommand{\ExerciseHeaderDifficulty}{\theExerciseDifficulty}
+\renewcommand{\ExerciseName}{练习}
+\renewcommand{\ExerciseHeader}{\noindent\textit{\ExerciseName}\thechapter.\ExerciseHeaderNB~[\ExerciseHeaderDifficulty\ignorespaces]}
+\newcounter{ChapterCounter}
+\renewcounter{ChapterCounter}[chapter]
+
 % customize title format
 \usepackage{titlesec}
 \titleformat
@@ -36,3 +45,11 @@
 } % before-code
 [
 ] % after-code
+
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=blue,
+  linkcolor=blue,
+  citecolor=red
+}
