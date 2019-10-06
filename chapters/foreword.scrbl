@@ -1,5 +1,5 @@
 #lang scribble/book
-@(require "../style/style.rkt")
+@(require "style.rkt")
 
 @title[#:style '(unnumbered) #:tag "fw"]{序}
 

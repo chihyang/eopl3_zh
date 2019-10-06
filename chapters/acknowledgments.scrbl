@@ -1,6 +1,6 @@
 #lang scribble/book
 @(require scribble/manual)
-@(require "../style/style.rkt")
+@(require "style.rkt")
 
 @title[#:style 'unnumbered #:tag "awk"]{致谢}
 

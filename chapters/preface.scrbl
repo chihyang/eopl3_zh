@@ -1,5 +1,5 @@
 #lang scribble/book
-@(require "../style/style.rkt")
+@(require "style.rkt")
 @(require scribble-math)
 @(require scribble-math/asymptote)
 @(require scriblib/footnote)

@@ -1,5 +1,5 @@
 #lang scribble/book
-@(require "../style/style.rkt")
+@(require "style.rkt")
 @(require latex-utils/scribble/theorem)
 @(require scribble/manual)
 @(require scribble-math)
