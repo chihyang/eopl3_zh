@@ -278,3 +278,79 @@ Scheme序对的首项为@${n}，余项为@${l}。
 们也可以用它来定义值的集合。
 
 例如，可以用语法定义集合 @List-of-Int[]：
+
+@; @grammar : (grammar production ...)
+@; @production : (production name expression #:code code-item)
+@; @code-item : elem
+@; @grammar{
+
+@centered[
+
+@tabular[
+
+#:sep @hspace[1]
+#:style 'centered
+(list (list @List-of-Int[] @${::=} @tt{()} )
+      (list @List-of-Int[] @${::=} @elem{@tt{(@${Int} . @List-of-Int[])}}))]
+
+]
+
+@; }
+
+这里的两条规则对应上述定义 1.1.4 的两条属性。第一条规则是说空表属于
+@List-of-Int[]，第二条是说若 @${n} 属于 @${Int} 且 @${l} 属于 @List-of-Int[]，则
+@tt{(@${n} . @${l})} 属于 @List-of-Int[]。这些规则叫做@emph{语法}。
+
+@elem[#:style question]{来看看这一定义的各个片段}。在这一定义中我们有：
+
+@itemlist[
+
+  @item{@bold{非终止符}。这些是所定义集合的名字。本例中只有一个这样的集合，但是
+        通常，可能会定义数个集合。这些集合有时称为 @emph{句法类别}。
+
+        依照惯例，我们将非终止符和集合名的首字母大写，但在文中提及它们的元素时，
+        将使用小写名称。这要比听起来容易。例如， @${Expression} 是非终止符，但我
+        们写作 @${e \in Expression} 或 “@${e} 是一个 expression。”
+
+        另一常见惯例，名为@emph{巴科斯-诺尔范式}或 @emph{BNF}，是在词周围加尖括
+        号，如 <expression>。 }
+
+  @item{@bold{终止符}。这些是@elem[#:style question]{外部表示}中的字符，在本例中，
+        是 @tt{.}、@tt{(} 和 @tt{)}。这些常用打字机字体写出，如 @tt{lambda}。}
+
+  @item{@bold{生成式}。规则叫做@emph{生成式}。每个生成式的左边是一个非终止符，右
+       边则包含终止符和非终止符。左右两边通常用符号 @${::=} 分隔，读作@emph{是}
+       或@emph{可能是}。根据其他句法类别和@emph{终止符}（如左括号、右括号和句点），
+       右边指定一种方法，用来构建句法类别的成员。}
+
+]
+
+若某些句法类别的含义在上下文中足够清晰，在生成式中提到它们时通常不做定义，如
+@${Int}。
+
+语法经常用一些简便形式书写。当一个生成式的左边与前一生成式相同时，一般会略去。根
+据这一惯例，我们的语法可以写作：
+
+@$${@List-of-Int[] ::= @tt{()}
+                   ::= @tt{(Int . @List-of-Int[])}}
+
+为单一句法类别编写一组规则时，也可以只写一次左边内容和 @${::=}，后续的所有右边内
+容用特殊符号“|”（竖线，读作@emph{或}）分隔。 用“|”，@List-of-Int[]
+的语法可以写作：
+
+
+@$${@List-of-Int[] ::= @tt{()} | @tt{(Int . @List-of-Int[])}}
+
+另一种简写是 @emph{Kleene 星} (@emph{Kleene Star})，写作 {...}*。当它出现
+在右边时，@elem[#:style question]{表示花括号之间的内容出现任意次数的序列}。用
+Kleene 星，@List-of-Int[] 的定义可以简写为：
+
+@$${@List-of-Int[] ::= @tt{({Int}*)}}
+
+@elem[#:style question]{这也包含不出现内容的情况。如果内容为0，得到的是空字符串。}
+
+星号的变体是 @emph{Kleene 加} (@emph{Kleene Star}) {...}+，表示一个或多个
+@elem[#:style question]{实例}的序列。在上例中，用 + 替代 *，就定义了句法类别非空
+整数列表。
+
+星号还有一种变体是@emph{分隔表} (@emph{separated list}) 法。例如，用
