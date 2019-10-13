@@ -3,6 +3,7 @@
 @(require latex-utils/scribble/theorem)
 @(require scribble/manual)
 @(require scribble-math)
+@(require scribble/example)
 @(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
 
 @title[#:style 'numbered #:tag "isd"]{归纳式数据集}
@@ -38,7 +39,7 @@
 
  }
 
-]
+ ]
 
 @; }
 
@@ -325,11 +326,11 @@ Scheme序对的首项为@${n}，余项为@${l}。
 
 ]
 
-若某些句法类别的含义在上下文中足够清晰，在生成式中提到它们时通常不做定义，如
+若某些句法类别的含义在上下文中足够清晰，在生成式中提到它们时通常不作定义，如
 @${Int}。
 
 语法经常用一些简便形式书写。当一个生成式的左边与前一生成式相同时，一般会略去。根
-据这一惯例，我们的语法可以写作：
+据这一惯例，我们的语法可以写作
 
 @$${@List-of-Int[] ::= @tt{()}
                    ::= @tt{(Int . @List-of-Int[])}}
@@ -343,7 +344,7 @@ Scheme序对的首项为@${n}，余项为@${l}。
 
 另一种简写是 @emph{Kleene 星} (@emph{Kleene Star})，写作 {...}*。当它出现
 在右边时，@elem[#:style question]{表示花括号之间的内容出现任意次数的序列}。用
-Kleene 星，@List-of-Int[] 的定义可以简写为：
+Kleene 星，@List-of-Int[] 的定义可以简写为
 
 @$${@List-of-Int[] ::= @tt{({Int}*)}}
 
@@ -353,4 +354,399 @@ Kleene 星，@List-of-Int[] 的定义可以简写为：
 @elem[#:style question]{实例}的序列。在上例中，用 + 替代 *，就定义了句法类别非空
 整数列表。
 
-星号还有一种变体是@emph{分隔表} (@emph{separated list}) 法。例如，用
+星号还有一种变体@emph{分隔表} (@emph{separated list}) 表示法。例如，用
+@${Int^{*(c)}} 表示任意数量的非终止符 @${Int} 序列，以非空字符序列 @${c} 分隔。
+这也包括没有任何@elem[#:style question]{实例}的情况。如果有 0 个实例，得到的是空
+字符串。例如，@${Int^{*(,)}} 包含字符串
+
+@tt{8}
+
+@tt{14, 12}
+
+@tt{7, 3, 14, 16}
+
+@${Int^{*(;)}} 包含字符串
+
+@tt{8}
+
+@tt{14; 12}
+
+@tt{7; 3; 14; 16}
+
+这些简写不是必需的。总能不倚赖它们重写语法。
+
+如果一个集合由语法定义，那么可以用@emph{句法推导} (@emph{syntactic derivation})
+证明给定值是集合的成员。这样的推导起始于集合对应的非终止符，在由箭头
+@${\Rightarrow} 指示的每一步骤中，或者用对应规则的右边代换非终止符，或者在句法类
+别未作定义时，用该类别的已知成员代换非终止符。例如，前述证明 @tt{(14 . ())} 是整
+数列表，可以用句法推导形式化为
+
+@$${@List-of-Int[] \Rightarrow @tt{(Int . @List-of-Int[])}
+                   \Rightarrow @tt{(14 . @List-of-Int[])}
+                   \Rightarrow @tt{(14 . ())} }
+
+非终止符的替换顺序无关紧要。@elem[#:style question]{那么， @tt{(14 . ())} 的另一
+推导是：}
+
+@$${@List-of-Int[] \Rightarrow @tt{(Int . @List-of-Int[])}
+                   \Rightarrow @tt{(Int . ())}
+                   \Rightarrow @tt{(14 . ())} }
+
+@; @exercise[#:difficulty 1 #:tag "e1.4"]{
+
+ 写出从 @List-of-Int[] 到 @tt{(-7 . (3 . (14 ())))} 的推导。
+
+@; }
+
+让我们思考其他一些有用集合的定义。
+
+@itemlist[#:style 'ordered
+
+ @item{许多操作符号的过程被设计为只处理包含符号和其他类似约束的列表。我们把这些
+ 叫做 @tt{s-lists}，定义如下：
+
+ @; @def[ #:title
+ （s-list，s-exp）
+ @; ]
+ @; {
+ @$${S-list ::= ({S-exp^*})}
+ @$${S-list ::= Symbol | S-list}
+ @; }
+
+ s-list 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。这里是一些 s-list。
+
+ @tt{(a b c)}
+ @tt{(an (((s-list)) (with () lots) ((of) nesting)))}
+
+ 有时也使用推广的 s-list 定义，既允许整数，也允许符号。
+
+ }
+
+ @item{使用三个元素的列表表示内部节点，则叶子是数值，内部节点是符号的二叉树可用
+ 语法表示为：
+
+ @; @def[ #:title
+ （二叉树）
+ @; ]
+ @; {
+ @$${Bintree ::= Int | (Symbol Bintree Bintree)}
+ @; }
+
+ 这里是此类树的一些例子：
+
+ @tt{1}
+ @tt{2}
+ @tt{(foo 1 2)}
+ @tt{(bar 1 (foo 1 2))}
+ @tt{(baz
+       (bar 1 (foo 1 2))
+       (biz 4 5))}
+
+ }
+
+ @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单的语言，常用于研究
+ 编程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用。可用这一语法定
+ 义它：
+
+ @; @def[ #:title
+ （lambda 演算）
+ @; ]
+ @; {
+ @$${LcExp ::= Identifier ::= @tt{(lambda (@${Identifier}) @${LcExp})} ::= @tt{(@${LcExp} @${LcExp})}}
+
+ @emph{其中，标识符 (@${Identifier}) 是除 @tt{lambda} 之外的任何符号。}
+ @; }
+
+ 第二个生成式中的标识符是 @tt{lambda} 表达式主体中的变量名。这一变量叫做表达式
+ 的@emph{绑定变量} (@emph{bound variable})，因为变量一旦在主体内出现就由它绑定或
+ 捕获。@elem[#:style question]{那变量一旦在主体内出现，指代的都是这一个。}
+
+ 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在这一语言中，
+
+ @codeblock{(lambda (x) (+ x 5))}
+
+ 是一表达式，@tt{x} 是其绑定变量。这一表达式描述的过程把参数加5。因此，在
+
+ @codeblock{((lambda (x) (+ x 5)) (- x 7))}
+
+ 中出现的第二个 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。@elem[#:style
+ question]{1.2.4 节中引入了 @tt{occurs-free?}，这将在那里讨论。}
+
+ 这一语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序操作它们。
+
+ }
+
+]
+
+这些语法叫做 @emph{上下文无关} (@emph{context-free}) 语法，因为由给定句法类别定
+义的规则可以在引用这一语法类别的任何上下文中使用。有时这不够严格。考虑二叉搜索树。
+二叉搜索树中的一个节点或者为空，或者包含一个整数、两棵子树
+
+@$${Binary-search-tree ::= @tt{()} | @tt{(@${Int} @${Binary-search-tree} @${Binary-search-tree})}}
+
+该语法正确描述了每个节点的结构，但是忽略了关于二叉搜索树的一个重要事实：所有左子
+树的键值都小于（或等于）当前节点，所有右子树的键值都大于当前节点。
+
+由于这一额外约束，不是每个由 @${Binary-search-tree} 得出的句法推导都是正确的二叉
+搜索树。要判断特定的生成式能否用于特定的句法推导，必须察看使用生成式的上下文。这
+样的约束叫做@emph{上下文敏感约束} (context-sensitive constraints) 或@emph{不变式}
+(invariants)。
+
+定义编程语言的语法也会带来上下文敏感约束。例如，在许多编程语言中变量必须在使用之
+前声明。@elem[#:style question]{对变量使用的这一约束就对使用它们的上下文敏
+感。}@nonbreaking{}虽然可以用形式化方法定义上下文敏感约束，但这些方法远比本章考
+虑的复杂。实际中，通常的方法是先定义上下文无关语法，随后再用其他方法添加约束。第
+七章展示了这种技术的一个例子。
+
+@subsection[#:tag "induct"]{归纳}
+
+@elem[#:style question]{归纳式的集合定义有两种用法}：证明关于集合成员的定理，写
+出操作集合成员的程序。这里给出一个此类证明的例子，写程序是下一节的主题。
+
+@; @theorem
+@; {
+令 t 为二叉树，形如定义 1.1.7，则 t 包含奇数个节点。
+@; }
+
+@; @proof
+@; @{
+用归纳法证明 t 的尺寸。令 t 的尺寸等于 t 中节点的个数。归纳假设 IH(k) 为，尺寸
+@${\leq k} 的任何树有奇数个节点。依照归纳证明的常规方法：先证明 @${IH(0)} 为真，
+然后证明对任何 @${k} 整数，@${IH} 均为真，则对 @${k + 1}，@${IH} 也为真。
+
+@itemlist[#:style 'ordered
+
+ @item{没有树包含 0 个节点，所以 @${IH(0)} 显然成立。}
+
+ @item{设 @${k} 为整数，@${IH(k)} 成立，即，任何树的节点数 @${\leq k} 时，
+ @elem[#:style question]{准确}节点数为奇数。需证明 @${IH(k + 1)} 也成立：任何树
+ 的节点数 @${\leq k + 1} 时，节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根
+ 据二叉树的定义，只有两种可能：
+
+ @itemlist[#:style 'ordered
+
+  @item{@${t} 形如 @${n}，@${n} 为整数。此时 @${t} 只有一个节点，一为奇数。}
+
+  @item{@${t} 形如 @${@tt{(@${sym} @${t_1} @${t_2})}}，其中，@${sym} 是一符号，
+  @${t_1} 和 @${t_2} 是树。此时 @${t_1} 和 @${t_2} 节点数少于 @${t}。因为 @${t}
+  有 @${\leq k + 1}个节点，@${t_1} 和 @${t_2} 一定有 @${\leq k} 个节点。因此它们
+  符合 @${IH(k)}，一定各有奇数个节点，不妨分别设为 @${2n_1 + 1} 和 @${2n_2 + 1}。
+  则算上两棵子树和根，原树中的节点总数为
+
+  @$${(2n_1 + 1) + (2n_2 + 1) + 1 = 2(n_1 + n_2 + 1) + 1}
+
+  也是一个奇数。}
+
+ ]
+ }
+]
+
+声明 @${IH(k + 1)} 成立证毕，归纳完成。
+@; @}
+
+证明的关键是树 @${t} 的子结构总是比 @${t} 本身小。这种证明模式叫做@emph{结构化归
+纳}。
+
+@; tip[#:title
+结构化归纳证明
+@; ]{
+欲证假设 @${IH(s)} 对所有结构 @${s} 为真，证明如下：
+
+@itemlist[#:style 'ordered
+
+ @item{@${IH} 对简单结构（没有子结构）为真。}
+
+ @item{若 @${IH} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。}
+]
+@;}
+
+@; @exercise[#:difficulty 2 #:tag "e1.5"]{
+
+ 证明若 @${e \in LcExp}，则 @${e} 中的左右括号数量相等。
+
+@; }
+
+@section[#:tag "drp"]{{推导}递归程序}
+
+我们已经用归纳式定义法描述了复杂集合。我们已明白可通过分析归纳式定义集合的元素来
+观察集合是如何从较小元素构建的。我们已经用这一思想写出了过程 @tt{in-S?} 来判断一
+个自然数是否属于集合 @${S}。现在，我们用同样的思想定义更通用的过程，以便对归纳式
+定义集合做运算。
+
+递归程序依赖于一条重要原则：
+
+@; tip[#:title
+较小子问题原则
+@; ]
+@; {
+若能化问题为较小的子问题，则能调用解决原问题的过程解决子问题。
+@; }
+
+已返回的子问题解随后可用来求解原问题。这行得通，因为每次过程调用，都是针对较小的
+子问题，直到最终调用，针对的是一个可直接解决的问题，而不必再次调用它本身。
+
+我们用一些例子解释这一思想。
+
+@subsection[#:tag "l-l"]{@tt{list-length}}
+
+标准的 Scheme 程序 @tt{length} 求出列表中的元素个数。
+
+@examples[#:label #f (length '(a b c))
+                     (length '((x) ()))]
+
+我们来写出自己的过程，名叫 @tt{list-length}，做同样的事。
+
+先来写出过程的@emph{合约}。合约指定了过程可取参数和可能返回值的集合。合约也可以
+包含过程的期望用法或行为。这有助于我们在编写时及以后追溯我们的意图。在代码中，这
+是一条注释，我们用打字机字体示之，以便阅读。
+
+@; racketblock with contracts and usage
+@codeblock{
+@; contracts
+; list-length : #,($ List) -> #,($ Int)
+@; usage
+; 用法 : (list-length l) = l 的长度
+(define list-length
+  (lambda (lst)
+    ...))
+}
+@;
+
+列表的集合可定义为
+
+@$${List ::= () | (Scheme value . List)}
+
+因此，考虑列表的每种情况。若列表为空，则长度为0。
+
+@; racketblock with contracts and usage and diff
+@codeblock{
+@; contracts
+; list-length : List -> Int
+@; usage
+; 用法 : (list-length l) = l 的长度
+(define list-length
+  (lambda (lst)
+@; diff{
+    (if (null? lst)
+        0
+@; }
+        ...)))
+}
+@;
+
+若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
+
+@; racketblock with contracts and usage and diff
+@codeblock{
+@; contracts
+; list-length : List -> Int
+@; usage
+; 用法 : (list-length l) = l 的长度
+(define list-length
+  (lambda (lst)
+    (if (null? lst)
+        0
+        @; diff{
+        (+ 1 (list-length (cdr lst))))))
+        @; }
+}
+@;
+
+通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
+
+@tt{(list-length '(a (b c) d))
+ = (+ 1 (list-length '((b c) d)))
+ = (+ 1 (+ 1 (list-length '(d))))
+ = (+ 1 (+ 1 (+ 1 (list-length '()))))
+ = (+ 1 (+ 1 (+ 1 0)))
+ = 3}
+
+@subsection[#:tag "n-e"]{@tt{nth-element}}
+
+标准的 Scheme 过程 @tt{list-ref} 取一列表 @tt{lst} 和从 0 开始计数的索引 @tt{n}，
+返回 @tt{lst} 的第 @tt{n} 个元素。
+
+@examples[#:label #f (list-ref '(a b c) 1)]
+
+我们来写出自己的过程，名叫 @tt{nth-element}，做同样的事。
+
+我们仍用上述 @${List} 的定义。
+
+当 @${lst} 为空时，@tt{(nth-element @${lst} @${n})} 应当返回什么？这种情况下，
+@tt{(nth-element @${lst} @${n})} 要取出空列表的元素，所以我们报告错误。
+
+当 @${lst} 非空时，@tt{(nth-element @${lst} @${n})} 应当返回什么？答案取决于
+@${n}。若 @${n = 0}，答案就是 @${lst} 的首项。
+
+当 @${lst} 非空，且 @${n \neq 0} 时，@tt{(nth-element @${lst} @${n})} 应当返回
+什么？这种情况下，答案是 @${lst} 余项的第 @${(n - 1)} 个元素。由 @${n \in N} 且
+@${n \neq 0}，可知 @${n - 1} 一定属于 @${N}，所以可通过递归调用 @tt{nth-element}
+找出第 @${(n - 1)} 个元素。
+
+这使我们得出定义
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; nth-element : List x Int -> SchemeVal
+@; usage
+; 用法 : (nth-element lst n) = lst 的第 n 个元素
+(define nth-element
+  (lambda (lst)
+    (if (null? lst)
+        (report-list-too-short n)
+        (if (zero? n)
+            (car lst)
+            (nth-element (cdr lst) (- n 1))))))
+
+(define report-list-too-short
+  (lambda (n)
+    (eopl:error 'nth-element
+                "List too short by ~s elements.~%" (+ n 1))))
+}
+@;
+
+这里的注释 @code{nth-element : List x Int -> SchemeVal} 表示 @bold{nth-element}
+是一个过程，取两个参数，一个为列表，一个为整数，返回一个 Scheme 值。这与数学中的
+表示 @${f : A \times B \to C} 相同。
+
+过程 @tt{report-list-too-short} 调用 @tt{eopl:} @tt{error} 来报告错误。过程
+@tt{eopl:error} 会终止计算。它的首个参数是一符号，用于在错误信息中指示调用
+@tt{eopl:error} 的过程。第二个参数是一个字符串，会打印为错误信息。对应于字符串中
+的每个字符序列 @tt{~s} ，都必须有一个额外参数。打印字符串时，这些参数的值会替换
+对应的 @tt{~s} 。@tt{~%} 视作换行。错误信息打印出来之后，计算终止。过程
+@tt{eopl:error} 并非标准 Scheme 的一部分，但大多数 Scheme 实现提供这样的组件。在
+本书中，我们以类似方式，用名字含 @tt{report-} 的过程报告错误。
+
+来看看 @tt{nth-element} 如何算出它的答案：
+
+@tt{(nth-element '(a b c d e) 3)
+  = (nth-element   '(b c d e) 2)
+  = (nth-element     '(c d e) 1)
+  = (nth-element       '(d e) 0)
+  = d}
+
+@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
+
+如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 的抱怨来获知传递了空列表，但它们
+的错误信息@elem[#:style question]{无甚帮助}。例如，当我们收到 @tt{car} 的错误信
+息，可能得找遍整个程序中使用 @tt{car} 的地方。
+
+@; @exercise[#:difficulty 1 #:tag "e1.6"]{
+
+ 如果翻转 @tt{nth-element} 中两个测试的顺序，会有什么问题？
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.7"]{
+
+ @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
+ 息，像 “@tt{(a b c)} 不足 8 个元素”。
+
+@; }
+
+@subsection[#:tag "r-f"]{@tt{remove-first}}
+
+过程 @tt{remove-first} 取两个参数：符号 @${s} 和符号列表 @${los}。它返回一个列表，
+除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。
+如果 @${s} 没有出现在 @${los} 中，则返回 @${los}。
