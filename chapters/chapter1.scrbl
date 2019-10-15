@@ -403,14 +403,14 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 @itemlist[#:style 'ordered
 
  @item{许多操作符号的过程被设计为只处理包含符号和其他类似约束的列表。我们把这些
- 叫做 @tt{s-lists}，定义如下：
+ 叫做 @tt{s-list}，定义如下：
 
  @; @def[ #:title
  （s-list，s-exp）
  @; ]
  @; {
- @$${S-list ::= ({S-exp^*})}
- @$${S-list ::= Symbol | S-list}
+ @$${S\mbox{-}list ::= ({S-exp^*})}
+ @$${S\mbox{-}list ::= Symbol | S\mbox{-}list}
  @; }
 
  s-list 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。这里是一些 s-list。
@@ -444,9 +444,8 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 
  }
 
- @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单的语言，常用于研究
- 编程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用。可用这一语法定
- 义它：
+ @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单语言，常用于研究编
+ 程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
 
  @; @def[ #:title
  （lambda 演算）
@@ -457,11 +456,12 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
  @emph{其中，标识符 (@${Identifier}) 是除 @tt{lambda} 之外的任何符号。}
  @; }
 
- 第二个生成式中的标识符是 @tt{lambda} 表达式主体中的变量名。这一变量叫做表达式
- 的@emph{绑定变量} (@emph{bound variable})，因为变量一旦在主体内出现就由它绑定或
- 捕获。@elem[#:style question]{那变量一旦在主体内出现，指代的都是这一个。}
+ 第二个生成式中的标识符是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表达式的
+ @emph{绑定变量} (@emph{bound variable})，因为@elem[#:style question]{同名变量}
+ 一旦出现在主体内就由它绑定或捕获。主体内出现的任何@elem[#:style question]{同名
+ 变量}都指代这一个。
 
- 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在这一语言中，
+ 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在那种语言里，
 
  @codeblock{(lambda (x) (+ x 5))}
 
@@ -469,10 +469,10 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 
  @codeblock{((lambda (x) (+ x 5)) (- x 7))}
 
- 中出现的第二个 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。@elem[#:style
- question]{1.2.4 节中引入了 @tt{occurs-free?}，这将在那里讨论。}
+ 中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。1.2.4 节中
+ 介绍了 @tt{occurs-free?}，@elem[#:style question]{到时我们再讨论这问题。}
 
- 这一语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序操作它们。
+ 这一语法把 @${LcExp} 的元素定义为 Scheme 值，因此很容易写出程序来操作它们。
 
  }
 
@@ -482,15 +482,16 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 义的规则可以在引用这一语法类别的任何上下文中使用。有时这不够严格。考虑二叉搜索树。
 二叉搜索树中的一个节点或者为空，或者包含一个整数、两棵子树
 
-@$${Binary-search-tree ::= @tt{()} | @tt{(@${Int} @${Binary-search-tree} @${Binary-search-tree})}}
+@$${Binary\mbox{-}search\mbox{-}tree ::= @tt{()} | @tt{(@${Int}
+@${Binary\mbox{-}search\mbox{-}tree} @${Binary\mbox{-}search\mbox{-}tree})}}
 
 该语法正确描述了每个节点的结构，但是忽略了关于二叉搜索树的一个重要事实：所有左子
 树的键值都小于（或等于）当前节点，所有右子树的键值都大于当前节点。
 
-由于这一额外约束，不是每个由 @${Binary-search-tree} 得出的句法推导都是正确的二叉
-搜索树。要判断特定的生成式能否用于特定的句法推导，必须察看使用生成式的上下文。这
-样的约束叫做@emph{上下文敏感约束} (context-sensitive constraints) 或@emph{不变式}
-(invariants)。
+由于这一额外约束，不是每个由 @${Binary\mbox{-}search\mbox{-}tree} 得出的句法推导
+都是正确的二叉搜索树。要判断特定的生成式能否用于特定的句法推导，必须察看使用生成
+式的上下文。这样的约束叫做@emph{上下文敏感约束} (context-sensitive constraints)，
+或@emph{不变式} (invariants)。
 
 定义编程语言的语法也会带来上下文敏感约束。例如，在许多编程语言中变量必须在使用之
 前声明。@elem[#:style question]{对变量使用的这一约束就对使用它们的上下文敏
@@ -741,7 +742,7 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 @; @exercise[#:difficulty 2 #:tag "e1.7"]{
 
  @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
- 息，像 “@tt{(a b c)} 不足 8 个元素”。
+ 息，像是 “@tt{(a b c)} 不足 8 个元素”。
 
 @; }
 
