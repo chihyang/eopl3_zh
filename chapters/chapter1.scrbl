@@ -4,6 +4,7 @@
 @(require scribble/manual)
 @(require scribble-math)
 @(require scribble/example)
+@(require racket/sandbox)
 @(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
 
 @title[#:style 'numbered #:tag "isd"]{归纳式数据集}
@@ -751,3 +752,349 @@ Kleene 星，@List-of-Int[] 的定义可以简写为
 过程 @tt{remove-first} 取两个参数：符号 @${s} 和符号列表 @${los}。它返回一个列表，
 除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。
 如果 @${s} 没有出现在 @${los} 中，则返回 @${los}。
+
+@(define remove-first-eval
+(parameterize ([sandbox-output 'string]
+               [sandbox-error-output 'string]
+               [sandbox-memory-limit 50])
+  (make-evaluator
+   'racket/base
+   '(define (remove-first s los)
+      (if (null? los)
+          los
+          (if (eq? s (car los))
+              (cdr los)
+              (cons (car los)
+                    (remove-first s (cdr los)))))))))
+
+@examples[#:eval remove-first-eval
+          #:label #f
+          (remove-first 'a '(a b c))
+          (remove-first 'b '(e f g))
+          (remove-first 'a4 '(c1 a4 c1 a4))
+          (remove-first 'x '())]
+
+写出此过程之前，我们先要定义符号列表集合 @${List\mbox{-}of\mbox{-}Symbol} ，以便
+给出问题的完整描述。不像上一节介绍的 s-lists，符号列表不包含子列表。
+
+@$${List\mbox{-}of\mbox{-}Symbol ::= @tt{()} | @tt{(} Symbol . List\mbox{-}of\mbox{-}Symbol @tt{)}}
+
+符号列表或者是空列表，或者是一列表，其首项为符号，余项为符号列表。
+
+如果列表为空，不需要移除 @${s}，则答案为空列表。
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; remove-first : Sym x Listof(Symbol) -> Listof(Sym)
+@; usage
+; 用法 : (remove-first s los) 返回一列表，除了不含第一个出现在 los 中的符号
+; s 外，元素及其排列顺序与 los 相同。
+(define remove-first
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        ...)))
+}
+@;
+
+写合约时，我们用 @${Listof(Sym)} 而不是 @${List\mbox{-}of\mbox{-}Symbol}。用这种
+表示我们不必写许多上面那样的定义。
+
+如果 @${los} 非空，有没有哪种情况可以立刻得出答案？如果 @${los} 的第一个元素是
+@${s}，比如 @${los = @tt{(} s s_1 ... s_{n-1} @tt{)}}，@${s} 首次出现时是
+@${los} 的第一个元素，那么把它删除之后的结果是 @${@tt{(} s_1 ... s_{n-1} @tt{)}}。
+
+@; codeblock with contracts
+@codeblock{
+@; contracts
+; remove-first : Sym x Listof(Symbol) -> Listof(Sym)
+(define remove-first
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        @; diff {
+        (if (eqv? (car los) s)
+            (cdr los)
+            ...
+            ))))
+        @; }
+}
+@;
+
+如果 @${los} 的第一个元素不是 @${s}，比如 @${los = @tt{(} s_0 s_1 ... s_{n-1}
+@tt{)}}，可知 @${s_0} 不是第一个出现的 @${s}，因此答案中的第一个元素一定是
+@${s_0}，即表达式 @tt{(car los)} 的值。而且，@${los} 中第一个出现的 @${s} 一定首
+先出现在 @${@tt{(} s_1 ... s_{n-1} @tt{)}} 中。所以答案的余下部分一定是移除
+@${los} 余项中首个 @${s} 的结果。因为 @${los} 的余项比 @${los} 短，我们可以递归
+调用 @tt{remove-first} 来从 @${los} 的余项中移除 @${s}，那么答案的余项可从
+@tt{(remove-first s (cdr los))} 求得。因为我们知道如何找出答案的首项和余项，我们
+可以用 @tt{cons} 把它们结合在一起，通过表达式 @tt{(cons (car los) (remove-first
+s (cdr los)))} 求得整个答案。由此，@tt{remove-first} 的完整定义为
+
+@; codeblock with contracts
+@codeblock{
+@; contracts
+; remove-first : Sym x Listof(Symbol) -> Listof(Sym)
+(define remove-first
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        (if (eqv? (car los) s)
+            (cdr los)
+            @; diff {
+            (cons (car los) (remove-first s (cdr los)))))))
+            @; }
+}
+@;
+
+@; @exercise[#:difficulty 1 #:tag "e1.8"]{
+
+ 如果把 @tt{remove-first} 定义中的最后一行改为 @tt{(remove-first s (cdr los))}，
+ 得到的过程做什么运算？对修改后的版本，给出合约，包括使用说明。
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.9"]{
+
+ 定义 @tt{remove}。它类似于 @tt{remove-first}，但会从符号列表中移除所有出现的给
+ 定符号，而不仅仅是第一个。
+
+@; }
+
+@subsection[#:tag "o-f"]{@tt{occurs-free?}}
+
+过程 @tt{occurs-free?} 取一个 Scheme 符号代表的变量 @${var}，一个形如定义 1.1.8
+的 lambda 演算表达式 @${exp}，判断 @${var} 是否自由出现于 @${exp}。如果一个变量
+出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变量@emph{自由
+出现} (@emph{occurs free}) 于表达式 @${exp} 中。例如，
+
+@(define occurs-free?-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+     '(define (occurs-free? var exp)
+        (cond ((symbol? exp)
+               (eqv? var exp))
+              ((eqv? (car exp) 'lambda)
+               (and (not (eqv? var (car (cadr exp))))
+                    (occurs-free? var (caddr exp))))
+              (else
+               (or (occurs-free? var (car exp))
+                   (occurs-free? var (cadr exp)))))))))
+
+@examples[#:eval occurs-free?-eval
+          #:label #f
+          (occurs-free? 'x 'x)
+          (occurs-free? 'x 'y)
+          (occurs-free? 'x '(lambda (x) (x y)))
+          (occurs-free? 'x '(lambda (y) (x y)))
+          (occurs-free? 'x '((lambda (x) x) (x y)))
+          (occurs-free? 'x '(lambda (y) (lambda (z) (x (y z)))))]
+
+遵照 lambda 演算表达式的语法，我们可以解决此问题：
+
+@$${LcExp ::= Identifier ::= @tt{(lambda (@${Identifier}) @${LcExp})} ::= @tt{(@${LcExp} @${LcExp})}}
+
+我们可以总结出规则的各种情况：
+
+@itemlist[
+
+ @item{若表达式 @${e} 是一变量，则当且仅当 @${x} 与 @${e} 相同时，变量 @${x} 自
+ 由出现于 @${e}。}
+
+ @item{若表达式 @${e} 形如 @tt{(@${lambda} (@${y}) @${e'})}，则当且仅当 @${y} 不
+ 同于 @${x} 且 @${x} 自由出现于 @${e'} 时，变量 @${x} 自由出现于 @${e}。}
+
+ @item{若表达式 @${e} 形如 @tt{(@${e_1} @${e_2})}，则当且仅当 @${x} 自由出现于
+ @${e_1} 或 @${e_2} 时，@${x} 自由出现于 @${e}。这里的“或”表示@emph{涵盖或}
+ (@emph{inclusive or})，意为它包含 @${x} 同时自由出现于 @${e_1} 和 @${e_2} 的情
+ 况。我们通常用“或”表示这种意思。}
+
+]
+
+你可以说服自己，这些规则涵盖了“@${x} 不在某一 lambda 绑定之中”表示的所有意思。
+
+@; @exercise[#:difficulty 1 #:tag "e1.10"]{
+
+ 我们常用“或”表示“涵盖或”。“或”还有什么含义？
+
+@; }
+
+然后，定义 @tt{occurs-free?} 就很容易了。因为有三种情况要检查，我们不用 Scheme
+的 @tt{if}，而是用 @tt{cond}。在 Scheme 中，若 @${exp_1} 或 @${exp_2} 返回真值，
+则@tt{(or @${exp_1} @${exp_2})} 返回真值。
+
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; occurs-free? : Sym x LcExp -> Bool
+@; usage
+; 用法 : 若符号 var 自由出现于 exp，返回 #t，否则返回 #f
+(define (occurs-free? var exp)
+  (cond
+    ((symbol? exp) (eqv? var exp))
+    ((eqv? (car exp) 'lambda)
+     (and
+      (not (eqv? var (car (cadr exp))))
+      (occurs-free? var (caddr exp))))
+    (else
+     (or
+      (occurs-free? var (car exp))
+      (occurs-free? var (cadr exp))))))
+}
+@;
+
+这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
+中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在 2.5 节，我
+们展示如何显著改善这种情况。
+
+@subsection[#:tag "subst"]{@tt{subst}}
+
+过程 @tt{subst} 取三个参数：两个符号 @tt{new} 和 @tt{old}，一个 s-list，
+@tt{slist}。它检查 @tt{slist} 的所有元素，返回类似 @tt{slist} 的新列表，但把其中
+所有的 @tt{old} 替换为 @tt{new}。
+
+@(define subst-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+     '(define (subst new old slist)
+        (if (null? slist)
+            '()
+            (cons
+              (subst-in-s-exp new old (car slist))
+              (subst new old (cdr slist)))))
+     '(define (subst-in-s-exp new old sexp)
+        (if (symbol? sexp)
+            (if (eqv? sexp old) new sexp)
+            (subst new old sexp))))))
+
+@examples[#:eval subst-eval
+          #:label #f
+          (subst 'a 'b '((b c) (b () d)))]
+
+因为 @tt{subst} 定义于 s-list 上，它的结构应当反映 s-list 的定义（定义 1.1.6）：
+
+@$${S\mbox{-}list ::= @tt{(@${\{S\mbox{-}exp\}^*})}}
+@$${S\mbox{-}exp ::= Symbol | S\mbox{-}list}
+
+Kleene 星号准确描述了集合 s-list，但对写程序没什么帮助。因此我们的第一步是抛开
+Kleene 星号重写语法。得出的语法表明，我们的过程应当该递归处理 s-list 的首项和余
+项。
+
+@$${S\mbox{-}list ::= @tt{()} ::= @tt{(@${S\mbox{-}exp} . @${S\mbox{-}list})}}
+@$${S\mbox{-}exp ::= Symbol | S\mbox{-}list}
+
+这一例子比之前复杂，因为它的语法输入包含两个非终止符，@${S\mbox{-}list} 和
+@${S\mbox{-}exp}。因此，我们需要两个过程，一个处理 @${S\mbox{-}list}，另一个处理
+@${S\mbox{-}exp}。
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; subst : Sym x Sym x S-list -> S-list
+(define subst
+  (lambda (new old slist)
+    ...))
+
+@; contracts
+; subst-in-s-exp : Sym x Sym x S-exp -> S-exp
+(define subst-in-s-exp
+  (lambda (new old sexp)
+    ...))
+}
+@;
+
+我们首先解决 @tt{subst}。如果列表为空，没有 @tt{old} 需要替换。
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; subst : Sym x Sym x S-list -> S-list
+(define subst
+  (lambda (new old slist)
+    (if (null? slist)
+        '()
+        ...)))
+}
+@;
+
+如果 @tt{slist} 非空，它的首项是 @${S\mbox{-}exp} 的元素，余项是另一个 s-list。
+这时，答案应当是一个列表，它的首项是把 @tt{slist} 首项中的 @tt{old} 替换为
+@tt{new} 的结果，它的余项是把 @tt{slist} 余项中的 @tt{old} 替换为 @tt{new} 的结
+果。因为 @tt{slist} 的首项是 @${S\mbox{-}exp} 的元素，我们用 @tt{subst-in-s-exp}
+解决这一子问题。因为 @tt{slist} 的余项是 @${S\mbox{-}list} 的元素，我们递归调用
+@tt{subst} 处理它。
+
+@; codeblock with contracts and usage
+@codeblock{
+@; contracts
+; subst : Sym x Sym x S-list -> S-list
+(define subst
+  (lambda (new old slist)
+    (if (null? slist)
+        '()
+        @; diff {
+        (cons
+         (subst-in-s-exp new old (car slist))
+         (subst new old (cdr slist))))))
+        @; }
+}
+@;
+
+因为我们严格依照 @${S\mbox{-}list} 和 @${S\mbox{-}exp} 的定义，这个递归一定会终
+止。由于 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称它们为@emph{互递
+归} (@emph{mutually recursive})。
+
+把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是一种重要技巧。对更为复杂的
+程序，我们得以每次考虑一个句法类别，从而化繁为简。
+
+@; @exercise[#:difficulty 1 #:tag "e1.11"]{
+
+ @tt{subst-in-s-exp} 的最后一行中，递归是针对 @tt{sexp} 而非更小的子结构，为什
+ 么一定能终止？
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.12"]{
+
+ 用 @tt{subst-in-s-exp} 的定义替换 @tt{subst} 对它的调用，从而排除这次调用，然后
+ 简化得到的过程。结果中的 @tt{subst} 应当不需要 @tt{subst-in-s-exp}。这种技巧叫
+ 做@emph{内联} (@emph{inlining})，用于优化编译器。
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.13"]{
+
+ 在我们的例子中，我们从排除 @${S\mbox{-}list} 语法内的 Kleene 星号开始。依照原本
+ 的语法，用 @tt{map} 编写 @tt{subst}。
+
+@; }
+
+现在，我们有了编写过程处理归纳式数据集的窍门，来把它总结成一句话。
+
+@; @tip[#:title
+依照语法！
+@; ]
+@; {
+定义过程处理归纳定义的数据时，程序的结构应当反映数据的结构。
+@; }
+
+更准确地说：
+
+@itemlist[
+
+ @item{为语法中的每个非终止符编写个过程。每一过程负责处理相应非终止符的数据，不
+ 做其他。}
+
+ @item{在每个过程中，为相应非终止符的每一生成式写一分支。你可能需要额外的
+ @elem[#:style question]{分支结构}，但这样才能开始。对等号右边出现的每个非终止符，
+ 递归调用相应的过程。}
+
+]
