@@ -1,6 +1,7 @@
 #lang scribble/book
 @(require "style.rkt")
 @(require latex-utils/scribble/theorem)
+@(require latex-utils/scribble/math)
 @(require scribble/manual)
 @(require scribble-math)
 @(require scribble/example)
@@ -1098,3 +1099,756 @@ Kleene 星号重写语法。得出的语法表明，我们的过程应当该递�
  递归调用相应的过程。}
 
 ]
+
+@section[#:tag "apca"]{辅助过程和上下文参数}
+
+窍门@emph{依照语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这一过
+程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0 @${v_0}) (1
+@${v_1}) (2 @${v_2}) ...)}。
+
+我们用过的那种直接拆解法不凑效，因为没有明显的方法能从 @tt{(number-elements (cdr
+lst))} 得出 @tt{(number-elements lst)} （但是，可以看看练习 1.36）。
+
+要解决这个问题，我们 @elem[#:style question]{推广} (@emph{generalize}) 它。我们
+写一个过程 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用
+递归处理列表，这个过程很容易写。
+
+@; @racketblock with contracts and usage
+@racketblock[
+@; contracts
+@#,elem{@bold{@tt{number-elements-from}} : @m{Listof(SchemeVal) \times Int \to Listof(List(Int, SchemeVal))}}
+@; usage
+@#,elem{@bold{用法} : @tt{(number-elements-from '(@m{v_0} @m{v_1} @m{v_2} ...) n) @linebreak[]
+           = ((@m{n} @m{v_0}) (@m{n + 1} @m{v_1}) (@m{n + 2} @m{v_2}) ...)}}
+(define number-elements-from
+  (lambda (lst n)
+    (if (null? lst) '()
+        (cons
+         (list n (car lst))
+         (number-elements-from (cdr lst) (+ n 1))))))
+]
+@;
+
+合约的标题告诉我们这个过程取两个参数，一个列表（包含任意 Scheme 值）和一个整数，
+返回一个列表，列表中的每个元素是包含两个元素的列表：一个整数，一个 Scheme 值。
+
+一旦我们定义了 @tt{number-elements-from}，很容易写出所求的过程。
+
+@; codeblock with contracts and usage
+@racketblock[
+@; contracts
+@#,elem{@bold{@tt{number-elements}} : @m{Listof(SchemeVal) \to Listof(List(Int, SchemeVal))}}
+(define number-elements
+  (lambda (lst n)
+    (number-elements-from lst 0)))
+]
+@;
+
+这里有两个要点。首先，过程 @tt{number-elements-from} 的定义独立于
+@tt{number-elements}。程序员经常要写一些过程，只调用其他辅助过程，多传递一些常量
+参数。除非我们理解辅助过程对它的@emph{每个}参数做什么，我们很难理解调用它的过程
+做什么。这给了我们一条口诀：
+
+@; @tip[#:title
+不要神秘小工具！
+@; ]
+@; {
+定义辅助过程时，总是指明它对每个参数做什么，而不仅仅是@elem[#:style question]{初
+始值}。
+@; }
+
+其次，@tt{number-elements-from} 的两个参数各司其职。第一个参数是我们要处理的列表。
+它随每一次递归调用而减小。而第二个参数，是对我们当前工作@emph{上下文}
+(@emph{context}) 的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
+@tt{number-elements-from} 处理原列表的每个子列表。第二个参数告知我们子列表在原列
+表中的位置。随递归调用，它不减反增，因为我们每次都跳过原列表的一个元素。有时我们
+称之为@emph{上下文参数} (@emph{context argument})，或者 @emph{继承属性}
+(@emph{inherited attribute})。
+
+另一个例子是向量求和。
+
+如果我们把列表中的值加起来，我们可以依照语法，递归处理列表的余项。那么我们的过程
+看起来像是：
+
+@; racketblock with contracts
+@racketblock[
+@; contracts
+@#,elem{@bold{@tt{list-sum}} : @m{Listof(Int) \to Int}}
+(define list-sum
+  (lambda (loi)
+    (if (null? loi)
+        0
+        (+ (car loi)
+           (list-sum (cdr loi))))))
+]
+@;
+
+但是不可能按照这种方式处理向量，因为它们不能够很方便地拆解。
+
+因为我们无法拆解向量，我们把问题推广为计算向量某一部分的和。我们的问题定义为，计算
+
+@$${\sum_{i=0}^{i=length(v)-1} v_i}
+
+其中，@${v} 是整数向量。我们推广该问题，把上界改为一个参数 @${n}，这样，新的任务
+是计算
+
+@$${\sum_{i=0}^{i=n} v_i}
+
+其中，@${0 \leq n \leq length(v)}。
+
+按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
+
+@; codeblock with contracts and usage
+@racketblock[
+@; contracts
+@#,elem{@bold{@tt{partial-vector-sum}} : @m{Vectorof(Int) \times Int \to Int}}
+@; usage
+@#,elem{@bold{用法} : 若 @m{0 \leq n < length(v)}，则
+         @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
+(define partial-vector-sum
+  (lambda (v n)
+    (if (zero? n)
+        (vector-ref v 0)
+        (+ (vector-ref v n)
+           (partial-vector-sum v (- n 1))))))
+]
+@;
+
+由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
+\leq n} 且 @${n \neq 0}，可得 @${0 \neq (n - 1)}，所以递归调用过程
+@${partial-vector-sum} 仍然满足其合约。
+
+现在，要解决我们原来的问题@elem[#:style question]{就很简单了}。若向量程度为 0，
+过程 @${partial-vector-sum} 不适用，所以得另行处理这种情况。
+
+@; racketblock with contracts and usage
+@racketblock[
+@; contracts
+@#,elem{@bold{@tt{vector-sum}} : @m{Vectorof(Int) \to Int}}
+@; usage
+@#,elem{@bold{用法} : @tt{(vector-sum @m{v}) = @m{\sum\limits_{i=0}^{i=length(v)-1} v_i}}}
+(define vector-sum
+  (lambda (v)
+    (let ((n (vector-length v)))
+      (if (zero? n)
+          0
+          (partial-vector-sum v (- n 1))))))
+]
+@;
+
+许多情况下，引入辅助变量或过程来解决问题很有帮助，甚至必不可少。要是能对新过程做
+什么给出独立的定义，尽请这样做。
+
+@; @exercise[#:difficulty 2 #:tag "e1.14"]{
+
+ 若 @${0 \leq n < length(v)}，证明 @tt{partial-vector-sum} 的正确性。
+
+@; }
+
+@section[#:tag "ex"]{练习}
+
+学写递归程序需要练习，那么我们拿几道习题结束本章。
+
+每道习题都假定 @tt{s} 是一个符号，@tt{n} 是一个非负整数，@tt{lst} 是一个列表，
+@tt{loi} 是一个整数列表，@tt{los} 是一个符号列表，@tt{slist} 是一个 s-list，
+@tt{x} 是任意 Scheme 值；类似地，@tt{s1} 是一个符号，@tt{los2} 是一个符号列表，
+@tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}，即一个过程，
+取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除非某个具体问题另有限制，不要对数
+据作其他假设。在这些习题中，不需要检查输入是否符合合约；对每个过程，都假定输入值
+是指定集合的成员。
+
+定义，测试和调试每个过程。你的定义应当有合约和用法注释，像我们本章用的这样。可以
+随便定义辅助过程，但是你定义的每个辅助过程都应该有它的说明，如同 1.3 节那样。
+
+测试这些程序时，先试试所有给出的例子，然后用其他例子测试，因为给定的例子不足以涵
+盖所有可能的错误。
+
+@; @exercise[#:difficulty 1 #:tag "e1.15"]{
+
+ @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
+
+@(define duple-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+     '(define duple
+        (lambda (n x)
+          (if (eq? n 0)
+              '()
+              (cons x (duple (- n 1) x))))))))
+
+@examples[#:eval duple-eval
+          #:label #f
+          (duple 2 3)
+          (duple 4 '(ha ha))
+          (duple 0 '(blah))]
+
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.16"]{
+
+ @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
+ 把每个二元列表反转。
+
+@(define invert-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+     '(define invert
+        (lambda (lst)
+          (if (null? lst)
+              '()
+              (cons (invert-2-lst (car lst))
+                    (invert (cdr lst))))))
+     '(define invert-2-lst
+        (lambda (2-lst)
+          (list (cadr 2-lst) (car 2-lst)))))))
+
+@examples[#:eval invert-eval
+          #:label #f
+(invert '((a 1) (a 2) (1 b) (2 b)))]
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.17"]{
+
+ @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
+
+@(define down-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define down
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        (cons (list (car lst))
+              (down (cdr lst)))))))))
+
+@examples[#:eval down-eval
+          #:label #f
+(down '(1 2 3))
+(down '((a) (fine) (idea)))
+(down '(a (more (complicated)) object))]
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.18"]{
+
+ @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
+ 为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
+
+@(define swapper-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define swapper
+  (lambda (s1 s2 slist)
+    (cond ((null? slist) '())
+          ((eq? s1 (car slist))
+           (cons s2 (swapper s1 s2 (cdr slist))))
+          ((eq? s2 (car slist))
+           (cons s1 (swapper s1 s2 (cdr slist))))
+          ((symbol? (car slist))
+           (cons (car slist) (swapper s1 s2 (cdr slist))))
+          (else
+           (cons (swapper s1 s2 (car slist))
+                 (swapper s1 s2 (cdr slist))))))))))
+
+@examples[#:eval swapper-eval
+          #:label #f
+(swapper 'a 'd '(a b c d))
+(swapper 'a 'd '(a d () c d))
+(swapper 'x 'y '((x) y (z (x))))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.19"]{
+
+ @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
+ @tt{x} 外，与 @tt{lst} 相同。
+
+@(define list-set-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define list-set
+  (lambda (lst n x)
+    (if (null? lst)
+        '()
+        (if (eq? n 0)
+            (cons x (cdr lst))
+            (cons (car lst)
+                  (list-set (cdr lst) (- n 1) x)))))))))
+
+@examples[#:eval list-set-eval
+          #:label #f
+(list-set '(a b c d) 2 '(1 2))
+(list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)]
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.20"]{
+
+ @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
+
+@(define count-occurrences-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define count-occurrences
+  (lambda (s slist)
+    (cond ((null? slist) 0)
+          ((eq? s (car slist))
+           (+ 1 (count-occurrences s (cdr slist))))
+          ((symbol? (car slist))
+           (count-occurrences s (cdr slist)))
+          (else
+           (+ (count-occurrences s (car slist))
+              (count-occurrences s (cdr slist))))))))))
+
+@examples[#:eval count-occurrences-eval
+          #:label #f
+(count-occurrences 'x '((f x) y (((x z) x))))
+(count-occurrences 'x '((f x) y (((x z) () x))))
+(count-occurrences 'w '((f x) y (((x z) x))))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.21"]{
+
+ @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}
+ 返回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不
+ 限。
+
+@(define product-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define product
+  (lambda (sos1 sos2)
+    (cond ((or (null? sos1) (null? sos2))
+           '())
+          (else
+           (append (s-product (car sos1) sos2)
+                   (product (cdr sos1) sos2))))))
+'(define s-product
+  (lambda (s sos)
+    (if (null? sos)
+        '()
+        (cons (list s (car sos))
+              (s-product s (cdr sos)))))))))
+
+@examples[#:eval product-eval
+          #:label #f
+(product '(a b c) '(x y))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.22"]{
+
+ @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
+ 成。
+
+@(define filter-in-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define filter-in
+  (lambda (pred lst)
+    (if (null? lst)
+        '()
+        (if (pred (car lst))
+            (cons (car lst)
+                  (filter-in pred (cdr lst)))
+            (filter-in pred (cdr lst)))))))))
+
+@examples[#:eval filter-in-eval
+          #:label #f
+(filter-in number? '(a 2 (1 3) b 7))
+(filter-in symbol?  '(a (b c) 17 foo))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.23"]{
+
+ @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
+
+@(define list-index-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define list-index
+  (lambda (pred lst)
+    (list-index-iter pred lst 0)))
+'(define list-index-iter
+  (lambda (pred lst n)
+    (if (null? lst)
+        #f
+        (if (pred (car lst))
+            n
+            (list-index-iter pred (cdr lst) (+ n 1)))))))))
+
+@examples[#:eval list-index-eval
+          #:label #f
+(list-index number? '(a 2 (1 3) b 7))
+(list-index symbol?  '(a (b c) 17 foo))
+(list-index symbol?  '(1 2 (a b) 3))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.24"]{
+
+ 若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
+ 否则返回 @tt{#t}。
+
+@(define every?-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define every?
+  (lambda (pred lst)
+    (if (null? lst)
+        #t
+        (if (pred (car lst))
+            (every? pred (cdr lst))
+            #f)))))))
+
+@examples[#:eval every?-eval
+          #:label #f
+(every? number? '(a b c 3 e))
+(every? number? '(1 2 3 4 5))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.25"]{
+
+ 若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
+
+@(define exists?-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define exists?
+  (lambda (pred lst)
+    (if (null? lst)
+        #f
+        (if (pred (car lst))
+            #t
+            (exists? pred (cdr lst)))))))))
+
+@examples[#:eval exists?-eval
+          #:label #f
+(exists? number? '(a b c 3 e))
+(exists? number? '(a b c d e))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.26"]{
+
+ @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
+ 则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
+ (up lst))} 不一定是列表（参见习题 1.17）。
+
+@(define up-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define up
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        (if (list? (car lst))
+            (append (car lst)
+                    (up (cdr lst)))
+            (cons (car lst)
+                  (up (cdr lst))))))))))
+
+@examples[#:eval up-eval
+          #:label #f
+(up '((1 2) (3 4)))
+(up '((x (y)) z))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.27"]{
+
+ @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
+
+@(define flatten-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define flatten
+  (lambda (slist)
+    (if (null? slist)
+        '()
+        (if (list? (car slist))
+            (append (flatten (car slist))
+                    (flatten (cdr slist)))
+            (cons (car slist)
+                  (flatten (cdr slist))))))))))
+
+@examples[#:eval flatten-eval
+          #:label #f
+(flatten '(a b c))
+(flatten '((a) () (b ()) () (c)))
+(flatten '((a b) c (((d)) e)))
+(flatten '(a b (() (c))))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.28"]{
+
+ @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
+ 回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
+
+@(define merge-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define merge
+  (lambda (loi1 loi2)
+    (cond ((null? loi2)
+           loi1)
+          ((null? loi1)
+           loi2)
+          ((< (car loi1) (car loi2))
+           (cons (car loi1)
+                 (merge (cdr loi1) loi2)))
+          (else
+           (cons (car loi2)
+                 (merge loi1 (cdr loi2)))))))
+'(define sort
+  (lambda (loi)
+    (sort-iter '() loi)))
+'(define sort-iter
+  (lambda (loi1 loi2)
+    (if (null? loi2)
+        loi1
+        (sort-iter (merge loi1 (list (car loi2)))
+                   (cdr loi2))))))))
+
+@examples[#:eval merge-eval
+          #:label #f
+(merge '(1 4) '(1 2 8))
+(merge '(35 62 81 90 91) '(3 83 85 90))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.29"]{
+
+ @tt{(sort loi)} 返回一列表，将 @tt{loi} 中的元素按照升序排列。
+
+@examples[#:eval merge-eval
+          #:label #f
+(sort '(8 2 5 2 3))]
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.30"]{
+
+ @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
+ 排列。
+
+@(define sort/predicate-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define sort/predicate
+  (lambda (pred loi)
+    (sort-iter/predicate pred '() loi)))
+'(define sort-iter/predicate
+  (lambda (pred loi1 loi2)
+    (if (null? loi2)
+        loi1
+        (sort-iter/predicate
+         pred
+         (merge/predicate pred loi1 (list (car loi2)))
+         (cdr loi2)))))
+'(define merge/predicate
+  (lambda (pred loi1 loi2)
+    (cond ((null? loi2)
+           loi1)
+          ((null? loi1)
+           loi2)
+          ((pred (car loi1) (car loi2))
+           (cons (car loi1)
+                 (merge/predicate pred (cdr loi1) loi2)))
+          (else
+           (cons (car loi2)
+                 (merge/predicate pred loi1 (cdr loi2))))))))))
+
+@examples[#:eval sort/predicate-eval
+          #:label #f
+(sort/predicate < '(8 2 5 2 3))
+(sort/predicate > '(8 2 5 2 3))]
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.31"]{
+
+ 写出如下过程，对二叉树（定义 1.1.7）进行运算：@tt{leaf} 和 @tt{interior-node}
+ 生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
+ @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
+ 用。
+
+@; }
+
+@; @exercise[#:difficulty 1 #:tag "e1.32"]{
+
+ 写出过程 @tt{double-tree}，它取一棵二叉树，形如定义 1.1.7，生成另一棵二叉树，把
+ 原二叉树中的所有整数翻倍。
+
+@; }
+
+@; @exercise[#:difficulty 2 #:tag "e1.33"]{
+
+ 写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（定义 1.1.7），生成与
+ 原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
+ 含有 @tt{red} 符号的节点数。例如，表达式
+
+@codeblock{
+(mark-leaves-with-red-depth
+ (interior-node 'red
+  (interior-node 'bar
+   (leaf 26)
+   (leaf 12))
+  (interior-node 'red
+   (leaf 11)
+   (interior-node 'quux
+    (leaf 117)
+    (leaf 14)))))
+}
+
+ 使用习题 1.31 中定义的过程，应返回二叉树
+
+@codeblock{
+(red
+ (bar 1 1)
+ (red 2 (quux 2 2)))
+}
+
+
+@; }
+
+@; @exercise[#:difficulty 3 #:tag "e1.34"]{
+
+ 写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树（第
+ @elem[#:style question]{10} 页）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的
+ 列表，表示如何找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
+
+@(define path-eval
+  (parameterize ([sandbox-output 'string]
+                 [sandbox-error-output 'string]
+                 [sandbox-memory-limit 50])
+    (make-evaluator
+     'racket/base
+'(define bst-leaf '())
+'(define bst-node
+  (lambda (n lbst rbst)
+    (list n lbst rbst)))
+'(define bst-leaf? null?)
+'(define bst-lson cadr)
+'(define bst-rson caddr)
+'(define bst-contents
+  (lambda (bst)
+    (if (bst-leaf? bst)
+        (bst-leaf)
+        (car bst))))
+'(define path
+  (lambda (n bst)
+    (cond ((bst-leaf? bst)
+           '())
+          ((< (bst-contents bst) n)
+           (cons 'right
+                 (path n (bst-rson bst))))
+          ((> (bst-contents bst) n)
+           (cons 'left
+                 (path n (bst-lson bst))))
+          (else
+           '())))))))
+
+@examples[#:eval path-eval
+          #:label #f
+(path 17 '(14 (7 () (12 () ()))
+              (26 (20 (17 () ())
+                      ())
+                  (31 () ()))))]
+
+@; }
+
+@; @exercise[#:difficulty 3 #:tag "e1.35"]{
+
+ 写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
+ 的内容从 0 开始计的整数。例如，
+
+@codeblock{
+(number-leaves
+ (interior-node 'foo
+  (interior-node 'bar
+   (leaf 26)
+   (leaf 12))
+  (interior-node 'baz
+   (leaf 11)
+   (interior-node 'quux
+    (leaf 117)
+    (leaf 14)))))
+}
+
+应返回
+
+@codeblock{
+(foo
+ (bar 0 1)
+ (baz
+  2
+  (quux 3 4)))
+}
+
+@; }
+
+@; @exercise[#:difficulty 3 #:tag "e1.36"]{
+
+ 写出过程 @tt{g}，则第 @elem[#:style question]{23} 页的 @tt{number-elements} 可
+ 以定义为：
+
+@codeblock{
+(define number-elements
+  (lambda (lst)
+    (if (null? lst) '()
+        (g (list 0 (car lst)) (number-elements (cdr lst))))))
+}
+
+@; }
