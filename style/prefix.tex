@@ -1,4 +1,5 @@
 \documentclass{book}
+\usepackage[asymmetric, reversemarginpar]{geometry}
 \usepackage{xeCJK}
 \setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
 \setCJKsansfont{Adobe Song Std}
@@ -53,3 +54,8 @@
   linkcolor=black,
   citecolor=red
 }
+
+\usepackage{xpatch}
+\makeatletter
+\AtBeginDocument{\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}}
+\makeatother
