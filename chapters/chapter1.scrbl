@@ -314,19 +314,18 @@ List\mbox{-}of\mbox{-}Int &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
   @item{@bold{终止符}。这些是集合外在表示中的字符，在本例中，是“@tt{.}”，
         “@tt{(}”和“@tt{)}”。这些常用打字机字体写出，如 @tt{lambda}。}
 
-  @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的等
-       号左边是一个非终止符，等号右边包含终止符和非终止符。左右两边通常用符号
-       @${::=} 分隔，读作@emph{是}或@emph{可能是}。等号右边用其他句法类别和
-       @emph{终止符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别
-       的元素。}
+  @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的左
+       边是一个非终止符，右边包含终止符和非终止符。左右两边通常用符号 @${::=} 分
+       隔，读作@emph{是}或@emph{可能是}。式子右边用其他句法类别和@emph{终止
+       符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
 
 ]
 
 如果某些句法类别的含义在上下文中足够清晰，在生成式中提到它们时通常不作定义，如
 @${Int}。
 
-语法常常简写。当一个生成式的等号左边与前一生成式相同时，一般会略去。根据这一惯例，
-我们的语法可以写作
+语法常常简写。当一个生成式的左边与前一生成式相同时，一般会略去。根据这一惯例，我
+们的语法可以写作
 
 @envalign*{
 List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
@@ -341,7 +340,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 @$${@List-of-Int[] ::= @tt{()} @$${\mid} @tt{(@${Int} . @List-of-Int[])}}
 
 另一种简写是 @emph{克莱尼星号} (@emph{Kleene Star})，写作 @${\{...\}^*}。当它出
-现在等号右边时，表示一个序列，由任意多个花括号之间的内容组成。用克莱尼星号，
+现在右边时，表示一个序列，由任意多个花括号之间的内容组成。用克莱尼星号，
 @List-of-Int[] 的定义可以简写为
 
 @$${@List-of-Int[] ::= @tt{(@${\{Int\}^*})}}
@@ -354,19 +353,15 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，@${Int^{*(c)}} 表示
 一个序列，包含任意数量的非终止符@${Int}元素，以非空字符序列 @${c} 分隔。这也包含
 没有元素的情况。如果有 0 个元素，得到的是空字符串。例如，@${Int^{*(,)}} 包含字符
-串@nested{
-  @hspace[4]@tt{8}
-
-  @hspace[4]@tt{14, 12}
-
-  @hspace[4]@tt{7, 3, 14, 16}
+串@verbatim[#:indent 2]{
+  8
+  14, 12
+  7, 3, 14, 16
 }
-@${Int^{*(;)}} 包含字符串 @nested{
-  @hspace[4]@tt{8}
-
-  @hspace[4]@tt{14; 12}
-
-  @hspace[4]@tt{7; 3; 14; 16}
+@${Int^{*(;)}} 包含字符串@verbatim[#:indent 2]{
+  8
+  14; 12
+  7; 3; 14; 16
 }
 
 这些简写不是必需的，总能够不用它们重写语法。
@@ -381,7 +376,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
                   \Rightarrow @tt{(14 . @List-of-Int[])} \\
                   \Rightarrow @tt{(14 . ())}}
 
-非终止符的替换顺序无关紧要。所以@tt{(14 . ())}的推导也可以写成：
+非终止符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
 
 @${@List-of-Int[] \Rightarrow @tt{(@${Int} . @List-of-Int[])} \\
                   \Rightarrow @tt{(Int . ())} \\
@@ -393,50 +388,52 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 @; }
 
-让我们思考其他一些有用集合的定义。
+再来看一些有用集合的定义。
 
 @itemlist[#:style 'ordered
 
- @item{许多操作符号的过程被设计为只处理包含符号和其他类似约束的列表。我们把这些
- 叫做 @tt{s-list}，定义如下：
+ @item{许多符号操作过程用于处理只包含符号和具有类似约束的列表。我们把这些叫做
+ @tt{s-list}，定义如下：
 
  @; @def[ #:title
  （s-list，s-exp）
  @; ]
  @; {
- @$${S\mbox{-}list ::= ({S-exp^*})}
- @$${S\mbox{-}list ::= Symbol | S\mbox{-}list}
+ @envalign*{S\mbox{-}list &::= ({S-exp^*}) \\
+            S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
  @; }
 
  s-list 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。这里是一些 s-list。
 
- @tt{(a b c)}
- @tt{(an (((s-list)) (with () lots) ((of) nesting)))}
+ @verbatim[#:indent 2]{
+ (a b c)
+ (an (((s-list)) (with () lots) ((of) nesting)))
+ }
 
- 有时也使用推广的 s-list 定义，既允许整数，也允许符号。
+ 有时也使用更宽松的 s-list 定义，既允许整数，也允许符号。
 
  }
 
- @item{使用三个元素的列表表示内部节点，则叶子是数值，内部节点是符号的二叉树可用
- 语法表示为：
+ @item{使用三元素列表表示内部节点，则以数值为叶子，以符号标示内部节点的二叉树可
+ 用语法表示为：
 
  @; @def[ #:title
  （二叉树）
  @; ]
  @; {
- @$${Bintree ::= Int | (Symbol Bintree Bintree)}
+ @$${Bintree ::= Int \mid (Symbol Bintree Bintree)}
  @; }
 
- 这里是此类树的一些例子：
+ 这是此类树的几个例子：
 
- @tt{1}
- @tt{2}
- @tt{(foo 1 2)}
- @tt{(bar 1 (foo 1 2))}
- @tt{(baz
-       (bar 1 (foo 1 2))
-       (biz 4 5))}
-
+ @verbatim[#:indent 2]{
+ 1
+ 2
+ (foo 1 2)
+ (bar 1 (foo 1 2))
+ (baz
+  (bar 1 (foo 1 2))
+  (biz 4 5))}
  }
 
  @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单语言，常用于研究编
@@ -1088,8 +1085,8 @@ Kleene 星号重写语法。得出的语法表明，我们的过程应当该递�
  不做其他。}
 
  @item{在每个过程中，为相应非终止符的每一生成式写一分支。你可能需要额外的
- @elem[#:style question]{分支结构}，但这样才能开始。对等号右边出现的每个非终止符，
- 递归调用相应的过程。}
+ @elem[#:style question]{分支结构}，但这样才能开始。对右边出现的每个非终止符，递
+ 归调用相应的过程。}
 
 ]
 
