@@ -421,7 +421,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  （二叉树）
  @; ]
  @; {
- @$${Bintree ::= Int \mid (Symbol Bintree Bintree)}
+ @$${Bintree ::= Int \mid @tt{(@${Symbol} @${Bintree} @${Bintree})}}
  @; }
 
  这是此类树的几个例子：
@@ -443,53 +443,53 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  （lambda 演算）
  @; ]
  @; {
- @$${LcExp ::= Identifier ::= @tt{(lambda (@${Identifier}) @${LcExp})} ::= @tt{(@${LcExp} @${LcExp})}}
+@envalign*{LcExp &::= @m{Identifier} \\
+                 &::= @tt{(lambda (@m{Identifier}) @m{LcExp})} \\
+                 &::= @tt{(@m{LcExp} @m{LcExp})}}
 
- @emph{其中，标识符 (@${Identifier}) 是除 @tt{lambda} 之外的任何符号。}
+ 其中，identifier 是除 @tt{lambda} 之外的任何符号。
  @; }
 
- 第二个生成式中的标识符是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表达式的
- @emph{绑定变量} (@emph{bound variable})，因为@elem[#:style question]{同名变量}
- 一旦出现在主体内就由它绑定或捕获。主体内出现的任何@elem[#:style question]{同名
- 变量}都指代这一个。
+ 第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
+ 达式的@emph{绑定变量} (@emph{bound variable})，因为它绑定（或称捕获）主体内出现
+ 的任何同名变量。出现在主体内的同名变量都指代这一个。
 
- 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在那种语言里，
+ 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在这种语言里，
 
  @codeblock{(lambda (x) (+ x 5))}
 
- 是一表达式，@tt{x} 是其绑定变量。这一表达式描述的过程把参数加5。因此，在
+ 是一表达式，@tt{x} 是其绑定变量。这式子表示一个过程，把它的参数加5。因此，在
 
  @codeblock{((lambda (x) (+ x 5)) (- x 7))}
 
  中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。1.2.4 节中
- 介绍了 @tt{occurs-free?}，@elem[#:style question]{到时我们再讨论这问题。}
+ 介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
 
- 这一语法把 @${LcExp} 的元素定义为 Scheme 值，因此很容易写出程序来操作它们。
+ 该语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序来处理它们。
 
  }
 
 ]
 
-这些语法叫做 @emph{上下文无关} (@emph{context-free}) 语法，因为由给定句法类别定
-义的规则可以在引用这一语法类别的任何上下文中使用。有时这不够严格。考虑二叉搜索树。
-二叉搜索树中的一个节点或者为空，或者包含一个整数、两棵子树
+这些语法叫做@emph{上下文无关} (@emph{context-free}) 语法，因为一条规则定义的句法
+类别可以在涉及它的任何语境中使用。有时这不够严格。考虑二叉搜索树。其节点或者为空，
+或者包含一个整数、两棵子树
 
-@$${Binary\mbox{-}search\mbox{-}tree ::= @tt{()} | @tt{(@${Int}
-@${Binary\mbox{-}search\mbox{-}tree} @${Binary\mbox{-}search\mbox{-}tree})}}
+@$${Binary\mbox{-}search\mbox{-}tree ::= @tt{()} \mid
+    @tt{(@${Int} @${Binary\mbox{-}search\mbox{-}tree} @${Binary\mbox{-}search\mbox{-}tree})}}
 
-该语法正确描述了每个节点的结构，但是忽略了关于二叉搜索树的一个重要事实：所有左子
-树的键值都小于（或等于）当前节点，所有右子树的键值都大于当前节点。
+这如实反映了每个节点的结构，但是忽略了二叉搜索树的一个要点：所有左子树的键值都小
+于（或等于）当前节点，所有右子树的键值都大于当前节点。
 
-由于这一额外约束，不是每个由 @${Binary\mbox{-}search\mbox{-}tree} 得出的句法推导
-都是正确的二叉搜索树。要判断特定的生成式能否用于特定的句法推导，必须察看使用生成
-式的上下文。这样的约束叫做@emph{上下文敏感约束} (context-sensitive constraints)，
-或@emph{不变式} (invariants)。
+因为这条额外限制，从 @${Binary\mbox{-}search\mbox{-}tree} 得出的句法推导并不都是
+正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成式用在哪种
+语境。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive constraints})，
+或称@emph{不变式} (@emph{invariants})。
 
-定义编程语言的语法也会带来上下文敏感约束。例如，在许多编程语言中变量必须在使用之
-前声明。@elem[#:style question]{对变量使用的这一约束就对使用它们的上下文敏
-感。}@nonbreaking{}虽然可以用形式化方法定义上下文敏感约束，但这些方法远比本章考
-虑的复杂。实际中，通常的方法是先定义上下文无关语法，随后再用其他方法添加约束。第
-七章展示了这种技术的一个例子。
+定义编程语言的语法也会造成上下文敏感限制。例如，在许多编程语言中变量必须在使用之
+前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
+限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
+后再用其他方法添加上下文敏感限制。第七章展示了这种技巧的一个例子。
 
 @subsection[#:tag "induct"]{归纳}
 
