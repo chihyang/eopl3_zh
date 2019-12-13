@@ -82,11 +82,11 @@ in-S? : N -> Bool
 @${n - 3 \in S}。欲知此，首先判断是否@${(n - 3) \geqslant 0}。如果是，那么可以用
 我们的过程判断它是否属于@${S}。如果不是，那么@${n}不可能属于@${S}。
 
-这里是定义@${S}的另一种方式。
+@${S}又能够定义为：
 
 @; @def{
 
- 定义集合@${S}为@${N}所包含的集合中，满足如下两条性质的最小集合：
+ 集合@${S}为@${N}所包含的集合中，满足如下两条性质的最小集合：
 
  @itemlist[#:style 'ordered
 
@@ -104,7 +104,7 @@ in-S? : N -> Bool
 @${S_2}最小），因此@${S_1 = S_2}。之所以需要这一额外条件，是因为否则的话将有许多
 集合满足其他两个条件（见练习1.3）。
 
-该定义的另一种表示方法是：
+该定义还能表示为：
 
 @; infer should be implemented in scribble rather than use \infer directly
 @; infer: (infer conclusion hypothesis ...)
@@ -161,8 +161,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
   @item{@${@tt{()} \in @List-of-Int{}}，或}
 
-  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @tt{(@${n} . @${l}) \in
-        @List-of-Int{}}。}
+  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @tt{(@${n} . @${l})
+        @${\in} @List-of-Int{}}。}
 
  ]
 
@@ -211,8 +211,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 ]
 
-改点示法为列表法，可知 @tt{()}、 @tt{(14)}、 @tt{(3 14)} 以及 @tt{(-7 3 14)} 都
-是@List-of-Int[]的元素。
+改点缀表示法为列表表示法，可知 @tt{()}、 @tt{(14)}、 @tt{(3 14)} 以及 @tt{(-7 3
+14)} 都是@List-of-Int[]的元素。
 
 还可以结合各条规则来证明@${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}}，以见
 出整个推理过程。下面的树状图叫做@emph{推导} (@emph{derivation}) 或@emph{推理树}
@@ -253,14 +253,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
  @itemlist[#:style 'ordered
 
-  @item{@${(0, 1) \in S \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
+  @item{@${(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
 
-  @item{@${(0, 1) \in S \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
+  @item{@${(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
 
-  @item{@${(0, 0, 1) \in S \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@${(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
   @; difficulty: (difficulty 3)
-  @item{@bold["["]@${\star\star\star}@bold["]"] @${(0, 1, 0) \in S \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@bold["["]@${\star\star\star}@bold["]"] @${(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
 
  ]
 
@@ -269,15 +269,15 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @; @exercise[#:difficulty 1 #:tag "e1.3"]{
 
  找出自然数的子集 @${T}，满足 @${0 \in T}，且对任何 @${n \in T}，都有 @${n + 3
- \in T}，但 @${ T \neq S}，@${S} 是由定义 1.1.2 给出的集合。
+ \in T}，但 @${T \neq S}，@${S} 是由定义 1.1.2 给出的集合。
 
 @; }
 
 @subsection[#:tag "dsug"]{用语法定义集合}
 
-前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为解决这点，我们
-展示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，
-但也能用来定义值的集合。
+前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为了方便，我们展
+示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，但
+也能用来定义值的集合。
 
 例如，集合 @List-of-Int[]可用语法定义为：
 
@@ -392,14 +392,14 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 @itemlist[#:style 'ordered
 
- @item{许多符号操作过程用于处理只包含符号和具有类似约束的列表。我们把这些叫做
+ @item{许多符号操作过程用于处理只包含符号和具有类似限制的列表。我们把这些叫做
  @tt{s-list}，定义如下：
 
  @; @def[ #:title
  （s-list，s-exp）
  @; ]
  @; {
- @envalign*{S\mbox{-}list &::= ({S-exp^*}) \\
+ @envalign*{S\mbox{-}list &::= @tt{(@m{\{S\mbox{-}exp\}^*})} \\
             S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
  @; }
 
@@ -486,15 +486,15 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 语境。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive constraints})，
 或称@emph{不变式} (@emph{invariants})。
 
-定义编程语言的语法也会造成上下文敏感限制。例如，在许多编程语言中变量必须在使用之
+定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
 前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
 后再用其他方法添加上下文敏感限制。第七章展示了这种技巧的一个例子。
 
 @subsection[#:tag "induct"]{归纳}
 
-@elem[#:style question]{归纳式的集合定义有两种用法}：证明关于集合成员的定理，写
-出操作集合成员的程序。这里给出一个此类证明的例子，写程序是下一节的主题。
+用归纳法描述的集合，其定义有两种用法：证明关于集合成员的定理，写出操作集合成员的
+程序。这里给出一个此类证明的例子，写程序留作下节的主题。
 
 @; @theorem
 @; {
