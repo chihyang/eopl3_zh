@@ -2,6 +2,7 @@
 @(require "style.rkt")
 @(require latex-utils/scribble/theorem)
 @(require latex-utils/scribble/math)
+@(require latex-utils/scribble/utils)
 @(require scribble/manual)
 @(require scribble-math)
 @(require scribble/example)
@@ -29,20 +30,23 @@
 
 @; definition: (def #:title title #:tag tag pre-flow ...)
 @; @def {
+@; 自然数@${n}属于@${S}，当且仅当：
+@; @itemlist[#:style 'ordered
 
- 自然数@${n}属于@${S}，当且仅当：
+@;  @item{@${{n = 0}}，或}
 
- @itemlist[#:style 'ordered
+@;  @item{@${n - 3 \in S}。
 
-  @item{@${{n = 0}}，或}
-
-  @item{@${n - 3 \in S}。
-
- }
-
- ]
-
+@; }]
 @; }
+@env["sdef"]{
+ 自然数@m{n}属于@m{S}，当且仅当：
+ \begin{enumerate}
+  \item @m{n = 0}，或
+  \item @m{n - 3 \in S}
+ \end{enumerate}
+}
+
 
 来看看如何用这一定义判断哪些自然数属于@${S}。已知@${0 \in S}，因此@${3 \in S}，
 因为@${(3 - 3) = 0}，而@${0 \in S}。同样地，@${6 \in S}，因为@${(6 - 3) = 3}，而
@@ -85,22 +89,27 @@ in-S? : N -> Bool
 @${S}又能够定义为：
 
 @; @def{
+@; 集合@${S}为@${N}所包含的集合中，满足如下两条性质的最小集合：
 
- 集合@${S}为@${N}所包含的集合中，满足如下两条性质的最小集合：
+@; @itemlist[#:style 'ordered
 
- @itemlist[#:style 'ordered
+@;  @item{@${0 \in S}，且}
 
-  @item{@${0 \in S}，且}
+@;  @item{若@${n \in S}，则@${n + 3 \in S}。}
 
-  @item{若@${n \in S}，则@${n + 3 \in S}。}
-
- ]
-
+@; ]
 @; }
+@env["sdef"]{
+ 集合@m{S}为@m{N}所包含的集合中，满足如下两条性质的最小集合：
+ \begin{enumerate}
+  \item @m{0 \in S}，且
+  \item 若@m{n \in S}，则@m{n + 3 \in S}。
+ \end{enumerate}
+}
 
 “最小集合”是指该集合满足性质 1 和 2，并且是其他任何满足性质 1 和 2 的集合的子
 集。易知只能有一个这样的集合：如果@${S_1}和@${S_2}都满足性质 1 和 2，并且都为最
-小，那么@${S_1 \subseteq S_2}（因为@${S_1}最小）并且@${S_2 \subseteq S_1}（因为
+小，那么@${S_1 \subseteq S_2}（因为@${S_1}最小）且@${S_2 \subseteq S_1}（因为
 @${S_2}最小），因此@${S_1 = S_2}。之所以需要这一额外条件，是因为否则的话将有许多
 集合满足其他两个条件（见练习1.3）。
 
@@ -114,7 +123,7 @@ in-S? : N -> Bool
 @; @infer[${(n + 3) \in S}]{$@{n \in S}}
 @$${\infer{(n + 3) \in S}{n \in S}}
 
-这只是前一种定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
+这只是前一定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
 inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称作
 @emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分称
 作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。要罗列两
@@ -133,54 +142,75 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 再来看几个运用这些的例子。
 
 @; @def[ #:title
-（整数列表，自顶向下）
+@; （整数列表，自顶向下）
 @; ]
 @; {
- Scheme列表是整数列表，当且仅当
-
- @itemlist[#:style 'ordered
-
-  @item{列表为空，或}
-
-  @item{列表为序对，首项为整数，余项为整数列表。}
-
-]
-
+@;  Scheme列表是整数列表，当且仅当
+@;
+@;  @itemlist[#:style 'ordered
+@;   @item{列表为空，或}
+@;   @item{列表为序对，首项为整数，余项为整数列表。}
+@; ]
 @; }
+@env["sdef" #:opt (list (bracket "整数列表，自顶向下"))]{
+  Scheme列表是整数列表，当且仅当：
+ \begin{enumerate}
+  \item 列表为空，或
+  \item 列表为序对，首项为整数，余项为整数列表。
+ \end{enumerate}
+}
 
 我们用@${Int}表示所有整数的集合，用@List-of-Int[]表示所有整数列表
 的集合。
 
 @; @def[ #:title
-（整数列表，自底向上）
+@; （整数列表，自底向上）
 @; ]{
 
- 集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
+@; 集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
 
- @itemlist[#:style 'ordered
+@; @itemlist[#:style 'ordered
 
-  @item{@${@tt{()} \in @List-of-Int{}}，或}
+@;  @item{@${@tt{()} \in @List-of-Int{}}，或}
 
-  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @tt{(@${n} . @${l})
-        @${\in} @List-of-Int{}}。}
-
- ]
-
+@;  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @tt{(@${n} . @${l})
+@;        @${\in} @List-of-Int{}}。}
+@; ]
 @; }
+@env["sdef" #:opt (list (bracket "整数列表，自底向上"))]{
+ 集合@m{List\mbox{-}of\mbox{-}Int}是满足如下两条性质的最小Scheme列表集合：
+
+ \begin{enumerate}
+
+  \item @m{\normalfont{@tt{()}} \in List\mbox{-}of\mbox{-}Int}，或
+
+  \item 若 @m{n \in Int}且@m{l \in List\mbox{-}of\mbox{-}Int}，则
+  @m{\normalfont{@tt{(@m{n} . @m{l})}} \in List\mbox{-}of\mbox{-}Int}。
+
+ \end{enumerate}
+}
 
 
 这里，我们用中缀“@tt{.}”代表Scheme中 @racket[cons] 操作的结果。式子@tt{(@${n}
 . @${l})}代表Scheme序对的首项为@${n}，余项为@${l}。
 
 @; @def[ #:title
-（整数列表，推理规则）
+@; （整数列表，推理规则）
 @; ]{
 
- @$${\infer{() \in @List-of-Int{}}{}}
+@; @$${\infer{() \in @List-of-Int{}}{}}
 
- @$${\infer{(n . l) \in @List-of-Int{}}{n \in Int & l \in @List-of-Int{}}}
+@; @$${\infer{(n . l) \in @List-of-Int{}}{n \in Int & l \in @List-of-Int{}}}
 
 @; }
+@env["sdef" #:opt (list (bracket "整数列表，推理规则"))]{
+
+ @mp{\normalfont{@tt{()}} \in List\mbox{-}of\mbox{-}Int}
+
+ @mp{\infer{\normalfont{@tt{(@m{n} . @m{l})}} \in List\mbox{-}of\mbox{-}Int}
+           {n \in Int & l \in List\mbox{-}of\mbox{-}Int}}
+
+}
 
 这三个定义等价。来看看如何用它们生成一些@List-of-Int[]的元素。
 
@@ -228,50 +258,100 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @; exercise: (exercise #:difficulty difficulty #:tag tag pre-flow ...)
 @; @exercise[#:difficulty 1 #:tag "e1.1"]{
 
- 写出下列集合的归纳式定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
- 义，并用你的规则推导出各集合的一些元素。
+@; 写出下列集合的归纳式定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
+@; 义，并用你的规则推导出各集合的一些元素。
 
- @itemlist[#:style 'ordered
+@; @itemlist[#:style 'ordered
 
-  @item{@${\{ 3n + 2 \mid n \in N \}}}
+@;  @item{@${\{ 3n + 2 \mid n \in N \}}}
 
-  @item{@${\{ 2n + 3m + 1 \mid n, m \in N \}}}
+@;  @item{@${\{ 2n + 3m + 1 \mid n, m \in N \}}}
 
-  @item{@${\{ (n, 2n + 1) \mid n \in N \}}}
+@;  @item{@${\{ (n, 2n + 1) \mid n \in N \}}}
 
-  @item{@${\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示：想一想
-        方程@${ (n + 1) ^ 2 = n ^ 2 + 2n + 1}。}
+@;  @item{@${\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示：想一想
+@;        方程@${ (n + 1) ^ 2 = n ^ 2 + 2n + 1}。}
 
- ]
+@; ]
 
 @; }
 @;
 
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=1, label=ex1.1, counter=ChapterCounter"))]{
+
+ 写出下列集合的归纳式定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
+ 义，并用你的规则推导出各集合的一些元素。
+
+  \begin{enumerate}
+
+   \item{@m{\{ 3n + 2 \mid n \in N \}}}
+
+   \item{@m{\{ 2n + 3m + 1 \mid n, m \in N \}}}
+
+   \item{@m{\{ (n, 2n + 1) \mid n \in N \}}}
+
+   \item{@m{\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示：想一想
+         方程@m{ (n + 1) ^ 2 = n ^ 2 + 2n + 1}。}
+
+  \end{enumerate}
+ }
+
 @; @exercise[#:difficulty 2 #:tag "e1.2"]{
+
+@; 下面的几对规则分别定义了什么集合？给出解释。
+
+@; @itemlist[#:style 'ordered
+
+@;  @item{@${(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
+
+@;  @item{@${(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
+
+@;  @item{@${(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
+
+@;  @; difficulty: (difficulty 3)
+@;  @item{@bold["["]@${\star\star\star}@bold["]"] @${(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+
+@; ]
+
+@; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=2, label=ex1.2, counter=ChapterCounter"))]{
 
  下面的几对规则分别定义了什么集合？给出解释。
 
- @itemlist[#:style 'ordered
+ \begin{enumerate}
 
-  @item{@${(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
+  \item{@m{(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
 
-  @item{@${(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
+  \item{@m{(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
 
-  @item{@${(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
+  \item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
-  @; difficulty: (difficulty 3)
-  @item{@bold["["]@${\star\star\star}@bold["]"] @${(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+  \item{@bold["["]@m{\star\star\star}@bold["]"] \quad @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
 
- ]
+ \end{enumerate}
 
-@; }
+}
 
 @; @exercise[#:difficulty 1 #:tag "e1.3"]{
 
- 找出自然数的子集 @${T}，满足 @${0 \in T}，且对任何 @${n \in T}，都有 @${n + 3
- \in T}，但 @${T \neq S}，@${S} 是由定义 1.1.2 给出的集合。
+@; 找出自然数的子集 @${T}，满足 @${0 \in T}，且对任何 @${n \in T}，都有 @${n + 3
+@; \in T}，但 @${T \neq S}，@${S} 是由定义 1.1.2 给出的集合。
 
 @; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=1, label=ex1.3, counter=ChapterCounter"))]{
+
+ 找出自然数的子集 @m{T}，满足 @m{0 \in T}，且对任何 @m{n \in T}，都有 @m{n + 3
+ \in T}，但 @m{T \neq S}，@m{S} 是由定义 1.1.2 给出的集合。
+
+}
 
 @subsection[#:tag "dsug"]{用语法定义集合}
 
@@ -372,21 +452,33 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 换为对应规则右边的内容。例如，前述证明 “@tt{(14 . ())}是整数列表”，可以用句法
 推导化为
 
-@${@List-of-Int[] \Rightarrow @tt{(@${Int} . @List-of-Int[])} \\
-                  \Rightarrow @tt{(14 . @List-of-Int[])} \\
-                  \Rightarrow @tt{(14 . ())}}
+@envalign*{
+ List\mbox{-}of\mbox{-}Int &\Rightarrow @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})} \\
+                           &\Rightarrow @tt{(14 . @m{List\mbox{-}of\mbox{-}Int})} \\
+                           &\Rightarrow @tt{(14 . ())}}
 
 非终止符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
 
-@${@List-of-Int[] \Rightarrow @tt{(@${Int} . @List-of-Int[])} \\
-                  \Rightarrow @tt{(Int . ())} \\
-                  \Rightarrow @tt{(14 . ())}}
+@envalign*{
+ List\mbox{-}of\mbox{-}Int &\Rightarrow @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})} \\
+                           &\Rightarrow @tt{(@m{Int} . ())} \\
+                           &\Rightarrow @tt{(14 . ())}
+}
 
 @; @exercise[#:difficulty 1 #:tag "e1.4"]{
 
- 写出从 @List-of-Int[] 到 @tt{(-7 . (3 . (14 ())))} 的推导。
+@; 写出从 @List-of-Int[] 到 @tt{(-7 . (3 . (14 ())))} 的推导。
 
 @; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=1, label=ex1.4, counter=ChapterCounter"))]{
+
+ 写出从 @m{List\mbox{-}of\mbox{-}Int} 到 @tt{(-7 . (3 . (14 ())))} 的推导。
+ \hspace*{\fill}\\
+
+}
 
 再来看一些有用集合的定义。
 
@@ -396,12 +488,16 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  @tt{s-list}，定义如下：
 
  @; @def[ #:title
- （s-list，s-exp）
+ @; （s-list，s-exp）
  @; ]
  @; {
- @envalign*{S\mbox{-}list &::= @tt{(@m{\{S\mbox{-}exp\}^*})} \\
-            S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
  @; }
+
+ @env["sdef" #:opt (list (bracket "s-list, s-exp"))]{
+
+  @envalign*{S\mbox{-}list &::= \normalfont{@tt{(@m{\{S\mbox{-}exp\}^*})}} \\
+             S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
+ }
 
  s-list 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。这里是一些 s-list。
 
@@ -418,11 +514,17 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  用语法表示为：
 
  @; @def[ #:title
- （二叉树）
+ @; （二叉树）
  @; ]
  @; {
- @$${Bintree ::= Int \mid @tt{(@${Symbol} @${Bintree} @${Bintree})}}
+ @; @$${Bintree ::= Int \mid @tt{(@${Symbol} @${Bintree} @${Bintree})}}
  @; }
+
+ @env["sdef" #:opt (list (bracket "二叉树"))]{
+
+   @mp{Bintree ::= Int \mid \normalfont{@tt{(@m{Symbol} @m{Bintree} @m{Bintree})}}}
+
+ }
 
  这是此类树的几个例子：
 
@@ -440,15 +542,25 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
 
  @; @def[ #:title
- （lambda 演算）
+ @; （lambda 演算）
  @; ]
  @; {
-@envalign*{LcExp &::= @m{Identifier} \\
-                 &::= @tt{(lambda (@m{Identifier}) @m{LcExp})} \\
-                 &::= @tt{(@m{LcExp} @m{LcExp})}}
+ @; @envalign*{LcExp &::= @m{Identifier} \\
+ @;                  &::= @tt{(lambda (@m{Identifier}) @m{LcExp})} \\
+ @;                  &::= @tt{(@m{LcExp} @m{LcExp})}}
 
- 其中，identifier 是除 @tt{lambda} 之外的任何符号。
+ @; 其中，identifier 是除 @tt{lambda} 之外的任何符号。
  @; }
+
+ @env["sdef" #:opt (list (bracket "lambda 演算"))]{
+
+  @envalign*{LcExp &::= @m{Identifier} \\
+                   &::= \normalfont{@tt{(lambda (@m{Identifier}) @m{LcExp})}} \\
+                   &::= \normalfont{@tt{(@m{LcExp} @m{LcExp})}}}
+
+  其中，identifier 是除 \normalfont{@tt{lambda}} 之外的任何符号。
+
+ }
 
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
  达式的@emph{绑定变量} (@emph{bound variable})，因为它绑定（或称捕获）主体内出现
@@ -559,7 +671,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 @; }
 
-@section[#:tag "drp"]{{推导}递归程序}
+@section[#:tag "drp"]{推导递归程序}
 
 我们已经用归纳式定义法描述了复杂集合。我们已明白可通过分析归纳式定义集合的元素来
 观察集合是如何从较小元素构建的。我们已经用这一思想写出了过程 @tt{in-S?} 来判断一
