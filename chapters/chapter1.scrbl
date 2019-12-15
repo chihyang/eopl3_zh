@@ -47,7 +47,6 @@
  \end{enumerate}
 }
 
-
 来看看如何用这一定义判断哪些自然数属于@${S}。已知@${0 \in S}，因此@${3 \in S}，
 因为@${(3 - 3) = 0}，而@${0 \in S}。同样地，@${6 \in S}，因为@${(6 - 3) = 3}，而
 @${3 \in S}。依此类推，可得结论：所有@${3}的整数倍都属于@${S}。
@@ -344,9 +343,9 @@ List\mbox{-}of\mbox{-}Int &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
         “@tt{(}”和“@tt{)}”。这些常用打字机字体写出，如 @tt{lambda}。}
 
   @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的左
-       边是一个非终止符，右边包含终止符和非终止符。左右两边通常用符号 @${::=} 分
-       隔，读作@emph{是}或@emph{可能是}。式子右边用其他句法类别和@emph{终止
-       符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
+        边是一个非终止符，右边包含终止符和非终止符。左右两边通常用符号 @${::=}
+        分隔，读作@emph{是}或@emph{可能是}。式子右边用其他句法类别和@emph{终止
+        符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
 
 ]
 
@@ -1286,10 +1285,6 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 测试这些程序时，先试试所有给出的例子，然后用其他例子测试，因为给定的例子不足以涵
 盖所有可能的错误。
 
-@; @exercise[#:difficulty 1 #:tag "e1.15"]{
-
- @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
-
 @(define duple-eval
   (parameterize ([sandbox-output 'string]
                  [sandbox-error-output 'string]
@@ -1301,20 +1296,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (if (eq? n 0)
               '()
               (cons x (duple (- n 1) x))))))))
+@; @exercise[#:difficulty 1 #:tag "e1.15"]{
+@nested[#:style exercise]{
+ @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
-@examples[#:eval duple-eval
-          #:label #f
-          (duple 2 3)
-          (duple 4 '(ha ha))
-          (duple 0 '(blah))]
-
-
-@; }
-
-@; @exercise[#:difficulty 1 #:tag "e1.16"]{
-
- @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
- 把每个二元列表反转。
+ @examples[#:eval duple-eval
+           #:label #f
+           (duple 2 3)
+           (duple 4 '(ha ha))
+           (duple 0 '(blah))]
+}
 
 @(define invert-eval
   (parameterize ([sandbox-output 'string]
@@ -1331,16 +1322,15 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
      '(define invert-2-lst
         (lambda (2-lst)
           (list (cadr 2-lst) (car 2-lst)))))))
+@; @exercise[#:difficulty 1 #:tag "e1.16"]{
+@nested[#:style exercise]{
+ @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
+ 把每个二元列表反转。
 
-@examples[#:eval invert-eval
-          #:label #f
-(invert '((a 1) (a 2) (1 b) (2 b)))]
-
-@; }
-
-@; @exercise[#:difficulty 1 #:tag "e1.17"]{
-
- @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
+ @examples[#:eval invert-eval
+           #:label #f
+ (invert '((a 1) (a 2) (1 b) (2 b)))]
+}
 
 @(define down-eval
   (parameterize ([sandbox-output 'string]
@@ -1354,19 +1344,17 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list (car lst))
               (down (cdr lst)))))))))
+@; @exercise[#:difficulty 1 #:tag "e1.17"]{
+@nested[#:style exercise]{
+ @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
 
-@examples[#:eval down-eval
+ @examples[#:eval down-eval
           #:label #f
-(down '(1 2 3))
-(down '((a) (fine) (idea)))
-(down '(a (more (complicated)) object))]
+ (down '(1 2 3))
+ (down '((a) (fine) (idea)))
+ (down '(a (more (complicated)) object))]
 
-@; }
-
-@; @exercise[#:difficulty 1 #:tag "e1.18"]{
-
- @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
- 为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
+}
 
 @(define swapper-eval
   (parameterize ([sandbox-output 'string]
@@ -1386,19 +1374,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (swapper s1 s2 (car slist))
                  (swapper s1 s2 (cdr slist))))))))))
+@; @exercise[#:difficulty 1 #:tag "e1.18"]{
+@nested[#:style exercise]{
+ @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
+ 为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
 
-@examples[#:eval swapper-eval
-          #:label #f
-(swapper 'a 'd '(a b c d))
-(swapper 'a 'd '(a d () c d))
-(swapper 'x 'y '((x) y (z (x))))]
+ @examples[#:eval swapper-eval
+           #:label #f
+ (swapper 'a 'd '(a b c d))
+ (swapper 'a 'd '(a d () c d))
+ (swapper 'x 'y '((x) y (z (x))))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.19"]{
-
- @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
- @tt{x} 外，与 @tt{lst} 相同。
+}
 
 @(define list-set-eval
   (parameterize ([sandbox-output 'string]
@@ -1414,17 +1401,17 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons x (cdr lst))
             (cons (car lst)
                   (list-set (cdr lst) (- n 1) x)))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.19"]{
+@nested[#:style exercise]{
+ @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
+ @tt{x} 外，与 @tt{lst} 相同。
 
-@examples[#:eval list-set-eval
-          #:label #f
-(list-set '(a b c d) 2 '(1 2))
-(list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)]
+ @examples[#:eval list-set-eval
+           #:label #f
+ (list-set '(a b c d) 2 '(1 2))
+ (list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)]
 
-@; }
-
-@; @exercise[#:difficulty 1 #:tag "e1.20"]{
-
- @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
+}
 
 @(define count-occurrences-eval
   (parameterize ([sandbox-output 'string]
@@ -1442,20 +1429,17 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (+ (count-occurrences s (car slist))
               (count-occurrences s (cdr slist))))))))))
+@; @exercise[#:difficulty 1 #:tag "e1.20"]{
+@nested[#:style exercise]{
+ @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
 
-@examples[#:eval count-occurrences-eval
-          #:label #f
-(count-occurrences 'x '((f x) y (((x z) x))))
-(count-occurrences 'x '((f x) y (((x z) () x))))
-(count-occurrences 'w '((f x) y (((x z) x))))]
+ @examples[#:eval count-occurrences-eval
+           #:label #f
+ (count-occurrences 'x '((f x) y (((x z) x))))
+ (count-occurrences 'x '((f x) y (((x z) () x))))
+ (count-occurrences 'w '((f x) y (((x z) x))))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.21"]{
-
- @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}
- 返回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不
- 限。
+}
 
 @(define product-eval
   (parameterize ([sandbox-output 'string]
@@ -1476,17 +1460,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list s (car sos))
               (s-product s (cdr sos)))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.21"]{
+@nested[#:style exercise]{
+ @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}返
+ 回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不限。
 
-@examples[#:eval product-eval
-          #:label #f
-(product '(a b c) '(x y))]
+ @examples[#:eval product-eval
+           #:label #f
+ (product '(a b c) '(x y))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.22"]{
-
- @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
- 成。
+}
 
 @(define filter-in-eval
   (parameterize ([sandbox-output 'string]
@@ -1502,18 +1485,17 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons (car lst)
                   (filter-in pred (cdr lst)))
             (filter-in pred (cdr lst)))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.22"]{
+@nested[#:style exercise]{
+ @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
+ 成。
 
-@examples[#:eval filter-in-eval
-          #:label #f
-(filter-in number? '(a 2 (1 3) b 7))
-(filter-in symbol?  '(a (b c) 17 foo))]
+ @examples[#:eval filter-in-eval
+           #:label #f
+ (filter-in number? '(a 2 (1 3) b 7))
+ (filter-in symbol?  '(a (b c) 17 foo))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.23"]{
-
- @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，
-     从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
+}
 
 @(define list-index-eval
   (parameterize ([sandbox-output 'string]
@@ -1531,19 +1513,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             n
             (list-index-iter pred (cdr lst) (+ n 1)))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.23"]{
+@nested[#:style exercise]{
+ @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，
+     从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
 
-@examples[#:eval list-index-eval
+ @examples[#:eval list-index-eval
           #:label #f
-(list-index number? '(a 2 (1 3) b 7))
-(list-index symbol?  '(a (b c) 17 foo))
-(list-index symbol?  '(1 2 (a b) 3))]
+ (list-index number? '(a 2 (1 3) b 7))
+ (list-index symbol?  '(a (b c) 17 foo))
+ (list-index symbol?  '(1 2 (a b) 3))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.24"]{
-
- 若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
- 否则返回 @tt{#t}。
+}
 
 @(define every?-eval
   (parameterize ([sandbox-output 'string]
@@ -1558,17 +1539,17 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             (every? pred (cdr lst))
             #f)))))))
+@; @exercise[#:difficulty 2 #:tag "e1.24"]{
+@nested[#:style exercise]{
+ 若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
+ 否则返回 @tt{#t}。
 
-@examples[#:eval every?-eval
-          #:label #f
-(every? number? '(a b c 3 e))
-(every? number? '(1 2 3 4 5))]
+ @examples[#:eval every?-eval
+           #:label #f
+ (every? number? '(a b c 3 e))
+ (every? number? '(1 2 3 4 5))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.25"]{
-
- 若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
+}
 
 @(define exists?-eval
   (parameterize ([sandbox-output 'string]
@@ -1583,19 +1564,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             #t
             (exists? pred (cdr lst)))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.25"]{
+@nested[#:style exercise]{
+ 若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
 
-@examples[#:eval exists?-eval
-          #:label #f
-(exists? number? '(a b c 3 e))
-(exists? number? '(a b c d e))]
+ @examples[#:eval exists?-eval
+           #:label #f
+ (exists? number? '(a b c 3 e))
+ (exists? number? '(a b c d e))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.26"]{
-
- @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
- 则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
- (up lst))} 不一定是列表（参见习题 1.17）。
+}
 
 @(define up-eval
   (parameterize ([sandbox-output 'string]
@@ -1612,17 +1590,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (up (cdr lst)))
             (cons (car lst)
                   (up (cdr lst))))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.26"]{
+@nested[#:style exercise]{
+ @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
+ 则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
+ (up lst))} 不一定是列表（参见练习 1.17）。
 
-@examples[#:eval up-eval
-          #:label #f
-(up '((1 2) (3 4)))
-(up '((x (y)) z))]
+ @examples[#:eval up-eval
+           #:label #f
+ (up '((1 2) (3 4)))
+ (up '((x (y)) z))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.27"]{
-
- @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
+}
 
 @(define flatten-eval
   (parameterize ([sandbox-output 'string]
@@ -1639,20 +1618,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (flatten (cdr slist)))
             (cons (car slist)
                   (flatten (cdr slist))))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.27"]{
+@nested[#:style exercise]{
+ @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
 
-@examples[#:eval flatten-eval
-          #:label #f
-(flatten '(a b c))
-(flatten '((a) () (b ()) () (c)))
-(flatten '((a b) c (((d)) e)))
-(flatten '(a b (() (c))))]
+ @examples[#:eval flatten-eval
+           #:label #f
+ (flatten '(a b c))
+ (flatten '((a) () (b ()) () (c)))
+ (flatten '((a b) c (((d)) e)))
+ (flatten '(a b (() (c))))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.28"]{
-
- @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
- 回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
+}
 
 @(define merge-eval
   (parameterize ([sandbox-output 'string]
@@ -1681,28 +1658,27 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         loi1
         (sort-iter (merge loi1 (list (car loi2)))
                    (cdr loi2))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.28"]{
+@nested[#:style exercise]{
+ @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
+ 回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
 
-@examples[#:eval merge-eval
-          #:label #f
-(merge '(1 4) '(1 2 8))
-(merge '(35 62 81 90 91) '(3 83 85 90))]
+ @examples[#:eval merge-eval
+           #:label #f
+ (merge '(1 4) '(1 2 8))
+ (merge '(35 62 81 90 91) '(3 83 85 90))]
 
-@; }
+}
 
 @; @exercise[#:difficulty 2 #:tag "e1.29"]{
-
+@nested[#:style exercise]{
  @tt{(sort loi)} 返回一列表，将 @tt{loi} 中的元素按照升序排列。
 
-@examples[#:eval merge-eval
-          #:label #f
-(sort '(8 2 5 2 3))]
+ @examples[#:eval merge-eval
+           #:label #f
+ (sort '(8 2 5 2 3))]
 
-@; }
-
-@; @exercise[#:difficulty 2 #:tag "e1.30"]{
-
- @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
- 排列。
+}
 
 @(define sort/predicate-eval
   (parameterize ([sandbox-output 'string]
@@ -1733,65 +1709,61 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (car loi2)
                  (merge/predicate pred loi1 (cdr loi2))))))))))
+@; @exercise[#:difficulty 2 #:tag "e1.30"]{
+@nested[#:style exercise]{
+ @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
+ 排列。
 
-@examples[#:eval sort/predicate-eval
-          #:label #f
-(sort/predicate < '(8 2 5 2 3))
-(sort/predicate > '(8 2 5 2 3))]
+ @examples[#:eval sort/predicate-eval
+           #:label #f
+ (sort/predicate < '(8 2 5 2 3))
+ (sort/predicate > '(8 2 5 2 3))]
 
-@; }
+}
 
 @; @exercise[#:difficulty 1 #:tag "e1.31"]{
-
+@nested[#:style exercise]{
  写出如下过程，对二叉树（定义 1.1.7）进行运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
  @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
  用。
 
-@; }
+}
 
 @; @exercise[#:difficulty 1 #:tag "e1.32"]{
-
+@nested[#:style exercise]{
  写出过程 @tt{double-tree}，它取一棵二叉树，形如定义 1.1.7，生成另一棵二叉树，把
  原二叉树中的所有整数翻倍。
 
-@; }
+}
 
 @; @exercise[#:difficulty 2 #:tag "e1.33"]{
-
+@nested[#:style exercise]{
  写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（定义 1.1.7），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
+ @nested{
+  @codeblock{
+  (mark-leaves-with-red-depth
+   (interior-node 'red
+    (interior-node 'bar
+     (leaf 26)
+     (leaf 12))
+    (interior-node 'red
+     (leaf 11)
+     (interior-node 'quux
+      (leaf 117)
+      (leaf 14)))))
+  }}
+ 使用练习 1.31 中定义的过程，应返回二叉树
 
-@codeblock{
-(mark-leaves-with-red-depth
- (interior-node 'red
-  (interior-node 'bar
-   (leaf 26)
-   (leaf 12))
-  (interior-node 'red
-   (leaf 11)
-   (interior-node 'quux
-    (leaf 117)
-    (leaf 14)))))
+ @codeblock{
+ (red
+  (bar 1 1)
+  (red 2 (quux 2 2)))
+ }
+
 }
-
- 使用习题 1.31 中定义的过程，应返回二叉树
-
-@codeblock{
-(red
- (bar 1 1)
- (red 2 (quux 2 2)))
-}
-
-
-@; }
-
-@; @exercise[#:difficulty 3 #:tag "e1.34"]{
-
- 写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树（第
- @elem[#:style question]{10} 页）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的
- 列表，表示如何找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
 
 @(define path-eval
   (parameterize ([sandbox-output 'string]
@@ -1823,56 +1795,60 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                  (path n (bst-lson bst))))
           (else
            '())))))))
+@; @exercise[#:difficulty 3 #:tag "e1.34"]{
+@nested[#:style exercise]{
+ 写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树（第
+ @elem[#:style question]{10} 页）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的
+ 列表，表示如何找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
 
-@examples[#:eval path-eval
-          #:label #f
-(path 17 '(14 (7 () (12 () ()))
-              (26 (20 (17 () ())
-                      ())
-                  (31 () ()))))]
+ @examples[#:eval path-eval
+           #:label #f
+ (path 17 '(14 (7 () (12 () ()))
+               (26 (20 (17 () ())
+                       ())
+                   (31 () ()))))]
 
-@; }
+}
 
 @; @exercise[#:difficulty 3 #:tag "e1.35"]{
-
+@nested[#:style exercise]{
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
+ @nested{
+  @codeblock{
+  (number-leaves
+   (interior-node 'foo
+    (interior-node 'bar
+     (leaf 26)
+     (leaf 12))
+    (interior-node 'baz
+     (leaf 11)
+     (interior-node 'quux
+      (leaf 117)
+      (leaf 14)))))
+  }}
+ 应返回
 
-@codeblock{
-(number-leaves
- (interior-node 'foo
-  (interior-node 'bar
-   (leaf 26)
-   (leaf 12))
-  (interior-node 'baz
-   (leaf 11)
-   (interior-node 'quux
-    (leaf 117)
-    (leaf 14)))))
+ @codeblock{
+ (foo
+  (bar 0 1)
+  (baz
+   2
+   (quux 3 4)))
+ }
+
 }
-
-应返回
-
-@codeblock{
-(foo
- (bar 0 1)
- (baz
-  2
-  (quux 3 4)))
-}
-
-@; }
 
 @; @exercise[#:difficulty 3 #:tag "e1.36"]{
-
+@nested[#:style exercise]{
  写出过程 @tt{g}，则第 @elem[#:style question]{23} 页的 @tt{number-elements} 可
  以定义为：
 
-@codeblock{
-(define number-elements
+ @codeblock{
+ (define number-elements
   (lambda (lst)
     (if (null? lst) '()
         (g (list 0 (car lst)) (number-elements (cdr lst))))))
+ }
 }
-
 @; }
