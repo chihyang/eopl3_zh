@@ -23,9 +23,9 @@
 编写过程代码时，必须明确知道什么样的值能作为过程的参数，什么样的值是过程的合法返
 回值。这些值的集合通常很复杂。本节介绍定义值集合的形式化技术。
 
-@subsection[#:tag "is"]{归纳式定义法}
+@subsection[#:tag "is"]{归纳定义法}
 
-归纳式定义法是定义值集合的有效方法。为解释这一方法，我们用它来描述自然数 @${N =
+归纳定义法是定义值集合的有效方法。为解释这一方法，我们用它来描述自然数 @${N =
 {0,1,2,...}} 的某一子集@${S}。
 
 @; definition: (def #:title title #:tag tag pre-flow ...)
@@ -62,23 +62,20 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 
 可以用该定义编写一个函数，判断一个自然数@${n}是否属于@${S}。
 
-
 @; codeblock with contracts and usage
-@codeblock{
-@; contracts
-in-S? : N -> Bool
-@; usage
-用法 : (in-S? n) = #t 若 n 属于 S, 否则 #f
+@racketblock[
+@#,elem{@bold{@tt{in-S?}} : @${N \to Bool}}
+@#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
 (define in-S?
   (lambda (n)
     (if (zero? n) #t
         (if (>= (- n 3) 0)
             (in-S? (- n 3))
             #f))))
-}
+]
 @;
 
-这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? : N -> Bool]  @;contract
+这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? : @#,elem{@${N \to Bool}}]  @;contract
 是一条注释，称为该函数的@emph{合约} (@emph{contact})。它表示@racket[in-S?] 应为
 一过程，取一自然数，产生一布尔值。这样的注释对阅读和编写代码很有帮助。
 
@@ -281,7 +278,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
      #:opt
      (list (bracket "difficulty=1, label=ex1.1, counter=ChapterCounter"))]{
 
- 写出下列集合的归纳式定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
+ 写出下列集合的归纳定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
  义，并用你的规则推导出各集合的一些元素。
 
   \begin{enumerate}
@@ -353,7 +350,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 }
 
-@subsection[#:tag "dsug"]{用语法定义集合}
+@subsection[#:tag "dsug"]{语法定义法}
 
 前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为了方便，我们展
 示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，但
@@ -558,7 +555,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
                    &::= \normalfont{@tt{(lambda (@m{Identifier}) @m{LcExp})}} \\
                    &::= \normalfont{@tt{(@m{LcExp} @m{LcExp})}}}
 
-  其中，identifier 是除 \normalfont{@tt{lambda}} 之外的任何符号。
+  其中，identifier 是除 {\normalfont{@tt{lambda}}} 之外的任何符号。
 
  }
 
@@ -603,94 +600,108 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
 后再用其他方法添加上下文敏感限制。第七章展示了这种技巧的一个例子。
 
-@subsection[#:tag "induct"]{归纳}
+@subsection[#:tag "induct"]{归纳证明法}
 
-用归纳法描述的集合，其定义有两种用法：证明关于集合成员的定理，写出操作集合成员的
+用归纳法描述的集合，其定义有两种用法：证明关于集合元素的定理，写出操作集合元素的
 程序。这里给出一个此类证明的例子，写程序留作下节的主题。
 
 @; @theorem
 @; {
-令 t 为二叉树，形如定义 1.1.7，则 t 包含奇数个节点。
+@; 令 t 为二叉树，形如定义 1.1.7，则 t 包含奇数个节点。
 @; }
+
+@env["sthm"]{
+
+ 令 t 为二叉树，形如定义 1.1.7，则 t 中包含奇数个节点。
+
+}
 
 @; @proof
 @; @{
-用归纳法证明 t 的尺寸。令 t 的尺寸等于 t 中节点的个数。归纳假设 IH(k) 为，尺寸
-@${\leq k} 的任何树有奇数个节点。依照归纳证明的常规方法：先证明 @${IH(0)} 为真，
-然后证明对任何 @${k} 整数，@${IH} 均为真，则对 @${k + 1}，@${IH} 也为真。
+@parprf{
 
-@itemlist[#:style 'ordered
-
- @item{没有树包含 0 个节点，所以 @${IH(0)} 显然成立。}
-
- @item{设 @${k} 为整数，@${IH(k)} 成立，即，任何树的节点数 @${\leq k} 时，
- @elem[#:style question]{准确}节点数为奇数。需证明 @${IH(k + 1)} 也成立：任何树
- 的节点数 @${\leq k + 1} 时，节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根
- 据二叉树的定义，只有两种可能：
+ 用归纳法证明 @${t} 的大小。令 @${t} 的大小等于 @${t} 中节点的个数。归纳假设为
+ @${IH(k)}：树的大小@${\leq k}时有奇数个节点。依照归纳法的惯例：先证明 @${IH(0)}
+ 为真，然后证明若对任一整数 @${k}，@${IH} 为真，则对@${k + 1}，@${IH} 也为真。
 
  @itemlist[#:style 'ordered
 
-  @item{@${t} 形如 @${n}，@${n} 为整数。此时 @${t} 只有一个节点，一为奇数。}
+  @item{没有哪棵树只有 @${0} 个节点，所以 @${IH(0)} 显然成立。}
 
-  @item{@${t} 形如 @${@tt{(@${sym} @${t_1} @${t_2})}}，其中，@${sym} 是一符号，
-  @${t_1} 和 @${t_2} 是树。此时 @${t_1} 和 @${t_2} 节点数少于 @${t}。因为 @${t}
-  有 @${\leq k + 1}个节点，@${t_1} 和 @${t_2} 一定有 @${\leq k} 个节点。因此它们
-  符合 @${IH(k)}，一定各有奇数个节点，不妨分别设为 @${2n_1 + 1} 和 @${2n_2 + 1}。
-  则算上两棵子树和根，原树中的节点总数为
+  @item{设 @${k} 为整数时，@${IH(k)} 成立，即，任何树的节点数 @${\leq k} 时，其
+  准确数目为奇数。需证明 @${IH(k + 1)} 也成立：任何树的节点数 @${\leq k + 1} 时，
+  节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根据二叉树的定义，只有两种可
+  能：
 
-  @$${(2n_1 + 1) + (2n_2 + 1) + 1 = 2(n_1 + n_2 + 1) + 1}
+  @itemlist[#:style 'ordered
 
-  也是一个奇数。}
+   @item{@${t} 形如 @${n}，@${n} 为整数。此时 @${t} 只有一个节点，一为奇数。}
 
- ]
+   @item{@${t} 形如 @${@tt{(@${sym} @${t_1} @${t_2})}}，其中，@${sym} 是一符号，
+   @${t_1} 和 @${t_2} 是树。此时 @${t_1} 和 @${t_2} 节点数少于 @${t}。因为 @${t}
+   有 @${\leq k + 1}个节点，@${t_1} 和 @${t_2} 一定有 @${\leq k} 个节点。因此它
+   们符合 @${IH(k)}，一定各有奇数个节点，不妨分别设为 @${2n_1 + 1} 和 @${2n_2 +
+   1}。则算上两棵子树和根，原树中的节点总数为
+
+   @$${(2n_1 + 1) + (2n_2 + 1) + 1 = 2(n_1 + n_2 + 1) + 1}
+
+   也是一个奇数。}]}]
+
+ 陈述“@${IH(k + 1)} 成立”证毕，归纳完成。
  }
-]
-
-陈述“@${IH(k + 1)} 成立”证毕，归纳完成。
 @; @}
 
-证明的关键是树 @${t} 的子结构总是比 @${t} 本身小。这种证明模式叫做@emph{结构化归
-纳}。
+证明的关键是树 @${t} 的子结构总是比 @${t} 自身小。这种证明模式叫做@emph{结构化归
+纳法} (@emph{structural induction})。
 
+@nested{
 @; @tip[#:title
-结构化归纳证明
+@centered{@bold{结构化归纳证明}}
 @; ]{
-欲证假设 @${IH(s)} 对所有结构 @${s} 为真，证明如下：
+欲证明假设 @${IH(s)} 对所有结构 @${s} 为真，需证明：
 
 @itemlist[#:style 'ordered
 
  @item{@${IH} 对简单结构（没有子结构）为真。}
 
  @item{若 @${IH} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。}
-]
+]@linebreak{}
 @;}
+}
 
 @; @exercise[#:difficulty 2 #:tag "e1.5"]{
 
- 证明若 @${e \in LcExp}，则 @${e} 中的左右括号数量相等。
+@; 证明若 @${e \in LcExp}，则 @${e} 中的左右括号数量相等。
 
 @; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=2, label=ex1.5, counter=ChapterCounter"))]{
+ 证明若 @m{e \in LcExp}，则 @m{e} 中的左右括号数量相等。
+
+}
 
 @section[#:tag "drp"]{推导递归程序}
 
-我们已经用归纳式定义法描述了复杂集合。我们已明白可通过分析归纳式定义集合的元素来
-观察集合是如何从较小元素构建的。我们已经用这一思想写出了过程 @tt{in-S?} 来判断一
-个自然数是否属于集合 @${S}。现在，我们用同样的思想定义更通用的过程，以便对归纳式
-定义集合做运算。
+我们已经用归纳定义法描述了复杂集合。我们能够分析归纳式集合的元素，观察如何从较小
+元素构建集合。我们用这一想法写出了过程 @tt{in-S?}，用以判断自然数是否属于集合
+@${S}。现在，我们用同样的想法定义更通用的过程，以便对归纳式集合做运算。
 
-递归程序依赖于一条重要原则：
+递归过程依赖于一条重要原则：
 
+@nested{
 @; @tip[#:title
-较小子问题原则
-@; ]
-@; {
-若能化问题为较小的子问题，则能调用解决原问题的过程解决子问题。
-@; }
+@centered{@bold{较小子问题原则}}
+@; ]{
+ 若能化问题为较小子问题，则能调用解决原问题的过程解决子问题。@linebreak{}
+@;}
+}
 
-已返回的子问题解随后可用来求解原问题。这行得通，因为每次过程调用，都是针对较小的
-子问题，直到最终调用，针对的是一个可直接解决的问题，而不必再次调用它本身。
+已求得的子问题解随后可用来求解原问题。这可行，因为每次过程调用都是针对较小的子问
+题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
 
-我们用一些例子解释这一思想。
+我们用一些例子解释这一想法。
 
 @subsection[#:tag "l-l"]{@tt{list-length}}
 
@@ -699,36 +710,29 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 @examples[#:label #f (length '(a b c))
                      (length '((x) ()))]
 
-我们来写出自己的过程，名叫 @tt{list-length}，做同样的事。
+我们来写出自己的过程 @tt{list-length}，做同样的事。
 
 先来写出过程的@emph{合约}。合约指定了过程可取参数和可能返回值的集合。合约也可以
-包含过程的期望用法或行为。这有助于我们在编写时及以后追溯我们的意图。在代码中，这
+包含过程的期望用法或行为。这有助于我们在编写时及以后追查我们的意图。在代码中，这
 是一条注释，我们用打字机字体示之，以便阅读。
 
-@; racketblock with contracts and usage
-@codeblock{
-@; contracts
-; list-length : #,($ List) -> #,($ Int)
-@; usage
-; 用法 : (list-length l) = l 的长度
+@racketblock[
+@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
     ...))
-}
-@;
+]
 
-列表的集合可定义为
+列表的集合定义为
 
-@$${List ::= () | (Scheme value . List)}
+@$${List ::= @tt{()} \mid @tt{(@${Scheme \ value} . @${List})}}
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
-@; racketblock with contracts and usage and diff
-@codeblock{
-@; contracts
-; list-length : List -> Int
-@; usage
-; 用法 : (list-length l) = l 的长度
+@racketblock[
+@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
 @; diff{
@@ -736,17 +740,13 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
         0
 @; }
         ...)))
-}
-@;
+]
 
 若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
 
-@; racketblock with contracts and usage and diff
-@codeblock{
-@; contracts
-; list-length : List -> Int
-@; usage
-; 用法 : (list-length l) = l 的长度
+@racketblock[
+@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
     (if (null? lst)
@@ -754,16 +754,15 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
         @; diff{
         (+ 1 (list-length (cdr lst))))))
         @; }
-}
-@;
+]
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
 
-@tt{(list-length '(a (b c) d))
- = (+ 1 (list-length '((b c) d)))
- = (+ 1 (+ 1 (list-length '(d))))
- = (+ 1 (+ 1 (+ 1 (list-length '()))))
- = (+ 1 (+ 1 (+ 1 0)))
+@tt{(list-length '(a (b c) d))@linebreak[]
+ = (+ 1 (list-length '((b c) d)))@linebreak[]
+ = (+ 1 (+ 1 (list-length '(d))))@linebreak[]
+ = (+ 1 (+ 1 (+ 1 (list-length '()))))@linebreak[]
+ = (+ 1 (+ 1 (+ 1 0)))@linebreak[]
  = 3}
 
 @subsection[#:tag "n-e"]{@tt{nth-element}}
@@ -773,29 +772,26 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 @examples[#:label #f (list-ref '(a b c) 1)]
 
-我们来写出自己的过程，名叫 @tt{nth-element}，做同样的事。
+我们来写出自己的过程 @tt{nth-element}，做同样的事。
 
-我们仍用上述 @${List} 的定义。
+仍沿用上述 @${List} 的定义。
 
 当 @${lst} 为空时，@tt{(nth-element @${lst} @${n})} 应当返回什么？这种情况下，
-@tt{(nth-element @${lst} @${n})} 要取出空列表的元素，所以我们报告错误。
+@tt{(nth-element @${lst} @${n})} 想要取空列表的元素，所以报错。
 
 当 @${lst} 非空时，@tt{(nth-element @${lst} @${n})} 应当返回什么？答案取决于
-@${n}。若 @${n = 0}，答案就是 @${lst} 的首项。
+@${n}。若 @${n = 0}，答案是 @${lst} 的首项。
 
-当 @${lst} 非空，且 @${n \neq 0} 时，@tt{(nth-element @${lst} @${n})} 应当返回
-什么？这种情况下，答案是 @${lst} 余项的第 @${(n - 1)} 个元素。由 @${n \in N} 且
-@${n \neq 0}，可知 @${n - 1} 一定属于 @${N}，所以可通过递归调用 @tt{nth-element}
-找出第 @${(n - 1)} 个元素。
+当 @${lst} 非空，且 @${n \neq 0} 时，@tt{(nth-element @${lst} @${n})} 应当返回什
+么？这种情况下，答案是 @${lst} 余项的第 @${(n - 1)} 个元素。由 @${n \in N} 且
+@${n \neq 0}，可知 @${n - 1} 一定属于 @${N}，因此可以递归调用 @tt{nth-element}找
+出第 @${(n - 1)} 个元素。
 
-这使我们得出定义
+这就得出定义
 
-@; codeblock with contracts and usage
-@codeblock{
-@; contracts
-; nth-element : List x Int -> SchemeVal
-@; usage
-; 用法 : (nth-element lst n) = lst 的第 n 个元素
+@racketblock[
+@#,elem{@bold{@tt{nth-element}} : @${List \times Int \to SchemeVal}}
+@#,elem{@bold{用法} : @tt{(nth-element @${lst} @${n}) = @${lst} 的第 @${n} 个元素}}
 (define nth-element
   (lambda (lst)
     (if (null? lst)
@@ -808,47 +804,61 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
   (lambda (n)
     (eopl:error 'nth-element
                 "List too short by ~s elements.~%" (+ n 1))))
-}
-@;
+]
 
-这里的注释 @code{nth-element : List x Int -> SchemeVal} 表示 @bold{nth-element}
-是一个过程，取两个参数，一个为列表，一个为整数，返回一个 Scheme 值。这与数学中的
-表示 @${f : A \times B \to C} 相同。
+这里的注释 @tt{@bold{@tt{nth-element}} : @${List \times Int \to SchemeVal}} 表示
+@bold{@tt{nth-element}}是一个过程，取两个参数，一个为列表，一个为整数，返回一个
+Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 过程 @tt{report-list-too-short} 调用 @tt{eopl:} @tt{error} 来报告错误。过程
 @tt{eopl:error} 会终止计算。它的首个参数是一符号，用于在错误信息中指示调用
 @tt{eopl:error} 的过程。第二个参数是一个字符串，会打印为错误信息。对应于字符串中
 的每个字符序列 @tt{~s} ，都必须有一个额外参数。打印字符串时，这些参数的值会替换
-对应的 @tt{~s} 。@tt{~%} 视作换行。错误信息打印出来之后，计算终止。过程
-@tt{eopl:error} 并非标准 Scheme 的一部分，但大多数 Scheme 实现提供这样的组件。在
-本书中，我们以类似方式，用名字含 @tt{report-} 的过程报告错误。
+对应的 @tt{~s} 。@tt{~%} 代表换行。错误信息打印后，计算终止。过程@tt{eopl:error}
+并非标准 Scheme 的一部分，但大多数 Scheme 实现提供这样的组件。在本书中，我们以类
+似方式，用名字含 @tt{report-} 的过程报告错误。
 
-来看看 @tt{nth-element} 如何算出它的答案：
+来看看 @tt{nth-element} 如何算出答案：
 
-@tt{(nth-element '(a b c d e) 3)
-    = (nth-element   '(b c d e) 2)
-    = (nth-element     '(c d e) 1)
-    = (nth-element       '(d e) 0)
+@tt{(nth-element '(a b c d e) 3)@linebreak[]
+    = (nth-element   '(b c d e) 2)@linebreak[]
+    = (nth-element     '(c d e) 1)@linebreak[]
+    = (nth-element       '(d e) 0)@linebreak[]
     = d}
 
 @tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
 
 如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 的抱怨来获知传递了空列表，但它们
-的错误信息没什么帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中
-使用 @tt{car} 的地方。
+的错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使
+用 @tt{car} 的地方。
 
 @; @exercise[#:difficulty 1 #:tag "e1.6"]{
 
- 如果翻转 @tt{nth-element} 中两个测试的顺序，会有什么问题？
+@; 如果翻转 @tt{nth-element} 中两个测试的顺序，会有什么问题？
 
 @; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=1, label=ex1.6, counter=ChapterCounter"))]{
+ 如果翻转 @tt{nth-element} 中两个条件的顺序，会有什么问题？
+
+}
 
 @; @exercise[#:difficulty 2 #:tag "e1.7"]{
 
+@; @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
+@; 息，像是 “@tt{(a b c)} 不足 8 个元素”。
+
+@; }
+
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=2, label=ex1.7, counter=ChapterCounter"))]{
  @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
  息，像是 “@tt{(a b c)} 不足 8 个元素”。
 
-@; }
+}
 
 @subsection[#:tag "r-f"]{@tt{remove-first}}
 
@@ -1180,13 +1190,13 @@ Kleene 星号重写语法。得出的语法表明，我们的过程应当该递�
 
 @; }
 
-现在，我们有了编写过程处理归纳式数据集的窍门，来把它总结成一句口诀。
+现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。
 
 @; @tip[#:title
 依照语法！
 @; ]
 @; {
-定义过程处理归纳定义的数据时，程序的结构应当反映数据的结构。
+定义过程处理归纳式数据时，程序的结构应当反映数据的结构。@linebreak{}
 @; }
 
 更准确地说：
