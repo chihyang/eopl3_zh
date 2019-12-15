@@ -20,4 +20,7 @@
   (make-style "TipContent" (list (make-tex-addition "../style/tip-content.tex")
                                  (make-css-addition "../style/tip-content.css"))))
 
-(provide right underline question tip tip-content)
+(define exercise
+  (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex"))))
+
+(provide right underline question tip tip-content exercise)
