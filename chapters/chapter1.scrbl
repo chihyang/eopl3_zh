@@ -1207,8 +1207,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 另一个例子是向量求和。
 
-要求列表中的各项的和，我们可以依照语法，递归处理列表的余项。那么我们的过程看起来
-像是：
+要求列表中各项的和，我们可以依照语法，递归处理列表的余项。那么我们的过程看起来像
+是：
 
 @; racketblock with contracts
 @racketblock[
@@ -1238,8 +1238,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @; codeblock with contracts and usage
 @racketblock[
-@#,elem{@bold{@tt{partial-vector-sum}} : @m{Vectorof(Int) \times Int \to Int}}
-@#,elem{@bold{用法} : 若 @m{0 \leq n < length(v)}，则
+@#,elem{@bold{@tt{partial-vector-sum}} : @${Vectorof(Int) \times Int \to Int}}
+@#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则
          @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
 (define partial-vector-sum
   (lambda (v n)
@@ -1251,10 +1251,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @;
 
 由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
-\leq n} 且 @${n \neq 0}，可得 @${0 \neq (n - 1)}，所以递归调用过程
+\leq n} 且 @${n \neq 0}，可得 @${0 \leq (n - 1)}，所以递归调用过程
 @tt{partial-vector-sum} 仍然满足其合约。
 
-现在，要解决我们原来的问题就简单多了。因为向量长度为0时无法使用过程
+现在，要解决原问题就简单多了。因为向量长度为0时无法使用过程
 @tt{partial-vector-sum}，所以得另行处理这种情况。
 
 @; racketblock with contracts and usage

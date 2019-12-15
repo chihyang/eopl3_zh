@@ -1,5 +1,6 @@
 #lang scribble/book
 @(require "style.rkt")
+@(require latex-utils/scribble/utils)
 @(require scribble-math)
 @(require scribble-math/asymptote)
 @(require scriblib/footnote)
@@ -163,13 +164,15 @@ Haskell的编程经验。
 一等过程和赋值的语言（ML, Common Lisp, Python, Ruby等等）都足以完成本书练习。
 @linebreak{}
 
-@; @exercise[#:difficulty 1 #:tag "e0.1"]{
+@; @exercise[#:difficulty 1 #:tag "e0.1"]
+@env["Exercise"
+     #:opt
+     (list (bracket "difficulty=1, label=ex0.1, counter=ChapterCounter"))]{
 
-我们常说“某语言具有某属性”。为每种说法找出一种或多种具有该属性的语言，以及一种
-或多种不具有该属性的语言。请随意搜索这些信息，不拘任何程序语言的介绍性书籍（比如
-Scott(2005)，Sebesta (2007)，或者Pratt & Zelkowitz(2001)）。
-
-@; }
+ 我们常说“某语言具有某属性”。为每种说法找出一种或多种具有该属性的语言，以及一
+ 种或多种不具有该属性的语言。请随意搜索这些信息，不拘任何程序语言的介绍性书籍
+ （比如Scott(2005)，Sebesta (2007)，或者Pratt \& Zelkowitz(2001)）。@linebreak[]
+}
 
 这是本手册：本书讨论的一切都可在通常的大学课程限度内完成。因为函数式语言的抽象特
 性尤其适合这类编程，我们可以写出大量语言处理系统，既简洁，又能以适当的努力掌握。
