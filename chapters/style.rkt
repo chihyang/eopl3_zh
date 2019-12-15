@@ -12,4 +12,12 @@
   (make-style "Sunderline" (list (make-tex-addition "../style/underline.tex")
                                  (make-css-addition "../style/underline.css"))))
 
-(provide right underline question)
+(define tip
+  (make-style "Tip" (list (make-tex-addition "../style/tip.tex")
+                          (make-css-addition "../style/tip.css"))))
+
+(define tip-content
+  (make-style "TipContent" (list (make-tex-addition "../style/tip-content.tex")
+                                 (make-css-addition "../style/tip-content.css"))))
+
+(provide right underline question tip tip-content)
