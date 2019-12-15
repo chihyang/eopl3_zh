@@ -600,19 +600,16 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 证明的关键是树 @${t} 的子结构总是比 @${t} 自身小。这种证明模式叫做@emph{结构化归
 纳法} (@emph{structural induction})。
 
-@nested{
-@; @tip[#:title
-@centered{@bold{结构化归纳证明}}
-@; ]{
-欲证明假设 @${IH(s)} 对所有结构 @${s} 为真，需证明：
+@nested[#:style tip]{
+ @centered{@bold{结构化归纳证明}}
 
-@itemlist[#:style 'ordered
+ @para[#:style tip-content]{欲证明假设 @${IH(s)} 对所有结构 @${s} 为真，需证明：}
 
- @item{@${IH} 对简单结构（没有子结构）为真。}
+ @itemlist[#:style 'ordered
+   @item{@${IH} 对简单结构（没有子结构）为真。}
 
- @item{若 @${IH} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。}
-]@linebreak{}
-@;}
+   @item{若 @${IH} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。}
+ ]
 }
 
 @env["Exercise"
@@ -630,13 +627,11 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 递归过程依赖于一条重要原则：
 
-@nested{
-@; @tip[#:title
-@centered{@bold{较小子问题原则}}
-@; ]{
- 若能化问题为较小子问题，则能调用解决原问题的过程解决子问题。@linebreak{}
-@;}
-}
+@nested[#:style tip]{
+ @centered{@bold{较小子问题原则}}
+
+ @para[#:style tip-content]{若能化问题为较小子问题，则能调用解决原问题的过程解决
+ 子问题。}}
 
 已求得的子问题解随后可用来求解原问题。这可行，因为每次过程调用都是针对较小的子问
 题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
@@ -1123,13 +1118,11 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。@linebreak{}
 
-@nested{
-@; @tip[#:title
-@centered{@bold{依照语法！}}
-@; ]{
- 定义过程处理归纳式数据时，程序的结构应当反映数据的结构。@linebreak{}
-@;}
-}
+@nested[#:style tip]{
+ @centered{@bold{依照语法！}}
+
+ @para[#:style tip-content]{定义过程处理归纳式数据时，程序的结构应当反映数据的结
+ 构。}}
 
 更准确地说：
 
@@ -1187,15 +1180,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 参数。除非我们理解辅助过程对参数的@emph{每个}值做什么，我们很难理解调用它的过程
 做什么。这给了我们一条口诀：
 
-@linebreak[]
-@nested{
-@; @tip[#:title
-@centered{@bold{避免神秘小工具！}}
-@; ]{
- 定义辅助过程时，总是指明它对所有参数值做什么，而不只是初始值。
-@;}
-}
-@linebreak[]
+@nested[#:style tip]{
+ @centered{@bold{避免神秘小工具！}}
+
+ @para[#:style tip-content]{定义辅助过程时，总是指明它对所有参数值做什么，而不只
+ 是初始值。}}
 
 其次，@tt{number-elements-from} 的两个参数各有作用。第一个参数是我们要处理的列表，
 随每一次递归调用而减小。而第二个参数，则是对我们当前任务@emph{上下文}
