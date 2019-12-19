@@ -10,3 +10,4 @@
 @include-section["acknowledgments.scrbl"]
 
 @include-section["chapter1.scrbl"]
+@include-section["chapter2.scrbl"]

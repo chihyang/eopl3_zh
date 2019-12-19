@@ -1081,8 +1081,8 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 ]
 
 因为我们严格依照 @${S\mbox{-}list} 和 @${S\mbox{-}exp} 的定义，这个递归一定会终
-止。由于 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称它们为@emph{互递
-归} (@emph{mutually recursive})。
+止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称之为@emph{互递归}
+(@emph{mutually recursive})。
 
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
@@ -1851,4 +1851,3 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (g (list 0 (car lst)) (number-elements (cdr lst))))))
  }
 }
-@; }
