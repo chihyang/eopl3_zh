@@ -1296,7 +1296,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (if (eq? n 0)
               '()
               (cons x (duple (- n 1) x))))))))
-@; @exercise[#:difficulty 1 #:tag "e1.15"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.15"]{
 @nested[#:style exercise]{
  @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
@@ -1322,7 +1322,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
      '(define invert-2-lst
         (lambda (2-lst)
           (list (cadr 2-lst) (car 2-lst)))))))
-@; @exercise[#:difficulty 1 #:tag "e1.16"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.16"]{
 @nested[#:style exercise]{
  @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
  把每个二元列表反转。
@@ -1344,7 +1344,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list (car lst))
               (down (cdr lst)))))))))
-@; @exercise[#:difficulty 1 #:tag "e1.17"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.17"]{
 @nested[#:style exercise]{
  @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
 
@@ -1374,7 +1374,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (swapper s1 s2 (car slist))
                  (swapper s1 s2 (cdr slist))))))))))
-@; @exercise[#:difficulty 1 #:tag "e1.18"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.18"]{
 @nested[#:style exercise]{
  @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
  为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
@@ -1401,7 +1401,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons x (cdr lst))
             (cons (car lst)
                   (list-set (cdr lst) (- n 1) x)))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.19"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.19"]{
 @nested[#:style exercise]{
  @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
  @tt{x} 外，与 @tt{lst} 相同。
@@ -1429,7 +1429,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (+ (count-occurrences s (car slist))
               (count-occurrences s (cdr slist))))))))))
-@; @exercise[#:difficulty 1 #:tag "e1.20"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.20"]{
 @nested[#:style exercise]{
  @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
 
@@ -1460,7 +1460,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list s (car sos))
               (s-product s (cdr sos)))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.21"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.21"]{
 @nested[#:style exercise]{
  @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}返
  回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不限。
@@ -1485,7 +1485,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons (car lst)
                   (filter-in pred (cdr lst)))
             (filter-in pred (cdr lst)))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.22"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.22"]{
 @nested[#:style exercise]{
  @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
  成。
@@ -1513,7 +1513,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             n
             (list-index-iter pred (cdr lst) (+ n 1)))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.23"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.23"]{
 @nested[#:style exercise]{
  @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，
      从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
@@ -1539,7 +1539,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             (every? pred (cdr lst))
             #f)))))))
-@; @exercise[#:difficulty 2 #:tag "e1.24"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.24"]{
 @nested[#:style exercise]{
  若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
  否则返回 @tt{#t}。
@@ -1564,7 +1564,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             #t
             (exists? pred (cdr lst)))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.25"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.25"]{
 @nested[#:style exercise]{
  若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
 
@@ -1590,7 +1590,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (up (cdr lst)))
             (cons (car lst)
                   (up (cdr lst))))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.26"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.26"]{
 @nested[#:style exercise]{
  @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
  则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
@@ -1618,7 +1618,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (flatten (cdr slist)))
             (cons (car slist)
                   (flatten (cdr slist))))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.27"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.27"]{
 @nested[#:style exercise]{
  @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
 
@@ -1658,7 +1658,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         loi1
         (sort-iter (merge loi1 (list (car loi2)))
                    (cdr loi2))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.28"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.28"]{
 @nested[#:style exercise]{
  @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
  回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
@@ -1670,7 +1670,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 2 #:tag "e1.29"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.29"]{
 @nested[#:style exercise]{
  @tt{(sort loi)} 返回一列表，将 @tt{loi} 中的元素按照升序排列。
 
@@ -1709,7 +1709,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (car loi2)
                  (merge/predicate pred loi1 (cdr loi2))))))))))
-@; @exercise[#:difficulty 2 #:tag "e1.30"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.30"]{
 @nested[#:style exercise]{
  @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
  排列。
@@ -1721,7 +1721,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 1 #:tag "e1.31"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.31"]{
 @nested[#:style exercise]{
  写出如下过程，对二叉树（定义 1.1.7）进行运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
@@ -1730,14 +1730,14 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 1 #:tag "e1.32"]{
+@; @exercise[#:difficulty 1 #:tag "ex1.32"]{
 @nested[#:style exercise]{
  写出过程 @tt{double-tree}，它取一棵二叉树，形如定义 1.1.7，生成另一棵二叉树，把
  原二叉树中的所有整数翻倍。
 
 }
 
-@; @exercise[#:difficulty 2 #:tag "e1.33"]{
+@; @exercise[#:difficulty 2 #:tag "ex1.33"]{
 @nested[#:style exercise]{
  写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（定义 1.1.7），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
@@ -1795,7 +1795,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                  (path n (bst-lson bst))))
           (else
            '())))))))
-@; @exercise[#:difficulty 3 #:tag "e1.34"]{
+@; @exercise[#:difficulty 3 #:tag "ex1.34"]{
 @nested[#:style exercise]{
  写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树（第
  @elem[#:style question]{10} 页）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的
@@ -1810,7 +1810,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 3 #:tag "e1.35"]{
+@; @exercise[#:difficulty 3 #:tag "ex1.35"]{
 @nested[#:style exercise]{
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
@@ -1839,7 +1839,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 3 #:tag "e1.36"]{
+@; @exercise[#:difficulty 3 #:tag "ex1.36"]{
 @nested[#:style exercise]{
  写出过程 @tt{g}，则第 @elem[#:style question]{23} 页的 @tt{number-elements} 可
  以定义为：
