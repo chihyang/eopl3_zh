@@ -4,6 +4,7 @@
 @(require latex-utils/scribble/utils)
 @(require scribble/manual)
 @(require scribble-math)
+@(require scribble/example)
 
 @title[#:style 'numbered #:tag "da"]{数据抽象}
 
@@ -155,12 +156,13 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
  列表 @tt{(one)} 表示 1。如果 @${t_1} 表示 @${n_1}，@${t_2} 表示 @${n_2}，那么
  @tt{(diff @${n_1} @${n_2})} 表示 @${n_1 - n_2}。
 
- 所以，@tt{(one)} 和 @tt{(diff (one) (diff (one) (one)))} 都表示1；@tt{(diff
- (diff (one) (one)) (one))} 表示 @${-1}。
+ 所以，@tt{(one)} 和 @tt["(diff"] @tt{(one)} @tt["(diff"] @tt{(one)}
+ @tt["(one)))"] 都表示1；@tt["(diff"] @tt["(diff"] @tt{(one)} @tt["(one))"]
+ @tt["(one))"] 表示 @${-1}。
 
  @itemlist[#:style 'ordered
 
-   @item{证明此系统中，每个数都有无限种表示方法。}
+   @item{证明此系统中，每个数都有无限种表示方式。}
 
    @item{实现这种整数表示法：写出@elem[#:style question]{32页}指定的 @tt{zero}，
    @tt{is-zero?}，@tt{successor} 和 @tt{predecessor}，此外还要能表示负数。这种方
@@ -176,4 +178,68 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@section[#:tag "rsdt"]{数据类型的表示策略}
+@section[#:tag "rsdt"]{数据类型的表示技巧}
+
+使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关。甚至
+可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
+质。
+
+本节介绍几个表示数据类型的技巧。我们用数据类型@emph{环境} (@emph{environment})
+解释这些@elem[#:style question]{选择}。对有限个变量组成的集合，环境将值与其中的
+每个元素关联起来。在编程语言的实现之中，环境可用来维系变量与值的关系。编译器也能
+用环境记录各个变量名与变量相关信息的关系。
+
+只要能够检查两个变量是否相等，变量能够用我们想用的任何方式表示。我们选用 Scheme
+符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
+数字（见3.6节）表示。
+
+@subsection[#:tag "ei"]{环境的接口}
+
+环境是一函数，定义域为有限个变量的集合，值域为所有 Scheme 值的集合。数学上常说的
+有限函数是指有序数对组成的有限集合，我们采用这一含义，就得表示形如
+@m{\{(var_1,\allowbreak val_1),\allowbreak ...,\allowbreak (var_n, val_n)\}}的所
+有集合，其中，@${var_i} 是某一变量，@${val_i} 是任意 Scheme 值。有时称环境
+@${env} 中变量 @${var} 的值 @${val} 为其在 @${env} 中的@emph{绑定}
+(@emph{binding})。
+
+这一数据类型的接口有三个过程，定义如下：
+
+ @nested{
+ @envalign*{&@tt{(empty-env)} &= &\lceil \emptyset \rceil \\
+            &@tt{(apply-env @m{\lceil f \rceil} @m{var})} &= &f(var) \\
+            &@tt{(extend-env @m{var} @m{v} @m{\lceil f \rceil})} &= &\lceil g \rceil \\
+            &\phantom{x} &其中，&g(var_1) = @env["cases"]{v & 若\ var_1 = var \\
+                                                          f(var_1) & 否则}
+ }
+ }
+
+过程 @tt{empty-env} 不带参数，必须返回空环境的表示；@tt{apply-env} 用环境对变量
+求值；@tt{(extend-env @${var} @${val} @${env})} 产生一个新的环境，除了使变量
+@${var} 的值为 @${val} 外，与@${env} 相同。例如，表达式：
+
+ @nested{
+ @racketinput[
+   (define e
+     (extend-env 'd 6
+       (extend-env 'y 8
+         (extend-env 'x 7
+           (extend-env 'y 14
+             (empty-env))))))]
+
+ 定义了一个环境 @${e}，使 @${env(@tt{d}) = 6}，@${env(@tt{x}) = 7}，
+ @${env(@tt{y}) = 8}，且对任何其他变量，@${e}未定义。当然，这只是很多种不同的环
+ 境定义方法之一。例如，上面的例子中，@tt{y}先绑定到@${14}，随后又绑定到@${8}。}
+
+如同前一个例子，可以将接口中的过程分为构造器和观测器。本例中，@tt{empty-env}和
+@tt{extend-env}是构造器，@tt{apply-env}是唯一的观测器。
+
+@; @exercise[#:difficulty 2 #:tag "ex2.4"]{
+@nested[#:style exercise]{
+
+ 考虑数据类型@emph{堆栈} (@emph{stack})，接口包含过程 @tt{empty-stack}，
+ @tt{push}，@tt{pop}, @tt{top}和@tt{empty-stack?}。按照示例中的方式写出这些操作
+ 的定义。哪些操作是构造器？哪些是观测器？
+
+}
+
+@subsection[#:tag "dsr"]{数据结构的表示}
