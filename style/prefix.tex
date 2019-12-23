@@ -5,6 +5,7 @@
 \setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
 \setCJKsansfont{Adobe Song Std}
 \setCJKmonofont{Adobe Song Std}
+\xeCJKsetup{CJKmath=true, PlainEquation=true}
 \usepackage[T1]{fontenc}
 \usepackage{emptypage}
 
@@ -60,3 +61,6 @@
 \makeatletter
 \AtBeginDocument{\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}}
 \makeatother
+
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf, labelsep=quad, name=图}

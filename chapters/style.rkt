@@ -23,4 +23,7 @@
 (define exercise
   (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex"))))
 
-(provide right underline question tip tip-content exercise)
+(define figure
+  (make-style "Figure" (list (make-tex-addition "../style/figure.tex"))))
+
+(provide (all-defined-out))
