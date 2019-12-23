@@ -5,6 +5,7 @@
 @(require scribble/manual)
 @(require scribble-math)
 @(require scribble/example)
+@(require scribble/core)
 
 @title[#:style 'numbered #:tag "da"]{数据抽象}
 
@@ -30,7 +31,7 @@
 
 这一想法并不陌生：我们写程序处理文件时，多数时候只关心能否调用过程来打开，关闭，
 读取文件或对文件做其他操作。同样地，大多数时候，我们不关心整数在机器中究竟怎样表
-示，我们只关心能否可靠地执行算数操作。
+示，只关心能否可靠地执行算数操作。
 
 当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码与@emph{表示无关}
 (@emph{representation-independent})，因为这些代码不依赖数据类型的表示。
@@ -242,3 +243,89 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 }
 
 @subsection[#:tag "dsr"]{数据结构的表示}
+
+环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次应用
+@tt{extend-env}，其中@${n \geqslant 0}。例如，
+
+@racketblock[
+(extend-env @#,elem{@${var_n}} @#,elem{@${val_n}}
+   ...
+   (extend-env @#,elem{@${var_1}} @#,elem{@${val_1}}
+     (empty-env)))]
+
+所以，每个环境都能通过下列语法描述的表达式生成：
+
+@envalign*{\mathit{Env\mbox{-}exp} &::= @tt{(empty-env)} \\ &::= @tt{(extend-env
+                            @m{\mathit{Identifier}}
+                            @m{\mathit{Scheme\mbox{-}value}}
+                            @m{\mathit{Env\mbox{-}exp}})}}
+
+可以用描述列表集合的语法表示环境，由此得出图2.1中的实现。数据结构@tt{env}表示一
+环境，过程@tt{apply-env}查看和判断它表示哪种环境，并做适当操作：如果它表示空环境，
+那就报错；如果它表示由@tt{extend-env}生成的环境，那就判断要查找的变量是否与环境
+中绑定的某一变量相同，如果相同，则返回保存的值，否则在保存的环境中查找变量。
+
+这是一种常见的代码模式。我们叫它@emph{解释器秘方} (@emph{interpreter recipe})：
+
+@nested[#:style tip]{
+ @centered{@bold{解释器秘方}}
+
+ @nested[#:style tip-content]{
+ @itemlist[#:style 'ordered
+
+  @item{查看一段数据。}
+
+  @item{判断它表示什么样的数据。}
+
+  @item{提取数据的各个部分，对它们做适当操作。}
+
+   ]}}
+
+@nested[#:style figure]{
+@racketblock[
+@#,elem{@${Env = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
+@#,elem{@${Var = Sym}}
+
+@#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
+(define empty-env
+  (lambda () (list 'empty-env)))
+
+@#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
+(define extend-env
+  (lambda (var val env)
+    (list 'extend-env var val env)))
+
+@#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
+(define apply-env
+  (lambda (env search-var)
+    (cond
+      ((eqv? (car env) 'empty-env)
+       (report-no-binding-found search-var))
+      ((eqv? (car env) 'extend-env)
+       (let ((saved-var (cadr env))
+             (saved-val (caddr env))
+             (saved-env (cadddr env)))
+         (if (eqv? search-var saved-var)
+             saved-val
+             (apply-env saved-env search-var))))
+      (else
+       (report-invalid-env env)))))
+
+(define report-no-binding-found
+  (lambda (search-var)
+    (eopl:error 'apply-env "No binding for ~s" search-var)))
+
+(define report-invalid-env
+  (lambda (env)
+    (eopl:error 'apply-env "Bad environment: ~s" env)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "环境的数据结构表示"))]
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.5"]{
+@nested[#:style exercise]{
+
+只要能区分空环境和非空环境，并能从后者提取出数据片段，可以用任何数据结构表示环境。}
