@@ -25,8 +25,8 @@
 代码。
 
 这样抽象出的数据类型称为@emph{抽象数据类型} (@emph{abstract data type})。程序的
-其余部分，即数据类型的@emph{客户} (@emph{client})，只能通过接口中指定的操作处理
-新数据。这样一来，如果我们希望改变数据的表示方式，只须改变数据处理接口的实现。
+其余部分——数据类型的@emph{客户} (@emph{client}) ——只能通过接口中指定的操作处理新
+数据。这样一来，如果我们希望改变数据的表示方式，只须改变数据处理接口的实现。
 
 这一想法并不陌生：我们写程序处理文件时，多数时候只关心能否调用过程来打开，关闭，
 读取文件或对文件做其他操作。同样地，大多数时候，我们不关心整数在机器中究竟怎样表
@@ -73,9 +73,8 @@
 y\rceil}}。}
 
 大多数接口都包含：若干@emph{构造器} (@emph{constructor})，用来产生数据类型的元素；
-若干@emph{观测器} (@emph{observer})，用来从数据类型的值中提取信息。这里，我们有
-三个构造器，@tt{zero}，@tt{successor} 和 @tt{predecessor}，一个观察器，
-@tt{is-zero?}。
+若干@emph{观测器} (@emph{observer})，用来从数据类型的值中提取信息。这里有三个构
+造器，@tt{zero}，@tt{successor} 和 @tt{predecessor}，一个观测器，@tt{is-zero?}。
 
 可以用多种方式表示这套接口，我们考虑其中三种。
 
@@ -205,10 +204,10 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 这一数据类型的接口有三个过程，定义如下：
 
  @nested{
- @envalign*{&@tt{(empty-env)} &= &\lceil \emptyset \rceil \\
-            &@tt{(apply-env @m{\lceil f \rceil} @m{var})} &= &f(var) \\
-            &@tt{(extend-env @m{var} @m{v} @m{\lceil f \rceil})} &= &\lceil g \rceil \\
-            &\phantom{x} &其中，&g(var_1) = @env["cases"]{v & 若\ var_1 = var \\
+ @envalign*{&@tt{(empty-env)} &= &\ \lceil \emptyset \rceil \\
+            &@tt{(apply-env @m{\lceil f \rceil} @m{var})} &= &\ f(var) \\
+            &@tt{(extend-env @m{var} @m{v} @m{\lceil f \rceil})} &= &\ \lceil g \rceil \\
+            &\phantom{x} &其中，&\ g(var_1) = @env["cases"]{v & 若\ var_1 = var \\
                                                           f(var_1) & 否则}
  }
  }
