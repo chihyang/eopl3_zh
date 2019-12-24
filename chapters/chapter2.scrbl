@@ -39,7 +39,7 @@
 因此，所有关于数据表示的信息必须在实现代码之中。实现最重要的部分就是指定数据如何
 表示。我们用符号@${\lceil v \rceil}指代“数据 @${v} 的表示”。
 
-要说得更直白些，来看一个简单例子：自然数类型。要表示的数据是自然数。接口由四个过
+要说得更明白些，来看一个简单例子：自然数类型。要表示的数据是自然数。接口由四个过
 程组成：@tt{zero}，@tt{is-zero?}，@tt{successor} 和 @tt{predecessor}。当然，不是
 随便几个过程都可以作为这一接口的实现。当且仅当一组过程满足如下四个方程时，可以作
 为@tt{zero}，@tt{is-zero?}，@tt{successor} 和 @tt{predecessor}的实现：
@@ -328,4 +328,200 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @; @exercise[#:difficulty 1 #:tag "ex2.5"]{
 @nested[#:style exercise]{
 
-只要能区分空环境和非空环境，并能从后者提取出数据片段，可以用任何数据结构表示环境。}
+只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
+境。按这种方式实现环境：空列表由空环境表示，@tt{extend-env}生成如下环境：
+
+@centered{
+@asymptote{
+defaultpen(fontsize(10pt));
+unitsize(15pt);
+real w = 1;
+real l = 1;
+real offset = 2*w+l/2;
+path a_box = box((0, 0), (l, w));
+path a_arrow = (l/2,w/2)--(l/2,-w*1);
+path b_arrow = (l*1.5,w/2)--(l*3.5,w/2);
+
+draw(shift(0)*a_box);
+draw(shift(1*l)*a_box);
+draw(shift(0, -2*w)*a_box);
+draw(shift(1*l, -2*w)*a_box);
+
+draw(a_arrow,arrow=Arrow());
+draw(b_arrow,arrow=Arrow());
+draw((l*0.5,-w*1.5)--(-l,-w*3), arrow=Arrow());
+draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
+
+label("$\mathit{saved\mbox{-}env}$",(l*3.5,w/2),align=E);
+label("$\mathit{saved\mbox{-}var}$",(-l,-w*3.5));
+label("$\mathit{saved\mbox{-}val}$",(l*3,-w*3.5));
+shipout(currentpicture.fit());
+}
+}
+
+@nested[#:style 'noindent]{这种表示方式叫做@emph{a-list}或@emph{关联列
+表}(@emph{association-list})。}}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.6"]{
+@nested[#:style exercise]{
+
+发明三种以上的环境表示方式，设计接口，实现它们。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.7"]{
+@nested[#:style exercise]{
+
+重写图2.1中的@tt{apply-env}，给出更详细的错误信息。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.8"]{
+@nested[#:style exercise]{
+
+向环境接口添加观测器@tt{empty-env?}，用a-list表示法实现它。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.9"]{
+@nested[#:style exercise]{
+
+向环境接口添加观测器@tt{has-binding?}，它取一环境@${env}，一个变量@${s}，判断
+@${s}在@${env}中是否有绑定值。用a-list表示法实现它。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.10"]{
+@nested[#:style exercise]{
+
+向环境接口添加构造器@tt{extend-env*}，用a-list表示法实现它。这一构造器取一变量列
+表和一长度相等的值列表，以及一环境，其定义为：
+
+ @envalign*{
+   & @tt{(extend-env* (@m{var_1} @m{\dots} @m{var_k}) (@m{val_1} @m{\dots} @m{var_k}) @m{\lceil f \rceil})} = \lceil g \rceil, \\
+   & \quad 其中，g(var) =
+    @env["cases"]{
+    val_i & 若 \ var = var_i \  对某个i成立，1 \leqslant i \leqslant k \\
+    f(var) & 否则
+    }
+ }
+}
+
+@; @exercise[#:difficulty 2 #:tag "ex2.11"]{
+@nested[#:style exercise]{
+
+前一题中的@tt{extend-env*}实现比较拙劣的话，运行时间与@${k}成正比。有一种表示可
+使@tt{extend-env*}的运行时间为常数：用空列表表示空环境，用下面的数据结构表示非空
+环境：
+
+@centered{
+@asymptote{
+defaultpen(fontsize(8pt));
+unitsize(12pt);
+real w = 1;
+real l = 1;
+real offset = 2*w+l/2;
+path a_box = box((0, 0), (l, w));
+path a_arrow = (l/2,w/2)--(l/2,-w*1);
+path b_arrow = (l*1.5,w/2)--(l*3.5,w/2);
+
+draw(shift(0)*a_box);
+draw(shift(1*l)*a_box);
+draw(shift(0, -2*w)*a_box);
+draw(shift(1*l, -2*w)*a_box);
+
+draw(a_arrow,arrow=Arrow());
+draw(b_arrow,arrow=Arrow());
+draw((l*0.5,-w*1.5)--(-l,-w*3), arrow=Arrow());
+draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
+
+label("$\mathit{saved\mbox{-}env}$",(l*3.5,w/2),align=E);
+label("$\mathit{saved\mbox{-}vars}$",(-l,-w*3.5));
+label("$\mathit{saved\mbox{-}vals}$",(l*3,-w*3.5));
+shipout(currentpicture.fit());
+}
+}
+
+@nested[#:style 'noindent]{
+
+那么一个环境看起来像是这样：
+
+@centered{
+@asymptote{
+settings.tex="xelatex";
+texpreamble("\usepackage{xeCJK}
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
+\setCJKsansfont{Adobe Song Std}
+\setCJKmonofont{Adobe Song Std}
+\xeCJKsetup{CJKmath=true, PlainEquation=true}
+\usepackage[T1]{fontenc}
+");
+defaultpen(fontsize(8pt));
+unitsize(12pt);
+real w = 1;
+real l = 1;
+real offset = 8;
+path a_box = box((0, 0), (l, w));
+path a_arrow = (l/2,w/2)--(l/2,-w*1);
+path b_arrow = (l*1.5,w/2)--(l*offset,w/2);
+path c_arrow = (0,w/2)--(l*(offset-1.5),w/2);
+
+@; first part
+draw(shift(0)*a_box);
+draw(shift(1)*a_box);
+draw(shift(0,-2*w)*a_box);
+draw(shift(1,-2*w)*a_box);
+
+draw(a_arrow,arrow=Arrow());
+draw(b_arrow,arrow=Arrow());
+draw((l*(1.5+offset)/2,w/2+3.5){(0.5,-1.5)}..{down}(l*(1.5+offset)/2+0.5,w/2+2){down}..{(-0.5,-1.5)}(l*(1.5+offset)/2,w/2+0.5), arrow=Arrow());
+draw(((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
+draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
+
+label("\emph{脊柱}",(l*(1.5+offset)/2,w/2+3.5),align=N);
+label("\texttt{(a b c)}",(-l,-w*3.5));
+label("\texttt{(11 12 13)}",(l*3,-w*3.5));
+
+@; second part
+draw(shift(offset)*a_box);
+draw(shift(offset+1)*a_box);
+draw(shift(offset,-2*w)*a_box);
+draw(shift(offset+1,-2*w)*a_box);
+
+draw(shift(offset)*a_arrow,arrow=Arrow());
+draw(shift(offset)*b_arrow,arrow=Arrow());
+draw(shift(offset)*((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
+draw(shift(offset)*((l*1.5,-w*1.5)--(l*3,-w*3)), arrow=Arrow());
+
+label("\texttt{(x z)}",shift(offset)*(-l,-w*3.5));
+label("\texttt{(66 77)}",shift(offset)*(l*3,-w*3.5));
+
+@; third part
+draw(shift(offset*2)*a_box);
+draw(shift(offset*2+1)*a_box);
+draw(shift(offset*2,-2*w)*a_box);
+draw(shift(offset*2+1,-2*w)*a_box);
+
+draw(shift(offset*2)*a_arrow,arrow=Arrow());
+draw(shift(offset*2+l*1.5)*(xscale(0.8)*c_arrow),arrow=Arrow());
+draw(shift(offset*2)*((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
+draw(shift(offset*2)*((l*1.5,-w*1.5)--(l*3,-w*3)), arrow=Arrow());
+
+label("\textit{环境其余部分}",shift(offset*2+0.8*(offset-1.5))*(l*1.5,w/2),align=E);
+label("\texttt{(x y)}",shift(offset*2)*(-l,-w*3.5));
+label("\texttt{(88 99)}",shift(offset*2)*(l*3,-w*3.5));
+
+shipout(currentpicture.fit());
+}
+}
+
+这叫做或@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{ribs})的
+序对列表表示；每根左肋是变量列表，右肋是对应的值列表。
+
+用这种表示方式实现环境接口，包括@tt{extend-env*}。
+
+}
+
+}
+
+@subsection[#:tag "pr"]{过程表示法}
