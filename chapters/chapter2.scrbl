@@ -365,7 +365,7 @@ shipout(currentpicture.fit());
 @; @exercise[#:difficulty 1 #:tag "ex2.6"]{
 @nested[#:style exercise]{
 
-发明三种以上的环境表示方式，设计接口，实现它们。
+发明三种以上的环境表示方式，设计接口，给出实现。
 
 }
 
@@ -401,7 +401,7 @@ shipout(currentpicture.fit());
    & @tt{(extend-env* (@m{var_1} @m{\dots} @m{var_k}) (@m{val_1} @m{\dots} @m{var_k}) @m{\lceil f \rceil})} = \lceil g \rceil, \\
    & \quad 其中，g(var) =
     @env["cases"]{
-    val_i & 若 \ var = var_i \  对某个i成立，1 \leqslant i \leqslant k \\
+    val_i & 若 \ var = var_i \  对某个 \ i \ 成立，1 \leqslant i \leqslant k \\
     f(var) & 否则
     }
  }
@@ -515,8 +515,8 @@ shipout(currentpicture.fit());
 }
 }
 
-这叫做或@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{ribs})的
-序对列表表示；每根左肋是变量列表，右肋是对应的值列表。
+这叫做@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{ribs})的序
+对列表表示；每根左肋是变量列表，右肋是对应的值列表。
 
 用这种表示方式实现环境接口，包括@tt{extend-env*}。
 
