@@ -178,16 +178,16 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@section[#:tag "rsdt"]{数据类型的表示技巧}
+@section[#:tag "rsdt"]{数据类型的表示策略}
 
-使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关。甚至
+使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关，甚至
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
 质。
 
-本节介绍几个表示数据类型的技巧。我们用数据类型@emph{环境} (@emph{environment})
-解释这些@elem[#:style question]{选择}。对有限个变量组成的集合，环境将值与其中的
-每个元素关联起来。在编程语言的实现之中，环境可用来维系变量与值的关系。编译器也能
-用环境记录各个变量名与变量相关信息的关系。
+本节介绍几种表示数据类型的策略。我们用数据类型@emph{环境} (@emph{environment})
+解释这些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语
+言的实现之中，环境可用来维系变量与值的关系。编译器也能用环境记录各个变量名与变量
+相关信息的关系。
 
 只要能够检查两个变量是否相等，变量能够用我们想用的任何方式表示。我们选用 Scheme
 符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
@@ -242,7 +242,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@subsection[#:tag "dsr"]{数据结构的表示}
+@subsection[#:tag "dsr"]{数据结构表示法}
 
 环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次应用
 @tt{extend-env}，其中@${n \geqslant 0}。例如，
@@ -329,12 +329,12 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @nested[#:style exercise]{
 
 只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
-境。按这种方式实现环境：空列表由空环境表示，@tt{extend-env}生成如下环境：
+境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
 @centered{
 @asymptote{
 defaultpen(fontsize(10pt));
-unitsize(15pt);
+unitsize(12pt);
 real w = 1;
 real l = 1;
 real offset = 2*w+l/2;
@@ -359,8 +359,8 @@ shipout(currentpicture.fit());
 }
 }
 
-@nested[#:style 'noindent]{这种表示方式叫做@emph{a-list}或@emph{关联列
-表}(@emph{association-list})。}}
+@nested[#:style 'noindent]{这叫@emph{a-list}或@emph{关联列
+表}(@emph{association-list})表示法。}}
 
 @; @exercise[#:difficulty 1 #:tag "ex2.6"]{
 @nested[#:style exercise]{
@@ -518,10 +518,95 @@ shipout(currentpicture.fit());
 这叫做@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{ribs})的序
 对列表表示；每根左肋是变量列表，右肋是对应的值列表。
 
-用这种表示方式实现环境接口，包括@tt{extend-env*}。
+用这种表示方式实现@tt{extend-env*}及其他环境接口。
 
 }
 
 }
 
 @subsection[#:tag "pr"]{过程表示法}
+
+环境接口有一条重要性质：它只有@tt{apply-env}一个观测器。这样就能用取一变量，返回
+绑定值的Scheme过程表示环境。
+
+要这样表示，定义@tt{empty-env}和@tt{extend-env}的返回值为过程，调用二者的返回值
+就如同调用上一节的@tt{apply-env}。由此得出下面的实现。
+
+@racketblock[
+@#,elem{@${\mathit{Env} = \mathit{Var} \to \mathit{SchemeVal}}}
+@#,elem{@${\mathit{Var} = \mathit{Sym}}}
+
+@#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
+(define empty-env
+  (lambda ()
+    (lambda (search-var)
+      (report-no-binding-found search-var))))
+
+@#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
+(define extend-env
+  (lambda (saved-var saved-val saved-env)
+    (lambda (search-var)
+      (if (eqv? search-var saved-var)
+          saved-val
+          (apply-env saved-env search-var)))))
+
+@#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
+(define apply-env
+  (lambda (env search-var)
+    (env search-var)))
+]
+
+@tt{empty-env}创建的空环境收到任何变量都会报错，表明给定的变量不在其中。过程
+@tt{extend-env}返回的过程代表扩展的环境。这个过程收到变量@tt{search-var}后，判断
+该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的环境中查
+找它。
+
+这种表示法中，数据由@tt{apply-env}@emph{执行的动作}表示，我们称之为@emph{过程表
+示法} (@emph{procedural representation})。
+
+数据类型只有一个观测器的情形并非想象中那般少见。比如，数据是一组函数，就能用函数
+调用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
+
+@itemlist[#:style 'ordered
+
+ @item{找出客户代码中求取类型值的lambda表达式。为每个这样的lambda表达式创建一个
+ 构造器过程。构造器过程的参数用作lambda表达式中的自由变量。在客户代码中，调用构
+ 造器，替换与之对应的lambda表达式。}
+
+ @item{像定义@tt{apply-env}那样定义一个@tt{apply-} 过程。找出客户代码中所有使用
+ 类型值的地方，包括构造器过程的主体。所有使用类型值的地方都改用@tt{apply-} 过程。}
+
+]
+
+一旦完成这些步骤，接口就包含所有的构造器过程和@tt{apply-} 过程，客户代码则与表示
+无关：它不再依赖表示，我们将能随意换用另一套接口实现，正像 @secref{dsr}希望的那
+样。
+
+如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
+方实现所需接口，就像上一节那样。这个过程叫做@emph{去函数}
+(@emph{defunctionalization})。环境的数据结构表示中，各种变体都是去函数的简单例子。
+过程表示法和去函数表示法的关系将是本书反复出现的主题。
+
+@; @exercise[#:difficulty 1 #:tag "ex2.12"]{
+@nested[#:style exercise]{
+
+用过程表示法实现练习2.4中的堆栈数据类型。
+
+}
+
+@; @exercise[#:difficulty 2 #:tag "ex2.13"]{
+@nested[#:style exercise]{
+
+实现@tt{empty-env?}。扩展过程表示法，用两个过程组成的列表表示环境：一个过程返回
+变量的绑定值，像前面那样；一个返回环境是否为空。
+
+}
+
+@; @exercise[#:difficulty 2 #:tag "ex2.14"]{
+@nested[#:style exercise]{
+
+扩展前一题中的表示法，加入第三个过程，实现 @tt{has-binding?} （见练习2.9）。
+
+}
+
+@section[#:tag "irdt"]{递推数据类型的接口}
