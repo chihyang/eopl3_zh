@@ -1,5 +1,5 @@
 #lang racket
-(require scribble/core scribble/latex-properties scribble/html-properties)
+(require scribble/core scribble/latex-properties scribble/html-properties scribble/decode)
 
 (define question
   (make-style "Squestion" (list (make-tex-addition "../style/question.tex")
@@ -20,10 +20,14 @@
   (make-style "TipContent" (list (make-tex-addition "../style/tip-content.tex")
                                  (make-css-addition "../style/tip-content.css"))))
 
-(define exercise
-  (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex"))))
+(define exer
+  (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex")
+                                 (make-css-addition "../style/exercise.css"))))
 
 (define figure
   (make-style "Figure" (list (make-tex-addition "../style/figure.tex"))))
+
+(define (exercise #:level [level 1] #:tag [tag ""] . c)
+  (make-nested-flow exer (decode-flow c)))
 
 (provide (all-defined-out))

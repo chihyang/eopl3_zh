@@ -272,29 +272,25 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
   \end{enumerate}
  }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.2, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.2"]{
 
  下面的几对规则分别定义了什么集合？给出解释。
 
- \begin{enumerate}
+ @itemlist[#:style 'ordered
 
-  \item{@m{(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
+  @item{@m{(0, 1) \in S \qquad \infer{(n + 1, k + 7) \in S}{(n, k) \in S}}}
 
-  \item{@m{(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
+  @item{@m{(0, 1) \in S \qquad \infer{(n + 1, 2k) \in S}{(n, k) \in S}}}
 
-  \item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
-  \item{@bold["["]@m{\star\star\star}@bold["]"] \quad @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@bold["["]@m{\star\star\star}@bold["]"] @m{\quad} @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
 
- \end{enumerate}
+ ]
 
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.3, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.3"]{
 
  找出自然数的子集 @m{T}，满足 @m{0 \in T}，且对任何 @m{n \in T}，都有 @m{n + 3
  \in T}，但 @m{T \neq S}，@m{S} 是由定义 1.1.2 给出的集合。
@@ -413,12 +409,9 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
                            &\Rightarrow @tt{(14 . ())}
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.4, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.4"]{
 
  写出从 @m{List\mbox{-}of\mbox{-}Int} 到 @tt{(-7 . (3 . (14 ())))} 的推导。
- \hspace*{\fill}\\
 
 }
 
@@ -543,7 +536,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
 前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
-后再用其他方法添加上下文敏感限制。第七章展示了这种技巧的一个例子。
+后再用其他方法添加上下文敏感限制。第7章展示了这种技巧的一个例子。
 
 @subsection[#:tag "induct"]{归纳证明法}
 
@@ -613,9 +606,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
  ]
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.5, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.5"]{
  证明若 @m{e \in LcExp}，则 @m{e} 中的左右括号数量相等。
 
 }
@@ -768,16 +759,12 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 的错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使
 用 @tt{car} 的地方。
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.6, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.6"]{
  如果翻转 @tt{nth-element} 中两个条件的顺序，会有什么问题？
 
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.7, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.7"]{
  @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
  息，像是 “@tt{(a b c)} 不足 8 个元素”。
 
@@ -873,18 +860,14 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
             @; }
 ]
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.8, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.8"]{
 
  如果把 @tt{remove-first} 定义中的最后一行改为 @tt{(remove-first s (cdr los))}，
  得到的过程做什么运算？对修改后的版本，给出合约，包括使用说明。
 
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.9, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.9"]{
 
  定义 @tt{remove}。它类似于 @tt{remove-first}，但会从符号列表中移除出现的所有给
  定符号，而不只是第一个。
@@ -948,9 +931,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 你可以说服自己，这些规则涵盖了“@${x} 不在某一 lambda 绑定之中”表示的所有意思。
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.10, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.10"]{
 
  我们常用“或”表示“涵盖或”。“或”还有什么含义？@linebreak[]
 
@@ -1089,18 +1070,14 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.11, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.11"]{
 
  @tt{subst-in-s-exp} 的最后一行中，递归是针对 @tt{sexp} 而非更小的子结构，为什
  么一定能终止？
 
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.12, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.12"]{
 
  用 @tt{subst-in-s-exp} 的定义替换 @tt{subst} 中的调用，从而排除这次调用，然后
  简化得到的过程。结果中的 @tt{subst} 应当不需要 @tt{subst-in-s-exp}。这种技巧叫
@@ -1108,9 +1085,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 }
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.13, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.13"]{
 
  在我们的例子中，我们从排除 @m{S\mbox{-}list} 语法内的克莱尼星号开始。依照原本的
  语法，用 @tt{map} 重写 @tt{subst}。@linebreak[]
@@ -1262,9 +1237,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 还有许多情况下，引入辅助变量或过程来解决问题会有帮助，甚至必不可少。只要能对新过
 程做什么给出独立的定义，尽可以如此。
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=2, label=ex1.14, counter=ChapterCounter"))]{
+@exercise[#:level 2 #:tag "ex1.14"]{
  若 @m{0 \leq n < length(v)}，证明 @tt{partial-vector-sum} 的正确性。
 
 }
@@ -1298,8 +1271,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (if (eq? n 0)
               '()
               (cons x (duple (- n 1) x))))))))
-@; @exercise[#:difficulty 1 #:tag "ex1.15"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.15"]{
  @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
  @examples[#:eval duple-eval
@@ -1324,8 +1296,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
      '(define invert-2-lst
         (lambda (2-lst)
           (list (cadr 2-lst) (car 2-lst)))))))
-@; @exercise[#:difficulty 1 #:tag "ex1.16"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.16"]{
  @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
  把每个二元列表反转。
 
@@ -1346,8 +1317,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list (car lst))
               (down (cdr lst)))))))))
-@; @exercise[#:difficulty 1 #:tag "ex1.17"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.17"]{
  @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
 
  @examples[#:eval down-eval
@@ -1376,8 +1346,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (swapper s1 s2 (car slist))
                  (swapper s1 s2 (cdr slist))))))))))
-@; @exercise[#:difficulty 1 #:tag "ex1.18"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.18"]{
  @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
  为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
 
@@ -1403,8 +1372,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons x (cdr lst))
             (cons (car lst)
                   (list-set (cdr lst) (- n 1) x)))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.19"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.19"]{
  @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
  @tt{x} 外，与 @tt{lst} 相同。
 
@@ -1431,8 +1399,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (+ (count-occurrences s (car slist))
               (count-occurrences s (cdr slist))))))))))
-@; @exercise[#:difficulty 1 #:tag "ex1.20"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.20"]{
  @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
 
  @examples[#:eval count-occurrences-eval
@@ -1462,8 +1429,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         '()
         (cons (list s (car sos))
               (s-product s (cdr sos)))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.21"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.21"]{
  @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}返
  回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不限。
 
@@ -1487,8 +1453,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons (car lst)
                   (filter-in pred (cdr lst)))
             (filter-in pred (cdr lst)))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.22"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.22"]{
  @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
  成。
 
@@ -1515,8 +1480,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             n
             (list-index-iter pred (cdr lst) (+ n 1)))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.23"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.23"]{
  @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，
      从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
 
@@ -1541,8 +1505,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             (every? pred (cdr lst))
             #f)))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.24"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.24"]{
  若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
  否则返回 @tt{#t}。
 
@@ -1566,8 +1529,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (if (pred (car lst))
             #t
             (exists? pred (cdr lst)))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.25"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.25"]{
  若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
 
  @examples[#:eval exists?-eval
@@ -1592,8 +1554,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (up (cdr lst)))
             (cons (car lst)
                   (up (cdr lst))))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.26"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.26"]{
  @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
  则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
  (up lst))} 不一定是列表（参见练习 1.17）。
@@ -1620,8 +1581,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                     (flatten (cdr slist)))
             (cons (car slist)
                   (flatten (cdr slist))))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.27"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.27"]{
  @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
 
  @examples[#:eval flatten-eval
@@ -1660,8 +1620,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         loi1
         (sort-iter (merge loi1 (list (car loi2)))
                    (cdr loi2))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.28"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.28"]{
  @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
  回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
 
@@ -1672,8 +1631,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 2 #:tag "ex1.29"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.29"]{
  @tt{(sort loi)} 返回一列表，将 @tt{loi} 中的元素按照升序排列。
 
  @examples[#:eval merge-eval
@@ -1711,8 +1669,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
           (else
            (cons (car loi2)
                  (merge/predicate pred loi1 (cdr loi2))))))))))
-@; @exercise[#:difficulty 2 #:tag "ex1.30"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.30"]{
  @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
  排列。
 
@@ -1723,8 +1680,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 1 #:tag "ex1.31"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.31"]{
  写出如下过程，对二叉树（定义 1.1.7）进行运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
  @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
@@ -1732,15 +1688,13 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 1 #:tag "ex1.32"]{
-@nested[#:style exercise]{
+@exercise[#:level 1 #:tag "ex1.32"]{
  写出过程 @tt{double-tree}，它取一棵二叉树，形如定义 1.1.7，生成另一棵二叉树，把
  原二叉树中的所有整数翻倍。
 
 }
 
-@; @exercise[#:difficulty 2 #:tag "ex1.33"]{
-@nested[#:style exercise]{
+@exercise[#:level 2 #:tag "ex1.33"]{
  写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（定义 1.1.7），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
@@ -1797,8 +1751,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
                  (path n (bst-lson bst))))
           (else
            '())))))))
-@; @exercise[#:difficulty 3 #:tag "ex1.34"]{
-@nested[#:style exercise]{
+@exercise[#:level 3 #:tag "ex1.34"]{
  写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树（第
  @elem[#:style question]{10} 页）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的
  列表，表示如何找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
@@ -1812,8 +1765,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 3 #:tag "ex1.35"]{
-@nested[#:style exercise]{
+@exercise[#:level 3 #:tag "ex1.35"]{
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
  @nested{
@@ -1841,8 +1793,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 }
 
-@; @exercise[#:difficulty 3 #:tag "ex1.36"]{
-@nested[#:style exercise]{
+@exercise[#:level 3 #:tag "ex1.36"]{
  写出过程 @tt{g}，则第 @elem[#:style question]{23} 页的 @tt{number-elements} 可
  以定义为：
 
