@@ -6,6 +6,8 @@
 @(require scribble-math)
 @(require scribble/example)
 @(require scribble/core)
+@(require scribble/example)
+@(require racket/sandbox)
 
 @title[#:style 'numbered #:tag "da"]{数据抽象}
 
@@ -583,9 +585,9 @@ shipout(currentpicture.fit());
 样。
 
 如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
-方实现所需接口，就像上一节那样。这个过程叫做@emph{去函数}
-(@emph{defunctionalization})。环境的数据结构表示中，各种变体都是去函数的简单例子。
-过程表示法和去函数表示法的关系将是本书反复出现的主题。
+方实现所需接口，就像上一节那样。这个过程叫做@emph{消函}
+(@emph{defunctionalization})。环境的数据结构表示中，各种变体都是消函的简单例子。
+过程表示法和消函表示法的关系将是本书反复出现的主题。
 
 @; @exercise[#:difficulty 1 #:tag "ex2.12"]{
 @nested[#:style exercise]{
@@ -597,8 +599,8 @@ shipout(currentpicture.fit());
 @; @exercise[#:difficulty 2 #:tag "ex2.13"]{
 @nested[#:style exercise]{
 
-实现@tt{empty-env?}。扩展过程表示法，用两个过程组成的列表表示环境：一个过程返回
-变量的绑定值，像前面那样；一个返回环境是否为空。
+扩展过程表示法，用两个过程组成的列表表示环境：一个过程返回变量的绑定值，像前面那
+样；一个返回环境是否为空。实现@tt{empty-env?}
 
 }
 
@@ -610,3 +612,280 @@ shipout(currentpicture.fit());
 }
 
 @section[#:tag "irdt"]{递推数据类型的接口}
+
+@secref{isd}大部分都在处理递推数据类型。例如，定义1.1.8给出了lambda演算表达式的
+语法：
+
+@envalign*{\mathit{Lc\mbox{-}Exp}
+           &::= \mathit{Identifier} \\
+           &::= \normalfont{@tt{(lambda (@m{\mathit{Identifier}}) @m{\mathit{Lc\mbox{-}Exp}})}} \\
+           &::= \normalfont{@tt{(@m{\mathit{Lc\mbox{-}Exp}} @m{\mathit{Lc\mbox{-}Exp}})}}}
+
+我们还写出了过程 @tt{occurs-free?}。像当时提到的，@secref{o-f}中
+@tt{occurs-free?}的定义不大容易读懂。比如，很难搞明白@tt{(car (cadr exp))}指的是
+一个@tt{lambda}表达式中的变量声明，或者@tt{(caddr exp)}指的是式子的主体。
+
+要改善这种情况，可以给lambda演算表达式添加一套接口。我们的接口有几个构造器，以及
+两种观测器：谓词和抽词器。
+
+构造器有：
+
+@; TODO: better refinement of formula spacing
+@envalign*{
+@bold{@tt{var-exp}}    &: & \mathit{Var} \to \mathit{Lc\mbox{-}Exp} \\
+@bold{@tt{lambda-exp}} &: & \mathit{Var} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
+@bold{@tt{app-exp}}    &: & \mathit{Lc\mbox{-}Exp} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}
+}
+
+谓词有：
+
+@; TODO: better refinement of formula spacing
+@envalign*{
+@bold{@tt{var-exp?}}    &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool} \\
+@bold{@tt{lambda-exp?}} &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool} \\
+@bold{@tt{app-exp?}}    &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}
+}
+
+抽词器有：
+
+@; TODO: better refinement of formula spacing
+@envalign*{
+@bold{@tt{var-exp->exp}}          &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Var} \\
+@bold{@tt{lambda-exp->bound-var}} &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Var} \\
+@bold{@tt{lambda-exp->body}}      &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
+@bold{@tt{app-exp->rator}}        &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
+@bold{@tt{app-exp->rand}}         &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}
+}
+
+每个抽词器对应lambda演算表达式中的一部分。现在可以写出一版只依赖接口的
+@tt{occurs-free?}。
+
+@racketblock[
+@#,elem{@${@tt{occurs-free?} : \mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
+(define occurs-free?
+  (lambda (search-var exp)
+    (cond
+     ((var-exp? exp) (eqv? search-var (var-exp->var exp)))
+     ((lambda-exp? exp)
+      (and
+       (not (eqv? search-var (lambda-exp->bound-var exp)))
+       (occurs-free? search-var (lambda-exp->body exp))))
+     (else
+      (or
+       (occurs-free? search-var (app-exp->rator exp))
+       (occurs-free? search-var (app-exp->rand exp)))))))
+]
+
+只要使用上述构造器，这适用于lambda演算表达式的任何表示。
+
+可以写出设计递推数据类型接口的一般步骤：
+
+@nested[#:style tip]{
+ @centered{@bold{设计递推数据类型的接口}}
+
+ @nested[#:style tip-content]{
+ @itemlist[#:style 'ordered
+
+  @item{为数据类型的每种变体各加入一个构造器。}
+
+  @item{为数据类型的每种变体各加入一个谓词。}
+
+  @item{为传给数据类型构造器的每段数据加入一个抽词器。}
+
+   ]}}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.15"]{
+@nested[#:style exercise]{
+
+上述语法指定了lambda演算表达式的表示方式，实现其接口。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.16"]{
+@nested[#:style exercise]{
+
+修改实现，换用另一种表示，去掉@tt{lambda}表达式绑定变量周围的括号。
+
+}
+
+@; @exercise[#:difficulty 1 #:tag "ex2.17"]{
+@nested[#:style exercise]{
+
+再发明至少两种方式来表示数据类型lambda演算表达式，实现它们。
+
+}
+
+@(define bidirection-eval
+(parameterize ([sandbox-output 'string]
+               [sandbox-error-output 'string]
+               [sandbox-memory-limit 50])
+  (make-evaluator
+   'eopl
+
+'(define number->sequence
+  (lambda (number)
+    (list number '() '())))
+
+'(define current-element
+  (lambda (node)
+    (car node)))
+
+'(define move-to-left
+  (lambda (node)
+    (if (at-left-end? node)
+        (report-left-end (car node))
+        (list (caadr node) (cdadr node) (cons (car node) (caddr node))))))
+
+'(define move-to-right
+  (lambda (node)
+    (if (at-right-end? node)
+        (report-right-end (car node))
+        (list (caaddr node)
+              (cons (car node) (cadr node))
+              (cdr (caddr node))))))
+'(define report-left-end
+  (lambda (n)
+    (eopl:error 'move-to-left "~s is at the left end of sequence." n)))
+
+'(define report-right-end
+  (lambda (n)
+    (eopl:error 'move-to-right "~s is at the right end of sequence." n)))
+
+'(define insert-to-left
+  (lambda (n node)
+    (list (car node)
+          (cons n (cadr node))
+          (caddr node))))
+
+'(define insert-to-right
+  (lambda (n node)
+    (list (car node)
+          (cadr node)
+          (cons n (caddr node)))))
+
+'(define at-left-end?
+  (lambda (node)
+    (null? (cadr node))))
+
+'(define at-right-end?
+  (lambda (node)
+    (null? (caddr node)))))))
+
+@; @exercise[#:difficulty 1 #:tag "ex2.18"]{
+@nested[#:style exercise]{
+
+我们常用列表表示值的序列。在这种表示法中，很容易从序列中的一个元素移动到下一个，
+但是不借助上下文参数，很难从一个元素移动到上一个。实现非空双向整数序列，语法为：
+
+@mp{\mathit{NodeInSequence} ::= @tt{(@m{\mathit{Int}}
+@m{\mathit{Listof@tt{(@m{\mathit{Int}})}}} @m{\mathit{Listof@tt{(@m{\mathit{Int}})}}})}}
+
+第一个整数列表是当前元素之前的序列，反向排列。第二个列表是当前元素之后的序列。例
+如，@tt{(6 (5 4 3 2 1) (7 8 9))} 表示列表@tt{(1 2 3 4 5 6 7 8 9)}，当前元素为6。
+
+用这种表示实现过程@tt{number->sequence}，取一数字，生成只包含该数字的序列。接着
+实现@tt{current-element}，@tt{move-to-left}，@tt{move-to-right}，
+@tt{insert-to-left}，@tt{insert-to-right}，@tt{at-left-end?}和
+@tt{at-right-end?}。
+
+例如：
+
+@examples[#:eval bidirection-eval
+          #:label #f
+          (number->sequence 7)
+          (current-element '(6 (5 4 3 2 1) (7 8 9)))
+          (move-to-left '(6 (5 4 3 2 1) (7 8 9)))
+          (move-to-right '(6 (5 4 3 2 1) (7 8 9)))
+          (insert-to-left 13 '(6 (5 4 3 2 1) (7 8 9)))
+          (insert-to-right 13 '(6 (5 4 3 2 1) (7 8 9)))]
+
+如果参数在序列最右端，过程@tt{move-to-right}应失败。如果参数在序列最左端，过程
+@tt{move-to-left}应失败。
+
+}
+
+@(define bintree-eval
+(parameterize ([sandbox-output 'string]
+               [sandbox-error-output 'string]
+               [sandbox-memory-limit 50])
+  (make-evaluator
+   'eopl
+
+'(define number->bintree
+  (lambda (n)
+    (list n '() '())))
+
+'(define current-element
+  (lambda (tree)
+    (car tree)))
+
+'(define move-to-left-son
+  (lambda (tree)
+    (cadr tree)))
+
+'(define move-to-right-son
+  (lambda (tree)
+    (caddr tree)))
+
+'(define at-leaf?
+  (lambda (tree)
+    (null? tree)))
+
+'(define insert-to-left
+  (lambda (n tree)
+    (list (car tree)
+          (list n
+                (cadr tree)
+                '())
+          (caddr tree))))
+
+'(define insert-to-right
+  (lambda (n tree)
+    (list (car tree)
+          (cadr tree)
+          (list n
+                (caddr tree)
+                '())))))))
+
+@; @exercise[#:difficulty 1 #:tag "ex2.19"]{
+@nested[#:style exercise]{
+
+不带叶子和以整数标记中间节点的二叉树可以用语法表示为：
+
+@mp{\mathit{BinTree} ::= @tt{()} \mid @tt{(@m{\mathit{Int}} @m{\mathit{BinTree}}
+@m{\mathit{BinTree}})}}
+
+用这种表示实现过程@tt{number->bintree}，它取一个整数，产生一棵新的二叉树，树的唯
+一节点包含该数字。接着实现@tt{current-element}，@tt{move-to-left-son}，
+@tt{move-to-right-son}，@tt{at-leaf?}，@tt{insert-to-left}和@tt{insert-to-right}。
+例如：
+
+@examples[#:eval bintree-eval
+          #:label #f
+          (number->bintree 13)
+          (define t1 (insert-to-right 14
+                       (insert-to-left 12
+                         (number->bintree 13))))
+          t1
+          (move-to-left-son t1)
+          (current-element (move-to-left-son t1))
+          (at-leaf? (move-to-right-son (move-to-left-son t1)))
+          (insert-to-left 15 t1)]
+
+}
+
+@; @exercise[#:difficulty 3 #:tag "ex2.20"]{
+@nested[#:style exercise]{
+
+按照练习2.19中的二叉树表示，很容易从父节点移到某个子节点，但是不借助上下文参数，
+无法从子节点移动到父节点。扩展练习2.18中的列表表示法，用以表示二叉树中的节点。提
+示，想想怎样用逆序列表表示二叉树在当前节点以上的部分，就像练习2.18那样。
+
+用这种表示实现练习2.19中的过程。接着实现@tt{move-up}，@tt{at-root?}和
+@tt{at-leaf?}。
+
+}
+
+@section[#:tag "atdrdy"]{定义递推数据类型的工具}
+
+对复杂的数据类型，按照上述步骤构建接口
