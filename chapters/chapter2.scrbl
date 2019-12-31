@@ -871,4 +871,353 @@ shipout(currentpicture.fit());
 
 @section[#:tag "atdrdy"]{定义递推数据类型的工具}
 
-对复杂的数据类型，按照上述步骤构建接口
+对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用Scheme自动设计
+和实现接口的工具。与前一节相比，这个工具产生的接口看起来很类似，却不完全相同。
+
+再来说说前一节讨论的数据类型lambda演算表达式。lambda演算表达式的接口可以这样写：
+
+@racketblock[
+(define-datatype lc-exp lc-exp?
+  (var-exp
+   (var identifier?))
+  (lambda-exp
+   (bound-var identifier?)
+   (body lc-exp?))
+  (app-exp
+   (rator lc-exp?)
+   (rand lc-exp?)))
+]
+
+这里的名字@tt{var-exp}，@tt{var}，@tt{bound-var}，@tt{app-exp}，@tt{rator}和
+@tt{rand}分别是 @emph{变量表达式} (@emph{variable expression})，@emph{变量}
+(@emph{variable})，@emph{绑定变量} (@emph{bound variable})，@emph{调用表达式}
+(@emph{application expression})，@emph{操作符} (@emph{operator})和@emph{操作数}
+(@emph{operand})的缩写。
+
+这些表达式声明了三种构造器，@tt{var-exp}，@tt{lambda-exp}和@tt{app-exp}，以及一
+个谓词@tt{lc-exp?}。三个构造器用谓词@tt{identifier?}和@tt{lc-exp?}检查它们的参数，
+确保参数合规。所以，如果生成一个lc-exp只用这些构造器，可以确保它及其所有子表达式
+是合法的lc-exp。这样在处理lambda表达式时就可以跳过许多检查。
+
+我们用@elem[#:style question]{结构式}@tt{cases}代替谓词和抽词器，判断数据类型的
+实体属于哪种变体，并提取出它的组件。要搞明白这个结构式，我们用数据类型
+@tt{lc-exp}重写@tt{occurs-free?}（@elem[#:style question]{43页}）：
+
+@nested[#:style 'noindent]{
+@racketblock[
+@#,elem{@${@tt{occurs-free?} : \mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
+(define occurs-free?
+  (lambda (search-var exp)
+    (cases lc-exp exp
+           (var-exp
+            (var) (eqv? var search-var))
+           (lambda-exp
+            (bound-var body)
+            (and
+              (not (eqv? search-var bound-var))
+              (occurs-free? search-var body)))
+           (app-exp
+            (rator rand)
+            (or
+              (occurs-free? search-var rator)
+              (occurs-free? search-var rand))))))
+]
+
+要理解它，假设@tt{exp}是由@tt{app-exp}生成的lambda演算表达式。根据@tt{exp}的取值，
+分支@tt{app-exp}将被选中，@tt{rator}和@tt{rand}则绑定到两个子表达式，接着，表达式
+
+@racketblock[
+(or
+  (occurs-free? search-var rator)
+  (occurs-free? search-var rand))
+]
+
+将会求值，就像我们写：
+
+@racketblock[
+(if (app-exp? exp)
+  (let ((rator (app-exp->rator exp))
+        (rand (app-exp->rand exp)))
+    (or
+      (occurs-free? search-var rator)
+      (occurs-free? search-var rand)))
+...)
+]
+
+递归调用@tt{occurs-free?}也是像这样完成运算。
+
+}
+
+大体上，@tt{define-datatype}的声明形如：
+
+@racketblock[
+(define-datatype @#,elem{@${type\mbox{-}name}} @#,elem{@${type\mbox{-}predicate\mbox{-}name}}
+  @#,elem{@${\{@tt["("]variant\mbox{-}name \quad \{@tt["("]filed\mbox{-}name \quad predicate@tt[")"]\}^{*} @tt[")"]\}^{+}}})
+]
+
+这新定义了一种数据类型，名为@${type\mbox{-}name}，它有一些 @emph{变体}
+(@emph{variants})。每个变体有一变体名，以及0或多个字段，每个字段各有其字段名和相
+对应的谓词。不管是否分属不同的类型，变体都不能重名。类型也不能重名，且类型名不能
+用作变体名。每个字段的谓词必须是一个Scheme谓词。
+
+每个变体都有一个构造器过程，用于创建该变体的值。这些过程的名字与对应的变体相同。
+如果一个变体有@${n}个字段，那么它的构造器取@${n}个参数，用对应的谓词检查每个参数
+值，并返回变体值，值的第@${i}个字段为第@${i}个参数值。
+
+@${type\mbox{-}predicate\mbox{-}name}绑定到一个谓词。这个谓词判断其参数值是否是
+对应的类型。
+
+可以将只有一种变体的记录定义为一种数据类型。为了区分数据类型及其唯一变体，我们遵
+循一种命名惯例：当只有一个变体时，我们以a-@${type\mbox{-}name}或
+an-@${type\mbox{-}name}命名构造器；否则，以
+@${variant\mbox{-}name\mbox{-}type\mbox{-}name}命名构造器。
+
+由@tt{define-datatype}生成的数据结构可以互递归。例如，@secref{rd}中的s-list语法
+为：
+
+@envalign*{S\mbox{-}list &::= {\normalfont{@tt{(@m{\{S\mbox{-}exp\}^{*}})}}} \\
+           S\mbox{-}exp &::= Symbol \mid S\mbox{-}list}
+
+s-list中的数据可以用数据类型@tt{s-list}表示为：
+
+@racketblock[
+(define-datatype s-list s-list?
+  (empty-s-list)
+  (non-empty-s-list
+   (first s-exp?)
+   (rest s-list?)))
+
+(define-datatype s-exp s-exp?
+  (symbol-s-exp
+   (sym symbol?))
+  (s-list-s-exp
+   (slst s-list?)))
+]
+
+数据类型@tt{s-list}用@tt{(empty-s-list)}和@tt{non-empty-s-list}代替@tt{()}和
+@tt{cons}来表示列表。如果我们还想用Scheme列表，可以写成：
+
+@nested[#:style 'noindent]{
+
+@racketblock[
+(define-datatype s-list s-list?
+  (an-s-list
+   (sexps (list-of s-exp?))))
+
+(define list-of
+  (lambda (pred)
+    (lambda (val)
+      (or (null? val)
+          (and (pair? val)
+               (pred (car val))
+               ((list-of pred) (cdr val)))))))
+]
+
+这里@tt{(list-of @${pred})}生成一个谓词，检查其参数值是否是一个列表，且列表的每
+个元素都满足@${pred}。
+
+}
+
+@tt{cases}的语法大体上是：
+@nested[#:style 'noindent]{
+
+@racketblock[
+(cases @#,elem{@${type\mbox{-}name}} @#,elem{@${expression}}
+  @#,elem{@${\{@tt["("]variant\mbox{-}name \phantom{x} @tt["("]\{filed\mbox{-}name\}^{*}@tt[")"] \phantom{x} consequent@tt[")"]\}^{*}}}
+  (else @#,elem{@${default}}))
+]
+
+@elem[#:style question]{结构式}指定一类型，一个待求值并检查的表达式，以及一些从
+句。每个分句以给定类型的某一变体名及对应字段名为标识。@tt{else}分句可有可无。首
+先，@${expression}求值，得到@${type\mbox{-}name}的某个值@${v}。如果@${v}是某个
+@${variant\mbox{name}}的变体，那就选中对应的分句。每个@${field-name}绑定到@${v}中
+对应的字段值。然后@${consequent}在这些绑定的作用域内求值，并返回自身的值。如果
+@${v}不属于任何变体，且有@tt{else}分句，则求@${default}的值并返回。如果没有
+@tt{else}从句，必须给指定数据类型的@emph{每个}变体指定分句。
+
+}
+
+@elem[#:style question]{结构式}@tt{cases}按位置绑定变量：第@${i}个变量绑定到第
+@${i}个字段。所以，我们可以写：
+
+@nested[#:style 'noindent]{
+
+@centered{
+@racketblock[
+(app-exp (exp1 exp2)
+  (or
+    (occurs-free? search-var exp1)
+    (occurs-free? search-var exp2)))
+]
+}
+
+而不是：
+
+@centered{
+@racketblock[
+(app-exp (rator rand)
+  (or
+    (occurs-free? search-var rator)
+    (occurs-free? search-var rand)))
+]
+}
+
+}
+
+@elem[#:style question]{结构式}@tt{define-datatype}和@tt{cases}提供了一种简洁的
+方式来定义递推数据类型，但这种方式并不是唯一的。根据使用场景，可能得用专门的表示
+方式，它们利用数据的特殊性质，更紧凑或者更高效。要获得这些优势，代价是不得不动手
+实现接口中的过程。
+
+@elem[#:style question]{结构式}@tt{define-datatype}是@emph{特定领域语言}
+(@emph{domain-specific language})的例子。特定领域语言是一种小巧的语言，用来描述
+一些小而精确的任务中的单一任务。本例中的任务是定义一种递归数据类型。这样的语言可
+能存在于通用语言中，就像@tt{define-datatype}，也可能是一门单独的语言，有自己的一
+套工具。要实现这样的语言，通常要找出不同种类的任务，然后设计描述各种任务的语言。
+有时这种策略非常有用。
+
+@exercise[#:level 1 #:tag "ex2.21"]{
+
+用@tt{define-datatype}实现@secref{dsr}中的数据类型环境。然后实现练习2.9中的
+@tt{has-binding?}。
+
+}
+
+@exercise[#:level 1 #:tag "ex2.22"]{
+
+用@tt{define-datatype}实现练习2.4中的堆栈数据类型。
+
+}
+
+@exercise[#:level 1 #:tag "ex2.23"]{
+
+@tt{lc-exp}的定语忽略了定义1.1.8中的条件：“@${Identifier}是除@tt{lambda}之外的
+任何符号。”修改@tt{identifier?}的定义，补充这一条件。提示，任何谓词都能在
+@tt{define-datatype}中使用，你定义的也能。
+
+}
+
+@exercise[#:level 1 #:tag "ex2.24"]{
+
+这是用@tt{define-datatype}表示的二叉树：
+
+@racketblock[
+(define-datatype bintree bintree?
+  (leaf-node
+   (num integer?))
+  (interior-node
+   (key symbol?)
+   (left bintree?)
+   (right bintree?)))
+]
+
+为二叉树实现过程@tt{bintree-to-list}，则@tt{(bintree-to-list (interior-node 'a
+(leaf-node 3) (leaf-node 4)))}返回列表：
+
+@racketblock[
+(interior-node
+  a
+  (leaf-node 3)
+  (leaf-node 4))
+]
+
+}
+
+@(define max-interior-eval
+(parameterize ([sandbox-output 'string]
+               [sandbox-error-output 'string]
+               [sandbox-memory-limit 50])
+  (make-evaluator
+   'eopl
+
+'(define-datatype bintree bintree?
+  (leaf-node
+   (num integer?))
+  (interior-node
+   (key symbol?)
+   (left bintree?)
+   (right bintree?)))
+'(define bintree-sum
+  (lambda (tree)
+    (cases bintree tree
+           (leaf-node
+            (num)
+            num)
+           (interior-node
+            (key left right)
+            (+ (bintree-sum left)
+               (bintree-sum right))))))
+'(define max-interior
+  (lambda (tree)
+    (cases bintree tree
+           (leaf-node
+            (num)
+            (eopl:error 'bintree
+                        "Cannot get max interior from a leaf ~s!" tree))
+           (interior-node
+            (key left right)
+            (let* ((left-sum (bintree-sum left))
+                   (right-sum (bintree-sum right))
+                   (total-sum (+ left-sum right-sum)))
+              (cond ((and (interior-node? left)
+                          (interior-node? right))
+                     (if (> left-sum right-sum)
+                         (if (> left-sum total-sum)
+                             (max-interior left)
+                             key)
+                         (if (> right-sum total-sum)
+                             (max-interior right)
+                             key)))
+                    ((interior-node? left)
+                     (if (> left-sum total-sum)
+                         (max-interior left)
+                         key))
+                    ((interior-node? right)
+                     (if (> right-sum total-sum)
+                         (max-interior right)
+                         key))
+                    (else key)))))))
+'(define interior-node?
+  (lambda (tree)
+    (cases bintree tree
+           (interior-node
+            (key left right)
+            #t)
+           (else #f)))))))
+
+@exercise[#:level 2 #:tag "ex2.25"]{
+
+用@tt{cases}写出@tt{max-interior}，它取一棵至少有一个节点的整数二叉树（像前一道
+练习那样），返回叶子之和最大的节点对应的符号。
+
+@examples[#:eval max-interior-eval
+          #:label #f
+          (define tree-1
+            (interior-node 'foo (leaf-node 2) (leaf-node 3)))
+          (define tree-2
+            (interior-node 'bar (leaf-node -1) tree-1))
+          (define tree-3
+            (interior-node 'baz tree-2 (leaf-node 1)))
+          (max-interior tree-2)
+          (max-interior tree-3)
+]
+
+最后一次调用@tt{max-interior}也可能返回@tt{foo}，因为节点@tt{foo}和@tt{baz}的叶子之和都为@${5}。
+
+}
+
+@exercise[#:level 2 #:tag "ex2.26"]{
+
+练习1.33还有一种写法。树的集合可以用下列语法定义：
+
+@envalign*{Red\mbox{-}blue\mbox{-}tree &::= Red\mbox{-}blue\mbox{-}subtree \\
+           Red\mbox{-}blue\mbox{-}subtree &::= @tt{(red-node @m{Red\mbox{-}blue\mbox{-}subtree}
+                                                             @m{Red\mbox{-}blue\mbox{-}subtree})} \\
+                                          &::= @tt{(blue-node @m{\{Red\mbox{-}blue\mbox{-}subtree\}^{*}})} \\
+                                          &::= @tt{(leaf-node @m{Int})}
+}
+
+用@tt{define-datatype}写出等价定义，用得到的接口写出一个过程，它取一棵树，生成形
+状相同的另一棵树，但把每个叶子改为当前叶子节点与树根之间红色节点的数目。
+
+}
