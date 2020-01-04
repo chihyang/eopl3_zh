@@ -1091,7 +1091,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
-@tt{lc-exp}的定语忽略了定义1.1.8中的条件：“@${Identifier}是除@tt{lambda}之外的
+@tt{lc-exp}的定义忽略了定义1.1.8中的条件：“@${Identifier}是除@tt{lambda}之外的
 任何符号。”修改@tt{identifier?}的定义，补充这一条件。提示，任何谓词都能在
 @tt{define-datatype}中使用，你定义的也能。
 
@@ -1211,13 +1211,276 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 练习1.33还有一种写法。树的集合可以用下列语法定义：
 
 @envalign*{Red\mbox{-}blue\mbox{-}tree &::= Red\mbox{-}blue\mbox{-}subtree \\
-           Red\mbox{-}blue\mbox{-}subtree &::= @tt{(red-node @m{Red\mbox{-}blue\mbox{-}subtree}
-                                                             @m{Red\mbox{-}blue\mbox{-}subtree})} \\
+           Red\mbox{-}blue\mbox{-}subtree &::= @tt{(red-node @m{Red\mbox{-}blue\mbox{-}subtree} @m{Red\mbox{-}blue\mbox{-}subtree})} \\
                                           &::= @tt{(blue-node @m{\{Red\mbox{-}blue\mbox{-}subtree\}^{*}})} \\
                                           &::= @tt{(leaf-node @m{Int})}
 }
 
 用@tt{define-datatype}写出等价定义，用得到的接口写出一个过程，它取一棵树，生成形
-状相同的另一棵树，但把每个叶子改为当前叶子节点与树根之间红色节点的数目。
+状相同的另一棵树，但把每个叶子改为从当前叶子节点到树根之间红色节点的数目。
+
+}
+
+@section[#:tag "asir"]{抽象语法及其表示}
+
+语法通常指定递推数据结构的具体表示方式，后者使用前者生成的字符串或值。这种表示叫
+做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external})表示。
+
+例如，定义1.1.8指定集合lambda演算表达式，用的就是lambda演算表达式的具体语法。我
+们可以用其他具体语法表示lambda演算表达式。例如，可以用
+
+
+@nested[#:style 'noindent]{
+
+@envalign*{Lc\mbox{-}exp &::= Identifier \\
+                         &::= @tt{proc @m{Identifier} @tt{=>} @m{Lc\mbox{-}exp}} \\
+                         &::= @tt{@m{Lc\mbox{-}exp} (@m{Lc\mbox{-}exp})}}
+
+把lambda演算表达式定义为另一个字符串集合。
+
+}
+
+要处理这样的数据，要将其转换为@emph{内部} (@emph{internal})表示。@elem[#:style
+question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义这样的内部表示。
+我们称之为@emph{抽象语法} (@emph{abstrat syntax})。在抽象语法中，不需要存储括号
+这样的终止符，因为它们不传达信息。另一方面，我们要确保数据结构足以用来判断它代表
+哪种lambda演算表达式，并提取出各部分。@elem[#:style question]{46页}的数据类型
+@tt{lc-exp}使我们轻松完成这两项。
+
+将内部表示画成@emph{抽象语法树} (@emph{abstract syntax tree})很方便。图2.2展示了
+一棵抽象语法树，它代表用数据类型@tt{lc-exp}表示的lambda演算表达式@tt{(lambda (x)
+(f (f x)))}。树的每个内部节点以相对应的生成式名字为标识。树枝以所出现的非终止符
+名字为标识。叶子对应终止符字符串。
+
+@nested[#:style figure]{
+@centered{
+@asymptote{import flowchart;
+settings.tex="xelatex";
+texpreamble("\usepackage{xeCJK}
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
+\setCJKsansfont{Adobe Song Std}
+\setCJKmonofont{Adobe Song Std}
+\xeCJKsetup{CJKmath=true, PlainEquation=true}
+\usepackage[T1]{fontenc}
+");
+defaultpen(fontsize(8pt));
+unitsize(12pt);
+pair pos = (0, 0);
+real w = 3;
+real l = 18;
+real x_off=5, y_off=3;
+real ah=4;
+
+block block1=rectangle("\texttt{lambda-exp}", pos);
+block block2=rectangle("\texttt{x}", shift(-x_off, -y_off)*pos);
+block block3=rectangle("\texttt{app-exp}", shift(x_off, -y_off)*pos);
+block block4=rectangle("\texttt{var-exp}", shift(-x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block5=rectangle("\texttt{f}", shift(0,-1.5*y_off)*shift(-x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block6=rectangle("\texttt{app-exp}", shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block7=rectangle("\texttt{var-exp}", shift(-x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block8=rectangle("\texttt{f}", shift(0,-y_off)*shift(-x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block9=rectangle("\texttt{var-exp}", shift(x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
+block block10=rectangle("\texttt{f}", shift(0,-y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
+
+draw(block1);
+draw(block2);
+draw(block3);
+draw(block4);
+draw(block5);
+draw(block6);
+draw(block7);
+draw(block8);
+draw(block9);
+draw(block10);
+
+Label Lbvar = Label("\texttt{bound-var}", align=(0,0), position=MidPoint, filltype=Fill(white));
+Label Lbd = Label("\texttt{body}", align=(0,0), position=MidPoint, filltype=Fill(white));
+Label Lrtor = Label("\texttt{rator}", align=(0,0), position=MidPoint, filltype=Fill(white));
+Label Lrand = Label("\texttt{rand}", align=(0,0), position=MidPoint, filltype=Fill(white));
+Label Lvar = Label("\texttt{var}", align=(0,0), position=MidPoint, filltype=Fill(white));
+
+add(new void(picture pic, transform t) {
+    draw(pic, Lbvar, block1.bottom(t)--block2.top(t), arrow=Arrow(size=3));
+    draw(pic, Lbd, block1.bottom(t)--block3.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lrtor, block3.bottom(t)--block4.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lvar, block4.bottom(t)--block5.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lrand, block3.bottom(t)--block6.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lrtor, block6.bottom(t)--block7.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lvar, block7.bottom(t)--block8.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lrand, block6.bottom(t)--block9.top(t), arrow=Arrow(size=ah));
+    draw(pic, Lvar, block9.bottom(t)--block10.top(t), arrow=Arrow(size=ah));
+  });
+
+shipout(bbox(currentpicture, 2, 2, filltype=Draw(2, 2), p=invisible));
+}
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "(lambda (x) (f (f x)))") "的抽象语法树"))]
+}
+
+要为某个具体语法设计抽象语法，需要给其中的每个生成式，以及每个生成式中出现的每个
+非终止符起个名字。为抽象语法生成@tt{define-datatype}声明很直接。我们为每个非终止
+符加一个@tt{define-datatype}，给每个生成式加一个变体。
+
+图2.2中选出的部分可以精确表示如下：
+
+@envalign*{\mathit{Lc\mbox{-}Exp} &::= \mathit{Identifier} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{var-exp (var)}} \\[5pt]
+                                  &::= \normalfont{@tt{(lambda (@m{\mathit{Identifier}}) @m{\mathit{Lc\mbox{-}Exp}})}} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{lambda-exp (bound-var body)}} \\[5pt]
+                                  &::= \normalfont{@tt{(@m{\mathit{Lc\mbox{-}Exp}} @m{\mathit{Lc\mbox{-}Exp}})}} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{app-exp (rator rand)}}}
+
+这种表示法同时指明具体语法和抽象语法，本书一直采用。
+
+具体语法主要供人使用，抽象语法主要供计算机使用，既已区分二者，现在来看看如何将一
+种语法转换为另一种。
+
+具体语法若表示字符串集合，要得出对应的抽象语法树可能是件很复杂的任务。这个任务叫
+@emph{解析} (@emph{parsing})，由@emph{解析器} (@emph{parser})完成。因为写解析器
+通常比较麻烦，所以最好借由工具@emph{解析器生成器} (@emph{parser generator})完成。
+解析器生成器以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必须
+以某种机器能够理解的语言写成：写语法用的特定领域语言。有很多现成的解析器生成器。
+
+如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，本节开头的lambda演
+算表达式指定了一个列表集合，如同@elem[#:style question]{47页}的
+@tt{define-datatype}语法。这样，Scheme@elem[#:style question]{过程}@tt{read}自动
+把字符串解析为列表和符号。然后，把这些列表结构解析为抽象语法树就容易多了，就像
+@tt{parse-expression}这样。
+
+@racketblock[
+@#,elem{@bold{@tt{parse-expression}} : @${\mathit{SchemeVal} \to \mathit{LcExp}}}
+(define parse-expression
+  (lambda (datum)
+    (cond
+     ((symbol? datum) (var-exp datum))
+     ((pair? datum)
+      (if (eqv? (car datum) 'lambda)
+          (lambda-exp
+           (car (cadr datum))
+           (parse-expression (caddr datum)))
+          (app-exp
+           (parse-expression (car datum))
+           (parse-expression (cadr datum)))))
+     (else (report-invalid-concrete-syntax datum)))))
+ ]
+
+把抽象语法树重新转成列表-符号表示通常很直接。我们这样做了，Scheme的打印
+@elem[#:style question]{程序}就会将其显示为列表形式的具体语法。这由
+@tt{unparse-lc-exp}完成：
+
+@racketblock[
+@#,elem{@bold{@tt{unparse-lc-exp}} : @${\mathit{LcExp} \to \mathit{SchemeVal}}}
+(define unparse-lc-exp
+  (lambda (exp)
+    (cases lc-exp exp
+           (var-exp (var) var)
+           (lambda-exp
+            (bound-var body)
+            (list 'lambda
+                  (list bound-var)
+                  (unparse-lc-exp body)))
+           (app-exp
+            (rator rand)
+            (list (unparse-lc-exp rator)
+                  (unparse-lc-exp rand))))))
+]
+
+@exercise[#:level 1 #:tag "ex2.27"]{
+
+画出下面lambda演算表达式的抽象语法树：
+
+@racketblock[
+((lambda (a) (a b)) c)
+
+(lambda (x)
+  (lambda (y)
+    ((lambda (x)
+       (x y))
+     x)))
+]
+}
+
+@exercise[#:level 1 #:tag "ex2.28"]{
+
+写出反向解析器，将lc-exp的抽象语法转换为符合本节第二个语法（@elem[#:style
+question]{52页}）的字符串。
+
+}
+
+@exercise[#:level 1 #:tag "ex2.29"]{
+
+当具体语法使用克莱尼星号或加号（@elem[#:style question]{7页}）时，设计抽象语法树
+最好用@${list}表示相应子树。例如，如果lambda演算表达式的语法为：
+
+@nested[#:style 'noindent]{
+
+@envalign*{\mathit{Lc\mbox{-}Exp} &::= \mathit{Identifier} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{var-exp (var)}} \\[5pt]
+                                  &::= \normalfont{@tt{(lambda (@m{\{\mathit{Identifier}\}^{*}}) @m{\mathit{Lc\mbox{-}Exp}})}} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{lambda-exp (bound-vars body)}} \\[5pt]
+                                  &::= \normalfont{@tt{(@m{\mathit{Lc\mbox{-}Exp}} @m{\{\mathit{Lc\mbox{-}Exp}\}^{*}})}} \\[-3pt]
+                                  &\mathrel{\phantom{::=}} \fbox{@tt{app-exp (rator rands)}}}
+
+那么字段@tt{bound-vars}的谓词可写作@tt{(list-of identifier?)}，字段@tt{rands}的
+谓词可写作@tt{(list-of lc-exp?)}。以这种方式写出该语法的@tt{define-datatype}和解
+析器。
+
+}
+}
+
+@exercise[#:level 2 #:tag "ex2.30"]{
+
+上面定义的过程@tt{parse-expression}很不可靠：它检查不到某些可能的语法错误，例如
+@tt{(a b c)}，并且因其他表达式终止时给不出恰当的错误信息，如@tt{(lambda)}。修改
+一下使之更健壮，可接受任何s-exp，并且对不表示lambda演算表达式的s-exp给出恰当的错
+误信息。
+
+}
+
+@exercise[#:level 2 #:tag "ex2.31"]{
+
+有时把具体语法定义为由括号包围的符号和整数序列很有用。例如，可以把集合@emph{前缀
+列表} (@emph{prefix list})定义为：
+
+@nested[#:style 'noindent]{
+
+@envalign*{Prefix\mbox{-}list &::= @tt{(@m{Prefix\mbox{-}exp})} \\
+           Prefix\mbox{-}exp  &::= Int \\
+                              &::= @tt{- @m{Prefix\mbox{-}exp} @m{Prefix\mbox{-}exp}}}
+
+那么@tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
+Łukasiewicz，称之为 @emph{波兰前缀表示法} (@emph{Polish prefix notation})。写一
+个解析器，将前缀列表表示法转换为抽象语法：
+
+@racketblock[
+(define-datatype prefix-exp prefix-exp?
+  (const-exp
+   (num integer?))
+  (diff-exp
+   (operand1 prefix-exp?)
+   (operand2 prefix-exp?)))
+]
+
+使上例与这几个构造器生成相同抽象语法树：
+
+@racketblock[
+(diff-exp
+ (diff-exp
+  (const-exp 3)
+  (const-exp 2))
+ (diff-exp
+  (const-exp 4)
+  (diff-exp
+   (const-exp 12)
+   (const-exp 7))))
+]
+
+提示，想想如何写一个过程，取一列表，产生一个@tt{prefix-exp}和列表剩余元素组成的
+列表。
+
+}
 
 }
