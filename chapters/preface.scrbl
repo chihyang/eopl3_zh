@@ -127,10 +127,7 @@ Haskell的编程经验。
 一等过程和赋值的语言（ML, Common Lisp, Python, Ruby等等）都足以完成本书练习。
 @linebreak{}
 
-@; @exercise[#:difficulty 1 #:tag "e0.1"]
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex0.1, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex0.1"]{
 
  我们常说“某语言具有某属性”。为每种说法找出一种或多种具有该属性的语言，以及一
  种或多种不具有该属性的语言。请随意搜索这些信息，不拘任何程序语言的介绍性书籍

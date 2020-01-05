@@ -251,25 +251,23 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
                                        {@tt{14} \in N & @tt{()} \in @List-of-Int{}}}
           }}
 
-@env["Exercise"
-     #:opt
-     (list (bracket "difficulty=1, label=ex1.1, counter=ChapterCounter"))]{
+@exercise[#:level 1 #:tag "ex1.1"]{
 
  写出下列集合的归纳定义。以三种方式（自顶向下，自底向上，推理规则）写出每个定
  义，并用你的规则推导出各集合的一些元素。
 
-  \begin{enumerate}
+  @itemlist[#:style 'ordered
 
-   \item{@m{\{ 3n + 2 \mid n \in N \}}}
+   @item{@m{\{ 3n + 2 \mid n \in N \}}}
 
-   \item{@m{\{ 2n + 3m + 1 \mid n, m \in N \}}}
+   @item{@m{\{ 2n + 3m + 1 \mid n, m \in N \}}}
 
-   \item{@m{\{ (n, 2n + 1) \mid n \in N \}}}
+   @item{@m{\{ (n, 2n + 1) \mid n \in N \}}}
 
-   \item{@m{\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示：想一想
+   @item{@m{\{ (n, n^2) \mid n \in N \}}。不要在你的规则中使用平方。提示：想一想
          方程@m{ (n + 1) ^ 2 = n ^ 2 + 2n + 1}。}
 
-  \end{enumerate}
+  ]
  }
 
 @exercise[#:level 2 #:tag "ex1.2"]{
@@ -284,7 +282,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
   @item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
-  @item{@bold["["]@m{\star\star\star}@bold["]"] @m{\quad} @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@m{\textnormal{\lbrack}\star\star\star\textnormal{\rbrack}} @m{\quad}
+  @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
 
  ]
 
