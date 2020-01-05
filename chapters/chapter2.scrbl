@@ -333,31 +333,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
 @centered{
-@asymptote{
-defaultpen(fontsize(10pt));
-unitsize(12pt);
-real w = 1;
-real l = 1;
-real offset = 2*w+l/2;
-path a_box = box((0, 0), (l, w));
-path a_arrow = (l/2,w/2)--(l/2,-w*1);
-path b_arrow = (l*1.5,w/2)--(l*3.5,w/2);
-
-draw(shift(0)*a_box);
-draw(shift(1*l)*a_box);
-draw(shift(0, -2*w)*a_box);
-draw(shift(1*l, -2*w)*a_box);
-
-draw(a_arrow,arrow=Arrow());
-draw(b_arrow,arrow=Arrow());
-draw((l*0.5,-w*1.5)--(-l,-w*3), arrow=Arrow());
-draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
-
-label("$\mathit{saved\mbox{-}env}$",(l*3.5,w/2),align=E);
-label("$\mathit{saved\mbox{-}var}$",(-l,-w*3.5));
-label("$\mathit{saved\mbox{-}val}$",(l*3,-w*3.5));
-shipout(currentpicture.fit());
-}
+@(image "../images/alist-env"
+  #:suffixes (list ".pdf" ".svg")
+  "关联列表表示法")
 }
 
 @nested[#:style 'noindent]{这叫@emph{a-list}或@emph{关联列
@@ -410,31 +388,9 @@ shipout(currentpicture.fit());
 环境：
 
 @centered{
-@asymptote{
-defaultpen(fontsize(8pt));
-unitsize(12pt);
-real w = 1;
-real l = 1;
-real offset = 2*w+l/2;
-path a_box = box((0, 0), (l, w));
-path a_arrow = (l/2,w/2)--(l/2,-w*1);
-path b_arrow = (l*1.5,w/2)--(l*3.5,w/2);
-
-draw(shift(0)*a_box);
-draw(shift(1*l)*a_box);
-draw(shift(0, -2*w)*a_box);
-draw(shift(1*l, -2*w)*a_box);
-
-draw(a_arrow,arrow=Arrow());
-draw(b_arrow,arrow=Arrow());
-draw((l*0.5,-w*1.5)--(-l,-w*3), arrow=Arrow());
-draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
-
-label("$\mathit{saved\mbox{-}env}$",(l*3.5,w/2),align=E);
-label("$\mathit{saved\mbox{-}vars}$",(-l,-w*3.5));
-label("$\mathit{saved\mbox{-}vals}$",(l*3,-w*3.5));
-shipout(currentpicture.fit());
-}
+@(image "../images/rib-cage-one"
+  #:suffixes (list ".pdf" ".svg")
+  "肋排环境表示法片段")
 }
 
 @nested[#:style 'noindent]{
@@ -442,72 +398,9 @@ shipout(currentpicture.fit());
 那么一个环境看起来像是这样：
 
 @centered{
-@asymptote{
-settings.tex="xelatex";
-texpreamble("\usepackage{xeCJK}
-\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
-\setCJKsansfont{Adobe Song Std}
-\setCJKmonofont{Adobe Song Std}
-\xeCJKsetup{CJKmath=true, PlainEquation=true}
-\usepackage[T1]{fontenc}
-");
-defaultpen(fontsize(8pt));
-unitsize(12pt);
-real w = 1;
-real l = 1;
-real offset = 8;
-path a_box = box((0, 0), (l, w));
-path a_arrow = (l/2,w/2)--(l/2,-w*1);
-path b_arrow = (l*1.5,w/2)--(l*offset,w/2);
-path c_arrow = (0,w/2)--(l*(offset-1.5),w/2);
-
-@; first part
-draw(shift(0)*a_box);
-draw(shift(1)*a_box);
-draw(shift(0,-2*w)*a_box);
-draw(shift(1,-2*w)*a_box);
-
-draw(a_arrow,arrow=Arrow());
-draw(b_arrow,arrow=Arrow());
-draw((l*(1.5+offset)/2,w/2+3.5){(0.5,-1.5)}..{down}(l*(1.5+offset)/2+0.5,w/2+2){down}..{(-0.5,-1.5)}(l*(1.5+offset)/2,w/2+0.5), arrow=Arrow());
-draw(((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
-draw((l*1.5,-w*1.5)--(l*3,-w*3), arrow=Arrow());
-
-label("\emph{脊柱}",(l*(1.5+offset)/2,w/2+3.5),align=N);
-label("\texttt{(a b c)}",(-l,-w*3.5));
-label("\texttt{(11 12 13)}",(l*3,-w*3.5));
-
-@; second part
-draw(shift(offset)*a_box);
-draw(shift(offset+1)*a_box);
-draw(shift(offset,-2*w)*a_box);
-draw(shift(offset+1,-2*w)*a_box);
-
-draw(shift(offset)*a_arrow,arrow=Arrow());
-draw(shift(offset)*b_arrow,arrow=Arrow());
-draw(shift(offset)*((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
-draw(shift(offset)*((l*1.5,-w*1.5)--(l*3,-w*3)), arrow=Arrow());
-
-label("\texttt{(x z)}",shift(offset)*(-l,-w*3.5));
-label("\texttt{(66 77)}",shift(offset)*(l*3,-w*3.5));
-
-@; third part
-draw(shift(offset*2)*a_box);
-draw(shift(offset*2+1)*a_box);
-draw(shift(offset*2,-2*w)*a_box);
-draw(shift(offset*2+1,-2*w)*a_box);
-
-draw(shift(offset*2)*a_arrow,arrow=Arrow());
-draw(shift(offset*2+l*1.5)*(xscale(0.8)*c_arrow),arrow=Arrow());
-draw(shift(offset*2)*((l*0.5,-w*1.5)--(-l,-w*3)), arrow=Arrow());
-draw(shift(offset*2)*((l*1.5,-w*1.5)--(l*3,-w*3)), arrow=Arrow());
-
-label("\textit{环境其余部分}",shift(offset*2+0.8*(offset-1.5))*(l*1.5,w/2),align=E);
-label("\texttt{(x y)}",shift(offset*2)*(-l,-w*3.5));
-label("\texttt{(88 99)}",shift(offset*2)*(l*3,-w*3.5));
-
-shipout(currentpicture.fit());
-}
+@(image "../images/rib-cage"
+  #:suffixes (list ".pdf" ".svg")
+  "肋排环境表示法")
 }
 
 这叫做@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{ribs})的序
@@ -1254,65 +1147,9 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
 
 @nested[#:style figure]{
 @centered{
-@asymptote{import flowchart;
-settings.tex="xelatex";
-texpreamble("\usepackage{xeCJK}
-\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
-\setCJKsansfont{Adobe Song Std}
-\setCJKmonofont{Adobe Song Std}
-\xeCJKsetup{CJKmath=true, PlainEquation=true}
-\usepackage[T1]{fontenc}
-");
-defaultpen(fontsize(8pt));
-unitsize(12pt);
-pair pos = (0, 0);
-real w = 3;
-real l = 18;
-real x_off=5, y_off=3;
-real ah=4;
-
-block block1=rectangle("\texttt{lambda-exp}", pos);
-block block2=rectangle("\texttt{x}", shift(-x_off, -y_off)*pos);
-block block3=rectangle("\texttt{app-exp}", shift(x_off, -y_off)*pos);
-block block4=rectangle("\texttt{var-exp}", shift(-x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block5=rectangle("\texttt{f}", shift(0,-1.5*y_off)*shift(-x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block6=rectangle("\texttt{app-exp}", shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block7=rectangle("\texttt{var-exp}", shift(-x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block8=rectangle("\texttt{f}", shift(0,-y_off)*shift(-x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block9=rectangle("\texttt{var-exp}", shift(x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
-block block10=rectangle("\texttt{f}", shift(0,-y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*shift(x_off, -y_off)*pos);
-
-draw(block1);
-draw(block2);
-draw(block3);
-draw(block4);
-draw(block5);
-draw(block6);
-draw(block7);
-draw(block8);
-draw(block9);
-draw(block10);
-
-Label Lbvar = Label("\texttt{bound-var}", align=(0,0), position=MidPoint, filltype=Fill(white));
-Label Lbd = Label("\texttt{body}", align=(0,0), position=MidPoint, filltype=Fill(white));
-Label Lrtor = Label("\texttt{rator}", align=(0,0), position=MidPoint, filltype=Fill(white));
-Label Lrand = Label("\texttt{rand}", align=(0,0), position=MidPoint, filltype=Fill(white));
-Label Lvar = Label("\texttt{var}", align=(0,0), position=MidPoint, filltype=Fill(white));
-
-add(new void(picture pic, transform t) {
-    draw(pic, Lbvar, block1.bottom(t)--block2.top(t), arrow=Arrow(size=3));
-    draw(pic, Lbd, block1.bottom(t)--block3.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lrtor, block3.bottom(t)--block4.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lvar, block4.bottom(t)--block5.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lrand, block3.bottom(t)--block6.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lrtor, block6.bottom(t)--block7.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lvar, block7.bottom(t)--block8.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lrand, block6.bottom(t)--block9.top(t), arrow=Arrow(size=ah));
-    draw(pic, Lvar, block9.bottom(t)--block10.top(t), arrow=Arrow(size=ah));
-  });
-
-shipout(bbox(currentpicture, 2, 2, filltype=Draw(2, 2), p=invisible));
-}
+@(image "../images/ast"
+  #:suffixes (list ".pdf" ".svg")
+  (tt "(lambda (x) (f (f x)))") "的抽象语法树")
 }
 
 @make-nested-flow[
