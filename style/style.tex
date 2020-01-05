@@ -12,3 +12,9 @@
 \renewcommand{\Ssubsectionstarx}[2]{\phantomsection\Ssubsectionstar{#2}\addcontentsline{toc}{section}{#1}}
 \newtheorem{sdef}{定义}[section]
 \newtheorem{sthm}{定理}[section]
+\renewcommand{\proofname}{证明}
+
+\renewenvironment{SCodeFlow}{\SCodePreSkip\begin{list}{}{\topsep=0pt\partopsep=0pt%
+\listparindent=0pt\itemindent=0pt\labelwidth=0pt\leftmargin=2em\rightmargin=2em%
+\itemsep=0pt\parsep=0pt}\item}{\end{list}\SCodePostSkip}
+\renewcommand{\SCodeInsetBox}[1]{\setbox1=\hbox{\hbox{\hspace{2em}#1\hspace{2em}}}\vbox{\SCodePreSkip\vtop{\box1\SCodePostSkip}}}
