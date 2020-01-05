@@ -117,12 +117,10 @@
             (make-compound-paragraph
              (make-style #f '())
              (append
-              (map add-style-property decoded-flow)
+              decoded-flow
               (list
                (make-paragraph (make-style #f '(never-indents))
                                exercise-postfix))))))
-      ;; (pretty-print decoded-flow)
-      ;; (pretty-print wrapped-flow)
       wrapped-flow)]
    [else (decode-flow c)]))
 
