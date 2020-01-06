@@ -39,38 +39,6 @@
          (remove-leading-newlines (cdr c))]
         [else c]))
 
-(define-syntax (add-style-property-inner stx)
-  (syntax-case stx ()
-    [(_ type content)
-     (syntax-case
-         (datum->syntax #'type
-                        (string->symbol
-                         (format "~a-style" (syntax->datum #'type))))
-         ()
-       [type #'(let ((sty (type content)))
-                 (make-style (style-name sty)
-                             (cons 'never-indents (style-properties sty))))])]))
-
-(define (add-style-property block)
-  (cond
-   [(paragraph? block)
-    (make-paragraph
-     (add-style-property-inner paragraph block)
-     (paragraph-content block))]
-   [(table? block)
-    (make-table
-     (add-style-property-inner table block)
-     (table-blockss block))]
-   [(itemization? block)
-    (make-itemization
-     (add-style-property-inner itemization block)
-     (itemization-blockss block))]
-   [(nested-flow? block)
-    (make-nested-flow
-     (add-style-property-inner nested-flow block)
-     (nested-flow-blocks block))]
-   [else block]))
-
 (define (make-exercise-prefix level tag)
   (make-element (make-style #f (list 'exact-chars))
                 (string-append
@@ -101,7 +69,7 @@
 
 (define (add-prefix a-flow exer-prefix)
   (if (null? a-flow)
-      (make-paragraph (make-style #f '() exer-prefix))
+      (make-paragraph (make-style #f '()) exer-prefix)
       (let ((prefixed-block
              (add-prefix-to-block (car a-flow) exer-prefix)))
         (if (list? prefixed-block)
@@ -127,8 +95,5 @@
 (provide (except-out (all-defined-out)
                      add-prefix-to-block
                      remove-leading-newlines
-                     add-style-property-inner
-                     add-style-property
                      make-exercise-prefix
-                     exercise-postfix
-                     add-style-property))
+                     exercise-postfix))
