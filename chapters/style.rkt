@@ -25,8 +25,8 @@
   (make-style "TipContent" (list (make-tex-addition "../style/tip-content.tex")
                                  (make-css-addition "../style/tip-content.css"))))
 
-(define figure
-  (make-style "Figure" (list (make-tex-addition "../style/figure.tex"))))
+(define eopl-figure
+  (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
 
 (define exer
   (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex")

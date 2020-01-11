@@ -283,7 +283,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
    ]}}
 
-@nested[#:style figure]{
+@nested[#:style eopl-figure]{
 @racketblock[
 @#,elem{@${Env = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
 @#,elem{@${Var = Sym}}
@@ -1145,7 +1145,7 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
 (f (f x)))}。树的每个内部节点以相对应的生成式名字为标识。树枝以所出现的非终止符
 名字为标识。叶子对应终止符字符串。
 
-@nested[#:style figure]{
+@nested[#:style eopl-figure]{
 @centered{
 @(image "../images/ast"
   #:suffixes (list ".eps" ".pdf" ".svg")
