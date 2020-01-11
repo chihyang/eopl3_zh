@@ -59,20 +59,36 @@ code})，它的解释器称作@emph{虚拟机} (@emph{virtual machine})。
 specification})。扫描器取一字符序列，生成词牌序列。
 
 解析就是将词牌序列组成有层次的语法结构，如表达式，语句和块。这就像用从句组织（或
-称图解@dg-note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学
-习英文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@emph{句法}
+称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
+文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@emph{句法}
 (@emph{syntactic})或@emph{语法} (@emph{grammatical})结构。解析器取一词牌序列（由
 扫描器给出），生成一棵抽象语法树。
 
-设计前端的标准方式是使用@emph{解析器生成器} (@emph{parser generator})。解析器生
-成器是一程序，取一词法规范和语法，生成一扫描器和解析器。
+设计前端的标准方式是使用@emph{解析器制造机} (@emph{parser generator})。解析器制
+造机是一程序，取一词法规范和语法，生成一扫描器和解析器。
 
-大多数主流语言都有系统来做解析器生成器。如果没有解析器生成器，或者没有适用的，可
-以手写扫描器和解析器。编译器教材描述了这一过程。我们使用的解析技术及相关语法设计
-从简，专门满足我们的需求。
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/exe-via-interpreter"
+  #:suffixes (list ".eps" ".pdf" ".svg")
+  "由解释器执行")
+}
+
+@centered{
+@(image "../images/exe-via-compiler"
+  #:suffixes (list ".eps" ".pdf" ".svg")
+  "由解释器执行")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "语言处理系统块状图"))]
+}
+
+大多数主流语言都有解析器制造系统。如果没有解析器制造机，或者没有适用的，可以手写
+扫描器和解析器。编译器教材描述了这一过程。我们使用的解析技术及相关语法设计从简，
+专门满足我们的需求。
 
 另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像在@secref{asir}和练习
 2.31中，处理lambda演算表达式那样。
 
-@define-footnote[dg-note make-dg-nt]
-@make-dg-nt[]
