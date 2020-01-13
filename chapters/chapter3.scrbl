@@ -92,3 +92,64 @@ specification})。扫描器取一字符序列，生成词牌序列。
 另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像在@secref{asir}和练习
 2.31中，处理lambda演算表达式那样。
 
+@section[#:tag "let-a-simple-language"]{LET：一门简单语言}
+
+我们先来定义一种非常简单的语言，根据它最有趣的特性命名为LET。
+
+@subsection[#:tag "specifying-the-syntax"]{定义语法}
+
+图3.2展示了我们这门简单语言的语法。在这种语言中，程序只能是一个表达式。一个表达
+式是个整数常量，或差值表达式，或判零表达式，或条件表达式，或变量，或@tt{let}表达
+式。
+
+这里是这门语言的一个简单表达式，及其抽象语法表示。
+
+@racketblock[
+(scan&parse "-(55, -(x,11))")
+#(struct:a-program
+  #(struct:diff-exp
+    #(struct:const-exp 55)
+    #(struct:diff-exp
+      #(struct:var-exp x)
+      #(struct:const-exp 11))))]
+
+@nested[#:style eopl-figure]{
+
+@linebreak[]
+@envalign*{\mathit{Program} &::= \mathit{Expression} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-program (exp1)}} \\[5pt]
+        \mathit{Expression} &::= \mathit{Number} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{const-exp (num)}} \\[5pt]
+        \mathit{Expression} &::= @tt{(- @m{\mathit{Expression}} , @m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{diff-exp (exp1 exp2)}} \\[5pt]
+        \mathit{Expression} &::= @tt{(zero? @m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{zero?-exp (exp1)}} \\[5pt]
+        \mathit{Expression} &::= @tt{if @m{\mathit{Expression}} then @m{\mathit{Expression}} else @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{if-exp (exp1 exp2 exp3)}} \\[5pt]
+        \mathit{Expression} &::= \mathit{Identifier} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{var-exp (var)}} \\[5pt]
+        \mathit{Expression} &::= @tt{let @m{\mathit{Identifier}} = @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{let-exp (var exp1 body)}}}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "LET语言的语法"))]
+}
+
+@subsection[#:tag "specification-of-values"]{定义值}
+
+任何编程语言规范中，最重要的一部分就是语言处理的值集合。每种语言至少有两个这样的
+集合：@emph{表达值} (@emph{expressed values})和@emph{指代值} (@emph{denoted
+values})。表达值是指表达式的可能取值，指代值是指可以绑定到变量的值。
+
+本章的语言中，表达值和指代值总是相同的。它们最初是：
+
+@nested{
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} \\
+\mathit{DenVal} &= \mathit{Int} + \mathit{Bool} \\
+}
+
+第四章展示表达值和指代值不同的语言。
+}
+
