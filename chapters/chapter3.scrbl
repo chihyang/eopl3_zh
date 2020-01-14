@@ -138,11 +138,11 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @subsection[#:tag "specification-of-values"]{定义值}
 
-任何编程语言规范中，最重要的一部分就是语言处理的值集合。每种语言至少有两个这样的
-集合：@emph{表达值} (@emph{expressed values})和@emph{指代值} (@emph{denoted
-values})。表达值是指表达式的可能取值，指代值是指可以绑定到变量的值。
+任何编程语言规范中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两个这
+种集合：@emph{表达值} (@emph{expressed values})和@emph{指代值} (@emph{denoted
+values})。表达值是指表达式可能的取值，指代值是指可以绑定到变量的值。
 
-本章的语言中，表达值和指代值总是相同的。它们最初是：
+本章的语言中，表达值和指代值总是相同。现在，它们是：
 
 @nested{
 @envalign*{
@@ -151,5 +151,141 @@ values})。表达值是指表达式的可能取值，指代值是指可以绑定
 }
 
 第四章展示表达值和指代值不同的语言。
+
 }
 
+要使用这个定义，我们要有表达值数据类型的接口。我们有这几个接口：
+
+@envalign*{
+@bold{@tt{num-val}}  &: \mathit{Int} \to \mathit{ExpVal} \\
+@bold{@tt{bool-val}} &: \mathit{Bool} \to \mathit{ExpVal} \\
+@bold{@tt{expval->num}}   &: \mathit{ExpVal} \to \mathit{Int} \\
+@bold{@tt{expval->bool}}  &: \mathit{ExpVal} \to \mathit{Bool} \\
+}
+
+我们假定传给@tt{expval->num}的参数不是整数，或传给@tt{expval->bool}的参数不是布
+尔值时，二者未定义。
+
+@subsection[#:tag "environment"]{环境}
+
+若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像在
+@secref{rsdt}那样。
+
+环境是一函数，定义域为变量的有限集合，值域为指代值。写环境时我们用一些缩写。
+
+@itemlist[
+
+ @item{@${\rho}@@elem[#:style question]{一环境}。}
+
+ @item{@${\textnormal{\lbrack\rbrack}}表示空环境。}
+
+ @item{@${[var = val]\rho}表示@tt{(extend-env @${var} @${val} @${\rho})}。}
+
+ @item{@${[var_1 = val_1, var_2 = val2]\rho}是@${var_1 = val_1([var_2 =
+ val_2]\rho)}的缩写，等等。}
+
+ @item{@${[var_1 = val_1, var_2 = val2,\dots]}表示的环境中，@${var_1}的值为
+ @${val_1}，等等。}
+
+]
+
+我们偶尔用不同缩进写出复杂环境，以便阅读。例如，我们可能把
+
+@nested{
+
+@racketblock[
+(extend-env 'x 3
+  (extend-env 'y 7
+    (extend-env 'u 5 @#,elem{@${\rho}})))]
+
+缩写为
+
+@racketblock[
+[x=3]
+ [y=7]
+  [u=5]@#,elem{@${\rho}}]
+
+}
+
+@subsection[#:tag "specifying-the-behavior-of-expressions"]{指定表达式的行为}
+
+我们语言中的六种表达式各对应一个左边为@${Expression}的生成式。表达式接口包含七个
+过程，六个是构造器，一个是观测器。我们用@${ExpVal}表示表达值的集合。
+
+构造器：
+
+@envalign*{
+@bold{@tt{const-exp}}  &: \mathit{Int} \to \mathit{Exp} \\
+@bold{@tt{zero?-exp}} &: \mathit{Exp} \to \mathit{Exp} \\
+@bold{@tt{if-exp}}   &: \mathit{Exp} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
+@bold{@tt{diff-exp}}  &: \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
+@bold{@tt{var-exp}}  &: \mathit{Var} \to \mathit{Exp} \\
+@bold{@tt{let-exp}}  &: \mathit{Var} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
+}
+
+观测器：
+
+@envalign*{
+@bold{@tt{value-of}}  &: \mathit{Exp} \times \mathit{Env} \to \mathit{ExpVal} \\
+}
+
+实现之前，我们先写出这些过程的行为规范。依照解释器秘方，我们希望@tt{value-of}查
+看表达式，判断其类别，然后返回恰当的值。
+
+@racketblock[
+(value-of (const-exp @#,elem{@${n}}) @#,elem{@${\rho}}) = (num-val @#,elem{@${n}})
+]
+
+@racketblock[
+(value-of (var-exp @#,elem{@${var}}) @#,elem{@${\rho}}) = (apply-env @#,elem{@${\rho}} @#,elem{@${var}})
+]
+
+@racketblock[
+(value-of (diff-exp @#,elem{@${exp_1}} @#,elem{@${exp_2}}) @#,elem{@${\rho}})
+= (num-val
+    (-
+      (expval->num (value-of @#,elem{@${exp_1}} @#,elem{@${\rho}}))
+      (expval->num (value-of @#,elem{@${exp_2}} @#,elem{@${\rho}}))))
+]
+
+任何环境中，常量表达式的值都是该常量。某一环境中，变量引用的值须在其中查询该变量
+得到。某一环境中，差值表达式的值为第一个操作数在该环境中的值减去第二个在该环境中
+的值。当然，准确来说我们得确保操作数的值是整数，并且结果是表示为表达值的整数值。
+
+图3.3展示了如何结合这些规则求取一个构造器生成的表达式的值。在本例以及其他例子中，
+我们用@${\textnormal{\guillemotleft} exp \textnormal{\guillemotright}}表示表达式
+@${exp}的抽象语法树。我们还用@${\lceil n \rceil}代替@tt{(num-val @${n})}，用
+@${\lfloor val \rfloor}代替@tt{(expval->num @${val})}。我们也运用了一点事实：
+@${\lfloor \lceil n \rceil \rfloor = n}。
+
+@exercise[#:level 1 #:tag "ex3.1"]{
+
+列出在图3.3中，所有运用事实@${\lfloor \lceil n \rceil \rfloor = n}的地方。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.2"]{
+
+给出一个表达值@${val \in ExpVal}，且@${\lceil \lfloor n \rfloor \rceil \neq n}。
+
+}
+
+@subsection[#:tag "specifying-the-behavior-of-programs"]{指定程序的行为}
+
+在我们的语言中，整个程序只是一个表达式。要找出这个表达式的值，我们需要指定程序中
+自由变量的值。所以程序的值就是在适当的初始环境中求出的那个表达式的值。我们把初始
+环境设为@tt{[i=1,v=5,x=10]}。
+
+@racketblock[
+(value-of-program @#,elem{@${exp}})
+= (value-of @#,elem{@${exp}} [@#,elem{@tt{i=}@${\lceil \tt{1} \rceil},@tt{v=}@${\lceil \tt{5} \rceil},@tt{x=}@${\lceil \tt{10} \rceil}}])
+]
+
+@subsection[#:tag "specifying-conditions"]{指定条件}
+
+下一部分介绍我们语言的布尔值接口。语言有一个布尔值构造器，@tt{zero?}，一个布尔值
+观测器，@tt{if}表达式。
+
+当且仅当操作数的值为0，@tt{zero?}表达式的值为真。可以将其写为一条推理规则，像定
+义1.1.5那样。我们用@tt{bool-val}作为构造器，把布尔值转换为表达值，用
+@tt{expval->num}作为抽词器，判断表达式是否为整数，如果是，则返回该整数。
