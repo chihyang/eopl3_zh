@@ -289,3 +289,73 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 当且仅当操作数的值为0，@tt{zero?}表达式的值为真。可以将其写为一条推理规则，像定
 义1.1.5那样。我们用@tt{bool-val}作为构造器，把布尔值转换为表达值，用
 @tt{expval->num}作为抽词器，判断表达式是否为整数，如果是，则返回该整数。
+
+@nested[#:style eopl-figure]{
+
+令@${\rho =} @tt{[i=1,v=5,x=10]}。
+
+@nested[#:style two-columns]{
+
+@verbatim|{
+(value-of
+  <<-(-(x,3), -(v,i))>>
+  |@${\rho})
+
+= |@${\lceil}(-
+    |@${\lfloor}(value-of <<-(x,3)>> |@${\rho})|@${\rfloor}
+    |@${\lfloor}(value-of <<-(v,i)>> |@${\rho})|@${\rfloor})|@${\rceil}
+
+= |@${\lceil}(-
+    (-
+      |@${\lfloor}(value-of <<x>> |@${\rho})|@${\rfloor}
+      |@${\lfloor}(value-of <<3>> |@${\rho})|@${\rfloor})
+    |@${\lfloor}(value-of <<-(v,i)>> |@${\rho})|@${\rfloor})|@${\rceil}
+
+= |@${\lceil}(-
+    (-
+      10
+      |@${\lfloor}(value-of <<3>> |@${\rho})|@${\rfloor})
+    |@${\lfloor}(value-of <<-(v,i)>> |@${\rho})|@${\rfloor})|@${\rceil}
+
+= |@${\lceil}(-
+    (-
+      10
+      3)
+    |@${\lfloor}(value-of <<-(v,i)>> |@${\rho})|@${\rfloor})|@${\rceil}
+
+= |@${\lceil}(-
+    7
+    |@${\lfloor}(value-of <<-(v,i)>> |@${\rho})|@${\rfloor})|@${\rceil}
+|@${\columnbreak}
+
+= |@${\lceil}(-
+    7
+    (-
+      |@${\lfloor}(value-of <<v>> |@${\rho})|@${\rfloor}
+      |@${\lfloor}(value-of <<i>> |@${\rho})|@${\rfloor}))|@${\rceil}
+
+= |@${\lceil}(-
+    7
+    (-
+      5
+      |@${\lfloor}(value-of <<i>> |@${\rho})|@${\rfloor}))|@${\rceil}
+
+= |@${\lceil}(-
+    7
+    (-
+      5
+      1))|@${\rceil}
+
+= |@${\lceil}(-
+    7
+    4)|@${\rceil}
+
+= |@${\lceil}3|@${\rceil}
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "按照规范做简单运算"))]
+
+}
