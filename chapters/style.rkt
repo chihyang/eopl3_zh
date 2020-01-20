@@ -32,6 +32,9 @@
   (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex")
                                  (make-css-addition "../style/exercise.css"))))
 
+(define two-columns
+  (make-style "TwoColumns" (list (make-tex-addition "../style/two-columns.tex"))))
+
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
         [(and (string? (car c))
