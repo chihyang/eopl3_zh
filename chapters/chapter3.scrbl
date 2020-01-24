@@ -908,3 +908,437 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 值应为4。
 }
+
+@section[#:tag "proc-a-language-with-procedures"]{PROC：有过程的语言}
+
+到现在为止，我们的语言只能做语言已定义的操作。要想让我们这种解释性语言更有用，必
+须能创建新过程。我们把新语言叫做PROC。
+
+我们将按照Scheme的设计，把过程作为语言的表达值，则：
+
+@nested{
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
+\mathit{DenVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
+}
+
+其中，@${Proc}是一值集合，表示过程。我们把@${Proc}作为一种抽象数据类型。下面我们
+考虑它的接口和规范。
+
+}
+
+我们还需要语法来创建和调用过程。对应的生成式为：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{proc (@m{\mathit{Number}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var body)}} \\[5pt]
+        \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
+
+在@tt{(proc @${var} @${body})}中，变量@${var}是 @emph{绑定变量} (@emph{bound
+variable})或@emph{形式参数} (@emph{formal parameter})。在过程调用@tt{(call-exp
+@${exp_1} @${exp_2})}中，表达式@${exp_1}是@emph{操作符} (@emph{operator})，表达
+式@${exp_2}是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
+parameter})。我们用名词@emph{实参} (@emph{argument})指代实际参数的值。
+
+这里是这种语言的两个简单例子。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let f = proc (x) -(x,11)
+in (f (f 77))
+
+(proc (f) (f (f 77))
+ proc (x) -(x,11))
+}|
+}
+
+第一个程序创建一过程，将实参减11。它调用创建的过程@tt{f}，两次对77使用@tt{f}，得
+到的答案为55。第二个程序创建一过程，它取一参数，连续两次对77使用其实参。然后该程
+序将减11的过程传给该过程。结果仍然是55。
+
+现在我们来看数据类型@${Proc}。它的接口包含构造器@tt{procedure}，用于创建过程值；
+观测器@tt{apply-procedure}，用于调用过程值。
+
+接下来我们的任务是确定表示一个过程需要在值里面包含什么信息。欲知此，我们考虑在程
+序中任意位置写出@tt{proc}表达式时发生了什么。
+
+词法定界规则告诉我们，调用一个过程时，过程的形式参数绑定到调用时的实参，然后在该
+环境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 200
+in let f = proc (z) -(z,x)
+   in let x = 100
+      in let g = proc (z) -(z,x)
+         in -((f 1), (g 1))
+}|
+}
+
+这里我们两次求值表达式@tt{proc (z) -(z,x)}。第一次求值时，@tt{x}绑定到200，所以
+根据词法绑定规则，得出的过程将实参减200。我们将其命名为@tt{f}。第二次求值时，
+@tt{x}绑定到100，得出的过程应将实参减100。我们将该过程命名为@tt{g}。
+
+这两个过程由同一个表达式生成，而表现必定不同。我们得出结论，@tt{proc}表达式的值
+一定以某种方式依赖求值时的环境。因此，构造器@tt{procedure}必定取三个参数：绑定变
+量，主体，以及环境。@tt{proc}表达式定义为：
+
+@nested{
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of (proc-exp |@${var} |@${body}) |@${\rho})
+= (proc-val (procedure |@${var} |@${body} |@${\rho}))
+}|
+}
+
+其中，@tt{proc-val}是一构造器，像@tt{bool-val}和@tt{num-val}，生成一个@${Proc}的
+表达值。
+}
+
+调用过程时，我们要找出操作符和操作数的值。如果操作符是一个@tt{proc-val}，那么我
+们要用操作数的值调用它。
+
+@nested{
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of (call-exp |@${rator} |@${rand}) |@${\rho})
+= (let ((proc (expval->proc (value-of |@${rator} |@${\rho})))
+        (arg (value-of |@${rand} |@${\rho})))
+    (apply-procedure proc arg))
+}|
+}
+
+这里，我们用了一个@elem[#:style question]{抽词器}@tt{expval->proc}，像
+@tt{expval->num}，它判断表达值@tt{(value-of @${rator} @${\rho})}是否用
+@tt{proc-val}生成，如果是，则从中提取出包含的过程。
+
+}
+
+@subsection[#:tag "an-example"]{一个例子}
+
+我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
+算过程用@emph{规范}表示。令@${\rho}为任一环境。
+
+@nested{
+@verbatim|{
+(value-of
+  <<let x = 200
+    in let f = proc (z) -(z,x)
+       in let x = 100
+          in let g = proc (z) -(z,x)
+             in -((f 1), (g 1))>>
+  |@${\rho})
+
+= (value-of
+    <<let f = proc (z) -(z,x)
+      in let x = 100
+         in let g = proc (z) -(z,x)
+            in -((f 1), (g 1))>>
+    [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+
+= (value-of
+    <<let x = 100
+      in let g = proc (z) -(z,x)
+         in -((f 1), (g 1))>>
+    [f=(proc-val (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+     [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+
+= (value-of
+    <<let g = proc (z) -(z,x)
+      in -((f 1), (g 1))>>
+    [x=|@${\lceil}100|@${\rceil}]|@${\rho}
+     [f=(proc-val (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+      [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+
+= (value-of
+    <<let g = proc (z) -(z,x)
+      in -((f 1), (g 1))>>
+    [g=(proc-val (procedure z <<-(z,x)>>
+                            [x=|@${\lceil}100|@${\rceil}][f=...][x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+     [x=|@${\lceil}100|@${\rceil}]|@${\rho}
+      [f=(proc-val (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+       [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+
+= |@${\lceil}(-
+    (value-of <<(f 1)>>
+      [g=(proc-val (procedure z <<-(z,x)>>
+                              [x=|@${\lceil}100|@${\rceil}][f=...][x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+       [x=|@${\lceil}100|@${\rceil}]|@${\rho}
+        [f=(proc-val (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+         [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+    (value-of <<(g 1)>>
+      [g=(proc-val (procedure z <<-(z,x)>>
+                              [x=|@${\lceil}100|@${\rceil}][f=...][x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+       [x=|@${\lceil}100|@${\rceil}]|@${\rho}
+        [f=(proc-val (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho}))]
+         [x=|@${\lceil}200|@${\rceil}]|@${\rho}))|@${\rceil}
+
+= |@${\lceil}(-
+    (apply-procedure
+      (procedure z <<-(z,x)>> [x=|@${\lceil}200|@${\rceil}]|@${\rho})
+      |@${\lceil}1|@${\rceil})
+    (apply-procedure
+      (procedure z <<-(z,x)>> [x=|@${\lceil}100|@${\rceil}][f=...][x=|@${\lceil}200|@${\rceil}]|@${\rho})
+      |@${\lceil}1|@${\rceil}))|@${\rceil}
+
+= |@${\lceil}(-
+    (value-of <<-(z,x)>> [z=|@${\lceil}1|@${\rceil}][x=|@${\lceil}200|@${\rceil}]|@${\rho})
+    (value-of <<-(z,x)>> [z=|@${\lceil}1|@${\rceil}][x=|@${\lceil}100|@${\rceil}][f=...][x=|@${\lceil}200|@${\rceil}]|@${\rho}))|@${\rceil}
+
+= |@${\lceil}(- -199 -99)|@${\rceil}
+
+= |@${\lceil}-100|@${\rceil}
+
+}|
+}
+
+其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
+@tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
+
+@subsection[#:tag "representing-procedures"]{表示过程}
+
+根据@secref{pr}中介绍的方法，我们可以按照过程表示法，用过程在
+@tt{apply-procedure}中的动作表示它们。欲如此，我们定义@tt{procedure}的值为实现语
+言的过程，它取一实参，返回规范指定的值：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
+= (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
+}|
+}
+
+因此，完整的实现是：
+
+@racketblock[
+@#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+(define proc?
+  (lambda (val)
+    (procedure? val)))
+
+@#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
+(define procedure
+  (lambda (var body env)
+    (lambda (val)
+      (value-of body (extend-env var val env)))))
+
+@#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
+(define apply-procedure
+  (lambda (proc1 val)
+    (proc1 val)))
+]
+
+这里定义的函数@tt{proc?}有些不大准确，因为不是每个Scheme过程都能作为我们语言中的
+过程。我们只是用来它定义数据类型@tt{expval}。
+
+}
+
+另一种方式是用@secref{dsr}那样的数据结构表示法。
+
+@racketblock[
+@#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+@#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
+(define-datatype proc proc?
+  (procedure
+   (var identifier?)
+   (body expression?)
+   (saved-env environment?)))
+
+@#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
+(define apply-procedure
+  (lambda (proc1 val)
+    (cases proc proc1
+      (procedure (var body saved-env)
+        (value-of body (extend-env var val saved-env))))))
+]
+
+这些数据结构常称为@emph{闭包} (@emph{closure})，因为它们自给自足，包含过程调用所
+需要的一切。有时，我们说过程@emph{闭合于}（@emph{closed over} 或@emph{closed in}）
+创建时的环境。
+
+显然，这些实现都满足过程接口的定义。
+
+在完整的实现中，我们向数据类型@tt{expval}添加一种变体：
+
+@nested{
+
+@racketblock[
+(define-datatype exp-val exp-val?
+  (num-val
+    (val number?))
+  (bool-val
+    (val boolean?))
+  (proc-val
+    (val proc?)))
+]
+
+同时向@tt{value-of}添加两条新语句：
+
+@codeblock[#:indent 7]{
+(proc-exp (var body)
+  (proc-val (procedure var body env)))
+
+(call-exp (rator rand)
+  (let ((proc (expval->proc (value-of rator env)))
+        (arg (value-of rand env)))
+    (apply-procedure proc arg)))
+}
+
+提醒：为语言的每个扩展写出规范。参见 @elem[#:style question]{第70页}的说明。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.19"]{
+
+在很多语言中，过程创建和命名必须同时进行。修改本节的语言，用@tt{letproc}替换
+@tt{proc}，以支持此属性。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.20"]{
+
+在PROC中，过程只能有一个参数，但是可以用返回其他过程的过程来模拟多参数过程。例如，
+可以写出这样的代码：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let f = proc (x) proc (y) ...
+in ((f 3) 4)
+}|
+}
+
+这个小技巧叫做@emph{咖哩化} (@emph{Currying})，该过程则称作@emph{咖喱式}
+(@emph{Curried})的。写出一个咖喱式的过程，它取两个参数，返回二者之和。在我们的语
+言中，可以把@${x+y}写成@tt{-(x,-(0,y))}。
+
+}
+}
+
+@exercise[#:level 2 #:tag "ex3.21"]{
+
+扩展本节的语言，添加多参数过程及其调用，语法为：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{proc (@m{\{\mathit{Number}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
+        \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{\{Expression\}^{*}}})}
+}
+}
+
+@exercise[#:level 3 #:tag "ex3.22"]{
+
+本节的具体语法中，内置操作（如差值）和过程调用使用不同的方式。修改具体语法，使该
+语言的用户不需要知道哪些是内置操作，哪些是定义的过程。根据所使用的解析技术，这道
+练习可能很容易，也可能非常难。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.23"]{
+
+下面的PROC程序值是什么？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let makemult = proc (maker)
+                proc (x)
+                 if zero?(x)
+                 then 0
+                 else -(((maker maker) -(x,1)), -4)
+in let times4 = proc (x) ((makemult makemult) x)
+   in (times4 3)
+}|
+}
+
+用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用咖喱化（练习3.20）定义双参
+数过程@tt{times}。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.24"]{
+
+用上述程序里的小技巧写出两个互递归程序，@tt{odd}和@tt{even}，像练习3.32那样。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.25"]{
+
+提取上述练习中的技巧，可以用来定义任何PROC递归过程。考虑下面的代码：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let makerec = proc (f)
+               let d = proc (x)
+                        proc (z) ((f (x x)) z)
+               in proc (n) ((f (d d)) n)
+in let maketimes4 = proc (f)
+                     proc (x)
+                      if zero?(x)
+                      then 0
+                      else -((f -(x,1)), -4)
+   in let times4 = (makerec maketimes4)
+      in (times4 3)
+}|
+}
+
+证明它返回12。
+}
+
+@exercise[#:level 2 #:tag "ex3.26"]{
+
+我们用数据结构表示过程时，在闭包中记录了整个环境。但是显然，我们只需要自由变量的
+绑定。修改过程的表示法，只保留自由变量。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.27"]{
+
+向语言添加一种新的过程@tt{traceproc}。@tt{traceproc}像@tt{proc}一样，除了在进入
+和退出时打印一条跟踪消息。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.28"]{
+
+设计过程的另一种方法是@emph{动态绑定} (@emph{dynamic binding})（或称 @emph{动态
+定界} (@emph{dynamic scoping})）：求值过程主体的环境由扩展调用处的环境得到。例如，
+在
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let a = 3
+in let p = proc (x) -(x,a)
+       a = 5
+   in -(a, (p 2))
+}|
+}
+
+中，过程主体内的@tt{a}绑定到5，而不是3。修改语言，使用动态绑定。做两次，一次使用
+过程表示法表示过程，一次使用数据结构表示法。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.29"]{
+
+很不幸的是，使用动态绑定的程序很可能异常难懂。例如，在词法绑定中，批量替换过程的
+绑定变量，决不会改变程序的行为：我们甚至可以像@elem[#:style question]{3.6节}那样，
+删除所有变量，将它们替换为词法地址。但是在动态绑定中，这种转换是危险的。
+
+例如，在动态绑定中，过程@tt{proc (z) a}返回调用者环境中的变量@tt{a}。那么程序
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let a = 3
+in let p = proc (z) a
+   in let f = proc (x) (p 0)
+      in let a = 5
+         in (f 2)
+}|
+}
+
+返回5，因为调用处@tt{a}的值为5。如果@tt{f}的形式参数为@tt{a}呢？
+
+}
