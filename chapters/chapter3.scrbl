@@ -16,7 +16,7 @@
 范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为@emph{环
 境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的含义。
 
-@section[#:tag "spec-and-imp-strategy"]{规范和实现策略}
+@section[#:tag "s3.1"]{规范和实现策略}
 
 我们的规范包含若干断言，形如：
 @nested{
@@ -92,11 +92,11 @@ specification})。扫描器取一字符序列，生成词牌序列。
 另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像在@secref{asir}和练习
 2.31中，处理lambda演算表达式那样。
 
-@section[#:tag "let-a-simple-language"]{LET：一门简单语言}
+@section[#:tag "s3.2"]{LET：一门简单语言}
 
 我们先来定义一种非常简单的语言，根据它最有趣的特性命名为LET。
 
-@subsection[#:tag "specifying-the-syntax"]{定义语法}
+@subsection[#:tag "s3.2.1"]{定义语法}
 
 图3.2展示了我们这门简单语言的语法。在这种语言中，程序只能是一个表达式。一个表达
 式是个整数常量，或差值表达式，或判零表达式，或条件表达式，或变量，或@tt{let}表达
@@ -136,7 +136,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
  (list (para "LET语言的语法"))]
 }
 
-@subsection[#:tag "specification-of-values"]{定义值}
+@subsection[#:tag "s3.2.2"]{定义值}
 
 任何编程语言规范中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两个这
 种集合：@emph{表达值} (@emph{expressed values})和@emph{指代值} (@emph{denoted
@@ -166,7 +166,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 我们假定传给@tt{expval->num}的参数不是整数，或传给@tt{expval->bool}的参数不是布
 尔值时，二者未定义。
 
-@subsection[#:tag "environment"]{环境}
+@subsection[#:tag "s3.2.3"]{环境}
 
 若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像在
 @secref{rsdt}那样。
@@ -207,7 +207,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 }
 
-@subsection[#:tag "specifying-the-behavior-of-expressions"]{指定表达式的行为}
+@subsection[#:tag "s3.2.4"]{指定表达式的行为}
 
 我们语言中的六种表达式各对应一个左边为@${Expression}的生成式。表达式接口包含七个
 过程，六个是构造器，一个是观测器。我们用@${ExpVal}表示表达值的集合。
@@ -270,7 +270,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 }
 
-@subsection[#:tag "specifying-the-behavior-of-programs"]{指定程序的行为}
+@subsection[#:tag "s3.2.5"]{指定程序的行为}
 
 在我们的语言中，整个程序只是一个表达式。要找出这个表达式的值，我们需要指定程序中
 自由变量的值。所以程序的值就是在适当的初始环境中求出的那个表达式的值。我们把初始
@@ -281,7 +281,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 = (value-of @#,elem{@${exp}} [@#,elem{@tt{i=}@${\lceil \tt{1} \rceil},@tt{v=}@${\lceil \tt{5} \rceil},@tt{x=}@${\lceil \tt{10} \rceil}}])
 ]
 
-@subsection[#:tag "specifying-conditions"]{指定条件}
+@subsection[#:tag "s3.2.6"]{指定条件}
 
 下一部分介绍我们语言的布尔值接口。语言有一个布尔值构造器，@tt{zero?}，一个布尔值
 观测器，@tt{if}表达式。
@@ -434,7 +434,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
  (list (para "条件表达式的简单计算过程"))]
  }
 
-@subsection[#:tag "specifying-let"]{指定@tt{let}}
+@subsection[#:tag "s3.2.7"]{指定@tt{let}}
 
 接下来我们解决用@tt{let}表达式创建新变量绑定的问题。我们给这种解释性语言添加语法，
 用关键字@tt{let}引导一个声明，关键字@tt{in}，以及主体。例如，
@@ -564,7 +564,7 @@ in let y = 2
  (list (para (tt "let") "一例"))]
  }
 
-@subsection[#:tag "specifying-the-specification-of-let"]{实现LET的规范}
+@subsection[#:tag "s3.2.8"]{实现LET的规范}
 
 接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{见
 @elem[#:style question]{附录B}}作为前端，表达式用图3.6中的数据类型表示。我们的实
@@ -773,8 +773,8 @@ in let y = 2
 @exercise[#:level 2 #:tag "ex3.9"]{
 
 向该语言添加列表处理操作，包括@tt{cons}，@tt{car}，@tt{cdr}，@tt{null?}和
-@tt{emptylist}。列表可以包含任何表达值，包括其他列表。像
-@secref{specification-of-values}那样，给出语言表达值和指代值的定义。例如：
+@tt{emptylist}。列表可以包含任何表达值，包括其他列表。像@secref{s3.2.2}那样，给
+出语言表达值和指代值的定义。例如：
 
 @nested{
 
@@ -909,7 +909,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 值应为4。
 }
 
-@section[#:tag "proc-a-language-with-procedures"]{PROC：有过程的语言}
+@section[#:tag "s3.3"]{PROC：有过程的语言}
 
 到现在为止，我们的语言只能做语言已定义的操作。要想让我们这种解释性语言更有用，必
 须能创建新过程。我们把新语言叫做PROC。
@@ -930,7 +930,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 我们还需要语法来创建和调用过程。对应的生成式为：
 
 @envalign*{
-        \mathit{Expression} &::= @tt{proc (@m{\mathit{Number}}) @m{\mathit{Expression}}} \\[-3pt]
+        \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier}}) @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var body)}} \\[5pt]
         \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
@@ -1017,7 +1017,7 @@ in let f = proc (z) -(z,x)
 
 }
 
-@subsection[#:tag "an-example"]{一个例子}
+@subsection[#:tag "s3.3.1"]{一个例子}
 
 我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
 算过程用@emph{规范}表示。令@${\rho}为任一环境。
@@ -1098,7 +1098,7 @@ in let f = proc (z) -(z,x)
 其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
 @tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
 
-@subsection[#:tag "representing-procedures"]{表示过程}
+@subsection[#:tag "s3.3.2"]{表示过程}
 
 根据@secref{pr}中介绍的方法，我们可以按照过程表示法，用过程在
 @tt{apply-procedure}中的动作表示它们。欲如此，我们定义@tt{procedure}的值为实现语
@@ -1224,16 +1224,16 @@ in ((f 3) 4)
 扩展本节的语言，添加多参数过程及其调用，语法为：
 
 @envalign*{
-        \mathit{Expression} &::= @tt{proc (@m{\{\mathit{Number}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
+        \mathit{Expression} &::= @tt{proc (@m{\{\mathit{Identifier}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
         \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{\{Expression\}^{*}}})}
 }
 }
 
 @exercise[#:level 3 #:tag "ex3.22"]{
 
-本节的具体语法中，内置操作（如差值）和过程调用使用不同的方式。修改具体语法，使该
-语言的用户不需要知道哪些是内置操作，哪些是定义的过程。根据所使用的解析技术，这道
-练习可能很容易，也可能非常难。
+本节的具体语法中，内置操作（如差值）和过程调用使用不同的语法。修改具体语法，不要
+让该语言的用户区分哪些是内置操作，哪些是定义的过程。根据所使用的解析技术，这道练
+习可能很容易，也可能非常难。
 
 }
 
@@ -1290,7 +1290,7 @@ in let maketimes4 = proc (f)
 @exercise[#:level 2 #:tag "ex3.26"]{
 
 我们用数据结构表示过程时，在闭包中记录了整个环境。但是显然，我们只需要自由变量的
-绑定。修改过程的表示法，只保留自由变量。
+绑定。修改过程的表示，只保留自由变量。
 
 }
 
@@ -1303,8 +1303,8 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 2 #:tag "ex3.28"]{
 
-设计过程的另一种方法是@emph{动态绑定} (@emph{dynamic binding})（或称 @emph{动态
-定界} (@emph{dynamic scoping})）：求值过程主体的环境由扩展调用处的环境得到。例如，
+设计过程的另一种方法是@emph{动态绑定} (@emph{dynamic binding})（或称@emph{动态定
+界} (@emph{dynamic scoping})）：过程主体求值时的环境由扩展调用处的环境得到。例如，
 在
 
 @nested[#:style 'code-inset]{
@@ -1340,5 +1340,283 @@ in let p = proc (z) a
 }
 
 返回5，因为调用处@tt{a}的值为5。如果@tt{f}的形式参数为@tt{a}呢？
+
+}
+
+@section[#:tag "s3.4"]{LETREC：支持递归过程的语言}
+
+现在我们来定义一门新语言LETREC，让我们的语言支持递归。因为我们的语言只有单参数过
+程，我们降低难度，只让@tt{letrec}表达式声明一个单参数过程，例如：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec double (x)
+        = if zero?(x) then 0 else -((double -(x,1)), -2)
+in (double 6)
+}|
+}
+
+递归声明的左边是递归过程的名字以及绑定变量。@tt{=}右边是过程主体。它的生成式为：
+
+@envalign*{
+\mathit{Expression} &::= @tt{letrec @m{\mathit{Identifier}} (@m{\mathit{Identifier}}) = @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
+  &\mathrel{\phantom{::=}} \fbox{@tt{letrec-exp (p-name b-var p-body letrec-body)}}}
+
+@tt{letrec}表达式的值是其主体的值，在符合这种行为的环境中求出：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of
+  (letrec-exp |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${letrec\mbox{-}body})
+  |@${\rho})
+= (value-of
+    |@${letrec\mbox{-}body}
+    (extend-env-rec |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${\rho}))
+}|
+}
+
+这里，我们给环境接口新添一个过程@tt{extend-env-rec}。但我们仍然得回答这个问题：
+@tt{(extend-env-rec @${proc\mbox{-}name} @${bound\mbox{-}var}
+@${proc\mbox{-}body} @${\rho})}应符合什么行为？
+
+}
+
+我们定义该环境的行为如下：设@${\rho_1}为@tt{(extend-env-rec @${proc\mbox{-}name}
+@${bound\mbox{-}var} @${proc\mbox{-}body} @${\rho})}产生的环境，那么
+@tt{(apply-env @${\rho_1} @${var})}应返回什么？
+
+@itemlist[#:style 'ordered
+
+ @item{如果变量@${var}与@${proc\mbox{-}name}相同，那么@tt{(apply-env @${\rho_1}
+ @${var})}应返回一个闭包，其绑定变量是@${bound\mbox{-}var}，其主体为
+ @${proc\mbox{-}body}，其环境为绑定@${proc\mbox{-}name}时所在的环境。但我们已经
+ 有这个环境了，那就是@${\rho_1}本身！所以：
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ (apply-env |@${\rho_1} |@${proc\mbox{-}name})
+ = (proc-val (procedure |@${bound\mbox{-}var} |@${proc\mbox{-}name} |@${\rho_1}))
+ }|
+ }
+ }
+
+ @item{如果@${var}与@${proc\mbox{-}name}不同，那么：
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ (apply-env |@${\rho_1} |@${var}) = (apply-env |@${\rho} |@${var})
+ }|
+ }}
+
+]
+
+图3.10和图3.11展示了一个例子。图3.11的最后一行，递归调用@tt{double}找出了原来的
+@tt{double}，正合所愿。
+
+我们按这些要求实现@tt{extend-env-rec}。这里我们用抽象语法树表示。练习中讨论其他
+实现策略。
+
+如图3.12，在抽象语法树表示中，我们新添一种变体@tt{extend-env-rec}。
+@tt{apply-env}倒数第二行中的@tt{env}对应上述@${\rho_1}。
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+(value-of <<letrec double(x) = if zero?(x)
+                               then 0
+                               else -((double -(x,1)), -2)
+            in (double 6)>> |@${\rho_0})
+
+= (value-of <<(double 6)>>
+    (extend-env-rec double x <<if zero?(x) ...>> |@${\rho_0}))
+
+= (apply-procedure
+    (value-of <<double>> (extend-env-rec double x
+                           <<if zero?(x) ...>> |@${\rho_0}))
+    (value-of <<6>> (extend-env-rec double x
+                      <<if zero?(x) ...>> |@${\rho_0})))
+
+= (apply-procedure
+    (value-of <<double>> (extend-env-rec double x
+                           <<if zero?(x) ...>> |@${\rho_0}))
+    |@${\lceil}6|@${\rceil})
+
+= (value-of
+    <<if zero?(x) ...>>
+    [x=|@${\lceil}6|@${\rceil}](extend-env-rec
+                   double x <<if zero?(x) ...>> |@${\rho_0}))
+
+...
+
+= (-
+    (value-of
+      <<(double -(x,1))>>
+      [x=|@${\lceil}6|@${\rceil}](extend-env-rec
+                      double x <<if zero?(x) ...>> |@${\rho_0}))
+    -2)
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "extend-env-rec") "计算过程"))]
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+= (-
+    (apply-procedure
+      (value-of
+        <<double>>
+        [x=|@${\lceil}6|@${\rceil}](extend-env-rec
+                      double x <<if zero?(x) ...>> |@${\rho_0}))
+      (value-of
+        <<(double -(x,1))>>
+        [x=|@${\lceil}6|@${\rceil}](extend-env-rec
+                      double x <<if zero?(x) ...>> |@${\rho_0})))
+    -2)
+
+= (-
+    (apply-procedure
+      (value-of
+        <<double>>
+        [x=|@${\lceil}6|@${\rceil}](extend-env-rec
+                      double x <<if zero?(x) ...>> |@${\rho_0}))
+      |@${\lceil}5|@${\rceil})
+    -2)
+
+= ...
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "extend-env-rec") "计算过程，续"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(define-datatype environment environment?
+  (empty-env)
+  (extend-env
+    (var identifier?)
+    (val expval?)
+    (env environment?))
+  (extend-env-rec
+    (p-name identifier?)
+    (b-var identifier?)
+    (body expression?)
+    (env environment?)))
+
+(define apply-env
+  (lambda (env search-var)
+    (cases environment env
+      (empty-env ()
+        (report-no-binding-found search-var))
+      (extend-env (saved-var saved-val saved-env)
+        (if (eqv? saved-var search-var)
+          saved-val
+          (apply-env saved-env search-var)))
+      (extend-env-rec (p-name b-var p-body saved-env)
+        (if (eqv? search-var p-name)
+          (proc-val (procedure b-var p-body env))
+          (apply-env saved-env search-var))))))]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "向环境添加" (tt "extend-env-rec")))]
+}
+
+@exercise[#:level 1 #:tag "ex3.30"]{
+
+在@tt{apply-env}倒数第二行调用@tt{proc-val}的目的是什么？
+
+}
+
+@exercise[#:level 1 #:tag "ex3.31"]{
+
+扩展上面的语言，允许声明有任意多个参数的过程，像练习3.21那样。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.32"]{
+
+扩展上面的语言，允许声明有任意多个单参数互递归过程，例如：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec
+  even(x) = if zero?(x) then 1 else (odd -(x,1))
+  odd(x)  = if zero?(x) then 0 else (even -(x,1))
+in (odd 13)
+}|
+}
+
+}
+
+@exercise[#:level 2 #:tag "ex3.33"]{
+
+扩展上面的语言，允许声明有任意多个互递归过程，且参数数量任意，像练习3.21那样。
+
+}
+
+@exercise[#:level 3 #:tag "ex3.34"]{
+
+用@secref{pr}环境的过程表示法实现@tt{extend-env-rec}。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.35"]{
+
+到目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包。
+但是每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为1的向量，并主动放入
+一个循环式结构中，像这样：
+
+@; TODO: figure
+
+这里是创建这种数据结构的代码：
+
+@nested[#:style 'code-inset]{
+@racketblock[
+(define extend-env-rec
+  (lambda (p-names b-vars bodies saved-env)
+    (let ((vec (make-vector (length p-names))))
+      (let ((new-env (extend-env p-names vec saved-env)))
+        (make-proc-vec! vec 0
+          b-vars bodies new-env)
+        new-env))))
+]
+}
+
+按此修改环境数据结构的定义和@tt{apply-env}，实现这种表示法。确保@tt{apply-env}总
+是返回表达值。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.36"]{
+
+扩展这种实现，使之能够处理练习3.32中的语言。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.37"]{
+
+使用动态绑定（练习3.28），用@tt{let}就可以创建递归过程；不需要任何特殊的递归机制。
+这是出于历史兴趣。在早年的编程语言设计中，像@secref{s3.4}讨论的那些方法还鲜为人
+知。要明白动态绑定实现的递归，试试程序：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let fact = proc (n) add1(n)
+in let fact = proc (n)
+               if zero?(n)
+               then 1
+               else *(n, (fact -(n,1)))
+   in (fact 5)
+}|
+}
+
+试试词法绑定，再试试动态绑定。用动态绑定写出@secref{s3.4}中的互递归过程@tt{even}
+和@tt{odd}。
 
 }
