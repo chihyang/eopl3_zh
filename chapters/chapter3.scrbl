@@ -1572,11 +1572,15 @@ in (odd 13)
 但是每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为1的向量，并主动放入
 一个循环式结构中，像这样：
 
-@; TODO: figure
+@centered{
+@(image "../images/vector-env"
+  #:scale 0.95
+  #:suffixes (list ".eps" ".pdf" ".svg")
+  "vector环境")
+}
 
 这里是创建这种数据结构的代码：
 
-@nested[#:style 'code-inset]{
 @racketblock[
 (define extend-env-rec
   (lambda (p-names b-vars bodies saved-env)
@@ -1586,7 +1590,6 @@ in (odd 13)
           b-vars bodies new-env)
         new-env))))
 ]
-}
 
 按此修改环境数据结构的定义和@tt{apply-env}，实现这种表示法。确保@tt{apply-env}总
 是返回表达值。
