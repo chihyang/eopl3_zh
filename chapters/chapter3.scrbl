@@ -1529,7 +1529,7 @@ in (double 6)
 
 @exercise[#:level 1 #:tag "ex3.30"]{
 
-在@tt{apply-env}倒数第二行调用@tt{proc-val}的目的是什么？
+@tt{apply-env}倒数第二行调用@tt{proc-val}的目的是什么？
 
 }
 
@@ -1623,3 +1623,206 @@ in let fact = proc (n)
 和@tt{odd}。
 
 }
+
+@section[#:tag "s3.5"]{定界和变量绑定}
+
+我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
+
+在大多数编程语言中，变量只能以两种方式出现：@emph{引用} (@emph{reference})或
+@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在Scheme表达式
+
+@nested{
+@codeblock{(f x y)}
+
+中，所有的变量@tt{f}，@tt{x}和@tt{y}都为引用。但在
+
+@codeblock{(lambda (x) (+ x 3))}
+
+或
+
+@codeblock{(let ((x (+ y 7))) (+ x 3))}
+
+中，第一个出现的@tt{x}是声明：引入一个变量，作为某个值的名字。在@tt{lambda}表达
+式中，变量的值在过程调用时提供。在@tt{let}表达式，变量的值由表达式@tt{(+ y z)}求
+得。
+
+}
+
+我们说变量引用由对应的声明@emph{绑定} (@emph{bound})到值。在@secref{o-f}，我们已
+经见过用声明绑定变量的例子。
+
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/simple-contour"
+  #:suffixes (list ".eps" ".pdf" ".svg")
+  "由解释器执行")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "简单等界线"))]
+}
+
+大多数编程语言中的声明都有有限的作用范围，所以同一个变量名在程序的部分可用于不同
+的目的。例如，我们反复把@tt{lst}用作绑定变量，每次它的作用范围都限制到对应的
+@tt{lambda}表达式主体内。
+
+每种编程语言都有一些规则来判断每个变量引用指代哪个声明。这些规则通常叫做@emph{定
+界} (@emph{scoping})规则。程序中，声明有效的部分叫做声明的@emph{作用范围}
+(@emph{scope})。
+
+不需要执行程序，就能判断各个变量引用对应于哪个声明。这样的属性不需要执行程序就能
+算出来，叫做@emph{静态} (@emph{static})属性。
+
+要找出某个变量引用对应于哪一声明，我们@emph{向外} (@emph{outward})查找，直到找出
+变量的声明。这里有个简单的Scheme示例。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(let ((x 3)                             |@elem{称之为@tt{x1}}
+      (y 4))
+  (+ (let ((x                           |@elem{称之为@tt{x2}}
+             (+ y 5)))
+       (* x y))                         |@elem{这个@tt{x}指代@tt{x2}}
+     x))                                |@elem{这个@tt{x}指代@tt{x1}}
+}|
+}
+
+在这个例子中，内层的@tt{x}绑定到9，所以表达式的值为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(let ((x 3)
+      (y 4))
+  (+ (let ((x
+             (+ y 5)))
+       (* x y))
+     x))
+
+= (+ (let ((x
+             (+ 4 5)))
+       (* x 4))
+     3)
+
+= (+ (let ((x 9))
+       (* x 4))
+     3)
+
+= (+ 36
+     3)
+
+= 39
+}|
+}
+
+这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping})规则，这样声明的变量叫
+做@emph{词法变量} (@emph{lexical variable})。
+
+使用词法定界，我们可以重新声明一个变量，给一个作用范围捅出个“洞”。这样的内层声
+明@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例的乘式@tt{(* x y)}中，内层
+@tt{x}遮蔽了外层的。
+
+词法作用范围是嵌套式的：每个作用范围完全包裹在另一个里面。我们用@emph{等界线}
+(@emph{contour diagram})解释这点。图3.13展示了上例的等界线。每个作用范围用一个框
+圈起来，垂线连接声明与其作用范围。
+
+图3.14展示了一个更复杂的程序，绘有等界线。这里面，在第5，第7和第8行，表达式
+@tt{(+ x y z)}出现了三次。第5行在@tt{x2}和@tt{z2}的作用范围内，@tt{x2}和@tt{z2}
+的作用范围在@tt{z1}的作用范围内，@tt{z1}的作用范围在@tt{x1}和@tt{y1}的作用范围内。
+所以，第5行的@tt{x}指代@tt{x2}，@tt{y}指代@tt{y1}，@tt{z}指代@tt{z2}。第7行在
+@tt{x4}和@tt{y2}的作用范围内，@tt{x4}和@tt{y2}的作用范围在@tt{x2}和@tt{z2}的作用
+范围内，@tt{x2}和@tt{z2}的作用范围在@tt{z1}的作用范围内，@tt{z1}的作用范围在
+@tt{x1}和@tt{y1}的作用范围内。所以，第7行的@tt{x}指代@tt{x4}，@tt{y}指代@tt{y2}，
+@tt{z}指代@tt{z2}。最后，第8行在@tt{x3}的作用范围内，@tt{x3}的作用范围在@tt{x2}
+和@tt{z2}的作用范围内，@tt{x2}和@tt{z2}的作用范围在@tt{z1}的作用范围内，@tt{z1}
+的作用范围在@tt{x1}和@tt{y1}的作用范围内。所以，第8行的@tt{x}指代@tt{x3}，@tt{y}
+指代@tt{y1}，@tt{z}指代@tt{z2}。
+
+@; TODO: figure 3.14
+
+变量与值的对应关系叫做@emph{绑定} (@emph{binding})。可以查看我们语言的规范来理解
+绑定如何创建。
+
+由@tt{proc}声明的变量在过程调用时绑定。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
+= (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
+}|
+}
+
+@tt{let}变量绑定到声明右边的值。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of (let-exp |@${var} |@${val} |@${body}) |@${\rho})
+= (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
+}|
+}
+
+@tt{letrec}声明的变量也要绑定到声明右边。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of
+  (letrec-exp |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${letrec\mbox{-}body})
+  |@${\rho})
+= (value-of
+    |@${letrec\mbox{-}body}
+    (extend-env-rec |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${\rho}))
+}|
+}
+
+绑定的@emph{期限} (@emph{extent})是指绑定保持的时长。在我们的语言中，就像在
+Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})的，意思是变量一
+旦绑定，该绑定就要（至少是有可能）无限制地保留。这是因为绑定可能藏在已返回的闭包
+之中。在半无限的语言中，垃圾回收器收集不能再访问的绑定。这只能在运行时确定，因此
+我们说这是一条@emph{动态} (@emph{dynamic})属性。
+
+很可惜的是，“动态”有时表示“在表达式求值期间”，有时却又表示“无法事先计算”。
+如果我们不允许@tt{let}的值为过程，那么let绑定会在@tt{let}主体求值结束时到期。这
+叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所以
+我们可以准确预测绑定何时可以抛弃。3.28等几道练习中的动态绑定表现类似。
+
+@section[#:tag "s3.6"]{消除变量名}
+
+定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
+能会跨过很多等界线。跨越的等界线数目叫做变量引用的@emph{词深} (@emph{lexical
+depth})（或 @emph{静深} (@emph{static depth})）。由于惯用“从0开始的索引”，所以
+不计最后跨过的等界线。例如，在Scheme表达式
+
+@nested{
+@nested[#:style 'code-inset]{
+@typeset-code{
+(lambda (x)
+  ((lambda (a)
+     (x a))
+   x))
+}
+}
+
+中，最后一行@tt{x}的引用以及@tt{a}的引用词深均为0，而第三行@tt{x}的引用词深为1。
+
+}
+
+因此，我们可以完全消除变量名，写成这样：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(nameless-lambda
+  ((nameless-lambda
+     (#1 #0))
+   #0))
+}|
+}
+
+这里，每个@tt{nameless-lambda}声明了一个新的匿名变量，每个变量引用由其词深替代；
+这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
+address})或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
+引用的词法地址。除非用来提供调试信息，一旦完成，变量名即可丢弃。
+
+}
+
+用这种方法记录信息很有用，因为词法地址@emph{预测}了
