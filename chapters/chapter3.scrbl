@@ -1655,7 +1655,7 @@ in let fact = proc (n)
 @centered{
 @(image "../images/simple-contour"
   #:suffixes (list ".pdf" ".svg")
-  "由解释器执行")
+  "简单等界线")
 }
 
 @make-nested-flow[
@@ -1739,6 +1739,17 @@ in let fact = proc (n)
 指代@tt{y1}，@tt{z}指代@tt{z2}。
 
 @; TODO: figure 3.14
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/complicated-contour"
+  #:suffixes (list ".pdf" ".svg")
+  "较复杂的等界线")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "较复杂的等界线"))]
+}
 
 变量与值的对应关系叫做@emph{绑定} (@emph{binding})。可以查看我们语言的规范来理解
 绑定如何创建。
