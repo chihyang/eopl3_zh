@@ -1,11 +1,11 @@
 import flowchart;
-// texpreamble("\usepackage{xeCJK}
-// \setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
-// \setCJKsansfont{Adobe Song Std}
-// \setCJKmonofont{Adobe Song Std}
-// \xeCJKsetup{CJKmath=true, PlainEquation=true}
-// \usepackage[T1]{fontenc}
-// ");
+texpreamble("\usepackage{xeCJK}
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
+\setCJKsansfont{Adobe Song Std}
+\setCJKmonofont{Adobe Song Std}
+\xeCJKsetup{CJKmath=true, PlainEquation=true}
+\usepackage[T1]{fontenc}
+");
 defaultpen(fontsize(8pt));
 unitsize(12pt);
 pair pos = (0, 0);
