@@ -334,7 +334,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @centered{
 @(image "../images/alist-env"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "关联列表表示法")
 }
 
@@ -389,7 +389,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @centered{
 @(image "../images/rib-cage-one"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "肋排环境表示法片段")
 }
 
@@ -399,7 +399,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @centered{
 @(image "../images/rib-cage"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "肋排环境表示法")
 }
 
@@ -1148,7 +1148,7 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/ast"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   (tt "(lambda (x) (f (f x)))") "的抽象语法树")
 }
 

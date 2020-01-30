@@ -70,13 +70,13 @@ specification})。扫描器取一字符序列，生成词牌序列。
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/exe-via-interpreter"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "由解释器执行")
 }
 
 @centered{
 @(image "../images/exe-via-compiler"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "由解释器执行")
 }
 
@@ -1575,7 +1575,7 @@ in (odd 13)
 @centered{
 @(image "../images/vector-env"
   #:scale 0.95
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "vector环境")
 }
 
@@ -1654,7 +1654,7 @@ in let fact = proc (n)
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/simple-contour"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "由解释器执行")
 }
 

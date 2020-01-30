@@ -108,7 +108,7 @@
 
 @centered{
 @(image "../images/structure"
-  #:suffixes (list ".eps" ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg")
   "章节依赖关系")
 }
 
