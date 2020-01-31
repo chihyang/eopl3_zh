@@ -147,7 +147,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 @nested{
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} \\
-\mathit{DenVal} &= \mathit{Int} + \mathit{Bool} \\
+\mathit{DenVal} &= \mathit{Int} + \mathit{Bool}
 }
 
 第四章展示表达值和指代值不同的语言。
@@ -160,7 +160,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 @bold{@tt{num-val}}  &: \mathit{Int} \to \mathit{ExpVal} \\
 @bold{@tt{bool-val}} &: \mathit{Bool} \to \mathit{ExpVal} \\
 @bold{@tt{expval->num}}   &: \mathit{ExpVal} \to \mathit{Int} \\
-@bold{@tt{expval->bool}}  &: \mathit{ExpVal} \to \mathit{Bool} \\
+@bold{@tt{expval->bool}}  &: \mathit{ExpVal} \to \mathit{Bool}
 }
 
 我们假定传给@tt{expval->num}的参数不是整数，或传给@tt{expval->bool}的参数不是布
@@ -220,13 +220,13 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 @bold{@tt{if-exp}}   &: \mathit{Exp} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
 @bold{@tt{diff-exp}}  &: \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
 @bold{@tt{var-exp}}  &: \mathit{Var} \to \mathit{Exp} \\
-@bold{@tt{let-exp}}  &: \mathit{Var} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp} \\
+@bold{@tt{let-exp}}  &: \mathit{Var} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}
 }
 
 观测器：
 
 @envalign*{
-@bold{@tt{value-of}}  &: \mathit{Exp} \times \mathit{Env} \to \mathit{ExpVal} \\
+@bold{@tt{value-of}}  &: \mathit{Exp} \times \mathit{Env} \to \mathit{ExpVal}
 }
 
 实现之前，我们先写出这些过程的行为规范。依照解释器秘方，我们希望@tt{value-of}查
@@ -919,7 +919,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 @nested{
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
-\mathit{DenVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
+\mathit{DenVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc}
 }
 
 其中，@${Proc}是一值集合，表示过程。我们把@${Proc}作为一种抽象数据类型。下面我们
@@ -1655,12 +1655,12 @@ in let fact = proc (n)
 @centered{
 @(image "../images/simple-contour"
   #:suffixes (list ".pdf" ".svg")
-  "简单等界线")
+  "简单等深线")
 }
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "简单等界线"))]
+ (list (para "简单等深线"))]
 }
 
 大多数编程语言中的声明都有有限的作用范围，所以同一个变量名在程序的部分可用于不同
@@ -1722,11 +1722,11 @@ in let fact = proc (n)
 明@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例的乘式@tt{(* x y)}中，内层
 @tt{x}遮蔽了外层的。
 
-词法作用范围是嵌套式的：每个作用范围完全包裹在另一个里面。我们用@emph{等界线}
-(@emph{contour diagram})解释这点。图3.13展示了上例的等界线。每个作用范围用一个框
+词法作用范围是嵌套式的：每个作用范围完全包裹在另一个里面。我们用@emph{等深线}
+(@emph{contour diagram})解释这点。图3.13展示了上例的等深线。每个作用范围用一个框
 圈起来，垂线连接声明与其作用范围。
 
-图3.14展示了一个更复杂的程序，绘有等界线。这里面，在第5，第7和第8行，表达式
+图3.14展示了一个更复杂的程序，绘有等深线。这里面，在第5，第7和第8行，表达式
 @tt{(+ x y z)}出现了三次。第5行在@tt{x2}和@tt{z2}的作用范围内，@tt{x2}和@tt{z2}
 的作用范围在@tt{z1}的作用范围内，@tt{z1}的作用范围在@tt{x1}和@tt{y1}的作用范围内。
 所以，第5行的@tt{x}指代@tt{x2}，@tt{y}指代@tt{y1}，@tt{z}指代@tt{z2}。第7行在
@@ -1738,17 +1738,16 @@ in let fact = proc (n)
 的作用范围在@tt{x1}和@tt{y1}的作用范围内。所以，第8行的@tt{x}指代@tt{x3}，@tt{y}
 指代@tt{y1}，@tt{z}指代@tt{z2}。
 
-@; TODO: figure 3.14
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/complicated-contour"
   #:suffixes (list ".pdf" ".svg")
-  "较复杂的等界线")
+  "较复杂的等深线")
 }
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "较复杂的等界线"))]
+ (list (para "较复杂的等深线"))]
 }
 
 变量与值的对应关系叫做@emph{绑定} (@emph{binding})。可以查看我们语言的规范来理解
@@ -1799,19 +1798,17 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 @section[#:tag "s3.6"]{消除变量名}
 
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
-能会跨过很多等界线。跨越的等界线数目叫做变量引用的@emph{词深} (@emph{lexical
+能会跨过很多等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
 depth})（或 @emph{静深} (@emph{static depth})）。由于惯用“从0开始的索引”，所以
-不计最后跨过的等界线。例如，在Scheme表达式
+不计最后跨过的等深线。例如，在Scheme表达式
 
 @nested{
-@nested[#:style 'code-inset]{
-@typeset-code{
+@racketblock[
 (lambda (x)
   ((lambda (a)
      (x a))
    x))
-}
-}
+]
 
 中，最后一行@tt{x}的引用以及@tt{a}的引用词深均为0，而第三行@tt{x}的引用词深为1。
 
@@ -1829,11 +1826,534 @@ depth})（或 @emph{静深} (@emph{static depth})）。由于惯用“从0开始
 }|
 }
 
-这里，每个@tt{nameless-lambda}声明了一个新的匿名变量，每个变量引用由其词深替代；
+这里，每个@tt{nameless-lambda}声明了一个新的无名变量，每个变量引用由其词深替代；
 这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
 address})或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
 引用的词法地址。除非用来提供调试信息，一旦完成，变量名即可丢弃。
 
 }
 
-用这种方法记录信息很有用，因为词法地址@emph{预测}了
+这样记录信息有用，因为词法地址@emph{预测}了怎样从环境中找出某个变量。
+
+考虑一个我们语言的表达式：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = |@${exp_1}
+in let y = |@${exp_2}
+   in -(x,y)
+}|
+}
+
+在差值表达式中，@tt{y}和@tt{x}的词深分别为0和1。
+}
+
+现在，设在某个适当环境中，@${exp_1}和@${exp_2}的值分别为@${val_1}和@${val_2}，那
+么这个表达式的值为：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of
+  <<let x = |@${exp_1}
+    in let y = |@${exp_2}
+       in -(x,y)>>
+  |@${\rho})
+=
+(value-of
+  <<let y = |@${exp_2}
+    in -(x,y)>>
+  [x=|@${val_1}]|@${\rho})
+=
+(value-of
+  <<-(x,y)>>
+  [y=|@${val_2}][x=|@${val_1}]|@${\rho})
+}|
+}
+
+那么求值差值表达式时，@tt{y}深度为0,@tt{x}深度为1，正如词深预测的那样。
+
+}
+
+如果用关联列表表示环境（见练习2.5），那么环境看起来像是：
+
+@nested{
+@centered{
+@(image "../images/lexical-addr-env"
+  #:suffixes (list ".pdf" ".svg")
+  "关联列表表示的词法地址环境")
+}
+
+所以不论@${val_1}和@${val_2}值为何，@tt{x}和@tt{y}的值都是取环境中第1个元素的余
+项和第0个元素的余项。
+
+}
+
+过程的主体也是这样。考虑：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let a = 5
+in proc (x) -(x,1)
+}|
+}
+
+在过程的主体中，@tt{x}的词深是0，@tt{a}的词深是1。
+
+}
+
+这个表达式的值为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of
+  <<let a = 5 in proc (x) -(x,a)>>
+  |@${\rho})
+= (value-of <<proc (x) -(x,a)>>
+    (extend-env a |@${\lceil}5|@${\rceil} |@${\rho}))
+= (proc-val (procedure x <<-(x,a)>> [a=|@${\lceil}5|@${\rceil}]|@${\rho}))
+}|
+}
+
+这个过程的主体只能通过@tt{apply-procedure}求值：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure
+  (procedure x <<-(x,a)>> [a=|@${\lceil}5|@${\rceil}]|@${\rho})
+  |@${\lceil}7|@${\rceil})
+= (value-of <<-(x,a)>>
+    [x=|@${\lceil}7|@${\rceil}][a=|@${\lceil}5|@${\rceil}]|@${\rho})
+}|
+}
+
+每个变量又一次在词深预测的位置从环境中找到。
+
+@section[#:tag "s3.7"]{实现词法地址}
+
+现在，我们来实现上面分析的词法地址。我们写个过程@tt{translation-of-program}，它
+取一程序，从声明中移除所有变量，并将每个变量引用替换为词深。
+
+例如，程序
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 37
+in proc (y)
+    let z = -(y,x)
+    in -(x,y)
+}|
+}
+
+将翻译为：
+
+@racketblock[
+#(struct:a-program
+   #(struct:nameless-let-exp
+      #(struct:const-exp 37)
+      #(struct:nameless-proc-exp
+         #(struct:nameless-let-exp
+            #(struct:diff-exp
+               #(struct:nameless-var-exp 0)
+               #(struct:nameless-var-exp 1))
+            #(struct:diff-exp
+               #(struct:nameless-var-exp 2)
+               #(struct:nameless-var-exp 1))))))
+]
+
+然后，我们另写一个@tt{value-of-program}，不必把变量放入环境就能求取无名程序的值。
+
+}
+
+@subsection[#:tag "s3.7.1"]{翻译器}
+
+因为是写翻译器，我们得知道源语言和目标语言。目标语言中的某些部分源语言中没有，像
+@tt{nameless-var-exp}和@tt{nameless-let-exp}；源语言中的某些部分目标语言中没有，
+它们由后者中的对应构造器取代，像@tt{var-exp}和@tt{let-exp}。
+
+我们可以给每种语言写一个@tt{define-datatype}，也可以让二者用同一个。因为我们使用
+的前端是SLLGEN，后者更容易。我们给SLLGEN的语法添加生成式：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{%lexref @m{\mathit{number}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{nameless-var-exp (num)}} \\[5pt]
+        \mathit{Expression} &::= @tt{%let @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{nameless-let-exp (exp1 body)}} \\[5pt]
+        \mathit{Expression} &::= @tt{%lexproc @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{nameless-proc-exp (body)}}}
+
+新的生成式中，我们用@tt{%}开头的名字，因为在我们的语言中，@tt{%}通常是注释字符。
+
+我们的翻译器将拒绝任何含有无名构造器（@tt{nameless-var-exp}，
+@tt{nameless-let-exp}或@tt{nameless-proc-exp}）的程序。具名构造器（@tt{var-exp}，
+@tt{let-exp}或@tt{proc-exp}）应被替换，我们的解释器将拒绝任何含有这些的程序。
+
+要计算任何变量引用的词法地址，我们需要它所在的作用范围。这是一种@emph{上下文}
+(@emph{context})信息，所以它就像@secref{apca}的继承属性一样。
+
+那么@tt{translation-of-program}将取两个参数：一个表达式和一个@emph{静态环境}
+(@emph{static environment})。静态环境是一个变量列表，表示当前表达式所在的作用范
+围。最内部作用范围声明的变量成为列表的第一个元素。
+
+例如，翻译上例中的最后一行时，静态环境为：
+
+@nested{
+
+@centered{
+@tt{(z y x)}
+}
+
+所以，在静态环境中搜索变量就是查找它在静态环境中的位置，也就是词法地址：查得
+@tt{x}为2，@tt{y}为1，@tt{z}为0。
+
+}
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+
+@#,elem{@${\mathit{Senv}} = @${\mathit{Listof}}@tt{(@${\mathit{Sym}})}}
+@#,elem{@${\mathit{Lexaddr}} = @${\mathit{N}}}
+
+@#,elem{@bold{@tt{empty-senv}} : @${\mathit{()} \to \mathit{Senv}}}
+(define empty-senv
+  (lambda ()
+    '()))
+
+@#,elem{@bold{@tt{extend-senv}} : @${\mathit{Var} \times \mathit{Senv} \to \mathit{Senv}}}
+(define extend-senv
+  (lambda (var senv)
+    (cons var senv)))
+
+@#,elem{@bold{@tt{apply-senv}} : @${\mathit{Senv} \times \mathit{Var} \to \mathit{Lexaddr}}}
+(define apply-senv
+  (lambda (senv var)
+    (cond
+      ((null? senv)
+       (report-no-binding-found var))
+      ((eqv? var (car senv))
+       0)
+      (else
+        (+ 1 (apply-senv (cdr senv) var))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "实现静态环境"))]
+}
+
+进入新的作用范围就要给静态环境添加一个新元素。我们添加过程@tt{extend-senv}来完成
+这点。
+
+由于静态环境只是变量列表，这些过程很容易实现，如图3.15所示。
+
+翻译器有两个过程：@tt{translation-of}处理表达式，@tt{translation-of-program}处理
+程序。
+
+@tt{senv}表示一些声明，我们从中翻译表达式@tt{e}。要完成这点，我们像练习1.33或
+2.26那样递归复制语法树，除了：
+
+@nested{
+
+@itemlist[#:style 'ordered
+
+ @item{调用@tt{apply-senv}，用正确的词法地址，把每个@tt{var-exp}替换为
+ @tt{nameless-var-exp}。}
+
+ @item{把每个@tt{let-exp}替换为一个@tt{nameless-let-exp}。新表达式的右侧由旧表达
+ 式右侧译得。这与原式的作用范围相同，所以我们在同样的静态环境@tt{senv}中翻译。新
+ 表达式的主体由旧表达式的主体译得。但是主体位于新的作用范围内，多了一个绑定变量
+ @${var}。所以我们在静态环境@tt{(extend-senv @${var} @${senv})}中翻译主体。}
+
+ @item{把每个@tt{proc-exp}替换为一个@tt{nameless-proc-exp}，主体在新的作用范围内
+ 译得，该作用范围由静态环境@tt{(extend-senv @${var} senv)}表示。}
+
+]
+
+@tt{translation-of}代码如图3.16所示。
+
+}
+
+过程@tt{translation-of-program}在适当的初始静态环境中运行@tt{translation-of}。
+
+@racketblock[
+@#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
+(define translation-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (a-program
+          (translation-of exp1 (init-senv)))))))
+
+@#,elem{@bold{@tt{translation-of}} : @${\mathit{()} \to \mathit{Senv}}}
+(define init-senv
+  (lambda ()
+    (extend-senv 'i
+      (extend-senv 'v
+        (extend-senv 'x
+          (empty-senv))))))
+]
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{translation-of}} : @${\mathit{Exp} \times \mathit{Senv} \to \mathit{Nameless\mbox{-}exp}}}
+(define translation-of
+  (lambda (exp senv)
+    (cases expression exp
+      (const-exp (num)
+        (const-exp num))
+      (diff-exp (exp1 exp2)
+        (diff-exp
+          (translation-of exp1 senv)
+          (translation-of exp2 senv)))
+      (zero?-exp (exp1)
+        (zero?-exp
+          (translation-of exp1 senv)))
+      (if-exp (exp1 exp2 exp3)
+        (if-exp
+          (translation-of exp1 senv)
+          (translation-of exp2 senv)
+          (translation-of exp3 senv)))
+      (var-exp (var)
+        (nameless-var-exp
+          (apply-senv senv var)))
+      (let-exp (var exp1 body)
+        (nameless-let-exp
+          (translation-of exp1 senv)
+          (translation-of body
+            (extend-senv var senv))))
+      (proc-exp (var body)
+        (nameless-proc-exp
+          (translation-of body
+            (extend-senv var senv))))
+      (call-exp (rator rand)
+        (call-exp
+          (translation-of rator senv)
+          (translation-of rand senv)))
+      (else
+        (report-invalid-source-expression exp)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "词法地址翻译器"))]
+}
+
+@subsection[#:tag "s3.7.2"]{无名解释器}
+
+我们的解释器利用词法分析器的预测，从而避免在运行时直接搜索变量。
+
+由于我们的程序中没有任何变量，我们不能把变量放入环境中；但是因为我们准确知道在环
+境中到哪儿去找，我们不需要！
+
+我们的顶层过程是@tt{run}：
+
+@racketblock[
+@#,elem{@bold{@tt{run}} : @${\mathit{String} \to \mathit{ExpVal}}}
+(define run
+  (lambda (string)
+    (value-of-program
+     (translation-of-program
+      (scan&parse string)))))
+]
+
+我们不用全功能的环境，而是用无名环境，其接口如下：
+
+@envalign*{
+@bold{@tt{nameless-environment?}}  &: \mathit{SchemeVal} \to \mathit{Bool} \\
+@bold{@tt{empty-nameless-env}}     &: \mathit{()} \to \mathit{Nameless\mbox{-}env} \\
+@bold{@tt{extend-nameless-env}}    &: \mathit{ExpVal} \times \mathit{Nameless\mbox{-}env} \to \mathit{Nameless\mbox{-}env} \\
+@bold{@tt{apply-nameless-env}}     &: \mathit{Nameless\mbox{-}env} \times \mathit{Lexaddr} \to \mathit{DenVal}
+}
+
+我们可以用指代值列表实现无名环境，这样@tt{apply-nameless-env}只须调用
+@tt{list-ref}。这种实现如图3.17所示。
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{nameless-environment?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+(define nameless-environment?
+  (lambda (x)
+    ((list-of exp-val?) x)))
+
+@#,elem{@bold{@tt{empty-nameless-env}} : @${\mathit{()} \to \mathit{Nameless\mbox{-}env}}}
+(define empty-nameless-env
+  (lambda () '()))
+
+@#,elem{@bold{@tt{extend-nameless-env}} : @${\mathit{Expval} \times \mathit{Nameless\mbox{-}env} \to \mathit{Nameless\mbox{-}env}}}
+(define extend-nameless-env
+  (lambda (val nameless-env)
+    (cons val nameless-env)))
+
+@#,elem{@bold{@tt{apply-nameless-env}} : @${\mathit{Nameless\mbox{-}env} \times \mathit{Lexaddr} \to \mathit{DenVal}}}
+(define apply-nameless-env
+  (lambda (nameless-env n)
+    (list-ref nameless-env n)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "无名环境"))]
+}
+
+在@elem[#:style question]{第93页}例子中的最后一行，无名环境看起来像是：
+
+@centered{
+@(image "../images/nameless-env"
+  #:suffixes (list ".pdf" ".svg")
+  "无名环境")
+}
+
+我们更改了环境接口，需要查看代码中所有依赖接口的地方。我们的解释器中使用环境的只
+有两处：过程实现和@tt{value-of}。
+
+修改过程规范时，只用把旧规范中的变量名移除：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
+= (value-of |@${body} (extend-nameless-env |@${val} |@${\rho}))
+}|
+}
+
+实现这一规范时可定义：
+
+@racketblock[
+@#,elem{@bold{@tt{procedure}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{Proc}}}
+(define-datatype proc proc?
+  (procedure
+   (body expression?)
+   (saved-nameless-env nameless-environment?)))
+
+@#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
+(define apply-procedure
+  (lambda (proc1 val)
+    (cases proc proc1
+      (procedure
+        (body saved-nameless-env)
+        (value-of body
+          (extend-nameless-env val saved-nameless-env))))))
+]
+
+现在，我们可以写出@tt{value-of}。它大部分与前一个解释器相同，但原先使用@tt{env}
+的地方现在用@tt{nameless-env}。但我们要处理新的部分：@tt{nameless-var-exp}，
+@tt{nameless-let-exp}和@tt{nameless-proc-exp}，它们分别对应并取代@tt{var-exp}，
+@tt{let-exp}和@tt{proc-exp}。实现如图3.18所示。@tt{nameless-var-exp}用于环境查询。
+@tt{nameless-let-exp}先求出式子右边的@${exp_1}，然后用式子右边的值扩展环境，并在
+该环境内求值主体。这和@tt{let}做的相同，只是没有变量。@tt{nameless-proc}生成一个
+@tt{proc}，随后可供@tt{apply-procedure}使用。
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{value-of}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{ExpVal}}}
+(define value-of
+  (lambda (exp nameless-env)
+    (cases expression exp
+
+      (const-exp (num) @#,elem{@${\ldots} @emph{同前} @${\ldots}})
+      (diff-exp (exp1 exp2) @#,elem{@${\ldots} @emph{同前} @${\ldots}})
+      (zero?-exp (exp1) @#,elem{@${\ldots} @emph{同前} @${\ldots}})
+      (if-exp (exp1 exp2 exp3) @#,elem{@${\ldots} @emph{同前} @${\ldots}})
+      (call-exp (rator rand) @#,elem{@${\ldots} @emph{同前} @${\ldots}})
+
+      (nameless-var-exp (n)
+        (apply-nameless-env nameless-env n))
+
+      (nameless-let-exp
+        (exp1 body)
+        (let ((val (value-of exp1 nameless-env)))
+          (value-of body
+            (extend-nameless-env val nameless-env))))
+
+      (nameless-proc-exp (body)
+        (proc-val
+          (procedure body nameless-env)))
+
+      (else
+        (report-invalid-translated-expression exp)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "无名解释器的" (tt "value-of")))]
+}
+
+最后是新的@tt{value-of-program}：
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Nameless\mbox{-}program} \to \mathit{ExpVal}}}
+(define value-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (value-of exp1 (init-nameless-env))))))
+]
+
+@exercise[#:level 1 #:tag "ex3.38"]{
+
+扩展词法地址翻译器和解释器，处理练习3.12中的@tt{cond}。
+
+}
+
+@exercise[#:level 1 #:tag "ex3.39"]{
+
+扩展词法地址翻译器和解释器，处理练习3.18中的@tt{pack}。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.40"]{
+
+扩展词法地址翻译器和解释器，处理@tt{letrec}。修改@tt{translation-of}的上下文参数，
+不仅记录每个绑定变量名，也记录变量是否由@tt{letrec}绑定。对@tt{letrec}绑定变量的
+引用，生成一种新的引用，名为@tt{nameless-letrec-var-exp}。然后可以继续用上面的无
+名环境表示法，而解释器要对@tt{nameless-letrec-var-exp}做适当处理。
+
+}
+
+@exercise[#:level 2 #:tag "ex3.41"]{
+
+修改词法地址翻译器和解释器，处理多参数的@tt{let}表达式，过程和过程调用，像练习
+3.21那样。用肋排表示法（练习2.21）表示无名环境。在这种表示法中，词法地址包含两个
+非负数：词深指示跨过的等深线数目，与之前相同；@emph{位置} (@emph{position})指示
+变量在声明中的位置。
+
+}
+
+@exercise[#:level 3 #:tag "ex3.42"]{
+
+修改词法地址翻译器和解释器，处理练习3.26中的瘦身过程表示法。要完成这点，你不能在
+@tt{extend-senv @${var} @${senv}}中翻译过程的主体，而是在一个新的静态环境中，它
+准确标明了各个变量在瘦身表示法中的位于何处。
+
+}
+
+@exercise[#:level 3 #:tag "ex3.43"]{
+
+翻译器不仅仅可以记录变量的名字。例如，考虑程序：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 3
+in let f = proc (y) -(y,x)
+   in (f 13)
+}|
+}
+
+这里，我们不必运行就能看出：在过程调用处，@tt{f}绑定到一个过程，其主体为
+@tt{-(y,x)}，@tt{x}的值与过程创建处相同。因此我们完全可以避免在环境中查找@tt{f}。
+扩展翻译器，记录“已知过程”，为这样的过程生成代码，避免搜索环境。
+
+}
+
+@exercise[#:level 3 #:tag "ex3.44"]{
+
+在前一个例子中，@tt{f}的唯一用途是作为一个已知过程。因此，由表达式@tt{proc (y)
+-(y,x)}产生的过程从未使用。修改解释器，避免产生这样的过程。
+
+}
