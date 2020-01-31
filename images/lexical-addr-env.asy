@@ -39,9 +39,9 @@ draw(shift(4*l)*(l*1.5,-w*1.5)--shift(4*l)*(l*1.5,-w*3), arrow=Arrow(size=ah));
 draw(shift(0,2*l)*a_arrow,arrow=Arrow(size=ah));
 
 label("$\mathit{saved\mbox{-}env}$",shift(4*l)*(l*4,w/2),align=E);
-label("\tt{y}$\phantom{\mathit{l}}$",(l*0.5,-w*3),align=S);
+label("$\phantom{\mathit{l}}$\tt{y}$\phantom{\mathit{l}}$",(l*0.5,-w*3),align=S);
 label("$\mathit{val_2}$",(l*1.5,-w*3),align=S);
-label("\tt{x}$\phantom{\mathit{l}}$",shift(4*l)*(l*0.5,-w*3),align=S);
+label("$\phantom{\mathit{l}}$\tt{x}$\phantom{\mathit{l}}$",shift(4*l)*(l*0.5,-w*3),align=S);
 label("$\mathit{val_1}$",shift(4*l)*(l*1.5,-w*3),align=S);
 
 shipout(bbox(currentpicture, 2, 2, filltype=Draw(2, 2), p=invisible));
