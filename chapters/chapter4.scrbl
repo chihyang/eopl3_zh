@@ -149,3 +149,41 @@ in let a = (g 11)
 }
 }
 
+@exercise[#:level 1 #:tag "ex4.1"]{
+
+如果程序写成下面这样会怎样？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let g = proc (dummy)
+          let counter = newref(0)
+          in begin
+             setref(counter, -(deref(counter), -1));
+             deref(counter)
+          end
+in let a = (g 11)
+   in let b = (g 11)
+      in -(a,b)
+}|
+}
+
+}
+
+在EXPLICIT-REFS中，我们可以存储任何表达值。引用也是表达值。这意味着我们可以在一
+个位置存储引用。考虑下面的程序：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = newref(newref(0))
+in begin
+    setref(deref(x), 11);
+    deref(deref(x))
+end
+}|
+}
+
+这段程序分配了一个新位置，内容为0。然后，它将@tt{x}绑定到一个位置，其内容为指向
+第一个位置的引用。因此，@tt{deref(x)}的值是第一个位置的引用。那么程序求值
+@tt{setref}时，会修改第一个位置，整个程序返回11。
+
+@subsection[#:tag "s4.2.1"]{存储器传递规范}
