@@ -28,12 +28,18 @@
 (define eopl-figure
   (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
 
+(define eopl-subfigure
+  (make-style "EoplSubfigure" (list (make-tex-addition "../style/subfigure.tex"))))
+
 (define exer
   (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex")
                                  (make-css-addition "../style/exercise.css"))))
 
 (define two-columns
   (make-style "TwoColumns" (list (make-tex-addition "../style/two-columns.tex"))))
+
+(define samepage
+  (make-style "Samepage" (list (make-tex-addition "../style/samepage.tex"))))
 
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
