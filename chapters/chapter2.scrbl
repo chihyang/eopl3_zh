@@ -1208,6 +1208,7 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
 @elem[#:style question]{程序}就会将其显示为列表形式的具体语法。这由
 @tt{unparse-lc-exp}完成：
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{unparse-lc-exp}} : @${\mathit{LcExp} \to \mathit{SchemeVal}}}
 (define unparse-lc-exp
@@ -1224,6 +1225,7 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
             (list (unparse-lc-exp rator)
                   (unparse-lc-exp rand))))))
 ]
+}
 
 @exercise[#:level 1 #:tag "ex2.27"]{
 

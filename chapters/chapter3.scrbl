@@ -606,7 +606,7 @@ in let y = 2
 只要满足@secref{rsdt}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
 建指定的初始环境，由@tt{value-of-program}使用。
 
-@nested[#:style 'code-inset]{
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{init-env}} : @${() \to \mathit{Env}}}
 @#,elem{@bold{用法} : @tt{(init-env)} = @tt{[i=@${\lceil}1@${\rceil},v=@${\lceil}5@${\rceil},x=@${\lceil}10@${\rceil}]}}
@@ -1165,7 +1165,7 @@ in let f = proc (z) -(z,x)
 在完整的实现中，我们向数据类型@tt{expval}添加一种变体：
 
 @nested{
-
+@nested[#:style samepage]{
 @racketblock[
 (define-datatype exp-val exp-val?
   (num-val
@@ -1175,6 +1175,7 @@ in let f = proc (z) -(z,x)
   (proc-val
     (val proc?)))
 ]
+}
 
 同时向@tt{value-of}添加两条新语句：
 
@@ -1773,6 +1774,7 @@ in let fact = proc (n)
 
 @tt{letrec}声明的变量也要绑定到声明右边。
 
+@nested[#:style samepage]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (value-of
@@ -1782,6 +1784,7 @@ in let fact = proc (n)
     |@${letrec\mbox{-}body}
     (extend-env-rec |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${\rho}))
 }|
+}
 }
 
 绑定的@emph{期限} (@emph{extent})是指绑定保持的时长。在我们的语言中，就像在
@@ -1919,6 +1922,7 @@ in proc (x) -(x,1)
 
 这个过程的主体只能通过@tt{apply-procedure}求值：
 
+@nested[#:style samepage]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (apply-procedure
@@ -1927,6 +1931,7 @@ in proc (x) -(x,1)
 = (value-of <<-(x,a)>>
     [x=|@${\lceil}7|@${\rceil}][a=|@${\lceil}5|@${\rceil}]|@${\rho})
 }|
+}
 }
 
 每个变量又一次在词深预测的位置从环境中找到。
@@ -2079,6 +2084,7 @@ in proc (y)
 
 过程@tt{translation-of-program}在适当的初始静态环境中运行@tt{translation-of}。
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
 (define translation-of-program
@@ -2096,6 +2102,7 @@ in proc (y)
         (extend-senv 'x
           (empty-senv))))))
 ]
+}
 
 @nested[#:style eopl-figure]{
 
@@ -2223,6 +2230,7 @@ in proc (y)
 
 实现这一规范时可定义：
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{Proc}}}
 (define-datatype proc proc?
@@ -2239,6 +2247,7 @@ in proc (y)
         (value-of body
           (extend-nameless-env val saved-nameless-env))))))
 ]
+}
 
 现在，我们可以写出@tt{value-of}。它大部分与前一个解释器相同，但原先使用@tt{env}
 的地方现在用@tt{nameless-env}。但我们要处理新的部分：@tt{nameless-var-exp}，

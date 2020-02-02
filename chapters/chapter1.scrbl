@@ -62,6 +62,7 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 可以用该定义编写一个函数，判断一个自然数@${n}是否属于@${S}。
 
 @; codeblock with contracts and usage
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{in-S?}} : @${N \to Bool}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
@@ -72,6 +73,7 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
             (in-S? (- n 3))
             #f))))
 ]
+}
 @;
 
 这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? : @#,elem{@${N \to Bool}}]  @;contract
@@ -148,12 +150,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @;   @item{列表为序对，首项为整数，余项为整数列表。}
 @; ]
 @; }
+@nested[#:style samepage]{
 @env["sdef" #:opt (list (bracket "整数列表，自顶向下"))]{
   Scheme列表是整数列表，当且仅当：
  \begin{enumerate}
   \item 列表为空，或
   \item 列表为序对，首项为整数，余项为整数列表。
  \end{enumerate}
+}
 }
 
 我们用@${Int}表示所有整数的集合，用@List-of-Int[]表示所有整数列表
@@ -656,6 +660,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${List \to Int}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -667,6 +672,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 @; }
         ...)))
 ]
+}
 
 若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
 
@@ -846,6 +852,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 @tt{cons} 结合二者，通过表达式 @tt{(cons (car los) (remove-first s (cdr los)))}
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
 (define remove-first
@@ -858,6 +865,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
             (cons (car los) (remove-first s (cdr los)))))))
             @; }
 ]
+}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 
@@ -940,6 +948,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 的 @tt{if}，而是用 @tt{cond}。在 Scheme 中，若 @${exp_1} 或 @${exp_2} 返回真值，
 则@tt{(or @${exp_1} @${exp_2})} 返回真值。
 
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{occurs-free?}} : @${Sym \times LcExp \to Bool}}
 @#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
@@ -955,6 +964,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
       (occurs-free? var (car exp))
       (occurs-free? var (cadr exp))))))
 ]
+}
 
 这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
 中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在 2.5 节，我
@@ -1201,10 +1211,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
 @; codeblock with contracts and usage
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{partial-vector-sum}} : @${Vectorof(Int) \times Int \to Int}}
-@#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则
-         @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
+@#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
 (define partial-vector-sum
   (lambda (v n)
     (if (zero? n)
@@ -1212,6 +1222,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (+ (vector-ref v n)
            (partial-vector-sum v (- n 1))))))
 ]
+}
 @;
 
 由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0

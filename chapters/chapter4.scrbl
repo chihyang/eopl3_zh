@@ -132,11 +132,20 @@ in let a = (g 11)
 这里，过程@tt{g}保留了一个私有变量，用来存储@tt{g}被调用的次数。因此，第一次调用
 @tt{g}返回1，第二次返回2，整个程序的值为@${-1}。
 
+@nested[#:style samepage]{
 下图是@tt{g}绑定时所在的环境。
 
+@nested{
 @centered{
 @(image "../images/g-bound"
   #:scale 0.95
   #:suffixes (list ".pdf" ".svg")
   "g绑定时的环境")
 }
+
+可以认为，这是在@tt{g}的不同调用之间共享信息。Scheme过程@tt{gensym}用这种技术创
+建唯一符号。
+
+}
+}
+
