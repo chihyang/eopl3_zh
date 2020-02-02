@@ -68,17 +68,30 @@ specification})。扫描器取一字符序列，生成词牌序列。
 造机是一程序，取一词法规范和语法，生成一扫描器和解析器。
 
 @nested[#:style eopl-figure]{
-@centered{
-@(image "../images/exe-via-interpreter"
-  #:suffixes (list ".pdf" ".svg")
-  "由解释器执行")
-}
 
-@centered{
-@(image "../images/exe-via-compiler"
-  #:suffixes (list ".pdf" ".svg")
-  "由解释器执行")
-}
+ @nested[#:style eopl-subfigure]{
+ @centered{
+ @(image "../images/exe-via-interpreter"
+   #:suffixes (list ".pdf" ".svg")
+   "由解释器执行")
+ }
+
+ @make-nested-flow[
+  (make-style "caption" (list 'multicommand))
+  (list (para "由解释器执行"))]
+ }
+
+ @nested[#:style eopl-subfigure]{
+ @centered{
+ @(image "../images/exe-via-compiler"
+   #:suffixes (list ".pdf" ".svg")
+   "由编译器执行")
+ }
+
+ @make-nested-flow[
+  (make-style "caption" (list 'multicommand))
+  (list (para "由编译器执行"))]
+ }
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
