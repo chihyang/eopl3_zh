@@ -245,21 +245,19 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 实现之前，我们先写出这些过程的行为规范。依照解释器秘方，我们希望@tt{value-of}查
 看表达式，判断其类别，然后返回恰当的值。
 
-@racketblock[
-(value-of (const-exp @#,elem{@${n}}) @#,elem{@${\rho}}) = (num-val @#,elem{@${n}})
-]
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of (const-exp |@${n}) |@${\rho}) = (num-val |@${n})
 
-@racketblock[
-(value-of (var-exp @#,elem{@${var}}) @#,elem{@${\rho}}) = (apply-env @#,elem{@${\rho}} @#,elem{@${var}})
-]
+(value-of (var-exp |@${var}) |@${\rho}) = (apply-env |@${\rho} |@${var})
 
-@racketblock[
-(value-of (diff-exp @#,elem{@${exp_1}} @#,elem{@${exp_2}}) @#,elem{@${\rho}})
+(value-of (diff-exp |@${exp_1} |@${exp_2}) |@${\rho})
 = (num-val
     (-
-      (expval->num (value-of @#,elem{@${exp_1}} @#,elem{@${\rho}}))
-      (expval->num (value-of @#,elem{@${exp_2}} @#,elem{@${\rho}}))))
-]
+      (expval->num (value-of |@${exp_1} |@${\rho}))
+      (expval->num (value-of |@${exp_2} |@${\rho}))))
+}|
+}
 
 任何环境中，常量表达式的值都是该常量。某一环境中，变量引用的值须在其中查询该变量
 得到。某一环境中，差值表达式的值为第一个操作数在该环境中的值减去第二个在该环境中

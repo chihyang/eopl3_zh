@@ -380,15 +380,26 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，@${Int^{*(c)}} 表示
 一个序列，包含任意数量的非终止符@${Int}元素，以非空字符序列 @${c} 分隔。这也包含
 没有元素的情况。如果有 0 个元素，得到的是空字符串。例如，@${Int^{*(,)}} 包含字符
-串@verbatim[#:indent 2]{
-  8
-  14, 12
-  7, 3, 14, 16
+串
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+8
+14, 12
+7, 3, 14, 16
+}|
 }
-@${Int^{*(;)}} 包含字符串@verbatim[#:indent 2]{
-  8
-  14; 12
-  7; 3; 14; 16
+
+@${Int^{*(;)}} 包含字符串
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+8
+14; 12
+7; 3; 14; 16
+}|
+}
 }
 
 这些简写不是必需的，总能够不用它们重写语法。
@@ -512,8 +523,8 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
  @codeblock{((lambda (x) (+ x 5)) (- x 7))}
 
- 中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。1.2.4 节中
- 介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
+ 中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。
+ @secref{o-f}节中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
 
  该语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序来处理它们。
 
@@ -648,7 +659,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${List \to Int}}
-@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
+@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@emph{的长度}}}
 (define list-length
   (lambda (lst)
     ...))
@@ -690,12 +701,14 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
 
-@tt{(list-length '(a (b c) d))@linebreak[]
- = (+ 1 (list-length '((b c) d)))@linebreak[]
- = (+ 1 (+ 1 (list-length '(d))))@linebreak[]
- = (+ 1 (+ 1 (+ 1 (list-length '()))))@linebreak[]
- = (+ 1 (+ 1 (+ 1 0)))@linebreak[]
- = 3}
+@verbatim|{
+  (list-length '(a (b c) d))
+= (+ 1 (list-length '((b c) d)))
+= (+ 1 (+ 1 (list-length '(d))))
+= (+ 1 (+ 1 (+ 1 (list-length '()))))
+= (+ 1 (+ 1 (+ 1 0)))
+= 3
+}|
 
 @subsection[#:tag "n-e"]{@tt{nth-element}}
 
@@ -752,11 +765,13 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 来看看 @tt{nth-element} 如何算出答案：
 
-@tt{(nth-element '(a b c d e) 3)@linebreak[]
-    = (nth-element   '(b c d e) 2)@linebreak[]
-    = (nth-element     '(c d e) 1)@linebreak[]
-    = (nth-element       '(d e) 0)@linebreak[]
-    = d}
+@verbatim|{
+  (nth-element '(a b c d e) 3)
+= (nth-element   '(b c d e) 2)
+= (nth-element     '(c d e) 1)
+= (nth-element       '(d e) 0)
+= d
+}|
 
 @tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
 
@@ -1137,8 +1152,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @; @racketblock with contracts and usage
 @racketblock[
 @#,elem{@bold{@tt{number-elements-from}} : @m{Listof(SchemeVal) \times Int \to Listof(List(Int, SchemeVal))}}
-@#,elem{@bold{用法} : @tt{(number-elements-from '(@m{v_0} @m{v_1} @m{v_2} ...) n) @linebreak[]
-           = ((@m{n} @m{v_0}) (@m{n + 1} @m{v_1}) (@m{n + 2} @m{v_2}) ...)}}
+@#,elem{@${\begin{alignedat}{-1}@bold{用法} : &@tt{(number-elements-from '(@${v_0} @${v_1} @${v_2} ...) n)} \\ &\hphantom{x}= @tt{((@${n} @${v_0}) (@${n + 1} @${v_1}) (@${n + 2} @${v_2}) ...)}\end{alignedat}}}
 (define number-elements-from
   (lambda (lst n)
     (if (null? lst) '()

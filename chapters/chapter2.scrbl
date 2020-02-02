@@ -1122,8 +1122,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 例如，定义1.1.8指定集合lambda演算表达式，用的就是lambda演算表达式的具体语法。我
 们可以用其他具体语法表示lambda演算表达式。例如，可以用
 
-
-@nested[#:style 'noindent]{
+@nested{
 
 @envalign*{Lc\mbox{-}exp &::= Identifier \\
                          &::= @tt{proc @m{Identifier} @tt{=>} @m{Lc\mbox{-}exp}} \\
