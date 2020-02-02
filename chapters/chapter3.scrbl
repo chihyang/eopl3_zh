@@ -12,9 +12,10 @@
 
 @title[#:style 'numbered #:tag "expr"]{表达式}
 
-本章研究变量绑定和作用域。我们用一系列小型语言解释这些概念。我们为这些语言写出规
-范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为@emph{环
-境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的含义。
+本章研究变量绑定和及其作用范围。我们用一系列小型语言解释这些概念。我们为这些语言
+写出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为
+@emph{环境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的含
+义。
 
 @section[#:tag "s3.1"]{规范和实现策略}
 
@@ -98,7 +99,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
  (list (para "语言处理系统块状图"))]
 }
 
-大多数主流语言都有解析器制造系统。如果没有解析器制造机，或者没有适用的，可以手写
+大多数主流语言都有解析器制造系统。如果没有解析器制造机，或者没有合适的，可以手写
 扫描器和解析器。编译器教材描述了这一过程。我们使用的解析技术及相关语法设计从简，
 专门满足我们的需求。
 
@@ -578,8 +579,8 @@ in let y = 2
 @subsection[#:tag "s3.2.8"]{实现LET的规范}
 
 接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{见
-@elem[#:style question]{附录B}}作为前端，表达式用图3.6中的数据类型表示。我们的实
-现中，表达值的表示如图3.7所示。数据类型声明了构造器@tt{num-val}和@tt{bool-val}，
+@elem[#:style question]{附录B}。}作为前端，表达式用图3.6中的数据类型表示。我们的
+实现中，表达值的表示如图3.7所示。数据类型声明了构造器@tt{num-val}和@tt{bool-val}，
 用来将整数和布尔值转换为表达值。我们还定义了抽词器，用来将表达值转为整数或布尔值。
 如果表达值类型不符预期，则抽词器报错。
 
@@ -1734,9 +1735,9 @@ in let fact = proc (n)
 明@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例的乘式@tt{(* x y)}中，内层
 @tt{x}遮蔽了外层的。
 
-词法作用范围是嵌套式的：每个作用范围完全包裹在另一个里面。我们用@emph{等深线}
-(@emph{contour diagram})解释这点。图3.13展示了上例的等深线。每个作用范围用一个框
-圈起来，垂线连接声明与其作用范围。
+词法作用范围是嵌套式的：每个作用范围完全包裹在另一个里面。我们用@deftech{等深线}
+(@emph{contour diagram})解释这点。图3.13展示了上例的@tech{等深线}。每个作用范围
+用一个框圈起来，垂线连接声明与其作用范围。
 
 图3.14展示了一个更复杂的程序，绘有等深线。这里面，在第5，第7和第8行，表达式
 @tt{(+ x y z)}出现了三次。第5行在@tt{x2}和@tt{z2}的作用范围内，@tt{x2}和@tt{z2}
@@ -2260,13 +2261,14 @@ in proc (y)
 ]
 }
 
-现在，我们可以写出@tt{value-of}。它大部分与前一个解释器相同，但原先使用@tt{env}
-的地方现在用@tt{nameless-env}。但我们要处理新的部分：@tt{nameless-var-exp}，
-@tt{nameless-let-exp}和@tt{nameless-proc-exp}，它们分别对应并取代@tt{var-exp}，
-@tt{let-exp}和@tt{proc-exp}。实现如图3.18所示。@tt{nameless-var-exp}用于环境查询。
-@tt{nameless-let-exp}先求出式子右边的@${exp_1}，然后用式子右边的值扩展环境，并在
-该环境内求值主体。这和@tt{let}做的相同，只是没有变量。@tt{nameless-proc}生成一个
-@tt{proc}，随后可供@tt{apply-procedure}使用。
+现在，我们可以写出@tt{value-of}。它大部分与前一个解释器相同，只是原先使用
+@tt{env}的地方现在用@tt{nameless-env}。但我们要处理新的部分：
+@tt{nameless-var-exp}，@tt{nameless-let-exp}和@tt{nameless-proc-exp}，它们分别对
+应并取代@tt{var-exp}，@tt{let-exp}和@tt{proc-exp}。实现如图3.18所示。
+@tt{nameless-var-exp}用于环境查询。@tt{nameless-let-exp}先求出式子右边的
+@${exp_1}，然后用式子右边的值扩展环境，并在该环境内求值主体。这和@tt{let}做的相
+同，只是没有变量。@tt{nameless-proc}生成一个@tt{proc}，随后可供
+@tt{apply-procedure}使用。
 
 @nested[#:style eopl-figure]{
 
