@@ -55,6 +55,17 @@
 [
 ] % after-code
 
+\usepackage{xpatch}
+\makeatletter
+\AtBeginDocument{\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}}
+\makeatother
+
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup[figure]{labelfont=bf, labelsep=quad, name=图}
+
+\usepackage[perpage]{footmisc}
+
 \usepackage{hyperref}
 \hypersetup{
   pdfauthor={Daniel P. Friedman, Mitchell Wand},
@@ -67,14 +78,3 @@
   linkcolor=black,
   citecolor=red
 }
-
-\usepackage{xpatch}
-\makeatletter
-\AtBeginDocument{\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}}
-\makeatother
-
-\usepackage{caption}
-\usepackage{subcaption}
-\captionsetup[figure]{labelfont=bf, labelsep=quad, name=图}
-
-\usepackage[perpage]{footmisc}

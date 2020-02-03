@@ -286,7 +286,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
   @item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
-  @item{@m{\textnormal{\lbrack}\star\star\star\textnormal{\rbrack}} @m{\quad}
+  @item{@m{\textnormal{\lbrack}\mathord{\star}\mathord{\star}\mathord{\star}\textnormal{\rbrack}} @m{\quad}
   @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
 
  ]
