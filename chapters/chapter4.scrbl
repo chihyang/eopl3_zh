@@ -494,10 +494,10 @@ Scheme中的效果建模效果。
 Scheme程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避免这
 种依赖。在这个解释器中，@tt{value-of}同时返回值和存储器，就像规范中那样。这个解
 释器的片段如图4.6所示。我们称之为@emph{传递存储器的解释器} (@emph{store-passing
-interpreter})。扩展这个解释器，覆盖整个EXPLICIT-REFS语言。
+interpreter})。补全这个解释器，处理整个EXPLICIT-REFS语言。
 
-可能修改存储器的每个过程不仅返回通常的值，还要返回一个新的存储器。它们包含在名为
-@tt{answer}的数据类型之中。完成这个@tt{value-of}定义。
+过程可能修改存储器时，不仅返回通常的值，还要返回一个新的存储器。它们包含在名为
+@tt{answer}的数据类型之中。完成这个@tt{value-of}的定义。
 
 }
 
@@ -543,18 +543,18 @@ in let f = proc (z) let zz = newref(-(z,deref(x)))
                     in deref(zz)
    in -((f 66), (f 55))")
 
-entering let x
-newref: allocating location 0
-entering body of let x with env =
+进入 let x
+newref: 分配位置 0
+进入 let x 主体，env =
 ((x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22)))
 
-entering let f
-entering body of let f with env =
+进入 let f
+进入 let f 主体，env =
 ((f
   (procedure
    z
@@ -567,16 +567,16 @@ entering body of let f with env =
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22)))
 
-entering body of proc z with env =
+进入 proc z 主体，env =
 ((z #(struct:num-val 66))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22)))
 }|
 
@@ -588,37 +588,37 @@ store =
 @nested[#:style eopl-figure]{
 @verbatim|{
 
-entering let zz
-newref: allocating location 1
-entering body of let zz with env =
+进入 let zz
+newref: 分配位置 1
+进入 let zz 主体，env =
 ((zz #(struct:ref-val 1))
  (z #(struct:num-val 66))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22)) (1 #(struct:num-val 44)))
 
-entering body of proc z with env =
+进入 proc z 主体，env =
 ((z #(struct:num-val 55))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22)) (1 #(struct:num-val 44)))
 
-entering let zz
-newref: allocating location 2
-entering body of let zz with env =
+进入 let zz
+newref: 分配位置 2
+进入 let zz 主体，env =
 ((zz #(struct:ref-val 2))
  (z #(struct:num-val 55))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
  (x #(struct:num-val 10)))
-store =
+存储器 =
 ((0 #(struct:num-val 22))
  (1 #(struct:num-val 44))
  (2 #(struct:num-val 33)))
@@ -636,11 +636,10 @@ store =
 @racketblock[
 (define-datatype answer answer?
   (an-answer
-   (val exp-val?)
-   (store store?)))
+    (val exp-val?)
+    (store store?)))
 
-@#,elem{@bold{@tt{value-of!}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Sto} \to \mathit{ExpVal}}}
-@#,elem{@bold{用法} : 把位置@tt{ref}处的值设为@tt{val}，此外@tt{the-store}与原状态相同。}
+@#,elem{@bold{@tt{value-of}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Sto} \to \mathit{ExpVal}}}
 (define value-of
   (lambda (exp env store)
     (cases expression exp
