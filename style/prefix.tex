@@ -5,7 +5,13 @@
 \setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
 \setCJKsansfont{Adobe Song Std}
 \setCJKmonofont{Adobe Song Std}
-\xeCJKsetup{CJKmath=true, PlainEquation=true}
+\xeCJKDeclarePunctStyle{mine}{
+  enabled-hanging=true,
+}
+\xeCJKsetup{CJKmath=true, PlainEquation=true, PunctStyle=mine}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}[BoldFont={WenQuanYi Micro Hei}, ItalicFont={TeX Gyre Pagella}]
+\setsansfont{TeX Gyre Pagella}
 \usepackage[T1]{fontenc}
 \usepackage{emptypage}
 

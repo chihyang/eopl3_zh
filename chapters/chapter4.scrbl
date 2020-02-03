@@ -102,7 +102,7 @@ in letrec even(dummy)
 }
 
 这个程序使用能声明多个变量的@tt{letrec}（练习3.32）以及@tt{begin}表达式（练习
-4.4）。@tt{begin}表达式按顺序求值每个子表达式，并返回最后一个的值。
+4.4）。@tt{begin}表达式按顺序求每个子表达式的值，并返回最后一个的值。
 
 }
 
@@ -187,3 +187,485 @@ end
 @tt{setref}时，会修改第一个位置，整个程序返回11。
 
 @subsection[#:tag "s4.2.1"]{存储器传递规范}
+
+在我们的语言中，任何表达式都可以有效果。要定义这些效果，我们需要描述每次求值使用
+什么样的存储器，以及求值如何修改存储器。
+
+在规范中，我们用@${\sigma}表示存储器。我们用
+@${\textnormal{\lbrack}l=v\textnormal{\rbrack}\sigma}表示存储器，它与@${\sigma}
+类似，只是将位置@${l}映射到@${v}。有时，指代@${\sigma}的某个具体值时，我们称之为
+存储器的@emph{状态} (@emph{state})。
+
+我们使用@emph{存储器传递规范} (@emph{store-passing specifications})。在存储器传
+递规范中，存储器直接作为参数传递给@tt{value-of}，并作为@tt{value-of}的结果返回。
+那么我们可以写：
+
+@nested{
+
+@$${@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
+
+它断定表达式@${exp_1}在环境为@${\rho}，存储器状态为@${\sigma_0}求值时，返回值
+@${val_1}，并且可能把存储器改成不同的状态@${\sigma_1}。
+
+}
+
+那么我们可以写
+
+@nested{
+
+@$${@tt{(value-of (const-exp @${n}) @${\rho} @${\sigma})} = @tt{(@${n},@${\sigma})}}
+
+来指定@tt{const-exp}这样无效果的操作。这表明求值该表达式时，存储器不变。
+
+}
+
+@tt{diff-exp}的规范展示了如何定义有序行为。
+
+@nested{
+
+@$${\infer{@tt{(value-of (diff-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0})} =
+           @tt{(@${\lceil\lfloor val_1 \rfloor\rceil - \lceil\lfloor val_2 \rfloor\rceil},@${\sigma_2})}}
+          {\begin{alignedat}{-1}
+             @tt{(value-of (diff-exp @${exp_1}) @${\rho} @${\sigma_0})} &= @tt{(@${val_1},@${\sigma_1})} \\
+             @tt{(value-of (diff-exp @${exp_2}) @${\rho} @${\sigma_1})} &= @tt{(@${val_2},@${\sigma_2})}
+           \end{alignedat}}}
+
+这里，我们从状态为@${\sigma_0}的存储器开始，首先求值@${exp_1}。@${exp_1}返回值为
+@${val_1}，而且它可能有效果，把存储器状态改为@${\sigma_1}。然后我们求值@${exp_2}，
+这时存储器的状态由@${exp_1}修改过，也就是@${\sigma_1}。@${exp_2}同样返回一个值
+@${val_2}，并把存储器状态改为@${\sigma_2}。之后，整个表达式返回@${val_1 - val2}，
+不再更改存储器，所以存储器状态留在@${\sigma_2}。
+
+}
+
+再来看看条件表达式。
+
+@$${
+\infer{\begin{alignedat}{-1}
+         &@tt{ (value-of (if-exp @${exp_1} @${exp_2} @${exp_3}) @${\rho} @${\sigma_0}) } \\
+         &\hphantom{xx}= \begin{cases}
+                          @tt{(value-of @${exp_2} @${\rho} @${\sigma_1})} & 若 @tt{(expval->bool @${val_1})} = @tt{#t} \\
+                          @tt{(value-of @${exp_3} @${\rho} @${\sigma_1})} & 若 @tt{(expval->bool @${val_1})} = @tt{#f} \hphantom{x}
+                        \end{cases}
+       \end{alignedat}}
+      {@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
+}
+
+从状态@${\sigma_0}开始，@tt{if-exp}求值条件表达式@${exp_1}，返回值为@${val_1}，
+存储器状态改为@${\sigma_1}。整个表达式的结果可能是@${exp_2}或@${exp_3}的结果，二
+者都在当前环境@${\rho}中求值，此时存储器状态是@${exp_1}留下的@${\sigma_1}。
+
+@exercise[#:level 1 #:tag "ex4.2"]{
+
+写出@tt{zero?-exp}的规范。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.3"]{
+
+写出@tt{call-exp}的规范。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.4"]{
+
+写出@tt{begin}表达式的规范。
+
+@nested{
+@$${\mathit{Expression} ::= @tt{begin @${\mathit{Expression}} @${\{}@tt{; }@${\mathit{Expression}}@${\}^{*}} end}}
+}
+
+@tt{begin}表达式可能包含一个或多个子表达式，由分号分隔。这些子表达式按顺序求值，
+最后一个的作为返回值。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.5"]{
+
+写出@tt{list}（练习3.10）的规范。
+
+}
+
+@subsection[#:tag "s4.2.2"]{指定显式引用操作}
+
+在EXPLICIT-REFS中，我们必须定义三个操作：@tt{newref}，@tt{deref}和@tt{setref}。
+它们的语法为：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{newref (@m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{newref-exp (exp1)}} \\[5pt]
+        \mathit{Expression} &::= @tt{deref (@m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{deref-exp (exp1)}} \\[5pt]
+        \mathit{Expression} &::= @tt{setref (@m{\mathit{Expression}} , @m{\mathit{Expression}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{setref-exp (exp1 exp2)}}}
+
+这些操作的行为定义如下。
+
+@$${
+\infer{@tt{(value-of (newref-exp @${exp}) @${\rho} @${\sigma_0}) =
+           ((ref-val @${l}),[@${l}=@${val}]@${\sigma_1})}}
+      {@tt{(value-of @${exp} @${\rho} @${\sigma_0})} = @tt{(@${val},@${\sigma_1})} \quad l \notin dom(\sigma_1)}
+}
+
+这条规则是说@tt{newref-exp}求操作数的值。它扩展得到的存储器：新分配一个位置@${l}，
+把它的参数值@${val}放到那个位置。然后它返回新位置@${l}的引用。这是说@${l}不在
+@${\sigma_1}的定义域内。
+
+@$${
+\infer{@tt{(value-of (deref-exp @${exp}) @${\rho} @${\sigma_0}) =
+           (@${\sigma_1(l)},@${\sigma_1})}}
+      {@tt{(value-of @${exp} @${\rho} @${\sigma_0})} = @tt{(@${val},@${\sigma_1})}}
+}
+
+这条规则是说@tt{deref-exp}求操作数的值，把存储器状态改为@${\sigma_1}。参数的值应
+是位置@${l}的引用。然后@tt{deref-exp}返回@${\sigma_1}中@${l}处的内容，不再更改存
+储器。
+
+@$${
+\infer{@tt{(value-of (setref-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0}) =
+           (@${\lceil 23 \rceil},[@${l}=@${val}]@${\sigma_2})}}
+      {\begin{gathered}
+        @tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${l},@${\sigma_1})} \\
+        @tt{(value-of @${exp_2} @${\rho} @${\sigma_1})} = @tt{(@${val},@${\sigma_2})}
+       \end{gathered}}
+}
+
+这条规则是说@tt{setref-exp}从左到右求操作数的值。第一个操作数的值必须是某个位置
+@${l}的引用。然后@tt{setref-exp}把第二个参数的值@${val}放到位置@${l}处，从而更新
+存储器。@tt{setref-exp}应该返回什么呢？它可以返回任何值。为了突出这种随机性，我
+们让它返回23。因为我们对@tt{setref-exp}的返回值不感兴趣，我们说这个表达式的执行
+@emph{求效果} (@emph{for effect})而不求值。
+
+@exercise[#:level 1 #:tag "ex4.6"]{
+
+修改上面的规则，让@tt{setref-exp}返回右边表达式的值。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.7"]{
+
+修改上面的规则，让@tt{setref-exp}返回位置原有内容。
+
+}
+
+@subsection[#:tag "s4.2.3"]{实现}
+
+我们当前使用的规范语言可以轻松描述有效果的计算的行为，但是它没有体现存储器的一个
+要点：引用最终指向现实世界存在的内存中一个真实的位置。因为我们只有一个现实世界，
+我们的程序只能记录存储器的一个状态@${\sigma}。
+
+在我们的实现中，我们利用这一事实，用Scheme中的存储器建模存储器。这样，我们就能用
+Scheme中的效果建模效果。
+
+我们用一个Scheme值表示存储器状态，但是我们不像规范建议的那样直接传递和返回它，相
+反，我们在一个全局变量中记录状态，实现代码中的所有过程都能访问它。这很像在示例程
+序@tt{even/odd}中，我们使用共享位置，而不是直接传递参数。使用单一全局变量时，我
+们也几乎不需要理解Scheme中的效果。
+
+我们还是要确定如何用Scheme值建模存储器。我们的选择可能是最简单的模型：以表达值列
+表作为存储器，以代表列表位置的数字表示引用。分配新引用就是给列表末尾添加新值；更
+新存储器则是尽量复制列表中需要的部分。代码如图4.1和4.2所示。
+
+这种表示法极其低效。一般的内存操作大致要在常数时间内完成，但是用我们的表示法，这
+些操作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但是这足以达到
+我们的目的。
+
+我们给数据类型表达值新增一种变体@tt{ref-val}，然后修改@tt{value-of-program}，在
+每次求值之前初始化存储器。
+
+@nested{
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{SchemeVal}}}
+(define value-of-program
+  (lambda (pgm)
+    (initialize-store!)
+    (cases program pgm
+      (a-program (exp1)
+        (value-of exp1 (init-env))))))
+]
+
+现在，我们可以写出@tt{value-of}中与@tt{newref}，@tt{deref}和@tt{setref}相关的语
+句。这些语句如图4.3所示。
+
+}
+
+我们可以给该系统添加一些辅助过程，把环境、过程和存储器转换为更易读的形式，也可以
+增强系统，在代码中的关键位置打印消息。我们还使用过程把环境、过程和存储器转换为更
+易读的形式。得出的日志详细描述了系统的动作。典型例子如图4.4和4.5所示。此外，这个
+跟踪日志还标明差值表达式的参数从左到右进行求值。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{empty-store}} : @${() \to \mathit{Sto}}}
+(define empty-store
+  (lambda () '()))
+
+@#,elem{@bold{用法} : Scheme变量，包含存储器当前的状态。初始值无意义。}
+(define the-store 'uninitialized)
+
+@#,elem{@bold{@tt{get-store}} : @${() \to \mathit{Sto}}}
+(define get-store
+  (lambda () the-store))
+
+@#,elem{@bold{@tt{initialize-store!}} : @${() \to \mathit{Unspecified}}}
+@#,elem{@bold{用法} : @tt{(initialize-store!)}将存储器设为空。}
+(define initialize-store!
+  (lambda ()
+    (set! the-store (empty-store))))
+
+@#,elem{@bold{@tt{reference?!}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+(define reference?
+  (lambda (v)
+    (integer? v)))
+
+@#,elem{@bold{@tt{reference?}} : @${\mathit{ExpVal} \to \mathit{Ref}}}
+(define newref
+  (lambda (val)
+    (let ((next-ref (length the-store)))
+      (set! the-store (append the-store (list val)))
+      next-ref)))
+
+@#,elem{@bold{@tt{deref}} : @${\mathit{Ref} \to \mathit{ExpVal}}}
+(define deref
+  (lambda (ref)
+    (list-ref the-store ref)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "拙劣的存储器模型"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{setref!}} : @${\mathit{Ref} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
+@#,elem{@bold{用法} : 把位置@tt{ref}处的值设为@tt{val}，此外@tt{the-store}与原状态相同。}
+(define setref!
+  (lambda (ref val)
+    (set! the-store
+      (letrec ((setref-inner
+                 @#,elem{@bold{用法} : 返回一列表，在位置@tt{ref1}处值为@tt{val}，此外与@tt{store1}相同。}
+                 (lambda (store1 ref1)
+                   (cond
+                     ((null? store1)
+                      (report-invalid-reference ref the-store))
+                     ((zero? ref1)
+                      (cons val (cdr store1)))
+                     (else
+                       (cons
+                         (car store1)
+                         (setref-inner
+                           (cdr store1) (- ref1 1))))))))
+        (setref-inner the-store ref)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "拙劣的存储器模型，续"))]
+}
+
+@exercise[#:level 1 #:tag "ex4.8"]{
+
+指出我们实现的存储器中，到底是哪些操作花费了线性时间而非常数时间。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.9"]{
+
+用Scheme向量表示存储器，从而实现常数时间操作。用这种表示方法会失去什么？
+
+}
+
+@exercise[#:level 1 #:tag "ex4.10"]{
+
+实现练习4.4中定义的@tt{begin}表达式。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.11"]{
+
+实现练习4.5中的@tt{list}。
+
+}
+
+@exercise[#:level 3 #:tag "ex4.12"]{
+
+像解释器中展示的，我们对存储器的理解基于Scheme效果的含义。具体地说，我们得知道在
+Scheme程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避免这
+种依赖。在这个解释器中，@tt{value-of}同时返回值和存储器，就像规范中那样。这个解
+释器的片段如图4.6所示。我们称之为@emph{传递存储器的解释器} (@emph{store-passing
+interpreter})。扩展这个解释器，覆盖整个EXPLICIT-REFS语言。
+
+可能修改存储器的每个过程不仅返回通常的值，还要返回一个新的存储器。它们包含在名为
+@tt{answer}的数据类型之中。完成这个@tt{value-of}定义。
+
+}
+
+@exercise[#:level 3 #:tag "ex4.13"]{
+
+扩展前一道练习中的解释器，支持多参数过程。
+
+}
+
+@nested[#:style eopl-figure]{
+@codeblock[#:indent 11]{
+(newref-exp
+ (exp1)
+ (let ((v1 (value-of exp1 env)))
+   (ref-val (newref v1))))
+
+(deref-exp
+ (exp1)
+ (let ((v1 (value-of exp1 env)))
+   (let ((ref1 (expval->ref v1)))
+     (deref ref1))))
+
+(setref-exp
+ (exp1 exp2)
+ (let ((ref (expval->ref (value-of exp1 env))))
+   (let ((val2 (value-of exp2 env)))
+     (begin
+       (setref! ref val2)
+       (num-val 23)))))
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "value-of") "的显式引用操作语句"))]
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+> (run "
+let x = newref(22)
+in let f = proc (z) let zz = newref(-(z,deref(x)))
+                    in deref(zz)
+   in -((f 66), (f 55))")
+
+entering let x
+newref: allocating location 0
+entering body of let x with env =
+((x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22)))
+
+entering let f
+entering body of let f with env =
+((f
+  (procedure
+   z
+   ...
+   ((x #(struct:ref-val 0))
+    (i #(struct:num-val 1))
+    (v #(struct:num-val 5))
+    (x #(struct:num-val 10)))))
+ (x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22)))
+
+entering body of proc z with env =
+((z #(struct:num-val 66))
+ (x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22)))
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "EXPLICIT-REFS的求值跟踪日志"))]
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+entering let zz
+newref: allocating location 1
+entering body of let zz with env =
+((zz #(struct:ref-val 1))
+ (z #(struct:num-val 66))
+ (x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22)) (1 #(struct:num-val 44)))
+
+entering body of proc z with env =
+((z #(struct:num-val 55))
+ (x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22)) (1 #(struct:num-val 44)))
+
+entering let zz
+newref: allocating location 2
+entering body of let zz with env =
+((zz #(struct:ref-val 2))
+ (z #(struct:num-val 55))
+ (x #(struct:ref-val 0))
+ (i #(struct:num-val 1))
+ (v #(struct:num-val 5))
+ (x #(struct:num-val 10)))
+store =
+((0 #(struct:num-val 22))
+ (1 #(struct:num-val 44))
+ (2 #(struct:num-val 33)))
+
+#(struct:num-val 11)
+>
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "EXPLICIT-REFS的求值跟踪日志，续"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(define-datatype answer answer?
+  (an-answer
+   (val exp-val?)
+   (store store?)))
+
+@#,elem{@bold{@tt{value-of!}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Sto} \to \mathit{ExpVal}}}
+@#,elem{@bold{用法} : 把位置@tt{ref}处的值设为@tt{val}，此外@tt{the-store}与原状态相同。}
+(define value-of
+  (lambda (exp env store)
+    (cases expression exp
+      (const-exp (num)
+        (an-answer (num-val num) store))
+      (var-exp (var)
+        (an-answer
+          (apply-store store (apply-env env var))
+          store))
+      (if-exp (exp1 exp2 exp3)
+        (cases answer (value-of exp1 env store)
+          (an-answer (val new-store)
+            (if (expval->bool val)
+              (value-of exp2 env new-store)
+              (value-of exp3 env new-store)))))
+      (deref-exp
+        (exp1)
+        (cases answer (value-of exp1 env store)
+          (an-answer (v1 new-store)
+            (let ((ref1 (expval->ref v1)))
+              (an-answer (deref ref1) new-store)))))
+      ...)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "练习4.12，传递存储器的解释器"))]
+}
