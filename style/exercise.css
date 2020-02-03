@@ -1,0 +1,6 @@
+.MyExercise {
+}
+.MyExercise::before {
+  content: "Exercise ";
+  font-weight: bold;
+}
