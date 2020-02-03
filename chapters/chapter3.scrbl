@@ -189,7 +189,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 @itemlist[
 
- @item{@${\rho}@@elem[#:style question]{一环境}。}
+ @item{@${\rho}表示环境。}
 
  @item{@${\textnormal{\lbrack\rbrack}}表示空环境。}
 

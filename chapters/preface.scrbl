@@ -122,10 +122,10 @@ Haskell的编程经验。
 @; @difficulty[1]
 （标为[@${\star}]），困难者，须花费大量思考和编程工作（标为
 @; @difficulty[3]
-[@${\star\star\star}]）。大量关于应用，历史以及理论的材料潜藏其间。我们建议读一
-读每道习题，想一想如何解决它们。虽然我们用Scheme编写解释程序和转换系统，任何支持
-一等过程和赋值的语言（ML, Common Lisp, Python, Ruby等等）都足以完成本书练习。
-@linebreak{}
+[@${\mathord{\star}\mathord{\star}\mathord{\star}}]）。大量关于应用，历史以及理
+论的材料潜藏其间。我们建议读一读每道习题，想一想如何解决它们。虽然我们用Scheme编
+写解释程序和转换系统，任何支持一等过程和赋值的语言（ML, Common Lisp, Python,
+Ruby等等）都足以完成本书练习。@linebreak{}
 
 @exercise[#:level 1 #:tag "ex0.1"]{
 

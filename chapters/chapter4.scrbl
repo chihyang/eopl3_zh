@@ -413,12 +413,12 @@ Scheme中的效果建模效果。
   (lambda ()
     (set! the-store (empty-store))))
 
-@#,elem{@bold{@tt{reference?!}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+@#,elem{@bold{@tt{reference?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 (define reference?
   (lambda (v)
     (integer? v)))
 
-@#,elem{@bold{@tt{reference?}} : @${\mathit{ExpVal} \to \mathit{Ref}}}
+@#,elem{@bold{@tt{newref}} : @${\mathit{ExpVal} \to \mathit{Ref}}}
 (define newref
   (lambda (val)
     (let ((next-ref (length the-store)))
@@ -668,3 +668,81 @@ newref: 分配位置 2
  (make-style "caption" (list 'multicommand))
  (list (para "练习4.12，传递存储器的解释器"))]
 }
+
+@section[#:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
+
+显式引用设计清晰描述了内存的分配、索值和修改，因为所有这些操作直接出现在程序员的
+代码之中。
+
+大多数编程语言以同样的方式处理分配、索值和修改，并把它们打包为语言的一部分。这样，
+程序员不需要担心何时执行这些操作，因为它们存在于语言内部。
+
+在这种设计中，每个变量都表示一个引用。指代值是包含表达值的位置的引用。引用不再是
+表达值。它们只能作为变量绑定。
+
+@nested{
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
+\mathit{DenVal} &= \mathit{Ref(ExpVal)}
+}
+
+每次绑定操作都会分配一个位置：在每个过程调用处，在@tt{let}和@tt{letrec}中。
+
+}
+
+当变量出现在表达式中，我们首先在环境中搜索标识符，找出绑定的位置，然后在存储器中
+找出那个位置的值。因此对@tt{var-exp}，我们有个“双层”系统。
+
+一个位置的内容可用@tt{set}表达式修改，语法为：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{set @m{\mathit{Identifier}} = @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{assign-exp (var exp1)}}}
+
+这里的@${\mathit{Identifier}}不是表达式的一部分，所以无法对其索值。在这种设计中，
+我们说变量是@emph{可变的} (@emph{mutable})，意为可以修改。
+
+这种设计叫做@emph{按值调用} (@emph{call-by-value})，或@emph{隐式引用}
+(@emph{implicit reference})。大多数编程语言，包括Scheme，都使用这种设计的一些变
+体。
+
+图4.7是这种设计的两个示例程序。因为引用不再是表达值，我们不能做链式引用，像
+@secref{s4.2}中的那个例子那样。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 0
+in letrec even(dummy)
+           = if zero?(x)
+             then 1
+             else begin
+                   set x = -(x,1);
+                   (odd 888)
+                  end
+          odd(dummy)
+           = if zero?(x)
+             then 0
+             else begin
+                   set x = -(x,1);
+                   (even 888)
+                  end
+   in begin set x = 13; (odd -888) end
+
+let g = let count = 0
+        in proc (dummy)
+            begin
+             set count = -(count,-1);
+             count
+            end
+in let a = (g 11)
+   in let b = (g 11)
+      in -(a,b)
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "IMPLICIT-REFS中的" (tt "odd") "和" (tt "even")))]
+}
+
