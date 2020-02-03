@@ -746,3 +746,43 @@ in let a = (g 11)
  (list (para "IMPLICIT-REFS中的" (tt "odd") "和" (tt "even")))]
 }
 
+@subsection[#:tag "s4.3.1"]{规范}
+
+我们可以轻松写出索值和@tt{set}的规则。现在，环境总是把变量绑定到位置，所以当变量
+作为表达式时，我们需要索取它的值：
+
+@$${@tt{(value-of (var-exp @${var}) @${\rho} @${\sigma})} = @tt{(@${\sigma(\rho(var))},@${\sigma})}}
+
+赋值就像我们预想的那样：我们在环境中搜索式子左侧的标识符，获取一个位置，在环境中
+求值式子右侧的表达式，修改指定位置的内容。就像@tt{setref}，@tt{set}表达式的返回
+值是任意的。我们让它返回表达值27。
+
+@$${
+\infer{@tt{(value-of (assign-exp @${var} @${exp_1}) @${\rho} @${\sigma_0}) =
+           (@${\lceil 27 \rceil},[@${\rho(var)}=@${val_1}]@${\sigma_1})}}
+      {@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
+}
+
+我们还要重写过程调用和@tt{let}规则，体现出对存储器的修改。对过程调用，规则变成：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val} |@${\sigma})
+= (value-of |@${body} [|@${var=l}]|@${\rho} [|@${l=val}]|@${\sigma})
+}|
+}
+
+其中，@${l}是不在@${\sigma}定义域中的一个位置。
+
+}
+
+@tt{(let-exp @${var} @${exp_1} @${body})}的规则类似。式子右边的@${exp_1}求值，环
+境中的变量@${var}绑定到包含@${exp_1}值的新位置，@tt{let}表达式的主体在该环境中求
+值，并作为表达式的值。
+
+@exercise[#:level 1 #:tag "ex4.14"]{
+
+写出@tt{let}的规则。
+
+}
