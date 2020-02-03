@@ -189,7 +189,9 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 @itemlist[
 
- @item{@${\rho}表示环境。}
+ @item{@${\rho}表示任一环境。@note{原文为“@emph{@${\rho} ranges over
+ environments}”。这是将所有环境视为一集合，@${\rho}视为一变量，@${\rho}可以取集
+ 合中的任意值。@tech[#:key "sigma_for_store"]{下文}中的@${\sigma}同理。}}
 
  @item{@${\textnormal{\lbrack\rbrack}}表示空环境。}
 
