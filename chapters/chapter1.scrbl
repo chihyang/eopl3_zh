@@ -329,7 +329,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
 
   @item{@bold{非终止符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
         可能会定义数个集合。这些集合有时称为@emph{句法类别} (@emph{syntactic
-        categories})。
+        category})。
 
         依照惯例，我们将非终止符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终止符，但我们写作

@@ -189,9 +189,9 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 @itemlist[
 
- @item{@${\rho}表示任一环境。@note{原文为“@emph{@${\rho} ranges over
- environments}”。这是将所有环境视为一集合，@${\rho}视为一变量，@${\rho}可以取集
- 合中的任意值。@tech[#:key "sigma_for_store"]{下文}中的@${\sigma}同理。}}
+ @item{@${\rho}表示任一环境。@note{原文为“@${\rho} ranges over environments”。
+ 这是将所有环境视为一集合，@${\rho}视为一变量，@${\rho}可以取集合中的任意值。
+ @tech[#:key "sigma_for_store"]{下文}中的@${\sigma}同理。}}
 
  @item{@${\textnormal{\lbrack\rbrack}}表示空环境。}
 
@@ -1036,8 +1036,8 @@ in let f = proc (z) -(z,x)
 我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
 算过程用@emph{规范}表示。令@${\rho}为任一环境。
 
-@nested{
 @verbatim|{
+
 (value-of
   <<let x = 200
     in let f = proc (z) -(z,x)
@@ -1105,9 +1105,7 @@ in let f = proc (z) -(z,x)
 = |@${\lceil}(- -199 -99)|@${\rceil}
 
 = |@${\lceil}-100|@${\rceil}
-
 }|
-}
 
 其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
 @tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
@@ -2352,8 +2350,8 @@ in proc (y)
 @exercise[#:level 3 #:tag "ex3.42"]{
 
 修改词法地址翻译器和解释器，处理练习3.26中的瘦身过程表示法。要完成这点，你不能在
-@tt{extend-senv @${var} @${senv}}中翻译过程的主体，而是在一个新的静态环境中，它
-准确标明了各个变量在瘦身表示法中的位于何处。
+@tt{(extend-senv @${var} @${senv})}中翻译过程的主体，而是在一个新的静态环境中，
+它准确标明了各个变量在瘦身表示法中的位于何处。
 
 }
 
