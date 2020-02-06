@@ -41,6 +41,9 @@
 (define samepage
   (make-style "Samepage" (list (make-tex-addition "../style/samepage.tex"))))
 
+(define hangindent
+  (make-style "Hangindent" (list (make-tex-addition "../style/hangindent.tex"))))
+
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
         [(and (string? (car c))
