@@ -545,7 +545,7 @@ in let f = proc (z) let zz = newref(-(z,deref(x)))
 
 进入 let x
 newref: 分配位置 0
-进入 let x 主体，env =
+进入 let x 主体，环境 =
 ((x #(struct:ref-val 0))
  (i #(struct:num-val 1))
  (v #(struct:num-val 5))
@@ -554,7 +554,7 @@ newref: 分配位置 0
 ((0 #(struct:num-val 22)))
 
 进入 let f
-进入 let f 主体，env =
+进入 let f 主体，环境 =
 ((f
   (procedure
    z
@@ -570,7 +570,7 @@ newref: 分配位置 0
 存储器 =
 ((0 #(struct:num-val 22)))
 
-进入 proc z 主体，env =
+进入 proc z 主体，环境 =
 ((z #(struct:num-val 66))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
@@ -590,7 +590,7 @@ newref: 分配位置 0
 
 进入 let zz
 newref: 分配位置 1
-进入 let zz 主体，env =
+进入 let zz 主体，环境 =
 ((zz #(struct:ref-val 1))
  (z #(struct:num-val 66))
  (x #(struct:ref-val 0))
@@ -600,7 +600,7 @@ newref: 分配位置 1
 存储器 =
 ((0 #(struct:num-val 22)) (1 #(struct:num-val 44)))
 
-进入 proc z 主体，env =
+进入 proc z 主体，环境 =
 ((z #(struct:num-val 55))
  (x #(struct:ref-val 0))
  (i #(struct:num-val 1))
@@ -611,7 +611,7 @@ newref: 分配位置 1
 
 进入 let zz
 newref: 分配位置 2
-进入 let zz 主体，env =
+进入 let zz 主体，环境 =
 ((zz #(struct:ref-val 2))
  (z #(struct:num-val 55))
  (x #(struct:ref-val 0))
@@ -872,7 +872,7 @@ newref: 分配位置 1
 newref: 分配位置 2
 进入 let f
 newref: 分配位置 3
-进入 let f 主体，env =
+进入 let f 主体，环境 =
 ((f 3) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -881,7 +881,7 @@ newref: 分配位置 3
  (3 (procedure x ... ((i 0) (v 1) (x 2)))))
 
 newref: 分配位置 4
-进入 proc x 主体，env =
+进入 proc x 主体，环境 =
 ((x 4) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -891,7 +891,7 @@ newref: 分配位置 4
  (4 #(struct:num-val 44)))
 
 newref: 分配位置 5
-进入 proc y 主体，env =
+进入 proc y 主体，环境 =
 ((y 5) (x 4) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -1282,7 +1282,7 @@ newref: 分配位置 3
 newref: 分配位置 4
 ;; 为 glo 分配单元
 newref: 分配位置 5
-进入 let glo 主体，env =
+进入 let glo 主体，环境 =
 ((glo 5) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -1295,7 +1295,7 @@ newref: 分配位置 5
 进入 let f
 ;; 为 f 分配单元
 newref: 分配位置 6
-进入 let f 主体，env =
+进入 let f 主体，环境 =
 ((f 6) (glo 5) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -1317,7 +1317,7 @@ newref: 分配位置 6
 
 ;; 为 loc 分配单元
 newref: 分配位置 7
-进入 proc loc 主体，env =
+进入 proc loc 主体，环境 =
 ((loc 7) (glo 5) (i 0) (v 1) (x 2))
 存储器 =
 ((0 #(struct:num-val 1))
@@ -1419,6 +1419,337 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 @exercise[#:level 2 #:tag "ex4.30"]{
 
 给练习4.29的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
-数。确保@tt{arrayref}和@tt{arrayset}会查验索引在数组长度之内。
+数。@tt{arrayref}和@tt{arrayset}一定要查验索引，确保其值在数组长度之内。
+
+}
+
+@section[#:tag "s4.5"]{传参变体}
+
+当过程主体执行时，其形参绑定到一个指代值。那个值从哪儿来？它一定是过程调用传入的
+实际参数值。我们已见过两种传参方式：
+
+@itemlist[
+
+ @item{自然传参，指代值与实际参数的表达值相同（@elem[#:style question]{第75页}）。}
+
+ @item{按值调用，指代值是一个引用，指向一个位置，该位置包含实际参数的表达值
+ （@secref{s4.3}）。这是最常用的传参方式。}
+
+]
+
+本节中，我们探讨其他一些传参机制。
+
+@subsection[#:tag "s4.5.1"]{按址调用}
+
+考虑下面的表达式：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let p = proc (x) set x = 4
+in let a = 3
+   in begin (p a); a end
+}|
+}
+
+按值调用时，绑定到@tt{x}的指代值是一个引用，它包含的初始值与绑定到@tt{a}的引用相
+同，但这些引用互不相干。那么赋值给@tt{x}不会影响引用@tt{a}的内容，所以，整个表达
+式的值是3。
+
+}
+
+按值调用时，当过程给某个参数赋新值，调用者无法获悉。当然，如果传给调用者的参数像
+@secref{s4.4}那样包含可变序对，那么调用者能看到@tt{setleft}和@tt{setright}的效果
+的效果，但看不到@tt{set}的效果。
+
+虽然这样隔离调用者和受调者符合通常期望，但有时给过程传递一个位置，并要求过程给这
+个位置赋值也很有用。要这样做，可以给过程传递一个引用，指向调用者变量的位置，而不
+是变量的内容。这种传参机制叫做@emph{按址调用} (@emph{call-by-reference})。如果操
+作数正是变量引用，那就传递变量的位置。然后，过程的形式参数绑定到这个位置。如果操
+作数是其他类型的表达式，那么形式参数绑定到一个新位置，其值为操作数的值，就像按值
+调用一样。在上例中使用按址调用，给@tt{x}赋值4等效于给@tt{a}赋值4，所以整个表达式
+返回4，而不是3。
+
+按址调用过程，且实际参数为变量时，传递的不是按值调用中变量所在位置的内容，而是那
+个变量的@emph{位置}。例如，考虑：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let p = proc (x) set x = 44
+in let g = proc (y) (f y)
+   in let z = 55
+      in begin (g z); z end
+}|
+}
+
+调用过程@tt{g}时，@tt{y}绑定到@tt{z}的位置，而不是那个位置处的内容。类似地，调用
+@tt{f}时，@tt{x}绑定到同一个位置。所以，@tt{x}、@tt{y}和@tt{z}都绑定到同一位置，
+@tt{set x = 44}的效果是把那个位置的内容设为44。因此，整个表达式的值是44。执行这
+个表达式的跟踪日志如图4.14和图4.15所示。在本例中，@tt{x}、@tt{y}和@tt{z}最终都绑
+定到位置5。
+
+}
+
+按址调用的常见用法是返回多个值。一个过程以通常方式返回一个值，并给按址传递的参数
+赋其他值。另一种例子，考虑变量换值问题：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let swap = proc (x) proc (y)
+            let temp = x
+            in begin
+                set x = y;
+                set y = temp
+               end
+in let a = 33
+   in let b = 44
+      in begin
+          ((swap a) b);
+          -(a,b)
+         end
+}|
+}
+
+使用按址调用，这会交换@tt{a}和@tt{b}的值，所以它返回11。但如果用我们已有的按值调
+用解释器执行这个程序，它会返回@${-11}，因为在换值过程内部赋值对变量@tt{a}和
+@tt{b}毫无影响。
+
+}
+
+按址调用中，变量仍然指代表达值的引用，就像按值调用一样：
+
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
+\mathit{DenVal} &= \mathit{Ref(ExpVal)} + \mathit{ExpVal}
+}
+
+唯一需要改变的是新位置的分配。按值调用中，求值每个操作数都要分配新位置；按址调用
+中，只在求值@emph{非变量}操作数时才分配新位置。
+
+这很容易实现。函数@tt{apply-procedure}必须修改，因为不是每个过程调用都要分配新位
+置。@tt{value-of}中的@tt{call-exp}能作出判断，因此分配的责任上移其中。
+
+@racketblock[
+@#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
+(define apply-procedure
+  (lambda (proc1 val)
+    (cases proc proc1
+      (procedure (var body saved-env)
+        (value-of body
+          (extend-env var val saved-env))))))
+]
+
+然后我们修改@tt{value-of}中的@tt{call-exp}，引入新函数@tt{value-of-operand}来做
+必要的判断。
+
+@codeblock[#:indent 11]{
+(call-exp
+ (rator rand)
+ (let ((proc (expval->proc (value-of rator env)))
+       (arg (value-of-operand rand env)))
+   (apply-procedure proc arg)))
+}
+
+过程@tt{value-of-operand}检查操作数是否为变量。如果是，则返回那个变量指代的引用，
+然后传给过程@tt{apply-procedure}。否则，求值操作数，返回指向新位置的引用，位置中
+包含该值。
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-operand}} : @${\mathit{Exp} \times \mathit{Env} \to \mathit{Ref}}}
+(define value-of-operand
+  (lambda (exp env)
+    (cases expression exp
+      (var-exp (var) (apply-env env var))
+      (else
+        (newref (value-of exp env))))))
+]
+
+我们也可以按照同样地方式修改@tt{let}，但我们不这样做，所以语言中仍会保留按值调用
+功能。
+
+多个按址调用参数可以指向同一个位置，如下列程序所示。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let b = 3
+in let p = proc (x) proc(y)
+            begin
+             set x = 4;
+             y
+            end
+   in ((p b) b)
+}|
+}
+
+它的值为4，因为@tt{x}和@tt{y}指向同一个位置，即@tt{b}的绑定。这种现象叫做
+@emph{变量别名} (@emph{variable aliasing})。这里@tt{x}和@tt{y}是同一个位置的别名
+（名字）。通常，我们不希望给一个变量赋值会改变另一个的值，所以别名会导致程序难以
+理解。
+
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+> (run "
+let f = proc (x) set x = 44
+in let g = proc (y) (f y)
+   in let z = 55
+      in begin
+          (g z);
+          z
+         end")
+newref: 分配位置 0
+newref: 分配位置 1
+newref: 分配位置 2
+进入 let f
+newref: 分配位置 3
+进入 let f 主体，环境 =
+((f 3) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 (procedure x ... ((i 0) (v 1) (x 2)))))
+
+进入 let g
+newref: 分配位置 4
+进入 let g 主体，环境 =
+((g 4) (f 3) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+(1 #(struct:num-val 5))
+(2 #(struct:num-val 10))
+(3 (procedure x ... ((i 0) (v 1) (x 2))))
+(4 (procedure y ... ((f 3) (i 0) (v 1) (x 2)))))
+
+进入 let z
+newref: 分配位置 5
+进入 let z 主体，环境 =
+((z 5) (g 4) (f 3) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 (procedure x ... ((i 0) (v 1) (x 2))))
+ (4 (procedure y ... ((f 3) (i 0) (v 1) (x 2))))
+ (5 #(struct:num-val 55)))
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CALL-BY-REFERENCE的简单求值"))]
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+进入 proc y 主体，环境 =
+((y 5) (f 3) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 (procedure x ... ((i 0) (v 1) (x 2))))
+ (4 (procedure y ... ((f 3) (i 0) (v 1) (x 2))))
+ (5 #(struct:num-val 55)))
+
+进入 proc x 主体，环境 =
+((x 5) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 (procedure x ... ((i 0) (v 1) (x 2))))
+ (4 (procedure y ... ((f 3) (i 0) (v 1) (x 2))))
+ (5 #(struct:num-val 55)))
+
+#(struct:num-val 44)
+>}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CALL-BY-REFERENCE的简单求值，续"))]
+}
+
+@exercise[#:level 1 #:tag "ex4.31"]{
+
+写出CALL-BY-REFERENCE的规则定义。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.32"]{
+
+扩展语言CALL-BY-REFERENCE，支持多参数过程。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.33"]{
+
+扩展语言CALL-BY-REFERENCE，同时支持按值调用过程。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.34"]{
+
+给语言添加按址调用的@tt{let}，名为@tt{letref}。写出规范并实现。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.35"]{
+
+在按值调用框架下，我们仍能享受按址调用的便利。扩展语言IMPLICIT-REF，添加新表达式：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{ref @m{\mathit{Identifier}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{ref-exp (var)}}}
+
+这与语言EXPLICIT-REF不同。因为引用只能从变量获得。这就使我们能用按值调用语言写出
+类似@tt{swap}的程序。下列表达式的值是什么？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let a = 3
+    b = 4
+in let swap = proc (x) proc (y)
+               let temp = deref(x)
+               in begin
+                   setref(x,deref(y));
+                   setref(y,temp)
+                  end
+   in begin ((swap ref a) ref b); -(a,b) end
+}|
+}
+
+这里我们用支持多声明的@tt{let}（练习3.16）。这种语言的表达值和指代值是什么？
+
+}
+
+@exercise[#:level 1 #:tag "ex4.36"]{
+
+大多数语言支持数组，在按址调用中，数组引用通常像变量引用那样处理。如果操作数是数
+组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调用交换
+过程的常见情形是对换数组元素，传递数组引用就能用上交换过程。给按址调用语言添加练
+习4.29中的数组操作符，扩展@tt{value-of-operand}，处理这种情况。使下例中的过程调
+用能够如愿工作：
+
+@centered{@code{((swap (arrayref a i)) (arrayref a j))}}
+
+要是下面这样呢？
+
+@centered{@code{((swap (arrayref a (arrayref a i))) (arrayref a j))}}
+
+}
+
+@exercise[#:level 2 #:tag "ex4.37"]{
+
+@emph{按值和结果调用} (@emph{call-by-value-result})是按址调用的一种变体。在按值和
+结果调用中，实际参数必须是变量。传递参数时，形式参数绑定到新的引用，初值为实际参
+数的值，就像按值调用一样。然后照常执行过程主体。但过程主体返回时，新引用处的值复
+制到实际参数指代的引用中。因为这样可以改进内存非陪，这可能比按址调用更高效。实现
+按值和结果调用，写出一个过程，采用按址调用与按值和结果调用产生不同的答案。
 
 }
