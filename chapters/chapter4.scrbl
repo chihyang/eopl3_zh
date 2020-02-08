@@ -869,7 +869,7 @@ let f = proc (x) proc (y)
 in ((f 44) 33)")
 newref: 分配位置 0
 newref: 分配位置 1
-newref: 分配职位 2
+newref: 分配位置 2
 进入 let f
 newref: 分配位置 3
 进入 let f 主体，env =
@@ -1132,5 +1132,293 @@ in let p = proc (y) -(y,x)
 程用，但是它不返回值，且其主体为语句而非表达式。此外，增加新语句子程序调用，扩展
 块语法，允许同时声明过程和子程序。这会如何影响指代值和表达值？如果在子程序调用中
 使用过程会怎样？反过来呢？
+
+}
+
+@section[#:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
+
+在练习3.9中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
+@tt{set-car!}和@tt{set-cdr!}处理它们。
+
+现在，我们给IMPLICIT-REFS添加可变序对。序对是表达值，具有如下操作：
+
+@envalign*{
+@bold{@tt{newpair}}  &: \mathit{Expval} \times \mathit{Expval} \to \mathit{MutPair} \\
+@bold{@tt{left}} &: \mathit{MutPair} \to \mathit{Expval} \\
+@bold{@tt{right}}   &: \mathit{MutPair} \to \mathit{Expval} \\
+@bold{@tt{setleft}}  &: \mathit{MutPair} \times \mathit{Expval} \to \mathit{Unspecified} \\
+@bold{@tt{setright}}  &: \mathit{MutPair} \times \mathit{Expval} \to \mathit{Unspecified}
+}
+
+序对包含两个位置，二者均可自行赋值。这给出 @elem[#:style question]{定义域方程}：
+
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} + \mathit{MutPair} \\
+\mathit{DenVal} &= \mathit{Ref(ExpVal)} \\
+\mathit{MutPair} &= \mathit{Ref(ExpVal)} \times \mathit{Ref(ExpVal)}
+}
+
+我们把这种语言叫做MUTABLE-PAIRS。
+
+@subsection[#:tag "s4.4.1"]{实现}
+
+我们可以直接用前例中的@tt{reference}数据类型实现可变序对。代码如图4.9所示。
+
+一旦完成之后，向语言添加这些就很直接了。我们给表达值数据类型新增一种变体
+@tt{mutpair-val}，给@tt{value-of}新增5行代码。这些如图4.10所示。我们随便选取
+@tt{setleft}的返回值为82，@tt{setright}的返回值为83。用前述辅助组件得到的示例跟
+踪日志如图4.11所示。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(define-datatype mutpair mutpair?
+  (a-pair
+    (left-loc reference?)
+    (right-loc reference?)))
+
+@#,elem{@bold{@tt{make-pair}} : @${\mathit{ExpVal} \times \mathit{ExpVal} \to \mathit{MutPair}}}
+(define make-pair
+  (lambda (val1 val2)
+    (a-pair
+      (newref val1)
+      (newref val2))))
+
+@#,elem{@bold{@tt{left}} : @${\mathit{MutPair} \to \mathit{ExpVal}}}
+(define left
+  (lambda (p)
+    (cases mutpair p
+      (a-pair (left-loc right-loc)
+        (deref left-loc)))))
+
+@#,elem{@bold{@tt{right}} : @${\mathit{MutPair} \to \mathit{ExpVal}}}
+(define right
+  (lambda (p)
+    (cases mutpair p
+      (a-pair (left-loc right-loc)
+        (deref right-loc)))))
+
+@#,elem{@bold{@tt{setleft}} : @${\mathit{MutPair} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
+(define setleft
+  (lambda (p val)
+    (cases mutpair p
+      (a-pair (left-loc right-loc)
+        (setref! left-loc val)))))
+
+@#,elem{@bold{@tt{setright}} : @${\mathit{MutPair} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
+(define setright
+  (lambda (p val)
+    (cases mutpair p
+      (a-pair (left-loc right-loc)
+        (setref! right-loc val)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "可变序对的拙劣实现"))]
+}
+
+@nested[#:style eopl-figure]{
+@codeblock[#:indent 11]{
+(newpair-exp (exp1 exp2)
+  (let ((val1 (value-of exp1 env))
+        (val2 (value-of exp2 env)))
+    (mutpair-val (make-pair val1 val2))))
+
+(left-exp (exp1)
+  (let ((val1 (value-of exp1 env)))
+    (let ((p1 (expval->mutpair val1)))
+      (left p1))))
+
+(right-exp (exp1)
+  (let ((val1 (value-of exp1 env)))
+    (let ((p1 (expval->mutpair val1)))
+      (right p1))))
+
+(setleft-exp (exp1 exp2)
+  (let ((val1 (value-of exp1 env))
+        (val2 (value-of exp2 env)))
+    (let ((p (expval->mutpair val1)))
+      (begin
+        (setleft p val2)
+        (num-val 82)))))
+
+(setright-exp (exp1 exp2)
+  (let ((val1 (value-of exp1 env))
+        (val2 (value-of exp2 env)))
+    (let ((p (expval->mutpair val1)))
+      (begin
+        (setright p val2)
+        (num-val 83)))))
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "给解释器添加可变序对模块"))]
+}
+
+@subsection[#:tag "s4.4.2"]{可变序对的另一种表示}
+
+把可变序对表示为两个引用没有利用@tt{MutPair}的已知信息。序对中的两个位置虽然能够
+各自赋值，但它们不是独立分配的。我们知道它们会一起分配：如果序对的左侧是一个位置，
+那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。代码如图4.13所示。其他
+不需要修改。
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+> (run "let glo = pair(11,22)
+in let f = proc (loc)
+            let d1 = setright(loc, left(loc))
+            in let d2 = setleft(glo, 99)
+               in -(left(loc),right(loc))
+   in (f glo)")
+;; 为 init-env 分配单元
+newref: 分配位置 0
+newref: 分配位置 1
+newref: 分配位置 2
+进入 let glo
+;; 为序对分配单元
+newref: 分配位置 3
+newref: 分配位置 4
+;; 为 glo 分配单元
+newref: 分配位置 5
+进入 let glo 主体，env =
+((glo 5) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 #(struct:num-val 11))
+ (4 #(struct:num-val 22))
+ (5 #(struct:mutpair-val #(struct:a-pair 3 4))))
+
+进入 let f
+;; 为 f 分配单元
+newref: 分配位置 6
+进入 let f 主体，env =
+((f 6) (glo 5) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 #(struct:num-val 11))
+ (4 #(struct:num-val 22))
+ (5 #(struct:mutpair-val #(struct:a-pair 3 4)))
+ (6 (procedure loc ... ((glo 5) (i 0) (v 1) (x 2)))))
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "MUTABLE-PAIRS求值的跟踪日志"))]
+}
+
+@nested[#:style eopl-figure]{
+@verbatim|{
+
+;; 为 loc 分配单元
+newref: 分配位置 7
+进入 proc loc 主体，env =
+((loc 7) (glo 5) (i 0) (v 1) (x 2))
+存储器 =
+((0 #(struct:num-val 1))
+ (1 #(struct:num-val 5))
+ (2 #(struct:num-val 10))
+ (3 #(struct:num-val 11))
+ (4 #(struct:num-val 22))
+ (5 #(struct:mutpair-val #(struct:a-pair 3 4)))
+ (6 (procedure loc ... ((glo 5) (i 0) (v 1) (x 2))))
+ (7 #(struct:mutpair-val #(struct:a-pair 3 4))))
+
+#(struct:num-val 88)
+>
+}|
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "MUTABLE-PAIRS求值的跟踪日志，续"))]
+}
+
+同样地，堆中的任何聚合性对象都可以用其第一个位置的指针表示。但是，如果不提供区域
+的长度信息，指针本身不能指代一片内存区域（见练习4.30）。缺乏长度信息是经典安全问
+题的一大来源，比如写数组越界。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{mutpair?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
+(define mutpair?
+  (lambda (v)
+    (reference? v)))
+
+@#,elem{@bold{@tt{make-pair}} : @${\mathit{ExpVal} \times \mathit{ExpVal} \to \mathit{MutPair}}}
+(define make-pair
+  (lambda (val1 val2)
+    (let ((ref1 (newref val1)))
+      (let ((ref2 (newref val2)))
+        ref1))))
+
+@#,elem{@bold{@tt{left}} : @${\mathit{MutPair} \to \mathit{ExpVal}}}
+(define right
+  (lambda (p)
+    (deref (+ 1 p))))
+
+@#,elem{@bold{@tt{right}} : @${\mathit{MutPair} \to \mathit{ExpVal}}}
+(define left
+  (lambda (p)
+    (deref p)))
+
+@#,elem{@bold{@tt{setleft}} : @${\mathit{MutPair} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
+(define setright
+  (lambda (p val)
+    (setref! (+ 1 p) val)))
+
+@#,elem{@bold{@tt{setright}} : @${\mathit{MutPair} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
+(define setright
+  (lambda (p val)
+    (setref! (+ 1 p) val)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "可变序对的另一种表示"))]
+}
+
+@exercise[#:level 2 #:tag "ex4.28"]{
+
+写出五个可变序对操作的规则定义。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.29"]{
+
+给语言添加数组。添加新操作符@tt{newarray}、@tt{arrayref}、@tt{arrayset}，来创建、
+索值和更新数组。这引出：
+
+@envalign*{
+\mathit{ArrVal} &= \mathit{(Ref(ExpVal))} \\
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} + \mathit{ArrVal} \\
+\mathit{DenVal} &= \mathit{Ref(ExpVal)}
+}
+
+由于数组中的位置是连续的，用上述第二种表示。下列程序的结果是什么？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let a = newarray(2,-99)
+    p = proc (x)
+         let v = arrayref(x,1)
+         in arrayset(x,1,-(v,-1))
+in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
+}|
+}
+
+这里@tt{newarray(2,-99)}要创建长度为2的数组，数组中的每个位置包含@${-99}。
+@tt{begin}表达式定义如练习4.4。让数组索引从0开始，那么长度为2的数组索引为0和1。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.30"]{
+
+给练习4.29的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
+数。确保@tt{arrayref}和@tt{arrayset}会查验索引在数组长度之内。
 
 }
