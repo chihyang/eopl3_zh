@@ -60,11 +60,11 @@
                  ", "
                  (when (> (string-length tag))
                    (string-append "label=" tag ", "))
-                 "counter=ChapterCounter]{\n")))
+                 "counter=ChapterCounter]\\begin{small}\\setlength{\\parskip}{1em}{\n")))
 
 (define exercise-postfix
   (make-element (make-style #f (list 'exact-chars))
-                "}\\end{Exercise}"))
+                "}\\end{small}\\end{Exercise}"))
 
 (define (add-prefix-to-block block prefix)
   (cond [(paragraph? block)
