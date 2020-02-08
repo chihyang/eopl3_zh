@@ -1753,3 +1753,168 @@ in let swap = proc (x) proc (y)
 按值和结果调用，写出一个过程，采用按址调用与按值和结果调用产生不同的答案。
 
 }
+
+@subsection[#:tag "s4.5.2"]{懒求值：按名调用和按需调用}
+
+迄今为止，我们讨论的所有参数传递机制都是@emph{即时} (@emph{eager})的：它们总是找
+出每个操作数的值。现在我们来看另一种截然不同的传参机制，名叫@emph{懒求值}
+(@emph{lazy evaluation})。在懒求值中，操作数的值直到过程主体需要时才会求取。如果
+主体从未引用相关参数，就不需求值。
+
+这可以避免永不终止。例如，考虑：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec infinite-loop (x) = infinite-loop(-(x,-1))
+in let f = proc (z) 11
+   in (f (infinite-loop 0))
+}|
+}
+
+这里@tt{infinite-loop}是一个过程，调用时永不终止。@tt{f}是一个过程，调用时不引用
+它的参数，总返回11。我们考虑过的任何一种传参机制都无法使这个程序终止。但在懒求值
+中，这个程序将返回11，因为操作数@tt{(infinite-loop 0)}没有求值。
+
+}
+
+现在，我们修改我们的语言，使用懒求值。在懒求值中，如无必要，我们不求操作数表达式
+的值。因此，我们将过程的绑定变量与未求值的操作数关联起来。当过程主体需要绑定变量
+的值时，先求值相关操作数。操作数不经求值就传给过程，我们有时称之为@emph{冻结}
+(@emph{frozen})，过程求值操作数则称为@emph{解冻} (@emph{thawed})。
+
+当然，我们还要加入过程求值时的环境。要这样，我们引入一种新的数据类型，@emph{值箱}
+(@emph{thunk})。@elem[#:style question]{值箱}包含一个表达式，一个环境。
+
+@nested{
+@racketblock[
+(define-datatype thunk thunk?
+  (a-thunk
+   (exp1 expression?)
+   (env environment?)))
+]
+
+但过程需要用绑定变量的值时，会求相应值箱的值。
+
+}
+
+我们面对的情况稍稍复杂一些，因为我们需要同时容纳懒求值、计算效果和即时求值
+（@tt{let}要用）。因此，我们把指代值定为内存位置的引用，位置包含表达值或者值箱。
+
+@envalign*{
+\mathit{DenVal} &= \mathit{Ref(ExpVal + Thunk)} \\
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc}
+}
+
+我们的位置分配策略与按址调用类似：如果操作数是变量，那么我们传递指代的引用。否则，
+我们给未求值的参数在新位置放一个值箱，传递该位置的引用。
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-operand}} : @${\mathit{Exp} \times \mathit{Env} \to \mathit{Ref}}}
+(define value-of-operand
+  (lambda (exp env)
+    (cases expression exp
+      (var-exp (var) (apply-env env var))
+      (else
+        (newref (a-thunk exp env))))))
+]
+
+求值@tt{var-exp}时，我们首先找到变量绑定的位置。如果该位置是一个表达值，那么返回
+这个值，作为@tt{var-exp}的值。如果它包含一个值箱，那么我们求取并返回值箱的值。这
+叫@emph{按名调用} (@emph{call by name})。
+
+@codeblock[#:indent 11]{
+(var-exp (var)
+  (let ((ref1 (apply-env env var)))
+    (let ((w (deref ref1)))
+      (if (expval? val)
+        val
+        (value-of-thunk val)))))
+}
+
+过程@tt{value-of-thunk}定义如下：
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-thunk}} : @${\mathit{Thunk} \to \mathit{ExpVal}}}
+(define value-of-thunk
+  (lambda (th)
+    (cases thunk th
+      (a-thunk (exp1 saved-env)
+        (value-of exp1 saved-env)))))
+]
+
+或者，一旦发现值箱的值，我们可以把表达值放到同一个位置，这样就不需要再次求值箱的
+值。这种方式叫做@emph{按需调用} (@emph{call by need})。
+
+@nested{
+@codeblock[#:indent 11]{
+(var-exp (var)
+  (let ((ref1 (apply-env env var)))
+    (let ((w (deref ref1)))
+      (if (expval? w)
+        w
+        (let ((val1 (value-of-thunk w)))
+          (begin
+            (setref! ref1 val1)
+            val1))))))
+}
+
+这里用到了一种名为@emph{助记法} (@emph{memoization})的通用策略。
+
+}
+
+各种形式的懒求值引人之处在于，即使没有计算效果，通过它也能以相当简单的方式思考程
+序。把过程调用替换为过程的主体，把每个形参的引用替换为对应的操作数，就能建模过程
+调用。这种求值策略是lambda演算的基础，名为 @emph{@${\beta}-推导}
+(@emph{@${\beta}-reduction})。
+
+不幸的是，按名调用和按需调用使求值顺序难以确定，而这对理解有效果的程序极为关键。
+但是没有效果时，这不成问题。所以懒求值盛行于函数式编程语言（没有计算效果），在别
+处却难觅踪影。
+
+@exercise[#:level 1 #:tag "ex4.38"]{
+
+下面的例子展示了练习3.25在按需调用中的变体。练习3.25中的原始程序在按需调用中可行
+吗？如果下面的程序在按值调用中运行呢？为什么？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let makerec = proc (f)
+               let d = proc (x) (f (x x))
+               in (f (d d))
+in let maketimes4 = proc (f)
+                     proc (x)
+                      if zero?(x)
+                      then 0
+                      else -((f -(x,1)), -4)
+   in let times4 = (makerec maketimes4)
+      in (times4 3)
+}|
+}
+
+}
+
+@exercise[#:level 1 #:tag "ex4.39"]{
+
+没有计算效果的话，按名调用和按需调用总是给出同样的答案。设计一个例子，让按名调用
+和按需调用给出不同的答案。
+
+}
+
+@exercise[#:level 1 #:tag "ex4.40"]{
+
+修改@tt{value-of-operand}，避免为常量和过程生成值箱。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.41"]{
+
+写出按名调用和按需调用的规则定义。
+
+}
+
+@exercise[#:level 2 #:tag "ex4.42"]{
+
+给按需调用解释器添加懒求值@tt{let}。
+
+}
