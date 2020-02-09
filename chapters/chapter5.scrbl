@@ -905,3 +905,177 @@ question]{150页}计算中最大续文的尺寸是3。然后，用@tt{fact}和@t
  (make-style "caption" (list 'multicommand))
  (list (para "图5.4中续文的规范"))]
 }
+
+@section[#:tag "s5.2"]{跳跃式解释器}
+
+有人可能想用普通的过程式语言转写解释器，使用数据结构表示续文，从而避免高阶函数。
+但是，用大多数过程式语言做这种翻译都很困难：它们不是只在必要时才扩大控制语境，而
+是在每个函数调用处扩大控制语境（即堆栈！）。由于我们的系统中，过程调用在计算结束
+之前决不返回，系统的堆栈将一直增高，直到那时为止。
+
+这种行为不无道理：在这种语言中，几乎所有的过程调用都出现在赋值语句的右边，所以，
+几乎每个过程调用都要扩大控制语境，以便记住待做的乘法。因此，系统结构为这种最常见
+的情况进行了优化。而且，大多数语言在堆栈中存储环境信息，所以，每个过程调用生成的
+控制语境还要记住移除堆栈上的环境信息。
+
+在这种语言中，一种解决方案是使用技术@emph{跃迁} (@emph{trampolining})。为了避免
+产生无限长的调用链，我们把调用链打断，让解释器中的某个过程返回一个无参数过程。这
+个过程在调用时继续进行计算。整个计算由一个名叫@emph{跳床} (@emph{trampoline})的
+过程驱动，它从一个过程调用跳到另一个。例如，我们可以在@tt{apply-procedure/k}的主
+体周围插入一个@tt{(lambda () ...)}，因为在我们的语言中，只要不执行过程调用，表达
+式的运行时间不会超出某个界限。
+
+得出的代码如图5.7所示，它还展示了解释器中所有的尾调用。因为我们修改了
+@tt{apply-procedure/k}，不再让它返回一个@${ExpVal}，而是返回一个过程，我们得重写
+它和它调用的所有过程的合约。因此，我们必须检查解释器中所有过程的合约。
+
+我们从@tt{value-of-program}开始。由于这是调用解释器的过程，它的合约保持不变。它
+调用@tt{value-of/k}，把结果传给@tt{trampoline}。因为我们在处理@tt{value-of/k}的
+结果，它不是@${FinalAnswer}。我们明明没有修改@tt{value-of/k}的代码，怎么会这样呢？
+过程@tt{value-of/k}在尾部递归调用@tt{apply-cont}，@tt{apply-cont}在尾部递归调用
+@tt{apply-procedure/k}，所以@tt{apply-procedure/k}的任何结果都可能作为
+@tt{value-of/k}的结果。而我们修改了@tt{apply-procedure/k}，其返回值与之前不同。
+
+我们引入@emph{弹珠} (@${Bounce})，作为@tt{value-of/k}的可能结果。（我们叫它弹珠，
+因为它是跳床的输入。）这一集合的值是什么呢？@tt{value-of/k}在尾部递归调用它自己
+和@tt{apply-cont}，这些是它里面所有的尾递归。所以能成为@tt{value-of/k}结果的值只
+能是@tt{apply-cont}的结果。而且，@tt{apply-procedure/k}在尾部递归调用
+@tt{value-of/k}，所以不论@${Bounce}是什么，它是@tt{value-of/k}、@tt{apply-cont}
+和@tt{apply-procedure/k}结果的集合。
+
+过程@tt{value-of/k}和@tt{apply-cont}只是在尾部调用其他过程。真正把值放入
+@${Bound}中的是@tt{apply-procedure/k}。这些是什么样的值呢？我们来看代码。
+
+@racketblock[
+(define apply-procedure/k
+  (lambda (proc1 val cont)
+    (cases proc proc1
+      (... (value-of/k body ...)))))
+]
+
+已知@tt{apply-procedure/k}返回无参数的过程，该过程在调用时返回一个
+@${\mathit{ExpVal}}或调用@tt{value-of/k}、@tt{apply-cont}和
+@tt{apply-procedure/k}之一的结果，也就是@${Bounce}。所以，@tt{apply-procedure/k}
+可能的取值由如下集合描述：
+
+@nested{
+@$${\mathit{ExpVal} \cup (() \to (\mathit{Bounce}))}
+
+这和@tt{value-of/k}的可能结果相同，所以我们得出结论：
+
+@$${\mathit{Bounce} = \mathit{ExpVal} \cup (() \to (\mathit{Bounce}))}
+
+合约为：
+
+@$${
+\begin{alignedat}{-1}
+&@tt{@bold{value-of-program}} : \mathit{Program} \to \mathit{FinalAnswer} \\
+&@tt{@bold{trampoline}} : \mathit{Bounce} \to \mathit{FinalAnswer} \\
+&@tt{@bold{value-of/k}} : \mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{Bounce} \\
+&@tt{@bold{apply-cont}} : \mathit{Cont} \times \mathit{ExpVal} \to \mathit{Bounce} \\
+&@tt{@bold{apply-procedure/k}} : \mathit{Proc} \times \mathit{ExpVal} \times \mathit{FinalAnswer} \to \mathit{Bounce}
+\end{alignedat}
+}
+
+}
+
+过程@tt{trampoline}满足其合约：首先给它传入一个@${Bounce}。如果其参数是一个
+@${ExpVal}（也是@${FinalAnswer}），那么返回；否则，参数一定是一个返回值为
+@${Bounce}的过程。所以，它调用这个无参数过程，然后调用自身处理其结果，返回值总是
+一个@${Bounce}。（在@elem[#:style question]{7.4节}我们将看到如何自动完成这个推理
+过程。）
+
+@tt{apply-procedure/k}返回的每个无参数函数都表示计算过程的一个快照。我们可以在计
+算中的不同位置返回这样的快照。在@secref{s5.5}，我们将看到如何用这一思想模拟多线
+程程序中的原子操作。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\mathit{Bounce}} = @${\mathit{ExpVal} \cup (() \to (\mathit{Bounce}))}}
+
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
+(define value-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp)
+        (trampoline
+          (value-of/k exp (init-env) (end-cont)))))))
+
+@#,elem{@bold{@tt{trampoline}} : @${\mathit{Bounce} \to \mathit{FinalAnswer}}}
+(define trampoline
+  (lambda (bounce)
+    (if (expval? bounce)
+      bounce
+      (trampoline (bounce)))))
+
+@#,elem{@bold{@tt{value-of/k}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{Bounce}}}
+(define value-of/k
+  (lambda (exp env cont)
+    (cases expression exp
+      (... (value-of/k ...))
+      (... (apply-cont ...)))))
+
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{Bounce}}}
+(define apply-cont
+  (lambda (cont val)
+    (cases continuation cont
+      (... val)
+      (... (value-of/k ...))
+      (... (apply-cont ...))
+      (... (apply-procedure/k ...)))))
+
+@#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{Cont} \to \mathit{Bounce}}}
+(define apply-procedure/k
+  (lambda (proc1 val cont)
+    (lambda ()
+      (cases procedure proc1
+        (... (value-of/k ...))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "用过程表示跳床"))]
+}
+
+@exercise[#:level 1 #:tag "ex5.17"]{
+
+修改跳跃式解释器，把每个调用@tt{apply-procedure/k}的地方（只有一处）放入
+@tt{(lambda () ...)}中。这个修改需要更改合约吗？
+
+}
+
+@exercise[#:level 1 #:tag "ex5.18"]{
+
+图5.7中的跳床系统使用过程表示@${Bounce}。改用数据结构表示法。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.19"]{
+
+不要在@tt{apply-procedure/k}主体周围插入@tt{(lambda () ...)}，改为在
+@tt{apply-cont}的主体周围插入。修改合约，使之符合这一更改。@${Bounce}的定义需要
+修改吗？然后，用数据结构表示法替换过程表示法表示@${Bounce}，像练习5.18那样。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.20"]{
+
+在练习5.18中，@tt{trampoline}返回@${FinalAnswer}之前的最后一颗弹珠形如
+@tt{(apply-cont (end-cont) @${val})}，其中，@${val}是@${ExpVal}。利用这一点优化
+练习5.19中弹珠的表示。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.21"]{
+
+用普通的过程式语言实现跳跃式解释器。用练习5.18中的数据结构表示快照，把
+@tt{trampoline}中对自身的递归调用替换为普通的@tt{while}或其它循环结构。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.22"]{
+
+有人可能想用普通的过程式语言转写@secref{expr}中传递环境的解释器。同样是因为上述
+原因，除了最简单的情况，这种转换都会失败。跃迁技术在这种情况下也有效吗？
+
+}
