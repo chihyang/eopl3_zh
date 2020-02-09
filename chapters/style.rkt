@@ -102,7 +102,9 @@
                (make-paragraph (make-style #f '(never-indents))
                                exercise-postfix))))))
       wrapped-flow)]
-   [else (decode-flow c)]))
+   [else (make-compound-paragraph
+          (make-style #f '())
+          (decode-flow c))]))
 
 (provide (except-out (all-defined-out)
                      add-prefix-to-block
