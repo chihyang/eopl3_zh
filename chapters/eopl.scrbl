@@ -13,3 +13,4 @@
 @include-section["chapter2.scrbl"]
 @include-section["chapter3.scrbl"]
 @include-section["chapter4.scrbl"]
+@include-section["chapter5.scrbl"]
