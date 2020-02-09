@@ -354,3 +354,554 @@ behavior})。
 
 @tt{let}表达式主体的值称为@tt{let}表达式的值，所以求值@tt{let}表达式主体时的续文
 与求值整个@tt{let}表达式相同。这是@bold{尾调用不扩大续文}原则的又一例子。
+
+下面我们处理@tt{if}表达式。在@tt{if}表达式中，首先要求值条件，但条件的结果不是整
+个表达式的值。我们要新生成一个续文，查看条件表达式的结果是否为真，然后求值真值表
+达式或假值表达式。所以在@tt{value-of/k}中我们写：
+
+@nested{
+@codeblock[#:indent 11]{
+(if-exp (exp1 exp2 exp3)
+  (value-of/k exp1 env
+    (if-test-cont exp2 exp3 body env cont)))
+}
+
+其中，@tt{if-test-cont}是另一个续文构造器，满足如下规范：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (if-test-cont |@${exp_2} |@${exp_3} |@${env} |@${cont}) |@${val})
+= (if (expval->bool |@${val})
+    (value-of/k |@${exp_2} |@${env} |@${cont})
+    (value-of/k |@${exp_3} |@${env} |@${cont}))
+}|
+}
+}
+
+现在，我们有了四个续文构造器。我们可以用过程表示法或者数据结构表示法实现它们。过
+程表示法如图5.2所示，数据结构表示法使用@tt{define-datatype}，如图5.3所示。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\mathit{Cont}} = @${\mathit{ExpVal}} -> @${\mathit{FinalAnswer}}}
+
+@#,elem{@bold{@tt{end-cont}} : @${\mathit{()} \to \mathit{Cont}}}
+(define end-cont
+  (lambda ()
+    (lambda (val)
+      (begin
+        (eopl:printf "计算结束.~%")
+        val))))
+
+@#,elem{@bold{@tt{zero1-cont}} : @${\mathit{Cont} \to \mathit{Cont}}}
+(define zero1-cont
+  (lambda (cont)
+    (lambda (val)
+      (apply-cont cont
+        (bool-val
+          (zero? (expval->num val)))))))
+
+@#,elem{@bold{@tt{let-exp-cont}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{Cont}}}
+(define let-exp-cont
+  (lambda (var body env cont)
+    (lambda (val)
+      (value-of/k body (extend-env var val env) cont))))
+
+@#,elem{@bold{@tt{if-test-cont}} : @${\mathit{Exp} \times \mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{Cont}}}
+ : Exp × Exp × Env × Cont → Cont
+(define if-test-cont
+  (lambda (exp2 exp3 env cont)
+    (lambda (val)
+      (if (expval->bool val)
+        (value-of/k exp2 env cont)
+        (value-of/k exp3 env cont)))))
+
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
+(define apply-cont
+  (lambda (cont v)
+    (cont v)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "用过程表示续文"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(define-datatype continuation continuation?
+  (end-cont)
+  (zero1-cont
+    (cont continuation?))
+  (let-exp-cont
+    (var identifier?)
+    (body expression?)
+    (env environment?)
+    (cont continuation?))
+  (if-test-cont
+    (exp2 expression?)
+    (exp3 expression?)
+    (env environment?)
+    (cont continuation?)))
+
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
+(define apply-cont
+  (lambda (cont val)
+    (cases continuation cont
+      (end-cont ()
+        (begin
+          (eopl:printf "计算结束.~%")
+          val))
+      (zero1-cont (saved-cont)
+        (apply-cont saved-cont
+          (bool-val
+            (zero? (expval->num val)))))
+      (let-exp-cont (var body saved-env saved-cont)
+        (value-of/k body
+          (extend-env var val saved-env) saved-cont))
+      (if-test-cont (exp2 exp3 saved-env saved-cont)
+        (if (expval->bool val)
+          (value-of/k exp2 saved-env saved-cont)
+          (value-of/k exp3 saved-env saved-cont))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "用数据结构表示续文"))]
+}
+
+下面这个简单算例展示了各部分如何结合在一起。像在@secref{s3.3}那样，我们用
+@${<<exp>>}指代表达式@${exp}的抽象语法树。设@${\rho_0}是一环境，@tt{b}在其中绑定
+到@tt{(bool-val #t)}；@${cont_0}是初始续文，即@tt{(end-cont)}的值。注释说明应与
+@tt{value-of/k}的定义和@tt{apply-cont}的规范对读。这个例子是预测性的，因为我们让
+@tt{letrec}引入了过程，但还不知道如何调用它。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of/k <<letrec p(x) = x in if b then 3 else 4>>
+  |@${\rho_0} |@${cont_0})
+= |@smaller{@emph{令@${\rho_0}为}@tt{(extend-env-rec ... @${\rho_0})}}
+(value-of/k <<if b then 3 else 4>> |@${\rho_1} |@${cont_0})
+= |@smaller{@emph{然后，求条件表达式的值}}
+(value-of/k <<b>> |@${\rho_1} (test-cont <<3>> <<4>> |@${\rho_1} |@${cont_0}))
+= |@smaller{@emph{把}@tt{b}@emph{的值传给续文}}
+(apply-cont (test-cont <<3>> <<4>> |@${\rho_1} |@${cont_0})
+            (bool-val #f))
+= |@smaller{@emph{求真值表达式}}
+(value-of/k <<3>> |@${\rho_1} |@${cont_0})
+= |@smaller{@emph{把表达式的值传给续文}}
+(apply-cont |@${cont_0} (num-val 3))
+= |@smaller{@emph{在最后的续文中处理最终答案}}
+(begin (eopl:printf ...) (num-val 3))
+}|
+}
+
+差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像@tt{if}
+那样开始，先求第一个实参：
+
+@codeblock[#:indent 11]{
+(diff-exp (exp1 exp2)
+  (value-of/k exp1 env
+    (diff1-cont exp2 env cont)))
+}
+
+当@tt{(diff1-cont exp2 env cont)}收到一个值，它求值@tt{exp2}时的语境应保存
+@tt{exp1}的值。我们将其定义为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (diff1-cont |@${exp_2} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${exp_2} |@${env}
+    (diff2-cont |@${val1} |@${cont}))
+}|
+}
+
+当@tt{(diff2-cont val1 cont)}收到一个值，我们得到了两个操作数的值，所以，我们可
+以把二者的差继续传给等待中的@tt{cont}。定义为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (diff2-cont |@${val1} |@${cont}) |@${val2})
+= (let ((num1 (expval->num |@${val1}))
+        (num2 (expval->num |@${val2})))
+    (apply-cont |@${cont}
+      (num-val (- num1 num2))))
+}|
+}
+
+让我们看看该系统的例子。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of/k
+  <<-(-(44,11),3)>>
+  |@${\rho_0}
+  #(struct:end-cont))
+= |@smaller{@emph{开始处理第一个操作数}}
+(value-of/k
+  <<-(44,11)>>
+  |@${\rho_0}
+  #(struct:diff1-cont <<3>> |@${\rho_0}
+     #(struct:end-cont)))
+= |@smaller{@emph{开始处理第一个操作数}}
+(value-of/k
+  <<44>>
+  |@${\rho_0}
+  #(struct:diff1-cont <<11>> |@${\rho_0}
+     #(struct:diff1-cont <<3>> |@${\rho_0}
+        #(struct:end-cont))))
+= |@smaller{@emph{把}@tt{<<44>>}的值传给续文}
+(apply-cont
+  #(struct:diff1-cont <<11>> |@${\rho_0}
+    #(struct:diff1-cont <<3>> |@${\rho_0}
+       #(struct:end-cont)))
+  (num-val 44))
+= |@smaller{@emph{现在，开始处理第二个操作数}}
+(value-of/k
+  <<11>>
+  |@${\rho_0}
+  #(struct:diff2-cont (num-val 44)
+     #(struct:diff1-cont <<3>> |@${\rho_0}
+        #(struct:end-cont))))
+= |@smaller{@emph{把值传给续文}}
+(apply-cont
+  #(struct:diff2-cont (num-val 44)
+     #(struct:diff1-cont <<3>> |@${\rho_0}
+        #(struct:end-cont)))
+  (num-val 11))
+= |@smaller{@emph{@${44-11}等于@${33}，传给续文}}
+(apply-cont
+  #(struct:diff1-cont <<3>> |@${\rho_0}
+     #(struct:end-cont))
+  (num-val 33))
+= |@smaller{@emph{开始处理第二个操作数}@tt{<<3>>}}
+(value-of/k
+  <<3>>
+  |@${\rho_0}
+  #(struct:diff2-cont (num-val 33)
+     #(struct:end-cont)))
+= |@smaller{@emph{把值传给续文}}
+(apply-cont
+  #(struct:diff2-cont (num-val 33)
+     #(struct:end-cont))
+  (num-val 3))
+= |@smaller{@emph{@${33-3}等于@${30}，传给续文}}
+(apply-cont
+  #(struct:end-cont)
+  (num-val 30))
+}|
+}
+
+@tt{apply-cont}打印出消息“计算结束”，返回计算的最终结果@tt{(num-val 30)}。
+
+}
+
+我们的语言中最后要处理的是过程调用。在传递环境的解释器中，我们写：
+
+@codeblock[#:indent 11]{
+(call-exp (rator rand)
+  (let ((proc1 (expval->proc (value-of rator env)))
+        (arg (value-of rand env)))
+    (apply-procedure proc1 arg)))
+}
+
+就像在@tt{diff-exp}中一样，这里要处理两个调用。所以我们必须先选其一，然后转换余
+下部分，再处理第二个。此外，我们必须把续文传给@tt{apply-procedure}，因为
+@tt{apply-procedure}要掉用@tt{value-of/k}。
+
+我们选择先求操作符的值，所以在@tt{value-of/k}中我们写：
+
+@nested{
+@codeblock[#:indent 11]{
+(call-exp (rator rand)
+  (value-of/k rator
+    (rator-cont rand env cont)))
+}
+
+就像@tt{diff-exp}，@tt{rator-cont}在适当的环境中求值操作数：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${rand} |@${env}
+    (rand-cont |@${val1} |@${cont}))
+}|
+}
+
+当@tt{rand-cont}收到一个值，它就可以调用过程了：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
+= (let ((proc1 (expval->proc |@${val1})))
+    (apply-procedure/k proc1 |@${val2} |@${cont}))
+}|
+}
+
+最后，我们还要修改@tt{apply-procedure}，以符合续文传递风格：
+
+@racketblock[
+@#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
+(define apply-procedure/k
+  (lambda (proc1 val cont)
+    (cases proc proc1
+      (procedure (var body saved-env)
+        (value-of/k body
+          (extend-env var val saved-env)
+          cont)))))
+]
+}
+
+传递续文的解释器展示完毕。完整的解释器如图5.4和图5.5所示。续文的完整规范如图5.6
+所示。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
+(define value-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (value-of/k exp1 (init-env) (end-cont))))))
+
+@#,elem{@bold{@tt{value-of/k}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
+(define value-of/k
+  (lambda (exp env cont)
+    (cases expression exp
+      (const-exp (num) (apply-cont cont (num-val num)))
+      (var-exp (var) (apply-cont cont (apply-env env var)))
+      (proc-exp (var body)
+        (apply-cont cont
+          (proc-val
+            (procedure var body env))))
+      (letrec-exp (p-name b-var p-body letrec-body)
+        (value-of/k letrec-body
+          (extend-env-rec p-name b-var p-body env)
+          cont))
+      (zero?-exp (exp1)
+        (value-of/k exp1 env
+          (zero1-cont cont)))
+      (if-exp (exp1 exp2 exp3)
+        (value-of/k exp1 env
+          (if-test-cont exp2 exp3 env cont)))
+      (let-exp (var exp1 body)
+        (value-of/k exp1 env
+          (let-exp-cont var body env cont)))
+      (diff-exp (exp1 exp2)
+        (value-of/k exp1 env
+          (diff1-cont exp2 env cont)))
+      (call-exp (rator rand)
+        (value-of/k rator env
+          (rator-cont rand env cont))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "传递续文的解释器（第1部分）"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{FinalAnswer} \to \mathit{FinalAnswer}}}
+(define apply-procedure/k
+  (lambda (proc1 val cont)
+    (cases proc proc1
+      (procedure (var body saved-env)
+        (value-of/k body
+          (extend-env var val saved-env)
+          cont)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "传递续文的解释器（第2部分）"))]
+}
+
+现在我们可以验证断言：不是过程调用，而是实际参数的求值扩大了控制语境。具体来说，
+如果我们在某个续文@${cont_1}中求过程调用@tt{(@${exp_1} @${exp_2})}的值，求
+@${exp_1}得到的过程主体也将在@${cont_1}中求值。
+
+但过程调用本身不会增大控制语境。考虑@tt{(@${exp_1} @${exp_2})}的求值，其中
+@${exp_1}的值是一个过程@${proc_1}，@${exp_2}的值是某个表达值@${val_2}。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of/k <<(|@${exp_1} |@${exp_2})>> |@${\rho_1} |@${cont_1})
+= |@smaller{@emph{求操作符的值}}
+(value-of/k <<|@${exp_1}>> |@${\rho_1}
+  (rator-cont <<|@${exp_2}>> |@${\rho_1} |@${cont_1}))
+= |@smaller{@emph{把过程值传给续文}}
+(apply-cont
+  (rator-cont <<|@${exp_2}>> |@${\rho_1} |@${cont_1})
+  |@${proc_1})
+= |@smaller{@emph{求操作符的值}}
+(value-of/k <<|@${exp_2}>> |@${\rho_1}
+  (rand-cont <<|@${proc_1}>> |@${cont_1}))
+= |@smaller{@emph{把参数值传给续文}}
+(apply-cont
+  (rand-cont <<|@${proc_1}>> |@${cont_1})
+  |@${val_2})
+= |@smaller{@emph{调用过程}}
+(apply-procedure/k |@${proc_1} |@${val_2} |@${cont_1})
+}|
+}
+
+所以，过程调用时，主体在调用所在的续文中求值。操作数的求值需要控制语境，进入过程
+主体不需要。
+
+@exercise[#:level 1 #:tag "ex5.1"]{
+
+用过程表示法实现续文数据类型。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.2"]{
+
+用数据结构表示法实现续文数据类型。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.3"]{
+
+给解释器添加@tt{let2}。@tt{let2}表达式就像@tt{let}表达式，但要指定两个变量。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.4"]{
+
+给解释器添加@tt{let3}。@tt{let3}表达式就像@tt{let}表达式，但要指定三个变量。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.5"]{
+
+给语言添加练习3.9中的列表。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.6"]{
+
+给语言添加练习3.10中的@tt{list}表达式。提示：添加两个续文构造器，一个用来求列表
+首元素的值，一个用来求列表剩余元素的值。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.7"]{
+
+给解释器添加多声明@tt{let}（练习3.16）。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.8"]{
+
+给解释器添加多参数过程（练习3.21）。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.9"]{
+
+修改这个解释器，实现IMPLICIT-REFS语言。提示：添加新的续文构造器@tt{(set-rhs-cont
+env var cont)}。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.10"]{
+
+修改前一题的解答，不要在续文中保存环境。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.11"]{
+
+给传递续文的解释器添加练习4.4中的@tt{begin}表达式。确保@tt{value-of}和
+@tt{value-of-rands}不在需要生成控制语境的位置调用。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.12"]{
+
+给图5.4-5.6的解释器添加辅助过程，生成类似@elem[#:style question]{150页}计算的输
+出。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.13"]{
+
+把@tt{fact}和@tt{fact-iter}翻译为LETREC语言。你可以给语言添加乘法操作符。然后，
+用前一道练习中添加了辅助组件解释器计算@tt{(fact 4)}和@tt{(fact-iter 4)}。将它们
+和本章开头的计算比较。在@tt{(fact 4)}的跟踪日志中找出@tt{(* 4 (* 3 (* 2 (fact
+1))))}。调用@tt{(fact 1)}时，@tt{apply-procedure/k}的续文是什么？
+
+}
+
+@exercise[#:level 1 #:tag "ex5.14"]{
+
+前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文的
+@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所以@elem[#:style
+question]{150页}计算中最大续文的尺寸是3。然后，用@tt{fact}和@tt{fact-iter}计算几
+个操作数的值。验证@tt{fact}使用的最大续文尺寸随其参数递增，但@tt{fact-iter}使用
+的最大续文尺寸是常数。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.15"]{
+
+我们的续文数据类型只有一个常量@tt{end-cont}，所有其他续文构造器都有一个续文参数。
+用列表表示和实现续文。用空列表表示@tt{end-cont}，用首项为其他数据结构（名为
+@emph{帧} (@emph{frame})或@emph{活跃记录} (@emph{activation record})），余项为已
+保存续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.16"]{
+
+扩展传递续文的解释器，处理练习4.22中的语言。给@tt{result-of}传递一个续文参数，确
+保@tt{result-of}不在扩大控制语境的位置调用。因为语句不返回值，需要区分普通续文和
+语句续文；后者通常叫@emph{命令续文} (@emph{command continuation})。续文接口应包
+含过程@tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和无参数过程两
+种方式实现命令续文。
+
+}
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (end-cont) |@${val})
+= (begin
+    (eopl:printf
+      "计算结束.~%")
+    |@${val})
+
+(apply-cont (diff1-cont |@${exp_2} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${exp_2} |@${env} (diff2-cont |@${val1} |@${cont}))
+
+(apply-cont (diff2-cont |@${val1} |@${cont}) |@${val2})
+= (let ((num1 (expval->num |@${val1}))
+        (num2 (expval->num |@${val2})))
+    (apply-cont |@${cont} (num-val (- num1 num2))))
+
+(apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${rand} |@${env} (rand-cont |@${val1} |@${cont}))
+
+(apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
+= (let ((proc1 (expval->proc |@${val1})))
+    (apply-procedure/k proc1 |@${val2} |@${cont}))
+
+(apply-cont (zero1-cont |@${cont}) |@${val})
+= (apply-cont |@${cont} (bool-val (zero? (expval->num |@${val}))))
+
+(apply-cont (if-test-cont |@${exp_2} |@${exp_3} |@${env} |@${cont}) |@${val})
+= (if (expval->bool |@${val})
+    (value-of/k |@${exp_2} |@${env} |@${cont})
+    (value-of/k |@${exp_3} |@${env} |@${cont}))
+
+(apply-cont (let-exp-cont |@${var} |@${body} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${body} (extend-env |@${var} |@${val1} |@${env}) |@${cont})
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "图5.4中续文的规范"))]
+}
