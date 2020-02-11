@@ -224,7 +224,7 @@ end
 @nested{
 
 @$${\infer{@tt{(value-of (diff-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0})} =
-           @tt{(@${\lceil\lfloor val_1 \rfloor\rceil - \lceil\lfloor val_2 \rfloor\rceil},@${\sigma_2})}}
+           @tt{(@${\lceil\lfloor val_1 \rfloor - \lfloor val_2 \rfloor\rceil},@${\sigma_2})}}
           {\begin{alignedat}{-1}
              @tt{(value-of (diff-exp @${exp_1}) @${\rho} @${\sigma_0})} &= @tt{(@${val_1},@${\sigma_1})} \\
              @tt{(value-of (diff-exp @${exp_2}) @${\rho} @${\sigma_1})} &= @tt{(@${val_2},@${\sigma_2})}
