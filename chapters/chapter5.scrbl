@@ -918,7 +918,7 @@ question]{150页}计算中最大续文的尺寸是3。然后，用@tt{fact}和@t
 的情况进行了优化。而且，大多数语言在堆栈中存储环境信息，所以，每个过程调用生成的
 控制语境还要记住移除堆栈上的环境信息。
 
-在这种语言中，一种解决方案是使用技术@emph{跃迁} (@emph{trampolining})。为了避免
+在这种语言中，一种解决方案是使用@emph{跳跃} (@emph{trampolining})技术。为了避免
 产生无限长的调用链，我们把调用链打断，让解释器中的某个过程返回一个无参数过程。这
 个过程在调用时继续进行计算。整个计算由一个名叫@emph{跳床} (@emph{trampoline})的
 过程驱动，它从一个过程调用跳到另一个。例如，我们可以在@tt{apply-procedure/k}的主
@@ -1076,6 +1076,386 @@ question]{150页}计算中最大续文的尺寸是3。然后，用@tt{fact}和@t
 @exercise[#:level 3 #:tag "ex5.22"]{
 
 有人可能想用普通的过程式语言转写@secref{expr}中传递环境的解释器。同样是因为上述
-原因，除了最简单的情况，这种转换都会失败。跃迁技术在这种情况下也有效吗？
+原因，除了最简单的情况，这种转换都会失败。跳跃技术在这种情况下也有效吗？
+
+}
+
+@section[#:tag "s5.3"]{指令式解释器}
+
+在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。考虑图5.8顶部的老例
+子@tt{even}和@tt{odd}。可以用图5.8中间的程序替代它们。其中，共享变量@tt{x}供两个
+过程交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们
+从存储器中查找相关数据。
+
+考虑图5.8底部的计算跟踪日志。两个程序的计算跟踪日志都是可以是它。我们记录调用的
+过程和实参时，它是第一个计算的跟踪日志；我们记录调用的过程和寄存器@tt{x}的值时，
+它是第二个计算的跟踪日志。
+
+而当我们记录程序计数器的位置和寄存器@tt{x}的内容时，这又可以解释为
+@emph{goto}（名为流程图程序）的跟踪日志。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec
+ even(x) = if zero?(x)
+           then 1
+           else (odd sub1(x))
+ odd(x) = if zero?(x)
+          then 0
+          else (even sub1(x))
+in (odd 13)
+}|
+}
+
+@${\rule{\linewidth}{1pt}}
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 0
+in letrec
+    even() = if zero?(x)
+             then 1
+             else let d = set x = sub1(x)
+                  in (odd)
+    odd() = if zero?(x)
+            then 0
+            else let d = set x = sub1(x)
+                 in (even)
+   in let d = set x = 13
+      in (odd)
+}|
+}
+
+@${\rule{\linewidth}{0.5pt}}
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+      x = 13;
+      goto odd;
+even: if (x=0) then return(1)
+               else {x = x-1;
+                     goto odd;}
+odd:  if (x=0) then return(0)
+               else {x = x-1;
+                     goto even;}
+}|
+}
+
+@${\rule{\linewidth}{0.5pt}}
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+  (odd 13)
+= (even 12)
+= (odd 11)
+...
+= (odd 1)
+= (even 0)
+= 1
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "跟踪日志相同的三个程序"))]
+}
+
+能这样，只是因为原代码中@tt{even}和@tt{odd}的调用不扩大控制语境：它们是尾调用。
+我们不能这样转换@tt{fact}，因为@tt{fact}的跟踪日志无限增长：不像这里，“程序计数
+器”出现在跟踪日的最外层，而是在控制语境中。
+
+任何不需要控制语境的程序都可以这样转换。这给了我们一条重要原则：
+
+@nested[#:style tip]{
+ @centered{@bold{无参数的尾调用等同于跳转。}}
+}
+
+如果一组过程只通过尾调用互相调用，那么我们翻译程序，用赋值代替绑定，然后把赋值程
+序转译为流程图程序，就像图5.8那样。
+
+本节，我们用这一原则翻译传递续文的解释器，将其转换为适合无高阶过程语言的形式。
+
+我们首先从图5.4和5.5的解释器开始，用数据结构表示续文。续文的数据结构表示如图5.9
+和5.10所示。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(define-datatype continuation continuation?
+  (end-cont)
+  (zero1-cont
+    (saved-cont continuation?))
+  (let-exp-cont
+    (var identifier?)
+    (body expression?)
+    (saved-env environment?)
+    (saved-cont continuation?))
+  (if-test-cont
+    (exp2 expression?)
+    (exp3 expression?)
+    (saved-env environment?)
+    (saved-cont continuation?))
+  (diff1-cont
+    (exp2 expression?)
+    (saved-env environment?)
+    (saved-cont continuation?))
+  (diff2-cont
+    (val1 expval?)
+    (saved-cont continuation?))
+  (rator-cont
+    (rand expression?)
+    (saved-env environment?)
+    (saved-cont continuation?))
+  (rand-cont
+    (val1 expval?)
+    (saved-cont continuation?)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "用数据结构实现的续文（第1部分）"))]
+
+}
+
+我们的第一个任务是列出需要通过共享寄存器通信的过程。这些过程及其形参为：
+
+@nested{
+@codeblock[#:indent 0]{
+(value-of/k exp env cont)
+(apply-cont cont val)
+(apply-procedure/k proc1 val cont)
+}
+}
+
+所以我们需要五个寄存器：@tt{exp}，@tt{env}，@tt{cont}，@tt{val}和@tt{proc1}。上
+面的三个过程各改为一个无参数过程，每个实参的值存入对应的寄存器，调用无参数过程，
+换掉上述过程的调用。所以，这段代码
+
+@nested{
+@racketblock[
+(define value-of/k
+  (lambda (exp env cont)
+    (cases expression exp
+      (const-exp (num) (apply-cont cont (num-val num)))
+      ...)))
+]
+
+可以替换为：
+
+@racketblock[
+(define value-of/k
+  (lambda ()
+    (cases expression exp
+      (const-exp (num)
+        (set! cont cont)
+        (set! val (num-val num))
+        (apply-cont))
+      ...)))
+]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{Bounce}}}
+(define apply-cont
+  (lambda (cont val)
+    (cases continuation cont
+      (end-cont ()
+        (begin
+          (eopl:printf
+            "计算结束.~%")
+          val))
+      (zero1-cont (saved-cont)
+        (apply-cont saved-cont
+          (bool-val
+            (zero? (expval->num val)))))
+      (let-exp-cont (var body saved-env saved-cont)
+        (value-of/k body
+          (extend-env var val saved-env) saved-cont))
+      (if-test-cont (exp2 exp3 saved-env saved-cont)
+        (if (expval->bool val)
+          (value-of/k exp2 saved-env saved-cont)
+          (value-of/k exp3 saved-env saved-cont)))
+      (diff1-cont (exp2 saved-env saved-cont)
+        (value-of/k exp2
+          saved-env (diff2-cont val saved-cont)))
+      (diff2-cont (val1 saved-cont)
+        (let ((num1 (expval->num val1))
+              (num2 (expval->num val)))
+          (apply-cont saved-cont
+            (num-val (- num1 num2)))))
+      (rator-cont (rand saved-env saved-cont)
+        (value-of/k rand saved-env
+          (rand-cont val saved-cont)))
+      (rand-cont (val1 saved-cont)
+        (let ((proc (expval->proc val1)))
+          (apply-procedure/k proc val saved-cont))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "用数据结构实现的续文（第2部分）"))]
+
+}
+
+现在，我们依次转换四个过程。我们还要修改@tt{value-of-program}的主体，因为那是最
+初调用@tt{value-of/k}的地方。只有三点小麻烦：
+
+@itemlist[#:style 'ordered
+
+ @item{从一个过程调用到另一个时，常常有存储器保持不变。这就得出应上例中的
+ @tt{(set! cont cont)}赋值。我们大可移除这样的赋值。}
+
+ @item{我们必须确保@tt{cases}表达式中的字段不与寄存器重名。否则字段会遮蔽寄存器，
+ 寄存器就无法访问。例如，在@tt{value-of-program}中，我们如果写：
+
+ @codeblock[#:indent 5]{
+ (cases program pgn
+   (a-program (exp)
+     (value-of/k exp (init-env) (end-cont))))
+ }
+
+ 那么@tt{exp}绑定到局部变量，我们无法给全局寄存器@tt{exp}赋值。解决方法是重命名
+ 局部变量，避免冲突：
+
+ @codeblock[#:indent 5]{
+ (cases program pgn
+   (a-program (exp1)
+     (value-of/k exp1 (init-env) (end-cont))))
+ }
+
+ 然后，可以写：
+
+ @codeblock[#:indent 5]{
+ (cases program pgn
+   (a-program (exp1)
+     (set! cont (end-cont))
+     (set! exp exp1)
+     (set! env (init-env))
+     (value-of/k)))
+ }
+
+ 我们已仔细挑选数据类型中的字段名，避免这种冲突。
+
+ }
+
+ @item{一次调用中如果两次使用同一寄存器，又会造成一点麻烦。考虑转换@tt{(cons (f
+ (car x)) (f (cdr x)))}中的第一个调用，其中，@tt{x}是@tt{f}的形式参数。不假思索
+ 的话，调用可以转换为：
+
+ @racketblock[
+ (begin
+   (set! x (car x))
+   (set! cont (arg1-cont x cont))
+   (f))
+ ]
+
+ 但这是不对的，因为它给寄存器@tt{x}赋了新值，但@tt{x}原先的值还有用。解决方法是
+ 调整赋值顺序，把正确的值放入寄存器中，或者，使用临时变量。大多情况下，要避免这
+ 种问题，可以先给续文变量赋值：
+
+ @racketblock[
+ (begin
+   (set! cont (arg1-cont x cont))
+   (set! x (car x))
+   (f))
+ ]
+
+ 有时临时变量无法避免；考虑@tt{(f y x)}，其中@tt{x}和@tt{y}是@tt{f}的形式参数。
+ 我们的例子中还没有这种麻烦。}
+
+]
+
+翻译完成的解释器如图5.11-5.14所示。这个过程叫做@emph{寄存}
+(@emph{registerization})。很容易把它翻译成支持跳转的命令式语言。
+
+@exercise[#:level 1 #:tag "ex5.23"]{
+
+如果删去解释器某一分支中的“goto”会怎样？解释器究竟出什么错？
+
+}
+
+@exercise[#:level 1 #:tag "ex5.24"]{
+
+设计一些例子，解释上文提到的每个麻烦。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.25"]{
+
+寄存多参数过程的解释器（练习3.21）。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.26"]{
+
+用跳床转换这个解释器，用@tt{(set! pc apply-procedure/k)}替换
+@tt{apply-procedure/k}的调用，并使用下面这样的驱动器：
+
+@racketblock[
+(define trampoline
+  (lambda (pc)
+    (if pc (trampoline (pc)) val)))
+]
+
+}
+
+@exercise[#:level 1 #:tag "ex5.27"]{
+
+设计一个语言特性，导致最后给@tt{cont}赋值时，必须用临时变量。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.28"]{
+
+给这个解释器添加练习5.12中的辅助组件。由于续文表示方式相同，可以复用那里的代码。
+验证本节的命令式解释器生成的跟踪日志与练习5.12中的解释器@emph{完全}相同。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.29"]{
+
+转换本节的@tt{fact-iter}（@elem[#:style question]{139页}）。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.30"]{
+
+修改本节的解释器，让过程使用练习3.28中的动态绑定。提示：像本章这样转换练习3.28中
+的解释器；只有原解释器与本节解释器不同的部分，转换后的部分才会不同。像练习5.28那
+样给解释器添加辅助组件。观察可知，就像当前状态中只有一个续文，也只有一个压入和弹
+出的环境，而且它与续文同时压入弹出。由此可得，动态绑定具有 @emph{动态期限}
+(@emph{dynamic extent})：即，形式参数的绑定保留到过程返回为止。词法绑定则与之不
+同，牵涉闭包时可以一直保留。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.31"]{
+
+添加全局寄存器，排除本节代码中剩下的@tt{let}表达式。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.32"]{
+
+改进前一题的解答，尽可能减少全局寄存器的数量。不到5个就可以。除了本节解释器中已
+经用到的外，不要使用其他数据结构。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.33"]{
+
+把本节的解释器翻译为命令式语言。做两次，一次使用宿主语言中的无参数过程调用，一次
+使用@tt{goto}。计算量增加时，这二者性能如何？
+
+}
+
+@exercise[#:level 2 #:tag "ex5.34"]{
+
+如@elem[#:style question]{157页}所述，大多数命令式语言都很难完成这种翻译，因为不
+论哪种过程调用它们都要使用堆栈，即使是尾调用。而且，对大型解释器，使用@tt{goto}
+链接的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为命令式语言，用练
+习5.26中的跳跃技术避免这种困难。
 
 }
