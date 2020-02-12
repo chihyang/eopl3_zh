@@ -1621,3 +1621,416 @@ odd:  if (x=0) then return(0)
 习5.26中的跳跃技术避免这种困难。
 
 }
+
+@section[#:tag "s5.4"]{异常}
+
+迄今为止，我们只用续文管理语言中的普通控制流。但是续文还能让我们修改控制语境。让
+我们来给我们的语言添加@emph{异常处理} (@emph{exception handling})。我们给语言新
+增两个生成式：
+
+@envalign*{
+        \mathit{Expression} &::= @tt{try @m{\mathit{Expression}} catch (@m{\mathit{Identifier}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{try-exp (exp1 var handler-exp)}} \\[5pt]
+        \mathit{Expression} &::= @tt{raise @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{raise-exp (exp)}}}
+
+@tt{try}表达式在@tt{catch}从句描述的异常处理上下文中求第首个参数的值。如果该表达
+式正常返回，它的值就是整个@tt{try}表达式的值，异常处理器则抛弃。
+
+@tt{raise}表达式求出参数的值，用该值抛出异常，并把这个值传给最近建立的异常处理器，
+绑定到处理器的变量，然后，求出处理器主体的值。处理器主体可以返回一个值，这个值称
+为对应@tt{try}表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
+(@emph{propagate})出去；这时，异常会传给次近的异常处理器。
+
+暂时假设我们已经给语言添加了字符串，这里是一个例子。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let list-index =
+     proc (str)
+      letrec inner (lst)
+       = if null?(lst)
+         then raise("ListIndexFailed")
+         else if string-equal?(car(lst), str)
+              then 0
+              else -((inner cdr(lst)), -1)
+}|
+}
+
+过程@tt{list-index}是个咖喱式过程，它取一个字符串，一个字符串列表，返回字符串在
+列表中的位置。如果找不到期望的列表元素，@tt{inner}抛出一个异常，跳过所有待做的减
+法，把@tt{"ListIndexFailed"}传给最近建立的异常处理器。
+
+}
+
+异常处理器可以利用调用处的信息对异常做适当处理。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let find-member-number =
+     proc (member-name)
+      ... try ((list-index member-name) member-list)
+            catch (exn)
+             raise("CantFindMemberNumber")
+}|
+}
+
+过程@tt{find-member-number}取一字符串，用@tt{list-index}找出字符串在列表
+@tt{member-name}中的位置。@tt{find-member-number}的调用者没办法知道
+@tt{list-index}，所以@tt{find-member-number}把错误消息翻译成调用者能够理解的异常。
+
+}
+
+根据程序的用途，还有一种可能是，元素名不在列表中时，@tt{find-member-number}返回
+一个默认值。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let find-member-number =
+     proc (member-name)
+      ... try ((list-index member-name) member-list)
+           catch (exn)
+            the-default-member-number
+}|
+}
+
+在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise}传出的值可能包含可供调
+用者利用的部分信息。
+
+}
+
+用续文实现这种异常处理机制直截了当。我们从@tt{try}表达式开始。在续文的数据结构表
+示中，我们添加两个构造器：
+
+@nested{
+@codeblock[#:indent 11]{
+(try-cont
+  (var identifier?)
+  (handler-exp expression?)
+  (env environment?)
+  (cont continuation?))
+(raise1-cont
+  (saved-cont continuation?))
+}
+
+在@tt{value-of/k}中我们给@tt{try}添加下面的从句：
+
+@codeblock[#:indent 11]{
+(try-exp (exp1 var handler-exp)
+  (value-of/k exp1 env
+    (try-cont var handler-exp env cont)))
+}
+
+}
+
+求@tt{try}表达式的主体值时会发生什么呢？如果主体正常返回，那么这个值因该传给
+@tt{try}表达式的续文，也就是此处的@tt{cont}：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (try-cont |@${var} |@${handler-exp} |@${env} |@${cont}) |@${val})
+= (apply-cont |@${cont} |@${val})
+}|
+}
+
+如果抛出一个异常呢？首先，我们当然要求出@tt{raise}参数的值。
+
+@codeblock[#:indent 11]{
+(raise-exp (exp1)
+  (value-of/k exp1 env
+    (raise1-cont cont)))
+}
+
+当@tt{exp1}的值返还给@tt{raise1-cont}时，我们要查找续文中最近的异常处理器，即最
+上层的@tt{try-cont}续文。所以，在我们把续文规范写成：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-cont (raise1-cont |@${cont}) |@${val})
+= (apply-handler |@${val} |@${cont})
+}|
+}
+
+其中，@tt{apply-handler}是一过程，它找出最近的异常处理器并调用它（图5.15）。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{apply-handler}} : @${\mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
+(define apply-handler
+  (lambda (val cont)
+    (cases continuation cont
+      (try-cont (var handler-exp saved-env saved-cont)
+        (value-of/k handler-exp
+          (extend-env var val saved-env)
+          saved-cont))
+      (end-cont ()
+        (report-uncaught-exception))
+      (diff1-cont (exp2 saved-env saved-cont)
+        (apply-handler val saved-cont))
+      (diff2-cont (val1 saved-cont)
+        (apply-handler val saved-cont))
+      ...)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "过程" (tt "apply-handler")))]
+
+}
+
+要看出这些怎样配合，我们考虑用待定语言实现的@tt{index}。令@${exp_0}表示表达式：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let index
+     = proc (n)
+        letrec inner (lst)
+          = if null? (lst)
+            then raise 99
+            else if zero?(-(car(lst), n))
+                 then 0
+                 else -((inner cdr(lst)), -1)
+          in proc (lst)
+              try (inner lst)
+               catch (x) -1
+in ((index 5) list(2, 3))
+}|
+}
+
+我们从任意环境@${\rho_0}和续文@${cont_0}开始求值@${exp_0}。我们只展示计算的关键
+部分，并插入注释。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of/k
+  <<let index = ... in ((index 5) list(2, 3))>>
+  |@${\rho_0}
+  |@${cont_0})
+= |@smaller{@emph{执行}@tt{let}@emph{主体}}
+(value-of/k
+  <<((index 5) list(2, 3))>>
+  ((index               |@smaller{@emph{称之为}@${\rho_1}}
+     #(struct:proc-val
+        #(struct:procedure n <<letrec ...>> |@${\rho_0})))
+   (i #(struct:num-val 1))
+   (v #(struct:num-val 5))
+   (x #(struct:num-val 10)))
+  #(struct:end-cont))
+= |@smaller{@emph{最后求}@tt{try}@emph{的值}}
+(value-of/k
+  <<try (inner lst) catch (x) -1>>
+  ((lst                 |@smaller{@emph{称之为}@${\rho_{lst=(2 \  3)}}}
+     #(struct:list-val
+        (#(struct:num-val 2) #(struct:num-val 3))))
+   (inner ...)
+   (n #(struct:num-val 5))
+   |@${\rho_0})
+  #(struct:end-cont))
+= |@smaller{@emph{在}@tt{try-cont}@emph{续文中求}@tt{try}@emph{主体的值}}
+(value-of/k
+  <<(inner lst)>>
+  |@${\rho_{lst=(2 \  3)}}
+  #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:end-cont)))
+= |@smaller{@tt{lst}@emph{绑定到}@${(2 \  3)}，@emph{求}@tt{inner}@emph{主体的值}}
+(value-of/k
+  <<if null?(lst) ...>>
+  |@${\rho_{lst=(2 \  3)}}
+  #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:end-cont)))
+= |@smaller{@emph{求条件的值，进入递归所在的行}}
+(value-of/k
+  <<-((inner cdr(lst)), -1)>>
+  |@${\rho_{lst=(2 \  3)}}
+  #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:end-cont)))
+= |@smaller{@emph{求}@tt{diff-exp}@emph{第一个参数的值}}
+(value-of/k
+  <<(inner cdr(lst))>>
+  |@${\rho_{lst=(2 \  3)}}
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:end-cont))))
+= |@smaller{@tt{lst}@emph{绑定到}@${(3)}，@emph{求}@tt{inner}@emph{主体的值}}
+(value-of/k
+  <<if null?(lst) ...>>
+  ((lst #(struct:list-val (#(struct:num-val 3)))) |@smaller{@emph{称之为}@${\rho_{lst=(3)}}}
+   (inner ...)
+   |@${\rho_0})
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:end-cont))))
+= |@smaller{@emph{求条件的值，进入递归所在的行}}
+(value-of/k
+  <<-((inner cdr(lst)), -1)>>
+  |@${\rho_{lst=(3)}}
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:end-cont))))
+= |@smaller{@emph{求}@tt{diff-exp}@emph{第一个参数的值}}
+(value-of/k
+  <<(inner cdr(lst))>>
+  |@${\rho_{lst=(3)}}
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+           #(struct:end-cont)))))
+= |@smaller{@tt{lst}@emph{绑定到}@${()}，@emph{求}@tt{inner}@emph{主体的值}}
+(value-of/k
+  <<if null?(lst) ... >>
+  ((lst #(struct:list-val ()))     |@smaller{@emph{称之为}@${\rho_{lst=()}}}
+   (inner ...)
+   (n #(struct:num-val 5))
+   ...)
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(3)}}
+     #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+           #(struct:end-cont)))))
+= |@smaller{@emph{求}@tt{raise}@emph{表达式参数的值}}
+(value-of/k
+  <<99>>
+  |@${\rho_{lst=()}}
+  #(struct:raise1-cont
+     #(struct:diff1-cont <<-1>> |@${\rho_{lst=(3)}}
+        #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+           #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+              #(struct:end-cont))))))
+
+= |@smaller{@emph{用}@tt{apply-handler}@emph{展开续文，直到找出一个异常处理器}}
+(apply-handler
+  #(struct:num-val 99)
+     #(struct:diff1-cont <<-1>> |@${\rho_{lst=(3)}}
+        #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+           #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+              #(struct:end-cont)))))
+=
+(apply-handler
+  #(struct:num-val 99)
+  #(struct:diff1-cont <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+        #(struct:end-cont))))
+=
+(apply-handler
+  #(struct:num-val 99)
+  #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
+     #(struct:end-cont)))
+= |@smaller{@emph{找到译成处理器；把异常值绑定到}@tt{x}}
+(value-of/k
+  #(struct:const-exp -1)
+  ((x #(struct:num-val 99))
+  |@${\rho_{lst=(2 \  3)}} ...)
+  #(struct:end-cont))
+=
+(apply-cont #(struct:end-cont) #(struct:const-exp -1))
+=
+#(struct:const-exp -1)
+}|
+}
+
+如果列表包含期望值，那么我们不掉用@tt{apply-handler}，而是调用@tt{apply-cont}，
+并执行续文中所有待完成的@tt{diff}。
+
+@exercise[#:level 2 #:tag "ex5.35"]{
+
+这种实现很低效，因为异常抛出时，@tt{apply-handler}必须在续文中线性查找处理器。让
+每个续文直接使用@tt{try-cont}续文，从而避免这种查找。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.36"]{
+
+另一种避免@tt{apply-handler}线性查找的设计是使用两个续文，一个正常续文，一个异常
+续文。修改本节的解释器，改用两个续文，实现这一目标。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.37"]{
+
+修改待定语言，在过程调用的实参数目错误时抛出异常。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.38"]{
+
+修改待定语言，添加除法表达式。除以零时抛出异常。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.39"]{
+
+现在，异常处理器可以重新抛出异常，把它传播出去；或者返回一个值，作为@tt{try}表达
+式的值。还可以这样设计语言：允许计算从异常抛出的位置继续。修改本节的解释器，在
+@tt{raise}调用处的续文中运行异常处理器的主体，从而完成这种设计。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.40"]{
+
+把@tt{raise}异常处的续文作为第二个参数传递，使待定语言中的异常处理器既可返回也可
+继续。这可能需要把续文作为一种新的表达值。为用值调用续文设计恰当的语法。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.41"]{
+
+我们已经展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{pr}中的
+步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler}和
+@tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程表示@tt{apply-cont}中续
+文的动作，一个无参数过程表示@tt{apply-handler}中续文的动作。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.42"]{
+
+前一道练习只在抛出异常时捕获续文。添加结构式@tt{letcc @${\mathit{Identifier}} in
+@${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(value-of/k (letcc |@${var} |@${body}) |@${\rho} |@${cont})
+= (value-of/k |@${body} (extend-env |@${var} |@${cont} |@${\rho}) |@${cont})
+}|
+}
+
+这样捕获的续文可用@tt{throw}调用：表达式@tt{throw @${\mathit{Expression}} to
+@${\mathit{Expression}}}求出两个子表达式的值。第二个表达式应返回一续文，应用于第
+一个表达式的值。@tt{throw}表达式当前的续文则被忽略。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.43"]{
+
+修改前一道练习待定语言中的@tt{letcc}，把捕获的续文作为一种新的过程，这样就可以写
+@tt{(@${exp_1} @${exp_2})}，而不用写@tt{throw @${\mathit{Expression}} to
+@${\mathit{Expression}}}。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.44"]{
+
+前面练习里的@tt{letcc}和@tt{throw}还有一种设计方式，只需给语言添加一个过程。这个
+过程在Scheme中叫做@tt{call-with-current-continuation}，它取一个单参数过程@tt{p}，
+并给@tt{p}传递一个单参数过程，该过程在调用时，将其参数传递给当前的续文@tt{cont}。
+可以用@tt{letcc}和@tt{throws}，把@tt{call-with-current-continuation}定义如下：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let call-with-current-continuation
+      = proc (p)
+          letcc cont
+          in (p proc (v) throw v to cont)
+in ...
+}|
+}
+
+给语言添加@tt{call-with-current-continuation}。然后写一个翻译器，把具有
+@tt{letcc}和@tt{throw}的语言翻译为只有@tt{call-with-current-continuation}，没有
+@tt{letcc}和@tt{throw}的语言。
+
+}
