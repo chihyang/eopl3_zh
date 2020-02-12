@@ -1370,6 +1370,168 @@ odd:  if (x=0) then return(0)
 翻译完成的解释器如图5.11-5.14所示。这个过程叫做@emph{寄存}
 (@emph{registerization})。很容易把它翻译成支持跳转的命令式语言。
 
+@nested[#:style eopl-figure]{
+@racketblock[
+(define exp 'uninitialized)
+(define env 'uninitialized)
+(define cont 'uninitialized)
+(define val 'uninitialized)
+(define proc1 'uninitialized)
+
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
+(define value-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (set! cont (end-cont))
+        (set! exp exp1)
+        (set! env (init-env))
+        (value-of/k)))))
+
+@#,elem{@bold{@tt{value-of/k}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
+@#,elem{@bold{用法} : 依赖寄存器}
+@#,elem{@tt{exp} : @${\mathit{Exp}}}
+@#,elem{@tt{env} : @${\mathit{Env}}}
+@#,elem{@tt{cont} : @${\mathit{Cont}}}
+(define value-of/k
+  (lambda ()
+    (cases expression exp
+      (const-exp (num)
+        (set! val (num-val num))
+        (apply-cont))
+      (var-exp (var)
+        (set! val (apply-env env var))
+        (apply-cont))
+      (proc-exp (var body)
+        (set! val (proc-val (procedure var body env)))
+        (apply-cont))
+      (letrec-exp (p-name b-var p-body letrec-body)
+        (set! exp letrec-body)
+        (set! env (extend-env-rec p-name b-var p-body env))
+        (value-of/k))
+)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "命令式解释器（第1部分）"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(((
+      (zero?-exp (exp1)
+        (set! cont (zero1-cont cont))
+        (set! exp exp1)
+        (value-of/k))
+      (let-exp (var exp1 body)
+        (set! cont (let-exp-cont var body env cont))
+        (set! exp exp1)
+        (value-of/k))
+      (if-exp (exp1 exp2 exp3)
+        (set! cont (if-test-cont exp2 exp3 env cont))
+        (set! exp exp1)
+        (value-of/k))
+      (diff-exp (exp1 exp2)
+        (set! cont (diff1-cont exp2 env cont))
+        (set! exp exp1)
+        (value-of/k))
+      (call-exp (rator rand)
+        (set! cont (rator-cont rand env cont))
+        (set! exp rator)
+        (value-of/k)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "命令式解释器（第2部分）"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
+@#,elem{@bold{用法} : 读取寄存器}
+@#,elem{@tt{cont} : @${\mathit{Cont}}}
+@#,elem{@tt{val} : @${\mathit{ExpVal}}}
+(define apply-cont
+  (lambda ()
+    (cases continuation cont
+      (end-cont ()
+        (eopl:printf "计算结束.~%")
+        val)
+      (zero1-cont (saved-cont)
+        (set! cont saved-cont)
+        (set! val (bool-val (zero? (expval->num val))))
+        (apply-cont))
+      (let-exp-cont (var body saved-env saved-cont)
+        (set! cont saved-cont)
+        (set! exp body)
+        (set! env (extend-env var val saved-env))
+        (value-of/k))
+      (if-test-cont (exp2 exp3 saved-env saved-cont)
+        (set! cont saved-cont)
+        (if (expval->bool val)
+          (set! exp exp2)
+          (set! exp exp3))
+        (set! env saved-env)
+        (value-of/k))
+)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "命令式解释器（第3部分）"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(((
+      (diff1-cont (exp2 saved-env saved-cont)
+        (set! cont (diff2-cont val saved-cont))
+        (set! exp exp2)
+        (set! env saved-env)
+        (value-of/k))
+      (diff2-cont (val1 saved-cont)
+        (let ((num1 (expval->num val1))
+               (num2 (expval->num val)))
+          (set! cont saved-cont)
+          (set! val (num-val (- num1 num2)))
+          (apply-cont)))
+      (rator-cont (rand saved-env saved-cont)
+        (set! cont (rand-cont val saved-cont))
+        (set! exp rand)
+        (set! env saved-env)
+        (value-of/k))
+      (rand-cont (rator-val saved-cont)
+        (let ((rator-proc (expval->proc rator-val)))
+          (set! cont saved-cont)
+          (set! proc1 rator-proc)
+          (set! val val)
+          (apply-procedure/k))))))
+
+@#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
+@#,elem{@bold{用法} : 依赖寄存器}
+@#,elem{@tt{proc1} : @${\mathit{Proc}}}
+@#,elem{@tt{val} : @${\mathit{ExpVal}}}
+@#,elem{@tt{cont} : @${\mathit{Cont}}}
+(define apply-procedure/k
+  (lambda ()
+    (cases proc proc1
+      (procedure (var body saved-env)
+        (set! exp body)
+        (set! env (extend-env var val saved-env))
+        (value-of/k)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "命令式解释器（第4部分）"))]
+
+}
+
 @exercise[#:level 1 #:tag "ex5.23"]{
 
 如果删去解释器某一分支中的“goto”会怎样？解释器究竟出什么错？
