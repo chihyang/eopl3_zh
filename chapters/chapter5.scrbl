@@ -608,7 +608,7 @@ behavior})。
 
 就像在@tt{diff-exp}中一样，这里要处理两个调用。所以我们必须先选其一，然后转换余
 下部分，再处理第二个。此外，我们必须把续文传给@tt{apply-procedure}，因为
-@tt{apply-procedure}要掉用@tt{value-of/k}。
+@tt{apply-procedure}要调用@tt{value-of/k}。
 
 我们选择先求操作符的值，所以在@tt{value-of/k}中我们写：
 
@@ -1920,7 +1920,7 @@ in ((index 5) list(2, 3))
   #(struct:num-val 99)
   #(struct:try-cont x <<-1>> |@${\rho_{lst=(2 \  3)}}
      #(struct:end-cont)))
-= |@smaller{@emph{找到译成处理器；把异常值绑定到}@tt{x}}
+= |@smaller{@emph{找到异常处理器；把异常值绑定到}@tt{x}}
 (value-of/k
   #(struct:const-exp -1)
   ((x #(struct:num-val 99))
@@ -1933,7 +1933,7 @@ in ((index 5) list(2, 3))
 }|
 }
 
-如果列表包含期望值，那么我们不掉用@tt{apply-handler}，而是调用@tt{apply-cont}，
+如果列表包含期望值，那么我们不调用@tt{apply-handler}，而是调用@tt{apply-cont}，
 并执行续文中所有待完成的@tt{diff}。
 
 @exercise[#:level 2 #:tag "ex5.35"]{
@@ -2032,5 +2032,138 @@ in ...
 给语言添加@tt{call-with-current-continuation}。然后写一个翻译器，把具有
 @tt{letcc}和@tt{throw}的语言翻译为只有@tt{call-with-current-continuation}，没有
 @tt{letcc}和@tt{throw}的语言。
+
+}
+
+@section[#:tag "s5.5"]{线程}
+
+许多编程任务中，可能需要一次进行多个计算。当这些计算作为同一进程的一部分，运行在
+同一地址空间，它们通常称为@emph{线程} (@emph{thread})。本节，我们将看到如何修改
+解释器，模拟多线程程序的执行。
+
+我们的多线程解释器不只做单线程计算，而是维护多个线程。每个线程包含一个正在进行的
+计算，就像本章之前展示的那样。线程使用@secref{state}中的赋值，通过共享内存通信。
+
+在我们的系统中，整个计算包含一个线程@emph{池} (@emph{pool})。每个线程@emph{在运
+行} (@emph{running})、@@emph{可运行} (@emph{runnable})或者@emph{受阻塞}
+(@emph{blocked})。在我们的系统中，一次只能有一个线程在运行。在多CPU系统中，可以
+有若干线程同时运行。可运行的线程记录在名为@emph{就绪队列} (@emph{ready queue})的
+队列中。还有线程因为种种原因未能就绪。我们说这些线程@emph{受阻塞}。本节稍后介绍
+阻塞的线程。
+
+线程调用由@emph{调度器} (@emph{scheduler})执行，它将就绪队列保存为状态的一部分。
+此外，它保存一个计时器，当一个线程完成若干步（即线程的@emph{时间片} (@emph{time
+slice})或@emph{量子} (@emph{quantum})）时，它中断线程，将其放入就绪队列中，并从
+就绪队列中选出一个新的线程来运行。这叫做@emph{抢占式调度} (@emph{pre-emptive
+scheduling})。
+
+我们的新语言基于IMPLICIT-REFS，名叫THREADS。在THREADS中，新线程由名为@tt{spawn}
+的构造器创建。@tt{spawn}取一参数，其值为一个过程。新创建的线程运行时，给那个过程
+传递一个未指明的参数。该线程不是立刻运行，而是放入就绪队列中，轮到它时才运行。
+@tt{spawn}的执行只求效果；在我们的系统中，我们随机为它挑选一个返回值73。
+
+我们来看这种语言的两个示例程序。图5.16定义了一个过程@tt{noisy}，它取一个列表，打
+印出列表的第一个元素，然后递归处理列表剩余部分。这里，主体表达式创建两个线程，分
+别打印列表@tt{[1,2,3,4,5]}和@tt{[6,7,8,9,10]}。列表究竟怎样穿插取决于调度器；在
+本例中，在被调度器打断之前，每个线程打印出列表中的两个元素，
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+test: two-non-cooperating-threads
+
+letrec
+  noisy (l) = if null?(l)
+              then 0
+              else begin print(car(l)); (noisy cdr(l)) end
+in
+   begin
+    spawn(proc (d) (noisy [1,2,3,4,5])) ;
+    spawn(proc (d) (noisy [6,7,8,9,10])) ;
+    print(100);
+    33
+   end
+
+100
+1
+2
+6
+7
+3
+4
+8
+9
+5
+10
+正确结果: 33
+实际结果: #(struct:num-val 33)
+正确
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "两个交错运行的线程"))]
+
+}
+
+图5.17展示了一个生产者和一个消费者，由初始值为0的缓存相联系。生产者取一参数
+@tt{n}，进入@tt{wait}循环5次，然后把@tt{n}放入缓存。每次进入@tt{wait}循环，它打
+印一个倒数计时器（以200s为单位）。消费者取一参数（但忽略它），进入一循环，等待缓
+存变成非零值。每次进入循环，它打印一个计数器（以100s为单位），以展示它等结果等了
+多久。主线程将生产者放入就绪队列，打印出300，并在自身中启动消费者。所以，前两项，
+300和205，分别由主线程和生产者线程打印。@note{原文为So the first two items, 300
+and 205, are printed by the main thread. 实则205是生产者所在线程打印。}就像前一
+个例子那样，在被打断之前，消费者线程和生产者线程各自循环大约两次。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let buffer = 0
+in let producer = proc (n)
+        letrec
+         wait(k) = if zero?(k)
+                   then set buffer = n
+                   else begin
+                         print(-(k,-200));
+                         (wait -(k,1))
+                        end
+         in (wait 5)
+   in let consumer = proc (d)
+           letrec busywait (k) = if zero?(buffer)
+                                 then begin
+                                       print(-(k,-100));
+                                       (busywait -(k,-1))
+                                      end
+                                 else buffer
+           in (busywait 0)
+      in begin
+          spawn(proc (d) (producer 44));
+          print(300);
+          (consumer 86)
+         end
+
+300
+205
+100
+101
+204
+203
+102
+103
+202
+201
+104
+105
+
+正确结果: 44
+实际结果: #(struct:num-val 44)
+正确
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "由缓存连接的生产者和消费者"))]
 
 }
