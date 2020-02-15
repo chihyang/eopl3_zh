@@ -2627,13 +2627,6 @@ in let mut = mutex()
 
 }
 
-@exercise[#:level 3 #:tag "ex5.52"]{
-
-写出使用互斥锁的程序，如图5.21，但主线程等待所有三个子线程终止，然后返回@tt{x}的
-值。
-
-}
-
 @exercise[#:level 3 #:tag "ex5.53"]{
 
 修改线程的表示，添加@emph{线程描述符} (@emph{thread identifier})。每个新线程都有
