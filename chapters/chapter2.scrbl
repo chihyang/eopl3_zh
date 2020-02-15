@@ -315,11 +315,11 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 (define report-no-binding-found
   (lambda (search-var)
-    (eopl:error 'apply-env "No binding for ~s" search-var)))
+    (eopl:error 'apply-env "~s未绑定" search-var)))
 
 (define report-invalid-env
   (lambda (env)
-    (eopl:error 'apply-env "Bad environment: ~s" env)))
+    (eopl:error 'apply-env "非法环境: ~s" env)))
 ]
 
 @make-nested-flow[

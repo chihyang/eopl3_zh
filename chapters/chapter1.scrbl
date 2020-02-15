@@ -748,7 +748,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 (define report-list-too-short
   (lambda (n)
     (eopl:error 'nth-element
-                "List too short by ~s elements.~%" (+ n 1))))
+                "列表太短，没有第~s个元素.~%" (+ n 1))))
 ]
 
 这里的注释 @tt{@bold{@tt{nth-element}} : @${List \times Int \to SchemeVal}} 表示
