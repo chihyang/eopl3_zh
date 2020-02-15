@@ -2078,8 +2078,8 @@ letrec
               else begin print(car(l)); (noisy cdr(l)) end
 in
    begin
-    spawn(proc (d) (noisy [1,2,3,4,5])) ;
-    spawn(proc (d) (noisy [6,7,8,9,10])) ;
+    spawn(proc (d) (noisy [1,2,3,4,5]));
+    spawn(proc (d) (noisy [6,7,8,9,10]));
     print(100);
     33
    end
@@ -2155,7 +2155,6 @@ in let producer = proc (n)
 201
 104
 105
-
 正确结果: 44
 实际结果: #(struct:num-val 44)
 正确
@@ -2165,5 +2164,239 @@ in let producer = proc (n)
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
  (list (para "由缓存连接的生产者和消费者"))]
+
+}
+
+实现从IMPLICIT-REFS语言传递续文的解释器开始。这与@secref{s5.1}中的类似，只是多了
+IMPLICIT-REFS中的存储器（当然！），以及练习5.9中的续文构造器@tt{set-rhs-cont}。
+
+我们给这个解释器添加一个调度器。调度器状态由四个值组成，接口提供六个过程来操作这
+些值，如图5.18所示。
+
+图5.19展示了本接口的实现。这里@tt{(enqueue @${q} @${val})}返回一队列，除了把
+@${val}放在末尾外，与@${q}相同。@tt{(dequeue @${q} @${f})}取出队头及剩余部分，将
+它们作为参数传递给@${f}。
+
+我们用无参数且返回表达值的Scheme过程表示线程：
+
+@nested[#:style 'inset]{
+@elem{@${\mathit{Thread} = () \to \mathit{ExpVal}}}
+}
+
+如果就绪队列非空，那么过程@tt{run-next-thread}从就绪队列取出第一个线程并运行，赋
+予它一个大小为@tt{the-max-time-slice}的新时间片。如果还有就绪线程，它还把
+@tt{the-ready-queue}设置为剩余线程队列。如果就绪队列为空，@tt{run-next-thread}返
+回@tt{the-final-answer}。计算到这里全部终止。
+
+然后我们来看解释器。@tt{spawn}表达式的求参续文在执行时，在就绪队列中放入一个新线
+程，把73返还给调用者，然后继续。新的线程在执行时，给@tt{spawn}参数的过程值传一个
+任意值（这里传28）。要完成这些，我们给@tt{value-of/k}新增从句：
+
+@nested{
+@codeblock[#:indent 11]{
+(spawn-exp (exp)
+  (value-of/k exp env
+    (spawn-cont cont)))
+}
+
+给@tt{apply-cont}新增从句：
+
+@codeblock[#:indent 11]{
+(spawn-cont (saved-cont)
+  (let ((proc1 (expval->proc val)))
+    (place-on-ready-queue!
+      (lambda ()
+        (apply-procedure/k proc1
+          (num-val 28)
+          (end-subthread-cont))))
+    (apply-cont saved-cont (num-val 73))))
+}
+
+@; TODO: figure 5.18, 5.19, 5.20
+
+跳跃式解释器生成快照时也是这样：它打包出一个续文（这里的@tt{(lambda ()
+(apply-procedure/k ...))}），把它传给另一个过程处理。在跳床的示例中，跳床只是接
+收线程并运行它。这里，我们把新线程放入就绪队列，继续我们的现有计算。
+
+}
+
+这带来一个关键问题：每个线程应在什么续文中运行？
+
+@itemlist[
+
+ @item{运行主线程的续文应记录主线程的值，作为最终答案，然后运行残存线程。}
+
+ @item{子线程结束时无法报告它的值，所以运行子线程的续文应忽略其值，然后直接运行
+ 残存线程。}
+
+]
+
+这给我们两种新续文，其行为由@tt{apply-cont}中的以下几行实现：
+
+@codeblock[#:indent 11]{
+(end-main-thread-cont ()
+  (set-final-answer! val)
+  (run-next-thread))
+
+(end-subthread-cont ()
+  (run-next-thread))
+}
+
+我们从@tt{value-of-program}入手整个系统：
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Int} \times \mathit{Program} \to \mathit{FinalAnswer}}}
+(define value-of-program
+  (lambda (timeslice pgm)
+    (initialize-store!)
+    (initialize-scheduler! timeslice)
+    (cases program pgm
+      (a-program (exp1)
+        (value-of/k
+          exp1
+          (init-env)
+          (end-main-thread-cont))))))
+]
+
+最后，我们修改@tt{apply-cont}，让它在每次调用时递减计时器。如果计时器到期，那就
+中止当前计算。实现时，我们在就绪队列中放入一个新线程，它用调用
+@tt{run-next-thread}时恢复的计时器再次调用@tt{apply-cont}。
+
+@racketblock[
+@#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
+(define apply-cont
+  (lambda (cont val)
+    (if (time-expired?)
+      (begin
+        (place-on-ready-queue!
+          (lambda () (apply-cont cont val)))
+        (run-next-thread))
+      (begin
+        (decrement-timer!)
+        (cases continuation cont
+          ...)))))
+]
+
+共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，考虑图5.20中的
+程序。这里，我们创建了三个线程，试图累加同一个计数器@tt{x}。如果一个线程读取了计
+数器，但在更新计数器之前终端，那么两个线程将把计数器设置成同样的值。因此，计数器
+可能变成2，甚至是1，而不是3。
+
+我们想要确保不出这种乱子。同样地，我们想要组织我们的程序，那么图5.17中的程序不需
+要繁忙的等待。相反，它应该能够进入休眠状态，并在生产者向同一缓存插入一个值时唤醒。
+
+有许多方式设计这类同步组件，一种简单的方式是使用@emph{互斥锁}（@emph{mutex
+exclusion}，简称@emph{mutex}）或@emph{二元信号量} (@emph{binary semaphore})。
+
+互斥锁可能@emph{打开} (@emph{open})或@emph{关闭} (@emph{closed})。它还包含一个等
+待互斥锁打开的线程队列。互斥锁有三种操作：
+
+@itemlist[
+
+ @item{@tt{mutex}，没有参数，创建一个初始状态为打开的互斥锁。}
+
+ @item{@tt{waite}，取一个参数，线程用它表示自身想要访问一把互斥锁。它的参数必须
+ 是一把互斥锁。它的行为取决于互斥锁的状态。
+
+ @itemlist[
+
+  @item{若互斥锁关闭，当前线程放入护斥锁的等待队列并中止。我们说当前线程@emph{受
+  阻塞}，等待这把互斥锁。}
+
+  @item{若互斥锁打开，则将其关闭，当前线程继续执行。}
+
+ ]
+
+ @tt{wait}的执行只求效果；它的返回值未定义。
+ }
+
+ @item{@tt{signal}，取一个参数，线程用它表示自身准备释放一把互斥锁。它的参数必须
+ 是一把互斥锁。
+
+ @itemlist[
+
+  @item{若互斥锁关闭，且等待队列中没有线程，则将其打开，当前线程继续执行。}
+
+  @item{若互斥锁关闭，且等待队列中仍有线程，则从中选出一个线程，放入调度器的等待
+  队列，而互斥锁保持关闭。执行@tt{signal}的线程继续计算。}
+
+  @item{若互斥锁打开，则仍保持打开，线程继续执行。}
+
+ ]
+
+ @tt{signal}的执行只求效果；它的返回值未定义。@tt{signal}操作总是成功：执行它的
+ 线程仍然是正在运行的线程。
+
+ }
+
+]
+
+这些属性保证在一对连续的@tt{wait}和@tt{signal}之间，只有一个线程可以执行。这部分
+程序叫做@emph{关键区域} (@emph{critical region})。在关键区域内，两个线程不可能同
+时执行。例如，图5.21展示了我们只前的例子，只在关键行周围插入了一把互斥锁。在这个
+程序中，一次只有一个线程可以执行@tt{set x = -(x,-1)}；所以计数器一定能够到达终值
+3。
+
+@;TODO: figure 5.21
+
+我们用两个引用模拟互斥锁：一个指向其状态（开启或关闭），一个指向等待这把锁的线程
+列表。我们还把互斥锁作为一种表达值。
+
+@racketblock[
+(define-datatype mutex mutex?
+  (a-mutex
+    (ref-to-closed? reference?)
+    (ref-to-wait-queue reference?)))
+]
+
+我们给@tt{value-of/k}添加适当的行：
+
+@nested{
+@codeblock[#:indent 11]{
+(mutex-exp ()
+  (apply-cont cont (mutex-val (new-mutex))))
+}
+
+其中：
+
+@racketblock[
+@#,elem{@bold{@tt{new-mutex}} : @${\mathit{()} \to \mathit{Mutex}}}
+(define new-mutex
+  (lambda ()
+    (a-mutex
+     (newref #f)
+     (newref '()))))
+]
+
+}
+
+@tt{wait}和@tt{signal}作为新的单参数操作，只是调用过程@tt{wait-for-mutex}和
+@tt{signal-mutex}。@tt{wait}和@tt{signal}都要求它们唯一参数的值，所以，在
+@tt{apply-cont}中我们写：
+
+@codeblock[#:indent 11]{
+(wait-cont
+  (saved-cont)
+  (wait-for-mutex
+    (expval->mutex val)
+    (lambda () (apply-cont saved-cont (num-val 52)))))
+
+(signal-cont
+  (saved-cont)
+  (signal-mutex
+    (expval->mutex val)
+    (lambda () (apply-cont saved-cont (num-val 53)))))
+}
+
+现在，我们可以写出@tt{wait-for-mutex}和@tt{signal-mutex}。这些过程取两个参数：一
+个互斥锁，一个线程，其工作方式如上所述（图5.22）。
+
+@;TODO: figure 5.22
+
+@exercise[#:level 1 #:tag "ex5.45"]{
+
+给本节的语言添加construct @tt{yield}。不论何时一个线程执行@tt{yield}，都将自身放入就
+绪队列之中，就绪队列头部的线程接着执行。当线程中止时，其表现为调用@tt{yield}，返
+回数值99。
 
 }
