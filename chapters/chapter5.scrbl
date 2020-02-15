@@ -2212,7 +2212,127 @@ IMPLICIT-REFS中的存储器（当然！），以及练习5.9中的续文构造�
     (apply-cont saved-cont (num-val 73))))
 }
 
-@; TODO: figure 5.18, 5.19, 5.20
+@; TODO: format for interface in figure 5.18
+@nested[#:style eopl-figure]{
+
+@bold{调度器的内部状态}
+
+@tt{the-ready-queue} 就绪队列
+
+@tt{the-final-answer} 主线程结束时的值
+
+@tt{the-max-time-slice} 每个线程运行的步数
+
+@tt{the-time-remaining} 当前运行线程剩余的步数
+
+@bold{调度器的内部状态}
+
+@tt{@bold{initialize-scheduler!}} : @${\mathit{Int} \to \mathit{Unspecified}}
+
+初始化调度器状态
+
+@tt{@bold{place-on-ready-queue!}} : @${\mathit{Thread} \to \mathit{Unspecified}}
+
+把线程放入就绪队列
+
+@tt{@bold{run-next-thread}} : @${\mathit{()} \to \mathit{FinalAnswer}}
+
+运行下一个线程。如果没有就绪线程，返回最终答案。
+
+@tt{@bold{set-final-answer!}} : @${\mathit{ExpVal} \to \mathit{Unspecified}}
+
+设置最终答案
+
+@tt{@bold{time-expired?}} : @${\mathit{()} \to \mathit{Bool}}
+
+判断计时器是否为0
+
+@tt{@bold{decrement-timer!}} : @${\mathit{()} \to \mathit{Unspecified}}
+
+递减@tt{the-time-remaining}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "调度器的状态和接口"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{initialize-scheduler!}} : @${\mathit{Int} \to \mathit{Unspecified}}}
+(define initialize-scheduler!
+  (lambda (ticks)
+    (set! the-ready-queue (empty-queue))
+    (set! the-final-answer 'uninitialized)
+    (set! the-max-time-slice ticks)
+    (set! the-time-remaining the-max-time-slice)))
+
+@#,elem{@bold{@tt{place-on-ready-queue!}} : @${\mathit{Thread} \to \mathit{Unspecified}}}
+(define place-on-ready-queue!
+  (lambda (th)
+    (set! the-ready-queue
+      (enqueue the-ready-queue th))))
+
+@#,elem{@bold{@tt{run-next-thread}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
+(define run-next-thread
+  (lambda ()
+    (if (empty? the-ready-queue)
+        (begin
+          (when (debug-mode?)
+            (eopl:printf "计算结束.~%"))
+          the-final-answer)
+        (begin
+          (when (debug-mode?)
+            (eopl:printf "切换到另一线程.~%"))
+          (dequeue the-ready-queue
+                   (lambda (first-ready-thread other-ready-thread)
+                     (set! the-ready-queue other-ready-thread)
+                     (set! the-time-remaining the-max-time-slice)
+                     (first-ready-thread)))))))
+
+@#,elem{@bold{@tt{set-final-answer!}} : @${\mathit{ExpVal} \to \mathit{Unspecified}}}
+(define set-final-answer!
+  (lambda (val)
+    (set! the-final-answer val)))
+
+@#,elem{@bold{@tt{time-expired?}} : @${\mathit{ExpVal} \to \mathit{Bool}}}
+(define time-expired?
+  (lambda ()
+    (zero? the-time-remaining)))
+
+@#,elem{@bold{@tt{decrease-timer!}} : @${\mathit{()} \to \mathit{Unspecified}}}
+(define decrease-timer!
+  (lambda ()
+    (set! the-time-remaining (- the-time-remaining 1))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "调度器"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 0
+in let mut = mutex()
+   in let incr_x = proc (id)
+                    proc (dummy)
+                     set x = -(x,-1)
+      in begin
+          spawn((incr_x 100));
+          spawn((incr_x 200));
+          spawn((incr_x 300))
+         end
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "不安全的计数器"))]
+
+}
 
 跳跃式解释器生成快照时也是这样：它打包出一个续文（这里的@tt{(lambda ()
 (apply-procedure/k ...))}），把它传给另一个过程处理。在跳床的示例中，跳床只是接
@@ -2337,7 +2457,31 @@ exclusion}，简称@emph{mutex}）或@emph{二元信号量} (@emph{binary semaph
 程序中，一次只有一个线程可以执行@tt{set x = -(x,-1)}；所以计数器一定能够到达终值
 3。
 
-@;TODO: figure 5.21
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+let x = 0
+in let mut = mutex()
+   in let incr_x = proc (id)
+                    proc (dummy)
+                      begin
+                        wait(mut);
+                        set x = -(x,-1);
+                        signal(mut)
+                      end
+      in begin
+          spawn((incr_x 100));
+          spawn((incr_x 200));
+          spawn((incr_x 300))
+         end
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "使用互斥锁的安全计数器"))]
+
+}
 
 我们用两个引用模拟互斥锁：一个指向其状态（开启或关闭），一个指向等待这把锁的线程
 列表。我们还把互斥锁作为一种表达值。
@@ -2391,12 +2535,155 @@ exclusion}，简称@emph{mutex}）或@emph{二元信号量} (@emph{binary semaph
 现在，我们可以写出@tt{wait-for-mutex}和@tt{signal-mutex}。这些过程取两个参数：一
 个互斥锁，一个线程，其工作方式如上所述（图5.22）。
 
-@;TODO: figure 5.22
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{wait-for-mutex}} : @${\mathit{Mutex} \times \mathit{Thread} \to \mathit{FinalAnswer}}}
+@#,elem{@bold{用法} : 等待互斥锁开启，然后关闭它}
+(define wait-for-mutex
+  (lambda (m th)
+    (cases mutex m
+      (a-mutex (ref-to-closed? ref-to-wait-queue)
+        (cond
+          ((deref ref-to-closed?)
+            (setref! ref-to-wait-queue
+              (enqueue (deref ref-to-wait-queue) th))
+            (run-next-thread))
+          (else
+            (setref! ref-to-closed? #t)
+            (th)))))))
+
+@#,elem{@bold{@tt{signal-mutex}} : @${\mathit{Mutex} \times \mathit{Thread} \to \mathit{FinalAnswer}}}
+(define signal-mutex
+  (lambda (m th)
+    (cases mutex m
+      (a-mutex (ref-to-closed? ref-to-wait-queue)
+        (let ((closed? (deref ref-to-closed?))
+              (wait-queue (deref ref-to-wait-queue)))
+          (if closed?
+            (if (empty? wait-queue)
+              (begin
+                (setref! ref-to-closed? #f)
+                (th))
+              (begin
+                (dequeue
+                  wait-queue
+                  (lambda (first-waiting-th other-waiting-ths)
+                    (place-on-ready-queue!
+                      first-waiting-th)
+                    (setref! ref-to-wait-queue other-waiting-ths)))
+                (th)))
+            (th)))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "wait-for-mutex") "和" (tt "signal-mutex")))]
+
+}
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 
-给本节的语言添加construct @tt{yield}。不论何时一个线程执行@tt{yield}，都将自身放入就
-绪队列之中，就绪队列头部的线程接着执行。当线程中止时，其表现为调用@tt{yield}，返
-回数值99。
+给本节的语言添加结构式@tt{yield}。线程不论何时执行@tt{yield}，都将自身放入就绪队
+列之中，就绪队列头部的线程接着执行。当线程继续时，就像调用@tt{yield}返回数值99。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.46"]{
+
+在练习5.45的系统中，线程放入就绪队列，既可能是因因为耗尽时间片，也可能是因为它选
+择让步。在后一种情况下，线程会以一个完整的时间片重启。修改系统，让就绪队列记录每
+个线程的剩余时间片（如果有的话），并线程重启时仍用剩余的时间片。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.47"]{
+
+如果剩余两个子线程，每个等待另一个子线程持有的互斥锁会怎样？
+
+}
+
+@exercise[#:level 1 #:tag "ex5.48"]{
+
+我们用过程表示线程。将其改为数据结构表示法。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.49"]{
+
+为THREADS完成练习5.15（用堆栈上的帧表示续文）。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.50"]{
+
+寄存本节的解释器。必须寄存的互递归尾调用过程有哪些？
+
+}
+
+@exercise[#:level 3 #:tag "ex5.51"]{
+
+我们想要组织我们的程序，使图5.17中的程序不需要繁忙的等待。相反，它应该能够进入休
+眠状态，并在生产者向同一缓存插入一个值时唤醒。用具有互斥锁的程序完成这些，或者实
+现一种同步操作符完成这些。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.52"]{
+
+写出使用互斥锁的程序，如图5.21，但主线程等待所有三个子线程终止，然后返回@tt{x}的
+值。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.52"]{
+
+写出使用互斥锁的程序，如图5.21，但主线程等待所有三个子线程终止，然后返回@tt{x}的
+值。
+
+}
+
+@exercise[#:level 3 #:tag "ex5.53"]{
+
+修改线程的表示，添加@emph{线程描述符} (@emph{thread identifier})。每个新线程都有
+一个新的线程描述符。创建子线程时，把它的线程描述符作为值传进去，而不是传递本节的
+任意值28。子线程的描述符也作为@tt{spawn}表达式的值返还给父线程。给解释器添加辅助
+组件，跟踪线程描述符的创建。验证就绪队列中一个线程描述符至多出现一次。子线程如何
+获知父线程的描述符？程序原有的描述符应如何处理？
+
+}
+
+@exercise[#:level 2 #:tag "ex5.54"]{
+
+给练习5.53的解释器添加组件@tt{kill}。结构式@tt{kill}取一线程号，找到就绪队列或任
+何等待队列中对应的线程，然后删除它。此外，目标线程找到时，@tt{kill}返回真，任何
+队列中都没有指定线程号时，返回假。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.55"]{
+
+给练习5.53的解释器添加线程通信组件，一个线程可以用另一线程的描述符给它发一个值。
+线程可以选择接收消息，没有线程给它发消息时可以阻塞。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.56"]{
+
+修改练习5.55的解释器，不要使用共享存储器，而是让每个线程具有自己的存储器。在这种
+语言中，几乎可以排除互斥锁。重写本节语言的示例程序，不要使用互斥锁。
+
+}
+
+@exercise[#:level 2 #:tag "ex5.57"]{
+
+在你最喜欢的操作系统教材中，有许多不同的同步机制。挑出三种，在本节的框架下实现它
+们。
+
+}
+
+@exercise[#:level 1 #:tag "ex5.58"]{
+
+（@elem[#:style question]{绝对}@${\star}）和朋友吃些披萨吧，但是一人一次一定只拿
+一块！
 
 }
