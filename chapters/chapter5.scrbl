@@ -2215,41 +2215,33 @@ IMPLICIT-REFS中的存储器（当然！），以及练习5.9中的续文构造�
 @; TODO: format for interface in figure 5.18
 @nested[#:style eopl-figure]{
 
+@nested{
 @bold{调度器的内部状态}
 
-@tt{the-ready-queue} 就绪队列
+@tabular[#:sep @hspace[1]
+(list (list @tt{the-ready-queue} "就绪队列")
+      (list @tt{the-final-answer} "主线程结束时的值")
+      (list @tt{the-max-time-slice} "每个线程运行的步数")
+      (list @tt{the-time-remaining} "当前运行线程剩余的步数"))]
+}
 
-@tt{the-final-answer} 主线程结束时的值
-
-@tt{the-max-time-slice} 每个线程运行的步数
-
-@tt{the-time-remaining} 当前运行线程剩余的步数
-
+@nested{
 @bold{调度器的内部状态}
 
-@tt{@bold{initialize-scheduler!}} : @${\mathit{Int} \to \mathit{Unspecified}}
-
-初始化调度器状态
-
-@tt{@bold{place-on-ready-queue!}} : @${\mathit{Thread} \to \mathit{Unspecified}}
-
-把线程放入就绪队列
-
-@tt{@bold{run-next-thread}} : @${\mathit{()} \to \mathit{FinalAnswer}}
-
-运行下一个线程。如果没有就绪线程，返回最终答案。
-
-@tt{@bold{set-final-answer!}} : @${\mathit{ExpVal} \to \mathit{Unspecified}}
-
-设置最终答案
-
-@tt{@bold{time-expired?}} : @${\mathit{()} \to \mathit{Bool}}
-
-判断计时器是否为0
-
-@tt{@bold{decrement-timer!}} : @${\mathit{()} \to \mathit{Unspecified}}
-
-递减@tt{the-time-remaining}
+@tabular[#:sep @hspace[1]
+(list (list @tt{@bold{initialize-scheduler!}} @${: \mathit{Int} \to \mathit{Unspecified}})
+      (list "" "初始化调度器状态")
+      (list @tt{@bold{place-on-ready-queue!}} @${: \mathit{Thread} \to \mathit{Unspecified}})
+      (list "" "把线程放入就绪队列")
+      (list @tt{@bold{run-next-thread}} @${: \mathit{()} \to \mathit{FinalAnswer}})
+      (list "" "运行下一个线程。如果没有就绪线程，返回最终答案。")
+      (list @tt{@bold{set-final-answer!}} @${: \mathit{ExpVal} \to \mathit{Unspecified}})
+      (list "" "设置最终答案")
+      (list @tt{@bold{time-expired?}} @${: \mathit{()} \to \mathit{Bool}})
+      (list "" "判断计时器是否为0")
+      (list @tt{@bold{decrement-timer!}} @${: \mathit{()} \to \mathit{Unspecified}})
+      (list "" @elem{递减@tt{the-time-remaining}}))]
+}
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
