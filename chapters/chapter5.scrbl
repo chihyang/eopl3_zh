@@ -1368,7 +1368,7 @@ odd:  if (x=0) then return(0)
 ]
 
 翻译完成的解释器如图5.11-5.14所示。这个过程叫做@emph{寄存}
-(@emph{registerization})。很容易把它翻译成支持跳转的命令式语言。
+(@emph{registerization})。很容易把它翻译成支持跳转的指令式语言。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1414,7 +1414,7 @@ odd:  if (x=0) then return(0)
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "命令式解释器（第1部分）"))]
+ (list (para "指令式解释器（第1部分）"))]
 
 }
 
@@ -1445,7 +1445,7 @@ odd:  if (x=0) then return(0)
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "命令式解释器（第2部分）"))]
+ (list (para "指令式解释器（第2部分）"))]
 
 }
 
@@ -1482,7 +1482,7 @@ odd:  if (x=0) then return(0)
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "命令式解释器（第3部分）"))]
+ (list (para "指令式解释器（第3部分）"))]
 
 }
 
@@ -1528,7 +1528,7 @@ odd:  if (x=0) then return(0)
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "命令式解释器（第4部分）"))]
+ (list (para "指令式解释器（第4部分）"))]
 
 }
 
@@ -1572,7 +1572,7 @@ odd:  if (x=0) then return(0)
 @exercise[#:level 1 #:tag "ex5.28"]{
 
 给这个解释器添加练习5.12中的辅助组件。由于续文表示方式相同，可以复用那里的代码。
-验证本节的命令式解释器生成的跟踪日志与练习5.12中的解释器@emph{完全}相同。
+验证本节的指令式解释器生成的跟踪日志与练习5.12中的解释器@emph{完全}相同。
 
 }
 
@@ -1608,16 +1608,16 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.33"]{
 
-把本节的解释器翻译为命令式语言。做两次，一次使用宿主语言中的无参数过程调用，一次
+把本节的解释器翻译为指令式语言。做两次，一次使用宿主语言中的无参数过程调用，一次
 使用@tt{goto}。计算量增加时，这二者性能如何？
 
 }
 
 @exercise[#:level 2 #:tag "ex5.34"]{
 
-如@elem[#:style question]{157页}所述，大多数命令式语言都很难完成这种翻译，因为不
+如@elem[#:style question]{157页}所述，大多数指令式语言都很难完成这种翻译，因为不
 论哪种过程调用它们都要使用堆栈，即使是尾调用。而且，对大型解释器，使用@tt{goto}
-链接的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为命令式语言，用练
+链接的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为指令式语言，用练
 习5.26中的跳跃技术避免这种困难。
 
 }
