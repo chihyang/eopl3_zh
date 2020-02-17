@@ -371,9 +371,9 @@ val)}。
    ((= x 4) (f x (lambda (v1)
                    (g y (lambda (v2)
                           (cont (+ v1 33 v2))))))
-    (else (f x (lambda (v1)
-                 (g y (lambda (v2)
-                        (h v1 (- 44 y) v2 cont)))))))))
+   (else (f x (lambda (v1)
+                (g y (lambda (v2)
+                       (h v1 (- 44 y) v2 cont)))))))))
 ]
 
 其中，过程@tt{f}，@tt{g}和@tt{h}都以类似方式转换。
