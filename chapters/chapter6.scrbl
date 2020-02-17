@@ -118,23 +118,22 @@
 (define fact/k
   (lambda ()
     (if (zero? n)
-        (begin
-          (set! val 1)
-          (apply-cont))
-        (begin
-          (set! cont (fact1-cont n cont))
-          (set! n (- n 1))
-          (fact/k)))))
+      (begin
+        (set! val 1)
+        (apply-cont))
+      (begin
+        (set! cont (fact1-cont n cont))
+        (set! n (- n 1))
+        (fact/k)))))
 
 (define apply-cont
   (lambda ()
     (cases continuation cont
-           (end-cont ()
-            val)
-           (fact1-cont (saved-n saved-cont)
-            (set! cont saved-cont)
-            (set! val (* saved-n val))
-            (apply-cont)))))
+      (end-cont () val)
+      (fact1-cont (saved-n saved-cont)
+        (set! cont saved-cont)
+        (set! val (* saved-n val))
+        (apply-cont)))))
 ]
 
 @make-nested-flow[
@@ -409,7 +408,7 @@ val)}。
 
  @item{给每个过程传一个额外参数（通常是@tt{cont}或@tt{k}）。}
 
- @item{不论过程返回常量还是变量，都将返回值值传给续文，就像上面的@tt{(cont 7)}。}
+ @item{不论过程返回常量还是变量，都将返回值值传给续文，就像上面的@tt{(cont 17)}。}
 
  @item{过程调用在尾部时，用同样的续文@tt{cont}调用过程。}
 
@@ -461,7 +460,7 @@ val)}。
 @exercise[#:level 2 #:tag "ex6.4"]{
 
 把下面的每个过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
-后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照secref{cpi}那样定义
+后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用。
 
 @nested[#:style 'code-inset]{
