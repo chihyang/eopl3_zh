@@ -19,29 +19,9 @@
 % use package proof
 \usepackage{proof}
 
-% no indent at first paragraph
+% also indent at first paragraph
 \usepackage{indentfirst}
 \setlength{\parindent}{2em}
-
-% customize header format
-\usepackage{fancyhdr}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-\renewcommand{\chaptername}{}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[LE,RO]{\thepage}
-\fancyhead[RE]{\leftmark}
-\fancyhead[LO]{\rightmark}
-
-% use exercise package for exercise
-\usepackage{exercise}
-\renewcommand\DifficultyMarker{$\star$}
-\renewcommand{\ExerciseHeaderDifficulty}{\theExerciseDifficulty}
-\renewcommand{\ExerciseName}{练习}
-\renewcommand{\ExerciseHeader}{\noindent\textit{\ExerciseName}\thechapter.\ExerciseHeaderNB~[\ExerciseHeaderDifficulty\ignorespaces]}
-\newcounter{ChapterCounter}
-\renewcounter{ChapterCounter}[chapter]
 
 % customize title format
 \usepackage{titlesec}
@@ -55,6 +35,28 @@
 } % before-code
 [
 ] % after-code
+
+% customize header format
+\usepackage{fancyhdr}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\renewcommand{\chaptername}{}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand\chaptermark[1]{ \markboth{\textit{\thechapter \hskip1em #1}}{} }
+\renewcommand\sectionmark[1]{ \markright{\textit{\thesection \hskip1em  #1}} }
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\leftmark}
+\fancyhead[LO]{\rightmark}
+
+% use exercise package for exercise
+\usepackage{exercise}
+\renewcommand\DifficultyMarker{$\star$}
+\renewcommand{\ExerciseHeaderDifficulty}{\theExerciseDifficulty}
+\renewcommand{\ExerciseName}{练习}
+\renewcommand{\ExerciseHeader}{\noindent\textit{\ExerciseName}\thechapter.\ExerciseHeaderNB~[\ExerciseHeaderDifficulty\ignorespaces]}
+\newcounter{ChapterCounter}
+\renewcounter{ChapterCounter}[chapter]
 
 \usepackage{xpatch}
 \makeatletter
