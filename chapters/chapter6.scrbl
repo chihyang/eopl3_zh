@@ -585,6 +585,446 @@ question]{200页}的秘方，给每个过程添加两个参数，一个表示@tt
 
 @section[#:tag "s6.2"]{曳尾式}
 
+要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择LETREC作为输
+入语言，补充多参数过程和多声明的@tt{letrec}表达式。其语法如图6.3所示，我们称之为
+CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些叫做 @emph{输入表达式}
+(@emph{input expression})。
+
+要定义CPS变换算法的可能输出，我们要找出CPI-IN的子集，在这个集合中，过程调用不产
+生任何控制语境。
+
+回忆@secref{cpi}中的原则：
+
+@nested{
+@nested[#:style tip]{
+ @centered{@bold{不是过程调用导致控制语境扩大，而是操作数的求值。}}
+}
+
+那么，在
+
+@racketblock[
+(define fact
+  (lambda (n)
+    (if (zero? n) 1 (* n (fact (- n 1))))))
+]
+
+中，是@emph{操作数}位置调用@tt{fact}导致了控制语境的产生。相反，在
+
+@racketblock[
+(define fact-iter
+  (lambda (n)
+    (fact-iter-acc n 1)))
+
+(define fact-iter-acc
+  (lambda (n a)
+    (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
+]
+
+中， 过程调用都不在操作数位置。我们说这些调用在@emph{尾端} (@emph{tail
+position})，因为它们的值就是整个调用的结果。我们称之为 @emph{尾调用} (@emph{tail
+call})。
+
+}
+
+@nested[#:style eopl-figure]{
+
+@linebreak[]
+@envalign*{\mathit{Program} &::= \mathit{InpExp} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-program (exp1)}} \\[5pt]
+            \mathit{InpExp} &::= \mathit{Number} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{const-exp (num)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{(- @m{\mathit{InpExp}} , @m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{diff-exp (exp1 exp2)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{(zero? @m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{zero?-exp (exp1)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{if @m{\mathit{InpExp}} then @m{\mathit{InpExp}} else @m{\mathit{InpExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{if-exp (exp1 exp2 exp3)}} \\[5pt]
+            \mathit{InpExp} &::= \mathit{Identifier} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{var-exp (var)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{let @m{\mathit{Identifier}} = @m{\mathit{InpExp}} in @m{\mathit{InpExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{let-exp (var exp1 body)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{letrec @m{\{\mathit{Identifier}\ }@tt["("]@m{\{\mathit{Identifier}\}^{*(,)}}@tt[")"] = @m{\mathit{InpExp}\}^{*}} in @m{\mathit{InpExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{letrec-exp (p-names b-varss p-bodies letrec-body)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{proc (@m{\mathit{\{Identifier\}^{*(,)}}}) @m{\mathit{InpExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (vars body)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{(@m{\mathit{InpExp}} @m{\{\mathit{InpExp}\}^{*}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CPS-IN的语法"))]
+}
+
+再回忆一下原则@bold{尾调用不扩大续文}：
+
+@nested[#:style tip]{
+ @centered{@bold{尾调用不扩大续文}}
+
+ @para[#:style tip-content]{若@${exp_1}的值作为@${exp_2}的值返回，则@${exp_1}和
+ @${exp_2}应在同样的续文中执行。
+ }
+}
+
+若每个过程调用，以及每个包含过程调用的子表达式都在尾端，我们称一个表达式为
+@emph{曳尾式} (@emph{tail form})。这个条件表明所有过程调用都不会产生控制语境。
+
+因此，在Scheme中，
+
+@nested{
+@racketblock[
+(if (zero? x) (f y) (g z))
+]
+
+是曳尾式，
+
+@racketblock[
+(if b
+  (if (zero? x) (f y) (g z))
+  (h u))
+]
+
+也是，但
+
+@racketblock[
+(+
+  (if (zero? x) (f y) (g z))
+  37)
+]
+
+不是。因为@tt{if}表达式包含一个不在尾端过程调用。
+
+}
+
+通常，要判定语言的尾端，我们必须理解其含义。尾端的子表达式具有如下属性：求值时，
+其值立刻成为整个表达式的值。一个表达式可能有多个尾端。例如，@tt{if}表达式可能选
+择真值分支，也可能选择假值分支。对尾端的子表达式，不需要保存信息，因此也就不会产
+生控制语境。
+
+CPS-IN中的尾端如图6.4所示。尾端的每个子表达式值都可以成为整个表达式的值。在传递
+续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达式在原表达式的续
+文中求值，如@elem[#:style question]{152页}所述。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+zero?(|@${O})
+-(|@${O},|@${O})
+if |@${O} then |@${T} else |@${T}
+let |@${Var} = |@${O} in |@${T}
+letrec |@${\{Var \ @tt["("]\{Var\}^{*(,)}@tt[")"] \ @tt{=} \ T\}^{*}} in |@${T}
+proc (|@${\{Var\}^{*(,)}}) = |@${T}
+(|@${O} |@${O} |@${...} |@${O})
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CPS-IN中的尾端和操作数位置。尾端记为" @${T} "。操作数位置记为"
+        @${O} "。"))]
+}
+
+我们用这种区别设计CPS转换算法的目标语言CPS-OUT。这种语言的语法如图6.5所示。这套
+语法定义了CPS-IN的子集，但略有不同。生成式的名字总以@tt{cps-}开头，这样它们不会
+与CPS-IN中生成式的名字混淆。
+
+新的语法有两个非终止符，@${\mathit{SimpleExp}}和@${\mathit{TfExp}}。这种设计中，
+@${\mathit{SimpleExp}}表达式决不包含任何过程调用，@${\mathit{TfExp}}表达式一定是
+曳尾式。
+
+因为@${\mathit{SimpleExp}}表达式决不包含任何过程调用，它们大致可以看成只有一行的
+简单代码，对我们来说它们简单到不需使用控制堆栈。简单表达式包括@tt{proc}表达式，
+因为@tt{proc}表达式立即返回一个过程值，但过程的主体必须是曳尾式。
+
+曳尾表达式的传递续文解释器如图6.6所示。由于这种语言的过程取多个参数，我们用练习
+2.10中的@tt{extend-env*}创建多个绑定，并用类似方式扩展@tt{extend-env-rec}得到
+@tt{extend-env-rec*}。
+
+在这个解释器中，所有递归调用都在（Scheme的）尾端，所以运行解释器不会在Scheme中产
+生控制语境。（不全是这样：过程@tt{value-of-simple-exp}（练习6.11）会在Scheme中产
+生控制语境，但这可以避免（参见练习6.18）。）
+
+更重要的是，解释器不会产生新的续文。过程@tt{value-of/k}取一个续文参数，原封不动
+地传给每个递归调用。所以，我们可以很容易地移除续文参数。
+
+当然，没有通用的方式判断一个过程的控制行为是否是迭代式的。考虑
+
+@nested{
+@racketblock[
+(lambda (n)
+  (if (strange-predicate? n)
+    (fact n)
+    (fact-iter n)))
+]
+
+只有@tt{strange-predicate?}对所有足够大的@tt{n}都返回假时，这个过程才是迭代式的。
+但即使能查看@tt{strange-predicate?}的代码，也可能无法判断这一条件的真假。因此，
+我们最多只能希望程序中的过程调用不产生控制语境，不论其是否执行。
+
+}
+
+@nested[#:style eopl-figure]{
+
+@linebreak[]
+@envalign*{\mathit{Program} &::= \mathit{TfExp} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-a-program (exp1)}} \\[5pt]
+         \mathit{SimpleExp} &::= \mathit{Number} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-const-exp (num)}} \\[5pt]
+         \mathit{SimpleExp} &::= \mathit{Identifier} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-var-exp (var)}} \\[5pt]
+         \mathit{SimpleExp} &::= @tt{(- @m{\mathit{SimpleExp}} , @m{\mathit{SimpleExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-diff-exp (simple1 simple2)}} \\[5pt]
+         \mathit{SimpleExp} &::= @tt{(zero? @m{\mathit{SimpleExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-zero?-exp (simple1)}} \\[5pt]
+         \mathit{SimpleExp} &::= @tt{proc (@m{\mathit{\{Identifier\}^{*(,)}}}) @m{\mathit{TfExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-proc-exp (vars body)}} \\[5pt]
+             \mathit{TfExp} &::= @m{\mathit{SimpleExp}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{simple-exp->exp (simple-exp1)}} \\[5pt]
+            \mathit{TfExp} &::= @tt{let @m{\mathit{Identifier}} = @m{\mathit{SimpleExp}} in @m{\mathit{TfExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-let-exp (var simple1 body)}} \\[5pt]
+             \mathit{TfExp} &::= @tt{letrec @m{\{\mathit{Identifier}\ }@tt["("]@m{\{\mathit{Identifier}\}^{*(,)}}@tt[")"] = @m{\mathit{TfExp}\}^{*}} in @m{\mathit{TfExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-letrec-exp (p-names b-varss p-bodies letrec-body)}} \\[5pt]
+             \mathit{TfExp} &::= @tt{if @m{\mathit{SimpleExp}} then @m{\mathit{TfExp}} else @m{\mathit{TfExp}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-if-exp (simple1 body1 body2)}} \\[5pt]
+             \mathit{TfExp} &::= @tt{(@m{\mathit{SimpleExp}} @m{\{\mathit{SimpleExp}\}^{*}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CPS-OUT的语法"))]
+}
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{value-of/k}} : @${\mathit{TfExp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
+(define value-of/k
+  (lambda (exp env cont)
+    (cases tfexp exp
+      (simple-exp->exp (simple)
+        (apply-cont cont
+          (value-of-simple-exp simple env)))
+      (cps-let-exp (var rhs body)
+        (let ((val (value-of-simple-exp rhs env)))
+          (value-of/k body
+            (extend-env (list var) (list val) env)
+            cont)))
+      (cps-letrec-exp (p-names b-varss p-bodies letrec-body)
+        (value-of/k letrec-body
+          (extend-env-rec** p-names b-varss p-bodies env)
+          cont))
+      (cps-if-exp (simple1 body1 body2)
+        (if (expval->bool (value-of-simple-exp simple1 env))
+          (value-of/k body1 env cont)
+          (value-of/k body2 env cont)))
+      (cps-call-exp (rator rands)
+        (let ((rator-proc
+                (expval->proc
+                  (value-of-simple-exp rator env)))
+               (rand-vals
+                 (map
+                   (lambda (simple)
+                     (value-of-simple-exp simple env))
+                   rands)))
+          (apply-procedure/k rator-proc rand-vals cont))))))
+
+@#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{Cont} \to \mathit{ExpVal}}}
+(define apply-procedure/k
+  (lambda (proc1 args cont)
+    (cases proc proc1
+      (procedure (vars body saved-env)
+        (value-of/k body
+          (extend-env* vars args saved-env)
+          cont)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CPS-OUT曳尾表达式的解释器"))]
+}
+
+@exercise[#:level 1 #:tag "ex6.11"]{
+
+写出@tt{value-of-simple-exp}，完成图6.6中的解释器。
+
+}
+
+@exercise[#:level 1 #:tag "ex6.12"]{
+
+判断下列表达式是否是简单的。
+
+@itemlist[#:style 'ordered
+
+ @item{@tt{-((f -(x,1)),1)}}
+
+ @item{@tt{(f -(-(x,y),1))}}
+
+ @item{@tt{if zero?(x) then -(x,y) else -(-(x,y),1)}}
+
+ @item{@tt{let x = proc (y) (y x) in -(x,3)}}
+
+ @item{@tt{let f = proc (x) x in (f 3)}}
+
+]
+
+}
+
+@exercise[#:level 1 #:tag "ex6.13"]{
+
+用上面@elem[#:style question]{200页}的CPS秘方，把下列CPS-IN表达式翻译为续文传递
+风格。用图6.6中的解释器运行转换后的程序，测试它们，确保原程序和转换后的版本对所
+有输入都给出同样的结果。
+
+@itemlist[#:style 'ordered
+
+ @item{@tt{removeall}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  removeall(n,s) =
+   if null?(s)
+   then emptylist
+   else if number?(car(s))
+        then if equal?(n,car(s))
+             then (removeall n cdr(s))
+             else cons(car(s),
+                       (removeall n cdr(s)))
+        else cons((removeall n car(s)),
+                  (removeall n cdr(s)))
+ }|
+ }
+ }
+
+ @item{@tt{occurs-in?}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  occurs-in?(n,s) =
+   if null?(s)
+   then 0
+   else if number?(car(s))
+        then if equal?(n,car(s))
+             then 1
+             else (occurs-in? n cdr(s))
+        else if (occurs-in? n car(s))
+             then 1
+             else (occurs-in? n cdr(s))
+ }|
+ }
+ }
+
+ @item{@tt{remfirst}。它使用前面例子中的@tt{occurs-in?}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  remfirst(n,s) =
+   letrec
+    loop(s) =
+     if null?(s)
+     then emptylist
+     else if number?(car(s))
+          then if equal?(n,car(s))
+               then cdr(s)
+               else cons(car(s),(loop cdr(s)))
+          else if (occurs-in? n car(s))
+               then cons((remfirst n car(s)),
+                         cdr(s))
+               else cons(car(s),
+                         (remfirst n cdr(s)))
+   in (loop s)
+ }|
+ }
+ }
+
+ @item{@tt{depth}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  depth(s) =
+   if null?(s)
+   then 1
+   else if number?(car(s))
+        then (depth cdr(s))
+        else if less?(add1((depth car(s))),
+                      (depth cdr(s)))
+             then (depth cdr(s))
+             else add1((depth car(s)))
+ }|
+ }
+ }
+
+ @item{@tt{depth-with-let}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  depth(s) =
+   if null?(s)
+   then 1
+   else if number?(car(s))
+        then (depth cdr(s))
+        else let dfirst = add1((depth car(s)))
+                 drest = (depth cdr(s))
+             in if less?(dfirst,drest)
+                then drest
+                else dfirst
+ }|
+ }
+ }
+
+ @item{@tt{map}。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  map(f, l) = if null?(l)
+              then emptylist
+              else cons((f car(l)),
+                        (map f cdr(l)))
+  square(n) = *(n,n)
+ in (map square list(1,2,3,4,5))
+ }|
+ }
+ }
+
+ @item{@tt{fnlrgtn}。n-list类似s-list（@elem[#:style question]{第9页}），只不过
+ 其中的元素不是符号，而是数字。@tt{fnlrgtn}取一n-list，一个数字@tt{n}，返回列表
+ 中（从左向右数）第一个大于@tt{n}的数字。一旦找到结果，就不再检查列表中剩余元素。
+ 例如，
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ (fnlrgtn list(1,list(3,list(2),7,list(9)))
+  6)
+ }|
+ }
+
+ 返回7。
+ }
+
+ @item{@tt{every}。这个过程取一谓词，一个列表，当且仅当谓词对列表中每个元素都为
+ 真时，返回真。
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ letrec
+  every(pred, l) =
+   if null?(l)
+   then 1
+   else if (pred car(l))
+        then (every pred cdr(l))
+        else 0
+ in (every proc(n) greater?(n,5) list(6,7,8,9))
+ }|
+ }
+ }
+]
+
+}
+
 @section[#:tag "s6.3"]{转换为续文传递风格}
 
 @section[#:tag "s6.4"]{建模计算效果}
