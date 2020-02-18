@@ -1,2 +1,3 @@
 \usepackage{framed}
-\newenvironment{Tip}{\begin{framed}}{\end{framed}}
+\newcounter{Tip}[chapter]
+\newenvironment{Tip}{\refstepcounter{Tip}\begin{framed}}{\end{framed}}
