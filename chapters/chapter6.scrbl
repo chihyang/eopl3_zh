@@ -1057,7 +1057,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 }
 
-@exercise[#:level 2 #:tag "ex6.18"]{
+@exercise[#:level 2 #:tag "ex6.19"]{
 
 写出Scheme过程@tt{tail-form?}，它取一CPS-IN程序的语法树，语法如图6.3所示，判断同
 一字符串是否是图6.5中语法定义的曳尾式。
@@ -1066,12 +1066,12 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @section[#:tag "s6.3"]{转换为续文传递风格}
 
-本节，我们开发将CPS-IN程序转换为CPS-OUT程序的算法。
+本节，我们开发算法，将CPS-IN程序转换为CPS-OUT程序。
 
 就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}，同样另取一个表示续文的参
 数。多出的这个续文参数是一个简单表达式。
 
-就像之前那样，我们给出例子，提出规范，然后写出程序。图6.7展示了的与前一节类似的
+就像之前那样，我们给出例子，提出规范，然后写出程序。图6.7展示了与前一节类似的
 Scheme示例，但是更加详细。
 
 @nested[#:style eopl-figure]{
@@ -1363,4 +1363,511 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 }
 
+处理求和表达式和过程调用时唯一不同之处，是所有参数都简单时。在这种情况下，我们要
+把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个曳尾式。
+
+我们可以把这种行为装入过程@tt{cps-of-exps}中，如图6.8所示。它用练习1.23中的
+@tt{list-index}，找出列表中第一个复杂表达式的位置。如果找到复杂表达式，则变换该
+表达式，变换时的续文给表达式的结果命名（绑定到@tt{var}的标识符），然后递归处理修
+改后的表达式列表。
+
+如果不存在复杂表达式，那么我们用@tt{builder}处理表达式列表。这些表达式虽然是简单
+的，但它们仍属CPS-IN的语法。因此，我们用过程@tt{cps-of-simple-exp}把每个表达式转
+换为CPS-OUT的语法。然后，我们把@${SimpleExp}的列表传给@tt{builder}。
+（@tt{list-set}如练习1.19所述。）
+
+过程@tt{inp-exp-simple?}取一CPS-IN表达式，判断表示它的字符串能否解析为
+@${SimpleExp}。它使用练习1.24中的过程@tt{every?}。若@${lst}中的每个元素满足
+@${pred}，@tt{(every? @${pred} @${lst})}返回@tt{#t}，否则返回@tt{#f}。
+
+我们可以用@tt{cps-of-exps}生成求和表达式和过程调用的曳尾式。
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-exps}} : @${\mathit{Listof(InpExp)} \times \mathit{(Listof(InpExp) \to TfExp)} \to \mathit{TfExp}}}
+(define cps-of-exps
+  (lambda (exps builder)
+    (let cps-of-rest ((exps exps))
+      cps-of-rest : Listof(InpExp)→TfExp
+      (let ((pos (list-index
+                   (lambda (exp)
+                     (not (inp-exp-simple? exp)))
+                   exps)))
+        (if (not pos)
+          (builder (map cps-of-simple-exp exps))
+          (let ((var (fresh-identifier ’var)))
+            (cps-of-exp
+              (list-ref exps pos)
+              (cps-proc-exp (list var)
+                (cps-of-rest
+                  (list-set exps pos (var-exp var)))))))))))
+
+@#,elem{@bold{@tt{inp-exp-simple?}} : @${\mathit{InpExp} \to \mathit{Bool}}}
+(define inp-exp-simple?
+  (lambda (exp)
+    (cases expression exp
+      (const-exp (num) #t)
+      (var-exp (var) #t)
+      (diff-exp (exp1 exp2)
+        (and (inp-exp-simple? exp1) (inp-exp-simple? exp2)))
+      (zero?-exp (exp1) (inp-exp-simple? exp1))
+      (proc-exp (ids exp) #t)
+      (sum-exp (exps) (every? inp-exp-simple? exps))
+      (else #f))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "cps-of-exps")))]
+}
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-sum-exp}} : @${\mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-sum-exp
+  (lambda (exps k-exp)
+    (cps-of-exps exps
+      (lambda (simples)
+        (make-send-to-cont
+          k-exp
+          (cps-sum-exp simples))))))
+]
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-simple-exp}} : @${\mathit{InpExp} \to \mathit{SimpleExp}}}
+@#,elem{@bold{用法} : @tt{设 (inp-exp-simple? exp) = #f}}
+(define cps-of-simple-exp
+  (lambda (exp)
+    (cases expression exp
+      (const-exp (num) (cps-const-exp num))
+      (var-exp (var) (cps-var-exp var))
+      (diff-exp (exp1 exp2)
+        (cps-diff-exp
+          (cps-of-simple-exp exp1)
+          (cps-of-simple-exp exp2)))
+      (zero?-exp (exp1)
+        (cps-zero?-exp (cps-of-simple-exp exp1)))
+      (proc-exp (ids exp)
+        (cps-proc-exp (append ids (list ’k%00))
+          (cps-of-exp exp (cps-var-exp ’k%00))))
+      (sum-exp (exps)
+        (cps-sum-exp (map cps-of-simple-exp exps)))
+      (else
+        (report-invalid-exp-to-cps-of-simple-exp exp)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "cps-of-simple-exp")))]
+}
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-call-exp}} : @${\mathit{InpExp} \times \mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-call-exp
+  (lambda (rator rands k-exp)
+    (cps-of-exps (cons rator rands)
+      (lambda (simples)
+        (cps-call-exp
+          (car simples)
+          (append (cdr simples) (list k-exp)))))))
+]
+
+现在，我们可以写出CPS翻译器剩余部分（图6.10-6.12）。它@tt{紧随语法}。当表达式一
+定是简单的，如常量、变量和过程，我们直接用@tt{make-send-to-cont}生成代码。否则，
+我们调用辅助过程，每个辅助过程调用@tt{cps-of-exps}求值它的子表达式，用适当的生成
+器构造CPS子表达式输出的内部。一个例外是@tt{cps-of-letrec-exp}，它没有
+@elem[#:style question]{紧挨着的}子表达式，所以它直接生成CPS输出。最后，我们调用
+@tt{cps-of-exps}翻译整个程序，使用的生成器直接返回 @elem[#:style question]{一简
+单表达式作为值}。
+
+在下面的练习中，用COS-OUT的语法和解释器运行输出表达式，确保它们是曳尾式。
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-exp}} : @${\mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-exp
+  (lambda (exp k-exp)
+    (cases expression exp
+      (const-exp (num)
+        (make-send-to-cont k-exp (cps-const-exp num)))
+      (var-exp (var)
+        (make-send-to-cont k-exp (cps-var-exp var)))
+      (proc-exp (vars body)
+        (make-send-to-cont k-exp
+          (cps-proc-exp (append vars (list ’k%00))
+            (cps-of-exp body (cps-var-exp ’k%00)))))
+      (zero?-exp (exp1)
+        (cps-of-zero?-exp exp1 k-exp))
+      (diff-exp (exp1 exp2)
+        (cps-of-diff-exp exp1 exp2 k-exp))
+      (sum-exp (exps)
+        (cps-of-sum-exp exps k-exp))
+      (if-exp (exp1 exp2 exp3)
+        (cps-of-if-exp exp1 exp2 exp3 k-exp))
+      (let-exp (var exp1 body)
+        (cps-of-let-exp var exp1 body k-exp))
+      (letrec-exp (p-names b-varss p-bodies letrec-body)
+        (cps-of-letrec-exp
+          p-names b-varss p-bodies letrec-body k-exp))
+      (call-exp (rator rands)
+        (cps-of-call-exp rator rands k-exp)))))
+
+@#,elem{@bold{@tt{cps-of-zero?-exp}} : @${\mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-zero?-exp
+  (lambda (exp1 k-exp)
+    (cps-of-exps (list exp1)
+      (lambda (simples)
+        (make-send-to-cont
+          k-exp
+          (cps-zero?-exp
+            (car simples)))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "cps-of-exp") "，第1部分"))]
+}
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-diff-exp}} : @${\mathit{InpExp} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-diff-exp
+  (lambda (exp1 exp2 k-exp)
+    (cps-of-exps
+      (list exp1 exp2)
+      (lambda (simples)
+        (make-send-to-cont
+          k-exp
+          (cps-diff-exp
+            (car simples)
+            (cadr simples)))))))
+
+@#,elem{@bold{@tt{cps-of-if-exp}} : @${\mathit{InpExp} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-if-exp
+  (lambda (exp1 exp2 exp3 k-exp)
+    (cps-of-exps (list exp1)
+      (lambda (simples)
+        (cps-if-exp (car simples)
+          (cps-of-exp exp2 k-exp)
+          (cps-of-exp exp3 k-exp))))))
+
+@#,elem{@bold{@tt{cps-of-let-exp}} : @${\mathit{Var} \times \mathit{InpExp} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-let-exp
+  (lambda (id rhs body k-exp)
+    (cps-of-exps (list rhs)
+      (lambda (simples)
+        (cps-let-exp id
+          (car simples)
+          (cps-of-exp body k-exp))))))
+
+@#,elem{@bold{@tt{cps-of-letrec-exp}} : @linebreak[] @${\phantom{x}\mathit{Listof(Var)} \times \mathit{Listof(Listof(Var))} \times \mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+(define cps-of-letrec-exp
+  (lambda (p-names b-varss p-bodies letrec-body k-exp)
+    (cps-letrec-exp
+      p-names
+      (map
+        (lambda (b-vars) (append b-vars (list ’k%00)))
+        b-varss)
+      (map
+        (lambda (p-body)
+          (cps-of-exp p-body (cps-var-exp ’k%00)))
+        p-bodies)
+      (cps-of-exp letrec-body k-exp))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "cps-of-exp") "，第2部分"))]
+}
+
+@nested[#:style eopl-figure]{
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-program}} : @${\mathit{InpExp} \to \mathit{TfExp}}}
+(define cps-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (cps-a-program
+          (cps-of-exps (list exp1)
+            (lambda (new-args)
+              (simple-exp->exp (car new-args)))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para (tt "cps-of-exp") "，第3部分"))]
+}
+
+@exercise[#:level 1 #:tag "ex6.20"]{
+
+过程@tt{cps-of-exps}使子表达式从左向右求值。修改@tt{cps-of-exps}，使子表达式从右
+向左求值。
+
+}
+
+@exercise[#:level 1 #:tag "ex6.21"]{
+
+修改@tt{cps-of-call-exp}，先从左向右求出操作数的值，再求操作符的值。
+
+}
+
+@exercise[#:level 1 #:tag "ex6.22"]{
+
+有时，生成@tt{(@${K} @${simp})}时，@${K}已经是一个@tt{proc-exp}。所以，不是生成：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(proc (|@${var_1}) ... |@${simp})
+}|
+}
+
+而应生成：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let |@${var_1} = |@${simp}
+in ...
+}|
+}
+
+那么，CPS代码具有性质：形如
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(proc (|@${var}) |@${exp_1}
+ |@${simp})
+}|
+}
+
+的表达式若不在原表达式中，则不会出现在CPS代码中。
+
+修改@tt{make-send-to-cont}，生成更好的代码。新的规则何时生效？
+
+}
+
+@exercise[#:level 2 #:tag "ex6.23"]{
+
+观察可知，@tt{if}的规则导致续文@${K}复制两次，所以嵌套@tt{if}中，转换后的代码尺
+寸会以指数增加。运行一个例子，验证这一观察。然后，修改转换过程，把@${K}绑定到新
+的变量，避免这种增加。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.24"]{
+
+给语言添加列表（练习3.10）。记住，列表的参数不在尾端。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.25"]{
+
+扩展CPS-IN，让@tt{let}表达式声明任意数量的变量（练习3.16）。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.26"]{
+
+由@tt{cps-of-exps}引入的变量在续文中只会只会出现一次。修改@tt{make-send-to-cont}，
+不是生称练习6.22中的
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let |@${var_1} = |@${simp_1}
+in |@${T}
+}|
+}
+
+而是生成@${T[simp_1/var_1]}。其中，@${E_1[E_2/var]}意为，把表达式@${E_1}中出现的
+每个自由变量@${var}替换为@${E_2}。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.27"]{
+
+如前所述，@tt{cps-of-let-exp}生成一个无用的@tt{let}表达式。（为什么？）修改这个
+过程，直接把@tt{let}变量作为续文变量。那么，若@${exp_1}是复杂的，
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(cps-of-exp <<let |@${var_1} = |@${exp_1} in |@${exp_2}>> |@${K})
+= (cps-of-exp |@${exp_1} <<proc (|@${var_1}) (cps-of-exp |@${exp_2} |@${K})>>)
+}|
+}
+
+}
+
+@exercise[#:level 1 #:tag "ex6.28"]{
+
+试想：有一个Scheme程序的CPS转换器，用它转换@secref{expr}中的第一个解释器，结果会
+怎样？
+
+}
+
+@exercise[#:level 2 #:tag "ex6.29"]{
+
+考虑@tt{cps-of-exps}的变体。
+
+@racketblock[
+(define cps-of-exps
+  (lambda (exps builder)
+    (let cps-of-rest ((exps exps) (acc ’()))
+      @#,elem{@bold{@tt{cps-of-rest}} : @${\mathit{Listof(InpExp)} \times \mathit{Listof(SimpleExp)} \to \mathit{TfExp}}}
+      (cond
+        ((null? exps) (builder (reverse acc)))
+        ((inp-exp-simple? (car exps))
+          (cps-of-rest (cdr exps)
+            (cons
+              (cps-of-simple-exp (car exps))
+              acc)))
+        (else
+          (let ((var (fresh-identifier ’var)))
+            (cps-of-exp (car exps)
+              (cps-proc-exp (list var)
+                (cps-of-rest (cdr exps)
+                  (cons
+                    (cps-of-simple-exp (var-exp var))
+                    acc))))))))))
+]
+
+为什么@tt{cps-of-exp}的这种变体比图6.8中的更高效？
+
+}
+
+@exercise[#:level 2 #:tag "ex6.30"]{
+
+调用@tt{cps-of-exps}处理长度为1的表达式列表如下：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(cps-of-exps (list |@${exp}) |@${builder})
+= (cps-of-exp/ctx |@${exp} (lambda (simp) (|@${builder} (list simp))))
+}|
+}
+
+其中，
+
+@racketblock[
+@#,elem{@bold{@tt{cps-of-exp/ctx}} : @${\mathit{InpExp} \times \mathit{(SimpleExp → TfExp)} \to \mathit{TfExp}}}
+(define cps-of-exp/ctx
+  (lambda (exp context)
+    (if (inp-exp-simple? exp)
+      (context (cps-of-simple-exp exp))
+      (let ((var (fresh-identifier ’var)))
+        (cps-of-exp exp
+          (cps-proc-exp (list var)
+            (context (cps-var-exp var))))))))
+]
+
+这样，我们可以简化@tt{(cps-of-exps (list ...))}，因为列表参数的数目已经确定。那
+么，诸如@tt{cps-of-diff-exp}可以不用@tt{cps-of-exps}，而用@tt{cps-of-exp/ctx}定
+义。
+
+@racketblock[
+(define cps-of-diff-exp
+  (lambda (exp1 exp2 k-exp)
+    (cps-of-exp/ctx exp1
+      (lambda (simp1)
+        (cps-of-exp/ctx exp2
+          (lambda (simp2)
+            (make-send-to-cont k-exp
+              (cps-diff-exp simp1 simp2))))))))
+]
+
+对@tt{cps-of-call-exp}中的@tt{cps-of-exps}，我们可以用@tt{cps-of-exp/ctx}处理
+@tt{rator}，但仍需用@tt{cps-of-exps}处理@tt{rands}。删除翻译器中出现的其他
+@tt{cps-of-exps}。
+
+}
+
+@exercise[#:level 3 #:tag "ex6.31"]{
+
+写一个翻译器，它取@tt{cps-of-program}的输出，产生一个等价程序，其中所有的续文都
+用@secref{cpi}中的数据结构表示。用列表表示那些用@tt{define-datatype}生成的数据结
+构。由于我们的语言不支持符号，你可以在首项位置使用整数标签，以此区分数据类型的不
+同变体。
+
+}
+
+@exercise[#:level 3 #:tag "ex6.32"]{
+
+写一个翻译器，它类似练习6.31，但把所有过程表示为数据结构。
+
+}
+
+@exercise[#:level 3 #:tag "ex6.33"]{
+
+写一个翻译器，它取练习6.32的输出，将其转换为图6.1那样的寄存器程序。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.34"]{
+
+我们把程序转换为CPS时，不仅仅是产生一个明确控制语境的程序，我们还明确了操作的顺
+序，以及每个中间结果的名字。后者叫做@emph{序列化} (@emph{sequentialization})。如
+果我们不关心迭代性控制行为，我们序列化程序时可将其转换为@emph{单调式}
+(@emph{A-normal form})，或称@emph{ANF}。这里是ANF程序的一个例子。
+
+@racketblock[
+(define fib/anf
+  (lambda (n)
+    (if (< n 2)
+      1
+      (let ((val1 (fib/anf (- n 1))))
+        (let ((val2 (fib/anf (- n 2))))
+          (+ val1 val2))))))
+]
+
+CPS程序序列化计算时，命名中间结果，传递续文；而ANF程序序列化计算时，用@tt{let}表
+达式命名所有中间结果。
+
+重写@tt{cps-of-exp}，生成ANF程序而非CPS程序。（对不在尾端的条件表达式，用练习
+6.23中的办法处理。）然后，用修改后的@tt{cps-of-exp}处理例子程序@tt{fib}的定义，
+验证结果是否为@tt{fib/anf}。最后，验证对已经是ANF的输入程序，除绑定变量名不同外，
+你的翻译器产生的程序与输入相同。
+
+}
+
+@exercise[#:level 1 #:tag "ex6.35"]{
+
+用几个例子验证：若采用练习6.27中的优化方法，对ANF转换器（练习6.34）的输入和输出
+程序进行CPS变换，所得结果相同。
+
+}
+
 @section[#:tag "s6.4"]{建模计算效果}
+
+CPS的另一重要应用是提供一个模型，显露计算效果。计算效果——像是打印或给变量赋值——
+很难用@secref{expr}中使用的方程推理建模。通过CPS变换，我们可以显露这些效果，就像
+我们在@secref{cpi}中处理非局部控制流一样。
+
+用CPS建模效果时，我们的基本原则是简单表达式不应有任何效果。简单表达式不应含有过
+程调用也是因为这一原则，因为过程调用可能不终止（这当然是一种效果！）。
+
+本节，我们研究三种效果：打印，存储器（用显式存储模型），以及非标准控制流。
+
+我们首先考虑打印。打印当然是一种效果：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(f print(3) print(4))
+}|
+}
+
+和
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(f 1 1)
+}|
+}
+
+效果不同，但是它们返回同样的答案。效果还取决于参数求值顺序。迄今为止，我们的语言
+总是从左向右求值参数，但其他语言可能不是这样。
+
+}
