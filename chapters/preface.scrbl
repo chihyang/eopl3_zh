@@ -7,7 +7,7 @@
 @(require scribble-math/dollar)
 @(use-mathjax)
 
-@title[#:style '(toc unnumbered) #:tag "pf"]{前言}
+@title[#:style '(unnumbered) #:tag "pf"]{前言}
 
 @section[#:style 'unnumbered #:tag "pf-obj"]{目标}
 
@@ -34,7 +34,7 @@
        言的特性。}
 
  @item{用语言处理器——如解释器和类型检查器——解释指定语言所写程序的行为。它们以形
-       式化（无歧并且完备）和可执行的方式表现语言设计中的决定。}
+       式化（无歧义并且完备）和可执行的方式表现语言设计中的决定。}
 
  @item{适当的时候，我们用接口和规范建立数据抽象。如此，我们可以改变数据的表示而
        不必更改程序。我们以此来研究不同的实现策略。}
