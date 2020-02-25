@@ -1871,3 +1871,292 @@ CPS的另一重要应用是提供一个模型，显露计算效果。计算效�
 总是从左向右求值参数，但其他语言可能不是这样。
 
 }
+
+要建模这些想法，我们按照下面的方式修改CPS变换：
+
+@itemlist[
+
+ @item{我们给CPS-IN添加@tt{print}表达式：
+
+ @envalign*{\mathit{InpExp} &::= @tt{print (@m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{print-exp (exp1)}}}
+
+ 我们还没有写出CPS-IN的解释器，但我们应扩展解释器处理@tt{print-exp}，它打印出参
+ 数的值，返回某个值（我们随便选38）。}
+
+ @item{我们给CPS-OUT添加@tt{printk}表达式：
+
+ @envalign*{\mathit{TfExp} &::= @tt{printk (@m{\mathit{SimpleExp}}) ; @m{\mathit{TfExp}}} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{cps-printk-exp (simple-exp1 body)}}}
+
+ 表达式@tt{printk(@${simp}) ; @${exp}}有一效果：打印。因此，它必须是一个
+ @${TfExp}，而不是@${SimpleExp}，而且只能出现在尾端。@${exp}的值成为整个
+ @tt{printk}表达式的值，所以@${exp}本身在尾端，可以是一个@tt{tfexp}。那么，这部
+ 分代码可以写作：
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ proc (v1)
+  printk(-(v1,1));
+   (f v1 |@${K})
+ }|
+ }
+
+ 要实现它，我们给CPS-OUT的解释器添加：
+
+ @racketblock[
+ (printk-exp (simple body)
+   (begin
+     (eopl:printf "~s~%"
+       (value-of-simple-exp simple env))
+     (value-of/k body env cont)))
+ ]
+ }
+
+ @item{我们给@tt{cps-of-exp}添加一行，把@tt{print}表达式翻译为@tt{printk}表达式。
+ 我们给@tt{print}随便选了一个返回值38。所以，我们的翻译为：
+
+ @nested[#:style 'code-inset]{
+ @verbatim|{
+ (cps-of-exp <<print(|@${simp_1})>> |@${K}) = printk(|@${simp_1}) ; (|@${K} 38)
+ }|
+ }
+
+ 然后，由于@tt{print}的参数可能是复杂的，我们用@tt{cps-of-exps}处理。这样，我们
+ 给@tt{cps-of-exp}新添这几行：
+
+ @racketblock[
+ (print-exp (rator)
+   (cps-of-exps (list rator)
+     (lambda (simples)
+       (cps-printk-exp
+         (car simples)
+         (make-send-to-cont k-exp
+           (cps-const-exp 38))))))
+ ]
+ }
+]
+
+来看一个更复杂的例子。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(cps-of-exp <<(f print((g x)) print(4))>> |@${K})
+= (cps-of-exp <<print((g x))>>
+    <<proc (v1)
+       (cps-of-exp <<(f v1 print(4))>> |@${K})>>)
+= (cps-of-exp <<(g x)>>
+    <<proc (v2)
+       (cps-of-exp <<(print v2)>>
+         <<proc (v1)
+            (cps-of-exp <<(f v1 print(4))>> |@${K})>>)>>)
+= (g x
+   proc (v2)
+    (cps-of-exp <<(print v2)>>
+      <<proc (v1)
+        (cps-of-exp <<(f v1 print(4))>> |@${K})>>))
+= (g x
+   proc (v2)
+    printk(v2);
+    let v1 = 38
+    in (cps-of-exp <<(f v1 print(4))>> |@${K}))
+= (g x
+   proc (v2)
+    printk(v2);
+    let v1 = 38
+    in (cps-of-exp <<print(4)>>
+         <<proc (v3)
+            (cps-of-exp <<(f v1 v3)>> |@${K})>>))
+= (g x
+   proc (v2)
+    printk(v2);
+    let v1 = 38
+    in printk(4);
+       let v3 = 38
+       in (cps-of-exp <<(f v1 v3)>> |@${K}))
+= (g x
+   proc (v2)
+    printk(v2);
+    let v1 = 38
+    in printk(4);
+       let v3 = 38
+       in (f v1 v3 |@${k}))
+}|
+}
+
+这里，我们调用@tt{g}，其续文把结果命名为@tt{v2}。续文打印出@tt{v2}的值，把38传给
+下一续文，下一续文将@tt{v1}绑定到实参38，打印出4，然后调用下一续文，下一续文把
+@tt{v2}绑定到实参（也是38），然后用@tt{v1}，@tt{v3}和@${K}调用@tt{f}。
+
+我们按照同样的步骤建模显式引用（@secref{s4.2}）。我们给CPS-IN和CPS-OUT添加新的语
+法，给CPS-OUT的解释器添加新行处理新的语法，给@tt{cps-of-exp}添加新行，将新的
+CPS-IN语法翻译为CPS-OUT。对显式引用，我们需要添加创建引用，索值和赋值的语法。
+
+@itemlist[
+
+ @item{我们给CPS-IN添加语法：
+
+ @envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{newref-exp (exp1)}} \\[5pt]
+            \mathit{InpExp} &::= @tt{deref (@m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{deref-exp (exp1)}} \\[5pt]
+          \mathit{InpExp} &::= @tt{setref (@m{\mathit{InpExp}} , @m{\mathit{InpExp}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{setref-exp (exp1 exp2)}}}
+ }
+
+ @item{我们给CPS-IN添加语法：
+
+ @envalign*{\mathit{TfExp} &::= @tt{newrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{cps-newrefk-exp (simple1 simpe2)}} \\[5pt]
+            \mathit{TfExp} &::= @tt{derefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{cps-derefk-exp (simple1 simpe2)}} \\[5pt]
+            \mathit{TfExp} &::= @tt{setrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}}) ; @m{\mathit{TfExp}}} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{cps-setrefk-exp (simple1 simpe2)}}}
+
+ @tt{newrefk}表达式取两个参数：要放入新分配单元的值，接收指向新位置的引用的续文。
+ @tt{derefk}与之类似。由于@tt{setrefk}的执行通常只求效果，@tt{setrefk}的设计与
+ @tt{printk}类似。它将第二个参数的值赋给第一个参数的值，后者应是一个引用，然后尾
+ 递归，求出第三个参数的值。
+
+ 在这门语言中，我们写：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+newrefk(33, proc (loc1)
+             newrefk(44, proc (loc2)
+                          setrefk(loc1,22);
+                          derefk(loc1, proc (val)
+                                        -(val,1))))
+}|
+}
+
+ 这个程序新分配一个位置，值为33，把@tt{loc1}绑定到那个位置。然后，它新分配一个位
+ 置，值为44，把@tt{loc2}绑定到那个位置。然后，它把位置@tt{loc1}的内容设为22。最
+ 后，它取出@tt{loc1}的值，把结果（应为22）绑定到@tt{val}，求出并返回
+ @tt{-(val,1)}的结果21。
+
+ 要得到这种行为，我们给CPS-OUT的解释器添加这几行：
+
+@racketblock[
+(cps-newrefk-exp (simple1 simple2)
+  (let ((val1 (value-of-simple-exp simple1 env))
+        (val2 (value-of-simple-exp simple2 env)))
+    (let ((newval (ref-val (newref val1))))
+      (apply-procedure
+        (expval->proc val2)
+        (list newval)
+        k-exp))))
+
+(cps-derefk-exp (simple1 simple2)
+  (apply-procedure
+    (expval->proc (value-of-simple-exp simple2 env))
+    (list
+      (deref
+        (expval->ref
+          (value-of-simple-exp simple1 env))))
+    k-exp))
+
+(cps-setrefk-exp (simple1 simple2 body)
+  (let ((ref (expval->ref
+              (value-of-simple-exp simple1 env)))
+         (val (value-of-simple-exp simple2 env)))
+    (begin
+      (setref! ref val)
+      (value-of/k body env k-exp))))
+
+]
+
+ }
+
+ @item{最后，我们给@tt{cps-of-exp}添加这些行来做翻译：
+
+@racketblock[
+(newref-exp (exp1)
+  (cps-of-exps (list exp1)
+    (lambda (simples)
+      (cps-newrefk-exp (car simples) k-exp))))
+
+(deref-exp (exp1)
+  (cps-of-exps (list exp1)
+    (lambda (simples)
+      (cps-derefk-exp (car simples) k-exp))))
+
+(setref-exp (exp1 exp2)
+  (cps-of-exps (list exp1 exp2)
+    (lambda (simples)
+      (cps-setrefk-exp
+        (car simples)
+        (cadr simples)
+        (make-send-to-cont k-exp
+          (cps-const-exp 23))))))
+]
+
+ 在最后一行，我们让@tt{setref}返回23，就像EXPLICIT-REFS中一样。
+ }
+]
+
+@exercise[#:level 2 #:tag "ex6.36"]{
+
+给CPS-IN添加@tt{begin}表达式（练习4.4）。CPS-OUT应该不需要修改。
+
+}
+
+@exercise[#:level 3 #:tag "ex6.37"]{
+
+给CPS-IN添加隐式引用（@secref{s4.3}）。用和显式引用相同的CPS-OUT，确保翻译器在适
+当的地方插入分配和索值。提示：回忆一下，在隐式引用出现的地方，@tt{var-exp}不再是
+简单的，因为它读取存储器。
+
+}
+
+@exercise[#:level 3 #:tag "ex6.38"]{
+
+如果一个变量决不出现在@tt{set}表达式的左边，它是不可变的，因此可以视为简单的。扩
+展前一题的解答，按简单表达式处理所有这样的变量。@linebreak[]
+
+}
+
+最后是非局部控制流。我们来考虑练习5.42中的@tt{letcc}。@tt{letcc}表达式@tt{letcc
+@${var} in @${body}}将当前续文绑定到变量@${var}。@${body}为该绑定的范围。续文的
+唯一操作是@tt{throw}。我们用语法@tt{throw @${Expression} to @${Expression}}，它
+求值两个子表达式。第二个表达式应返回一个续文，作用于第一个表达式。@tt{throw}当前
+的续文则忽略。
+
+我们首先按照本章的方式分析这些表达式。这些表达式决不简单。@tt{letcc}的主体部分在
+尾端，因为它的值就是整个表达式的值。由于@tt{throw}中的两个位置都须求值，且都不是
+@tt{throw}的值（确实，@tt{throw}没有值，因为它不返回到紧邻的续文），它们都是操作
+数位置。
+
+现在，我们可以写出转换这两个表达式的规则。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+(cps-of-exp <<letcc |@${var} in |@${body}>> |@${K})
+= let |@${var} = |@${K}
+  in (cps-of-exp |@${body} |@${var})
+
+(cps-of-exp <<throw |@${simp_1} to |@${simp_2}>> |@${K})
+= (|@${simp_2} |@${simp_1})
+}|
+}
+
+我们仍用@tt{cps-of-exps}处理@tt{throw}可能含有的复杂参数。这里，@${K}如期望的那
+样忽略。
+
+}
+
+这个例子中，我们没给CPS-OUT添加语法，因为我们只是在操作控制结构。
+
+@exercise[#:level 1 #:tag "ex6.39"]{
+
+在CPS翻译器中实现@tt{letcc}和@tt{throw}。
+
+}
+
+@exercise[#:level 2 #:tag "ex6.40"]{
+
+在CPS翻译器中添加和实现@secref{s5.4}中的@tt{try/catch}和@tt{throw}。CPS-OUT应该
+不需要添加任何东西，而@tt{cps-of-exp}改取两个续文：一个成功续文，一个错误续文。
+
+}
