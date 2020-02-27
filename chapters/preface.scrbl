@@ -5,7 +5,6 @@
 @(require scribble-math/asymptote)
 @(require scriblib/footnote)
 @(require scribble-math/dollar)
-@(use-mathjax)
 
 @title[#:style '(unnumbered) #:tag "pf"]{前言}
 
