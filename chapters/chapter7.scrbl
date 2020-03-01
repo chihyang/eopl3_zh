@@ -174,7 +174,7 @@ in (f 1)
    @item{发生类型错误之外的错误}
   ]
 
-  其类型为@tt{(@${t_1} @${\to} @${t_2})}。} ]
+  其类型为@tt{(@${t_1 \to t_2})}。} ]
 
 }
 
@@ -184,9 +184,9 @@ in (f 1)
 
 此定义归纳自@${t}。但是它依赖于上面另行定义的类型错误。
 
-在该系统中，值@${v}可以有多个类型。比如，值@tt{proc (x) x}类型为@tt{(@${t}
-@${\to} @${t})}，@${t}是任意类型。有些值可能没有类型，比如@tt{proc (x) if x then
-11 else zero?(11)}。
+在该系统中，值@${v}可以有多个类型。比如，值@tt{proc (x) x}类型为@tt{(@${t \to
+t})}，@${t}是任意类型。有些值可能没有类型，比如@tt{proc (x) if x then 11 else
+zero?(11)}。
 
 @exercise[#:level 1 #:tag "ex7.1"]{
 
@@ -426,7 +426,7 @@ proc (f : (bool -> int)) proc (n : int) (f zero?(n))
 
 @tt{letrec}呢？典型的@tt{letrec}如下：
 
-@centered{
+@nested[#:style 'code-inset]{
 @verbatim|{
 letrec
   |@${t_{res}} |@${p} (|@${var} : |@${t_{var}}) = |@${e_{proc\mbox{-}body}}
@@ -437,6 +437,308 @@ in |@${e_{letrec\mbox{-}body}}
 该表达式声明一个名为@${p}的过程，其形参是类型为@${t_{var}}的变量，主体为
 |@${e_{proc\mbox{-}body}}。因此，@${p}的类型应为@${t_{var} \to t_{res}}。
 
-@tt{letrec}中的各表达式，@${e_{proc\mbox{-}body}}和@${e_{letrec\mbox{-}body}}，
+检查@tt{letrec}中的表达式@${e_{proc\mbox{-}body}}和@${e_{letrec\mbox{-}body}}时，
+类型环境中的每个变量必须有正确的类型。可以用我们的定界规则判断每个变量是否在作用
+范围中，并由此判断对应的类型。
+
+在@${e_{letrec\mbox{-}body}}中，过程名@${p}在范围内。如上所述，@${p}的类型声明为
+@${t_{var} \to t_{res}}。因此，检查@${e_{letrec\mbox{-}body}}时的类型环境应为：
+
+@$${tenv_{letrec\mbox{-}body} = @tt["["]p=(t_{var} \to t_{res})@tt["]"]tenv}
+
+@${e_{proc\mbox{-}body}}呢？在@${e_{proc\mbox{-}body}}中，变量@${p}在范围内，其
+类型为@${t_{var} \to t_{res}}，变量@${var}在范围内，类型为@${t_{var}}。因此，
+@${e_{proc\mbox{-}body}}的类型环境应为：
+
+@$${tenv_{proc\mbox{-}body} = @tt["["]var=t_{var}@tt["]"]tenv_{letrec\mbox{-}body}}
+
+而且，在这个类型环境中，@${e_{proc\mbox{-}body}}的结果类型应为@${t_{res}}。
+
+把这些写成一条规则，我们有：
+
+@$${\infer{@tt{(type-of (letrec-exp @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}) @${tenv}) = @${t}}}
+          {\begin{gathered}
+           @tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_var}][@${p}=@${(t_{var} \to t_{res})}]@${tenv}) = @${t_{res}}} \\
+           @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p}=@${(t_{var} \to t_{res})}]@${tenv}) = @${t}}
+           \end{gathered}}}
+
+现在我们已经写出了所有规则，可以实现语言的类型检查器了。
+
+@subsection[#:tag "s7.3.1"]{检查器}
+
+我们需要比较类型是否相等。我们用过程@tt{check-equal-type!}做比较，它比较两个类型，
+若二者不等则报错。@tt{check-equal-type!}的第三个参数是一表达式，在类型不等时提供
+错误信息。
+
+@racketblock[
+@#,elem{@bold{@tt{check-equal-type!}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
+(define check-equal-type!
+  (lambda (ty1 ty2 exp)
+    (if (not (equal? ty1 ty2))
+      (report-unequal-types ty1 ty2 exp))))
+
+@#,elem{@bold{@tt{report-unequal-types}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
+(define report-unequal-types
+  (lambda (ty1 ty2 exp)
+    (eopl:error ’check-equal-type!
+      "类型不匹配: ~s != ~a 位置~%~a"
+      (type-to-external-form ty1)
+      (type-to-external-form ty2)
+      exp)))
+]
+
+我们不使用@tt{check-equal-type!}调用的返回值，因此@tt{check-equal-type!}的执行只
+求效果，如同@secref{s4.2.2}中的@tt{setref}那样。
+
+过程@tt{report-unequal-types}用@tt{type-to-external-form}，将类型转换为易读的列
+表。
+
+@racketblock[
+@#,elem{@bold{@tt{type-to-external-form}} : @${\mathit{Type} \to \mathit{List}}}
+(define type-to-external-form
+  (lambda (ty)
+    (cases type ty
+      (int-type () ’int)
+      (bool-type () ’bool)
+      (proc-type (arg-type result-type)
+        (list
+          (type-to-external-form arg-type)
+          ’->
+          (type-to-external-form result-type))))))
+]
+
+现在，我们可以将规则转换为程序，就像处理@secref{expr}中的解释器那样。结果如图
+7.1-7.3所示。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\mathit{Tenv} = \mathit{Var} \to \mathit{Type}}}
+
+@#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
+(define type-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1) (type-of exp1 (init-tenv))))))
+
+@#,elem{@bold{@tt{type-of-program}} : @${\mathit{Exp} \times \mathit{Tenv} \to \mathit{Type}}}
+(define type-of
+  (lambda (exp tenv)
+    (cases expression exp
+      @#,elem{@${\fbox{@tt{(type-of @${num} @${tenv}) = int}}}}
+      (const-exp (num) (int-type))
+      @#,elem{@${\fbox{@tt{(type-of @${var} @${tenv}) = @${tenv}(@${var})}}}}
+      (var-exp (var) (apply-tenv tenv var))
+      @#,elem{@${\fbox{\infer{@tt{(type-of (diff-exp @${e_1} @${e_2}) @${tenv}) = int}}{@tt{(type-of @${e_1} @${tenv}) = int} & @tt{(type-of @${e_2} @${tenv}) = int}}}}}
+      (diff-exp (exp1 exp2)
+        (let ((ty1 (type-of exp1 tenv))
+              (ty2 (type-of exp2 tenv)))
+          (check-equal-type! ty1 (int-type) exp1)
+          (check-equal-type! ty2 (int-type) exp2)
+          (int-type)))
+      @#,elem{@${\fbox{\infer{@tt{(type-of (zero?-exp @${e_1}) @${tenv}) = bool}}{@tt{(type-of @${e_1} @${tenv}) = int}}}}}
+      (zero?-exp (exp1)
+        (let ((ty1 (type-of exp1 tenv)))
+          (check-equal-type! ty1 (int-type) exp1)
+          (bool-type)))
+      @#,elem{@${\fbox{\infer{@tt{(type-of (if-exp @${e_1} @${e_2} @${e_3}) @${tenv}) = @${t}}}{\begin{gathered}@tt{(type-of @${e_1} @${tenv}) = bool} \\ @tt{(type-of @${e_2} @${tenv}) = @${t}} \\ @tt{(type-of @${e_3} @${tenv}) = @${t}}\end{gathered}}}}}
+      (if-exp (exp1 exp2 exp3)
+        (let ((ty1 (type-of exp1 tenv))
+              (ty2 (type-of exp2 tenv))
+              (ty3 (type-of exp3 tenv)))
+          (check-equal-type! ty1 (bool-type) exp1)
+          (check-equal-type! ty2 ty3 exp)
+          ty2))
+...)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CHECKED的" (tt "type-of")))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\fbox{\infer{@tt{(type-of (let-exp @${var} @${e_1} @${body}) @${tenv}) = @${t_2}}}{@tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}} & @tt{(type-of @${e_1} @${tenv}) = @${t_1}}}}}}
+(let-exp (var exp1 body)
+  (let ((exp1-type (type-of exp1 tenv)))
+    (type-of body
+      (extend-tenv var exp1-type tenv))))
+@#,elem{@${\fbox{\infer{@tt{(type-of (proc-exp @${var} @${t_{var}} @${body}) @${tenv}) = (@${t_{var} \to t_{res}})}}{@tt{(type-of @${body} [@${var}=@${t_{var}}]@${tenv}) = @${t_res}}}}}}
+(proc-exp (var var-type body)
+  (let ((result-type
+          (type-of body
+            (extend-tenv var var-type tenv))))
+    (proc-type var-type result-type)))
+@#,elem{@${\fbox{\infer{@tt{(type-of (call-exp @${rator} @${rand}) @${tenv}) = @${t_2}}}{@tt{(type-of @${rator} @${tenv}) = (@${t_1 \to t_2})} & @tt{(type-of @${rand} @${tenv}) = @${t_1}}}}}}
+(call-exp (rator rand)
+  (let ((rator-type (type-of rator tenv))
+        (rand-type (type-of rand tenv)))
+    (cases type rator-type
+      (proc-type (arg-type result-type)
+        (begin
+          (check-equal-type! arg-type rand-type rand)
+          result-type))
+      (else
+        (report-rator-not-a-proc-type
+          rator-type rator)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CHECKED的" (tt "type-of") "，续"))]
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+(((
+      @#,elem{@${\fbox{\infer{@tt{(type-of letrec @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}} @${tenv}) = @${t}}}{\begin{gathered}@tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_{var}}][@${p} =(@${t_{var} \to t_{res}})]@${tenv}) = @${t_{res}}} \\ @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p} = (@${t_{var} \to t_{res}})]@${tenv}) = @${t}}\end{gathered}}}}}
+      (letrec-exp (p-result-type p-name b-var b-var-type
+                    p-body letrec-body)
+        (let ((tenv-for-letrec-body
+                (extend-tenv p-name
+                  (proc-type b-var-type p-result-type)
+                  tenv)))
+          (let ((p-body-type
+                  (type-of p-body
+                    (extend-tenv b-var b-var-type
+                      tenv-for-letrec-body))))
+            (check-equal-type!
+              p-body-type p-result-type p-body)
+            (type-of letrec-body tenv-for-letrec-body)))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "CHECKED的" (tt "type-of") "，续"))]
+}
+
+@exercise[#:level 2 #:tag "ex7.5"]{
+
+扩展检查器，处理多声明@tt{let}，多参数过程，以及多声明@tt{letrec}。你需要添加形
+如@tt{@${t_1} * @${t_2} * @${\dots} * @${t_n} -> @${t}}的类型处理多参数过程。
+
+}
+
+@exercise[#:level 1 #:tag "ex7.6"]{
+
+扩展检查器，处理赋值（@secref{s4.3}）。
+
+}
+
+@exercise[#:level 1 #:tag "ex7.7"]{
+
+修改检查@tt{if-exp}的代码，若条件不是布尔值，则不检查其他表达式。给出一个例子，
+在两个检查器中行为不同。
+
+}
+
+@exercise[#:level 2 #:tag "ex7.8"]{
+
+给语言添加类型@tt{pairof}。比如，当且仅当一个值是序对，且所含值类型为@${t_1}和
+@${t_2}时，其类型为@tt{pairof @${t_1} * @${t_2}}。给语言添加下列生成式：
+
+@envalign*{\mathit{Type} &::= @tt{pairof @m{\mathit{Type}} * @m{\mathit{Type}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{pair-type (ty1 ty2)}} \\[5pt]
+     \mathit{Expression} &::= @tt{pair (@m{\mathit{Expression}} , @m{\mathit{Expression}})} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{pair-exp (exp1 exp2)}} \\[5pt]
+     \mathit{Expression} &::= @tt{unpair @m{\mathit{Identifier}} @m{\mathit{Identifier}} = @m{\mathit{Expression}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} @tt{in @m{\mathit{Expression}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{unpair-exp (var1 var2 exp body)}}}
+
+@tt{pair}表达式生成一个序对，@tt{unpair}表达式（类似练习3.18）将两个变量绑定到表
+达式的两部分。这些变量的作用范围是@tt{body}。@tt{pair}和@tt{unpair}的推类规则为：
+
+@$${\infer{@tt{(type-of (pair-exp @${e_1} @${e_2}) @${tenv}) = pairof @${t_1} * @${t_2}}}
+          {\begin{gathered}
+           (type-of @${e_1} @${tenv}) = @${t_1} \\
+           (type-of @${e_2} @${tenv}) = @${t_2} \\
+           \end{gathered}}}
+
+@$${\infer{@tt{(type-of (unpair-exp @${var_1} @${var_2} @${e_1} @${e_{body}}) @${tenv}) = @${t_{body}}}}
+          {\begin{gathered}
+           @tt{(type-of @${e_{pair}} @${tenv}) = (pairof @${t_1} @${t_2})} \\
+           @tt{(type-of @${e_{body}} [@${var_1}=@${t_1}][@${var_2}=@${t_2}]@${tenv}) = @${t_{body}}} \\
+           \end{gathered}}}
+
+扩展CHECKED，实现这些规则。在@tt{type-to-external-form}中，用列表@tt{(pairof
+@${t_1} @${t_2})}表示序对。
+
+}
+
+@exercise[#:level 2 #:tag "ex7.9"]{
+
+给语言添加类型@tt{listof}，其操作与练习3.9类似。当且仅当值是列表，且所有元素类型
+均为@${t}时，值类型为@tt{listof @${t}}。用下列生成式扩展语言：
+
+@envalign*{\mathit{Type} &::= @tt{listof @m{\mathit{Type}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{list-type (ty)}} \\[5pt]
+     \mathit{Expression} &::= @tt{list (@m{\mathit{Expression}} @m{\{,\mathit{Expression}}\}^{*})} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{list-exp (exp1 exps)}} \\[5pt]
+     \mathit{Expression} &::= @tt{cons (@m{\mathit{Expression}} , @m{\mathit{Expression}})} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{cons-exp (exp1 exp2)}} \\[5pt]
+     \mathit{Expression} &::= @tt{null? (@m{\mathit{Expression}})} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{null-exp (exp1)}} \\[5pt]
+     \mathit{Expression} &::= @tt{emptylist_@m{\mathit{Type}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{emptylist-exp (ty)}} \\[5pt]
+}
+
+以及四个与类型相关的规则：
+
+@$${\infer{@tt{(type-of (list-exp @${e_1} (@${e_2} ... @${e_n})) @${tenv}) = listof @${t}}}
+          {\begin{gathered}
+           @tt{(type-of @${e_1} @${tenv}) = @${t}} \\
+           @tt{(type-of @${e_2} @${tenv}) = @${t}} \\
+           \vdots \\
+           @tt{(type-of @${e_n} @${tenv}) = @${t}}
+           \end{gathered}}}
+
+@$${\infer{@tt{(type-of cons(@${e_1}, @${e_2}) @${tenv}) = listof @${t}}}
+          {\begin{gathered}
+           @tt{(type-of @${e_1} @${tenv}) = @${t}} \\
+           @tt{(type-of @${e_2} @${tenv}) = listof @${t}}
+           \end{gathered}}}
+
+@$${\infer{@tt{(type-of null?(@${e_1}) @${tenv}) = bool}}
+          {@tt{(type-of @${e_1} @${tenv}) = listof @${t}}}}
+
+@$${@tt{(type-of emptylist[@${t}] @${tenv}) = listof @${t}}}
+
+虽然@tt{cons}和@tt{pair}类似，它们的类型规则却非常不同。
+
+为@tt{car}和@tt{cdr}写出类似的规则，扩展检查器，处理这些和上述表达式。用练习7.8
+中的小技巧避免与@tt{proc-type-exp}的冲突。这些规则应保证@tt{car}和@tt{cdr}应用于
+列表，但它们不保证列表非空。为什么让规则确保列表非空不合理？为什么@tt{emptylist}
+中的类型参数是必需的？
+
+}
+
+@exercise[#:level 2 #:tag "ex7.10"]{
+
+扩展检查器，处理EXPLICIT-REFS。处理方式如下：
+
+@itemlist[
+
+ @item{给类型系统添加类型@tt{refto @${t}}，其中，@${t}是任意类型。这个类型表示引
+ 用，指向的位置包含类型为@${t}的值。那么，若@${e}类型为@${t}，@tt{(newref
+ @${e})类型为@tt{refto @${t}}}。}
+
+ @item{给类型系统添加类型@tt{void}。@tt{seref}的返回值为此类型。对类型为
+ @tt{void}的值，不能进行任何操作，所以@tt{setref}返回什么值都不要紧。这是用类型
+ 作为信息隐藏机制的例子。}
+
+ @item{写出@tt{newref}，@tt{deref}和@tt{setref}的类型规则。}
+
+ @item{在检查器中实现这些规则。}
+
+]
+
+}
+
+@exercise[#:level 2 #:tag "ex7.11"]{
+
+扩展检查器，处理MUTABLE-PAIRS。
+
+}
 
 @section[#:tag "s7.4"]{INFERRED：带有类型推导的语言}
