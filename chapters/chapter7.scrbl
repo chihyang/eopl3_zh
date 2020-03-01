@@ -268,7 +268,7 @@ proc (f)
 
 }
 
-@section[#:tag "s7.2"]{赋给表达值类型}
+@section[#:tag "s7.2"]{赋予表达值类型}
 
 目前，我们只处理了表达值的类型，要分析程序，我们要写出过程，取一表达式，预测其类
 型。
@@ -305,7 +305,138 @@ proc (f)
 我们用这一想法写出@tt{type-of}遵循的一些规则。设@${tenv}为一@emph{类型环境}，将
 各个变量映射到一类型。那么我们有：
 
-@bold{简单推类规则}
+@bold{简单@elem[#:style question]{类型(typing)}规则}
+@; TODO: big bracket
+@verbatim|{
+(type-of (const-exp |@${num}) |@${tenv}) = int
+
+(type-of (var-exp |@${num}) |@${tenv}) = |@${tenv}(|@${var})
+
+|@${\infer{@tt{(type-of (zero?-exp @${exp_1}) @${tenv}) = bool}}
+          {@tt{(type-of @${exp_1} @${tenv}) = int}}}
+
+|@${\infer{@tt{(type-of (diff-exp @${exp_1} @${exp_2}) @${tenv}) = int}}
+          {@tt{(type-of @${exp_1} @${tenv}) = int} &
+           @tt{(type-of @${exp_2} @${tenv}) = int}}}
+
+|@${\infer{@tt{(type-of (let-exp @${var} @${exp_1} @${body}) @${tenv}) = @${t_2}}}
+          {@tt{(type-of @${exp_1} @${tenv}) = @${t_1}} &
+           @tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}}}}
+
+|@${\infer{@tt{(type-of (if-exp @${exp_1} @${exp_2} @${exp_3}) @${tenv}) = @${t}}}
+          {\begin{gathered}
+           @tt{(type-of @${exp_1} @${tenv}) = bool} \\
+           @tt{(type-of @${exp_2} @${tenv}) = @${t}} \\
+           @tt{(type-of @${exp_2} @${tenv}) = @${t}}
+           \end{gathered}}}
+
+|@${\infer{@tt{(type-of (call-exp @${rator} @${rand}) @${tenv}) = @${t_2}}}
+          {@tt{(type-of @${rator} @${tenv}) = @${t_1 \to t_2}} &
+           @tt{(type-of @${rand} @${tenv}) = @${t_1}}}}
+}|
 @; TODO: big bracket
 
+若我们在适当的环境中求类型为@${t}的表达式@${exp}的值，我们不仅知道值的类型为
+@${t}，也知道与这个值有关的历史信息。因为求值@${exp}保证是安全的，我们知道
+@${exp}的值一定是由符合类型@${t}的操作符产生的。在第8章，我们更细致地思考数据抽
+象时，这种观点会很有帮助。
+
+过程如何呢？如果@tt{proc(@${var}) @${body}}类型为@${t_1 \to t_2}，那么应该用类型
+为@${t_1}的参数调用它。求值@${body}时，绑定到变量@${var}的值类型为@${t_1}。
+
+这给出如下规则：
+
+@$${\infer{@tt{(type-of (proc-exp @${var} @${body}) @${tenv}) = @${t_1 \to t_2}}}
+          {@tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}}}}
+
+这条规则是健壮的：如果@${type-of}正确预测了@${body}，那么它也能正确预测
+@tt{(proc-exp @${var} @${body})}。
+
+只有一个问题：如果我们要计算@tt{proc}表达式的值，我们怎么找出绑定变量的类型
+@${t_1}？它无处可寻。
+
+处理这个问题，有两种标准设计：
+
+@itemlist[
+
+ @item{@emph{类型检查} (@emph{Type Checking})：按这种方法，程序员需要指出缺失的
+ 绑定变量类型，类型检查器推断其他表达式的类型，检查它们是否一致。}
+
+ @item{@emph{类型推导} (@emph{Type Inference})：按这种方法，类型检查器根据程序中
+ 变量的使用，尝试@emph{推断} (@emph{infer})绑定变量的类型。如果语言设计得当，类
+ 型检查器可以推断处大多数或所有这样的类型。}
+
+]
+
+我们依次研究它们。
+
+@exercise[#:level 1 #:tag "ex7.4"]{
+
+用本节的规则，像第5页那样，写出@tt{proc (x) x}和@tt{proc (x) (x y)}的类型推导。
+运用规则，给每个表达式赋予至少两种类型。这些表达式的值类型相同吗？
+
+}
+
+@section[#:tag "s7.3"]{CHECKED：带有类型检查的语言}
+
+我们的新语言和LETREC相同，但我们要求程序员写出所有绑定变量的类型。对由
+@tt{letrec}绑定的变量，我们还要求程序员指定过程结果的类型。
+
+这里是一些CHECKED程序例子。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+proc (x : int) -(x,1)
+
+letrec
+ int double (x : int) = if zero?(x)
+                        then 0
+                        else -((double -(x,1)), -2)
+in double
+
+proc (f : (bool -> int)) proc (n : int) (f zero?(n))
+}|
+}
+
+@tt{double}结果的类型为@tt{int}，但@tt{double}本身的类型为@tt{(int -> int)}，因
+为它是一个过程，取一整数，返回一整树。
+
+要定义这种语言的语法，我们改变@tt{proc}和@tt{letrec}表达式的生成式。
+
+@bold{修改后的生成式，适用于CHECKED}
 @; TODO: big bracket
+@envalign*{
+        \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier : Type}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var ty body)}} \\[5pt]
+        \mathit{Expression} &::= @tt{letrec} \\[-3pt]
+          &\mathrel{\phantom{::=}} \phantom{x}@tt{@m{\mathit{Type}} @m{\mathit{Identifier}} (@m{\mathit{Identifier}} : @m{\mathit{Type}}) = @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} @tt{in @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{letrec-exp} \\
+                                          &\phantom{xx}@tt["("]{p-result-type p-name b-var b-var-type} \\
+                                          &\phantom{xxx}@tt{p-body} \\
+                                          &\phantom{xxx}@tt{letrec-body}@tt[")"]
+                                         \end{alignedat}\end{math}}}
+@; TODO: big bracket
+
+对指定绑定变量类型的@tt{proc}表达式，规则变为：
+
+@$${\infer{@tt{(type-of (proc-exp @${var} @${t_{var}} @${body}) @${tenv}) = @${t_{var} \to t_{res}}}}
+          {@tt{(type-of @${body} [@${var}=@${t_{var}}]@${tenv}) = @${t_{res}}}}}
+
+@tt{letrec}呢？典型的@tt{letrec}如下：
+
+@centered{
+@verbatim|{
+letrec
+  |@${t_{res}} |@${p} (|@${var} : |@${t_{var}}) = |@${e_{proc\mbox{-}body}}
+in |@${e_{letrec\mbox{-}body}}
+}|
+}
+
+该表达式声明一个名为@${p}的过程，其形参是类型为@${t_{var}}的变量，主体为
+|@${e_{proc\mbox{-}body}}。因此，@${p}的类型应为@${t_{var} \to t_{res}}。
+
+@tt{letrec}中的各表达式，@${e_{proc\mbox{-}body}}和@${e_{letrec\mbox{-}body}}，
+
+@section[#:tag "s7.4"]{INFERRED：带有类型推导的语言}
