@@ -742,3 +742,165 @@ in |@${e_{letrec\mbox{-}body}}
 }
 
 @section[#:tag "s7.4"]{INFERRED：带有类型推导的语言}
+
+在程序中写出类型虽然有助于设计和文档，但很耗时。另一种设计是让编译器根据变量的使
+用以及程序员可能给出的信息，推断出所有变量的类型。令人惊讶的是，对设计严谨的语言，
+编译器@emph{总}能推断出变量的类型。这种策略叫做@emph{类型推导} (@emph{type
+inference})。它适用于LETREC这样的语言，@elem[#:style question]{也应付得了大小合
+适的语言}。
+
+要研究类型推导，我们从语言CHECKED开始。然后，我们修改语言，令所有的类型表达式成
+为可选项。我们用标记@tt{?}替代缺失的类型表达式。因此，典型的程序看起来像是：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec
+ ? foo (x : ?) = if zero?(x)
+                 then 1
+                 else -(x, (foo -(x,1)))
+in foo
+}|
+}
+
+每个问号（除了@tt{zero?}结尾那个）表示所在之处有一个待指出的类型。
+
+}
+
+由于类型表达式是可选的，我们可以用类型替代某些@tt{?}，例如：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec
+ ? even (x : int) = if zero?(x) then 1 else (odd -(x,1))
+ bool odd (x : ?) = if zero?(x) then 0 else (even -(x,1))
+in (odd 13)
+}|
+}
+
+要定义这种语法，我们新添一个非终止符，@${Optional\mbox{-}type}，并修改@tt{proc}
+和@tt{letrec}的生成式，令其用可选类型替代类型。
+
+@envalign*{
+\mathit{Optinal\mbox{-}Type} &::= @tt{?} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{no-type ()}} \\[5pt]
+\mathit{Optinal\mbox{-}Type} &::= \mathit{Type} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-type (ty)}} \\[5pt]
+        \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier : Optinal\mbox{-}Type}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var otype body)}} \\[5pt]
+        \mathit{Expression} &::= @tt{letrec} \\[-3pt]
+          &\mathrel{\phantom{::=}} \phantom{x}@tt{@m{\mathit{Optinal\mbox{-}Type}} @m{\mathit{Identifier}} (@m{\mathit{Identifier}} : @m{\mathit{Optinal\mbox{-}Type}}) = @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} @tt{in @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{letrec-exp} \\
+                                          &\phantom{xx}@tt["("]{p-result-otype p-name} \\
+                                          &\phantom{xxx}@tt{b-var b-var-otype p-body} \\
+                                          &\phantom{xxx}@tt{letrec-body}@tt[")"]
+                                         \end{alignedat}\end{math}}}
+
+排除的类型就是我们要找出的类型。要找出它们，我们遍历抽象语法树，生成类型之间的方
+程，方程中也可能含有这些未知类型。然后，我们求解含有未知类型的方程。
+
+要明白这怎么用，我们需要给未知类型起个名字。对每个表达式@${e}或绑定变量@${var}，
+设@${t_e}或@${t_{var}}表示表达式或绑定变量的类型。
+
+对表达式抽象语法树中的每个节点，类型规则决定了类型之间必须成立的某些方程。对我们
+的PROC语言，这些方程是：
+
+@envalign*{
+@tt{(diff-exp @m{e_1} @m{e_2})} &: t_{e_1} = @tt{int} \\
+              &\mathrel{\phantom{:}} t_{e_2} = @tt{int} \\
+              &\mathrel{\phantom{:}} t_{@tt{(diff-exp @m{e_1} @m{e_2})}} = @tt{int} \\[1em]
+@tt{(zero?-exp @m{e_1})} &: t_{e_1} = @tt{int} \\
+       &\mathrel{\phantom{:}} t_{@tt{(zero?-exp @m{e_1})}} = @tt{bool} \\[1em]
+@tt{(if-exp @m{e_1} @m{e_2} @m{e_3})} &: t_{e_1} = @tt{bool} \\
+                    &\mathrel{\phantom{:}} t_{e_2} = t_{@tt{(if-exp @m{e_1} @m{e_2} @m{e_3})}} \\
+                    &\mathrel{\phantom{:}} t_{e_3} = t_{@tt{(if-exp @m{e_1} @m{e_2} @m{e_3})}} \\[1em]
+@tt{(proc-exp @m{var} @m{body})} &: t_{@tt{(proc-exp @m{var} @m{body})}} = (t_{var} \to t_{body}) \\[1em]
+@tt{(call-exp @m{rator} @m{rand})} &: t_{rator} = (t_{rand} \to t_{@tt{(call-exp @m{rator} @m{rand})}})
+}
+
+@itemlist[
+
+ @item{第一条规则是说，@tt{diff-exp}的参数和结果均为@tt{int}。}
+
+ @item{第二条规则是说，@tt{zero?-exp}的参数为@tt{int}，结果为@tt{bool}。}
+
+ @item{第三条规则是说，@tt{if}表达式中的条件类型必须为@tt{bool}，两个分支的类型
+ 必须与整个@tt{if}表达式的类型相同。}
+
+ @item{第四条规则是说，@tt{proc}表达式是一过程，其参数类型为绑定变量的类型，其结
+ 果类型为主体的类型。}
+
+ @item{第五条规则是说，在过程调用中，操作符必须是一过程，其参数类型必须与操作数
+ 相同，其结果类型与整个调用表达式的类型相同。}
+
+]
+
+要推导表达式的类型，我们为每个子表达式和绑定变量引入一个类型变量，给出每个子表达
+式的约束，然后求解得到的方程。要理解这一过程，我们来推导几个示例表达式的类型。
+
+我们从表达式@tt{proc(f) proc(x) -((f 3),(f x))}开始。我们首先做一张表，涵盖这个
+表达式中的所有绑定变量、@tt{proc}表达式、@tt{if}表达式和过程调用，并给它们分别安
+排一个变量。
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                         @bold{类型变量})
+               (list @tt{f}                                @${t_f})
+               (list @tt{x}                                @${t_x})
+               (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${t_0})
+               (list @tt{proc(x)-((f 3),(f x))}            @${t_1})
+               (list @tt{-((f 3),(f x))}                   @${t_2})
+               (list @tt{(f 3)}                            @${t_3})
+               (list @tt{(f x)}                            @${t_4}))]
+
+现在，对每个复杂表达式，都可以根据上述规则写出一个类型方程。
+
+@; TODO: numbered list in equations
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                         @bold{方程})
+               (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${t_0 = t_f \to t_1})
+               (list @tt{proc(x)-((f 3),(f x))}            @${t_1 = t_x \to t_2})
+               (list @tt{-((f 3),(f x))}                   @${t_3 = int})
+               (list ""                                    @${t_4 = int})
+               (list ""                                    @${t_2 = int})
+               (list @tt{(f 3)}                            @${t_f = int \to t_3})
+               (list @tt{(f x)}                            @${t_f = t_x \to t_4}))]
+
+@itemlist[
+
+ @item{方程1是说，整个表达式产生一过程，其参数类型为@${t_f}，结果类型与
+ @tt{proc(x)-((f 3),(f x))}相同。}
+
+ @item{方程2是说，@tt{proc(x)-((f 3),(f x))}产生一过程，其参数类型为@${t_x}，结
+ 果类型与@tt{-((f 3),(f x))}相同。}
+
+ @item{方程3-5是说，减法操作@tt{-((f 3),(f x))}的参数和结果都是整数。}
+
+ @item{方程6是说，@tt{f}期望的参数类型为@tt{int}，返回值类型与@tt{(f 3)}相同。}
+
+ @item{类似得，方程7是说，@tt{f}期望的参数类型与@tt{x}相同，返回值类型与@tt{(f
+ x)}相同。}
+
+]
+
+只要满足如下方程，怎样求解@${t_f}，@${t_x}，@${t_0}，@${t_1}，@${t_2}，@${t_3}和
+@${t_4}都可以：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+|@${t_0 = t_f \to t_1}
+|@${t_1 = t_x \to t_2}
+|@${t_3 = int}
+|@${t_4 = int}
+|@${t_2 = int}
+|@${t_f = int \to t_3}
+|@${t_f = t_x \to t_4}
+}|
+}
+
+我们的目标是找出是所有方程成立的变量值。可以用一组方程表示这些解，方程的左边都是
+变量。我们称这组方程为@emph{代换式} (@emph{substitution})，称代换式左边的变量
+@emph{绑定} (@emph{bound})于代换。
+
+我们可以依次求解这些方程。这一过程叫做@emph{合一} (@emph{unification})。
