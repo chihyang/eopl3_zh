@@ -861,10 +861,10 @@ in (odd 13)
          (list (list @bold{表达式}                         @bold{方程})
                (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${t_0 = t_f \to t_1})
                (list @tt{proc(x)-((f 3),(f x))}            @${t_1 = t_x \to t_2})
-               (list @tt{-((f 3),(f x))}                   @${t_3 = int})
-               (list ""                                    @${t_4 = int})
-               (list ""                                    @${t_2 = int})
-               (list @tt{(f 3)}                            @${t_f = int \to t_3})
+               (list @tt{-((f 3),(f x))}                   @${t_3 = @tt{int}})
+               (list ""                                    @${t_4 = @tt{int}})
+               (list ""                                    @${t_2 = @tt{int}})
+               (list @tt{(f 3)}                            @${t_f = @tt{int} \to t_3})
                (list @tt{(f x)}                            @${t_f = t_x \to t_4}))]
 
 @itemlist[
@@ -891,10 +891,10 @@ in (odd 13)
 @verbatim|{
 |@${t_0 = t_f \to t_1}
 |@${t_1 = t_x \to t_2}
-|@${t_3 = int}
-|@${t_4 = int}
-|@${t_2 = int}
-|@${t_f = int \to t_3}
+|@${t_3 = @tt{int}}
+|@${t_4 = @tt{int}}
+|@${t_2 = @tt{int}}
+|@${t_f = @tt{int} \to t_3}
 |@${t_f = t_x \to t_4}
 }|
 }
@@ -904,3 +904,769 @@ in (odd 13)
 @emph{绑定} (@emph{bound})于代换。
 
 我们可以依次求解这些方程。这一过程叫做@emph{合一} (@emph{unification})。
+
+我们把计算分为两种状态，一种是仍待求解的方程，一种是已发现的代换式。最开始，所有
+方程都待求解，没有一个代换式。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_0 = t_f \to t_1})
+           (list @${t_1 = t_x \to t_2})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]))]
+
+我们依次考虑每个方程。如果方程左边是一个变量，我们将其移到代换式中。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_1 = t_x \to t_2})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to t_1})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]))]
+
+但是，这样可能会改变代换式。例如，下一个方程给出了@${t_1}的值。代换式@${t_0}右边
+的值包含@${t_1}，我们要在其中使用这一信息。所以，我们把代换式右边出现的每个
+@${t_1}换掉。那么，我们有：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to (t_x \to t_2)})
+           (list @${t_1 = t_x \to t_2})
+           (list "")
+           (list "")
+           (list ""))]))]
+
+如果方程右边是一变量，我们调换两侧，然后一仍其旧。我们可以按照这种方式，继续处理
+接下来的三个方程。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to (t_x \to t_2)})
+           (list @${t_1 = t_x \to t_2})
+           (list @${t_3 = @tt{int}})
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4})
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to (t_x \to t_2)})
+           (list @${t_1 = t_x \to t_2})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}}))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = @tt{int} \to t_3})
+           (list @${t_f = t_x \to t_4})
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to (t_x \to @tt{int})})
+           (list @${t_1 = t_x \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}}))]))]
+
+现在，下一个要处理的方程含有@${t_3}，已经在代换式中绑定到@tt{int}。送一，我们用
+@tt{int}替换方程中的@${t_3}。对方程中的所有其他类型变量也是这样。我们称为对方程
+@emph{应用} (@emph{apply})代换式。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = @tt{int} \to @tt{int}})
+           (list @${t_f = t_x \to t_4})
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to (t_x \to @tt{int})})
+           (list @${t_1 = t_x \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}}))]))]
+
+我们把得到的方程移入代换式中，并更新需要更新的代换式。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = t_x \to t_4})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
+           (list @${t_1 = t_x \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to @tt{int}}))]))]
+
+下一个方程，@${t_f = t_x \to t_4}，包含@${t_f}和@${t_4}，均已绑定于代换式，所以
+我们对该方程应用代换式，得：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${@tt{int} \to @tt{int} = t_x \to @tt{int}})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
+           (list @${t_1 = t_x \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to @tt{int}}))]))]
+
+如果方程两边都不是变量，我们可以将其化简，得到两个方程：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${@tt{int} = t_x})
+           (list @${@tt{int} = @tt{int}})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
+           (list @${t_1 = t_x \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to @tt{int}}))]))]
+
+还是照常处理：像之前那样，交换第一个方程的两侧，加入代换式，更新代换式。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${@tt{int} = @tt{int}})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})})
+           (list @${t_1 = @tt{int} \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to @tt{int}})
+           (list @${t_x = @tt{int}}))]))]
+
+最后一个方程，@${@tt{int} = @tt{int}}总是成立，所以可以丢弃。
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})})
+           (list @${t_1 = @tt{int} \to @tt{int}})
+           (list @${t_3 = @tt{int}})
+           (list @${t_4 = @tt{int}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = @tt{int} \to @tt{int}})
+           (list @${t_x = @tt{int}}))]))]
+
+没有方程了，所以我们全部完成。从这个计算，我们得出原表达式@tt{proc (f) proc (x)
+-((f 3),(f x))}的类型应为：
+
+@nested[#:style 'code-inset]{
+@${(@tt{int} \to @tt{int}) to (@tt{int} \to @tt{int})}|
+}
+
+这是合理的：@tt{f}的第一个参数必须是个@tt{int}，因为它接受@tt{3}做参数。它必须产
+生一个@tt{int}，因为它的值用作减法操作的第一个参数。@tt{x}必定是一个@tt{int}，因
+为它也用作@tt{f}的参数。
+
+我们再看另一个例子：@tt{proc (f) (f 11)}。我们仍从指定类型变量开始。
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}         @bold{类型变量})
+               (list @tt{f}                @${t_f})
+               (list @tt{proc (f) (f 11)}  @${t_0})
+               (list @tt{(f 11)}           @${t_1}))]
+
+接下来我们写出方程：
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}          @bold{方程})
+               (list @tt{proc(f)(f 11)}     @${t_0 = t_f \to t_1})
+               (list @tt{(f 11)}            @${t_f = @tt{int} \to t_1}))]
+
+然后求解：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_0 = t_f \to t_1})
+           (list @${t_f = @tt{int} \to t_1}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list "")
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = @tt{int} \to t_1}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to t_1}))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = (@tt{int} \to t_1) \to t_1})
+           (list @${t_f = @tt{int} \to t_1}))]))]
+
+这意味着可以给@tt{proc (f) (f 11)}赋予类型@${(@tt{int} \to t_1) \to t_1}，
+@${t_1}是任何类型。这也是合理的：我们可以推出@tt{f}必须取一@tt{int}参数，但对
+@tt{f}结果的类型一无所知。而且，对任何@${t_1}，这个代码都切实可行，只要@tt{f}取
+一@tt{int}参数，返回一类型为@${t_1}的值。我们称@${t_1}是@emph{多态}
+(@emph{polymorphic})的。
+
+再来看一个例子。考虑@tt{if x then -(x,1) else 0}。我们还是给每个不是常数的子表达
+式分配一个类型变量。
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                 @bold{类型变量})
+               (list @tt{x}                        @${t_x})
+               (list @tt{if x then -(x,1) else 0}  @${t_0})
+               (list @tt{-(x,1)}                   @${t_1}))]
+
+然后给出方程：
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                @bold{方程})
+               (list @tt{if x then -(x,1) else 0} @${t_x = @tt{bool}})
+               (list ""                           @${t_1 = t_0})
+               (list ""                           @${@tt{int} = t_0})
+               (list @tt{-(x,1)}                  @${t_x = @tt{int}})
+               (list ""                           @${t_1 = @tt{int}}))]
+
+像之前那样求解这些方程，我们有：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_x = @tt{bool}})
+           (list @${t_1 = t_0})
+           (list @${@tt{int} = t_0})
+           (list @${t_x = @tt{int}})
+           (list @${t_1 = @tt{int}}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list "")
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_1 = t_0})
+           (list @${@tt{int} = t_0})
+           (list @${t_x = @tt{int}})
+           (list @${t_1 = @tt{int}}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_x = @tt{bool}})
+           (list "")
+           (list "")
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${@tt{int} = t_0})
+           (list @${t_x = @tt{int}})
+           (list @${t_1 = @tt{int}}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_x = @tt{bool}})
+           (list @${t_1 = t_0})
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_0 = @tt{int}})
+           (list @${t_x = @tt{int}})
+           (list @${t_1 = @tt{int}}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_x = @tt{bool}})
+           (list @${t_1 = t_0})
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_x = @tt{int}})
+           (list @${t_1 = @tt{int}})
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_x = @tt{bool}})
+           (list @${t_1 = t_0})
+           (list @${t_0 = @tt{int}}))]))]
+
+由于@${t_x}已经绑定于代换式，我们对下一方程应用代换，得：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${@tt{bool} = @tt{int}})
+           (list @${t_1 = @tt{int}})
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_x = @tt{bool}})
+           (list @${t_1 = t_0})
+           (list @${t_0 = @tt{int}}))]))]
+
+怎么回事？从这些方程，我们推出@tt{bool = int}。所以在这些方程中的解中，均有
+@tt{bool = int}。但@tt{bool}和@tt{int}不可能相等。因此，这些方程无解，也就无法赋
+予这个表达式类型。这是合理的，因为表达式@tt{if x then -(x,1) else 0}中，@tt{x}同
+时用作布尔值和整数值，而在我们的类型系统中，这是不允许的。
+
+再来看一个例子。考虑@tt{proc (f) zero?((f f))}。仍像之前那样处理。
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                 @bold{类型变量})
+               (list @tt{proc (f) zero?((f f))}    @${t_0})
+               (list @tt{f}                        @${t_f})
+               (list @tt{zero?((f f))}             @${t_1})
+               (list @tt{(f f)}                    @${t_2}))]
+
+@tabular[#:row-properties '(bottom-border ())
+         (list (list @bold{表达式}                @bold{方程})
+               (list @tt{proc (f) zero?((f f))}   @${t_0 = t_f \to t_1})
+               (list @tt{zero?((f f))}            @${t_1 = @tt{bool}})
+               (list ""                           @${t_2 = @tt{int}})
+               (list @tt{(f f)}                   @${t_f = t_f \to t_2}))]
+
+然后仍像之前那样求解：
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_0 = t_f \to t_1})
+           (list @${t_1 = @tt{bool}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = t_f \to t_2}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list "")
+           (list "")
+           (list "")
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_1 = @tt{bool}})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = t_f \to t_2}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to t_1})
+           (list "")
+           (list ""))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_2 = @tt{int}})
+           (list @${t_f = t_f \to t_2}))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to @tt{bool}})
+           (list @${t_1 = @tt{bool}}))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = t_f \to t_2})
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to @tt{bool}})
+           (list @${t_1 = @tt{bool}})
+           (list @${t_2 = @tt{int}}))]))]
+
+@tabular[#:sep @hspace[1]
+(list
+  (list
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{方程})
+           (list @${t_f = t_f \to @tt{int}})
+           (list "")
+           (list ""))]
+   @tabular[#:row-properties '(bottom-border ())
+     (list (list @bold{代换式})
+           (list @${t_0 = t_f \to @tt{bool}})
+           (list @${t_1 = @tt{bool}})
+           (list @${t_2 = @tt{int}}))]))]
+
+
+现在，有个问题。我们推导出@${t_f = t_f \to @tt{int}}。但没有一种类型具有这种属性，
+因为这个方程的右边总是比左边大：如果@${t_f}的语法树包含@${k}个节点，那么方程右边
+总是包含@${k+2}个节点。
+
+所以，如果我们推导的方程形如@${tv = t}，且类型变量@${tv}出现在类型@${t}中，我们
+只能得出结论：原方程误解。这个附加条件叫做@emph{验存} (@emph{occurrence check})。
+
+这个条件也意味着我们生成的代换式应满足如下不变式：
+
+@bold{无存不变式}
+@; TODO: big bracket
+代换式中绑定的变量不应出现在任何代换式的右边。
+@; TODO: big bracket
+
+我们用来解方程的代码极度依赖这条不变式。
+
+@exercise[#:level 1 #:tag "ex7.12"]{
+
+用本节的方法，推导练习7.1中每个表达式的类型，或者断定没有类型。就像本节的其他练
+习那样，假设每个绑定变量都有个对应的@tt{?}。
+
+}
+
+
+@exercise[#:level 1 #:tag "ex7.13"]{
+
+写出@tt{let}表达式的类型推导规则。用你的规则，推导下列各表达式的类型，或者断定表
+达式无类型。
+
+@itemlist[#:style 'ordered
+
+ @item{@tt{let x = 4 in (x 3)}}
+
+ @item{@tt{let f = proc (z) z in proc (x) -((f x), 1)}}
+
+ @item{@tt{let p = zero?(1) in if p then 88 else 99}}
+
+ @item{@tt{let p = proc (z) z in if p then 88 else 99}}
+ ]
+
+}
+
+@exercise[#:level 1 #:tag "ex7.14"]{
+
+下面的表达式有何问题？
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec
+ ? even(odd : ?) =
+    proc (x : ?)
+     if zero?(x) then 1 else (odd -(x,1))
+in letrec
+    ? odd(x : bool) =
+       if zero?(x) then 0 else ((even odd) -(x,1))
+    in (odd 13)
+}|
+}
+
+}
+
+@exercise[#:level 2 #:tag "ex7.15"]{
+
+写出@tt{letrec}表达式的类型推导规则。你的规则应能处理多声明的@tt{letrec}。用你的规则推导下列每个表达式的类型，或断定表达式无类型。
+
+@itemlist[#:style 'ordered
+
+ @item{
+  @verbatim{letrec ? f (x : ?)
+                    = if zero?(x) then 0 else -((f -(x,1)), -2)
+            in f}}
+
+  @verbatim{letrec ? even (x : ?)
+                      = if zero?(x) then 1 else (odd -(x,1))
+                   ? odd (x : ?)
+                      = if zero?(x) then 0 else (even -(x,1))
+            in (odd 13)}
+
+  @verbatim{letrec ? even (odd : ?)
+                      = proc (x) if zero?(x)
+                                 then 1
+                                 else (odd -(x,1))
+            in letrec ? odd (x : ?) =
+                         if zero?(x)
+                         then 0
+                         else ((even odd) -(x,1))
+               in (odd 13)}
+ ]
+
+}
+
+@exercise[#:level 3 #:tag "ex7.16"]{
+
+修改INFERRED的语法，不必再用@tt{?}标记缺失的类型，而可以直接排除。
+
+}
+
+@subsection[#:tag "s7.4.1"]{代换式}
+
+我们自底向上完成实现。首先来考虑代换式。
+
+我们给数据类型@tt{type}新增一种变体来表示类型变量，就像之前处理@secref{s3.7}中的
+词法地址一样。我们给语法添加生成式：
+
+@envalign*{\mathit{Type} &::= @tt{%tvar-type} \mathit{Number} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{tvar-type (serial-number)}}}
+
+我们把这些增改后的类型称为@emph{类型表达式} (@emph{type expression})。类型表达式
+的基本操作是用类型代换类型变量，由@tt{apply-one-subst}定义。@tt{(apply-one-subst
+@${t_0} @${tv} @${t_1})}将@${t_0}中出现的每个@${tv}代换为@${t_1}，返回代换后的表
+达式。有时，这写作@tt{@${t_0}[@${tv=t_1}]}。
+
+@racketblock[
+@#,elem{@bold{@tt{apply-one-subst}} : @${\mathit{Type} \times \mathit{Tvar} \times \mathit{Type} \to \mathit{Type}}}
+(define apply-one-subst
+  (lambda (ty0 tvar ty1)
+    (cases type ty0
+      (int-type () (int-type))
+      (bool-type () (bool-type))
+      (proc-type (arg-type result-type)
+        (proc-type
+          (apply-one-subst arg-type tvar ty1)
+          (apply-one-subst result-type tvar ty1)))
+      (tvar-type (sn)
+        (if (equal? ty0 tvar) ty1 ty0)))))
+]
+
+这个过程用来代换单个类型变量。它不能够像上节中描述的那样处理所有代换。
+
+代换式是一个方程列表，方程两边分别为类型变量和类型。该列表也可视为类型变量到类型
+的函数。当且仅当类型变量出现于代换式中的某个方程的左侧时，我们说该变量@emph{绑定}于
+代换式。
+
+我们用序对@tt{(类型变量 . 类型)}的列表表示代换式。代换式的必要观测器是
+@tt{apply-subst-to-type}。它遍历类型@${t}，把每个类型变量替换为代换式@${\sigma}
+中的绑定。如果一个变量未绑定于代换式，那么保持不变。我们用@${t\sigma}表示得到的
+类型。
+
+这一实现用Scheme过程@tt{assoc}在代换式中查找类型变量。若给定类型是列表中某个序对
+的首项，@tt{assoc}返回对应的（类型变量，类型）序对，否则返回@tt{#f}。写出来是：
+
+@racketblock[
+@#,elem{@bold{@tt{apply-subst-to-type}} : @${\mathit{Type} \times \mathit{Subst} \to \mathit{Type}}}
+(define apply-subst-to-type
+  (lambda (ty subst)
+    (cases type ty
+      (int-type () (int-type))
+      (bool-type () (bool-type))
+      (proc-type (t1 t2)
+        (proc-type
+          (apply-subst-to-type t1 subst)
+          (apply-subst-to-type t2 subst)))
+      (tvar-type (sn)
+        (let ((tmp (assoc ty subst)))
+          (if tmp
+            (cdr tmp)
+            ty))))))
+]
+
+代换式的构造器有@tt{empty-subst}和@tt{extend-subst}。@tt{(empty-subst)}生成空代
+换式的表示。@tt{(extend-subst @${\sigma} @${tv} @${t})}取一代换式@${\sigma}，像
+上节那样给它添加方程@${tv = t}。这个操作分两步：首先我们把代换式中每个方程右边的
+@${tv}替换为@${t}，然后把方程@${tv = t}添加到列表中。用公式表示为：
+
+@$${
+\begin{pmatrix}
+ tv_1 = t_1 \\
+ \vdots \\
+ tv_n = t_n
+\end{pmatrix}[tv = t] =
+\begin{pmatrix}
+ tv = t \\
+ tv_1 = t_1[tv = t] \\
+ \vdots \\
+ tv_n = t_n[tv = t]
+\end{pmatrix}}
+
+该定义具有如下属性：对任意类型@${t}，
+
+@$${(t\sigma)[tv = t'] = t(\sigma[tv = t'])}
+
+@tt{extend-subst}的实现按上式进行。它把@${\sigma_0}所有绑定中的@${t_0}代换为
+@${tv_0}。
+
+@racketblock[
+@#,elem{@bold{@tt{empty-subst}} : @${\mathit{()} \to \mathit{Subst}}}
+(define empty-subst (lambda () '()))
+
+@#,elem{@bold{@tt{extend-subst}} : @${\mathit{Subst} \times \mathit{Tvar} \times \mathit{Type} \to \mathit{Subst}}}
+@#,elem{@bold{用法} : @tt{tvar 尚未绑定于 subst。}}
+(define extend-subst
+  (lambda (subst tvar ty)
+    (cons
+      (cons tvar ty)
+      (map
+        (lambda (p)
+          (let ((oldlhs (car p))
+                (oldrhs (cdr p)))
+            (cons
+              oldlhs
+              (apply-one-subst oldrhs tvar ty))))
+        subst))))
+]
+
+这一实现保留了无存不变式，但既不依赖它，也不强制它。那是下一节中合一器的工作。
+
+
+@exercise[#:level 2 #:tag "ex7.17"]{
+
+在我们的实现中，当@${\sigma}很大时，@tt{extend-subst}要做大量工作。实现另一种表
+示法，则@tt{extend-subst}变成：
+
+@racketblock[
+(define extend-subst
+  (lambda (subst tvar ty)
+    (cons (cons tvar ty) subst)))
+]
+
+其余工作移至@tt{apply-subst-to-type}，而属性@${t(\sigma[tv = t']) = (t\sigma)[tv
+= t']}仍然满足。这样定义@tt{extend-subst}还需要无存不变式吗？
+
+}
+
+@exercise[#:level 2 #:tag "ex7.18"]{
+
+修改前一道练习中的实现，则对任意变量，@tt{apply-subst-to-type}最多只须计算一次代
+换。
+
+}
+
+@subsection[#:tag "s7.4.2"]{合一器}
