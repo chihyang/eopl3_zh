@@ -946,7 +946,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 @envalign*{
         \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier}}) @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var body)}} \\[5pt]
-        \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
+        \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
 在@tt{(proc @${var} @${body})}中，变量@${var}是 @emph{绑定变量} (@emph{bound
