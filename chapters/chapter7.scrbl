@@ -899,9 +899,9 @@ in (odd 13)
 }|
 }
 
-我们的目标是找出是所有方程成立的变量值。可以用一组方程表示这些解，方程的左边都是
-变量。我们称这组方程为@emph{代换式} (@emph{substitution})，称代换式左边的变量
-@emph{绑定} (@emph{bound})于代换。
+我们的目标是找出是所有方程成立的变量值。可以用方程组表示这些解，方程的左边都是变
+量。我们称这组方程为@emph{代换式组} (@emph{substitution})，称代换式左边的变量
+@emph{绑定} (@emph{bound})于代换式。
 
 我们可以依次求解这些方程。这一过程叫做@emph{合一} (@emph{unification})。
 
@@ -923,7 +923,7 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border)
      (list (list @bold{代换式}))]))]
 
-我们依次考虑每个方程。如果方程左边是一个变量，我们将其移到代换式中。
+我们依次考虑每个方程。如果方程左边是一个变量，我们将其移到代换式组中。
 
 @tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
@@ -1007,8 +1007,8 @@ in (odd 13)
            (list @${t_4 = @tt{int}})
            (list @${t_2 = @tt{int}}))]))]
 
-现在，下一个要处理的方程含有@${t_3}，已经在代换式中绑定到@tt{int}。送一，我们用
-@tt{int}替换方程中的@${t_3}。对方程中的所有其他类型变量也是这样。我们称为对方程
+现在，下一个要处理的方程含有@${t_3}，已经在代换式组中绑定到@tt{int}。所以，我们
+用@tt{int}替换方程中的@${t_3}。方程中的其他类型变量也这样处理。我们称之为对方程
 @emph{应用} (@emph{apply})代换式。
 
 @tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
@@ -1079,7 +1079,7 @@ in (odd 13)
            (list @${t_2 = @tt{int}})
            (list @${t_f = @tt{int} \to @tt{int}}))]))]
 
-还是照常处理：像之前那样，交换第一个方程的两侧，加入代换式，更新代换式。
+还是照常处理：像之前那样，交换第一个方程的两侧，加入代换式组，更新代换式组。
 
 @tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
@@ -1376,7 +1376,7 @@ in (odd 13)
 代换式中绑定的变量不应出现在任何代换式的右边。
 @; TODO: big bracket
 
-我们用来解方程的代码极度依赖这条不变式。
+我们解方程的代码极度依赖这条不变式。
 
 @exercise[#:level 1 #:tag "ex7.12"]{
 
@@ -1491,17 +1491,17 @@ in letrec
 
 这个过程用来代换单个类型变量。它不能够像上节中描述的那样处理所有代换。
 
-代换式是一个方程列表，方程两边分别为类型变量和类型。该列表也可视为类型变量到类型
-的函数。当且仅当类型变量出现于代换式中的某个方程的左侧时，我们说该变量@emph{绑定}于
-代换式。
+代换式组是一个方程列表，方程两边分别为类型变量和类型。该列表也可视为类型变量到类
+型的函数。当且仅当类型变量出现于代换式组中某个方程的左侧时，我们说该变量@emph{绑
+定}于代换式。
 
-我们用序对@tt{(类型变量 . 类型)}的列表表示代换式。代换式的必要观测器是
-@tt{apply-subst-to-type}。它遍历类型@${t}，把每个类型变量替换为代换式@${\sigma}
-中的绑定。如果一个变量未绑定于代换式，那么保持不变。我们用@${t\sigma}表示得到的
-类型。
+我们用序对@tt{(类型变量 . 类型)}的列表表示代换式组。代换式组的必要观测器是
+@tt{apply-subst-to-type}。它遍历类型@${t}，把每个类型变量替换为代换式组
+@${\sigma}中的绑定。如果一个变量未绑定于代换式，那么保持不变。我们用@${t\sigma}
+表示得到的类型。
 
-这一实现用Scheme过程@tt{assoc}在代换式中查找类型变量。若给定类型是列表中某个序对
-的首项，@tt{assoc}返回对应的（类型变量，类型）序对，否则返回@tt{#f}。写出来是：
+这一实现用Scheme过程@tt{assoc}在代换式组中查找类型变量。若给定类型是列表中某个序
+对的首项，@tt{assoc}返回对应的（类型变量，类型）序对，否则返回@tt{#f}。写出来是：
 
 @racketblock[
 @#,elem{@bold{@tt{apply-subst-to-type}} : @${\mathit{Type} \times \mathit{Subst} \to \mathit{Type}}}
@@ -1521,9 +1521,9 @@ in letrec
             ty))))))
 ]
 
-代换式的构造器有@tt{empty-subst}和@tt{extend-subst}。@tt{(empty-subst)}生成空代
-换式的表示。@tt{(extend-subst @${\sigma} @${tv} @${t})}取一代换式@${\sigma}，像
-上节那样给它添加方程@${tv = t}。这个操作分两步：首先我们把代换式中每个方程右边的
+代换式组的构造器有@tt{empty-subst}和@tt{extend-subst}。@tt{(empty-subst)}生成空
+代换式组。@tt{(extend-subst @${\sigma} @${tv} @${t})}取一代换式组@${\sigma}，像
+上节那样给它添加方程@${tv = t}。这个操作分两步：首先把代换式组中每个方程右边的
 @${tv}替换为@${t}，然后把方程@${tv = t}添加到列表中。用公式表示为：
 
 @$${
