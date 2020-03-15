@@ -844,7 +844,7 @@ in (odd 13)
 表达式中的所有绑定变量、@tt{proc}表达式、@tt{if}表达式和过程调用，并给它们分别安
 排一个变量。
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                         @bold{类型变量})
                (list @tt{f}                                @${t_f})
                (list @tt{x}                                @${t_x})
@@ -857,7 +857,7 @@ in (odd 13)
 现在，对每个复杂表达式，都可以根据上述规则写出一个类型方程。
 
 @; TODO: numbered list in equations
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                         @bold{方程})
                (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${t_0 = t_f \to t_1})
                (list @tt{proc(x)-((f 3),(f x))}            @${t_1 = t_x \to t_2})
@@ -908,7 +908,7 @@ in (odd 13)
 我们把计算分为两种状态，一种是仍待求解的方程，一种是已发现的代换式。最开始，所有
 方程都待求解，没有一个代换式。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -920,19 +920,12 @@ in (odd 13)
            (list @${t_2 = @tt{int}})
            (list @${t_f = @tt{int} \to t_3})
            (list @${t_f = t_x \to t_4}))]
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{代换式})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{代换式}))]))]
 
 我们依次考虑每个方程。如果方程左边是一个变量，我们将其移到代换式中。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -945,18 +938,13 @@ in (odd 13)
            (list @${t_f = t_x \to t_4}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
-           (list @${t_0 = t_f \to t_1})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]))]
+           (list @${t_0 = t_f \to t_1}))]))]
 
-但是，这样可能会改变代换式。例如，下一个方程给出了@${t_1}的值。代换式@${t_0}右边
-的值包含@${t_1}，我们要在其中使用这一信息。所以，我们把代换式右边出现的每个
+但是，这样可能会改变代换式组。例如，下一个方程给出了@${t_1}的值。代换式@${t_0}右
+边的值包含@${t_1}，我们要在其中使用这一信息。所以，我们把代换式右边出现的每个
 @${t_1}换掉。那么，我们有：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -969,15 +957,12 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to (t_x \to t_2)})
-           (list @${t_1 = t_x \to t_2})
-           (list "")
-           (list "")
-           (list ""))]))]
+           (list @${t_1 = t_x \to t_2}))]))]
 
 如果方程右边是一变量，我们调换两侧，然后一仍其旧。我们可以按照这种方式，继续处理
 接下来的三个方程。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -990,18 +975,16 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to (t_x \to t_2)})
            (list @${t_1 = t_x \to t_2})
-           (list @${t_3 = @tt{int}})
-           (list ""))]))]
+           (list @${t_3 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${t_2 = @tt{int}})
            (list @${t_f = @tt{int} \to t_3})
-           (list @${t_f = t_x \to t_4})
-           (list ""))]
+           (list @${t_f = t_x \to t_4}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to (t_x \to t_2)})
@@ -1009,16 +992,13 @@ in (odd 13)
            (list @${t_3 = @tt{int}})
            (list @${t_4 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${t_f = @tt{int} \to t_3})
-           (list @${t_f = t_x \to t_4})
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${t_f = t_x \to t_4}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to (t_x \to @tt{int})})
@@ -1031,16 +1011,13 @@ in (odd 13)
 @tt{int}替换方程中的@${t_3}。对方程中的所有其他类型变量也是这样。我们称为对方程
 @emph{应用} (@emph{apply})代换式。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${t_f = @tt{int} \to @tt{int}})
-           (list @${t_f = t_x \to t_4})
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${t_f = t_x \to t_4}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to (t_x \to @tt{int})})
@@ -1049,19 +1026,14 @@ in (odd 13)
            (list @${t_4 = @tt{int}})
            (list @${t_2 = @tt{int}}))]))]
 
-我们把得到的方程移入代换式中，并更新需要更新的代换式。
+我们把得到的方程移入代换式组中，并更新需要更新的代换式。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
-           (list @${t_f = t_x \to t_4})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${t_f = t_x \to t_4}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
@@ -1074,17 +1046,12 @@ in (odd 13)
 下一个方程，@${t_f = t_x \to t_4}，包含@${t_f}和@${t_4}，均已绑定于代换式，所以
 我们对该方程应用代换式，得：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
-           (list @${@tt{int} \to @tt{int} = t_x \to @tt{int}})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${@tt{int} \to @tt{int} = t_x \to @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
@@ -1096,18 +1063,13 @@ in (odd 13)
 
 如果方程两边都不是变量，我们可以将其化简，得到两个方程：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${@tt{int} = t_x})
-           (list @${@tt{int} = @tt{int}})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${@tt{int} = @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to @tt{int}) \to (t_x \to @tt{int})})
@@ -1119,18 +1081,12 @@ in (odd 13)
 
 还是照常处理：像之前那样，交换第一个方程的两侧，加入代换式，更新代换式。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
-           (list @${@tt{int} = @tt{int}})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]
+           (list @${@tt{int} = @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})})
@@ -1143,17 +1099,11 @@ in (odd 13)
 
 最后一个方程，@${@tt{int} = @tt{int}}总是成立，所以可以丢弃。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{方程})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{方程}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})})
@@ -1168,7 +1118,7 @@ in (odd 13)
 -((f 3),(f x))}的类型应为：
 
 @nested[#:style 'code-inset]{
-@${(@tt{int} \to @tt{int}) to (@tt{int} \to @tt{int})}|
+@${(@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})}|
 }
 
 这是合理的：@tt{f}的第一个参数必须是个@tt{int}，因为它接受@tt{3}做参数。它必须产
@@ -1177,7 +1127,7 @@ in (odd 13)
 
 我们再看另一个例子：@tt{proc (f) (f 11)}。我们仍从指定类型变量开始。
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}         @bold{类型变量})
                (list @tt{f}                @${t_f})
                (list @tt{proc (f) (f 11)}  @${t_0})
@@ -1185,26 +1135,24 @@ in (odd 13)
 
 接下来我们写出方程：
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}          @bold{方程})
                (list @tt{proc(f)(f 11)}     @${t_0 = t_f \to t_1})
                (list @tt{(f 11)}            @${t_f = @tt{int} \to t_1}))]
 
 然后求解：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${t_0 = t_f \to t_1})
            (list @${t_f = @tt{int} \to t_1}))]
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{代换式})
-           (list "")
-           (list ""))]))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8]
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1214,13 +1162,11 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to t_1}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{方程})
-           (list "")
-           (list ""))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{方程}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = (@tt{int} \to t_1) \to t_1})
@@ -1235,7 +1181,7 @@ in (odd 13)
 再来看一个例子。考虑@tt{if x then -(x,1) else 0}。我们还是给每个不是常数的子表达
 式分配一个类型变量。
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                 @bold{类型变量})
                (list @tt{x}                        @${t_x})
                (list @tt{if x then -(x,1) else 0}  @${t_0})
@@ -1243,7 +1189,7 @@ in (odd 13)
 
 然后给出方程：
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                @bold{方程})
                (list @tt{if x then -(x,1) else 0} @${t_x = @tt{bool}})
                (list ""                           @${t_1 = t_0})
@@ -1253,7 +1199,7 @@ in (odd 13)
 
 像之前那样求解这些方程，我们有：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1263,15 +1209,10 @@ in (odd 13)
            (list @${@tt{int} = t_0})
            (list @${t_x = @tt{int}})
            (list @${t_1 = @tt{int}}))]
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{代换式})
-           (list "")
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1282,12 +1223,9 @@ in (odd 13)
            (list @${t_1 = @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
-           (list @${t_x = @tt{bool}})
-           (list "")
-           (list "")
-           (list ""))]))]
+           (list @${t_x = @tt{bool}}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1298,10 +1236,9 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_x = @tt{bool}})
-           (list @${t_1 = t_0})
-           (list ""))]))]
+           (list @${t_1 = t_0}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1312,17 +1249,15 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_x = @tt{bool}})
-           (list @${t_1 = t_0})
-           (list ""))]))]
+           (list @${t_1 = t_0}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${t_x = @tt{int}})
-           (list @${t_1 = @tt{int}})
-           (list ""))]
+           (list @${t_1 = @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_x = @tt{bool}})
@@ -1331,14 +1266,13 @@ in (odd 13)
 
 由于@${t_x}已经绑定于代换式，我们对下一方程应用代换，得：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
            (list @${@tt{bool} = @tt{int}})
-           (list @${t_1 = @tt{int}})
-           (list ""))]
+           (list @${t_1 = @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_x = @tt{bool}})
@@ -1352,14 +1286,14 @@ in (odd 13)
 
 再来看一个例子。考虑@tt{proc (f) zero?((f f))}。仍像之前那样处理。
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                 @bold{类型变量})
                (list @tt{proc (f) zero?((f f))}    @${t_0})
                (list @tt{f}                        @${t_f})
                (list @tt{zero?((f f))}             @${t_1})
                (list @tt{(f f)}                    @${t_2}))]
 
-@tabular[#:row-properties '(bottom-border ())
+@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                @bold{方程})
                (list @tt{proc (f) zero?((f f))}   @${t_0 = t_f \to t_1})
                (list @tt{zero?((f f))}            @${t_1 = @tt{bool}})
@@ -1368,7 +1302,7 @@ in (odd 13)
 
 然后仍像之前那样求解：
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1377,14 +1311,10 @@ in (odd 13)
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}})
            (list @${t_f = t_f \to t_2}))]
-   @tabular[#:row-properties '(bottom-border ())
-     (list (list @bold{代换式})
-           (list "")
-           (list "")
-           (list "")
-           (list ""))]))]
+   @tabular[#:row-properties '(bottom-border)
+     (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1394,11 +1324,9 @@ in (odd 13)
            (list @${t_f = t_f \to t_2}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
-           (list @${t_0 = t_f \to t_1})
-           (list "")
-           (list ""))]))]
+           (list @${t_0 = t_f \to t_1}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1410,34 +1338,29 @@ in (odd 13)
            (list @${t_0 = t_f \to @tt{bool}})
            (list @${t_1 = @tt{bool}}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
-           (list @${t_f = t_f \to t_2})
-           (list "")
-           (list ""))]
+           (list @${t_f = t_f \to t_2}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to @tt{bool}})
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[1]
+@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{方程})
-           (list @${t_f = t_f \to @tt{int}})
-           (list "")
-           (list ""))]
+           (list @${t_f = t_f \to @tt{int}}))]
    @tabular[#:row-properties '(bottom-border ())
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to @tt{bool}})
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}}))]))]
-
 
 现在，有个问题。我们推导出@${t_f = t_f \to @tt{int}}。但没有一种类型具有这种属性，
 因为这个方程的右边总是比左边大：如果@${t_f}的语法树包含@${k}个节点，那么方程右边
