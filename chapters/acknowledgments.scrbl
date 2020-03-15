@@ -25,9 +25,9 @@ Ching也认真阅读并进行了评论。
 @racket[define-datatype] 和 @racket[cases] 语法扩展时，Jonathan Sobel和Erik
 Hilsdale完成了一些原型实现，贡献了很多想法。程序语言小组，尤其是Matthias
 Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮忙兼容他们
-的DrScheme系统。Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书的作者已使
-用多年。Will Byrd在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐我们兼
-容DrScheme的模块系统，这在位于 @url{http://www.eopl3.com} 的实现中显而易见。
+的DrScheme系统。Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书作者已使用
+多年。Will Byrd在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐我们兼容
+DrScheme的模块系统，这在位于 @url{http://www.eopl3.com} 的实现中显而易见。
 
 特别值得一提的是体贴和关心我们状态的人。George Springer和Larry Finkelstein都提供
 了无价支持。特别感谢Bob Prior，我们MIT出版社的优秀编辑，是他鼓励我们攻下本版的写
