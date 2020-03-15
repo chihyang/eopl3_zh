@@ -1593,3 +1593,125 @@ in letrec
 }
 
 @subsection[#:tag "s7.4.2"]{合一器}
+
+合一器的主要过程是@tt{unifier}。合一器执行上述推导过程中的这一的步骤：取两个类型
+@tt{t_1}和@tt{t_2}，满足无存不变式的代换式组@${\sigma}，以及表达式@tt{exp}，将
+@${t_1 = t_2}添加到@${\sigma}，返回得到的代换式组。这是统一@${t_1\sigma}和
+@${t_2\sigma}所得的最小@${\sigma}扩展。这组代换式仍满足无存不变式。若@${t_1 =
+t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指明是表达式@tt{exp}。这通常
+是包含方程@${t_1 = t_2}的表达式。
+
+这个算法用@tt{cases}来写十分不便，所以我们改用类型的谓词和抽词器。算法如图7.4所
+示，其流程如下：
+
+@itemlist[
+
+ @item{首先，像上面那样，我们对类型@${t_1}和@${t_2}分别应用代换式。}
+
+ @item{如果结果类型相同，立即返回。这一步对应上面的删除简单方程。}
+
+ @item{如果@tt{ty1}为未知类型，那么无存不变式告诉我们，它未绑定于代换式。由于它
+ 未绑定，我们试着把@${t_1 = t_2}添加到代换式组。但我们要验存，以保证无存不变式成
+ 立。当且仅当类型变量@${tv}不在@${t}中时，调用@tt{(no-occurrence? @${tv} @${t})}
+ 返回@tt{#t}。}
+
+ @item{如果@${t_2}是未知类型，则交换@${t_1}和@${t_2}的位置，也照这样处理。}
+
+ @item{如果@${t_1}和@${t_2}都不是类型变量，那么我们再做进一步分析。
+
+ 如果它们类型都是@tt{proc}，那么我们在两个参数类型之间建立方程，得到一代换式组，
+ 然后用这个代换式组在结果类型之间建立方程。
+
+ 否则，@${t_1}和@${t_2}中一个是@tt{int}，另一个是@tt{bool}，或一个是@tt{proc}，
+ 另一个是@tt{int}或@tt{bool}。不管是哪种情况，方程都无解，所以报错。}
+
+]
+
+从另一种角度来思考这些有助于理解。代换式组是一个@emph{存储器}，未知类型是指向存
+储器中某位置的@emph{引用}。@tt{unifier}把@tt{ty1 = ty2}添加到存储器中，生成一个
+新的存储器。
+
+最后，我们要验存。直接递归处理类型既可，如图7.5所示。
+
+@exercise[#:level 1 #:tag "ex7.19"]{
+
+我们说：“如果@tt{ty1}为未知类型，那么无存不变式告诉我们，它未绑定于代换式。”详
+细解释为什么是这样。
+
+}
+
+@exercise[#:level 2 #:tag "ex7.20"]{
+
+修改合一器，只用@tt{apply-subst-to-type}处理类型变量，而非合一器的实参。
+
+}
+
+@exercise[#:level 2 #:tag "ex7.21"]{
+
+我们说代换式组就像存储器。用练习7.17中的代换式组表示实现合一器，用全局Scheme变量
+记录代换式组，就像图4.1和4.2那样。
+
+}
+
+@exercise[#:level 2 #:tag "ex7.22"]{
+
+优化前一道练习的实现，在常数时间内获取每个类型变量的绑定。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{unifier}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Subst} \times \mathit{Exp} \to \mathit{Subst}}}
+(define unifier
+  (lambda (ty1 ty2 subst exp)
+    (let ((ty1 (apply-subst-to-type ty1 subst))
+           (ty2 (apply-subst-to-type ty2 subst)))
+      (cond
+        ((equal? ty1 ty2) subst)
+        ((tvar-type? ty1)
+          (if (no-occurrence? ty1 ty2)
+            (extend-subst subst ty1 ty2)
+            (report-no-occurrence-violation ty1 ty2 exp)))
+        ((tvar-type? ty2)
+          (if (no-occurrence? ty2 ty1)
+            (extend-subst subst ty2 ty1)
+            (report-no-occurrence-violation ty2 ty1 exp)))
+        ((and (proc-type? ty1) (proc-type? ty2))
+          (let ((subst (unifier
+                         (proc-type->arg-type ty1)
+                         (proc-type->arg-type ty2)
+                         subst exp)))
+            (let ((subst (unifier
+                           (proc-type->result-type ty1)
+                           (proc-type->result-type ty2)
+                           subst exp)))
+              subst)))
+        (else (report-unification-failure ty1 ty2 exp))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "合一器"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{no-occurrence?}} : @${\mathit{Tvar} \times \mathit{Type} \to \mathit{Bool}}}
+(define no-occurrence?
+  (lambda (tvar ty)
+    (cases type ty
+      (int-type () #t)
+      (bool-type () #t)
+      (proc-type (arg-type result-type)
+        (and
+          (no-occurrence? tvar arg-type)
+          (no-occurrence? tvar result-type)))
+      (tvar-type (serial-number) (not (equal? tvar ty))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "验存"))]
+}
+
+@subsection[#:tag "s7.4.3"]{找出表达式的类型}
