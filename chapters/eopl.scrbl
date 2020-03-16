@@ -16,3 +16,4 @@
 @include-section["chapter5.scrbl"]
 @include-section["chapter6.scrbl"]
 @include-section["chapter7.scrbl"]
+@include-section["chapter8.scrbl"]
