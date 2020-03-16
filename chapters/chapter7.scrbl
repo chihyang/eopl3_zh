@@ -520,7 +520,7 @@ in |@${e_{letrec\mbox{-}body}}
     (cases program pgm
       (a-program (exp1) (type-of exp1 (init-tenv))))))
 
-@#,elem{@bold{@tt{type-of-program}} : @${\mathit{Exp} \times \mathit{Tenv} \to \mathit{Type}}}
+@#,elem{@bold{@tt{type-of}} : @${\mathit{Exp} \times \mathit{Tenv} \to \mathit{Type}}}
 (define type-of
   (lambda (exp tenv)
     (cases expression exp
@@ -1780,6 +1780,230 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 要逐个命名所有未知变量，我们用@tt{canonical-subst}生成代换式组。用@tt{table}做累
 加器，直接递归即可。@tt{table}的长度告诉我们已找出多少个不同的未知类型，我们可以
 用其长度给“下一个”@tt{ty}符号编号。这与图4.1中使用的@tt{length}类似。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\mathit{Answer} = \mathit{Type} \to \mathit{Subst}}}
+
+(define-datatype answer answer?
+  (an-answer
+    (ty type?)
+    (subst substitution?)))
+
+@#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
+(define type-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (cases answer (type-of exp1
+                        (init-tenv) (empty-subst))
+          (an-answer (ty subst)
+            (apply-subst-to-type ty subst)))))))
+
+@#,elem{@bold{@tt{type-of}} : @${\mathit{Exp} \times \mathit{Tenv} \times \mathit{Subst} \to \mathit{Answer}}}
+(define type-of
+  (lambda (exp tenv subst)
+    (cases expression exp
+      (const-exp (num) (an-answer (int-type) subst))
+
+      @#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}@tt{(zero?-exp @${e_1})} &: @${t_{e_1}} = @tt{int} \\ &\mathrel{\phantom{:}} @${t_{@tt{(zero?-exp @${e_1})}}} = @tt{bool}\end{alignedat}\end{math}}}}
+      (zero?-exp (exp1)
+        (cases answer (type-of exp1 tenv subst)
+          (an-answer (ty1 subst1)
+            (let ((subst2
+                    (unifier ty1 (int-type) subst1 exp)))
+              (an-answer (bool-type) subst2)))))
+...)))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "INFERRED的" (tt "type-of") "，第1部分"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}@tt{(diff-exp @${e_1} @${e_2})} &: @${t_{e_1}} = @tt{int} \\ &\mathrel{\phantom{:}} @${t_{e_2}} = @tt{int} \\ &\mathrel{\phantom{:}} @${t_{@tt{(diff-exp @${e_1} @${e_2})}}} = @tt{int}\end{alignedat}\end{math}}}}
+(diff-exp (exp1 exp2)
+  (cases answer (type-of exp1 tenv subst)
+    (an-answer (ty1 subst1)
+      (let ((subst1
+              (unifier ty1 (int-type) subst1 exp1)))
+        (cases answer (type-of exp2 tenv subst1)
+          (an-answer (ty2 subst2)
+            (let ((subst2
+                    (unifier ty2 (int-type)
+                      subst2 exp2)))
+              (an-answer (int-type) subst2))))))))
+
+@#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}@tt{(if-exp @${e_1} @${e_2} @${e_3})} &: @${t_{e_1}} = @tt{bool} \\ &\mathrel{\phantom{:}} @${t_{e_2}} = @${t_{@tt{(if-exp @${e_1} @${e_2} @${e_3})}}} \\ &\mathrel{\phantom{:}} @${t_{e_3}} = @${t_{@tt{(if-exp @${e_1} @${e_2} @${e_3})}}}\end{alignedat}\end{math}}}}
+(if-exp (exp1 exp2 exp3)
+  (cases answer (type-of exp1 tenv subst)
+    (an-answer (ty1 subst)
+      (let ((subst
+              (unifier ty1 (bool-type) subst exp1)))
+        (cases answer (type-of exp2 tenv subst)
+          (an-answer (ty2 subst)
+            (cases answer (type-of exp3 tenv subst)
+              (an-answer (ty3 subst)
+                (let ((subst
+                        (unifier ty2 ty3 subst exp)))
+                  (an-answer ty2 subst))))))))))
+(var-exp (var)
+  (an-answer (apply-tenv tenv var) subst))
+(let-exp (var exp1 body)
+  (cases answer (type-of exp1 tenv subst)
+    (an-answer (exp1-type subst)
+      (type-of body
+        (extend-tenv var exp1-type tenv)
+        subst))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "INFERRED的" (tt "type-of") "，第2部分"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\fbox{@tt{(proc-exp @${var} @${body})} : @${t_{@tt{(proc-exp @${var} @${body})}}} = @tt{(@${tvar} @${\to} @${t_{body}})}}}}
+(proc-exp (var otype body)
+  (let ((var-type (otype->type otype)))
+    (cases answer (type-of body
+                    (extend-tenv var var-type tenv)
+                    subst)
+      (an-answer (body-type subst)
+        (an-answer
+          (proc-type var-type body-type)
+          subst)))))
+
+@#,elem{@${\fbox{@tt{(call-exp @${rator} @${rand})} : @${t_{rator}} = @tt{(@${t_{rand}} @${\to} @${t_{@tt{(call-exp @${rator} @${rand})}}})}}}}
+(call-exp (rator rand)
+  (let ((result-type (fresh-tvar-type)))
+    (cases answer (type-of rator tenv subst)
+      (an-answer (rator-type subst)
+        (cases answer (type-of rand tenv subst)
+          (an-answer (rand-type subst)
+            (let ((subst
+                    (unifier
+                      rator-type
+                      (proc-type
+                        rand-type result-type)
+                      subst
+                      exp)))
+              (an-answer result-type subst))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "INFERRED的" (tt "type-of") "，第3部分"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}&@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}} : \\ &\phantom{xx}t_{p} = t_{var} \to t_{e_{proc\mbox{-}body}} \\ &\phantom{xx}t_{e_{letrec\mbox{-}body}} = t_{@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}}}\end{alignedat}\end{math}}}}
+(((...
+    (letrec-exp (p-result-otype p-name b-var b-var-otype
+                  p-body letrec-body)
+      (let ((p-result-type (otype->type p-result-otype))
+             (p-var-type (otype->type b-var-otype)))
+        (let ((tenv-for-letrec-body
+                (extend-tenv p-name
+                  (proc-type p-var-type p-result-type)
+                  tenv)))
+          (cases answer (type-of p-body
+                          (extend-tenv b-var p-var-type
+                            tenv-for-letrec-body)
+                          subst)
+            (an-answer (p-body-type subst)
+              (let ((subst
+                      (unifier p-body-type p-result-type
+                        subst p-body)))
+                (type-of letrec-body
+                  tenv-for-letrec-body
+                  subst))))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "INFERRED的" (tt "type-of") "，第4部分"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@${\mathit{TvarTypeSym} = @emph{含有数字的符号}}}
+
+@#,elem{@${\mathit{A\mbox{-}list} = \mathit{Listof(Pair(TvarTypeSym,TvarTypeSym))}}}
+
+@#,elem{@bold{@tt{equal-up-to-gensyms?}} : @${\mathit{S\mbox{-}exp} \times \mathit{S\mbox{-}exp} \to \mathit{Bool}}}
+(define equal-up-to-gensyms?
+  (lambda (sexp1 sexp2)
+    (equal?
+      (apply-subst-to-sexp (canonical-subst sexp1) sexp1)
+      (apply-subst-to-sexp (canonical-subst sexp2) sexp2))))
+
+@#,elem{@bold{@tt{canonical-subst}} : @${\mathit{S\mbox{-}exp} \to \mathit{A\mbox{-}list}}}
+(define canonical-subst
+  (lambda (sexp)
+    loop : S-exp × A-list → A-list
+    (let loop ((sexp sexp) (table ’()))
+      (cond
+        ((null? sexp) table)
+        ((tvar-type-sym? sexp)
+          (cond
+            ((assq sexp table) table)
+            (else
+              (cons
+                (cons sexp (ctr->ty (length table)))
+                table))))
+        ((pair? sexp)
+          (loop (cdr sexp)
+            (loop (car sexp) table)))
+        (else table)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{equal-up-to-gensyms?} "，第1部分"))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{tvar-type-sym?}} : @${\mathit{Sym} \to \mathit{Bool}}}
+(define tvar-type-sym?
+  (lambda (sym)
+    (and (symbol? sym)
+      (char-numeric? (car (reverse (symbol->list sym)))))))
+
+@#,elem{@bold{@tt{symbol->list}} : @${\mathit{Sym} \to \mathit{List}}}
+(define symbol->list
+  (lambda (x)
+    (string->list (symbol->string x))))
+
+@#,elem{@bold{@tt{apply-subst-to-sexp}} : @${\mathit{A\mbox{-}list} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
+(define apply-subst-to-sexp
+  (lambda (subst sexp)
+    (cond
+      ((null? sexp) sexp)
+      ((tvar-type-sym? sexp)
+        (cdr (assq sexp subst)))
+      ((pair? sexp)
+        (cons
+          (apply-subst-to-sexp subst (car sexp))
+          (apply-subst-to-sexp subst (cdr sexp))))
+      (else sexp))))
+
+@#,elem{@bold{@tt{ctr->ty}} : @${\mathit{N} \to \mathit{Sym}}}
+(define ctr->ty
+  (lambda (n)
+    (string->symbol
+      (string-append "tvar" (number->string n)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{equal-up-to-gensyms?} "，第2部分"))]
+}
 
 @exercise[#:level 2 #:tag "ex7.23"]{
 
