@@ -182,7 +182,7 @@ filldraw(box3,rgb(209/255, 209/255, 211/255),black);
 layer();
 
 // For the first block
-pos=(min(box2).x-width, max(box2).y-13*get_x(content_3[0]));
+pos=(min(box2).x-width-3*get_x(content_3[0]), max(box2).y-13*get_x(content_3[0]));
 corner=pos;
 width=0;
 
