@@ -44,6 +44,9 @@
 (define hangindent
   (make-style "Hangindent" (list (make-tex-addition "../style/hangindent.tex"))))
 
+(define eopl-example
+  (make-style "EoplExample" (list (make-tex-addition "../style/example.tex"))))
+
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
         [(and (string? (car c))
