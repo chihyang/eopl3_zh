@@ -79,3 +79,92 @@
  (make-style "caption" (list 'multicommand))
  (list (para "项目中，爱丽丝所见的三个模块"))]
 }
+
+这是SIMPLE-MODULES的简单例子。
+
+@nested[#:style eopl-example]{
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [a : int
+   b : int
+   c : int]
+ body
+  [a = 33
+   x = -(a,1)  % = 32
+   b = -(a,x)  % = 1
+   c = -(x,b)] % = 31
+let a = 10
+in -(-(from m1 take a,
+       from m1 take b),
+     a)
+}|
+}
+
+类型为@tt{int}，值为@${((33-1)-10)=22}。
+}
+}
+
+此程序从名为@tt{m1}的模块定义开始。像其他模块一样，它有@emph{接口}和@tt{主体}。
+主体@emph{实现}接口。接口@emph{声明}变量@tt{a}、@tt{b}和@tt{c}。主体@emph{定义}
+了@tt{a}、@tt{x}、@tt{b}和@tt{c}。
+
+求程序的值时，也会求出@tt{m1}主体中表达式的值。变量@tt{from m1 take a}、@tt{from
+m1 take b}和@tt{from m1 take c}绑定到适当的值，模块定义之后在它们的作用范围内。
+由于@tt{from m1 take x}未在接口中声明，所以模块定义之后不在它的作用范围内。
+
+为了同@emph{简单变量} (@emph{simple variable})却别，我们称这些新变量为@emph{受限
+变量} (@emph{qualified})。在传统语言中，受限变量写作@tt{m1.a}、@tt{m1:a}或
+@tt{m1::a}。在第9章探讨的面向对象语言中，@tt{m1.a}常表示其他内容。
+
+我们说接口@emph{提出} (@emph{offer})（或称@emph{公布} (@emph{advertise})，或称
+@emph{承诺} (@emph{promise})）三个整型值，主体@emph{供应}（@emph{supply}或
+@emph{provide}）（或称@emph{输出} (@emph{export})）这些值。当模块主体供应的值类
+型与接口命名变量时公布的相符时，称主体@emph{满足} (@emph{satisfy})接口。
+
+在主体中，定义具有@tt{let*}那样的作用范围，所以@tt{x}、@tt{b}和@tt{c}在@tt{a}的
+作用范围内。部分作用范围如图8.2所示。
+
+本例中，以@tt{let a = 10}开头的表达式是@emph{程序主体} (@emph{program body})。它
+的值即程序的值。
+
+每个模块都在模块主体和程序其他部分之间建立了抽象边界。模块主体中的表达式在抽象边
+界@emph{之内}，其他部分在抽象边界@emph{之外}。模块主体也可以供应不在接口中的名字
+绑定，但那些绑定在程序主体和其他模块中不可见，正如图8.1所示。在我们的例子中，程
+序主体不在@tt{from m1 take x}的作用范围内。如果我们写@tt{-(from m1 take a, from
+m1 take x)}，程序就会是异常类型。
+
+@nested[#:style eopl-example]{
+程序
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [u : bool]
+ body
+  [u = 33]
+
+44
+}|
+}
+
+类型异常。就算程序的其他部分不使用那些值，模块主体也得将接口中的名字与适当类型的
+值关联起来。
+}
+}
+
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/module-contour"
+  #:suffixes (list ".pdf" ".svg")
+  "简单模块中的一些作用范围")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "简单模块中的一些作用范围"))]
+}
