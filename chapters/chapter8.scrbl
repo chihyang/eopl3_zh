@@ -168,3 +168,138 @@ module m1
  (make-style "caption" (list 'multicommand))
  (list (para "简单模块中的一些作用范围"))]
 }
+
+@nested[#:style eopl-example]{
+模块主体必须供应接口中声明的所有绑定。例如，
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [u : int
+   v : int]
+ body
+  [u = 33]
+
+44
+}|
+}
+
+类型异常，因为@tt{m1}的主体没有提供接口中公布的所有值。
+}
+}
+
+@nested[#:style eopl-example]{
+为了让实现简单一点，我们的语言要求模块主体按照接口声明的顺序给出各值。因此
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [u : int
+   v : int]
+ body
+  [v = 33
+   u = 44]
+
+from m1 take u
+}|
+}
+
+类型异常。可以弥补这一点（练习8.8，8.17）。
+}
+}
+
+@nested[#:style eopl-example]{
+在我们的语言中，模块具有@tt{let*}式的作用范围（练习3.17）。例如，
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [u : int]
+ body
+  [u = 44]
+
+module m2
+ interface
+  [v : int]
+ body
+  [v = -(from m1 take u,11)]
+
+-(from m1 take u, from m2 take v)
+}|
+}
+
+类型为@tt{int}。但如果我们交换定义的顺序，得
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m2
+ interface
+  [v : int]
+ body
+  [v = -(from m1 take u,11)]
+
+module m1
+ interface
+  [u : int]
+ body
+  [u = 44]
+
+-(from m1 take u, from m2 take v)
+}|
+}
+
+类型异常，因为@tt{m2}主体中使用@tt{from m1 take u}之处不在后者的作用范围内。
+}
+}
+
+@subsection[#:tag "s8.1.2"]{实现简单模块系统}
+
+@subsubsection[#:style 'unnumbered #:tag "s8.1.2.1"]{语法}
+
+SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
+
+@envalign*{
+           \mathit{Program} &::= \{\mathit{ModuleDefn}\}^{*} \mathit{Expression} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-program (m-defs body)}}}
+
+模块定义包含名字、接口和主体。
+
+@envalign*{
+           \mathit{ModuleDefn} &::= @tt{module} \mathit{Identifier} @tt{interface} \mathit{Iface} @tt{body} \mathit{ModuleBody} \\[-3pt]
+            &\mathrel{\phantom{::=}} \fbox{@tt{a-module-definition (m-name expected-iface m-body)}}}
+
+简单模块的接口包含任意数量的声明。每个声明指定程序中一个变量的类型。我们称之为
+@emph{值声明} (@emph{value declaration})，因为要声明的变量表示一个值。在后面几节
+中，我们介绍其他种类的接口和声明。
+
+@envalign*{
+           \mathit{Iface} &::= @tt["["] \{\mathit{Decl}\}^{*} @tt["]"] \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{simple-iface (decls)}} \\[-5pt]
+            \mathit{Decl} &::= \mathit{Identifier} @tt{:} \mathit{Type} \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{val-decl (var-name ty)}}
+            }
+
+模块主体包含任意数量的定义。每个定义将变量和某个表达式的值关联起来。
+
+@envalign*{
+           \mathit{ModuleBody} &::= @tt["["] \{\mathit{Defn}\}^{*} @tt["]"] \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{defns-module-body (defns)}} \\[-5pt]
+                 \mathit{Defn} &::= \mathit{Identifier} @tt{=} \mathit{Expression} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{val-defn (var-name exp)}}
+            }
+
+我们的表达式与CHECKED（@secref{s7.3}）相同，但要修改语法，新增一种表达式，以便使
+用受限变量。
+
+@envalign*{
+           \mathit{Expression} &::= @tt{from} \mathit{Identifier} @tt{take} \mathit{Identifier} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{qualified-var-exp (m-name var-name)}}
+            }
+
+@subsubsection[#:style 'unnumbered #:tag "s8.1.2.2"]{解释器}
