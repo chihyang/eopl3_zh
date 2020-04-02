@@ -82,7 +82,7 @@ code_line_height=get_y("\Large{\tt{(procedure)}}");
 box0_min_x=get_x("\Large{\tt{\phantom{xxx}}}");
 box0_max_x=get_x("\Large{\tt{\phantom{xxx}c = -(x,b)}}");
 
-box1_min_x=get_x("\Large{\tt{\phantom{}}}");
+box1_min_x=0;
 box1_max_x=get_x("\Large{\tt{in -(from m1 take a,}}");
 
 // get y positions of round boxes
@@ -103,7 +103,7 @@ for (Label l : lines) {
 path box0=shift(-code_word_width / 8)*roundedpath(box((box0_min_x - code_word_width / 20, box0_min_y), (box0_max_x + code_word_width, box0_max_y)), 2.5);
 draw(box0);
 
-path box1=shift(-code_word_width / 8, code_line_height / 20)*roundedpath(box((0, box1_min_y), (box1_max_x, box1_max_y)), 2.5);
+path box1=shift(-code_word_width / 8, code_line_height / 20)*roundedpath(box((box1_min_x, box1_min_y), (box1_max_x, box1_max_y)), 2.5);
 draw(box1);
 
 // draw notes, and arrows
