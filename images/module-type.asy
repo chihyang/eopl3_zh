@@ -16,26 +16,26 @@ unitsize(dsz);
 
 pair pos=(0,0);
 
-Label[] lines={"\Large{\tt{module m1}}",
-               "\Large{\tt{\phantom{x}interface}}",
-               "\Large{\tt{\phantom{xx}[opaque t}}",
-               "\Large{\tt{\phantom{xxx}z : t}}",
-               "\Large{\tt{\phantom{xxx}s : (t -> t)}}",
-               "\Large{\tt{\phantom{xxx}is-z? : (t -> bool) ]}}",
-               "\Large{\tt{\phantom{x}body}}",
-               "\Large{\tt{\phantom{xx}[type t = int}}",
-               "\Large{\tt{\phantom{xxx}z = 33}}",
-               "\Large{\tt{\phantom{xxx}s = proc (x : t) -(x, -1)}}",
-               "\Large{\tt{\phantom{xxx}is-z? = proc (x : t) zero?(-(x,z)) ]}}",
-               "\Large{\tt{\phantom{x}}}",
-               "\Large{\tt{let f = proc (x : from m1 take t) ...}}",
-               "\Large{\tt{in ...}}",
+Label[] lines={"{\tt{module m1}}",
+               "{\tt{\phantom{x}interface}}",
+               "{\tt{\phantom{xx}[opaque t}}",
+               "{\tt{\phantom{xxx}z : t}}",
+               "{\tt{\phantom{xxx}s : (t -> t)}}",
+               "{\tt{\phantom{xxx}is-z? : (t -> bool) ]}}",
+               "{\tt{\phantom{x}body}}",
+               "{\tt{\phantom{xx}[type t = int}}",
+               "{\tt{\phantom{xxx}z = 33}}",
+               "{\tt{\phantom{xxx}s = proc (x : t) -(x, -1)}}",
+               "{\tt{\phantom{xxx}is-z? = proc (x : t) zero?(-(x,z)) ]}}",
+               "{\tt{\phantom{x}}}",
+               "{\tt{let f = proc (x : from m1 take t) ...}}",
+               "{\tt{in ...}}",
                };
 
-Label[] notes={"{\texttt{opaque t}}\emph{的作用范围}",
-               "{\texttt{type t = int}}\emph{的作用范围}",
-               "{\texttt{from m1 take t}}\emph{的作用范围}",
-               "\emph{（模糊类型）}",
+Label[] notes={"{\scriptsize{\texttt{opaque t}}\emph{的作用范围}}",
+               "{\scriptsize{\texttt{type t = int}}\emph{的作用范围}}",
+               "{\scriptsize{\texttt{from m1 take t}}\emph{的作用范围}}",
+               "{\scriptsize\emph{（模糊类型）}}",
 };
 
 real code_word_width=0;
@@ -79,18 +79,18 @@ real get_y(Label l) {
 }
 
 // get width and height of a line
-code_word_width=get_x("\Large{\tt{x}}");
-code_line_height=get_y("\Large{\tt{(procedure)}}");
+code_word_width=get_x("{\tt{x}}");
+code_line_height=get_y("{\tt{(procedure)}}");
 
 // get x positions of round boxes
-box0_min_x=get_x("\Large{\tt{\phantom{xx}}}");
-box0_max_x=get_x("\Large{\tt{\phantom{xx}is-z? : (t -> bool) }}");
+box0_min_x=get_x("{\tt{\phantom{xx}}}");
+box0_max_x=get_x("{\tt{\phantom{xx}is-z? : (t -> bool) }}");
 
-box1_min_x=get_x("\Large{\tt{\phantom{xx}}}");
-box1_max_x=get_x("\Large{\tt{\phantom{xx}is-z? = proc (x : t) zero?(-(x,z)) }}");
+box1_min_x=get_x("{\tt{\phantom{xx}}}");
+box1_max_x=get_x("{\tt{\phantom{xx}is-z? = proc (x : t) zero?(-(x,z)) }}");
 
-box2_min_x=get_x("\Large{\tt{\phantom{}}}");
-box2_max_x=get_x("\Large{\tt{let f = proc (x : from m1 take t) ...\phantom{xxxx}}}");
+box2_min_x=get_x("{\tt{\phantom{}}}");
+box2_max_x=get_x("{\tt{let f = proc (x : from m1 take t) ...\phantom{xxxx}}}");
 
 // get y positions of round boxes
 box0_min_y=-2*code_line_height;
