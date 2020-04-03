@@ -854,3 +854,157 @@ module m
 }
 
 @section[#:tag "s8.2"]{声明类型的模块}
+
+至今为止，我们的接口只声明了普通变量及其类型。在下面这种模块语言OPAQUE-TYPES中，
+我们还允许接口声明类型。例如，在定义
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [opaque t
+   zero : t
+   succ : (t -> t)
+   pred : (t -> t)
+   is-zero : (t -> bool)]
+body
+ ...
+}|
+}
+
+中，接口声明了类型@tt{t}，以及该类型值的一些操作@tt{zero}，@tt{succ}，@tt{pred}
+和@tt{is-zero}。如同@secref{sdvi}，这套接口可能与算数操作的实现相关。这里@tt{t}
+声明为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类型的
+值如何表示。所有的外部代码都知道，可以用@tt{from m1 take zero}、@tt{from m1 take
+succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take t}就像原有类
+型@tt{int}和@tt{bool}一样。
+
+}
+
+我们将介绍两种类型声明：@emph{透明的} (@emph{transparent})和@emph{模糊的}
+(@emph{opaque})。好的模块系统中，二者缺一不可。
+
+@subsection[#:tag "s8.2.1"]{例子}
+
+欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含一对整数的数据结构表示点的横
+坐标和纵坐标。她使用的语言具有练习7.8那样的类型，所以她的模块@tt{Alices-points}
+接口具有如下声明
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+initial-point : (int -> pairof int * int)
+increment-x : (pairof int * int -> pairof int * int)
+}|
+}
+
+鲍伯和查理直发牢骚。他们不像一遍又一遍地写@tt{pairof int * int}。因此，爱丽丝用
+透明类型声明重写她的接口。这样，她可以写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module Alices-points
+ interface
+  [transparent point = pairof int * int
+   initial-point : (int -> point)
+   increment-x : (point -> point)
+   get-x : (point -> int)
+   ...]
+}|
+}
+
+这减轻了她的工作，因为她写得更少；这也简化了她合作者的工作，因为在他们的实现中可
+以写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[transparent point = from Alices-points take point
+ foo = proc (p1 : point)
+        proc (p2 : point) ...
+ ...]
+}|
+}
+
+在某些项目中，这样做很不错。不过，爱丽丝的项目中，正好要用点表示@elem[#:style
+question]{固定形状的金属导轨上的点}，所以横纵坐标不是相互独立的。爱丽丝实现
+@tt{increment-x}时，要仔细更新纵坐标，以匹配横坐标的改变。但是鲍伯不知道这点，所
+以他的过程写作
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+increment-y = proc (p : point)
+               unpair x y = p
+               in newpair(x, -(y,-1))
+}|
+}
+
+由于鲍伯的代码修改纵坐标时不随之修改横坐标。爱丽丝的代码就没法正常工作了。
+
+}
+
+更糟糕的是，如果爱丽丝打算修改点的表示，把纵坐标作为第一部分呢？她可以按照新的表
+示修改她的代码。但是鲍伯的代码就坏掉了，因为过程@tt{increment-y}现在修改了序对中
+的错误部分。
+
+爱丽丝可以把@tt{point}声明为@emph{模糊}数据类型来解决她的问题。她把接口重写为
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+opaque point
+initial-point : (int -> point)
+increment-x : (point -> point)
+get-x : (point -> int)
+}|
+}
+
+现在鲍伯用过程@tt{initial-point}创建新的点，可以用@tt{from Alices-points take
+get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽丝接口中过程
+外，他无法用其他过程处理点。尤其是，他写不出过程@tt{increment-y}，因为它用了爱丽
+丝接口之外的过程处理点。
+
+在本节的剩余部分中，我们探究这些组件的更多例子。
+
+@subsubsection[#:style 'unnumbered #:tag "s8.2.1.1"]{透明类型}
+
+我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型或
+@emph{类型缩写} (@emph{type abbreviation})。
+
+@nested[#:style eopl-example]{
+程序
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [transparent t = int
+   z : t
+   s : (t -> t)
+   is-z? : (t -> bool)]
+ body
+  [type t = int
+   z = 33
+   s = proc (x : t) -(x,-1)
+   is-z? = proc (x : t) zero?(-(x,z))]
+
+ proc (x : from m1 take t)
+  (from m1 take is-z? -(x,0))
+}|
+}
+
+类型为@tt{(int -> bool)}。
+}
+}
+
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/module-type"
+  #:suffixes (list ".pdf" ".svg")
+  "声明类型模块的作用范围")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "声明类型模块的作用范围"))]
+}
