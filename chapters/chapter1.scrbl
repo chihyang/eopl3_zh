@@ -249,10 +249,10 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 (@emph{deduction tree})。
 
 @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}}
-          {@tt{-7} \in N &
+          {@tt{-7} \in Int &
            \infer{@tt{(3 . (14 . ()))} \in @List-of-Int{}}
-                 {@tt{3} \in N & \infer{@tt{(14 . ())} \in @List-of-Int{}}
-                                       {@tt{14} \in N & @tt{()} \in @List-of-Int{}}}
+                 {@tt{3} \in Int & \infer{@tt{(14 . ())} \in @List-of-Int{}}
+                                       {@tt{14} \in Int & @tt{()} \in @List-of-Int{}}}
           }}
 
 @exercise[#:level 1 #:tag "ex1.1"]{
