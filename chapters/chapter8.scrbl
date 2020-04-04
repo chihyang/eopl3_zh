@@ -1001,10 +1001,369 @@ module m1
 @centered{
 @(image "../images/module-type"
   #:suffixes (list ".pdf" ".svg")
-  "声明类型模块的作用范围")
+  "模块类型声明的作用范围")
 }
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "声明类型模块的作用范围"))]
+ (list (para "模块类型声明的作用范围"))]
 }
+
+在接口的剩余部分中，声明@tt{transparent t = int}将@tt{t}绑定到类型@tt{int}，所以
+我们可以写@tt{z : t}。更重要的是，在程序的剩余部分中，声明也将@tt{from m1 take
+t}绑定到@tt{int}。我们称之为@emph{受限类型} (@emph{qualified type})。这里，我们
+用它声明了绑定到变量@tt{z}的类型。声明的作用范围是接口的剩余部分，以及模块定义之
+后，程序的剩余部分。
+
+模块主体中的定义@tt{type t = int}在主体的剩余部分中，将@tt{t}绑定到@tt{int}，所
+以我们可以写@tt{s = proc (x : t) ...}。像之前那样，定义的作用范围是主体的剩余部
+分（见图8.8）。
+
+当然，我们可以给类型起任意名字，也可以声明多个类型。类型声明可以出现在接口中任意
+位置，只要每个声明都先于使用。
+
+@subsubsection[#:style 'unnumbered #:tag "s8.2-opaque-types"]{模糊类型}
+
+模块还可以用@tt{opaque-type}声明输出@emph{模糊}类型。模糊类型有时又称作@emph{抽
+象类型} (@emph{abstract type})。
+
+@nested[#:style eopl-example]{
+我们把例8.6程序中的透明类型替换为模糊类型。得出的程序是
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [opaque t
+   z : t
+   s : (t -> t)
+   is-z? : (t -> bool)]
+ body
+  [type t = int
+   z = 33
+   s = proc (x : t) -(x,-1)
+   is-z? = proc (x : t) zero?(-(x,z))]
+
+ proc (x : from m1 take t)
+  (from m1 take is-z? -(x,0))
+}|
+}
+}
+}
+
+接口中的声明@tt{opaque t}用@tt{t}作为一种新的模糊类型名字。模糊类型就像@tt{int}
+或@tt{bool}之类的原生类型一样。名为@tt{t}的类型在接口的剩余部分中绑定到这种模糊
+类型，而受限类型@tt{from m1 take t}在程序的剩余部分中绑定到同一模糊类型。程序的
+剩余部分都知道@tt{from m1 take z}绑定到一个值，其类型为@tt{from m1 take t}；
+@tt{from m1 take s}和@tt{from m1 take is-z?}绑定到过程，用来处理这种类型的值。这
+就是抽象边界。类型检查器确保表达式的类型为@tt{from m1 take t}时，求值是安全的，
+所以表达式的值只能通过这些操作符产生，如@elem[#:style question]{239页}所述。
+
+与之对应，定义@tt{type t = int}在模块主体内部，将@tt{t}作为@tt{int}的名字，但是，
+由于程序的剩余部分是从模块接口得出绑定的，所以对此一无所知。
+
+所以@tt{-(x,0)}类型异常，因为主程序不知道类型@tt{from m1 take t}实为类型@tt{int}。
+
+我们改变程序，删掉算数操作，得
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [opaque t
+   z : t
+   s : (t -> t)
+   is-z? : (t -> bool)]
+ body
+  [type t = int
+   z = 33
+   s = proc (x : t) -(x,-1)
+   is-z? = proc (x : t) zero?(-(x,z))]
+
+ proc (x : from m1 take t)
+  (from m1 take is-z? x)
+}|
+}
+
+现在，我们的程序类型正常，类型为@tt{(from m1 take t -> bool)}。
+}
+
+通过强制抽象边界，类型检查器确保程序只能通过接口提供的过程处理接口提供的值。如
+@secref{da}所述，这给我们提供了机制来分离数据类型的用户和实现。接下来，我们给出
+这一技术的几个例子。
+
+@nested[#:style eopl-example]{
+如果程序使用了模块定义
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module colors
+ interface
+  [opaque color
+   red : color
+   green : color
+   is-red? : (color -> bool)]
+ body
+  [type color = int
+   red = 0
+   green = 1
+   is-red? = proc (c : color) zero?(c)]
+}|
+}
+
+程序没法知道@tt{from colors take color}实为@tt{int}，也不知道@tt{from colors
+take green}实为1（也许有个例外：返回颜色作为最终答案，然后打印出来）。
+}
+}
+
+@nested[#:style eopl-example]{
+程序
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module ints1
+ interface
+  [opaque t
+   zero : t
+   succ : (t -> t)
+   pred : (t -> t)
+   is-zero : (t -> bool)]
+ body
+  [type t = int
+   zero = 0
+   succ = proc(x : t) -(x,-5)
+   pred = proc(x : t) -(x,5)
+   is-zero = proc (x : t) zero?(x)]
+
+let z = from ints1 take zero
+in let s = from ints1 take succ
+   in (s (s z))
+}|
+}
+
+类型为@tt{from ints1 take t}，值为10。但我们只能通过@tt{ints1}输出的过程处理这个
+值。这个模块用表达值@${5*k}表示整数@${k}。用@secref{sdvi}的表示法，是@${\lceil k
+\rceil = 5 * k}。
+}
+}
+
+@nested[#:style eopl-example]{
+在本模块中，@${\lceil k \rceil = -3 * k}。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module ints2
+ interface
+  [opaque t
+   zero : t
+   succ : (t -> t)
+   pred : (t -> t)
+   is-zero : (t -> bool)]
+ body
+  [type t = int
+   zero = 0
+   succ = proc(x : t) -(x,3)
+   pred = proc(x : t) -(x,-3)
+   is-zero = proc (x : t) zero?(x)]
+
+let z = from ints2 take zero
+in let s = from ints2 take succ
+   in (s (s z))
+}|
+}
+
+类型为@tt{from ints2 take t}，值为-6。
+
+}
+}
+
+@nested[#:style eopl-example]{在前面的例子中，我们不能直接处理值，但我们能用模块
+输出的过程处理它们。像@secref{da}那样，我们可以结合这些过程做有用的工作。这里，
+我们用它们写出过程@tt{to-int}，把模块中的值转回类型@tt{int}的值。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module ints1 |@emph{...同前...}
+
+let z = from ints1 take zero
+in let s = from ints1 take succ
+in let p = from ints1 take pred
+in let z? = from ints1 take is-zero
+in letrec int to-int (x : from ints1 take t) =
+              if (z? x)
+              then 0
+              else -((to-int (p x)), -1)
+in (to-int (s (s z)))
+}|
+}
+
+类型为@tt{int}，值为2。
+
+}
+}
+
+@nested[#:style eopl-example]{
+这例用到的技术与@tt{ints2}中算数操作的实现相同。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module ints2 |@emph{...同前...}
+
+let z = from ints2 take zero
+in let s = from ints2 take succ
+in let p = from ints2 take pred
+in let z? = from ints2 take is-zero
+in letrec int to-int (x : from ints2 take t) =
+              if (z? x)
+              then 0
+              else -((to-int (p x)), -1)
+in (to-int (s (s z)))
+}|
+}
+
+同样类型为@tt{int}，值为2。
+
+}
+}
+
+在@secref{s8.3}中，我们展示如何抽象这两个例子中的模式。
+
+@nested[#:style eopl-example]{
+在下面的程序中，我们设计一个模块来封装布尔类型。布尔值用整数值表示，但是像例8.8
+那样，程序的剩余部分对此一无所知。
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module mybool
+ interface
+  [opaque t
+   true : t
+   false : t
+   and : (t -> (t -> t))
+   not : (t -> t)
+   to-bool : (t -> bool)]
+ body
+  [type t = int
+   true = 0
+   false = 13
+   and = proc (x : t)
+          proc (y : t)
+           if zero?(x) then y else false
+   not = proc (x : t)
+           if zero?(x) then false else true
+   to-bool = proc (x : t) zero?(x)]
+
+let true = from mybool take true
+in let false = from mybool take false
+   in let and = from mybool take and
+      in ((and true) false)
+}|
+}
+
+类型为@tt{from mybool take t}，值为13。
+
+}
+}
+
+@exercise[#:level 1 #:tag "ex8.12"]{
+
+在例8.13中，@tt{and}和@tt{not}的定义可以从模块内部移到外面吗？@tt{to-bool}呢？
+
+}
+
+@exercise[#:level 1 #:tag "ex8.13"]{
+
+写一个模块，用@${5*k+3}表示整数@${k}，实现算数操作。
+
+}
+
+@exercise[#:level 1 #:tag "ex8.14"]{
+
+下面是@tt{mybool}（例8.13）的另一种定义：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module mybool
+ interface
+  [opaque t
+   true : t
+   false : t
+   and : (t -> (t -> t))
+   not : (t -> t)
+   to-bool : (t -> bool)]
+ body
+  [type t = int
+   true = 1
+   false = 0
+   and = proc (x : t)
+          proc (y : t)
+           if zero?(x) then false else y
+   not = proc (x : t)
+          if zero?(x) then true else false
+   to-bool = proc (x : t)
+              if zero?(x) then zero?(1) else zero?(0)]
+}|
+}
+
+有没有程序类型为@tt{int}，用@tt{mybool}原来的定义返回一个值，用新的定义返回另一
+个值？
+
+}
+
+@exercise[#:level 2 #:tag "ex8.15"]{
+
+写一个模块，实现抽象表。你实现的表应像环境那样，但不是把符号绑定到Scheme值，而是
+把整数值绑定到整数值。接口提供一个值，表示空表；两个过程@tt{add-to-table}和
+@tt{lookup-in-table}类似@tt{extend-env}和@tt{apply-env}。由于我们的语言只有单参
+数过程，我们用咖喱化（练习3.20）实现等效的多参数过程。你可以把任何查询都返回0的
+表作为空表。这是该模块的一个例子：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module tables
+ interface
+  [opaque table
+   empty : table
+   add-to-table : (int -> (int -> (table -> table)))
+   lookup-in-table : (int -> (table -> int))]
+ body
+  [type table = (int -> int)
+   ...]
+
+let empty = from tables take empty
+in let add-binding = from tables take add-to-table
+   in let lookup = from tables take lookup-in-table
+      in let table1 = (((add-binding 3) 300)
+                       (((add-binding 4) 400)
+                        (((add-binding 3) 600)
+                         empty)))
+         in -(((lookup 4) table1),
+              ((lookup 3) table1))
+}|
+}
+
+这个程序类型应为@tt{int}。表@tt{table1}把4绑定到400，把3绑定到300，所以程序的值
+应为100。
+
+}
+
+@subsection[#:tag "s8.2.2"]{实现}
+
+现在我们来扩展系统，实现透明类型和模糊类型声明，及受限类型的使用。
+
+@subsubsection[#:style 'unnumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
+
+我们给两种新类型添加语法：有名类型（如@tt{t}）以及受限类型（如@tt{from m1 take
+t}）。
+
+@subsubsection[#:style 'unnumbered #:tag "the-checker"]{检查器}
+
+@section[#:tag "s8.3"]{模块过程}
