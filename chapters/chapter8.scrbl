@@ -57,7 +57,7 @@
 
 设想一个软件项目中有三名开发者：爱丽丝，鲍伯和查理。爱丽丝、鲍伯和查理正在开发项
 目中相对独立的几部分。这些开发者散居各处，时区都可能不同。项目的每部分都要实现一
-套@secref{s2.1}那样的接口，但接口的实现可能涉及大量其他过程。而且，开发者们需要
+套@secref{sdvi}那样的接口，但接口的实现可能涉及大量其他过程。而且，开发者们需要
 确保没有命名冲突，当个部分集成到一起时，不会干扰项目的其他部分。
 
 要实现这一目标，开发者们需要公布一套接口，列出每个供他人使用的过程名字。模块系统
@@ -476,7 +476,7 @@ in -(z, -(from m1 take a, from m2 take a))
 @racketblock[
 (define-datatype type-environment type-environment?
   (empty-tenv)
-  (extend-tenv ...as before...)
+  (extend-tenv @#,elem{@emph{...同前...}})
   (extend-tenv-with-module
     (name symbol?)
     (interface interface?)
@@ -877,13 +877,13 @@ body
 和@tt{is-zero}。如同@secref{sdvi}，这套接口可能与算数操作的实现相关。这里@tt{t}
 声明为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类型的
 值如何表示。所有的外部代码都知道，可以用@tt{from m1 take zero}、@tt{from m1 take
-succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take t}就像原有类
+succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take t}就像原生类
 型@tt{int}和@tt{bool}一样。
 
 }
 
-我们将介绍两种类型声明：@emph{透明的} (@emph{transparent})和@emph{模糊的}
-(@emph{opaque})。好的模块系统中，二者缺一不可。
+我们将介绍两种类型声明：@emph{透明} (@emph{transparent}) 类型和@emph{模糊}
+(@emph{opaque})类型。好的模块系统中，二者缺一不可。
 
 @subsection[#:tag "s8.2.1"]{例子}
 
@@ -898,8 +898,8 @@ increment-x : (pairof int * int -> pairof int * int)
 }|
 }
 
-鲍伯和查理直发牢骚。他们不像一遍又一遍地写@tt{pairof int * int}。因此，爱丽丝用
-透明类型声明重写她的接口。这样，她可以写
+鲍伯和查理对此直发牢骚。他们不想一遍又一遍地写@tt{pairof int * int}。因此，爱丽
+丝用透明类型声明重写她的接口。这样，她可以写
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -944,8 +944,8 @@ increment-y = proc (p : point)
 }
 
 更糟糕的是，如果爱丽丝打算修改点的表示，把纵坐标作为第一部分呢？她可以按照新的表
-示修改她的代码。但是鲍伯的代码就坏掉了，因为过程@tt{increment-y}现在修改了序对中
-的错误部分。
+示修改她的代码。但是现在，鲍伯的代码就坏掉了，因为过程@tt{increment-y}修改了序对
+中的错误部分。
 
 爱丽丝可以把@tt{point}声明为@emph{模糊}数据类型来解决她的问题。她把接口重写为
 

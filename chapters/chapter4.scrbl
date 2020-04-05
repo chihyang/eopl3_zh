@@ -1143,7 +1143,7 @@ in let p = proc (y) -(y,x)
 现在，我们给IMPLICIT-REFS添加可变序对。序对是表达值，具有如下操作：
 
 @envalign*{
-@bold{@tt{newpair}}  &: \mathit{Expval} \times \mathit{Expval} \to \mathit{MutPair} \\
+@bold{@tt{make-pair}}  &: \mathit{Expval} \times \mathit{Expval} \to \mathit{MutPair} \\
 @bold{@tt{left}} &: \mathit{MutPair} \to \mathit{Expval} \\
 @bold{@tt{right}}   &: \mathit{MutPair} \to \mathit{Expval} \\
 @bold{@tt{setleft}}  &: \mathit{MutPair} \times \mathit{Expval} \to \mathit{Unspecified} \\

@@ -1558,13 +1558,13 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @#,elem{@bold{@tt{cps-of-let-exp}} : @${\mathit{Var} \times \mathit{InpExp} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-let-exp
   (lambda (id rhs body k-exp)
-    (cps-of-exps (list rhs)
-      (lambda (simples)
-        (cps-let-exp id
-          (car simples)
-          (cps-of-exp body k-exp))))))
+    (cps-of-exp
+      (call-exp
+        (proc-exp (list id) body)
+        (list rhs))
+      k-exp)))
 
-@#,elem{@bold{@tt{cps-of-letrec-exp}} : @linebreak[] @${\phantom{x}\mathit{Listof(Var)} \times \mathit{Listof(Listof(Var))} \times \mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
+@#,elem{@bold{@tt{cps-of-letrec-exp}} : @linebreak[] @${\phantom{x}\mathit{Listof(Var)} \times \mathit{Listof(Listof(Var))} \times \mathit{Listof(InpExp)} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-letrec-exp
   (lambda (p-names b-varss p-bodies letrec-body k-exp)
     (cps-letrec-exp
@@ -2042,13 +2042,13 @@ newrefk(33, proc (loc1)
   (let ((val1 (value-of-simple-exp simple1 env))
         (val2 (value-of-simple-exp simple2 env)))
     (let ((newval (ref-val (newref val1))))
-      (apply-procedure
+      (apply-procedure/k
         (expval->proc val2)
         (list newval)
         k-exp))))
 
 (cps-derefk-exp (simple1 simple2)
-  (apply-procedure
+  (apply-procedure/k
     (expval->proc (value-of-simple-exp simple2 env))
     (list
       (deref

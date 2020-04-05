@@ -1719,7 +1719,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 我们用@tt{otype->type}，为每个@tt{?}定义一个新类型变量，把可选类型转换为未知类型。
 
 @racketblock[
-@#,elem{@bold{@tt{optype->type}} : @${\mathit{OptionalType} \to \mathit{Type}}}
+@#,elem{@bold{@tt{otype->type}} : @${\mathit{OptionalType} \to \mathit{Type}}}
 (define otype->type
   (lambda (otype)
     (cases optional-type otype
@@ -2064,7 +2064,7 @@ in if (f zero?(0))
 
 @nested[#:style 'code-inset]{
 @verbatim|{
-let
+letrec
  ? map (f : ?) =
     letrec
      ? foo (x : ?) = if null?(x)
@@ -2078,7 +2078,7 @@ in letrec
                      else if zero?(-(y,1))
                           then zero?(1)
                           else (even -(y,2))
-   in pair(((map proc(x : int)-(x,1))
+   in pair(((map proc(x : int) -(x,1))
            cons(3,cons(5,emptylist))),
            ((map even)
             cons(3,cons(5,emptylist))))
