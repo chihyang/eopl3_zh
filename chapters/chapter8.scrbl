@@ -260,7 +260,7 @@ module m1
 
 @subsection[#:tag "s8.1.2"]{实现简单模块系统}
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1.2.1"]{语法}
+@subsubsection[#:style 'unnumbered #:tag "s8.1-syntax"]{语法}
 
 SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
 
@@ -302,7 +302,7 @@ SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
              &\mathrel{\phantom{::=}} \fbox{@tt{qualified-var-exp (m-name var-name)}}
             }
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1.2.2"]{解释器}
+@subsubsection[#:style 'unnumbered #:tag "s8.1-the-interpreter"]{解释器}
 
 求模块主体的值会得到一个@emph{模块}。在我们的简单语言中，模块是一个环境，包含输
 出的所有绑定。我们用数据类型@tt{typed-module}表示这些。
@@ -461,7 +461,7 @@ in -(z, -(from m1 take a, from m2 take a))
  (list (para "SIMPLE-MODULES的解释器，第2部分"))]
 }
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1.2.3"]{检查器}
+@subsubsection[#:style 'unnumbered #:tag "s8.1-checker"]{检查器}
 
 检查器的工作是确保每个模块主体满足其接口，每个变量的使用符合其类型。
 
@@ -655,7 +655,7 @@ in -(z, -(from m1 take a, from m2 take a))
       ((null? decls1) #f)
       (else
         (let ((name1 (decl->name (car decls1)))
-               (name2 (decl->name (car decls2))))
+              (name2 (decl->name (car decls2))))
           (if (eqv? name1 name2)
             (and
               (equal?
@@ -965,7 +965,7 @@ get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽�
 
 在本节的剩余部分中，我们探究这些组件的更多例子。
 
-@subsubsection[#:style 'unnumbered #:tag "s8.2.1.1"]{透明类型}
+@subsubsection[#:style 'unnumbered #:tag "s8.2-transparent-types"]{透明类型}
 
 我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型或
 @emph{类型缩写} (@emph{type abbreviation})。
@@ -1361,9 +1361,467 @@ in let add-binding = from tables take add-to-table
 
 @subsubsection[#:style 'unnumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
 
-我们给两种新类型添加语法：有名类型（如@tt{t}）以及受限类型（如@tt{from m1 take
-t}）。
+我们给两种新类型添加语法：有名类型（如@tt{t}）和受限类型（如@tt{from m1 take t}）。
+
+@envalign*{\mathit{Type} &::= \mathit{Identifier} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{named-type (name)}} \\[5pt]
+           \mathit{Type} &::= @tt{from @m{\mathit{Identifier}} take @m{\mathit{Identifier}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{qualified-type (m-name t-name)}}}
+
+我们为模糊类型和透明类型新增两种声明。
+
+@envalign*{\mathit{Decl} &::= @tt{opaque @m{\mathit{Identifier}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{opaque-type-decl (t-name)}} \\[5pt]
+           \mathit{Decl} &::= @tt{transparent @m{\mathit{Identifier}} = @m{\mathit{Type}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{transparent-type-decl (t-name ty)}}}
+
+我们还要新增一种定义：类型定义，用来定义模糊类型和透明类型。
+
+@envalign*{\mathit{Defn} &::= @tt{type @m{\mathit{Identifier}} = @m{\mathit{Type}}} \\[-3pt]
+       &\mathrel{\phantom{::=}} \fbox{@tt{type-defn (name ty)}}}
+
+解释器不需要查看类型和声明，所以解释器的唯一改动是忽略类型定义。
+
+@racketblock[
+@#,elem{@bold{@tt{defns-to-env}} : @${\mathit{Listof(Defn)} \times \mathit{Env} \to \mathit{Env}}}
+(define defns-to-env
+  (lambda (defns env)
+    (if (null? defns)
+      (empty-env)
+      (cases definition (car defns)
+        (val-defn (var exp) ...as before...)
+        (type-defn (type-name type)
+          (defns-to-env (cdr defns) env))))))
+]
 
 @subsubsection[#:style 'unnumbered #:tag "the-checker"]{检查器}
+
+检查器的改动就多多了，因为所有关于类型的操作都要扩展，以便处理新的类型。
+
+首先，我们介绍处理模糊类型和透明类型的系统性方法。模糊类型就像@tt{int}或
+@tt{bool}之类的原生类型一样。而透明类型名副其实，是透明的：它们的行为与定义相同。
+所以每个类型都等价于下列语法：
+
+@nested{
+@$${\mathit{Type} ::= @tt{int} | @tt{bool} | @tt{from @${m} take @${t}} | @tt{(@${\mathit{Type}} -> @${\mathit{Type}})}}
+
+其中，@${t}为@${m}中的模糊类型声明。我们称这种形式的类型为@emph{展开类型}
+(@emph{expanded type})。}
+
+接下来我们扩展类型环境，处理新类型。我们的类型环境将每个有名类型或受限类型绑定到
+一个展开类型。新的类型环境定义为
+
+@nested{
+@racketblock[
+(define-datatype type-environment type-environment?
+  (empty-tenv)
+  (extend-tenv @#,elem{@emph{...同前...}})
+  (extend-tenv-with-module @#,elem{@emph{...同前...}})
+  (extend-tenv-with-type
+    (t-name symbol?)
+    (type type?)
+    (saved-tenv type-environment?)))
+]
+
+它满足条件，@tt{type}总是一个展开类型。像 @elem[#:style question]{第10页}讨论的，
+这个条件是一@emph{不变式}。
+
+}
+
+接着我们写函数@tt{expand-type}，它取一类型和一类型环境，用类型环境中绑定的类型扩
+展类型参数。根据结果类型总是展开这一不变式，它在类型环境中查询有名类型和受限类型，
+对@tt{proc}类型，它递归处理参数和结果类型。
+
+@racketblock[
+@#,elem{@bold{@tt{expand-type}} : @${\mathit{Type} \times \mathit{Tenv} \to \mathit{ExpandedType}}}
+(define expand-type
+  (lambda (ty tenv)
+    (cases type ty
+      (int-type () (int-type))
+      (bool-type () (bool-type))
+      (proc-type (arg-type result-type)
+        (proc-type
+          (expand-type arg-type tenv)
+          (expand-type result-type tenv)))
+      (named-type (name)
+        (lookup-type-name-in-tenv tenv name))
+      (qualified-type (m-name t-name)
+        (lookup-qualified-type-in-tenv m-name t-name tenv)))))
+]
+
+为了维持这一不变式，我们必须保证不论何时扩展类型环境，都要调用@tt{expand-type}。
+这种地方有三处：
+
+@itemlist[
+
+ @item{在检查器中的@tt{type-of}内；}
+
+ @item{用@tt{defns-to-decls}处理类型定义列表之处；}
+
+ @item{在@tt{add-module-defns-to-tenv}中，向类型环境添加模块之处。}
+
+]
+
+在检查器中，我们把形如
+
+@nested{
+@racketblock[(extend-tenv sym ty tenv)]
+
+的调用替换为
+
+@racketblock[(extend-tenv var (expand-type ty tenv) tenv)]
+
+}
+
+在@tt{defns-to-decls}中，当我们遇到类型定义时，我们扩展定义右边，然后将其加入类
+型环境中。@tt{type-of}返回的类型一定是展开的，所以我们不需要再次扩展它。当我们把
+由于在模块主体中，所有类型绑定都是透明的，所以我们把类型定义转换为透明类型声明。
+在@tt{add-module-defns-to-tenv}中，我们调用@tt{extend-tenv-with-module}，将接口
+加入类型环境。这里，我们需要扩展接口，确保它包含的所有类型都已展开。要完成这一点，
+我们修改@tt{add-module-defns-to-tenv}，调用@tt{expand-iface}。见图8.9。
+
+过程@tt{expand-iface}（图8.10）调用@tt{expand-decls}。我们提出这些过程，为
+@secref{s8.3}做准备。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{defns-to-decls}} : @${\mathit{Listof(Defn)} \times \mathit{Tenv} \to \mathit{Decl}}}
+(define defns-to-decls
+  (lambda (defns tenv)
+    (if (null? defns)
+      ’()
+      (cases definition (car defns)
+        (val-defn (var-name exp)
+          (let ((ty (type-of exp tenv)))
+            (let ((new-env (extend-tenv var-name ty tenv)))
+              (cons
+                (val-decl var-name ty)
+                (defns-to-decls (cdr defns) new-env)))))
+        (type-defn (name ty)
+          (let ((new-env
+                  (extend-tenv-with-type
+                    name (expand-type ty tenv) tenv)))
+            (cons
+              (transparent-type-decl name ty)
+              (defns-to-decls (cdr defns) new-env))))))))
+
+@#,elem{@bold{@tt{add-module-defns-to-tenv}} : @${\mathit{Listof(ModuleDefn)} \times \mathit{Tenv} \to \mathit{Tenv}}}
+(define add-module-defns-to-tenv
+  (lambda (defns tenv)
+    (if (null? defns)
+      tenv
+      (cases module-definition (car defns)
+        (a-module-definition (m-name expected-iface m-body)
+          (let ((actual-iface (interface-of m-body tenv)))
+            (if (<:-iface actual-iface expected-iface tenv)
+              (let ((new-env
+                      (extend-tenv-with-module m-name
+                        (expand-iface
+                          m-name expected-iface tenv)
+                        tenv)))
+                (add-module-defns-to-tenv
+                  (cdr defns) new-env))
+              (report-module-doesnt-satisfy-iface
+                m-name expected-iface actual-iface))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "OPAQUE-TYPES的检查器，第1部分"))]
+}
+
+过程@tt{expand-decls}遍历声明的集合，创建新的类型环境，其中的每个类型和变量名都
+绑定到一个展开类型。麻烦之处是声明遵循@tt{let*}式作用范围：集合中的每个声明的作
+用范围包含它之后的所有声明。
+
+要理解这些，考虑模块定义
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module m1
+ interface
+  [opaque t
+   transparent u = int
+   transparent uu = (t -> u)
+   % A 处
+   f : uu
+   ...]
+ body
+  [...]
+}|
+}
+
+要满足不变式，类型环境中的@tt{m1}应绑定到包含如下声明的借口
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[transparent t = from m1 take t
+ transparent u = int
+ transparent uu = (from m1 take t -> int)
+ f : (from m1 take t -> int)
+ ...]
+}|
+}
+
+只要我们这样做，不论何时我们从类型环境中查询类型时，得到的都是期望中的展开类型。
+
+在A处，紧随声明@tt{f}之后，类型环境应绑定到
+
+@nested[#:style 'code-inset]{
+@tabular[#:sep @hspace[1]
+         (list (list @tt{t}  @elem{绑定到} @tt{from m1 take t})
+               (list @tt{u}  @elem{绑定到} @tt{int})
+               (list @tt{uu} @elem{绑定到} @tt{(from m1 take t -> int)}))]
+}
+
+我们把A处即类似位置之上的类型环境称为@emph{内部}类型环境。它作为参数传给
+@tt{expand-decls}。
+
+现在我们可以写出@tt{expand-decls}。像@tt{defns-to-decls}，这个过程只创建透明类型，
+因为它的用途就是创建一种查询受限类型的数据结构。
+
+最后，我们修改@tt{<:-decls}，处理两种新声明。我们必须处理声明集合内部的作用范围
+关系。例如，如果我们比较
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
+(define expand-iface
+  (lambda (m-name iface tenv)
+    (cases interface iface
+      (simple-iface (decls)
+        (simple-iface
+          (expand-decls m-name decls tenv))))))
+
+@#,elem{@bold{@tt{expand-decls}} : @${\mathit{Sym} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Listof(Decl)}}}
+(define expand-decls
+  (lambda (m-name decls internal-tenv)
+    (if (null? decls) ()
+      (cases declaration (car decls)
+        (opaque-type-decl (t-name)
+          (let ((expanded-type
+                  (qualified-type m-name t-name)))
+            (let ((new-env
+                    (extend-tenv-with-type
+                      t-name expanded-type internal-tenv)))
+              (cons
+                (transparent-type-decl t-name expanded-type)
+                (expand-decls
+                  m-name (cdr decls) new-env)))))
+        (transparent-type-decl (t-name ty)
+          (let ((expanded-type
+                  (expand-type ty internal-tenv)))
+            (let ((new-env
+                    (extend-tenv-with-type
+                      t-name expanded-type internal-tenv)))
+              (cons
+                (transparent-type-decl t-name expanded-type)
+                (expand-decls
+                  m-name (cdr decls) new-env)))))
+        (val-decl (var-name ty)
+          (let ((expanded-type
+                  (expand-type ty internal-tenv)))
+            (cons
+              (val-decl var-name expanded-type)
+              (expand-decls
+                m-name (cdr decls) internal-tenv))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "OPAQUE-TYPES的检查器，第2部分"))]
+}
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+[transparent t = int
+x : bool                <:    [y : int]
+y : t]
+}|
+}
+
+我们处理到声明@tt{y}时，我们得知道@tt{t}指代@tt{int}类型。所以，当我们递归向下，
+处理声明列表时，我们需要随之扩展类型环境，就像在@tt{expand-decls}中生成
+@tt{internal-tenv}一样。我们调用@tt{extend-tenv-with-decl}处理这些，它取一声明，
+根据类型环境将其展开为适当的类型（图8.11）。
+
+}
+
+展开时，我们总使用@tt{decls1}。欲知其原因，考虑比较
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[transparent t = int           [opaque t
+transparent u = (t -> t)  <:    transparent u = (t -> int)
+f : (t -> u)]                   f : (t -> (int -> int))]
+}|
+}
+
+这一比较应该通过，因为模块主体供应左侧的绑定时，也是右侧接口的正确实现。
+
+比较类型@tt{u}的两个定义时，我们得知道类型@tt{t}实为@tt{int}。像上面第一个例子中
+的声明@tt{t}所展示的，即使左边的声明在右边没出现，同样的技巧也适用。我们调用
+@tt{expand-type}维持不变式，展开类型环境中的所有类型。@tt{extend-tenv-with-decl}
+最后一句中选什么模块名无关紧要，因为受限类型支持的唯一操作是@tt{equal?}。所以用
+@tt{fresh-module-name}足以保证这一受限类型是新生成的。
+
+现在来处理关键问题：如何比较声明？仅当二者使用相同的名字（变量或类型）时，声明才
+能匹配。如果一对声明名字相同，有四种匹配方式：
+
+@itemlist[
+
+ @item{二者均为值声明，类型匹配。}
+
+ @item{二者均为模糊类型声明。}
+
+ @item{二者均为透明类型声明，定义匹配。}
+
+ @item{@tt{decl1}为透明类型声明，@tt{decl2}为模糊类型声明。例如，假设有个模块声
+ 明了@tt{opaque t}，主体中的定义为@tt{type t = int}。应当接受这种做法。过程
+ @tt{defns-to-decls}将定义@tt{type t = int}转换为透明类型声明，所以
+ @tt{add-module-defns-to-tenv}中的条件
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+actual-iface <: expected-iface
+}|
+}
+
+ 需要检查
+
+ @$${@tt{(transparent @${t} = int)} <: @tt{(opaque @${t})}}
+
+ 是否成立。
+
+ 要接受这一模块，该条件应返回真。
+
+ 这就是说，类型已知的对象总能作为类型未知的对象，反之不然。例如，
+
+ @$${@tt{(opaque @${t})} <: @tt{(transparent @${t} = int)}}
+
+ 不成立，因为值的类型为模糊类型时，其实际类型可能不是@tt{int}，而且满足
+ @tt{opaque t}的模块可能不满足@tt{transparent t = int}。}
+
+]
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{<:-decls}} : @${\mathit{Listof(Decl)} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Bool}}}
+(define <:-decls
+  (lambda (decls1 decls2 tenv)
+    (cond
+      ((null? decls2) #t)
+      ((null? decls1) #f)
+      (else
+        (let ((name1 (decl->name (car decls1)))
+              (name2 (decl->name (car decls2))))
+          (if (eqv? name1 name2)
+            (and
+              (<:-decl
+                (car decls1) (car decls2) tenv)
+              (<:-decls
+                (cdr decls1) (cdr decls2)
+                (extend-tenv-with-decl
+                  (car decls1) tenv)))
+            (<:-decls
+              (cdr decls1) decls2
+              (extend-tenv-with-decl
+                (car decls1) tenv))))))))
+
+@#,elem{@bold{@tt{extend-tenv-with-decl}} : @${\mathit{Decl} \times \mathit{Tenv} \to \mathit{Tenv}}}
+(define extend-tenv-with-decl
+  (lambda (decl tenv)
+    (cases declaration decl
+      (val-decl (name ty) tenv)
+      (transparent-type-decl (name ty)
+        (extend-tenv-with-type
+          name
+          (expand-type ty tenv)
+          tenv))
+      (opaque-type-decl (name)
+        (extend-tenv-with-type
+          name
+          (qualified-type (fresh-module-name ’%unknown) name)
+          tenv)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "OPAQUE-TYPES的检查器，第3部分"))]
+}
+
+这样，我们就得出图8.12中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
+样的例子
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+[transparent t = int x : bool y : t] <: [y : int]
+}|
+}
+
+中，左边的@tt{t}展开为@tt{int}，匹配成功。
+}
+
+@exercise[#:level 1 #:tag "ex8.16"]{
+
+用练习7.24中的语言扩展本节的系统，然后重写练习8.15，用多参数过程代替返回过程的过
+程。
+
+}
+
+@exercise[#:level 2 #:tag "ex8.17"]{
+
+仿照练习8.8，允许模块以不同于接口声明的顺序产生值。但是记住，定义必须遵守定界规
+则，尤其是类型定义。
+
+}
+
+@exercise[#:level 2 #:tag "ex8.18"]{
+
+我们代码依赖的不变式是，类型环境中的每个类型都已展开。我们在代码中多次调用
+@tt{expand-type}来维持这一不变式。这就很容易因忘记调用@tt{expand-type}而破坏系统。
+重构代码，减少@tt{expand-type}的调用，以便更稳定地维持不变式。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{<:-decl}} : @${\mathit{Decl} \times \mathit{Decl} \times \mathit{Tenv} \to \mathit{Bool}}}
+(define <:-decl
+  (lambda (decl1 decl2 tenv)
+    (or
+      (and
+        (val-decl? decl1)
+        (val-decl? decl2)
+        (equiv-type?
+          (decl->type decl1)
+          (decl->type decl2) tenv))
+      (and
+        (transparent-type-decl? decl1)
+        (transparent-type-decl? decl2)
+        (equiv-type?
+          (decl->type decl1)
+          (decl->type decl2) tenv))
+      (and
+        (transparent-type-decl? decl1)
+        (opaque-type-decl? decl2))
+      (and
+        (opaque-type-decl? decl1)
+        (opaque-type-decl? decl2)))))
+
+@#,elem{@bold{@tt{equiv-type?}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Tenv} \to \mathit{Bool}}}
+(define equiv-type?
+  (lambda (ty1 ty2 tenv)
+    (equal?
+      (expand-type ty1 tenv)
+      (expand-type ty2 tenv))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "OPAQUE-TYPES的检查器，第4部分"))]
+}
 
 @section[#:tag "s8.3"]{模块过程}
