@@ -928,8 +928,8 @@ module Alices-points
 在某些项目中，这样做很不错。不过，爱丽丝的项目中，正好要用点表示固定形状金属导轨
 上的点，所以横纵坐标不是相互独立的。@note{不妨将金属导轨视为有长度无宽度的圆形轨
 迹，以圆心为坐标原点。要保证横坐标变化时，得到的点仍在圆上，则纵坐标也要相应改变。
-反之亦然。}爱丽丝实现@tt{increment-x}时，要仔细更新纵坐标，以匹配横坐标的改变。
-但是鲍伯不知道这点，所以他的过程写作
+反之亦然。——@emph{译注}}爱丽丝实现@tt{increment-x}时，要仔细更新纵坐标，以匹配横
+坐标的改变。但是鲍伯不知道这点，所以他的过程写作
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1826,3 +1826,721 @@ actual-iface <: expected-iface
 }
 
 @section[#:tag "s8.3"]{模块过程}
+
+OPAQUE-TYPES中的程序有固定的依赖关系。模块@tt{m4}可能依赖@tt{m3}和@tt{m2}，
+@tt{m2}依赖@tt{m1}。有时，我们说依赖关系是@emph{写死的} (@emph{hard-coded})。通
+常，这种写死的依赖关系会造成糟糕的程序设计，因为这使模块难以复用。本节，我们给系
+统添加名为@emph{模块过程} (@emph{module procedure})（有时又称 @emph{参数化模块}
+(@emph{parameterized module})）的组件，以便复用模块。我们称这种新语言为
+PROC-MODULES。
+
+@subsection[#:tag "s8.3.1"]{例子}
+
+再来看我们的三位开发者。查理想用爱丽丝模块的某些组件。但爱丽丝的模块使用了鲍伯模
+块提供的数据库，而查理想用另一数据库，由其他模块提供（戴安娜所写）。
+
+要实现这些，爱丽丝用模块过程重写她的代码。模块过程就像过程，但它处理的是模块，而
+非表达值。在模块层面上，接口就像类型。就像CHECKED中的过程类型指定参数和结果类型，
+模块过程的接口指定接口的参数类型和结果类型。
+
+爱丽丝写出新的模块@tt{Alices-point-builder}，开头为
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module Alices-point-builder
+ interface
+  ((database : [opaque db-type
+                opaque node-type
+                insert-node : (node-type ->
+                               (db-type -> db-type))
+                ...])
+   => [opaque point
+       initial-point : (int -> point)
+       ...])
+}|
+}
+
+这套接口说的是，@tt{Alices-point-builder}是一模块过程。它取一模块为参数，该模块
+输出两个类型，@tt{db-type}和@tt{node-type}，一个过程，@tt{insert-node}，可能还有
+其他值。给定这个模块，@tt{Alices-point-builder}应生成一模块，生成的模块输出模糊
+类型@tt{point}，过程@tt{initial-point}，还可能有些其他值。
+@tt{Alices-point-builder}的接口还指定了参数的局部名字；稍后我们会看到为何需要它。
+
+爱丽丝的新模块主体开头为
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+body
+ module-proc (m : [opaque db-type
+                   opaque node-type
+                   insert-node : (node-type ->
+                                  (db-type -> db-type))
+                   ...])
+  [type point = ...
+   initial-point = ... from m take insert-node ...
+   ...]
+}|
+}
+
+一般的过程表达式形如
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+proc (|@${var} : |@${t}) |@${e}
+}|
+}
+
+类似地，模块过程形如
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module-proc (|@${m} : [...]) [...]
+}|
+}
+
+}
+
+本例中，爱丽丝选择@tt{m}作为模块过程中绑定变量的名字；它不必和接口中的局部名字相
+同。我们重写参数中的接口，因为模块接口的作用范围不包含模块主体。可以弥补这一点
+（见练习8.27）。
+
+现在，爱丽丝把她的模块重写为
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module Alices-points
+ interface
+  [opaque point
+  initial-point : (int -> point)
+  ...]
+ body
+  (Alices-point-builder Bobs-db-module)
+}|
+}
+
+查理的模块写成
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module Charlies-points
+ interface
+  [opaque point
+   initial-point : (int -> point)
+   ...]
+ body
+  (Alices-point-builder Dianas-db-module)
+}|
+}
+
+}
+
+模块@tt{Alices-points}使用@tt{Bobs-db-module}的数据库。模块@tt{Charlies-points}
+使用@tt{Dianas-db-module}的数据库。这样安排可以复用@tt{Alices-point-builder}中的
+代码。这不仅避免了写两次同样的代码，而且，在代码需要变动时，可以只改一处，自动传
+播到@tt{Alices-point}和@tt{Charlies-points}。
+
+另一个例子，来看例8.11和8.12。在这两个例子中，我们用基本相同的代码写@tt{to-int}。
+在例8.11中它是
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+letrec int to-int (x : from ints1 take t)
+            = if (z? x)
+              then 0
+              else -((to-int (p x)), -1)
+}|
+}
+
+在例8.12中，@tt{x}的类型是@tt{from ints2 take t}。所以我们将其重写为模块过程，其
+参数模块产生所需的整数。
+
+}
+
+@nested[#:style eopl-example]{
+声明
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module to-int-maker
+ interface
+  ((ints : [opaque t
+            zero : t
+            succ : (t -> t)
+            pred : (t -> t)
+            is-zero : (t -> bool)])
+    => [to-int : (from ints take t -> int)])
+ body
+  module-proc (ints : [opaque t
+               zero : t
+               succ : (t -> t)
+               pred : (t -> t)
+               is-zero : (t -> bool)])
+   [to-int
+     = let z? = from ints take is-zero
+       in let p = from ints take pred
+       in letrec int to-int (x : from ints take t)
+                      = if (z? x)
+                        then 0
+                        else -((to-int (p x)), -1)
+       in to-int]
+}|
+}
+
+定义了一个模块过程。这套接口说的是，该模块取模块@tt{ints}，生成另一模块。
+@tt{ints}实现算数操作的接口，生成的模块输出过程@tt{to-int}，将@tt{ints}中的类型
+@tt{t}转换为整数。得出的过程@tt{to-int}不能依赖算数操作的实现，因为我们根本不知
+道实现是什么！这段代码中，@tt{ints}声明了两次：一次在接口中，一次在主体中。像我
+们之前说的，这是因为接口中声明的作用范围局限于接口，不包含模块主体。
+
+}
+}
+
+@nested[#:style eopl-example]{
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module to-int-maker |@emph{...同前...}
+
+module ints1 |@emph{...同前...}
+
+module ints1-to-int
+ interface [to-int : (from ints1 take t -> int)]
+ body
+  (to-int-maker ints1)
+
+let two1 = (from ints1 take succ
+            (from ints1 take succ
+             from ints1 take zero))
+in (from ints1-to-int take to-int
+    two1)
+}|
+}
+
+类型为@tt{int}，值为2。因为我们首先定义了模块@tt{to-int-maker}和@tt{ints1}。然后
+我们用@tt{ints1}调用@tt{to-int-maker}，得到模块@tt{ints1-to-int}，它输出绑定
+@tt{from ints1-to-int take to-int}。
+
+}
+}
+
+下面这个例子两次使用@tt{to-int-maker}，处理两种不同的算数操作实现。
+
+@nested[#:style eopl-example]{
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+module to-int-maker |@emph{...同前...}
+
+module ints1 |@emph{...同前...}
+
+module ints2 |@emph{...同前...}
+
+module ints1-to-int
+interface [to-int : (from ints1 take t -> int)]
+body (to-int-maker ints1)
+
+module ints2-to-int
+interface [to-int : (from ints2 take t -> int)]
+body (to-int-maker ints2)
+
+let s1 = from ints1 take succ
+in let z1 = from ints1 take zero
+in let to-ints1 = from ints1-to-int take to-int
+
+in let s2 = from ints2 take succ
+in let z2 = from ints2 take zero
+in let to-ints2 = from ints2-to-int take to-int
+
+in let two1 = (s1 (s1 z1))
+in let two2 = (s2 (s2 z2))
+in -((to-ints1 two1), (to-ints2 two2))
+}|
+}
+
+类型为@tt{int}，值为0。若我们用@tt{(to-ints2 two1)}替换@tt{(to-ints2 two2)}，则
+程序类型异常，因为@tt{to-ints2}期望的参数类型是@tt{int2}表示的算数，但值
+@tt{two1}的类型是@tt{int1}表示的算数。
+
+}
+}
+
+@exercise[#:level 1 #:tag "ex8.19"]{
+
+例8.16中，创建@tt{two1}和@tt{two2}的代码重复，因此可以抽象出来。完成模块定义
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module from-int-maker
+ interface
+  ((ints : [opaque t
+            zero : t
+            succ : (t -> t)
+            pred : (t -> t)
+            is-zero : (t -> bool)])
+    => [from-int : (int -> from ints take t)])
+ body
+  ...
+}|
+}
+
+将整数表达值转换为模块@tt{ints}中的表示。用你的模块重做例8.16中的计算。用大于2的
+参数测试。
+
+}
+
+@exercise[#:level 1 #:tag "ex8.20"]{
+
+完成模块定义
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module sum-prod-maker
+ interface
+  ((ints : [opaque t
+            zero : t
+            succ : (t -> t)
+            pred : (t -> t)
+            is-zero : (t -> bool)])
+    => [plus : (from ints take t
+                -> (from ints take t
+                    -> from ints take t))
+        times : (from ints take t
+                 -> (from ints take t
+                     -> from ints take t))])
+ body
+  [plus = ...
+   times = ...]
+}|
+}
+
+定义一个模块过程，它取一算数操作的实现，返回这种实现的求和和求积过程。用
+@elem[#:style question]{33页}中的@tt{plus}定义，以及类似的@tt{times}定义。
+
+}
+
+@exercise[#:level 1 #:tag "ex8.21"]{
+
+写一个模块过程，取算数操作的实现@tt{ints}，返回算数操作的另一种实现，其中，整数
+@${k}以@tt{ints}中的@${2*k}表示。
+
+}
+
+@exercise[#:level 1 #:tag "ex8.22"]{
+
+完成模块定义
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module equality-maker
+ interface
+  ((ints : [opaque t
+            zero : t
+            succ : (t -> t)
+            pred : (t -> t)
+            is-zero : (t -> bool)])
+    => [equal : (from ints take t
+                 -> (from ints take t
+                     -> bool))])
+body
+ ...
+}|
+}
+
+定义一个模块过程，它取一算数操作的实现，返回一过程，对这种实现做等值比较。
+
+}
+
+@exercise[#:level 1 #:tag "ex8.23"]{
+
+写出模块@tt{table-of}，它与练习8.15中的@tt{table}模块类似，只是将表的内容参数化，
+这样就能用
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+module mybool-tables
+ interface
+  [opaque table
+   empty : table
+   add-to-table : (int ->
+                   (from mybool take t ->
+                    (table -> table)))
+   lookup-in-table : (int ->
+                      (table ->
+                       from mybool take t))]
+ body
+  (table-of mybool)
+}|
+}
+
+定义包含@tt{from mybool take t}类型值的表。
+
+}
+
+@subsection[#:tag "s8.3.2"]{实现}
+
+@subsubsection[#:style 'unnumbered #:tag "s8.3-syntax"]{语法}
+
+给我们的语言添加模块过程很像添加过程。模块过程的接口很像@tt{proc}的类型。
+
+@envalign*{
+           \mathit{Iface} &::= @tt{((@m{\mathit{Identifier}} : @m{\mathit{Iface}})) => @m{\mathit{Iface}}} \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{proc-iface (param-name param-iface result-iface)}}
+            }
+
+虽然这套接口看起来像是普通的过程类型，它还是有两点不同。首先，它描述了模块值到模
+块值的函数，而非表达值到表达值的函数。第二，不像过程类型，它要给函数的输入命名。
+必须如此，因为输出的接口可能依赖于输入的值，就像@tt{to-int-maker}的类型那样：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+((ints : [opaque t
+          zero : t
+          succ : (t -> t)
+          pred : (t -> t)
+          is-zero : (t -> bool)])
+  => [to-int : (from ints take t -> int)])
+}|
+}
+
+@tt{to-int-maker}取一模块@tt{ints}，返回一模块，其类型不仅依赖@tt{ints}中的固定
+类型，也依赖@tt{ints}本身。当我们像例8.16中那样用@tt{ints1}调用@tt{to-int-maker}
+时，得到的模块接口是
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[to-int : (from ints1 take t -> int)]
+}|
+}
+
+而当我们用@tt{ints2}调用时，得到的是另一个接口
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[to-int : (from ints2 take t -> int)]
+}|
+}
+
+}
+
+我们扩展@tt{expand-iface}，处理这些新接口，按已展开处理。这么做能行，因为参数接
+口和结果接口在需要自会展开。
+
+@racketblock[
+@#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
+(define expand-iface
+  (lambda (m-name iface tenv)
+    (cases interface iface
+      (simple-iface (decls) @#,elem{@emph{...同前...}})
+      (proc-iface (param-name param-iface result-iface)
+        iface))))
+]
+
+我们需要新的模块主体来创建、引用和调用模块过程。
+
+@envalign*{
+           \mathit{ModuleBody} &::= @tt{module-proc (@m{\mathit{Identifier}} : @m{\mathit{Iface}}) @m{\mathit{ModuleBody}}} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{proc-module-body (m-name m-type m-body)}} \\[-5pt]
+           \mathit{ModuleBody} &::= \mathit{Identifier} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{var-module-body (m-name)}} \\[-5pt]
+           \mathit{ModuleBody} &::= @tt{(@m{\mathit{Identifier}} @m{\mathit{Identifier}})} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{app-module-body (rator rand)}}
+            }
+
+@subsubsection[#:style 'unnumbered #:tag "s8.3-interpreter"]{解释器}
+
+首先，类似过程，我们新加一种模块。
+
+@racketblock[
+(define-datatype typed-module typed-module?
+  (simple-module
+    (bindings environment?))
+  (proc-module
+    (b-var symbol?)
+    (body module-body?)
+    (saved-env environment?)))
+]
+
+我们扩展@tt{value-of-module-body}处理新的模块主体。代码类似于表达式的变量引用和
+过程调用（图8.13）。
+
+@subsubsection[#:style 'unnumbered #:tag "s8.3-checker"]{检查器}
+
+我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如图8.14所示。为了能
+在一页纸内写下规则，我们用@tt{(@${\rhd} @${body} @${tenv}) = @${i}}代替
+@tt{(interface-of @${body} @${tenv}) = @${i}}。
+
+模块变量的类型从类型环境中取得，与期望相符。@tt{module-proc}的类型由参数类型和主
+体类型得到，正像CHECKED中的过程。
+
+模块过程的调用很像CHECKED中的过程调用。但有两点重要不同。
+
+首先，操作数的类型（规则IFACE-M-APP中的@${i_2}）不必与参数类型 (@${i_1})相同。我
+们只要求@${i_2 <: i_1}。这就够了，因为@${i_2 <: i_1}表示满足接口@${i_2}的任何模
+块也满足接口@${i_1}，因此，能作为模块过程的参数。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
+(define value-of-module-body
+  (lambda (m-body env)
+    (cases module-body m-body
+      (defns-module-body (defns) ...as before...)
+      (var-module-body (m-name)
+        (lookup-module-name-in-env m-name env))
+      (proc-module-body (m-name m-type m-body)
+        (proc-module m-name m-body env))
+      (app-module-body (rator rand)
+        (let ((rator-val
+                (lookup-module-name-in-env rator env))
+               (rand-val
+                 (lookup-module-name-in-env rand env)))
+          (cases typed-module rator-val
+            (proc-module (m-name m-body env)
+              (value-of-module-body m-body
+                (extend-env-with-module
+                  m-name rand-val env)))
+            (else
+              (report-bad-module-app rator-val))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{value-of-module-body}))]
+}
+
+@nested[#:style eopl-figure]{
+@$${\begin{array}{l}
+     \small{\textrm{IFACE-M-VAR}} \\
+     @tt{(@${\rhd} @${m} @${tenv})} = tenv@tt{(@${m})}
+    \end{array}}
+
+@$${\begin{array}{l}
+     \small{\textrm{IFACE-M-PROC}} \\
+     \infer{@tt{(@${\rhd} (m-proc (@${m}:@${i_1}) @${body}))} = @tt{((@${m}:@${i_1}) => @${i^{\prime}_{1}})}}
+           {@tt{(@${\rhd} body [@${m}=@${i_1}]tenv)} = i^{\prime}}
+    \end{array}}
+
+@$${\begin{array}{l}
+     \small{\textrm{IFACE-M-APP}} \\
+     \infer{@tt{(@${\rhd} (@${m_1} @${m_2}) tenv)} = @tt{i((@${m}:@${i_1}) => @${i^{\prime}_{1}})}}
+           {\begin{array}{c}
+             tenv(m_1) = @tt{((@${m}:@${i_1}) => @${i^{\prime}_{1}})} \quad tenv(@${m_2}) = @${i_2} \\
+             i_2 <: i_1
+            \end{array}}
+    \end{array}}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "新模块主体的推类规则"))]
+}
+
+其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。考虑
+@elem[#:style question]{318页}的例子。其中，我们用@tt{ints1}和@tt{ints2}调用模块
+过程@tt{to-int-maker}，其接口为
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+((ints : [opaque t
+          zero : t
+          succ : (t -> t)
+          pred : (t -> t)
+          is-zero : (t -> bool)])
+  => [to-int : (from ints take t -> int)])
+}|
+}
+
+当我们用@tt{ints1}调用@tt{to-int-maker}时，代换后的接口是
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[to-int : (from ints1 take t -> int)]
+}|
+}
+
+当我们用@tt{ints2}调用@tt{to-int-maker}时，代换后的接口是
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[to-int : (from ints2 take t -> int)]
+}|
+}
+
+正合期望。
+
+}
+
+用这些规则，很容易写出@tt{interface-of}的代码（图8.15）。当我们检查
+@tt{module-proc}的主体时，我们把参数添加到类型环境中，就好像它是一个顶层模块。这
+段代码用过程@tt{rename-in-iface}对得到的接口进行代换。
+
+最后，我们扩展@tt{<:-iface}，处理新的类型。用来比较@tt{proc-iface}的规则是
+
+@$${\infer{@tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})} <: @tt{((@${m_2} : @${i_2}) => @${i^{\prime}_{2}})}}
+          {i_2 <: i_1 &
+           i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <: i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]} &
+           m^{\prime} 不在 i^{\prime}_{1} 或 i^{\prime}_{2} 中}}
+
+要使@tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})}，满足第一个接口的模块
+@${m_0}必须满足第二个接口。这就是说，接口为@${i_2}的任何模块都能传给@${m_0}作参
+数，@${m_0}产生的任何模块都满足@${i^{\prime}_{2}}。
+
+为满足第一个要求，我们要@${i_2 <: i_1}。这保证了满足@${i_2}的任何模块都能作为参
+数传给@${m_0}。注意逆序：在参数类型中，我们说@emph{子类型} (@emph{subtyping})是
+@emph{逆变的} (@emph{contravariant})。
+
+结果的类型呢？我们可以要求@${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行不
+通。@${i^{\prime}_{1}}中，可能出现模块变量@${m_1}，@${i^{\prime}_{2}}中，可能出
+现模块变量@${m_2}的实例。所以，要比较它们，我们得将@${m_1}和@${m_2}重命名为新的
+模块变量@${m^{\prime}}。一旦如此，我们就能照常比较它们了。这就得出条件
+@${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
+i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
+(define interface-of
+  (lambda (m-body tenv)
+    (cases module-body m-body
+      (var-module-body (m-name)
+        (lookup-module-name-in-tenv tenv m-name))
+      (defns-module-body (defns)
+        (simple-iface
+          (defns-to-decls defns tenv)))
+      (app-module-body (rator-id rand-id)
+        (let ((rator-iface
+                (lookup-module-name-in-tenv tenv rator-id))
+               (rand-iface
+                 (lookup-module-name-in-tenv tenv rand-id)))
+          (cases interface rator-iface
+            (simple-iface (decls)
+              (report-attempt-to-apply-simple-module rator-id))
+            (proc-iface (param-name param-iface result-iface)
+              (if (<:-iface rand-iface param-iface tenv)
+                (rename-in-iface
+                  result-iface param-name rand-id)
+                (report-bad-module-application-error
+                  param-iface rand-iface m-body))))))
+      (proc-module-body (rand-name rand-iface m-body)
+        (let ((body-iface
+                (interface-of m-body
+                  (extend-tenv-with-module rand-name
+                    (expand-iface rand-name rand-iface tenv)
+                    tenv))))
+          (proc-iface rand-name rand-iface body-iface))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "PROC-MODULES的检查器，第1部分"))]
+}
+
+判断这种关系的代码较为直接（图8.16）。判断
+@${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
+i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@${m^{\prime}}
+添加绑定。我们将@${m^{\prime}}与@${i_1}关联起来，因为它比@${i_2}小。我们调用
+@tt{extend-tenv-with-module}比较结果的类型时，要调用@tt{expand-iface}维持不变式。
+
+现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
+足坚果接口的。怎么混合不要紧，好吃就行！
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{<:-iface}} : @${\mathit{Iface} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Bool}}}
+(define <:-iface
+  (lambda (iface1 iface2 tenv)
+    (cases interface iface1
+      (simple-iface (decls1)
+        (cases interface iface2
+          (simple-iface (decls2)
+            (<:-decls decls1 decls2 tenv))
+          (proc-iface (param-name2 param-iface2 result-iface2)
+            #f)))
+      (proc-iface (param-name1 param-iface1 result-iface1)
+        (cases interface iface2
+          (simple-iface (decls2) #f)
+          (proc-iface (param-name2 param-iface2 result-iface2)
+            (let ((new-name (fresh-module-name param-name1)))
+              (let ((result-iface1
+                      (rename-in-iface
+                        result-iface1 param-name1 new-name))
+                     (result-iface2
+                       (rename-in-iface
+                         result-iface2 param-name2 new-name)))
+                (and
+                  (<:-iface param-iface2 param-iface1 tenv)
+                  (<:-iface result-iface1 result-iface2
+                    (extend-tenv-with-module
+                      new-name
+                      (expand-iface new-name param-iface1 tenv)
+                      tenv)))))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "PROC-MODULES的检查器，第2部分"))]
+}
+
+@exercise[#:level 1 #:tag "ex8.24"]{
+
+调用模块时，只能用标识符。要是我们想根据类型规则检查调用@tt{(m1 (m2 m3))}，会有
+什么问题？
+
+}
+
+@exercise[#:level 1 #:tag "ex8.25"]{
+
+扩展PROC-MODULES，像练习3.21那样，允许模块取多个参数。
+
+}
+
+@exercise[#:level 2 #:tag "ex8.26"]{
+
+扩展语言的模块主体，将模块调用的生成式改为
+
+@envalign*{
+           \mathit{ModuleBody} &::= @tt{(@m{\mathit{ModuleBody}} @m{\mathit{ModuleBody}})} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{app-module-body (rator rand)}}
+            }
+}
+
+@exercise[#:level 3 #:tag "ex8.27"]{
+
+在PROC-MODULES中，我们总要一遍又一遍写这种接口
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+[opaque t
+ zero : t
+ succ : (t -> t)
+ pred : (t -> t)
+ is-zero : (t -> bool)]
+}|
+}
+
+给程序添加语法，支持有名接口，这样我们就能写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+interface int-interface = [opaque t
+                           zero : t
+                           succ : (t -> t)
+                           pred : (t -> t)
+                           is-zero : (t -> bool)]
+module make-to-int
+ interface
+  ((ints : int-interface)
+    => [to-int : from ints take t -> int])
+ body
+  ...
+}|
+}
+
+}
