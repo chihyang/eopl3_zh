@@ -1,10 +1,10 @@
 #lang scribble/book
-@(require "style.rkt")
-@(require latex-utils/scribble/utils)
-@(require scribble-math)
-@(require scribble-math/asymptote)
-@(require scriblib/footnote)
-@(require scribble-math/dollar)
+@(require "style.rkt"
+          latex-utils/scribble/utils
+          scribble-math
+          scribble-math/asymptote
+          scriblib/footnote
+          scribble-math/dollar)
 
 @title[#:style '(unnumbered) #:tag "pf"]{前言}
 

@@ -1,13 +1,13 @@
 #lang scribble/book
-@(require "style.rkt")
-@(require latex-utils/scribble/math)
-@(require latex-utils/scribble/utils)
-@(require scribble/manual)
-@(require scribble-math)
-@(require scribble/example)
-@(require scribble/core)
-@(require scribble/example)
-@(require racket/sandbox)
+@(require "style.rkt"
+          latex-utils/scribble/math
+          latex-utils/scribble/utils
+          scribble/manual
+          scribble-math
+          scribble/example
+          scribble/core
+          scribble/example
+          racket/sandbox)
 
 @title[#:style 'numbered #:tag "da"]{数据抽象}
 

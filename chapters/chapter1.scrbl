@@ -1,12 +1,15 @@
 #lang scribble/book
-@(require "style.rkt")
-@(require latex-utils/scribble/theorem)
-@(require latex-utils/scribble/math)
-@(require latex-utils/scribble/utils)
-@(require scribble/manual)
-@(require scribble-math)
-@(require scribble/example)
-@(require racket/sandbox)
+@(require "style.rkt"
+          latex-utils/scribble/theorem
+          latex-utils/scribble/math
+          latex-utils/scribble/utils
+          scribble/manual
+          scribble-math
+          scribble/example
+          scribble/core
+          scribble/example
+          scriblib/footnote
+          racket/sandbox)
 @(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
 
 @title[#:style 'numbered #:tag "isd"]{归纳式数据集}
