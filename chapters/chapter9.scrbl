@@ -61,8 +61,8 @@
 @emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
 @tt{countup}和@tt{getstate}。每个方法包含@emph{方法名} (@emph{method name})，若
 干@emph{方法变量} (@emph{method var})（又称 @emph{方法参数} (@emph{method
-parameters})），以及 @emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}示
-例能够响应的@emph{消息}种类。有时，我们说成是“@tt{c1}的方法@tt{countup}”。
+parameters})），以及 @emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}的
+实例能够响应的@emph{消息}种类。有时，我们说成是“@tt{c1}的方法@tt{countup}”。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -168,6 +168,144 @@ in send o1 odd(13)}|
 }
 
 @section[#:tag "s9.2"]{继承}
+
+通过继承，程序员能够逐步修改旧类，得到新类。在实践中，这十分有用。例如，有颜色的
+点类似一个点，但是它还有处理颜色的方法，如图9.3中的经典例子所示。
+
+如果类@${c_2}扩展类@${c_1}，我们说@${c_1}是@${c_2}的@emph{父类} (@emph{parent})
+或@emph{超类} (@emph{superclass})，@${c_2}是@${c_1}的@emph{子类} (@emph{child})。
+继承时，由于@${c_2}定义为@${c_1}的扩展，@${c_1}必须在@${c_2}之前定义。在此之前，
+语言包含了一个预先定义的类，名为@tt{object}，它没有任何方法或字段。由于类
+@tt{object}没有@tt{initialize}方法，因此无法创建它的对象。除@tt{object}之外的所
+有类都有唯一父类，但可以有许多子类。因此，由@tt{extends}得出的关系在类与类之间产
+生了树状结构，其根为@tt{object}。因为每个类至多只有一个直接超类，这是一种
+@emph{单继承} (@emph{single-inheritance})语言。有些语言允许类继承自多个超类。
+@emph{多继承} (@emph{multiple inheritance})虽然强大，却不无问题。在练习中，我们
+考虑一些困难之处。
+
+术语@emph{继承}源于对宗谱的类比。我们常常引申这一类比，说类的@emph{祖先}
+(@emph{ancestor})（从类的父类到根部的类@tt{object}）和@emph{后代}
+(@emph{descendant})。如果@${c_2}是@${c_1}的后代，我们有时说@${c_2}是@${c_1}的
+@emph{子类} (@emph{subclass})，写作@${c_2 < c_1}。
+
+如果类@${c_2}继承自类@${c_1}，@${c_1}的所有字段和方法都对@${c_2}的方法可见，除非
+在@${c_2}中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例可以在
+任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实例的地
+方使用。有时，这叫做@emph{子类多态} (@emph{subclass polymorphism})。我们的语言选
+择这种设计，其他面向对象语言可能有不同的可见性规则。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class point extends object
+ field x
+ field y
+ method initialize (initx, inity)
+  begin
+   set x = initx;
+   set y = inity
+  end
+ method move (dx, dy)
+  begin
+   set x = +(x,dx);
+   set y = +(y,dy)
+  end
+ method get-location () list(x,y)
+class colorpoint extends point
+ field color
+ method set-color (c) set color = c
+ method get-color () color
+let p = new point(3,4)
+    cp = new colorpoint(10, 20)
+in begin
+    send p move(3,4);
+    send cp set-color(87);
+    send cp move(10,20);
+    list(send p get-location(),   % |@emph{返回} (6 8)
+         send cp get-location(),  % |@emph{返回} (20 40)
+         send cp get-color())     % |@emph{返回} 87
+   end
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "继承的经典例子：" @tt{colorpoint}))]
+}
+
+接下来，我们看看重新声明类的字段或方法时会发生什么。如果@${c_1}的子读在子类
+@${c_2}中重新声明，新的声明@emph{遮蔽} (@emph{shadow})旧的，就像词法定界一样。例
+如，考虑图9.4。类@tt{c2}的对象有两个名为@tt{y}的字段：@tt{c1}中声明的和@tt{c2}中
+声明的。@tt{c1}中声明的方法能看到@tt{c1}的字段@tt{x}和@tt{y}。在@tt{c2}中，
+@tt{getx2}中的@tt{x}指代@tt{c1}的字段@tt{x}，但@tt{gety2}中的@tt{y}指代@tt{c1}的
+字段@tt{y}。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ field x
+ field y
+ method initialize () 1
+ method setx1 (v) set x = v
+ method sety1 (v) set y = v
+ method getx1 () x
+ method gety1 () y
+class c2 extends c1
+ field y
+ method sety2 (v) set y = v
+ method getx2 () x
+ method gety2 () y
+let o2 = new c2()
+in begin
+    send o2 setx1(101);
+    send o2 sety1(102);
+    send o2 sety2(999);
+    list(send o2 getx1(),  % |@emph{返回} 101
+         send o2 gety1(),  % |@emph{返回} 102
+         send o2 getx2(),  % |@emph{返回} 101
+         send o2 gety2())  % |@emph{返回} 999
+   end
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "字段遮蔽的例子"))]
+}
+
+如果类@${c_1}的方法@${m}在某个子类@${c_2}中重新声明，我们说新的方法@emph{覆盖}
+(@emph{override})旧的方法。我们将方法声明所在的类称为方法的@emph{持有类}
+(@emph{host class})。同样地，我们将表达式的持有类定义为表达式所在方法（如果有的
+话）的持有类。我们还将方法或表达式的超类定义为持有类的父类。
+
+如果给类@${c_2}的对象发送消息@${m}，应使用新的方法。这条规则很简单，其结果却很微
+妙。考虑如下例子：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ method initialize () 1
+ method m1 () 11
+ method m2 () send self m1()
+class c2 extends c1
+ method m1 () 22
+let o1 = new c1() o2 = new c2()
+in list(send o1 m1(), send o2 m1(), send o2 m2())
+}|
+}
+
+我们希望@tt{send o1 m1()}返回11，因为@tt{o1}是@tt{c1}的实例。同样地，我们希望
+@tt{send o2 m1()}返回22，因为@tt{o2}是@tt{c2}的实例。那么@tt{send o2 m2()}呢？方
+法@tt{m2}只是调用方法@tt{m1}，但这是哪一个？
+}
+
+动态分发告诉我们，应查看绑定到@tt{self}的对象属于哪个类。@tt{self}的值是@tt{o2}，
+属于类@tt{c2}。因此，调用@tt{send self m1()}应返回22。
+
+我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。考虑图9.5中的程
+序。
 
 @section[#:tag "s9.3"]{语言}
 
