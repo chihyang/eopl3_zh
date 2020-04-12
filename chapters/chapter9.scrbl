@@ -401,7 +401,77 @@ in send o3 m3()
 
 @section[#:tag "s9.3"]{语言}
 
+我们的语言CLASSES由IMPLICIT-REFS扩展而得，新增生成式如图9.7所示。程序中首先是一
+些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超类名，0个或多个字段
+声明，以及0个或多个方法声明。方法声明类似@tt{letrec}中的过程声明，有个名字，一个
+形参列表，以及主体。同时我们扩展语言，支持多参数过程，多声明@tt{let}和多声明
+@tt{letrec}表达式，还有些其他操作，如加法和@tt{list}。列表操作同练习3.9。最后，
+我们增加@tt{begin}表达式，同练习4.4，它从左到右求出子表达式的值，返回最后一个的
+值。
+
+我们新增表达值对象和列表，所以有
+
+@nested{
+
+@envalign*{
+\mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} + \mathit{Listof(ExpVal)} + \mathit{Obj}\\
+\mathit{DenVal} &= \mathit{Ref(ExpVal)}
+}
+
+我们写@${\mathit{Listof(ExpVal)}}，表示列表可以包含任何表达值。
+
+}
+
+我们将在@secref{s9.4.1}考察@${\mathit{Obj}}。在我们的语言中，类既不是指代值，也
+不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，看看练习
+9.29。
+
+@nested[#:style eopl-figure]{
+
+@envalign*{
+           \mathit{Program} &::= \{\mathit{ClassDecl}\}^{*} \phantom{x} \mathit{Expression} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-program (class-decls body)}} \\[5pt]
+         \mathit{ClassDecl} &::= @tt{class @m{\mathit{Identifier}} extends @m{\mathit{Identifier}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \phantom{x}\{@tt{field @m{\mathit{Identifier}}}\}^{*}\phantom{x}\{\mathit{MethodDecl}\}^{*} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{a-class-decl} \\
+                                          &\phantom{x}@tt["("]@tt{class-name super-name} \\
+                                          &\phantom{xx}@tt{field-names method-decls}@tt[")"]
+                                         \end{alignedat}\end{math}} \\[5pt]
+        \mathit{MethodDecl} &::= @tt{method @m{\mathit{Identifier}} (@m{\{\mathit{Identifier}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{a-method-decl (method-name vars body)}} \\[5pt]
+        \mathit{Expression} &::= @tt{new @m{\mathit{Identifier}} (@m{\{\mathit{Expression}\}^{*(,)}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{new-object-exp (class-name rands)}} \\[5pt]
+        \mathit{Expression} &::= @tt{send @m{\mathit{Expression}} @m{\mathit{Identifier}} (@m{\{\mathit{Expression}\}^{*(,)}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{method-call-exp (obj-exp method-name rands)}} \\[5pt]
+        \mathit{Expression} &::= @tt{super @m{\mathit{Identifier}} (@m{\{\mathit{Expression}\}^{*(,)}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{super-call-exp (method-name rands)}} \\[5pt]
+        \mathit{Expression} &::= @tt{self} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{self-exp}}
+          }
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "简单面向对象语言中新增的生成式"))]
+}
+
+我们新增了四种表达式。@tt{new}表达式创建指定类的对象，然后调用@tt{initialize}方
+法初始化对象的字段。@tt{rands}求值后，传给@tt{initialize}方法。这个方法调用的返
+回值直接抛弃，新对象则作为@tt{new}表达式的值返回。
+
+@tt{self}表达式返回当前方法操作的对象。
+
+@tt{send}表达式包含一值为对象的表达式，一个方法名，0或多个操作数。它从对象的类中
+取出指定的方法，然后求操作数的值，将实参传给该方法。就像在IMPLICIT-REFS中那样，
+它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引用绑定起来，并在这个
+词法绑定的作用范围内求方法主体的值。
+
+@tt{super-call}表达式包含一个方法名，0或多个参数。它从表达式持有类的超类开始，找
+出指定的方法，然后以当前对象为@tt{self}，求出方法主体的值。
+
 @section[#:tag "s9.4"]{解释器}
+
+@subsection[#:tag "s9.4.1"]{对象}
 
 @section[#:tag "s9.5"]{有类型的语言}
 
