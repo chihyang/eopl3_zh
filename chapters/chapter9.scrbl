@@ -305,7 +305,99 @@ in list(send o1 m1(), send o2 m1(), send o2 m2())
 属于类@tt{c2}。因此，调用@tt{send self m1()}应返回22。
 
 我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。考虑图9.5中的程
-序。
+序。其中，我们在类@tt{colorpoint}中重写了@tt{initialize}方法，同时设置字段@tt{x}、
+@tt{y}和@tt{color}。但是，新方法的主体复制了原方法的代码。在我们的小例子中，这尚
+可接受，但在大型例子中，这显然是一种坏的做法。（为什么？）而且，如果
+@tt{colorpoint}声明了字段@tt{x}，就没法初始化@tt{point}的字段@tt{x}，就像
+@elem[#:style question]{331页}的例子中，没法初始化第一个@tt{y}一样。
+
+解决方案是，把@tt{colorpoint}的@tt{initialize}方法主体中的重复代码替换为@emph{超
+类调用}，形如@tt{super initialize()}。那么@tt{colorpoint}中的@tt{initialize}方法
+写作：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+method initialize (initx, inity, initcolor)
+ begin
+  super initialize(initx, inity);
+  set color = initcolor
+ end
+}|
+}
+
+方法@${m}主体中的超类调用@tt{super @${n}(...)}使用的是@${m}持有类父类的方法@${n}。
+这不一定是@tt{self}所指类的父类。@tt{self}所指类总是@${m}持有类的子类，但不一定
+是同一个，因为@${m}可能在目标对象的某个祖先中声明。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class point extends object
+ field x
+ field y
+ method initialize (initx, inity)
+  begin
+   set x = initx;
+   set y = inity
+ end
+ method move (dx, dy)
+  begin
+   set x = +(x,dx);
+   set y = +(y,dy)
+  end
+ method get-location () list(x,y)
+class colorpoint extends point
+ field color
+ method initialize (initx, inity, initcolor)
+  begin
+   set x = initx;
+   set y = inity;
+   set color = initcolor
+  end
+ method set-color (c) set color = c
+ method get-color () color
+let o1 = new colorpoint(3,4,172)
+in send o1 get-color()}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "演示" @tt{super} "必要性的例子"))]
+}
+
+要解释这种区别，考虑图9.6。给类@tt{c3}的对象@tt{o3}发送消息@tt{m3}，找到的是
+@tt{c2}的方法@tt{m3}，它执行@tt{super m1()}。@tt{o3}的类是@tt{c3}，其父类是
+@tt{c2}，但方法的持有类是@tt{c2}，@tt{c2}的超类是@tt{c1}。所以，执行的是@tt{c1}
+的方法@tt{m1}。这是@emph{静态方法分发} (@emph{static method dispatch})的例子。虽
+然进行超类方法调用的对象是@tt{self}，方法分发却是静态的，因为要使用的方法可以从
+程序文本中判断，与@tt{self}所指类无关。
+
+本例中，@tt{c1}的方法@tt{m1}调用@tt{o3}的方法@tt{m2}。这是普通方法调用，所以使用
+动态分发，找出的是@tt{c3}的方法@tt{m2}，返回33。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ method initialize () 1
+ method m1 () send self m2()
+ method m2 () 13
+class c2 extends c1
+ method m1 () 22
+ method m2 () 23
+ method m3 () super m1()
+class c3 extends c2
+ method m1 () 32
+ method m2 () 33
+let o3 = new c3()
+in send o3 m3()
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "解释" @tt{super} "调用与" @tt{self} "相互作用的例子"))]
+}
 
 @section[#:tag "s9.3"]{语言}
 
