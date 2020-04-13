@@ -471,7 +471,139 @@ in send o3 m3()
 
 @section[#:tag "s9.4"]{解释器}
 
+求程序的值时，所有类声明都用@tt{initialize-class-env!}处理，随后求表达式的值。过
+程@tt{initialize-class-env!}创建一个全局@emph{类环境} (@emph{class environment})，
+将类名映射到类的方法。因为这个环境是全局的，我们用一个Scheme变量表示它。在
+@secref{s9.4.3}我们再详细讨论类环境。
+
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
+(define value-of-program
+  (lambda (pgm)
+    (initialize-store!)
+    (cases program pgm
+      (a-program (class-decls body)
+        (initialize-class-env! class-decls)
+        (value-of body (init-env))))))
+]
+
+像之前那样，语言中的各种表达式在过程@tt{value-of}里都有对应的从句，也包括四种新
+的生成式。
+
+我们依次考虑新增的每种表达式。
+
+通常，表达式需要求值，是因为它是操作某个对象的方法的一部分。在环境中，这个对像绑
+定到伪变量@tt{%self}。我们称之为@emph{伪变量} (@emph{pseudo-variable})，因为它虽
+然像普通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，
+当前方法持有类的超类名字绑定到伪变量@tt{%super}。
+
+求@tt{self}表达式的值时，返回的是@tt{%self}的值。这句话在@tt{value-of}中写作
+
+@codeblock[#:indent 7]{
+(self-exp ()
+  (apply-env env '%self))
+}
+
+求@tt{send}表达式的值时，需要求操作数和对象表达式的值。我们从对象中找出它的类名，
+然后用@tt{find-method}找出方法。@tt{find-method}取一类名，一方法名，返回一方法。
+接着，我们用当前对象和方法参数调用这个方法。
+
+@codeblock[#:indent 7]{
+(method-call-exp (obj-exp method-name rands)
+  (let ((args (values-of-exps rands env))
+        (obj (value-of obj-exp env)))
+    (apply-method
+      (find-method
+        (object->class-name obj)
+        method-name)
+      obj
+      args)))
+}
+
+超类调用与普通方法调用类似，不同之处是，要在表达式持有类的超类中查找方法。
+@tt{value-of}中的语句是
+
+@codeblock[#:indent 7]{
+(super-call-exp (method-name rands)
+  (let ((args (values-of-exps rands env))
+        (obj (apply-env env ’%self)))
+    (apply-method
+      (find-method (apply-env env ’%super) method-name)
+      obj
+      args)))
+}
+
+我们的最后一项工作是创建对象。求@tt{new}表达式的值时，需要求操作数的值，并根据类
+名创建一个新对象。然后，调用对象的初始化函数，但要忽略这个函数的值。最后，返回该
+对象。
+
+@codeblock[#:indent 7]{
+(new-object-exp (class-name rands)
+  (let ((args (values-of-exps rands env))
+        (obj (new-object class-name)))
+    (apply-method
+      (find-method class-name ’initialize)
+      obj
+      args)
+    obj))
+}
+
+接下来，我们决定如何表示对象、方法和类。我们通过一个示例解释这种表示，如图9.8所
+示。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ field x
+ field y
+ method initialize ()
+  begin
+   set x = 11;
+   set y = 12
+  end
+ method m1 () ... x ... y ...
+ method m2 () ... send self m3() ...
+class c2 extends c1
+ field y
+ method initialize ()
+  begin
+   super initialize();
+   set y = 22
+  end
+ method m1 (u,v) ... x ... y ...
+ method m3 () ...
+class c3 extends c2
+ field x
+ field z
+ method initialize ()
+  begin
+   super initialize();
+   set x = 31;
+   set z = 32
+  end
+ method m3 () ... x ... y ... z ...
+let o3 = new c3()
+in send o3 m1(7,8)
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "OOP实现的示例程序"))]
+}
+
+@; TODO: figure 9.9
+
 @subsection[#:tag "s9.4.1"]{对象}
+
+@subsection[#:tag "s9.4.2"]{方法}
+
+@subsection[#:tag "s9.4.3"]{类和类环境}
+
+@subsection[#:tag "s9.4.4"]{方法环境}
+
+@subsection[#:tag "s9.4.5"]{练习}
 
 @section[#:tag "s9.5"]{有类型的语言}
 
