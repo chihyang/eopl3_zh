@@ -327,7 +327,8 @@ method initialize (initx, inity, initcolor)
 
 方法@${m}主体中的超类调用@tt{super @${n}(...)}使用的是@${m}持有类父类的方法@${n}。
 这不一定是@tt{self}所指类的父类。@tt{self}所指类总是@${m}持有类的子类，但不一定
-是同一个，因为@${m}可能在目标对象的某个祖先中声明。
+是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为@${m}可能在目
+标对象的某个祖先中声明。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
