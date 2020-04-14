@@ -595,6 +595,17 @@ in send o3 m1(7,8)
 }
 
 @; TODO: figure 9.9
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/simple-object"
+  #:suffixes (list ".pdf" ".svg")
+  "简单对象")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "简单对象"))]
+}
 
 @subsection[#:tag "s9.4.1"]{对象}
 
