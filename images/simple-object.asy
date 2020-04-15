@@ -6,7 +6,7 @@ texpreamble("\usepackage{xeCJK}
 \xeCJKsetup{CJKmath=true, PlainEquation=true}
 \usepackage[T1]{fontenc}
 ");
-defaultpen(fontsize(11pt));
+defaultpen(fontsize(10pt));
 unitsize(16pt);
 pair pos=(0,0);
 block _block0=rectangle("\tt{an-object}", pos);
@@ -20,9 +20,9 @@ draw(block0);
 
 add(new void(picture pic, transform t) {
     // first row
-    block _block5=rectangle("\tt{c3}");
+    block _block5=rectangle("\tt{\phantom{p}c3\phantom{d}}");
     real l5=_block5.right(t).x - _block5.left(t).x;
-    block block5=rectangle("\tt{c3}",
+    block block5=rectangle("\tt{\phantom{p}c3\phantom{d}}",
                            shift(l/2+l5*1.2/2)*pos, minwidth=l5*1.2, minheight=w);
 
     real bw=w*1.2;              // block width
@@ -108,7 +108,6 @@ add(new void(picture pic, transform t) {
     draw(pic, block15);
     dot(pic, block15.center);
     draw(pic, block16);
-    dot(pic, block16.center);
 
     draw(pic, block1);
     draw(pic, block2);
