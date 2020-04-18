@@ -629,6 +629,18 @@ in send o3 m1(7,8)
 
 @subsection[#:tag "s9.4.5"]{练习}
 
-@section[#:tag "s9.5"]{有类型的语言}
+@section[#:tag "s9.5"]{带类型的语言}
 
 @section[#:tag "s9.6"]{类型检查器}
+
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/subtyping-proc-type"
+  #:suffixes (list ".pdf" ".svg")
+  "过程类型的子类型判定")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "过程类型的子类型判定"))]
+}
