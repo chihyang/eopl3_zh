@@ -12,7 +12,7 @@ pair pos=(0,0);
 block _block0=rectangle("\tt{\phantom{p}an-object\phantom{d}}", pos);
 real _l=_block0.right().x - _block0.left().x;
 real _w=_block0.top().y - _block0.bottom().y;
-block block0=rectangle("\tt{\phantom{p}an-object\phantom{d}}", pos, minwidth=_l*0.8, minheight=_w*0.8);
+block block0=rectangle("\tt{\phantom{p}\textbf{an-object}\phantom{d}}", pos, minwidth=_l*0.8, minheight=_w*0.8);
 real w=block0.top().y - block0.bottom().y;
 real l=block0.right().x - block0.left().x;
 real ah=6;
@@ -23,7 +23,7 @@ add(new void(picture pic, transform t) {
     // first row
     block _block1=rectangle("\tt{\phantom{p}c3\phantom{d}}");
     real l1=_block1.right(t).x - _block1.left(t).x;
-    block block1=rectangle("\tt{\phantom{p}c3\phantom{d}}",
+    block block1=rectangle("\tt{\phantom{p}\textbf{c3}\phantom{d}}",
                            shift(l/2+l1/2)*pos, minwidth=l1, minheight=w);
 
     real bw=w*1.2;              // block width
@@ -116,7 +116,7 @@ add(new void(picture pic, transform t) {
 
     // label above row 3
     next_pos=shift(0,w)*block30.center;
-    block block32=rectangle("\tt{(u v)}", next_pos, minwidth=bw, minheight=w, drawpen=invisible);
+    block block32=rectangle("\tt{\textbf{(u v)}}", next_pos, minwidth=bw, minheight=w, drawpen=invisible);
 
     // label in row 3
     next_pos=shift(-bw*0.8)*block30.center;
@@ -133,10 +133,10 @@ add(new void(picture pic, transform t) {
     block block36=rectangle("\tt{(}", next_pos, minwidth=bw, minheight=w, drawpen=invisible);
 
     // label above row 4, right
-    block _block37=rectangle("\tt{\phantom{(d}\%super)}");
+    block _block37=rectangle("\tt{\phantom{(d}\textbf{\%super)}}");
     real l_lable=_block37.right().x-_block37.left().x;
     next_pos=shift(bw/2+l_lable/3,w)*block2.center;
-    block block37=rectangle("\tt{\phantom{d}\%super)}", next_pos, minheight=w, drawpen=invisible);
+    block block37=rectangle("\tt{\phantom{d}\textbf{\%super)}}", next_pos, minheight=w, drawpen=invisible);
 
     // label in row 4, middle
     next_pos=shift(0,-w)*block37.center;
@@ -144,19 +144,19 @@ add(new void(picture pic, transform t) {
 
     // label above row 4, middle
     next_pos=(block20.right().x, block37.center.y);
-    block block39=rectangle("\tt{\phantom{d}\%self\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
+    block block39=rectangle("\tt{\phantom{d}\textbf{\%self}\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
 
     // label above row 5, left
     next_pos=shift(-w/10,w*1.5)*block3.center;
-    block block40=rectangle("\tt{\phantom{d}(x\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
+    block block40=rectangle("\tt{\phantom{d}\textbf{(x}\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
 
     // label above row 5, middle
     next_pos=shift(0,w*1.5)*block5.center;
-    block block41=rectangle("\tt{\phantom{d}y\%1\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
+    block block41=rectangle("\tt{\phantom{d}\textbf{y\%1}\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
 
     // label above row 5, right
     next_pos=shift(0,w*1.5)*block7.center;
-    block block42=rectangle("\tt{\phantom{d}y)\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
+    block block42=rectangle("\tt{\phantom{d}\textbf{y)}\phantom{p}}", next_pos, minheight=w, drawpen=invisible);
 
     // row 4
     draw(pic, block1);
@@ -273,15 +273,50 @@ add(new void(picture pic, transform t) {
     // arrow from row 2
     draw(pic, block28.center--block32.top(), arrow=a);
     draw(pic, block29.center--shift(0,w/5)*(block29.center.x, block32.bottomright().y), arrow=a);
-    // TODO: better curve
-    draw(pic, block20.center{down}..{right}block35.left(), arrow=a);
-    draw(pic, block21.center{down}..{right}block36.left(), arrow=a);
+    draw(pic,
+         block20.center{down}--
+         arc(shift(-5,5)*(block20.center.x,block39.left().y+10),5,360,270)--
+         arc((block31.right().x,block39.left().y+10/2),10/2,90,270)--
+         shift(w/3)*block36.left(), arrow=a);
+    pair joint_right=(block21.center.x,block39.left().y+w*1.2);
+    pair joint_mid=(block20.center.x,joint_right.y);
+    pair joint_mid_top=shift(0,1.5)*joint_mid;
+    pair joint_mid_left=shift(-2)*joint_mid;
+    pair joint_mid_right=shift(2)*joint_mid;
+    pair joint_left=(block31.center.x,joint_right.y);
+    pair joint_left_bottom=(joint_left.x,block35.center.y);
+    draw(pic,
+         block21.center{down}--
+         arc(shift(-3,3)*joint_right,3,360,270){left}..
+         // TODO: better curve
+         {left}joint_mid_right{(-3,2)}..
+         {left}joint_mid_top{left}..
+         {(-3,-2)}joint_mid_left{left}..
+         arc(shift(3,-3)*joint_left,3,90,180)--
+         arc(shift(3,3)*joint_left_bottom,3,180,270)--
+         shift(w/4)*block35.left(), arrow=a);
 
     // arrow from row 4
-    // TODO: better curve
-    draw(pic, block2.center{down}..{right}block3.left(), arrow=a);
-    draw(pic, block18.center{down}..{right}block40.left(), arrow=a);
-    draw(pic, block19.center{down}..{right}block3.left(), arrow=a);
+    draw(pic, block2.center--arc((block2.center.x+5, block3.center.y+5),5,180,270)--block3.left(), arrow=a);
+    draw(pic, block18.center--arc((block18.center.x+2, block40.center.y+2),2,180,270)--shift(w/3)*block40.left(), arrow=a);
+    pair joint_mid=(block18.center.x, 0.6 * (block18.center.y + block40.center.y));
+    pair joint_mid_top=shift(0,1.5)*joint_mid;
+    pair joint_mid_left=shift(-2)*joint_mid;
+    pair joint_mid_right=shift(2)*joint_mid;
+    pair joint_right=(block19.center.x, joint_mid.y);
+    pair joint_left=(block18.left().x, joint_mid.y);
+    pair joint_left_bottom=(joint_left.x, block3.center.y);
+    draw(pic,
+         block19.center--
+         arc(shift(-3,3)*joint_right,3,360,270,CW){left}..
+         // TODO: better curve
+         {left}joint_mid_right{(-3,2)}..
+         {left}joint_mid_top{left}..
+         {(-3,-2)}joint_mid_left{left}..
+         arc(shift(3,-3)*joint_left,3,90,180)--
+         arc(shift(5,5)*joint_left_bottom,5,180,270)--
+         block3.left(),
+         arrow=a);
 
     // arrow from row 5
     draw(pic, block4.center--block5.left(), arrow=a);
@@ -298,4 +333,4 @@ add(new void(picture pic, transform t) {
 
   });
 
-shipout(bbox(currentpicture, 2, 2, filltype=Draw(2, 2), p=invisible));
+shipout(bbox(currentpicture, 1, 1, filltype=Draw(1, 1), p=invisible));
