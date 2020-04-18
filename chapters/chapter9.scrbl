@@ -594,7 +594,6 @@ in send o3 m1(7,8)
  (list (para "OOP实现的示例程序"))]
 }
 
-@; TODO: figure 9.9
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/simple-object"
@@ -610,6 +609,19 @@ in send o3 m1(7,8)
 @subsection[#:tag "s9.4.1"]{对象}
 
 @subsection[#:tag "s9.4.2"]{方法}
+
+@nested[#:style eopl-figure]{
+@centered{
+@(image "../images/env-for-method"
+  #:scale 0.95
+  #:suffixes (list ".pdf" ".svg")
+  "方法调用时的环境")
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "方法调用时的环境"))]
+}
 
 @subsection[#:tag "s9.4.3"]{类和类环境}
 
