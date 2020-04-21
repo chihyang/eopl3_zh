@@ -1,6 +1,8 @@
 #lang scribble/book
 @(require "style.rkt")
 
+@frontmatter
+
 @title[#:style '(unnumbered) #:tag "fw"]{序}
 
 本书引你直面计算机编程中最基本的思想：

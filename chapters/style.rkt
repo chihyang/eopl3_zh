@@ -109,6 +109,15 @@
           (make-style #f '())
           (decode-flow c))]))
 
+
+(define frontmatter
+  (make-paragraph (make-style 'pretitle '())
+                  (make-element (make-style "frontmatter" '(exact-chars)) '())))
+
+(define mainmatter
+  (make-paragraph (make-style 'pretitle '())
+                  (make-element (make-style "mainmatter" '(exact-chars)) '())))
+
 (provide (except-out (all-defined-out)
                      add-prefix-to-block
                      remove-leading-newlines
