@@ -1,5 +1,7 @@
 #lang scribble/book
-@title[#:style '(toc)]{程序语言要素}
+@(require "style.rkt")
+
+@title[#:style '(toc)]{编程语言要素}
 @author{Daniel P. Friedman}
 @author{Mitchell Wand}
 
@@ -18,3 +20,6 @@
 @include-section["chapter7.scrbl"]
 @include-section["chapter8.scrbl"]
 @include-section["chapter9.scrbl"]
+
+@include-section["appendix_a.scrbl"]
+@include-section["appendix_b.scrbl"]
