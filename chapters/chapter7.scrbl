@@ -305,7 +305,7 @@ proc (f)
 我们用这一想法写出@tt{type-of}遵循的一些规则。设@${tenv}为一@emph{类型环境}，将
 各个变量映射到一类型。那么我们有：
 
-@bold{简单@elem[#:style question]{类型(typing)}规则}
+@bold{简单@elem[#:style question]{判类(typing)}规则}
 @; TODO: big bracket
 @verbatim|{
 (type-of (const-exp |@${num}) |@${tenv}) = int
@@ -647,7 +647,7 @@ in |@${e_{letrec\mbox{-}body}}
        &\mathrel{\phantom{::=}} \fbox{@tt{unpair-exp (var1 var2 exp body)}}}
 
 @tt{pair}表达式生成一个序对，@tt{unpair}表达式（类似练习3.18）将两个变量绑定到表
-达式的两部分。这些变量的作用范围是@tt{body}。@tt{pair}和@tt{unpair}的推类规则为：
+达式的两部分。这些变量的作用范围是@tt{body}。@tt{pair}和@tt{unpair}的判类规则为：
 
 @$${\infer{@tt{(type-of (pair-exp @${e_1} @${e_2}) @${tenv}) = pairof @${t_1} * @${t_2}}}
           {\begin{gathered}
@@ -704,7 +704,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @$${@tt{(type-of emptylist[@${t}] @${tenv}) = listof @${t}}}
 
-虽然@tt{cons}和@tt{pair}类似，它们的类型规则却非常不同。
+虽然@tt{cons}和@tt{pair}类似，它们的判类规则却非常不同。
 
 为@tt{car}和@tt{cdr}写出类似的规则，扩展检查器，处理这些和上述表达式。用练习7.8
 中的小技巧避免与@tt{proc-type-exp}的冲突。这些规则应保证@tt{car}和@tt{cdr}应用于
@@ -727,7 +727,7 @@ in |@${e_{letrec\mbox{-}body}}
  @tt{void}的值，不能进行任何操作，所以@tt{setref}返回什么值都不要紧。这是用类型
  作为信息隐藏机制的例子。}
 
- @item{写出@tt{newref}，@tt{deref}和@tt{setref}的类型规则。}
+ @item{写出@tt{newref}，@tt{deref}和@tt{setref}的判类规则。}
 
  @item{在检查器中实现这些规则。}
 

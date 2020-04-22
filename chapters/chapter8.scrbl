@@ -2338,7 +2338,7 @@ module mybool-tables
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "新模块主体的推类规则"))]
+ (list (para "新模块主体的判类规则"))]
 }
 
 其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。考虑
@@ -2393,7 +2393,7 @@ module mybool-tables
 数，@${m_0}产生的任何模块都满足@${i^{\prime}_{2}}。
 
 为满足第一个要求，我们要@${i_2 <: i_1}。这保证了满足@${i_2}的任何模块都能作为参
-数传给@${m_0}。注意逆序：在参数类型中，我们说@emph{子类型} (@emph{subtyping})是
+数传给@${m_0}。注意逆序：在参数类型中，我们说@emph{子类判别} (@emph{subtyping})是
 @emph{逆变的} (@emph{contravariant})。
 
 结果的类型呢？我们可以要求@${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行不
