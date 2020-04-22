@@ -608,7 +608,110 @@ in send o3 m1(7,8)
 
 @subsection[#:tag "s9.4.1"]{对象}
 
+我们用包含类名和字段引用的数据类型表示对象。
+
+@racketblock[
+(define-datatype object object?
+  (an-object
+    (class-name identifier?)
+    (fields (list-of reference?))))
+]
+
+在列表中，我们把“最老”类的字段排在前面。这样，在图9.8中，类@tt{c1}对象的字段排
+列为@tt{(x y)}；类@tt{c2}对象的字段排列为@tt{(x y y)}，其中，第二个@tt{y}是
+@tt{c2}中的；类@tt{c3}对象的字段排列为@tt{(x y y x z)}。图9.8中对象@tt{o3}的表示
+如图9.9所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}中声明的字段@tt{x}，而不
+是@tt{c1}中声明的。我们在建立方法主体的求值环境时处理这点。
+
+这种方式有一条有用的性质：对@tt{c3}的任何子类，列表中同样位置具有同样的字段，因
+为随后添加的任何字段都会出现在这些字段的右边。在@tt{c3}任一子类定义的某个方法中，
+@tt{x}在什么位置呢？我们知道，在所有这些方法中，如果@tt{x}没有重新定义，@tt{x}的
+位置一定是3。那么，当声明字段变量时，对应值的位置保持不变。与@secref{s3.6}处理变
+量时类似，这条性质使我们能静态确定字段引用。
+
+创建新方法很容易。我们只需用新引用列表创建一个@tt{an-object}，其长度与对象字段数
+目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用一个非法值初始化
+每个位置，以便得知程序对未初始化位置索值。
+
+@racketblock[
+@#,elem{@${\mathit{ClassName} = \mathit{Sym}}}
+
+@#,elem{@bold{@tt{new-object}} : @${\mathit{ClassName} \to \mathit{Obj}}}
+(define new-object
+  (lambda (class-name)
+    (an-object
+      class-name
+      (map
+        (lambda (field-name)
+          (newref (list ’uninitialized-field field-name)))
+        (class->field-names (lookup-class class-name))))))
+]
+
 @subsection[#:tag "s9.4.2"]{方法}
+
+接下来我们处理方法。方法就像过程，但是它们不存储环境。相反，它们记录引用字段的名
+字。当调用方法时，它在如下环境中执行其主体
+
+@itemlist[#:style 'ordered
+
+ @item{方法的形参绑定到新引用，引用初始化为实参的值。这与IMPLICIT-REFS中的
+ @tt{apply-procedure}行为类似。}
+
+ @item{伪变量@tt{%self}和@tt{%super}分别绑定到当前对象和方法的超类。}
+
+ @item{可见的字段名绑定到当前对象的字段。要实现这点，我们定义
+
+@racketblock[
+(define-datatype method method?
+  (a-method
+    (vars (list-of identifier?))
+    (body expression?)
+    (super-name identifier?)
+    (field-names (list-of identifier?))))
+
+@#,elem{@bold{@tt{apply-method}} : @${\mathit{Method} \times \mathit{Obj} \times \mathit{Listof(ExpVal)} \to \mathit{ExpVal}}}
+(define apply-method
+  (lambda (m self args)
+    (cases method m
+      (a-method (vars body super-name field-names)
+        (value-of body
+          (extend-env* vars (map newref args)
+            (extend-env-with-self-and-super
+              self super-name
+              (extend-env* field-names (object->fields self)
+                (empty-env)))))))))
+]
+ }
+
+]
+
+这里，我们用练习2.10中的@tt{extend-env*}，扩展环境时，把变量列表绑定到指代值的列
+表。我们还给环境接口新增过程@tt{extend-env-with-self-and-super}，分别将
+@tt{%self}和@tt{%super}绑定到对象和类名。
+
+要确保各方法看到正确的字段，我们构建@tt{field-names}列表时要小心。各方法只应见到
+最后一个声明的同名字段，其他同名字段应被遮蔽。所以，我们构建@tt{field-names}列表
+时，将把最右边之外的出现的每个名字替换为新名。对图9.8中的程序，得出的
+@tt{field-names}如下
+
+@nested{
+
+@tabular[#:sep @hspace[4]
+         (list (list @bold{类} @bold{定义的字段} @bold{字段}      @bold{@tt{field-names}})
+               (list @tt{c1}   @tt{x, y}         @tt{(x y)}       @tt{(x@${\phantom{xxx}}y)})
+               (list @tt{c2}   @tt{y}            @tt{(x y y)}     @tt{(x@${\phantom{xxx}}y%1 y)})
+               (list @tt{c3}   @tt{x, z}         @tt{(x y y x z)} @tt{(x%1@${\phantom{x}}y%1 y x z)}))]
+
+由于方法主体对@tt{x%1}和@tt{y%1}一无所知，所以对各字段变量，它们只能见到最右边的。
+
+}
+
+图9.10展示了求值图9.8中方法主体内的@tt{send o3 m1(7,8)}时创建的环境。这张图表明，
+引用列表可能比变量列表长：变量列表只是@tt{(x y%1 y)}，因为从@tt{c2}的方法@tt{m1}
+中只能见到这些字段变量，但@tt{(object->fields self)}的值是对象中所有字段的列表。
+不过，由于三个可见字段变量的值是列表中的头三个元素，而且我们把第一个@tt{y}重命名
+为@tt{y%1}（该方法对词一无所知），方法@tt{m1}将把变量@tt{y}与@tt{c2}中声明的
+@tt{y}关联起来，正符期望。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -622,6 +725,10 @@ in send o3 m1(7,8)
  (make-style "caption" (list 'multicommand))
  (list (para "方法调用时的环境"))]
 }
+
+当@tt{self}的持有类和所属类相同时，变量列表的长度通常与字段位置列表的长度相同。
+如果持有类位于类链的上端，那么位置可能多于字段变量，与字段变量对应的值将位于列表
+开头，其余值则不可见。
 
 @subsection[#:tag "s9.4.3"]{类和类环境}
 
