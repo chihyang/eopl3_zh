@@ -732,9 +732,286 @@ in send o3 m1(7,8)
 
 @subsection[#:tag "s9.4.3"]{类和类环境}
 
+迄今为止，我们的实现都依赖从类名获取与类相关的信息。所以，我们需要一个@emph{类环
+境} (@emph{class environment}) 完成这一工作。类环境将每个类名与描述类的数据结构
+关联起来。
+
+类环境是全局的：在我们的语言中，类声明聚集于程序开头，且对整个程序生效。所以，我
+们用名为@tt{the-class-env}的全局变量表示类环境，它包含一个(类名, 类)列表的列表，
+但我们用过程@tt{add-to-class-env!}和@tt{lookup-class}隐藏这一表示。
+
+@racketblock[
+@#,elem{@${\mathit{ClassEnv} = \mathit{Listof(List(ClassName, Class))}}}
+
+@#,elem{@bold{@tt{the-class-env}} : @${\mathit{ClassEnv}}}
+(define the-class-env ’())
+
+@#,elem{@bold{@tt{add-to-class-env!}} : @${\mathit{ClassName} \times \mathit{Class} \to \mathit{Unspecified}}}
+(define add-to-class-env!
+  (lambda (class-name class)
+    (set! the-class-env
+      (cons
+        (list class-name class)
+        the-class-env))))
+
+@#,elem{@bold{@tt{lookup-class}} : @${\mathit{ClassName} \to \mathit{Class}}}
+(define lookup-class
+  (lambda (name)
+    (let ((maybe-pair (assq name the-class-env)))
+      (if maybe-pair (cadr maybe-pair)
+        (report-unknown-class name)))))
+]
+
+对每个类，我们记录三样东西：超类的名字，字段变量的列表，以及将方法名映射到方法的
+环境。
+
+@nested{
+@racketblock[
+(define-datatype class class?
+  (a-class
+    (super-name (maybe identifier?))
+    (field-names (list-of identifier?))
+    (method-env method-environment?)))
+]
+
+这里，我们用谓词@tt{(maybe identifier?)}，判断值是否为符号或@tt{#f}。后一种情况
+对是必须的，因为类@tt{object}没有超类。@tt{filed-names}是类的方法能见到的字段，
+@tt{method-env}是一环境，给出了类中每个方法名的定义。
+
+}
+
+我们初始化类环境时，为类@tt{object}添加一个绑定。对每个声明，我们向类环境添加新
+的绑定，将类名绑定到一个@tt{class}，它包含超类名，类中方法的@tt{field-names}，以
+及类中方法的环境。
+
+@racketblock[
+@#,elem{@bold{@tt{initialize-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
+(define initialize-class-env!
+  (lambda (c-decls)
+    (set! the-class-env
+      (list
+        (list ’object (a-class #f ’() ’()))))
+    (for-each initialize-class-decl! c-decls)))
+
+@#,elem{@bold{@tt{initialize-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
+(define initialize-class-decl!
+  (lambda (c-decl)
+    (cases class-decl c-decl
+      (a-class-decl (c-name s-name f-names m-decls)
+        (let ((f-names
+                (append-field-names
+                  (class->field-names (lookup-class s-name))
+                  f-names)))
+          (add-to-class-env!
+            c-name
+            (a-class s-name f-names
+              (merge-method-envs
+                (class->method-env (lookup-class s-name))
+                (method-decls->method-env
+                  m-decls s-name f-names)))))))))
+]
+
+过程@tt{append-field-names}用来给当前类创建@tt{field-names}。它@elem[#:style
+question]{扩展}超类字段和新类声明的字段，只是将超类中被新字段遮蔽的字段替换为新
+名字，就像@elem[#:style question]{341页}的例子那样。
+
+@racketblock[
+@#,elem{@bold{@tt{append-field-names}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(FieldName)} \times \mathit{Listof(FieldName)} \to \mathit{Listof(FieldName)}}}
+(define append-field-names
+  (lambda (super-fields new-fields)
+    (cond
+      ((null? super-fields) new-fields)
+      (else
+        (cons
+          (if (memq (car super-fields) new-fields)
+            (fresh-identifier (car super-fields))
+            (car super-fields))
+          (append-field-names
+            (cdr super-fields) new-fields))))))
+]
+
 @subsection[#:tag "s9.4.4"]{方法环境}
 
+剩下的只有@tt{find-method}和@tt{merge-method-envs}。
+
+像之前处理类那样，我们用(方法名, 方法)列表的列表表示方法环境，用@tt{find-method}
+查找方法。
+
+@racketblock[
+@#,elem{@${\mathit{MethodEnv} = \mathit{Listof(List(MethodName, Method))}}}
+
+@#,elem{@bold{@tt{find-method}} : @${\mathit{Sym} \times \mathit{Sym} \to \mathit{Method}}}
+(define find-method
+  (lambda (c-name name)
+    (let ((m-env (class->method-env (lookup-class c-name))))
+      (let ((maybe-pair (assq name m-env)))
+        (if (pair? maybe-pair) (cadr maybe-pair)
+          (report-method-not-found name))))))
+]
+
+用这条信息，我们可以写出@tt{method-decls->method-env}。它取一个类的方法声明，创
+建一个方法环境，记录每个方法的绑定变量，主体，持有类的超类名，以及持有类的
+@tt{field-names}。
+
+@racketblock[
+@#,elem{@bold{@tt{method-decls->method-env}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(MethodDecl)} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \to \mathit{MethodEnv}}}
+(define method-decls->method-env
+  (lambda (m-decls super-name field-names)
+    (map
+      (lambda (m-decl)
+        (cases method-decl m-decl
+          (a-method-decl (method-name vars body)
+            (list method-name
+              (a-method vars body super-name field-names)))))
+      m-decls)))
+]
+
+最后，我们写出@tt{merge-method-envs}。由于新类中的方法覆盖了旧类的同名方法，我们
+可以直接扩展环境，将新方法添加到前面。
+
+@nested{
+@racketblock[
+@#,elem{@bold{@tt{merge-method-envs}} : @${\mathit{MethodEnv} \times \mathit{MethodEnv} \to \mathit{MethodEnv}}}
+(define merge-method-envs
+  (lambda (super-m-env new-m-env)
+    (append new-m-env super-m-env)))
+]
+
+还有一些方式构建的方法环境在查询方法时更高效（练习9.18）。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+((c3
+   #(struct:a-class c2 (x%2 y%1 y x z)
+      ((initialize #(struct:a-method ()
+                      #(struct:begin-exp ...) c2 (x%2 y%1 y x z)))
+        (m3 #(struct:a-method ()
+               #(struct:diff-exp ...)) c2 (x%2 y%1 y x z))
+        (initialize #(struct:a-method ...))
+        (m1 #(struct:a-method (u v)
+               #(struct:diff-exp ...) c1 (x y%1 y)))
+        (m3 #(struct:a-method ...))
+        (initialize #(struct:a-method ...))
+        (m1 #(struct:a-method ...))
+        (m2 #(struct:a-method ()
+               #(struct:method-call-exp #(struct:self-exp) m3 ())
+               object (x y))))))
+  (c2
+    #(struct:a-class c1 (x y%1 y)
+       ((initialize #(struct:a-method ()
+                       #(struct:begin-exp ...) c1 (x y%1 y)))
+         (m1 #(struct:a-method (u v)
+                #(struct:diff-exp ...) c1 (x y%1 y)))
+         (m3 #(struct:a-method ()
+                #(struct:const-exp 23) c1 (x y%1 y)))
+         (initialize #(struct:a-method ...))
+         (m1 #(struct:a-method ...))
+         (m2 #(struct:a-method ()
+                #(struct:method-call-exp #(struct:self-exp) m3 ())
+                object (x y))))))
+  (c1
+    #(struct:a-class object (x y)
+       ((initialize #(struct:a-method ()
+                       #(struct:begin-exp ...) object (x y)))
+         (m1 #(struct:a-method ()
+                #(struct:diff-exp ...) object (x y)))
+         (m2 #(struct:a-method ()
+                #(struct:method-call-exp #(struct:self-exp) m3 ())
+                object (x y))))))
+  (object
+    #(struct:a-class #f () ())))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "图9.8中的类环境"))]
+}
+
 @subsection[#:tag "s9.4.5"]{练习}
+
+@exercise[#:level 1 #:tag "ex9.1"]{
+
+用本节的语言实现以下各项：
+
+@itemlist[#:style 'ordered
+
+ @item{队列类，包含方法@tt{empty?}、@tt{enqueue}和@tt{dequeue}。}
+
+ @item{扩展队列类，添加计数器，记录当前队列已进行的操作数。}
+
+ @item{扩展队列类，添加计数器，记录本类所有队列已进行的操作总数。提示：可在初始
+ 化时传递共享计数器。}
+
+]
+
+}
+
+@exercise[#:level 1 #:tag "ex9.2"]{
+
+继承也可以很危险，因为子类可以任意覆盖一个方法，改变其行为。定义继承自
+@tt{oddeven}的类@tt{bogus-oddeven}，覆盖方法@tt{even}，从而导致@tt{let o1 = new
+bogus-oddeven() in send o1 odd (13)}给出错误的答案。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.3"]{
+
+在图9.11中，哪里是共享的方法环境？哪里是共享的@tt{field-names}列表？
+
+}
+
+@exercise[#:level 1 #:tag "ex9.4"]{
+
+修改对象的表示，让@${\mathit{Obj}}包含对象所属的类，而非其名字。跟文中的方式相比，
+这有什么优势和劣势？
+
+}
+
+@exercise[#:level 1 #:tag "ex9.5"]{
+
+@secref{s9.4}中的解释器在词法环境中存储方法持有类的超类名。修改实现，让方法存储
+持有类的名字，然后用持有类的名字查找超类名。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.6"]{
+
+给我们的语言添加表达式@tt{instanceof @${exp} @${class\mbox{-}name}}。当且仅当表
+达式@${exp}的值为对象，且是@${class\mbox{-}name}或其子类的实例时，这种表达式的值
+为真。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.7"]{
+
+在我们的语言中，方法环境包含持有类@emph{以及}超类声明的字段变量的绑定。限制它，
+只包含持有类的字段变量绑定。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.8"]{
+
+给我们的语言添加一个新表达式，
+
+@centered{@tt{fieldref @${obj} @${field\mbox{-}name}}}
+
+取出指定对象指定字段的内容。再添加
+
+@centered{@tt{fieldset @${obj} @${field\mbox{-}name} = @${exp}}}
+
+将指定字段设置为@${exp}的值。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.9"]{
+
+添加表达式@tt{superfieldref @${field\mbox{-}name}}和@tt{superfieldset
+@${field\mbox{-}name} = @${exp}}，处理@tt{self}中被遮蔽的字段。记住，@tt{super}
+是静态的，总是指持有类的超类。
+
+}
 
 @section[#:tag "s9.5"]{带类型的语言}
 
