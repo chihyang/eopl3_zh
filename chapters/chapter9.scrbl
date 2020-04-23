@@ -652,7 +652,7 @@ in send o3 m1(7,8)
 接下来我们处理方法。方法就像过程，但是它们不存储环境。相反，它们记录引用字段的名
 字。当调用方法时，它在如下环境中执行其主体
 
-@itemlist[#:style 'ordered
+@itemlist[
 
  @item{方法的形参绑定到新引用，引用初始化为实参的值。这与IMPLICIT-REFS中的
  @tt{apply-procedure}行为类似。}
@@ -1020,6 +1020,7 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/subtyping-proc-type"
+  #:scale 1.5
   #:suffixes (list ".pdf" ".svg")
   "过程类型的子类型判定")
 }
