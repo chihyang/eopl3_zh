@@ -1013,6 +1013,134 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 }
 
+@exercise[#:level 2 #:tag "ex9.10"]{
+
+有些面向对象编程语言支持指明类的方法代用和字段引用。在指明类的方法调用中，可以写
+@tt{named-send c1 o m1()}。只要@tt{o}是@tt{c1}或其子类的实例，这会对@tt{o}调用
+@tt{c1}的方法@tt{m1}，即使@tt{o}所属类覆盖了@tt{m1}。这是一种静态方法分发。指明
+类的字段引用为字段引用提供类似工具。给本节的语言添加指明类的方法调用，字段引用和
+字段设值。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.11"]{
+
+允许CLASSES指定每个方法是@emph{私有的} (@emph{private})，只能在持有类内访问；或
+@emph{受保护的} (@emph{protected})，只能在持有类及其后代中访问；或 @emph{公有的}
+(@emph{public})，各处都能访问。许多面向对象编程语言包含了某种形式的这一特性。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.12"]{
+
+像练习9.11那样，允许CLASSES指定每个字段是私有的，受保护的，还是公有的。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.13"]{
+
+为了防止练习9.2那样的恶意子类，许多面向对象编程语言都能指定无法覆盖的@${final}方
+法。给CLASSES添加这样的组件，那么就能写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class oddeven extends object
+ method initialize () 1
+ final method even (n)
+  if zero?(n) then 1 else send self odd(-(n,1))
+ final method odd (n)
+  if zero?(n) then 0 else send self even(-(n,1))
+}|
+}
+
+}
+
+@exercise[#:level 2 #:tag "ex9.14"]{
+
+另一种防止恶意子类的方法是使用某种形式的@emph{静态分发}。修改CLASSES，通过
+@tt{self}调用的总是持有类的方法，而不是目标对象所属类的方法。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.15"]{
+
+很多面向对象编程语言提供@emph{静态} (@emph{static})或者@emph{类} (@emph{class})
+变量。静态变量与类的某些状态相关联；类的所有实例共享这一状态。例如，可以写：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ static next-serial-number = 1
+ field my-serial-number
+ method get-serial-number () my-serial-number
+ method initialize ()
+  begin
+   set my-serial-number = next-serial-number;
+   set next-serial-number = +(next-serial-number,1)
+  end
+let o1 = new c1()
+    o2 = new c1()
+in list(send o1 get-serial-number(),
+        send o2 get-serial-number())
+}|
+}
+
+类@tt{c1}的每个新对象具有连续的序列号。
+
+给我们的语言添加静态变量。由于静态变量可以在方法主体中出现，@tt{apply-method}必
+须在它创建的环境中添加额外的绑定。求静态变量（上例中的@tt{l}）初始化表达式的值时，
+应使用什么环境？
+
+}
+
+@exercise[#:level 2 #:tag "ex9.16"]{
+
+面向对象编程语言常允许@emph{重载} (@emph{overloading})方法。这一特性允许类有多个
+同名方法，只要它们有不同的@emph{签名} (@emph{signature})。方法签名通常是方法名加
+上参数类型。由于CLASSES中没有类型，我们可以仅依靠方法名和参数数量重载方法。例如，
+类可能有两个@tt{initialize}方法，一个没有参数，用它来初始化时，需要给字段默认值；
+另一个有一个参数，用它来初始化时，需要给字段特定值。扩展我们的解释器，允许通过方
+法的参数数量重载方法。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.17"]{
+
+显而易见，我们语言中的类定义是全局的。给CALSSES添加局部类，可写成@tt{letclass
+@${c} = ... in @${e}}。提示：考虑给解释器添加一个类环境参数。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.18"]{
+
+@tt{merge-method-envs}产生的方法环境可能很长。新写一个@tt{merge-method-envs}，保
+证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在图9.8中，在
+@tt{c1}、@tt{c2}、@tt{c3}，以及@tt{c3}任意后代的方法环境中，方法@tt{m2}应出现在
+同样的位置。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.19"]{
+
+为CLASSES实现词法寻址。首先，为本节语言写出类似@secref{s3.7}的词法地址计算器。然
+后修改环境的实现，去掉其中的名字。接着修改@tt{value-of}和@tt{apply-env}，不再取
+符号，而是像@secref{s3.7.2}那样取一词法地址。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.20"]{
+
+方法调用也能够用类似练习9.19中的方式优化吗？讨论为什么能，或为什么不能。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.21"]{
+
+如果类中有很多方法，从头线性搜索方法列表会很耗时。将其改为更快的实现。你的实现能
+改进多少？解释你的结果，不论更好还是更坏。
+
+}
+
 @section[#:tag "s9.5"]{带类型的语言}
 
 @section[#:tag "s9.6"]{类型检查器}
