@@ -1015,11 +1015,11 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.10"]{
 
-有些面向对象编程语言支持指明类的方法代用和字段引用。在指明类的方法调用中，可以写
+有些面向对象编程语言支持指明类的方法调用和字段引用。在指明类的方法调用中，可以写
 @tt{named-send c1 o m1()}。只要@tt{o}是@tt{c1}或其子类的实例，这会对@tt{o}调用
 @tt{c1}的方法@tt{m1}，即使@tt{o}所属类覆盖了@tt{m1}。这是一种静态方法分发。指明
 类的字段引用为字段引用提供类似工具。给本节的语言添加指明类的方法调用，字段引用和
-字段设值。
+字段设置。
 
 }
 
@@ -1138,6 +1138,156 @@ in list(send o1 get-serial-number(),
 
 如果类中有很多方法，从头线性搜索方法列表会很耗时。将其改为更快的实现。你的实现能
 改进多少？解释你的结果，不论更好还是更坏。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.22"]{
+
+在练习9.16中，我们扩展解释器，给语言添加方法重载。另一种支持重载的方法不需修改解
+释器，而是用语法预处理器。写一个预处理器，将每个方法@${m}重命名为@$["m:@n"]的形
+式，其中@${n}是方法声明中参数的数量。同样地，它还必须根据操作数的数量，改变每个
+方法调用的名字。我们假定程序员在方法名中不使用@$[":@"]，但解释器接受使用@$[":@"]
+的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧的例子，名为
+@emph{名称混淆} (@emph{name mangling})。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.23"]{
+
+我们以词法绑定的方式看待超类调用。但我们还可以做得更好：我们可以@emph{静态}确定
+@tt{super}调用。由于超类调用指向类的父类的方法，而父类与其方法在执行之前已知，我
+们可以在进行词法寻址和其他分析的同时确定超类调用究竟指的是那个方法。写一个翻译器，
+将每个超类调用替换为一个抽象语法树节点，节点中包含实际要调用的方法。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.24"]{
+
+写一个翻译器，把练习9.10中指明类调用的方法名替换为数字，数字表示运行时，指定方法
+在指定类方法表中的偏移。为翻译后的代码实现一个解释器，在常数时间内访问指定类的方
+法。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.25"]{
+
+我们给图9.5第一个继承例子中的类@tt{point}添加一个方法，判断两个点是否具有相同的
+横纵坐标。我们照下面这样给点类添加方法@tt{similarpoints}：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+method similarpoints (pt)
+ if equal?(send pt getx(), x)
+ then equal?(send pt gety(), y)
+ else zero?(1)
+}|
+}
+
+这对所有类型的点都有效。因为@tt{getx}，@tt{gety}和@tt{similarpoints}都在类
+@tt{point}中定义，通过继承，它们在@tt{colorpoint}中也有定义。测试
+@tt{similarpoints}，比较点和点，点和有色点，有色点和点，以及有色点和有色点。
+
+接下来考虑一个小扩展。我们给类@tt{colorpoint}添加新方法@tt{similarpoints}。我们
+希望两个点横纵坐标相同，都是有色点且颜色相同时，它返回真，否则返回假。这里是种错
+误做法。
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+method similarpoints (pt)
+ if super similarpoints(pt)
+ then equal?(send pt getcolor(),color)
+ else zero?(1)
+}|
+}
+
+测试这一扩展。说明它为何不适用于任意情况。修复它，让所有测试都返回正确的值。
+
+过程依赖多个对象造成的困难称为@emph{二元方法问题} (@emph{binary method problem})。
+它表明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫做
+@emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈发
+严重。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.26"]{
+
+多继承允许一个类有多个父类，但可能带来过度的复杂性。如果两个被继承的类具有同名方
+法呢？可以禁止这种情况；也可以按照某种规则遍历方法，比如深度优先、从左到右；还可
+以要求在调用时消除这种歧义。字段的情况就更糟了。考虑下面的情形，类@tt{c4}继承自
+@tt{c2}和@tt{c3}，二者均继承自@tt{c1}：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ field x
+class c2 extends c1
+class c3 extends c1
+class c4 extends c2, c3
+}|
+}
+
+@tt{c4}的实例是有一个字段@tt{x}实例，由@tt{c2}和@tt{c3}共享呢，还是有两个@tt{x}
+字段，一个继承自@tt{c2}，一个继承自@tt{c3}？有些语言选择共享，有些不，还有一些
+（至少在某些条件下）任选。这问题的复杂性致使设计时，更偏爱类的单继承，而多继承只
+用于接口（@secref{s9.5}），以尽量避免这些困难。
+
+给CLASSES添加多继承。对语法做必要扩展。指出解决方法名和字段名冲突时面临什么问题。
+描述共性问题及其解决方法。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.27"]{
+
+实现下面设计的无类有对象语言。对象是一组闭包，各闭包共享一个环境（亦即某种状态），
+以方法名为索引。类则由返回对象的过程替代。所以，我们不用写@tt{send o1
+m1(11,22,33)}，而是写普通的过程调用@tt{(getmethod(o1,m2) 11 22 33)}；不用写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class oddeven extends object
+ method initialize () 1
+ method even (n)
+  if zero?(n) then 1 else send self odd(-(n,1))
+ method odd (n)
+  if zero?(n) then 0 else send self even(-(n,1))
+let o1 = new oddeven()
+in send o1 odd(13)
+}|
+}
+
+而是写
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+let make-oddeven
+ = proc ()
+    newobject
+     even = proc (n) if zero?(n) then 1
+                     else (getmethod(self,odd) -(n,1))
+     odd = proc (n) if zero?(n) then 0
+                    else (getmethod(self,even) -(n,1))
+    endnewobject
+in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
+}|
+}
+
+}
+
+@exercise[#:level 3 #:tag "ex9.28"]{
+
+给练习9.27的语言添加继承。
+
+}
+
+@exercise[#:level 3 #:tag "ex9.29"]{
+
+设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象叫做
+@emph{原型} (@emph{prototype})。把类@tt{object}替换为没有方法和字段的原型对象。
+这样，我们就能用@tt{let c2 = extend c1 ...}替代@tt{class c2 extends c1 ...}。把
+操作@tt{new}替换为@tt{clone}，它取一对象，仅复制其方法和字段。这种语言中的方法位
+于一个词法作用范围中，所以应该能像通常那样访问词法上可见的变量以及字段变量。当@emph{超型}
+(@emph{superprototype})的字段变量与当前所在词法作用范围的变量同名时，
+遮蔽关系是怎样的？
 
 }
 
