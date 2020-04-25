@@ -1464,6 +1464,74 @@ in list(send o1 sum(),
  (list (para "TYPED-OO中的新生成式"))]
 }
 
+在图9.2中，类@tt{interior-node}和@tt{leaf-node}都实现了接口@tt{tree}。类型检查器
+允许这样，因为它们都实现了@tt{tree}要求的方法。
+
+当@${e}的值是一个对象，且是类@${c}或其后代的实例时，表达式@tt{instanceof @${e}
+@${c}}返回真。强制转换是@tt{instanceof}的补充。当@${e}的值是一对像，且是类@${c}
+或其后代的实例时，@tt{cast}表达式@${case @${e} @${c}}的值与@${e}的值相同。否则
+@tt{case}表达式报错。@tt{cast @${e} @${c}}的类型总是@${c}，因为它只要返回值，类
+型就一定是@${c}。
+
+例如，我们的示例程序包含如下方法
+
+@nested{
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+method bool equal(t : tree)
+ if instanceof t interior-node
+ then if send left
+          equal(send cast t interior-node getleft())
+      then send right
+          equal(send cast t interior-node getright())
+      else false
+ else false
+}|
+}
+
+表达式@tt{case t interior-node}检查@tt{t}的值是否为@tt{interior-node}（或其后代，
+如果有的话）的实例。如果是，返回@tt{t}的值；否则报错。当且仅当对应的@tt{cast}成
+功时，@tt{instanceof}表达式返回真值。因此，本例中的@tt{instanceof}确保强制转换一
+定成功。而强制转换又确保@tt{send ... getleft()}能够使用。强制转换表达式返回值的
+类型一定为类@tt{interior-node}，因此，给这个值发消息@tt{getleft}是安全的。
+
+}
+
+我们的实现从@secref{s9.4.1}中的解释器开始。我们给@tt{value-of}添加两条从句，求
+@tt{instanceof}和@tt{cast}表达式的值：
+
+@codeblock[#:indent 11]{
+(cast-exp (exp c-name)
+  (let ((obj (value-of exp env)))
+    (if (is-subclass? (object->class-name obj) c-name)
+      obj
+      (report-cast-error c-name obj))))
+
+(instanceof-exp (exp c-name)
+  (let ((obj (value-of exp env)))
+    (if (is-subclass? (object->class-name obj) c-name)
+      (bool-val #t)
+      (bool-val #f))))
+}
+
+过程@tt{is-subclass?}顺着第一个类结构的父系而上，直到找出第二个类，或在父系为
+@tt{#f}时停止。由于接口只用作类型，这个过程忽略它们。
+
+@racketblock[
+@#,elem{@bold{@tt{is-subclass?}} : @${\mathit{ClassName} \times \mathit{ClassName} \to \mathit{Bool}}}
+(define is-subclass?
+  (lambda (c-name1 c-name2)
+    (cond
+      ((eqv? c-name1 c-name2) #t)
+      (else
+        (let ((s-name (class->super-name
+                        (lookup-class c-name1))))
+          (if s-name (is-subclass? s-name c-name2) #f))))))
+]
+
+这样，本节语言解释器的修改就完成了。
+
 @section[#:tag "s9.6"]{类型检查器}
 
 @nested[#:style eopl-figure]{
