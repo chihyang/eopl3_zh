@@ -493,7 +493,7 @@ in send o3 m3()
 
 我们依次考虑新增的每种表达式。
 
-通常，表达式需要求值，是因为它是操作某个对象的方法的一部分。在环境中，这个对像绑
+通常，表达式需要求值，是因为它是操作某个对象的方法的一部分。在环境中，这个对象绑
 定到伪变量@tt{%self}。我们称之为@emph{伪变量} (@emph{pseudo-variable})，因为它虽
 然像普通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，
 当前方法持有类的超类名字绑定到伪变量@tt{%super}。
@@ -1292,6 +1292,177 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 }
 
 @section[#:tag "s9.5"]{带类型的语言}
+
+在@secref{types}，我们展示了如何用类型系统检查程序，保证它决不进行不当操作。通过
+检查器的程序决不会调用非过程处理实参，调用过程或其他操作符时，也不会使用错误数量
+或类型的实参。
+
+本节，我们将这种技术应用于名为TYPED-OO的面向对象语言。这种语言具有上述所有安全属
+性，此外，通过我们检查器的程序决不会给没有对应方法的对象发送消息，也不会给对象发
+送实参数量或类型错误的消息。
+
+TYPED-OO的示例程序如图9.12所示。这段程序定义了一个类@tt{tree}，其方法@tt{sum}像
+图9.2那样求出叶子之和，方法@tt{equal}取另一棵树，递归向下处理树，判断二者是否相
+等。
+
+这种语言的主要新特性是：
+
+@itemlist[
+
+ @item{字段和方法需要用@secref{types}那样的语法指定类型。}
+
+ @item{在面向对象@elem[#:style question]{设置}中，引入@emph{接口}
+ (@emph{interface})的概念。}
+
+ @item{语言中引入了@emph{子类型多态} (@emph{subtype polymorphism})的概念。}
+
+ @item{语言中引入了@emph{强制转换} (@emph{casting})的概念，同时包含练习9.6中的
+ @tt{instanceof}判断。}
+
+]
+
+我们依次考虑这些特性。
+
+TYPED-OO中的新生成式如图9.13所示。我们添加一种类型@tt{void}，作为@tt{set}操作的
+类型，然后添加练习7.9中的列表类型；像练习7.9那样，我们要求调用@tt{list}时至少给
+出一个实参。我们将标识符添加到类型表达式的集合中，但在本章，用作类型的标识符与同
+名的类或接口相关联。稍后我们详细思考这种对应关系。方法需要指明结果类型和参数类型，
+其语法与@secref{types}中的@tt{letrec}类似。最后是新增的两种表达式，@tt{cast}和
+@tt{instanceof}。
+
+要理解这种语言的新特性，我们必须像定义7.1.1那样，定义语言的类型。
+
+@nested[#:style (make-style "sdef" '())]{
+定义类型为@${t}的表达值@${v}具有如下属性：
+
+ @nested[#:style 'inset]{
+ @itemlist[
+
+  @item{若@${c}为类，当且仅当值是一个对象，且是类@${c}或其后代的实例时，值类型为
+  @tt{c}。}
+
+  @item{若@${I}为接口，当且仅当值是一个对象，且所属类实现了@${I}时，值类型为
+  @${I}。当且仅当类具有@tt{implements @${I}}声明，或其祖先实现了@${I}时，类实现
+  了@${I}。}
+
+  @item{若@${t}为其他类型，则用定义7.1.1中的规则。}
+
+ ]
+ }
+
+}
+
+对象只能是一个类的实例，但可以有很多类型。
+
+@itemlist[
+
+ @item{创建对象时的类是其类型。}
+
+ @item{该类的超类以及继承关系上方的所有类是其类型。特别地，每个对象都是
+ @tt{object}类型。}
+
+ @item{创建对象时的类实现的任意接口均是其类型。}
+
+]
+
+第二条性质叫做@emph{子类多态} (@emph{subclass polymorphism})。第三条性质叫做@emph{接口多态}
+(@emph{interface polymorphism})。
+
+接口表示实现某些方法的所有对象集合，而不论这些对象如何产生。仅当类@${c}按照约定
+的类型实现了接口@${I}要求的所有方法时，我们的判类系统才允许@${c}声称实现了@${I}。
+虽然我们的例子中只用了一个接口，但一个类可以实现多个不同接口。
+
+@nested[#:style eopl-figure]{
+@nested[#:style 'code-inset]{
+@verbatim|{
+interface tree
+ method int sum ()
+ method bool equal (t : tree)
+
+class interior-node extends object implements tree
+ field tree left
+ field tree right
+ method void initialize(l : tree, r : tree)
+  begin
+   set left = l; set right = r
+  end
+ method tree getleft () left
+ method tree getright () right
+ method int sum () +(send left sum(), send right sum())
+ method bool equal (t : tree)
+  if instanceof t interior-node
+  then if send left equal(send
+                           cast t interior-node
+                           getleft())
+       then send right equal(send
+                              cast t interior-node
+                              getright())
+       else zero?(1)
+  else zero?(1)
+
+class leaf-node extends object implements tree
+ field int value
+ method void initialize (v : int) set value = v
+ method int sum () value
+ method int getvalue () value
+ method bool equal (t : tree)
+  if instanceof t leaf-node
+  then zero?(-(value, send cast t leaf-node getvalue()))
+  else zero?(1)
+
+let o1 = new interior-node (
+          new interior-node (
+           new leaf-node(3),
+           new leaf-node(4)),
+          new leaf-node(5))
+in list(send o1 sum(),
+        if send o1 equal(o1) then 100 else 200)
+}|
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "TYPED-OO的程序示例"))]
+}
+
+@nested[#:style eopl-figure]{
+@envalign*{
+         \mathit{ClassDecl} &::= @tt{class @m{\mathit{Identifier}} extends @m{\mathit{Identifier}}} \\
+          &\mathrel{\phantom{::=}} \phantom{x}\{@tt{implements @m{\mathit{Identifier}}}\}^{*} \\
+          &\mathrel{\phantom{::=}} \phantom{x}\{@tt{field @m{\mathit{Type}} @m{\mathit{Identifier}}}\}^{*} \\
+          &\mathrel{\phantom{::=}} \phantom{x}\{@m{\mathit{MethodDecl}}\}^{*} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{a-class-decl}@tt["("]@tt{c-name s-name i-names} \\
+                                          &\phantom{xxxxxxxxxxxx}@tt{f-types f-names m-decls}@tt[")"]
+                                         \end{alignedat}\end{math}} \\[5pt]
+         \mathit{ClassDecl} &::= @tt{interface @m{\mathit{Identifier}} @m{\{\mathit{AbstractMethodDecl}\}^{*}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{an-interface-decl (i-name abs-m-decls)}} \\[5pt]
+        \mathit{MethodDecl} &::= @tt{method @m{\mathit{Type}} @m{\mathit{Identifier}} (@m{\{\mathit{Identifier} \ : \mathit{Type}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{a-method-decl} \\
+                                          &\phantom{x}@tt{(res-type m-name vars var-types body)}
+                                         \end{alignedat}\end{math}}} \\[5pt]
+\mathit{AbstractMethodDecl} &::= @tt{method @m{\mathit{Type}} @m{\mathit{Identifier}} (@m{\{\mathit{Identifier} \ : \mathit{Type}\}^{*(,)}})} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{{\begin{math}\begin{alignedat}{-1}
+                                          &@tt{a-method-decl} \\
+                                          &\phantom{x}@tt{(res-type m-name m-vars m-var-types)}
+                                         \end{alignedat}\end{math}}} \\[5pt]
+        \mathit{Expression} &::= @tt{cast @m{\mathit{Expression}} @m{\mathit{Identifier}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cast-exp (exp c-name)}} \\[5pt]
+        \mathit{Expression} &::= @tt{instanceof @m{\mathit{Expression}} @m{\mathit{Identifier}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{instanceof-exp (exp name)}} \\[5pt]
+              \mathit{Type} &::= @tt{void} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{void-type ()}} \\[5pt]
+              \mathit{Type} &::= \mathit{Identifier} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{class-type (class-name)}} \\[5pt]
+              \mathit{Type} &::= @tt{listof @m{\mathit{Type}}} \\[-3pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{list-type (type1)}}
+          }
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "TYPED-OO中的新生成式"))]
+}
 
 @section[#:tag "s9.6"]{类型检查器}
 
