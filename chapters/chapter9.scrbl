@@ -1361,7 +1361,7 @@ TYPED-OO中的新生成式如图9.13所示。我们添加一种类型@tt{void}�
  @item{该类的超类以及继承关系上方的所有类是其类型。特别地，每个对象都是
  @tt{object}类型。}
 
- @item{创建对象时的类实现的任意接口均是其类型。}
+ @item{对象所属类实现的任意接口均是其类型。}
 
 ]
 
@@ -1530,7 +1530,50 @@ method bool equal(t : tree)
           (if s-name (is-subclass? s-name c-name2) #f))))))
 ]
 
-这样，本节语言解释器的修改就完成了。
+这样，本节语言的解释器就修改完成了。
+
+@exercise[#:level 1 #:tag "ex9.30"]{
+
+创建接口@tt{summable}：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+interface summable
+ method int sum ()
+}|
+}
+
+为可求和的列表、可求和二叉树（如图9.12）和可求和的广义树（每个节点包含一个可求和
+的子节点列表）定义类。
+
+然后为接口
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+interface stringable
+ method string to-string ()
+}|
+}
+
+做同样的操作。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.31"]{
+
+在图9.12中，把@tt{tree}定义为类，然后让两个节点类继承@tt{tree}可行吗？在什么情况
+下这种方法比使用类似@tt{summable}的接口更好？在什么情况下更糟？
+
+}
+
+@exercise[#:level 2 #:tag "ex9.32"]{
+
+不使用@tt{instanceof}和@tt{cast}，给类@tt{tree}写一个等值判断谓词。这里需要用
+@emph{双派发} (@emph{double dispatch})替代通常方法使用的单派发。可做如下模拟：不
+用@tt{instanceof}找出实参@tt{t}的类，而是让当前的树给@tt{t}发回一条消息，这条消
+息编码当前树所属类，其参数则包含适当字段的值。
+
+}
 
 @section[#:tag "s9.6"]{类型检查器}
 
