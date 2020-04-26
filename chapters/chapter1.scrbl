@@ -12,6 +12,8 @@
           racket/sandbox)
 @(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
 
+@mainmatter
+
 @title[#:style 'numbered #:tag "isd"]{归纳式数据集}
 
 解释器与检查器一类的程序是编程语言处理器的核心，本章介绍写这些用到的基本编程工具。
@@ -704,6 +706,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
 
+@nested[#:style 'code-inset]{
 @verbatim|{
   (list-length '(a (b c) d))
 = (+ 1 (list-length '((b c) d)))
@@ -712,6 +715,7 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 = (+ 1 (+ 1 (+ 1 0)))
 = 3
 }|
+}
 
 @subsection[#:tag "n-e"]{@tt{nth-element}}
 
@@ -768,6 +772,8 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 来看看 @tt{nth-element} 如何算出答案：
 
+@nested{
+@nested[#:style 'code-inset]{
 @verbatim|{
   (nth-element '(a b c d e) 3)
 = (nth-element   '(b c d e) 2)
@@ -775,8 +781,10 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 = (nth-element       '(d e) 0)
 = d
 }|
+}
 
-@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
+这里，@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
+}
 
 如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 的抱怨来获知传递了空列表，但它们
 的错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使
@@ -966,7 +974,6 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 的 @tt{if}，而是用 @tt{cond}。在 Scheme 中，若 @${exp_1} 或 @${exp_2} 返回真值，
 则@tt{(or @${exp_1} @${exp_2})} 返回真值。
 
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{occurs-free?}} : @${Sym \times LcExp \to Bool}}
 @#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
@@ -982,13 +989,12 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
       (occurs-free? var (car exp))
       (occurs-free? var (cadr exp))))))
 ]
-}
 
 这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
 中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在 2.5 节，我
 们展示如何显著改善这种情况。
 
-@subsection[#:tag "subst"]{@tt{subst}}
+@subsection[#:tag "s1.2.5"]{@tt{subst}}
 
 过程 @tt{subst} 取三个参数：两个符号 @tt{new} 和 @tt{old}，一个 s-list，
 @tt{slist}。它检查 @tt{slist} 的所有元素，返回类似 @tt{slist} 的新列表，但把其中
@@ -1227,8 +1233,6 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
-@; codeblock with contracts and usage
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{partial-vector-sum}} : @${Vectorof(Int) \times Int \to Int}}
 @#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
@@ -1239,8 +1243,6 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
         (+ (vector-ref v n)
            (partial-vector-sum v (- n 1))))))
 ]
-}
-@;
 
 由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
 \leq n} 且 @${n \neq 0}，可得 @${0 \leq (n - 1)}，所以递归调用过程

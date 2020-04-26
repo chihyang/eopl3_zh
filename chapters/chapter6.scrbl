@@ -481,7 +481,7 @@ val)}。
 
  @item{@tt{occurs-free?}（@secref{o-f}）}
 
- @item{@tt{subst}（@secref{subst}）}
+ @item{@tt{subst}（@secref{s1.2.5}）}
 
 ]
 
