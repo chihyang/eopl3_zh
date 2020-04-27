@@ -1670,7 +1670,7 @@ interface stringable
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "面向对象表达式在" @tt{type-of} "中对应的语句，第1部分"))]
+ (list (para "面向对象表达式在" @tt{type-of} "中的对应语句，第1部分"))]
 }
 
 @racketblock[
@@ -1739,4 +1739,154 @@ interface stringable
 的}(@emph{contravariant})。见图9.15。这与 @secref{s8.3.2}中@tt{<:-iface}的定义类
 似。
 
-这些代码如图9.16所示。
+这部分代码如图9.16所示。代码使用@tt{every2?}，它扩展练习1.24中的过程@tt{every?}，
+取一个双参数谓词和两个列表，当列表长度相同且对应元素满足谓词时，返回@tt{#t}，否
+则返回@tt{#f}。
+
+现在可以逐一考虑三种调用（图9.17）。对方法调用，我们首先像通常那样，找出目标对象
+和操作数的类型。我们用类似@tt{find-method}的@tt{find-method-type}找出方法的类型。
+如果目标类型不是类或接口，那么@tt{type->class-name}报错。如果没有对应方法，那么
+@tt{find-method-type}报错。然后，我们调用@tt{type-of-call}验证操作数的类型与方法
+的期望相符，并返回结果的类型。
+
+对@tt{new}表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报错。
+之后，用操作数的类型调用@tt{type-of-call}，检查调用@tt{initialize}是否安全。如果
+检查通过，那么执行表达式就是安全的。由于@tt{new}表达式返回指定类的新对象，结果类
+型就是对应类的类型。
+
+TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境。
+
+要构建静态类环境，@tt{initialize-static-class-env!}首先将其设置为空，然后为类
+@tt{object}添加绑定。接着它遍历各个类和接口，给静态类环境添加适当的内容。
+
+@racketblock[
+@#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
+(define initialize-static-class-env!
+  (lambda (c-decls)
+    (empty-the-static-class-env!)
+    (add-static-class-binding!
+      'object (a-static-class #f '() '() '() '()))
+    (for-each add-class-decl-to-static-class-env! c-decls)))
+]
+
+过程@tt{add-class-decl-to-static-class-env!}（图9.18）承担创建静态类的艰巨工作。
+对每个类，我们必须收集其接口、字段和方法：
+
+@itemlist[
+
+ @item{类实现父类实现的任何接口，以及自称要实现的接口。}
+
+ @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
+ 所以，用@tt{append-field-names}计算@tt{field-names}，就像
+ @tt{initialize-class-decl!}那样（@elem[#:style question]{334页}）。}
+
+ @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
+
+ @item{类的方法包括父类的和自身的，方法带有声明类型。我们用@tt{proc-type}记录方
+ 法的类型。我们首先放置当前声明的方法，因为它们覆盖父类的方法。}
+
+ @item{我们确保当前类中声明的方法名、接口名和字段名没有重复。我们还确保类中一定
+ 有@tt{initialize}方法。}
+
+]
+
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{check-is-subtype!}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
+(define check-is-subtype!
+  (lambda (ty1 ty2 exp)
+    (if (is-subtype? ty1 ty2)
+      #t
+      (report-subtype-failure
+        (type-to-external-form ty1)
+        (type-to-external-form ty2)
+        exp))))
+
+@#,elem{@bold{@tt{is-subtype?}} : @${\mathit{Type} \times \mathit{Type} \to \mathit{Bool}}}
+(define is-subtype?
+  (lambda (ty1 ty2)
+    (cases type ty1
+      (class-type (name1)
+        (cases type ty2
+          (class-type (name2)
+            (statically-is-subclass? name1 name2))
+          (else #f)))
+      (proc-type (args1 res1)
+        (cases type ty2
+          (proc-type (args2 res2)
+            (and
+              (every2? is-subtype? args2 args1)
+              (is-subtype? res1 res2)))
+          (else #f)))
+      (else (equal? ty1 ty2)))))
+
+@#,elem{@bold{@tt{statically-is-subclass?}} : @${\mathit{ClassName} \times \mathit{ClassName} \to \mathit{Bool}}}
+(define statically-is-subclass?
+  (lambda (name1 name2)
+    (or
+      (eqv? name1 name2)
+      (let ((super-name
+              (static-class->super-name
+                (lookup-static-class name1))))
+        (if super-name
+          (statically-is-subclass? super-name name2)
+          #f))
+      (let ((interface-names
+              (static-class->interface-names
+                (lookup-static-class name1))))
+        (memv name2 interface-names)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "TYPED-OO的子类型判定"))]
+}
+
+@nested[#:style eopl-figure]{
+@codeblock[#:indent 11]{
+(method-call-exp (obj-exp method-name rands)
+  (let ((arg-types (types-of-exps rands tenv))
+         (obj-type (type-of obj-exp tenv)))
+    (type-of-call
+      (find-method-type
+        (type->class-name obj-type)
+        method-name)
+      arg-types
+      rands
+      exp)))
+
+(super-call-exp (method-name rands)
+  (let ((arg-types (types-of-exps rands tenv))
+         (obj-type (apply-tenv tenv ’%self)))
+    (type-of-call
+      (find-method-type
+        (apply-tenv tenv ’%super)
+        method-name)
+      arg-types
+      rands
+      exp)))
+
+(new-object-exp (class-name rands)
+  (let ((arg-types (types-of-exps rands tenv))
+         (c (lookup-static-class class-name)))
+    (cases static-class c
+      (an-interface (method-tenv)
+        (report-cant-instantiate-interface class-name))
+      (a-static-class (super-name i-names
+                        field-names field-types
+                        method-tenv)
+        (type-of-call
+          (find-method-type
+            class-name
+            ’initialize)
+          arg-types
+          rands
+          exp)
+        (class-type class-name)))))
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "面向对象表达式在" @tt{type-of} "中的对应语句，第2部分"))]
+}
