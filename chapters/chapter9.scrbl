@@ -1577,6 +1577,69 @@ interface stringable
 
 @section[#:tag "s9.6"]{类型检查器}
 
+现在我们来看这种语言的检查器。检查器的目标是确保一些安全属性。对我们的语言来说，
+这些属性包括原有过程式语言的那部分和之后面向对象语言的那部分：通过我们类型检查器
+的程序不会
+
+@itemlist[
+
+ @item{给非对象发送消息，}
+
+ @item{给没有对应方法的对象发消息，}
+
+ @item{给对象发送参数数量或类型错误的消息。}
+
+]
+
+我们无意验证@tt{initialize}方法确实初始化了所有字段，所以程序仍可能引用未初始化
+的字段。同样地，由于@tt{initialize}方法的类型通常难以预测，我们的检查器未防止以
+错误数量或类型的参数直接调用@tt{initialize}方法，但通过@tt{new}间接调用
+@tt{initialize}方法一定是正确的。
+
+检查器首先实现@tt{type-of-program}。由于所有类的所有方法都是互递归的，我们以类似
+@tt{letrec}的方式处理。对@tt{letrec}，我们首先收集过程声明的类型，建立
+@tt{tenv-for-letrec-body}（图7.3）。然后，我们对照每个过程主体与其声明类型。最后，
+我们在@tt{tenv-for-letrec-body}中检查@tt{letrec}的主体。
+
+这里，我们首先调用@tt{initialize-static-class-env!}，遍历类声明，将所有类型收集
+到一个静态环境中。由于这个环境是全局的，且不会改变，我们不是将其作参数传递，而是
+把它存储在一个Scheme变量中。然后，我们用@tt{check-class-decl!}检查每个类声明。最
+后，我们找出程序主体的类型。
+
+@racketblock[
+@#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
+(define type-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (class-decls exp1)
+        (initialize-static-class-env! class-decls)
+        (for-each check-class-decl! class-decls)
+        (type-of exp1 (init-tenv))))))
+]
+
+静态类环境将每个类名映射到一个静态类，这个类包含其父类的名字，字段的名字和类型，
+以及方法的名字和类型。在我们的语言中，接口没有父类，没有字段，所以我们用只含所需
+方法名字和类型的数据结构表示它们（但是，看看练习9.36）。
+
+@racketblock[
+(define-datatype static-class static-class?
+  (a-static-class
+    (super-name (maybe identifier?))
+    (interface-names (list-of identifier?))
+    (field-names (list-of identifier?))
+    (field-types (list-of type?))
+    (method-tenv method-tenv?))
+  (an-interface
+    (method-tenv method-tenv?)))
+]
+
+在思考如何建立静态环境之前，我们先思考如何扩展@tt{type-of}，检查六种面向对象表达
+式的类型：@tt{self}、@tt{instanceof}、@tt{cast}、方法调用、超类调用、以及
+@tt{new}。
+
+对@tt{self}表达式，我们用伪变量@tt{%self}查询其类型，该变量一定绑定到当前持有类
+的类型，就像在解释器中，它绑定到当前持有对象一样。
+
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/subtyping-proc-type"
