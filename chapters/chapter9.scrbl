@@ -1543,8 +1543,8 @@ interface summable
 }|
 }
 
-为可求和的列表、可求和二叉树（如图9.12）和可求和的广义树（每个节点包含一个可求和
-的子节点列表）定义类。
+为可求和列表、可求和二叉树（如图9.12）和可求和广义树（每个节点包含一个可求和的子
+节点列表）定义类。
 
 然后为接口
 
@@ -1674,7 +1674,7 @@ interface stringable
 }
 
 @racketblock[
-@#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Exp} \to \mathit{Type}}}
+@#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Listof(Exp)} \times \mathit{Exp} \to \mathit{Type}}}
 (define type-of-call
   (lambda (rator-type rand-types rands exp)
     (cases type rator-type
@@ -1724,7 +1724,7 @@ interface stringable
 
  @item{@${t_1}是类，@${t_2}是接口，且@${t_1}或其某个超类实现了@${t_2}，或}
 
- @item{@${t_1}和@${t_2}是过程类型，且@${t_2}的参数类型是@${t_1}参数类型的子类型，
+ @item{@${t_1}和@${t_2}是过程类型，且@${t_2}参数类型是@${t_1}参数类型的子类型，
  @${t_1}结果类型是@${t_2}结果类型的子类型。}
 
 ]
