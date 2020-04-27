@@ -2393,8 +2393,8 @@ module mybool-tables
 数，@${m_0}产生的任何模块都满足@${i^{\prime}_{2}}。
 
 为满足第一个要求，我们要@${i_2 <: i_1}。这保证了满足@${i_2}的任何模块都能作为参
-数传给@${m_0}。注意逆序：在参数类型中，我们说@emph{子类判别} (@emph{subtyping})是
-@emph{逆变的} (@emph{contravariant})。
+数传给@${m_0}。注意逆序：在参数类型中，我们说@emph{子类型判定}
+(@emph{subtyping})是@emph{逆变的} (@emph{contravariant})。
 
 结果的类型呢？我们可以要求@${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行不
 通。@${i^{\prime}_{1}}中，可能出现模块变量@${m_1}，@${i^{\prime}_{2}}中，可能出

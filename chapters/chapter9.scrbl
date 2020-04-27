@@ -1640,6 +1640,64 @@ interface stringable
 对@tt{self}表达式，我们用伪变量@tt{%self}查询其类型，该变量一定绑定到当前持有类
 的类型，就像在解释器中，它绑定到当前持有对象一样。
 
+@tt{instanceof}表达式如果返回，总是返回@tt{bool}值。若@${e}的值是一个对象，且是
+@${c}或它的某个后代的实例，则表达式@tt{cast @${e} @${c}}返回@${e}的值。因此，
+@tt{cast @${e} @${c}}如果返回值，值的类型是@${c}。所以我们总能将@tt{cast @${e}
+@${c}}的类型视为@${c}。对@tt{instanceof}和@tt{cast}表达式，解释器求出参数的值，
+并用它执行@tt{object->class-name}，所以我们也必须确保操作数类型正常，且返回值是
+一个对象。这三种情况的代码如图9.14所示。
+
+接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
+用。我们抽象出一个过程来检查它们。
+
+@nested[#:style eopl-figure]{
+@codeblock[#:indent 11]{
+(self-exp ()
+  (apply-tenv tenv ’%self))
+
+(instanceof-exp (exp class-name)
+  (let ((obj-type (type-of exp tenv)))
+    (if (class-type? obj-type)
+      (bool-type)
+      (report-bad-type-to-instanceof obj-type exp))))
+
+(cast-exp (exp class-name)
+  (let ((obj-type (type-of exp tenv)))
+    (if (class-type? obj-type)
+      (class-type class-name)
+      (report-bad-type-to-cast obj-type exp))))
+}
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "面向对象表达式在" @tt{type-of} "中对应的语句，第1部分"))]
+}
+
+@racketblock[
+@#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Exp} \to \mathit{Type}}}
+(define type-of-call
+  (lambda (rator-type rand-types rands exp)
+    (cases type rator-type
+      (proc-type (arg-types result-type)
+        (if (not (= (length arg-types) (length rand-types)))
+          (report-wrong-number-of-arguments
+            (map type-to-external-form arg-types)
+            (map type-to-external-form rand-types)
+            exp))
+        (for-each check-is-subtype! rand-types arg-types rands)
+        result-type)
+      (else
+        (report-rator-not-of-proc-type
+          (type-to-external-form rator-type)
+          exp)))))
+]
+
+这个过程等价于CHECKED中@tt{call-exp}对应的那一行（图7.2），但有两处明显区别。首
+先，由于我们的过程现在取多个参数，我们要确保调用时的实参数目正确，而在
+@tt{for-each}这行，我们逐一对照每个操作数的类型和过程类型中相对应的参数类型。更
+有意思的是第二点，我们把图7.2中的@tt{check-equal-type!}换成了
+@tt{check-is-subtype!}。
+
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/subtyping-proc-type"
@@ -1652,3 +1710,33 @@ interface stringable
  (make-style "caption" (list 'multicommand))
  (list (para "过程类型的子类型判定"))]
 }
+
+为什么必须这样？子类多态原则是说，如果类@${c_2}扩展了@${c_1}，那么类@${c_2}的对
+象可在类@${c_1}对象能够出现的任何地方使用。如果我们写出了过程@tt{proc (o :
+@${c_1}) ...}，那么该过程应该能取类型为@${c_2}的实参。
+
+通常，我们可以将子类多态的概念推广到@emph{子类型多态}，就像@secref{modules}中处
+理@tt{<:}那样。我们说@${t_1}是@${t_2}的子类型，当且仅当
+
+@itemlist[
+
+ @item{@${t_1}和@${t_2}是类，且@${t_1}是@${t_2}的子类，或}
+
+ @item{@${t_1}是类，@${t_2}是接口，且@${t_1}或其某个超类实现了@${t_2}，或}
+
+ @item{@${t_1}和@${t_2}是过程类型，且@${t_2}的参数类型是@${t_1}参数类型的子类型，
+ @${t_1}结果类型是@${t_2}结果类型的子类型。}
+
+]
+
+要理解最后一条规则，令@${t_1}为@tt{(c1 -> d1)}，@${t_2}为@tt{(c2 -> d2)}，且
+@tt{c2 < c1}，@tt{d1 < d2}。令@tt{f}为一过程，类型为@${t_1}。我们说@tt{f}类型也
+为@${t_2}。为什么？假设我们给@tt{f}传递了类型为@tt{c2}的参数。由于@tt{c2 < c1}，
+参数类型也是@tt{c1}，所以@tt{f}可以接受这个参数。然后，@tt{f}返回值类型为@tt{d1}。
+但由于@tt{d1 < d2}，这个结果类型也是@tt{d2}。所以，如果给@tt{f}一个类型为@tt{c2}
+的参数，其返回值类型为@tt{d2}。因此，@tt{f}类型为@tt{(c2 -> d2)}。我们说结果类型
+的子类型判定是@emph{协变的} (@emph{covariant})，参数类型的子类型判定是@emph{逆变
+的}(@emph{contravariant})。见图9.15。这与 @secref{s8.3.2}中@tt{<:-iface}的定义类
+似。
+
+这些代码如图9.16所示。
