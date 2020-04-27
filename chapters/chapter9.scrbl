@@ -1858,10 +1858,10 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
 (super-call-exp (method-name rands)
   (let ((arg-types (types-of-exps rands tenv))
-         (obj-type (apply-tenv tenv ’%self)))
+         (obj-type (apply-tenv tenv '%self)))
     (type-of-call
       (find-method-type
-        (apply-tenv tenv ’%super)
+        (apply-tenv tenv '%super)
         method-name)
       arg-types
       rands
@@ -1879,7 +1879,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
         (type-of-call
           (find-method-type
             class-name
-            ’initialize)
+            'initialize)
           arg-types
           rands
           exp)
