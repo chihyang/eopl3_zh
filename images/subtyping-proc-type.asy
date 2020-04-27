@@ -18,8 +18,8 @@ block block0=rectangle("\tt{\phantom{d}c1\phantom{p}}", pos, drawpen=invisible);
 block block1=rectangle("\tt{\phantom{d}d1\phantom{p}}", shift(x_off, 0) * block0.center, drawpen=invisible);
 block block2=rectangle("\tt{\phantom{d}c1\phantom{p}}", shift(0, -y_off) * block0.center, drawpen=invisible);
 block block3=rectangle("\tt{\phantom{d}d1\phantom{p}}", shift(0, -y_off) * block1.center, drawpen=invisible);
-block block4=rectangle("\tt{\phantom{d}c1\phantom{p}}", shift(-x_off, 0) * block2.center, drawpen=invisible);
-block block5=rectangle("\tt{\phantom{d}d1\phantom{p}}", shift(x_off, 0) * block3.center, drawpen=invisible);
+block block4=rectangle("\tt{\phantom{d}c2\phantom{p}}", shift(-x_off, 0) * block2.center, drawpen=invisible);
+block block5=rectangle("\tt{\phantom{d}d2\phantom{p}}", shift(x_off, 0) * block3.center, drawpen=invisible);
 
 draw(block0);
 draw(block1);
