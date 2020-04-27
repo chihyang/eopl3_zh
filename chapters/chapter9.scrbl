@@ -527,9 +527,9 @@ in send o3 m3()
 @codeblock[#:indent 7]{
 (super-call-exp (method-name rands)
   (let ((args (values-of-exps rands env))
-        (obj (apply-env env ’%self)))
+        (obj (apply-env env '%self)))
     (apply-method
-      (find-method (apply-env env ’%super) method-name)
+      (find-method (apply-env env '%super) method-name)
       obj
       args)))
 }
@@ -543,7 +543,7 @@ in send o3 m3()
   (let ((args (values-of-exps rands env))
         (obj (new-object class-name)))
     (apply-method
-      (find-method class-name ’initialize)
+      (find-method class-name 'initialize)
       obj
       args)
     obj))
@@ -643,7 +643,7 @@ in send o3 m1(7,8)
       class-name
       (map
         (lambda (field-name)
-          (newref (list ’uninitialized-field field-name)))
+          (newref (list 'uninitialized-field field-name)))
         (class->field-names (lookup-class class-name))))))
 ]
 
@@ -744,7 +744,7 @@ in send o3 m1(7,8)
 @#,elem{@${\mathit{ClassEnv} = \mathit{Listof(List(ClassName, Class))}}}
 
 @#,elem{@bold{@tt{the-class-env}} : @${\mathit{ClassEnv}}}
-(define the-class-env ’())
+(define the-class-env '())
 
 @#,elem{@bold{@tt{add-to-class-env!}} : @${\mathit{ClassName} \times \mathit{Class} \to \mathit{Unspecified}}}
 (define add-to-class-env!
@@ -790,7 +790,7 @@ in send o3 m1(7,8)
   (lambda (c-decls)
     (set! the-class-env
       (list
-        (list ’object (a-class #f ’() ’()))))
+        (list 'object (a-class #f '() '()))))
     (for-each initialize-class-decl! c-decls)))
 
 @#,elem{@bold{@tt{initialize-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
@@ -1653,7 +1653,7 @@ interface stringable
 @nested[#:style eopl-figure]{
 @codeblock[#:indent 11]{
 (self-exp ()
-  (apply-tenv tenv ’%self))
+  (apply-tenv tenv '%self))
 
 (instanceof-exp (exp class-name)
   (let ((obj-type (type-of exp tenv)))

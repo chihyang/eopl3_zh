@@ -1396,7 +1396,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
                    exps)))
         (if (not pos)
           (builder (map cps-of-simple-exp exps))
-          (let ((var (fresh-identifier ’var)))
+          (let ((var (fresh-identifier 'var)))
             (cps-of-exp
               (list-ref exps pos)
               (cps-proc-exp (list var)
@@ -1450,8 +1450,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
       (zero?-exp (exp1)
         (cps-zero?-exp (cps-of-simple-exp exp1)))
       (proc-exp (ids exp)
-        (cps-proc-exp (append ids (list ’k%00))
-          (cps-of-exp exp (cps-var-exp ’k%00))))
+        (cps-proc-exp (append ids (list 'k%00))
+          (cps-of-exp exp (cps-var-exp 'k%00))))
       (sum-exp (exps)
         (cps-sum-exp (map cps-of-simple-exp exps)))
       (else
@@ -1497,8 +1497,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
         (make-send-to-cont k-exp (cps-var-exp var)))
       (proc-exp (vars body)
         (make-send-to-cont k-exp
-          (cps-proc-exp (append vars (list ’k%00))
-            (cps-of-exp body (cps-var-exp ’k%00)))))
+          (cps-proc-exp (append vars (list 'k%00))
+            (cps-of-exp body (cps-var-exp 'k%00)))))
       (zero?-exp (exp1)
         (cps-of-zero?-exp exp1 k-exp))
       (diff-exp (exp1 exp2)
@@ -1570,11 +1570,11 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
     (cps-letrec-exp
       p-names
       (map
-        (lambda (b-vars) (append b-vars (list ’k%00)))
+        (lambda (b-vars) (append b-vars (list 'k%00)))
         b-varss)
       (map
         (lambda (p-body)
-          (cps-of-exp p-body (cps-var-exp ’k%00)))
+          (cps-of-exp p-body (cps-var-exp 'k%00)))
         p-bodies)
       (cps-of-exp letrec-body k-exp))))
 ]
@@ -1715,7 +1715,7 @@ in |@${T}
 @racketblock[
 (define cps-of-exps
   (lambda (exps builder)
-    (let cps-of-rest ((exps exps) (acc ’()))
+    (let cps-of-rest ((exps exps) (acc '()))
       @#,elem{@bold{@tt{cps-of-rest}} : @${\mathit{Listof(InpExp)} \times \mathit{Listof(SimpleExp)} \to \mathit{TfExp}}}
       (cond
         ((null? exps) (builder (reverse acc)))
@@ -1725,7 +1725,7 @@ in |@${T}
               (cps-of-simple-exp (car exps))
               acc)))
         (else
-          (let ((var (fresh-identifier ’var)))
+          (let ((var (fresh-identifier 'var)))
             (cps-of-exp (car exps)
               (cps-proc-exp (list var)
                 (cps-of-rest (cdr exps)
@@ -1757,7 +1757,7 @@ in |@${T}
   (lambda (exp context)
     (if (inp-exp-simple? exp)
       (context (cps-of-simple-exp exp))
-      (let ((var (fresh-identifier ’var)))
+      (let ((var (fresh-identifier 'var)))
         (cps-of-exp exp
           (cps-proc-exp (list var)
             (context (cps-var-exp var))))))))

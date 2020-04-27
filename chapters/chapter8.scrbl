@@ -611,7 +611,7 @@ in -(z, -(from m1 take a, from m2 take a))
 (define defns-to-decls
   (lambda (defns tenv)
     (if (null? defns)
-      ’()
+      '()
       (cases definition (car defns)
         (val-defn (var-name exp)
           (let ((ty (type-of exp tenv)))
@@ -1490,7 +1490,7 @@ in let add-binding = from tables take add-to-table
 (define defns-to-decls
   (lambda (defns tenv)
     (if (null? defns)
-      ’()
+      '()
       (cases definition (car defns)
         (val-defn (var-name exp)
           (let ((ty (type-of exp tenv)))
@@ -1743,7 +1743,7 @@ actual-iface <: expected-iface
       (opaque-type-decl (name)
         (extend-tenv-with-type
           name
-          (qualified-type (fresh-module-name ’%unknown) name)
+          (qualified-type (fresh-module-name '%unknown) name)
           tenv)))))
 ]
 

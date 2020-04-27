@@ -480,7 +480,7 @@ in |@${e_{letrec\mbox{-}body}}
 @#,elem{@bold{@tt{report-unequal-types}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
 (define report-unequal-types
   (lambda (ty1 ty2 exp)
-    (eopl:error ’check-equal-type!
+    (eopl:error 'check-equal-type!
       "类型不匹配: ~s != ~a 位置~%~a"
       (type-to-external-form ty1)
       (type-to-external-form ty2)
@@ -498,12 +498,12 @@ in |@${e_{letrec\mbox{-}body}}
 (define type-to-external-form
   (lambda (ty)
     (cases type ty
-      (int-type () ’int)
-      (bool-type () ’bool)
+      (int-type () 'int)
+      (bool-type () 'bool)
       (proc-type (arg-type result-type)
         (list
           (type-to-external-form arg-type)
-          ’->
+          '->
           (type-to-external-form result-type))))))
 ]
 
@@ -1946,7 +1946,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 (define canonical-subst
   (lambda (sexp)
     loop : S-exp × A-list → A-list
-    (let loop ((sexp sexp) (table ’()))
+    (let loop ((sexp sexp) (table '()))
       (cond
         ((null? sexp) table)
         ((tvar-type-sym? sexp)
