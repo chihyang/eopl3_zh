@@ -1774,10 +1774,10 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
 @itemlist[
 
- @item{类实现父类实现的任何接口，以及自称要实现的接口。}
+ @item{类实现父类实现的任何接口，以及自身声称实现的接口。}
 
  @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
- 所以，用@tt{append-field-names}计算@tt{field-names}，就像
+ 所以，@tt{field-names}由@tt{append-field-names}计算而得，就像
  @tt{initialize-class-decl!}那样（@elem[#:style question]{334页}）。}
 
  @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
@@ -1785,11 +1785,10 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
  @item{类的方法包括父类的和自身的，方法带有声明类型。我们用@tt{proc-type}记录方
  法的类型。我们首先放置当前声明的方法，因为它们覆盖父类的方法。}
 
- @item{我们确保当前类中声明的方法名、接口名和字段名没有重复。我们还确保类中一定
- 有@tt{initialize}方法。}
+ @item{我们确保当前类中声明的方法名、接口名和字段名不重复。我们还确保类中一定有
+ @tt{initialize}方法。}
 
 ]
-
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1889,4 +1888,144 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
  (list (para "面向对象表达式在" @tt{type-of} "中的对应语句，第2部分"))]
+}
+
+对接口声明，我们只需处理方法名与其类型。
+
+一旦建立了静态类环境，我们可以检查每个类声明。这由@tt{check-class-decl!}（图9.19）
+完成。对接口，什么都不必检查。对类声明，我们传递从静态类环境收集到的信息，检查每
+个方法。最后，我们检查类是否实现了它声称实现的每个接口。
+
+要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
+境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否是声明中结果类型
+的子类型。
+
+但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
+类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
+型。这条规则的唯一例外是@tt{initialize}，它只在当前类中调用，且随继承改变类型
+（见图9.12）。要这样做，它调用@tt{maybe-find-method-type}，后者返回已绑定方法的
+类型，或者@tt{#f}。见图9.20。
+
+如图9.21，过程@tt{check-if-implements?}取两个符号，分别为类名和接口名。它首先检
+查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查类是否提供了同名
+且类型兼容的方法。
+
+为图9.12中示例程序生成的静态类环境如图9.22所示。静态类是逆序的，这反映了建立类环
+境的顺序。三个类中的方法顺序相同，且类型相同，符合期望。
+
+这样，检查器就完成了。
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{add-class-decl-to-static-class-env!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
+(define add-class-decl-to-static-class-env!
+  (lambda (c-decl)
+    (cases class-decl c-decl
+      (an-interface-decl (i-name abs-m-decls)
+        (let ((m-tenv
+                (abs-method-decls->method-tenv abs-m-decls)))
+          (check-no-dups! (map car m-tenv) i-name)
+          (add-static-class-binding!
+            i-name (an-interface m-tenv))))
+      (a-class-decl (c-name s-name i-names
+                      f-types f-names m-decls)
+        (let ((i-names
+                (append
+                  (static-class->interface-names
+                    (lookup-static-class s-name))
+                  i-names))
+               (f-names
+                 (append-field-names
+                   (static-class->field-names
+                     (lookup-static-class s-name))
+                   f-names))
+               (f-types
+                 (append
+                   (static-class->field-types
+                     (lookup-static-class s-name))
+                   f-types))
+               (method-tenv
+                 (let ((local-method-tenv
+                         (method-decls->method-tenv m-decls)))
+                   (check-no-dups!
+                     (map car local-method-tenv) c-name)
+                   (merge-method-tenvs
+                     (static-class->method-tenv
+                       (lookup-static-class s-name))
+                     local-method-tenv))))
+          (check-no-dups! i-names c-name)
+          (check-no-dups! f-names c-name)
+          (check-for-initialize! method-tenv c-name)
+          (add-static-class-binding! c-name
+            (a-static-class
+              s-name i-names f-names f-types method-tenv)))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{add-class-decl-to-static-class-env!}))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{check-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
+(define check-class-decl!
+  (lambda (c-decl)
+    (cases class-decl c-decl
+      (an-interface-decl (i-name abs-method-decls)
+        #t)
+      (a-class-decl (class-name super-name i-names
+                      field-types field-names method-decls)
+        (let ((sc (lookup-static-class class-name)))
+          (for-each
+            (lambda (method-decl)
+              (check-method-decl! method-decl
+                class-name super-name
+                (static-class->field-names sc)
+                (static-class->field-types sc)))
+            method-decls))
+        (for-each
+          (lambda (i-name)
+            (check-if-implements! class-name i-name))
+          i-names)))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{check-class-decl!}))]
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{check-method-decl!}} : @linebreak[] @${\phantom{x}\mathit{MethodDecl} \times \mathit{ClassName} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \times \mathit{Listof(Type)} \\ \phantom{xxxx}\to \mathit{Unspecified}}}
+(define check-method-decl!
+  (lambda (m-decl self-name s-name f-names f-types)
+    (cases method-decl m-decl
+      (a-method-decl (res-type m-name vars var-types body)
+        (let ((tenv
+                (extend-tenv
+                  vars var-types
+                  (extend-tenv-with-self-and-super
+                    (class-type self-name)
+                    s-name
+                    (extend-tenv f-names f-types
+                      (init-tenv))))))
+          (let ((body-type (type-of body tenv)))
+            (check-is-subtype! body-type res-type m-decl)
+            (if (eqv? m-name 'initialize) #t
+              (let ((maybe-super-type
+                      (maybe-find-method-type
+                        (static-class->method-tenv
+                          (lookup-static-class s-name))
+                        m-name)))
+                (if maybe-super-type
+                  (check-is-subtype!
+                    (proc-type var-types res-type)
+                    maybe-super-type body)
+                  #t)))))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{check-method-decl!}))]
 }
