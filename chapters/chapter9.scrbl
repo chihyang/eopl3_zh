@@ -1783,7 +1783,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
  @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
 
  @item{类的方法包括父类的和自身的，方法带有声明类型。我们用@tt{proc-type}记录方
- 法的类型。我们首先放置当前声明的方法，因为它们覆盖父类的方法。}
+ 法的类型。我们把当前声明的方法放在前面，因为它们覆盖父类的方法。}
 
  @item{我们确保当前类中声明的方法名、接口名和字段名不重复。我们还确保类中一定有
  @tt{initialize}方法。}
@@ -2028,4 +2028,146 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
  (list (para @tt{check-method-decl!}))]
+}
+
+@exercise[#:level 1 #:tag "ex9.33"]{
+
+扩展类型检查器，确保安全属性：@tt{instanceof}和@tt{cast}不会对不是对象的值或不是
+类的类型执行。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.34"]{
+
+若@${e}的类型不是@${c}的后代或者祖先，则表达式@tt{cast @${e} @${c}}不会成功。
+（为什么？）扩展类型检查器，确保程序只对满足这条属性的@tt{cast}表达式求值。再对
+@tt{instanceof}检查做相应扩展。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.35"]{
+
+扩展类型检查器，保证安全属性：@tt{initialize}方法只从@tt{new-object-exp}内部调用。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.36"]{
+
+扩展语言，允许接口继承自其他接口。接口应要求实现父类要求实现的所有方法。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+@#,elem{@bold{@tt{check-if-implements!}} : @${\mathit{ClassName} \times \mathit{InterfaceName} \to \mathit{Bool}}}
+(define check-if-implements!
+  (lambda (c-name i-name)
+    (cases static-class (lookup-static-class i-name)
+      (a-static-class (s-name i-names f-names f-types
+                        m-tenv)
+        (report-cant-implement-non-interface
+          c-name i-name))
+      (an-interface (method-tenv)
+        (let ((class-method-tenv
+                (static-class->method-tenv
+                  (lookup-static-class c-name))))
+          (for-each
+            (lambda (method-binding)
+              (let ((m-name (car method-binding))
+                     (m-type (cadr method-binding)))
+                (let ((c-method-type
+                        (maybe-find-method-type
+                          class-method-tenv
+                          m-name)))
+                  (if c-method-type
+                    (check-is-subtype!
+                      c-method-type m-type c-name)
+                    (report-missing-method
+                      c-name i-name m-name)))))
+            method-tenv))))))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para @tt{check-if-implements!}))]
+}
+
+@exercise[#:level 2 #:tag "ex9.37"]{
+
+我们的TYPED-OO语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方法
+的选择依赖于对象的类型，而不是所属类。考虑例子
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ method int initialize () 1
+ method int m1 () 11
+ staticmethod int m2 () 21
+class c2 extends c1
+ method void m1 () 12
+ staticmethod int m2 () 22
+let f = proc (x : c1) send x m1()
+    g = proc (x : c1) send x m2()
+    o = new c2()
+in list((f o), (g o))
+}|
+}
+
+当调用@tt{f}和@tt{g}时，@tt{x}类型为@tt{c1}，当绑定到类@tt{c2}的对象。方法
+@tt{m1}使用动态分发，所以调用的是@tt{c2}的方法@tt{m1}，返回12。方法@tt{m2}使用静
+态分发，所以给@tt{x}发消息@tt{m2}调用与@tt{x}类型相关的方法，在本例中，是@tt{c1}，
+所以返回21。
+
+修改 @secref{s9.5}中的解释器，处理静态分发。提示：考虑在环境中记录类型信息，那么
+解释器就能在@tt{send}中找出目标表达式的类型。
+
+}
+
+@nested[#:style eopl-figure]{
+@racketblock[
+((leaf-node
+   #(struct:a-static-class
+      object
+      (tree)
+      (value)
+      (#(struct:int-type))
+      ((initialize #(struct:proc-type
+                      (#(struct:int-type))
+                      #(struct:void-type)))
+        (sum #(struct:proc-type () #(struct:int-type)))
+        (getvalue #(struct:proc-type () #(struct:int-type)))
+        (equal #(struct:proc-type
+                  (#(struct:class-type tree))
+                  #(struct:bool-type))))))
+  (interior-node
+    #(struct:a-static-class
+       object
+       (tree)
+       (left right)
+       (#(struct:class-type tree) #(struct:class-type tree))
+       ((initialize #(struct:proc-type
+                       (#(struct:class-type tree)
+                         #(struct:class-type tree))
+                       #(struct:void-type)))
+         (getleft #(struct:proc-type ()
+                     #(struct:class-type tree)))
+         (getright #(struct:proc-type ()
+                      #(struct:class-type tree)))
+         (sum #(struct:proc-type () #(struct:int-type)))
+         (equal #(struct:proc-type
+                   (#(struct:class-type tree))
+                   #(struct:bool-type))))))
+  (tree
+    #(struct:an-interface
+       ((sum #(struct:proc-type () #(struct:int-type)))
+         (equal #(struct:proc-type
+                   (#(struct:class-type tree))
+                   #(struct:bool-type))))))
+  (object
+    #(struct:a-static-class #f () () () ())))
+]
+
+@make-nested-flow[
+ (make-style "caption" (list 'multicommand))
+ (list (para "为示例程序生成的静态类环境"))]
 }
