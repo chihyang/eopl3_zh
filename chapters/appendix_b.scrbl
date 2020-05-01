@@ -24,7 +24,7 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 
 @section[#:tag "B.1"]{扫描}
 
-扫描问题如图B.1所示。我们在其中展示了一小段程序，以及应如何将其分割为小单元。
+扫描问题如图B.1所示。我们在其中展示了一小段程序，以及应如何将其分割为基本单元。
 
 字符串流应如何分割为词条是语言规范的一部分。语言的这部分规范有时称为@emph{词法规
 范} (@emph{lexical specification})。典型的词法规范可能包括：
@@ -59,6 +59,81 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 @$${\mathit{R} ::= \mathit{Character} \mid \mathit{RR} \mid \mathit{R} \cup \mathit{R} \mid \neg\mathit{Character}}
 
 每个正则表达式匹配一些字符串。我们可以用归纳法定义每个正则表达式匹配的字符串集合。
+
+@itemlist[
+
+ @item{匹配字符@${c}的字符串只含字符@${c}。}
+
+ @item{匹配@${\neg c}的字符串只含一个@${c}之外的字符。}
+
+ @item{匹配@${\mathit{RS}}的字符串由匹配@${\mathit{R}}和匹配@${\mathit{S}}的字串
+ 相接而得。这叫做@emph{串联} (@emph{concatenation})。}
+
+ @item{匹配@${\mathit{R} \cup \mathit{S}}的字符串匹配@${\mathit{R}}或
+ @${\mathit{S}}。这有时写作@${\mathit{R} \mid \mathit{S}}，叫做@emph{并联}
+ (@emph{alternation})。}
+
+ @item{匹配@${\mathit{R}^{*}}的字符串由@${n} (@${n \geq 0})个匹配@${\mathit{R}}
+ 的字符串串联而得。这叫做@${\mathit{R}}的@emph{克莱尼闭包} (@emph{Kleene
+ closure})。}
+
+]
+
+看些例子更有帮助：
+
+@itemlist[
+
+ @item{@${ab}只匹配字符串@tt{ab}。}
+
+ @item{@${ab \cup cd}匹配字符串@tt{ab}或@tt{cd}。}
+
+ @item{@${(ab \cup cd)(ab \cup cd \cup ef)}匹配字符串@tt{abab}、@tt{abcd}、
+ @tt{abef}、@tt{cdab}、@tt{cdcd}和@tt{cdef}。}
+
+ @item{@${(ab)^{*}}匹配空字符串、@tt{ab}、@tt{abab}、@tt{ababab}、@tt{abababab}、
+ @tt{...}。}
+
+ @item{@${(ab \cup cd)^{*}}匹配空字符串、@tt{ab}、@tt{cd}、@tt{abab}、@tt{abcd}、
+ @tt{cdab}、@tt{cdcd}、@tt{ababab}、@tt{...cdcdcd}、@tt{...}。}
+
+]
+
+上面的例子解释了不同操作的优先级，所以，@${{ab}^{*} \cup cd}表示@${(a(b^{*}))
+\cup (cd)}。
+
+我们例子中的规范可用正则表达式写作
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+|@${whitespace = (space \cup newline)(space \cup newline)^{*}}
+|@${comment = @tt{%}(\neg newline)^{*}}
+|@${identifier = letter(letter \cup digit)^{*}}
+}|
+}
+
+扫描器用正则表达式获取词牌时，规则总是取@emph{最长}匹配。所以@tt{xyz}扫描为一个
+标识符，而非三个。
+
+扫描器找到一个词牌时，它返回的数据结构至少包含下列数据：
+
+@itemlist[
+
+ @item{一个@emph{类别} (@emph{class})，描述词牌的种类。类别的集合是词法规范的一
+ 部分。SLLGEN使用Scheme符号区分这些类别；其他语法分析器可能使用其他数据结构。}
+
+ @item{一段数据，描述特定词牌。这段数据的性质也是词法规范的一部分。在我们的系统
+ 中，数据如下：标识符的数据是由词牌字符串产生的Scheme符号；数字的数据是由数字字
+ 面值描述的数值；字符串字面值的数据就是字符串。字符串数据用作关键字和标点。在没
+ 有符号的实现语言中，可以改用字符串（标识符的名字），或者以标识符为索引的哈希表
+ （@emph{符号表} (@emph{symbol table})）条目。}
+
+ @item{一段数据，描述该词牌在输入中的位置。解析器用这一信息帮程序员定位语法错误。}
+
+]
+
+通常，词牌的内部结构只与扫描器和解析器相关，所以我们不再详加介绍。
+
+
 
 @section[#:tag "B.2"]{解析}
 
