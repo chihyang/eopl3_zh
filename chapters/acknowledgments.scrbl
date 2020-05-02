@@ -7,16 +7,14 @@
 感谢无数同事同学，他们使用和评论了本书的前两版，又为第三版的漫长筹备提供了无价帮
 助。特别感激以下诸君的贡献，对他们我们深表谢忱。Oliver Danvy鼓励我们思考一阶组合
 式续文传递算法，并提出了一些饶有趣味的练习。Matthias Felleisen切中肯綮的分析改善
-了一些章节的设计。Amr Sabry提出了许多有用的建议，在第九章的草稿中发现了至少一个
-极难察觉的问题。Benjamin Pierce自使用本书第一版授课以来提出了一系列深入见解，其
-中大半已为我们采用。Gary Leavens对第二版的初稿提出了极为细致而珍贵的评论，包括许
-多详细的修改建议。Stephanie Weirich在本书第二版第七章的类型推导代码中发现了一个
-不易察觉的问题。Ryan Newton除了阅读第二章草稿之外，又承担了一个艰巨任务：为该版
-的每道练习题推荐难度等级。单中杰从第三版初稿开始授课，提供了大量有益的评论。
+了一些章节的设计。Amr Sabry提出了许多有用的建议，在@secref{oac}的草稿中发现了至
+少一个极难察觉的问题。Benjamin Pierce自使用本书第一版授课以来提出了一系列深入见
+解，其中大半已为我们采用。Gary Leavens对第二版的初稿提出了极为细致而珍贵的评论，
+包括许多详细的修改建议。Stephanie Weirich在本书第二版@secref{types}的类型推导代
+码中发现了一个不易察觉的问题。Ryan Newton除了阅读@secref{da}草稿之外，又承担了一
+个艰巨任务：为该版的每道练习题推荐难度等级。单中杰从第三版初稿开始授课，提供了大
+量有益的评论。
 
-Kevin Millikin、Arthur Lee、Roger Kirchner、Max Hailperin和Erik Hilsdale都用了第
-二版的初稿。Will Clinger、Will Byrd、Joe Near和Kyle Blocher都使用了本版草稿。他
-们的评论弥足珍贵。Ron Garcia、Matthew Flatt、Shriram Krishnamurthi、Steve Ganz、
 Gregor Kiczales、Marlene Miller、Galen Williamson、Dipanwita Sarkar、Steven
 Bogaerts、Albert Rossi、Craig Citro、Christopher Dutchyn、Jeremy Siek和Neil
 Ching也认真阅读并进行了评论。

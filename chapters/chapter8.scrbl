@@ -117,7 +117,7 @@ m1 take b}和@tt{from m1 take c}绑定到适当的值，模块定义之后在它
 
 为了同@emph{简单变量} (@emph{simple variable})却别，我们称这些新变量为@emph{受限
 变量} (@emph{qualified})。在传统语言中，受限变量写作@tt{m1.a}、@tt{m1:a}或
-@tt{m1::a}。在第9章探讨的面向对象语言中，@tt{m1.a}常表示其他内容。
+@tt{m1::a}。在@secref{oac}探讨的面向对象语言中，@tt{m1.a}常表示其他内容。
 
 我们说接口@emph{提出} (@emph{offer})（或称@emph{公布} (@emph{advertise})，或称
 @emph{承诺} (@emph{promise})）三个整型值，主体@emph{供应}（@emph{supply}或
