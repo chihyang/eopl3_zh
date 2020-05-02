@@ -66,8 +66,8 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 
  @item{匹配@${\neg c}的字符串只含一个@${c}之外的字符。}
 
- @item{匹配@${\mathit{RS}}的字符串由匹配@${\mathit{R}}和匹配@${\mathit{S}}的字串
- 相接而得。这叫做@emph{串联} (@emph{concatenation})。}
+ @item{匹配@${\mathit{RS}}的字符串由匹配@${\mathit{R}}和匹配@${\mathit{S}}的字符
+ 串相接而得。这叫做@emph{串联} (@emph{concatenation})。}
 
  @item{匹配@${\mathit{R} \cup \mathit{S}}的字符串匹配@${\mathit{R}}或
  @${\mathit{S}}。这有时写作@${\mathit{R} \mid \mathit{S}}，叫做@emph{并联}
