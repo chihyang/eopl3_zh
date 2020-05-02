@@ -65,8 +65,8 @@ specification})。扫描器取一字符序列，生成词牌序列。
 (@emph{syntactic})或@emph{语法} (@emph{grammatical})结构。解析器取一词牌序列（由
 扫描器给出），生成一棵抽象语法树。
 
-设计前端的标准方式是使用@emph{解析器生成器} (@emph{parser generator})。解析器制
-造机是一程序，取一词法规范和语法，生成一扫描器和解析器。
+设计前端的标准方式是使用@emph{解析器生成器} (@emph{parser generator})。解析器生
+成器是一程序，取一词法规范和语法，生成一扫描器和解析器。
 
 @nested[#:style eopl-figure]{
 
