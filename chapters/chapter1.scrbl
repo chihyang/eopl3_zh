@@ -305,7 +305,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 }
 
-@subsection[#:tag "dsug"]{语法定义法}
+@subsection[#:tag "s1.1.2"]{语法定义法}
 
 前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为了方便，我们展
 示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，但

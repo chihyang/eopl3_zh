@@ -133,9 +133,69 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 
 通常，词牌的内部结构只与扫描器和解析器相关，所以我们不再详加介绍。
 
-
-
 @section[#:tag "B.2"]{解析}
+
+解析过程将词牌序列组织成有层次的语法结构，如表达式，语句和块。这就像用从句组织句
+子。语言的语法结构通常由BNF定义，也叫做@emph{上下文无关语法} (@emph{context-free
+grammar})（@secref{s1.1.2}）。
+
+解析器取一词牌序列作为输入，输出一棵抽象语法树（@secref{s2.5}）。SLLGEN生成的抽
+象语法树可用@tt{define-datatype}描述。对给定的语法，每个非终止符都对应一个数据类
+型。对每个非终止符，每个以其为左边内容的生成式都对应一个变体。式子右边出现的每个
+非终止符，标识符和数字都对应变体中的一个字段。@secref{s2.5}有一个简单示例。当语
+法中有多个非终止符时，可以考虑练习4.22中的语法。
+
+@envalign*{
+      \mathit{Statement} &::= @tt{{ @m{\mathit{Statement}} ; @m{\mathit{Statement}} }} \\[-3pt]
+                         &::= @tt{while @m{\mathit{Expression}} do @m{\mathit{Statement}}} \\[-3pt]
+                         &::= @tt{@m{\mathit{Identifier}} := @m{\mathit{Expression}}} \\[-3pt]
+     \mathit{Expression} &::= \mathit{Identifier} \\[-3pt]
+                         &::= @tt{(@m{\mathit{Expression}} - @m{\mathit{Expression}})}
+                         }
+
+这个语法产生的树由如下数据类型描述：
+
+@nested{
+@racketblock[
+(define-datatype statement statement?
+  (compound-statement
+    (stmt1 statement?)
+    (stmt2 statement?))
+  (while-statement
+    (test expression?)
+    (body statement?))
+  (assign-statement
+    (lhs symbol?)
+    (rhs expression?)))
+
+(define-datatype expression expression?
+  (var-exp
+    (var symbol?))
+  (diff-exp
+    (exp1 expression?)
+    (exp2 expression?)))
+]
+
+式子右边的每个非终止符对应的树作为一个字段；标识符对应的符号作为一个字段。变体名
+字在用SLLGEN写语法时指定。字段名自动生成；这里，我们给字段起了一些便于记忆的名字。
+例如，输入
+
+@verbatim|{{x := foo; while x do x := (x - bar)}}|
+
+产生输出
+
+@racketblock[
+#(struct:compound-statement
+   #(struct:assign-statement x #(struct:var-exp foo))
+   #(struct:while-statement
+      #(struct:var-exp x)
+      #(struct:assign-statement x
+         #(struct:diff-exp
+            #(struct:var-exp x)
+            #(struct:var-exp bar)))))
+]
+
+}
 
 @section[#:tag "B.3"]{SLLGEN中的扫描器和解析器}
 

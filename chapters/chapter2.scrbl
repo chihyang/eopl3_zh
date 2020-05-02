@@ -1114,7 +1114,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 }
 
-@section[#:tag "asir"]{抽象语法及其表示}
+@section[#:tag "s2.5"]{抽象语法及其表示}
 
 语法通常指定递推数据结构的具体表示方式，后者使用前者生成的字符串或值。这种表示叫
 做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external})表示。
