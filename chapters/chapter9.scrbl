@@ -1757,7 +1757,7 @@ interface stringable
 TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境。
 
 要构建静态类环境，@tt{initialize-static-class-env!}首先将其设置为空，然后为类
-@tt{object}添加绑定。接着它遍历各个类和接口，给静态类环境添加适当的内容。
+@tt{object}添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
 @racketblock[
 @#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}

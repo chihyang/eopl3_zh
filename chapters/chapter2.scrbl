@@ -1004,8 +1004,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
    (right bintree?)))
 ]
 
-为二叉树实现过程@tt{bintree-to-list}，则@tt{(bintree-to-list (interior-node 'a
-(leaf-node 3) (leaf-node 4)))}返回列表：
+实现二叉树过程@tt{bintree-to-list}，@tt{(bintree-to-list (interior-node 'a
+(leaf-node 3) (leaf-node 4)))}应返回列表：
 
 @racketblock[
 (interior-node
@@ -1260,9 +1260,8 @@ question]{52页}）的字符串。
                                   &::= \normalfont{@tt{(@m{\mathit{Lc\mbox{-}Exp}} @m{\{\mathit{Lc\mbox{-}Exp}\}^{*}})}} \\[-3pt]
                                   &\mathrel{\phantom{::=}} \fbox{@tt{app-exp (rator rands)}}}
 
-那么字段@tt{bound-vars}的谓词可写作@tt{(list-of identifier?)}，字段@tt{rands}的
-谓词可写作@tt{(list-of lc-exp?)}。以这种方式写出该语法的@tt{define-datatype}和解
-析器。
+那么字段@tt{bound-vars}的谓词可写作@tt{(list-of identifier?)}，@tt{rands}的谓词
+可写作@tt{(list-of lc-exp?)}。以这种方式写出该语法的@tt{define-datatype}和解析器。
 
 }
 }
