@@ -10,6 +10,7 @@
 \renewcommand{\Ssectionstar}[1]{\chapter*{#1}\markboth{#1}{#1}\thispagestyle{empty}}
 \renewcommand{\Ssectionstarx}[2]{\Ssectionstar{#2}\addcontentsline{toc}{chapter}{#1}\markboth{#1}{#1}\thispagestyle{empty}}
 \renewcommand{\Ssubsectionstarx}[2]{\phantomsection\Ssubsectionstar{#2}\addcontentsline{toc}{section}{#1}}
+\renewcommand{\Ssubsubsectionstarx}[2]{\phantomsection\Ssubsubsectionstar{#2}\addcontentsline{toc}{subsection}{#1}}
 \newtheorem{sdef}{定义}[section]
 \newtheorem{sthm}{定理}[section]
 \renewcommand{\proofname}{证明}
