@@ -305,7 +305,7 @@ SLLGEN中的语法是由下列语法描述的列表：
 哪一非终止符，(2) 正在解析的字符串中的首个符号（词牌）。这种形式的语法叫做
 @${LL(1)}语法；SLLGEN表示Scheme @${LL(1)} 解析器@bold{生成}器（Scheme @${LL(1)}
 parser GENerator）。在实践中，这有些过于严格了，但足以应付本书需要。如果输入语法
-不满足这一条件，SLLGEN给出一条警告。
+不满足这一条件，SLLGEN会给出一条警告。
 
 @subsection[#:style 'unnumbered #:tag "B.3-operations"]{SLLGEN的操作}
 
@@ -331,7 +331,6 @@ SLLGEN也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 流。过程@tt{sllgen:make-rep-loop}取一字符串，一个单参数过程，一个流式解析器，生
 成一个读入-求值-打印循环，以指定字符串为标准输出中的提示符，从标准输入读入字符，
 解析它们，然后以指定过程处理抽象语法树，将结果打印出来。例如：
-
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -382,3 +381,240 @@ SLLGEN也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 
 @subsection[#:style 'unnumbered #:tag "B.3-arbno"]{@tt{arbno}和
 @tt{separated-list}模板关键字}
+
+@tt{arbno}关键字是语法中的克莱尼星号：它匹配重复任意次数的条目。例如，生成式
+
+@nested{
+
+@$${\mathit{statement} ::= @tt{{ @${\{statement @tt{;}\}^{*}} }}}
+
+在SLLGEN中可写作
+
+@racketblock[
+(define grammar-a2
+  '((statement
+      ("{" (arbno statement ";") "}")
+      compound-statement)
+     ...))
+]
+
+这匹配一条复合语句，由任意数量、分号分隔的语句序列组成。
+
+}
+
+@tt{arbno}在抽象语法树中对应单个字段。该字段包含一个@emph{列表}，由@tt{arbno}内
+的非终止符数据组成。我们的例子生成如下数据类型：
+
+@racketblock[
+(define-datatype statement statement?
+  (compound-statement
+    (compound-statement32 (list-of statement?)))
+  ...)
+]
+
+简单交互为：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+> (define scan&parse2
+    (sllgen:make-string-parser scanner-spec-a grammar-a2))
+
+> (scan&parse2 "{x := foo; y := bar; z := uu;}")
+(compound-statement
+  ((assign-statement x (var-exp foo))
+   (assign-statement y (var-exp bar))
+   (assign-statement z (var-exp uu))))
+}|
+}
+
+我们可以把非终止符序列放入@tt{arbno}中。这时，节点中会有多个字段，每个对应一个非
+终止符；每个字段包含一个语法树列表。例如：
+
+@racketblock[
+(define grammar-a3
+  '((expression (identifier) var-exp)
+     (expression
+       ("let" (arbno identifier "=" expression) "in" expression)
+       let-exp)))
+
+(define scan&parse3
+  (sllgen:make-string-parser scanner-spec-a grammar-a3))
+]
+
+生成数据类型
+
+@racketblock[
+(define-datatype expression expression?
+  (var-exp (var-exp4 symbol?))
+  (let-exp
+    (let-exp9 (list-of symbol?))
+    (let-exp7 (list-of expression?))
+    (let-exp8 expression?)))
+]
+
+这里是运用该语法的例子：
+
+@nested{
+@nested[#:style 'code-inset]{
+@verbatim|{
+> (scan&parse3 "let x = y u = v in z")
+(let-exp
+  (x u)
+  ((var-exp y) (var-exp v))
+  (var-exp z))
+}|
+}
+
+定义@tt{(arbno identifier "=" expression)}生成两个列表：标识符列表和表达式列表。
+这很方便，因为我们的解释器能直接从中取出一部分表达式。
+
+}
+
+对某些语言的语法，在列表中只用分隔符，而不用结束符会更方便。这十分常见，因此，
+SLLGEN内置这种操作。我们可以写
+
+@racketblock[
+(define grammar-a4
+  '((statement
+      ("{" (separated-list statement ";") "}")
+      compound-statement)
+     ...))
+]
+
+它生成数据类型
+
+@racketblock[
+(define-datatype statement statement?
+  (compound-statement
+    (compound-statement103 (list-of statement?)))
+  ...)
+]
+
+这是简单交互的例子：
+
+@nested{
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+> (define scan&parse4
+    (sllgen:make-string-parser scanner-spec-a grammar-a4))
+> (scan&parse4 "{}")
+(compound-statement ())
+> (scan&parse4 "{x:= y; u := v ; z := t}")
+(compound-statement
+  ((assign-statement x (var-exp y))
+   (assign-statement u (var-exp v))
+   (assign-statement z (var-exp t))))
+> (scan&parse4 "{x:= y; u := v ; z := t ;}")
+Error in parsing: at line 1
+Nonterminal <seplist3> can’t begin with string "}"
+}|
+}
+
+在本例中，输入字符串有一个结束分号，与语法不符，所以报错。
+
+}
+
+类似于@tt{arbno}，我们可以在@tt{separated-list}关键字中放置任意非终止符序列。这
+时，节点中会有多个字段，每个对应一个非终止符；每个字段包含一个语法树列表。这和
+@tt{arbno}生成的数据完全相同；不同的只是具体语法。
+
+我们偶尔会嵌套@tt{arbno}和@tt{separated-list}。@tt{arbno}内的非终止符生成一个列
+表，所以@tt{arbno}内的@tt{arbno}内的非终止符生成列表的列表。
+
+举个例子，考虑与@tt{grammar-a4}类似的@tt{compound-statement}，但它支持多赋值：
+
+@racketblock[
+(define grammar-a5
+  '((statement
+      ("{"
+        (separated-list
+          (separated-list identifier ",")
+          ":="
+          (separated-list expression ",")
+          ";")
+        "}")
+      compound-statement)
+     (expression (number) lit-exp)
+     (expression (identifier) var-exp)))
+]
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+> (define scan&parse5
+    (sllgen:make-string-parser scanner-spec-a grammar-a5))
+}|
+}
+
+它为@tt{statement}生成如下数据类型：
+
+@racketblock[
+(define-datatype statement statement?
+  (compound-statement
+    (compound-statement4 (list-of (list-of symbol?)))
+    (compound-statement3 (list-of (list-of expression?)))))
+]
+
+一般的交互如下：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+> (scan&parse5 "{x,y := u,v ; z := 4; t1, t2 := 5, 6}")
+(compound-statement
+  ((x y) (z) (t1 t2))
+  (((var-exp u) (var-exp v))
+    ((lit-exp 4))
+    ((lit-exp 5) (lit-exp 6))))
+}|
+}
+
+这里，@tt{compound-statement}有两个字段：标识符列表的列表，对应的表达式列表的列
+表。本例中，我们用@tt{separated-list}代替了@tt{arbno}，但是@tt{arbno}也会生成同
+样的数据。
+
+@exercise[#:level 1 #:tag "exB.1"]{
+
+下列语法按照通常的算数操作符优先级，定义了算数操作表达式：
+
+@envalign*{
+         \mathit{Arith\mbox{-}exp} &::= \mathit{Arith\mbox{-}term} \ \{\mathit{Additive\mbox{-}op} \mathit{Arith\mbox{-}term}\}^{*} \\[-3pt]
+        \mathit{Arith\mbox{-}term} &::= \mathit{Arith\mbox{-}factor} \ \{\mathit{Multiplicative\mbox{-}op} \mathit{Arith\mbox{-}factor}\}^{*} \\[-3pt]
+      \mathit{Arith\mbox{-}factor} &::= \mathit{Number} \\[-3pt]
+                                   &::= @tt{( @m{\mathit{Arith\mbox{-}expr}} )} \\[-3pt]
+          \mathit{Arith\mbox{-}op} &::= @tt{+} \mid @tt{-} \\[-3pt]
+ \mathit{Multiplicative\mbox{-}op} &::= @tt{*} \mid @tt{/}
+                         }
+
+这套语法是说，每个算数表达式是非空项序列的和；每一项都是非空因数序列的生成式；每
+个因数是一常数或者括号表达式。
+
+用SLLGEN写出词法规范和语法，根据这套语法扫描和解析。验证这套语法能正确处理优先级，
+那么，@tt{3+2*66-5}能正确分组为@${3 + (2 \times 66) - 5}。
+
+}
+
+@exercise[#:level 2 #:tag "exB.2"]{
+
+上面的语法为什么不能用@tt{separated-list}写？
+
+}
+
+@exercise[#:level 2 #:tag "exB.3"]{
+
+定义一个解释器，取练习B.1中解析器生成的抽象语法树，将其当作算数表达式求值。解析
+器处理通常的算数操作优先级；但解释器要处理关联性，即，确保同一优先级（比如加和减）
+的操作从左向右进行。由于这些表达式中没有变量，解释器不需要取环境参数。
+
+}
+
+@exercise[#:level 2 #:tag "exB.4"]{
+
+扩展前一道练习中的语言和解释器，加入变量。这个新解释器需要环境参数。
+
+}
+
+@exercise[#:level 1 #:tag "exB.5"]{
+
+给语言和解释器添加单参数取反操作，使之能正确处理输入@tt{3*-2}。
+
+}
