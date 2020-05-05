@@ -615,6 +615,6 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 @exercise[#:level 1 #:tag "exB.5"]{
 
-给语言和解释器添加单参数取反操作，使之能正确处理输入@tt{3*-2}。
+给语言和解释器添加单参数操作取反，使之能正确处理输入@tt{3*-2}。
 
 }
