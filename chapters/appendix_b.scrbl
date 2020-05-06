@@ -595,7 +595,7 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 @exercise[#:level 2 #:tag "exB.2"]{
 
-上面的语法为什么不能用@tt{separated-list}写？
+上面的语法为什么不能写成 @tt{separated-list}？
 
 }
 

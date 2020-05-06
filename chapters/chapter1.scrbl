@@ -1128,7 +1128,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。@linebreak{}
 
 @nested[#:style tip]{
- @centered{@bold{依照语法！}}
+ @centered{@bold{遵循语法！}}
 
  @para[#:style tip-content]{定义过程处理归纳式数据时，程序的结构应当反映数据的结
  构。}}
@@ -1147,7 +1147,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 @section[#:tag "apca"]{辅助过程和上下文参数}
 
-窍门@emph{依照语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这一过
+窍门@emph{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这一过
 程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0 @${v_0}) (1
 @${v_1}) (2 @${v_2}) ...)}。
 
@@ -1204,7 +1204,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 另一个例子是向量求和。
 
-要求列表中各项的和，我们可以依照语法，递归处理列表的余项。那么我们的过程看起来像
+要求列表中各项的和，我们可以遵循语法，递归处理列表的余项。那么我们的过程看起来像
 是：
 
 @; racketblock with contracts
