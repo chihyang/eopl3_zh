@@ -10,7 +10,9 @@
           scribble/example
           scriblib/footnote
           racket/sandbox)
-@(define (List-of-Int) ($ "List\\mbox{-}of\\mbox{-}Int"))
+@(define (List-of-Int-$) @${\mathit{List\mbox{-}of\mbox{-}Int}})
+@(define (List-of-Int-m) @m{\mathit{List\mbox{-}of\mbox{-}Int}})
+@(define (List-of-Int-raw) "\\mathit{List\\mbox{-}of\\mbox{-}Int}")
 
 @mainmatter
 
@@ -165,14 +167,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 }
 }
 
-我们用@${Int}表示所有整数的集合，用@List-of-Int[]表示所有整数列表
+我们用@${Int}表示所有整数的集合，用@List-of-Int-$[]表示所有整数列表
 的集合。
 
 @; @def[ #:title
 @; （整数列表，自底向上）
 @; ]{
 
-@; 集合@List-of-Int[]是满足如下两条性质的最小Scheme列表集合：
+@; 集合@List-of-Int-$[]是满足如下两条性质的最小Scheme列表集合：
 
 @; @itemlist[#:style 'ordered
 
@@ -183,14 +185,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @; ]
 @; }
 @env["sdef" #:opt (list (bracket "整数列表，自底向上"))]{
- 集合@m{List\mbox{-}of\mbox{-}Int}是满足如下两条性质的最小Scheme列表集合：
+ 集合@List-of-Int-m[]是满足如下两条性质的最小Scheme列表集合：
 
  \begin{enumerate}
 
-  \item @m{\normalfont{@tt{()}} \in List\mbox{-}of\mbox{-}Int}，或
+  \item @m{\normalfont{@tt{()}} \in @List-of-Int-raw[]}，或
 
-  \item 若 @m{n \in Int}且@m{l \in List\mbox{-}of\mbox{-}Int}，则
-  @m{\normalfont{@tt{(@m{n} . @m{l})}} \in List\mbox{-}of\mbox{-}Int}。
+  \item 若 @m{n \in Int}且@m{l \in @List-of-Int-raw[]}，则
+  @m{\normalfont{@tt{(@m{n} . @m{l})}} \in @List-of-Int-raw[]}。
 
  \end{enumerate}
 }
@@ -210,54 +212,54 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @; }
 @env["sdef" #:opt (list (bracket "整数列表，推理规则"))]{
 
- @mp{\normalfont{@tt{()}} \in List\mbox{-}of\mbox{-}Int}
+ @mp{\normalfont{@tt{()}} \in @List-of-Int-raw[]}
 
- @mp{\infer{\normalfont{@tt{(@m{n} . @m{l})}} \in List\mbox{-}of\mbox{-}Int}
-           {n \in Int & l \in List\mbox{-}of\mbox{-}Int}}
+ @mp{\infer{\normalfont{@tt{(@m{n} . @m{l})}} \in @List-of-Int-raw[]}
+           {n \in Int & l \in @List-of-Int-raw[]}}
 
 }
 
-这三个定义等价。来看看如何用它们生成一些@List-of-Int[]的元素。
+这三个定义等价。来看看如何用它们生成一些@List-of-Int-$[]的元素。
 
 @itemlist[#:style 'ordered
 
  @item{由定义1.1.4的性质1或定义1.1.5的规则1，@tt{()}是整数列表。}
 
  @item{由定义1.1.4的性质2，@tt{(14 . ())}是整数列表。因为@tt{14}是整数，@tt{()}
-       是整数列表。写成@List-of-Int[]规则二的形式，就是
+       是整数列表。写成@List-of-Int-$[]规则二的形式，就是
 
-       @$${\infer{@tt{(14 . ())} \in @List-of-Int{}} {@tt{14} \in Int & @tt{()}
-           \in @List-of-Int{}}} }
+       @$${\infer{@tt{(14 . ())} \in @List-of-Int-$[]} {@tt{14} \in Int &
+           @tt{()} \in @List-of-Int-$[]}} }
 
  @item{由定义1.1.4的性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，
-       @tt{(14 . ())}是整数列表。仍写成@List-of-Int[]规则二的形式，是
+       @tt{(14 . ())}是整数列表。仍写成@List-of-Int-$[]规则二的形式，是
 
-       @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int{}} {@tt{3} \in Int &
-           @tt{(14 . ())} \in @List-of-Int{}}} }
+       @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]} {@tt{3} \in Int &
+           @tt{(14 . ())} \in @List-of-Int-$[]}} }
 
  @item{由定义1.1.4的性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为 @tt{-7}
-       是整数，@tt{(3 . (14 . ()))}是整数列表。再次写成@List-of-Int[]规则二的
+       是整数，@tt{(3 . (14 . ()))}是整数列表。再次写成@List-of-Int-$[]规则二的
        形式，是
 
-       @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}} {@tt{-7} \in
-           Int & @tt{(3 . (14 . ()))}\in @List-of-Int{}}} }
+       @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]} {@tt{-7} \in
+           Int & @tt{(3 . (14 . ()))}\in @List-of-Int-$[]}} }
 
  @item{不按照这种方式得到的都不是整数列表。}
 
 ]
 
 改点缀表示法为列表表示法，可知 @tt{()}、 @tt{(14)}、 @tt{(3 14)} 以及 @tt{(-7 3
-14)} 都是@List-of-Int[]的元素。
+14)} 都是@List-of-Int-$[]的元素。
 
-还可以结合各条规则来证明@${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}}，以见
+还可以结合各条规则来证明@${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}，以见
 出整个推理过程。下面的树状图叫做@emph{推导} (@emph{derivation}) 或@emph{推理树}
 (@emph{deduction tree})。
 
-@$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int{}}
+@$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}
           {@tt{-7} \in Int &
-           \infer{@tt{(3 . (14 . ()))} \in @List-of-Int{}}
-                 {@tt{3} \in Int & \infer{@tt{(14 . ())} \in @List-of-Int{}}
-                                       {@tt{14} \in Int & @tt{()} \in @List-of-Int{}}}
+           \infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]}
+                 {@tt{3} \in Int & \infer{@tt{(14 . ())} \in @List-of-Int-$[]}
+                                       {@tt{14} \in Int & @tt{()} \in @List-of-Int-$[]}}
           }}
 
 @exercise[#:level 1 #:tag "ex1.1"]{
@@ -311,22 +313,22 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，但
 也能用来定义值的集合。
 
-例如，集合 @List-of-Int[]可用语法定义为：
+例如，集合 @List-of-Int-$[]可用语法定义为：
 
 @; @grammar : (grammar production ...)
 @; @production : (production name expression #:code code-item)
 @; @code-item : elem
 @; @grammar{
 
-@envalign*{List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
-List\mbox{-}of\mbox{-}Int &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
+@envalign*{@List-of-Int-raw[] &::= @tt{()} \\
+@List-of-Int-raw[] &::= @tt{(@m{Int} . @List-of-Int-m[])}
 }
 
 @; }
 
-这两条规则对应上述定义 1.1.4 中的两条属性。规则一是说空表属于@List-of-Int[]；规
-则二是说，若 @${n} 属于 @${Int} 且 @${l} 属于 @List-of-Int[]，则@tt{(@${n}
-. @${l})} 属于 @List-of-Int[]。这些规则叫做@emph{语法}。
+这两条规则对应上述定义 1.1.4 中的两条属性。规则一是说空表属于@List-of-Int-$[]；规
+则二是说，若 @${n} 属于 @${Int} 且 @${l} 属于 @List-of-Int-$[]，则@tt{(@${n}
+. @${l})} 属于 @List-of-Int-$[]。这些规则叫做@emph{语法}。
 
 来看看该定义的各个部分，其中有：
 
@@ -360,22 +362,22 @@ List\mbox{-}of\mbox{-}Int &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
 们的语法可以写作
 
 @envalign*{
-List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
-                          &::= @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})}
+@List-of-Int-raw[] &::= @tt{()} \\
+                          &::= @tt{(@m{Int} . @List-of-Int-m[])}
 }
 
 给同一句法类别编写一组规则时，也可以只写一次@${::=}和左边内容，随后的各个右边内
 容用特殊符号“@${\mid}”（竖线，读作@emph{或}）分隔。 用“@${\mid}”，
-@List-of-Int[]的语法可写成：
+@List-of-Int-$[]的语法可写成：
 
 
-@$${@List-of-Int[] ::= @tt{()} @$${\mid} @tt{(@${Int} . @List-of-Int[])}}
+@$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@${Int} . @List-of-Int-$[])}}
 
 另一种简写是 @emph{克莱尼星号} (@emph{Kleene Star})，写作 @${\{...\}^*}。当它出
 现在右边时，表示一个序列，由任意多个花括号之间的内容组成。用克莱尼星号，
-@List-of-Int[] 的定义可以简写为
+@List-of-Int-$[] 的定义可以简写为
 
-@$${@List-of-Int[] ::= @tt{(@${\{Int\}^*})}}
+@$${@List-of-Int-$[] ::= @tt{(@${\{Int\}^*})}}
 
 这也包含没有任何内容的情况。如果内容出现 0 次，得到的是空字符串。
 
@@ -416,21 +418,22 @@ List\mbox{-}of\mbox{-}Int &::= @tt{()} \\
 推导化为
 
 @envalign*{
- List\mbox{-}of\mbox{-}Int &\Rightarrow @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})} \\
-                           &\Rightarrow @tt{(14 . @m{List\mbox{-}of\mbox{-}Int})} \\
+ @List-of-Int-raw[] &\Rightarrow @tt{(@m{Int} . @List-of-Int-m[])} \\
+                           &\Rightarrow @tt{(14 . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(14 . ())}}
 
 非终止符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
 
 @envalign*{
- List\mbox{-}of\mbox{-}Int &\Rightarrow @tt{(@m{Int} . @m{List\mbox{-}of\mbox{-}Int})} \\
+ @List-of-Int-raw[] &\Rightarrow @tt{(@m{Int} . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(@m{Int} . ())} \\
                            &\Rightarrow @tt{(14 . ())}
 }
 
 @exercise[#:level 1 #:tag "ex1.4"]{
 
- 写出从 @m{List\mbox{-}of\mbox{-}Int} 到 @tt{(-7 . (3 . (14 ())))} 的推导。
+ 写出从 @List-of-Int-m[] 到 @tt{(-7 . (3 . (14 ())))} 的推导。
+ @linebreak[]
 
 }
 
