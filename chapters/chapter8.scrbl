@@ -24,10 +24,10 @@
  效工具，但当程序更大或有多个来源时还是不够。}
 
  @item{我们需要一种方式加强抽象边界。在@secref{da}，我们介绍了抽象数据类型的思想。
- 在类型的实现中，类型的值只能通过类型接口中的过程创建和操作。我们把这叫做
- @emph{抽象边界} (@emph{abstraction boundary})。如果程序尊重这种界限，我们可以改
- 变数据类型的实现。但是，如果某些代码打破了抽象，依赖实现细节，那么我们就无法任
- 意修改实现而不破坏其他代码。}
+ 在类型的实现中，类型的值只能通过类型接口中的过程创建和操作。我们把这叫做@emph{抽象边界}
+ (@emph{abstraction boundary})。如果程序尊重这种界限，我们可以改变数据类型的实现。
+ 但是，如果某些代码打破了抽象，依赖实现细节，那么我们就无法任意修改实现而不破坏
+ 其他代码。}
 
  @item{最后，我们需要一种方式，将这些部分灵活组合，那么同一部分可复用于不同地方。}
 
@@ -37,9 +37,9 @@
 如何用类型系统创建和强化抽象边界。
 
 我们的模块语言中，程序包含一系列@emph{模块定义} (@emph{module definition})，后跟
-待求值的表达式。每个模块定义把一个名字绑定到一个@emph{模块}。创建的模块可能是
-@emph{简单模块} (@emph{simple module})，即类似环境的一些绑定；也可能是@emph{模块
-过程} (@emph{module procedure})，取一模块，生成另一模块。
+待求值的表达式。每个模块定义把一个名字绑定到一个@emph{模块}。创建的模块可能
+是@emph{简单模块} (@emph{simple module})，即类似环境的一些绑定；也可能是@emph{模
+块过程} (@emph{module procedure})，取一模块，生成另一模块。
 
 每个模块都有一套@emph{接口} (@emph{interface})。简单模块具有@emph{简单接口}
 (@emph{simple interface})，接口列出模块提供的绑定及其类型。模块过程的接口指定参
@@ -119,8 +119,8 @@ m1 take b}和@tt{from m1 take c}绑定到适当的值，模块定义之后在它
 变量} (@emph{qualified})。在传统语言中，受限变量写作@tt{m1.a}、@tt{m1:a}或
 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，@tt{m1.a}常表示其他内容。
 
-我们说接口@emph{提出} (@emph{offer})（或称@emph{公布} (@emph{advertise})，或称
-@emph{承诺} (@emph{promise})）三个整型值，主体@emph{供应}（@emph{supply}或
+我们说接口@emph{提出} (@emph{offer})（或称@emph{公布} (@emph{advertise})，或
+称@emph{承诺} (@emph{promise})）三个整型值，主体@emph{供应}（@emph{supply}或
 @emph{provide}）（或称@emph{输出} (@emph{export})）这些值。当模块主体供应的值类
 型与接口命名变量时公布的相符时，称主体@emph{满足} (@emph{satisfy})接口。
 
@@ -274,9 +274,9 @@ SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
            \mathit{ModuleDefn} &::= @tt{module} \mathit{Identifier} @tt{interface} \mathit{Iface} @tt{body} \mathit{ModuleBody} \\[-3pt]
             &\mathrel{\phantom{::=}} \fbox{@tt{a-module-definition (m-name expected-iface m-body)}}}
 
-简单模块的接口包含任意数量的声明。每个声明指定程序中一个变量的类型。我们称之为
-@emph{值声明} (@emph{value declaration})，因为要声明的变量表示一个值。在后面几节
-中，我们介绍其他种类的接口和声明。
+简单模块的接口包含任意数量的声明。每个声明指定程序中一个变量的类型。我们称之
+为@emph{值声明} (@emph{value declaration})，因为要声明的变量表示一个值。在后面几
+节中，我们介绍其他种类的接口和声明。
 
 @envalign*{
            \mathit{Iface} &::= @tt["["] \{\mathit{Decl}\}^{*} @tt["]"] \\[-3pt]
@@ -968,8 +968,8 @@ get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽�
 
 @subsubsection[#:style 'unnumbered #:tag "s8.2-transparent-types"]{透明类型}
 
-我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型或
-@emph{类型缩写} (@emph{type abbreviation})。
+我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型
+或@emph{类型缩写} (@emph{type abbreviation})。
 
 @nested[#:style eopl-example]{
 程序
@@ -1830,7 +1830,7 @@ actual-iface <: expected-iface
 OPAQUE-TYPES中的程序有固定的依赖关系。模块@tt{m4}可能依赖@tt{m3}和@tt{m2}，
 @tt{m2}依赖@tt{m1}。有时，我们说依赖关系是@emph{写死的} (@emph{hard-coded})。通
 常，这种写死的依赖关系会造成糟糕的程序设计，因为这使模块难以复用。本节，我们给系
-统添加名为@emph{模块过程} (@emph{module procedure})（有时又称 @emph{参数化模块}
+统添加名为@emph{模块过程} (@emph{module procedure})（有时又称@emph{参数化模块}
 (@emph{parameterized module})）的组件，以便复用模块。我们称这种新语言为
 PROC-MODULES。
 

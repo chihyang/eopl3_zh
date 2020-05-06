@@ -129,10 +129,10 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 @$${\infer{(n + 3) \in S}{n \in S}}
 
 这只是前一定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
-inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称作
-@emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分称
-作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。要罗列两
-个或更多假设，用“和”连接（见定义1.1.5）。没有假设的规则称作@emph{公理}
+inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称
+作@emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分
+称作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。要罗列
+两个或更多假设，用“和”连接（见定义1.1.5）。没有假设的规则称作@emph{公理}
 (@emph{axiom})。写公理时通常不加水平线，如：
 
 @$${0 \in S}
@@ -373,16 +373,16 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 @$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@${Int} . @List-of-Int-$[])}}
 
-另一种简写是 @emph{克莱尼星号} (@emph{Kleene Star})，写作 @${\{...\}^*}。当它出
-现在右边时，表示一个序列，由任意多个花括号之间的内容组成。用克莱尼星号，
+另一种简写是@emph{克莱尼星号} (@emph{Kleene Star})，写作 @${\{...\}^*}。当它出现
+在右边时，表示一个序列，由任意多个花括号之间的内容组成。用克莱尼星号，
 @List-of-Int-$[] 的定义可以简写为
 
 @$${@List-of-Int-$[] ::= @tt{(@${\{Int\}^*})}}
 
 这也包含没有任何内容的情况。如果内容出现 0 次，得到的是空字符串。
 
-星号的变体是 @emph{克莱尼加号} (@emph{Kleene Plus}) @${\{...\}^+}，表示一个或多
-个内容的序列。把上例中的@${^*}换成@${^+}，定义的句法类别是非空整数列表。
+星号的变体是@emph{克莱尼加号} (@emph{Kleene Plus}) @${\{...\}^+}，表示一个或多个
+内容的序列。把上例中的@${^*}换成@${^+}，定义的句法类别是非空整数列表。
 
 星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，@${Int^{*(c)}} 表示
 一个序列，包含任意数量的非终止符@${Int}元素，以非空字符序列 @${c} 分隔。这也包含
@@ -1202,7 +1202,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 (@emph{context}) 的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
 @tt{number-elements-from} 处理原列表的每个子列表。第二个参数告知我们子列表在原列
 表中的位置。随递归调用，它不减反增，因为我们每次经过原列表的一个元素。有时我们称
-之为@emph{上下文参数} (@emph{context argument})，或者 @emph{继承属性}
+之为@emph{上下文参数} (@emph{context argument})，或者@emph{继承属性}
 (@emph{inherited attribute})。
 
 另一个例子是向量求和。
@@ -1281,10 +1281,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 每道习题都假定 @tt{s} 是一个符号，@tt{n} 是一个非负整数，@tt{lst} 是一个列表，
 @tt{loi} 是一个整数列表，@tt{los} 是一个符号列表，@tt{slist} 是一个 s-list，
 @tt{x} 是任意 Scheme 值；类似地，@tt{s1} 是一个符号，@tt{los2} 是一个符号列表，
-@tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}，即一个过程，
-取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除非某个具体问题另有限制，不要对数
-据作其他假设。在这些习题中，不需要检查输入是否符合合约；对每个过程，都假定输入值
-是指定集合的成员。
+@tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}
+(@emph{predicate})，即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除
+非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不需要检查输入是否符
+合合约；对每个过程，都假定输入值是指定集合的成员。
 
 定义，测试和调试每个过程。你的定义应当有合约和用法注释，像本章这样。可以随便定义
 辅助过程，但是你定义的每个辅助过程都应该有其说明，如同 1.3 节那样。

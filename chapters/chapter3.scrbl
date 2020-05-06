@@ -13,9 +13,9 @@
 @title[#:style 'numbered #:tag "expr"]{表达式}
 
 本章研究变量绑定和及其作用范围。我们用一系列小型语言解释这些概念。我们为这些语言
-写出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为
-@emph{环境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的含
-义。
+写出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名
+为@emph{环境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的
+含义。
 
 @section[#:tag "s3.1"]{规范和实现策略}
 
@@ -949,7 +949,7 @@ in unpack x y = cons(u,cons(3,emptylist))
         \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
-在@tt{(proc @${var} @${body})}中，变量@${var}是 @emph{绑定变量} (@emph{bound
+在@tt{(proc @${var} @${body})}中，变量@${var}是@emph{绑定变量} (@emph{bound
 variable})或@emph{形式参数} (@emph{formal parameter})。在过程调用@tt{(call-exp
 @${exp_1} @${exp_2})}中，表达式@${exp_1}是@emph{操作符} (@emph{operator})，表达
 式@${exp_2}是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
@@ -1641,8 +1641,8 @@ in let fact = proc (n)
 
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
-在大多数编程语言中，变量只能以两种方式出现：@emph{引用} (@emph{reference})或
-@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在Scheme表达式
+在大多数编程语言中，变量只能以两种方式出现：@emph{引用} (@emph{reference})
+或@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在Scheme表达式
 
 @nested{
 @codeblock{(f x y)}
@@ -1814,7 +1814,7 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
 能会跨过很多等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
-depth})（或 @emph{静深} (@emph{static depth})）。由于惯用“从0开始的索引”，所以
+depth})（或@emph{静深} (@emph{static depth})）。由于惯用“从0开始的索引”，所以
 不计最后跨过的等深线。例如，在Scheme表达式
 
 @nested{

@@ -27,9 +27,9 @@
 息留在已知位置，同一个过程就能在当前和后续调用之间分享信息。
 
 我们把内存建模为从@emph{位置} (@emph{location})到值集合的的有限映射，并把这个值
-集合叫做@emph{可存储值} (@emph{storable values})。出于历史原因，我们称之为
-@emph{存储器} (@emph{store})。通常，一种语言中的可存储值与表达值相同，但不总是这
-样。这个选择是语言设计的一部分。
+集合叫做@emph{可存储值} (@emph{storable values})。出于历史原因，我们称之
+为@emph{存储器} (@emph{store})。通常，一种语言中的可存储值与表达值相同，但不总是
+这样。这个选择是语言设计的一部分。
 
 代表内存位置的数据结构叫做@emph{引用} (@emph{reference})。位置是内存中可用来存值
 的地方，引用是指向那个地方的数据结构。位置和引用的区别可以这样类比：位置就像文件，
@@ -333,8 +333,8 @@ end
 这条规则是说@tt{setref-exp}从左到右求操作数的值。第一个操作数的值必须是某个位置
 @${l}的引用。然后@tt{setref-exp}把第二个参数的值@${val}放到位置@${l}处，从而更新
 存储器。@tt{setref-exp}应该返回什么呢？它可以返回任何值。为了突出这种随机性，我
-们让它返回23。因为我们对@tt{setref-exp}的返回值不感兴趣，我们说这个表达式的执行
-@emph{求效果} (@emph{for effect})而不求值。
+们让它返回23。因为我们对@tt{setref-exp}的返回值不感兴趣，我们说这个表达式的
+执行@emph{求效果} (@emph{for effect})而不求值。
 
 @exercise[#:level 1 #:tag "ex4.6"]{
 
@@ -989,9 +989,9 @@ in begin
 @exercise[#:level 2 #:tag "ex4.21"]{
 
 之前，我们建议用赋值让两个相去很远的过程交换信息，这样二者之间的过程不需要知道，
-程序更加模块化。这样的赋值经常是暂时性的，只在执行函数调用时生效。向语言添加
-@emph{动态赋值} (@emph{dynamic assignment})（又称 @emph{流式绑定} (@emph{fluid
-binding})）组件，完成这一操作。生成式为：
+程序更加模块化。这样的赋值经常是暂时性的，只在执行函数调用时生效。向语言
+添加@emph{动态赋值} (@emph{dynamic assignment})（又称@emph{流式绑定}
+(@emph{fluid binding})）组件，完成这一操作。生成式为：
 
 @envalign*{
         \mathit{Expression} &::= @tt{setdynamic @m{\mathit{Identifier}} = @m{\mathit{Expression}} during @m{\mathit{Expression}}} \\[-3pt]
@@ -1128,7 +1128,7 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 3 #:tag "ex4.27"]{
 
-扩展前一道练习中的解答，增加 @emph{子程序} (@emph{subroutine})。我们把子程序当过
+扩展前一道练习中的解答，增加@emph{子程序} (@emph{subroutine})。我们把子程序当过
 程用，但是它不返回值，且其主体为语句而非表达式。此外，增加新语句子程序调用，扩展
 块语法，允许同时声明过程和子程序。这会如何影响指代值和表达值？如果在子程序调用中
 使用过程会怎样？反过来呢？
@@ -1584,10 +1584,10 @@ in let p = proc (x) proc(y)
 }|
 }
 
-它的值为4，因为@tt{x}和@tt{y}指向同一个位置，即@tt{b}的绑定。这种现象叫做
-@emph{变量别名} (@emph{variable aliasing})。这里@tt{x}和@tt{y}是同一个位置的别名
-（名字）。通常，我们不希望给一个变量赋值会改变另一个的值，所以别名会导致程序难以
-理解。
+它的值为4，因为@tt{x}和@tt{y}指向同一个位置，即@tt{b}的绑定。这种现象
+叫做@emph{变量别名} (@emph{variable aliasing})。这里@tt{x}和@tt{y}是同一个位置的
+别名（名字）。通常，我们不希望给一个变量赋值会改变另一个的值，所以别名会导致程序
+难以理解。
 
 }
 

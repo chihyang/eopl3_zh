@@ -22,7 +22,7 @@
 我们得能定位程序中所有依赖表示方式的部分。这就需要借助技巧@emph{数据抽象}
 (@emph{data abstraction}) 。
 
-数据抽象将数据类型分为两部分：@emph{接口} (@emph{interface}) 和 @emph{实现}
+数据抽象将数据类型分为两部分：@emph{接口} (@emph{interface}) 和@emph{实现}
 (@emph{implementation})。@emph{接口}告诉我们某类型表示什么数据，能对数据做什么处
 理，以及可由这些处理得出的性质。@emph{实现}给出数据的具体表示，以及处理数据表示
 的代码。
@@ -782,7 +782,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ]
 
 这里的名字@tt{var-exp}，@tt{var}，@tt{bound-var}，@tt{app-exp}，@tt{rator}和
-@tt{rand}分别是 @emph{变量表达式} (@emph{variable expression})，@emph{变量}
+@tt{rand}分别是@emph{变量表达式} (@emph{variable expression})，@emph{变量}
 (@emph{variable})，@emph{绑定变量} (@emph{bound variable})，@emph{调用表达式}
 (@emph{application expression})，@emph{操作符} (@emph{operator})和@emph{操作数}
 (@emph{operand})的缩写。
@@ -848,7 +848,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   @#,elem{@${\{@tt["("]variant\mbox{-}name \quad \{@tt["("]filed\mbox{-}name \quad predicate@tt[")"]\}^{*} @tt[")"]\}^{+}}})
 ]
 
-这新定义了一种数据类型，名为@${type\mbox{-}name}，它有一些 @emph{变体}
+这新定义了一种数据类型，名为@${type\mbox{-}name}，它有一些@emph{变体}
 (@emph{variants})。每个变体有一变体名，以及0或多个字段，每个字段各有其字段名和相
 对应的谓词。不管是否分属不同的类型，变体都不能重名。类型也不能重名，且类型名不能
 用作变体名。每个字段的谓词必须是一个Scheme谓词。
@@ -1174,11 +1174,11 @@ question]{结构式}@tt{define-datatype}提供了一种简洁的方式来定义�
 具体语法主要供人使用，抽象语法主要供计算机使用，既已区分二者，现在来看看如何将一
 种语法转换为另一种。
 
-具体语法若表示字符串集合，要得出对应的抽象语法树可能是件很复杂的任务。这个任务叫
-@emph{解析} (@emph{parsing})，由@emph{解析器} (@emph{parser})完成。因为写解析器
-通常比较麻烦，所以最好借由工具@emph{解析器生成器} (@emph{parser generator})完成。
-解析器生成器以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必须
-以某种机器能够理解的语言写成：写语法用的特定领域语言。有很多现成的解析器生成器。
+具体语法若表示字符串集合，要得出对应的抽象语法树可能是件很复杂的任务。这个任务叫@emph{解析}
+(@emph{parsing})，由@emph{解析器} (@emph{parser})完成。因为写解析器通常比较麻烦，
+所以最好借由工具@emph{解析器生成器} (@emph{parser generator})完成。解析器生成器
+以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必须以某种机器能
+够理解的语言写成：写语法用的特定领域语言。有很多现成的解析器生成器。
 
 如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，本节开头的lambda演
 算表达式指定了一个列表集合，如同@elem[#:style question]{47页}的
@@ -1287,8 +1287,8 @@ question]{52页}）的字符串。
                               &::= @tt{- @m{Prefix\mbox{-}exp} @m{Prefix\mbox{-}exp}}}
 
 那么@tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
-Łukasiewicz，称之为 @emph{波兰前缀表示法} (@emph{Polish prefix notation})。写一
-个解析器，将前缀列表表示法转换为抽象语法：
+Łukasiewicz，称之为@emph{波兰前缀表示法} (@emph{Polish prefix notation})。写一个
+解析器，将前缀列表表示法转换为抽象语法：
 
 @racketblock[
 (define-datatype prefix-exp prefix-exp?

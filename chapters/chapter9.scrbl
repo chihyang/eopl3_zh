@@ -14,8 +14,8 @@
 
 许多编程任务都需要程序通过接口管理某些状态。例如，文件系统有内部状态，但访问和修
 改那一状态只能通过文件系统的接口。状态常常涉及多个变量，为了维护状态的一致性，必
-须协同修改那些变量。因此，需要某种技术，确保组成状态的多个变量能协同更新。
-@emph{面向对象编程} (@emph{Object-oriented programming})正是用来完成此任务的技术。
+须协同修改那些变量。因此，需要某种技术，确保组成状态的多个变量能协同更新。@emph{面向对象编程}
+(@emph{Object-oriented programming})正是用来完成此任务的技术。
 
 在面向对象编程中，每种受管理的状态称为一个@emph{对象} (@emph{object})。一个对象
 中存有多个量，称为@emph{字段} (@emph{field})；有多个相关过程，称为@emph{方法}
@@ -57,11 +57,11 @@
 
 图9.1展示了这种语言的一个简单程序。它定义了继承于@tt{object}的类@tt{c1}。类
 @tt{c1}的每个对象都包含两个字段，名为@tt{i}和@tt{j}。字段叫做@emph{成员}
-(@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三个
-@emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
+(@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三
+个@emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
 @tt{countup}和@tt{getstate}。每个方法包含@emph{方法名} (@emph{method name})，若
-干@emph{方法变量} (@emph{method var})（又称 @emph{方法参数} (@emph{method
-parameters})），以及 @emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}的
+干@emph{方法变量} (@emph{method var})（又称@emph{方法参数} (@emph{method
+parameters})），以及@emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}的
 实例能够响应的@emph{消息}种类。有时，我们说成是“@tt{c1}的方法@tt{countup}”。
 
 @nested[#:style eopl-figure]{
@@ -178,15 +178,15 @@ in send o1 odd(13)}|
 语言包含了一个预先定义的类，名为@tt{object}，它没有任何方法或字段。由于类
 @tt{object}没有@tt{initialize}方法，因此无法创建它的对象。除@tt{object}之外的所
 有类都有唯一父类，但可以有许多子类。因此，由@tt{extends}得出的关系在类与类之间产
-生了树状结构，其根为@tt{object}。因为每个类至多只有一个直接超类，这是一种
-@emph{单继承} (@emph{single-inheritance})语言。有些语言允许类继承自多个超类。
-@emph{多继承} (@emph{multiple inheritance})虽然强大，却不无问题。在练习中，我们
+生了树状结构，其根为@tt{object}。因为每个类至多只有一个直接超类，这是一
+种@emph{单继承} (@emph{single-inheritance})语言。有些语言允许类继承自多个超类。@emph{多继承}
+(@emph{multiple inheritance})虽然强大，却不无问题。在练习中，我们
 考虑一些困难之处。
 
 术语@emph{继承}源于对宗谱的类比。我们常常引申这一类比，说类的@emph{祖先}
 (@emph{ancestor})（从类的父类到根部的类@tt{object}）和@emph{后代}
-(@emph{descendant})。如果@${c_2}是@${c_1}的后代，我们有时说@${c_2}是@${c_1}的
-@emph{子类} (@emph{subclass})，写作@${c_2 < c_1}。
+(@emph{descendant})。如果@${c_2}是@${c_1}的后代，我们有时说@${c_2}是@${c_1}的@emph{子类}
+(@emph{subclass})，写作@${c_2 < c_1}。
 
 如果类@${c_2}继承自类@${c_1}，@${c_1}的所有字段和方法都对@${c_2}的方法可见，除非
 在@${c_2}中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例可以在
@@ -1025,8 +1025,8 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.11"]{
 
-允许CLASSES指定每个方法是@emph{私有的} (@emph{private})，只能在持有类内访问；或
-@emph{受保护的} (@emph{protected})，只能在持有类及其后代中访问；或 @emph{公有的}
+允许CLASSES指定每个方法是@emph{私有的} (@emph{private})，只能在持有类内访问；
+或@emph{受保护的} (@emph{protected})，只能在持有类及其后代中访问；或@emph{公有的}
 (@emph{public})，各处都能访问。许多面向对象编程语言包含了某种形式的这一特性。
 
 }
@@ -1147,8 +1147,8 @@ in list(send o1 get-serial-number(),
 释器，而是用语法预处理器。写一个预处理器，将每个方法@${m}重命名为@$["m:@n"]的形
 式，其中@${n}是方法声明中参数的数量。同样地，它还必须根据操作数的数量，改变每个
 方法调用的名字。我们假定程序员在方法名中不使用@$[":@"]，但解释器接受使用@$[":@"]
-的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧的例子，名为
-@emph{名称混淆} (@emph{name mangling})。
+的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧的例子，名为@emph{名称混淆}
+(@emph{name mangling})。
 
 }
 
@@ -1203,9 +1203,9 @@ method similarpoints (pt)
 测试这一扩展。说明它为何不适用于任意情况。修复它，让所有测试都返回正确的值。
 
 过程依赖多个对象造成的困难称为@emph{二元方法问题} (@emph{binary method problem})。
-它表明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫做
-@emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈发
-严重。
+它表明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫
+做@emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈
+发严重。
 
 }
 
@@ -1281,13 +1281,13 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 
 @exercise[#:level 3 #:tag "ex9.29"]{
 
-设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象叫做
-@emph{原型} (@emph{prototype})。把类@tt{object}替换为没有方法和字段的原型对象。
+设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象叫
+做@emph{原型} (@emph{prototype})。把类@tt{object}替换为没有方法和字段的原型对象。
 这样，我们就能用@tt{let c2 = extend c1 ...}替代@tt{class c2 extends c1 ...}。把
 操作@tt{new}替换为@tt{clone}，它取一对象，仅复制其方法和字段。这种语言中的方法位
-于一个词法作用范围中，所以应该能像通常那样访问词法上可见的变量以及字段变量。当@emph{超型}
-(@emph{superprototype})的字段变量与当前所在词法作用范围的变量同名时，
-遮蔽关系是怎样的？
+于一个词法作用范围中，所以应该能像通常那样访问词法上可见的变量以及字段变量。
+当@emph{超型} (@emph{superprototype})的字段变量与当前所在词法作用范围的变量同名
+时，遮蔽关系是怎样的？
 
 }
 
@@ -1568,10 +1568,10 @@ interface stringable
 
 @exercise[#:level 2 #:tag "ex9.32"]{
 
-不使用@tt{instanceof}和@tt{cast}，给类@tt{tree}写一个等值判断谓词。这里需要用
-@emph{双派发} (@emph{double dispatch})替代通常方法使用的单派发。可做如下模拟：不
-用@tt{instanceof}找出实参@tt{t}的类，而是让当前的树给@tt{t}发回一条消息，这条消
-息编码当前树所属类，其参数则包含适当字段的值。
+不使用@tt{instanceof}和@tt{cast}，给类@tt{tree}写一个等值判断谓词。这里需要
+用@emph{双派发} (@emph{double dispatch})替代通常方法使用的单派发。可做如下模拟：
+不用@tt{instanceof}找出实参@tt{t}的类，而是让当前的树给@tt{t}发回一条消息，这条
+消息编码当前树所属类，其参数则包含适当字段的值。
 
 }
 
