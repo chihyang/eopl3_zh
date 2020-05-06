@@ -1,5 +1,6 @@
 #lang scribble/book
-@(require "style.rkt")
+@(require "style.rkt"
+          "bibliography.rkt")
 
 @title[#:style '(toc)]{编程语言要素}
 @author{Daniel P. Friedman}
@@ -23,3 +24,5 @@
 
 @include-section["appendix_a.scrbl"]
 @include-section["appendix_b.scrbl"]
+
+@generate-bibliography[#:sec-title "参考书目"]
