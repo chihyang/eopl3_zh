@@ -237,7 +237,7 @@ in begin
 @${c_2}中重新声明，新的声明@emph{遮蔽} (@emph{shadow})旧的，就像词法定界一样。例
 如，考虑图9.4。类@tt{c2}的对象有两个名为@tt{y}的字段：@tt{c1}中声明的和@tt{c2}中
 声明的。@tt{c1}中声明的方法能看到@tt{c1}的字段@tt{x}和@tt{y}。在@tt{c2}中，
-@tt{getx2}中的@tt{x}指代@tt{c1}的字段@tt{x}，但@tt{gety2}中的@tt{y}指代@tt{c1}的
+@tt{getx2}中的@tt{x}指代@tt{c1}的字段@tt{x}，但@tt{gety2}中的@tt{y}指代@tt{c2}的
 字段@tt{y}。
 
 @nested[#:style eopl-figure]{
