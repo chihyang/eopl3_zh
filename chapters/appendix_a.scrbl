@@ -167,7 +167,7 @@ Common Lisp 中强大的面向对象编程组件 CLOS。
 
 Ruby （参见 Thomas et al., 2005）、Python （van Rossum & Drake, 2006）和
 Perl（Wall et al., 2000; Dominus, 2005）是具有对象和过程的无类型语言，大致类似我
-们的 CLASSES。C# 是一种有类型的语言，相较 Java 添加了很多特性，最著名的是与过程
+们的 CLASSES。C# 是一种带类型的语言，相较 Java 添加了很多特性，最著名的是与过程
 类似的@emph{委托} (@emph{delegates})，它还允许程序员指定某些调用应该是尾调用。
 
 Abadi & Cardelli (1996) 定义了一种简单的对象演算，成为面向对象系统中类型研究的有
