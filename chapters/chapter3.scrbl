@@ -159,7 +159,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 本章的语言中，表达值和指代值总是相同。现在，它们是：
 
 @nested{
-@envalign*{
+@elemtag["pass-by-value"]{}@envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} \\
 \mathit{DenVal} &= \mathit{Int} + \mathit{Bool}
 }
@@ -402,8 +402,8 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 这种推理规则可用来很容易地指定任何单个表达式的期望行为，但却不很适合展示推理过程。
 像@tt{(value-of @${exp_1} @${\rho})}这样的前件表示一部分计算，所以一个计算过程应
-该是一棵树，就像@elem[#:style question]{第5页}那种。很不幸的是，这种树很难读懂。
-因此，我们经常把规则转为方程，然后就能用相等待换展示计算过程。
+该是一棵树，就像@pageref{deriv-tree}那种。很不幸的是，这种树很难读懂。因此，我们
+经常把规则转为方程，然后就能用相等待换展示计算过程。
 
 @tt{if-exp}的方程式规范是：
 
@@ -581,10 +581,10 @@ in let y = 2
 @subsection[#:tag "s3.2.8"]{实现LET的规范}
 
 接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{见
-@elem[#:style question]{附录B}。}作为前端，表达式用图3.6中的数据类型表示。我们的
-实现中，表达值的表示如图3.7所示。数据类型声明了构造器@tt{num-val}和@tt{bool-val}，
-用来将整数和布尔值转换为表达值。我们还定义了抽词器，用来将表达值转为整数或布尔值。
-如果表达值类型不符预期，则抽词器报错。
+@elemref["sllgen"]{附录B}。——@emph{译注}}作为前端，表达式用图3.6中的数据类型表示。
+我们的实现中，表达值的表示如图3.7所示。数据类型声明了构造器@tt{num-val}和
+@tt{bool-val}，用来将整数和布尔值转换为表达值。我们还定义了抽词器，用来将表达值
+转为整数或布尔值。如果表达值类型不符预期，则抽词器报错。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -671,8 +671,8 @@ in let y = 2
 
 @nested[#:style 'noindent]{
 
-@smaller{@linebreak[]在下面的练习以及全书之中，短句“扩展语言，添加……”表示向
-语言规范添加规则或者方程，并增改相应的解释器，实现指定特性。}
+@smaller{@linebreak[]@elemtag["ex-note"]{}在下面的练习以及全书之中，短句“扩展语
+言，添加……”表示向语言规范添加规则或者方程，并增改相应的解释器，实现指定特性。}
 
 }
 
@@ -754,13 +754,13 @@ in let y = 2
 
 @exercise[#:level 1 #:tag "ex3.4"]{
 
-把图3.4中的推导写成@elem[#:style question]{第5页}那样的推理树。
+把图3.4中的推导写成@pageref{deriv-tree}那样的推理树。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.5"]{
 
-把图3.5中的推导写成@elem[#:style question]{第5页}那样的推理树。
+把图3.5中的推导写成@pageref{deriv-tree}那样的推理树。
 
 }
 
@@ -1201,7 +1201,7 @@ in let f = proc (z) -(z,x)
     (apply-procedure proc arg)))
 }
 
-提醒：为语言的每个扩展写出规范。参见 @elem[#:style question]{第70页}的说明。
+提醒：为语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
 
 }
 
@@ -1958,7 +1958,7 @@ in proc (x) -(x,1)
 @nested{
 @nested[#:style 'code-inset]{
 @verbatim|{
-let x = 37
+|@elemtag["s3.7-eg"]{}let x = 37
 in proc (y)
     let z = -(y,x)
     in -(x,y)
@@ -2220,7 +2220,7 @@ in proc (y)
  (list (para "无名环境"))]
 }
 
-在@elem[#:style question]{第93页}例子中的最后一行，无名环境看起来像是：
+在@pageref{s3.7-eg}例子中的最后一行，无名环境看起来像是：
 
 @centered{
 @(image "../images/nameless-env"

@@ -25,8 +25,8 @@
 
 在@secref{state}那样的有状态语言中，过程就是用对象编程的绝佳示例。过程是一种对象，
 其状态包含在自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
-@elem[#:style question]{105页}的@tt{g}控制计数器的状态，对这一状态，唯一能做的就
-是将其递增。但是，更常见的是让一个对象具有多种行为。面向对象编程语言提供这种功能。
+@pageref{g-counter}的@tt{g}控制计数器的状态，对这一状态，唯一能做的就是将其递增。
+但是，更常见的是让一个对象具有多种行为。面向对象编程语言提供这种功能。
 
 同一方法常常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
 面向对象编程系统通常提供名为@emph{类} (@emph{class})的结构，用来指定某种对象的字
@@ -243,7 +243,7 @@ in begin
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
 @verbatim|{
-class c1 extends object
+|@elemtag["field-shadowing"]{}class c1 extends object
  field x
  field y
  method initialize () 1
@@ -309,7 +309,7 @@ in list(send o1 m1(), send o2 m1(), send o2 m2())
 @tt{y}和@tt{color}。但是，新方法的主体复制了原方法的代码。在我们的小例子中，这尚
 可接受，但在大型例子中，这显然是一种坏的做法。（为什么？）而且，如果
 @tt{colorpoint}声明了字段@tt{x}，就没法初始化@tt{point}的字段@tt{x}，就像
-@elem[#:style question]{331页}的例子中，没法初始化第一个@tt{y}一样。
+@pageref{field-shadowing}的例子中，没法初始化第一个@tt{y}一样。
 
 解决方案是，把@tt{colorpoint}的@tt{initialize}方法主体中的重复代码替换为@emph{超
 类调用}，形如@tt{super initialize()}。那么@tt{colorpoint}中的@tt{initialize}方法
@@ -696,7 +696,7 @@ in send o3 m1(7,8)
 
 @nested{
 
-@tabular[#:sep @hspace[4]
+@elemtag["field-renaming"]{}@tabular[#:sep @hspace[4]
          (list (list @bold{类} @bold{定义的字段} @bold{字段}      @bold{@tt{field-names}})
                (list @tt{c1}   @tt{x, y}         @tt{(x y)}       @tt{(x@${\phantom{xxx}}y)})
                (list @tt{c2}   @tt{y}            @tt{(x y y)}     @tt{(x@${\phantom{xxx}}y%1 y)})
@@ -785,7 +785,7 @@ in send o3 m1(7,8)
 及类中方法的环境。
 
 @racketblock[
-@#,elem{@bold{@tt{initialize-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
+@#,elem{@elemtag["initialize-class-env!"]{@bold{@tt{initialize-class-env!}}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-class-env!
   (lambda (c-decls)
     (set! the-class-env
@@ -813,7 +813,7 @@ in send o3 m1(7,8)
 
 过程@tt{append-field-names}用来给当前类创建@tt{field-names}。它@elem[#:style
 question]{扩展}超类字段和新类声明的字段，只是将超类中被新字段遮蔽的字段替换为新
-名字，就像@elem[#:style question]{341页}的例子那样。
+名字，就像@pageref{field-renaming}的例子那样。
 
 @racketblock[
 @#,elem{@bold{@tt{append-field-names}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(FieldName)} \times \mathit{Listof(FieldName)} \to \mathit{Listof(FieldName)}}}
@@ -1778,7 +1778,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
  @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
  所以，@tt{field-names}由@tt{append-field-names}计算而得，就像
- @tt{initialize-class-decl!}那样（@elem[#:style question]{334页}）。}
+ @tt{initialize-class-decl!}那样（@pageref{initialize-class-env!}）。}
 
  @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
 

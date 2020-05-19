@@ -17,7 +17,7 @@
 叫做@emph{迭代性控制行为}。
 
 我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格叫做@emph{续
-文传递风格} (@emph{continuation-passing style})或@deftech{CPS}，且不限于解释器。
+文传递风格} (@emph{continuation-passing style})或 @deftech{CPS}，且不限于解释器。
 
 本章，我们介绍一种系统性的方法，将任何过程转换为等效的迭代性控制行为过程。要这样，
 需要将过程转换为续文传递风格。
@@ -399,7 +399,7 @@ val)}。
 这些例子中，浮现出一种模式。
 
 @nested[#:style tip]{
- @centered{@bold{CPS秘方}}
+ @centered{@elemtag["cps-recipe"]{@bold{CPS秘方}}}
 
  @nested[#:style tip-content]{
  要将程序转换为续文传递风格：
@@ -510,9 +510,9 @@ val)}。
 @exercise[#:level 3 #:tag "ex6.8"]{
 
 写出@secref{s5.4}解释器的过程表示和内联过程表示。这很有挑战性，因为我们实际上有
-两个观测器，@tt{apply-cont}和@tt{apply-handler}。提示，考虑修改 @elem[#:style
-question]{200页}的秘方，给每个过程添加两个参数，一个表示@tt{apply-cont}中 续文的
-行为，一个表示@tt{apply-handler}中续文的行为。
+两个观测器，@tt{apply-cont}和@tt{apply-handler}。提示，考虑修改
+@pageref{cps-recipe}的秘方，给每个过程添加两个参数，一个表示@tt{apply-cont}中 续
+文的行为，一个表示@tt{apply-handler}中续文的行为。@linebreak[]
 
 }
 
@@ -568,8 +568,9 @@ question]{200页}的秘方，给每个过程添加两个参数，一个表示@tt
       (fact/k (- n 1) (* cont n)))))
 ]
 
-但是这和@tt{fact-iter}（@${139页}）完全相同！所以我们明白了，累加器通常只是续文
-的一种表示方式。这令人拍案叫绝。相当一部分经典的程序优化问题原来是这一思想的特例。
+但是这和@tt{fact-iter}（@pageref{fact-iter}）完全相同！所以我们明白了，累加器通
+常只是续文的一种表示方式。这令人拍案叫绝。相当一部分经典的程序优化问题原来是这一
+思想的特例。
 
 @exercise[#:level 1 #:tag "ex6.9"]{
 
@@ -702,7 +703,7 @@ call})。
 
 CPS-IN中的尾端如图6.4所示。尾端的每个子表达式值都可以成为整个表达式的值。在传递
 续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达式在原表达式的续
-文中求值，如@elem[#:style question]{152页}所述。
+文中求值，如@pageref{tail-call-explain}所述。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -870,9 +871,9 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.13"]{
 
-用上面@elem[#:style question]{200页}的CPS秘方，把下列CPS-IN表达式翻译为续文传递
-风格。用图6.6中的解释器运行转换后的程序，测试它们，确保原程序和转换后的版本对所
-有输入都给出同样的结果。
+用上面@pageref{cps-recipe}的CPS秘方，把下列CPS-IN表达式翻译为续文传递风格。用图
+6.6中的解释器运行转换后的程序，测试它们，确保原程序和转换后的版本对所有输入都给
+出同样的结果。
 
 @itemlist[#:style 'ordered
 
@@ -990,10 +991,9 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  }
  }
 
- @item{@tt{fnlrgtn}。n-list类似s-list（@elem[#:style question]{第9页}），只不过
- 其中的元素不是符号，而是数字。@tt{fnlrgtn}取一n-list，一个数字@tt{n}，返回列表
- 中（从左向右数）第一个大于@tt{n}的数字。一旦找到结果，就不再检查列表中剩余元素。
- 例如，
+ @item{@tt{fnlrgtn}。n-list类似s-list（@pageref{s-list}），只不过其中的元素不是
+ 符号，而是数字。@tt{fnlrgtn}取一n-list，一个数字@tt{n}，返回列表中（从左向右数）
+ 第一个大于@tt{n}的数字。一旦找到结果，就不再检查列表中剩余元素。例如，
 
  @nested[#:style 'code-inset]{
  @verbatim|{

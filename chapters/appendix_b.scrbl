@@ -10,6 +10,8 @@
           scriblib/footnote
           racket/sandbox)
 
+@elemtag["sllgen"]{}
+
 @title[#:tag "sllgen-parsing-system"]{SLLGEN解析系统}
 
 程序只是字符串。要处理程序，需要将这些字符归类为有意义的单元。这种归类通常分为两

@@ -1059,7 +1059,7 @@ module m1
 剩余部分都知道@tt{from m1 take z}绑定到一个值，其类型为@tt{from m1 take t}；
 @tt{from m1 take s}和@tt{from m1 take is-z?}绑定到过程，用来处理这种类型的值。这
 就是抽象边界。类型检查器确保表达式的类型为@tt{from m1 take t}时，求值是安全的，
-所以表达式的值只能通过这些操作符产生，如@elem[#:style question]{239页}所述。
+所以表达式的值只能通过这些操作符产生，如@pageref{suitable-env}所述。
 
 与之对应，定义@tt{type t = int}在模块主体内部，将@tt{t}作为@tt{int}的名字，但是，
 由于程序的剩余部分是从模块接口得出绑定的，所以对此一无所知。
@@ -1424,8 +1424,8 @@ in let add-binding = from tables take add-to-table
     (saved-tenv type-environment?)))
 ]
 
-它满足条件，@tt{type}总是一个展开类型。像 @elem[#:style question]{第10页}讨论的，
-这个条件是一@emph{不变式}。
+它满足条件，@tt{type}总是一个展开类型。像@pageref{invariant}讨论的，这个条件是一
+@emph{不变式}。
 
 }
 
@@ -2119,8 +2119,8 @@ module sum-prod-maker
 }|
 }
 
-定义一个模块过程，它取一算数操作的实现，返回这种实现的求和和求积过程。用
-@elem[#:style question]{33页}中的@tt{plus}定义，以及类似的@tt{times}定义。
+定义一个模块过程，它取一算数操作的实现，返回这种实现的求和和求积过程。用@pageref{plus}
+中的@tt{plus}定义，以及类似的@tt{times}定义。
 
 }
 
@@ -2210,8 +2210,8 @@ module mybool-tables
 }
 
 @tt{to-int-maker}取一模块@tt{ints}，返回一模块，其类型不仅依赖@tt{ints}中的固定
-类型，也依赖@tt{ints}本身。当我们像例8.16中那样用@tt{ints1}调用@tt{to-int-maker}
-时，得到的模块接口是
+类型，也依赖@tt{ints}本身。@elemtag["module-proc-eg"]{}当我们像例8.16中那样用
+@tt{ints1}调用@tt{to-int-maker}时，得到的模块接口是
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2342,8 +2342,8 @@ module mybool-tables
 }
 
 其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。考虑
-@elem[#:style question]{318页}的例子。其中，我们用@tt{ints1}和@tt{ints2}调用模块
-过程@tt{to-int-maker}，其接口为
+@pageref{module-proc-eg}的例子。其中，我们用@tt{ints1}和@tt{ints2}调用模块过程
+@tt{to-int-maker}，其接口为
 
 @nested{
 @nested[#:style 'code-inset]{

@@ -117,7 +117,7 @@ in letrec even(dummy)
 
 @nested[#:style 'code-inset]{
 @verbatim|{
-let g = let counter = newref(0)
+|@elemtag["g-counter"]{}let g = let counter = newref(0)
         in proc (dummy)
             begin
              setref(counter, -(deref(counter), -1));
@@ -1430,7 +1430,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 @itemlist[
 
- @item{自然传参，指代值与实际参数的表达值相同（@elem[#:style question]{第75页}）。}
+ @item{自然传参，指代值与实际参数的表达值相同（@pageref{pass-by-value}）。}
 
  @item{按值调用，指代值是一个引用，指向一个位置，该位置包含实际参数的表达值
  （@secref{s4.3}）。这是最常用的传参方式。}
