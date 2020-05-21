@@ -1778,7 +1778,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
  @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
  所以，@tt{field-names}由@tt{append-field-names}计算而得，就像
- @tt{initialize-class-decl!}那样（@pageref{initialize-class-env!}）。}
+ @tt{initialize-class-env!}那样（@pageref{initialize-class-env!}）。}
 
  @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
 
