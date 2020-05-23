@@ -542,8 +542,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 ]
 
 这些语法叫做@emph{上下文无关} (@emph{context-free}) 语法，因为一条规则定义的句法
-类别可以在涉及它的任何语境中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索树}。
-其节点或者为空，或者包含一个整数、两棵子树
+类别可以在涉及它的任何上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索
+树}。其节点或者为空，或者包含一个整数、两棵子树
 
 @$${Binary\mbox{-}search\mbox{-}tree ::= @tt{()} \mid
     @tt{(@${Int} @${Binary\mbox{-}search\mbox{-}tree} @${Binary\mbox{-}search\mbox{-}tree})}}
@@ -553,7 +553,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 因为这条额外限制，从 @${Binary\mbox{-}search\mbox{-}tree} 得出的句法推导并不都是
 正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成式用在哪种
-语境。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive constraints})，
+上下文。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive constraints})，
 或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants})。
 
 定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
