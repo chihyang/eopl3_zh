@@ -4,8 +4,10 @@
          scribble/latex-properties
          scribble/html-properties
          scribble/decode
-         scriblib/render-cond)
+         scriblib/render-cond
+         scribble-math)
 
+;;; for title format
 (define book-title-style '(toc no-index))
 (define part-title-style-numbered '(numbered no-index))
 (define part-title-style-unnumbered '(unnumbered no-index))
@@ -37,10 +39,6 @@
 (define eopl-subfigure
   (make-style "EoplSubfigure" (list (make-tex-addition "../style/subfigure.tex"))))
 
-(define exer
-  (make-style "MyExercise" (list (make-tex-addition "../style/exercise.tex")
-                                 (make-css-addition "../style/exercise.css"))))
-
 (define two-columns
   (make-style "TwoColumns" (list (make-tex-addition "../style/two-columns.tex"))))
 
@@ -53,68 +51,33 @@
 (define eopl-example
   (make-style "EoplExample" (list (make-tex-addition "../style/example.tex"))))
 
+;;; for exercise
+(define exercise-level-mark "{\\star}")
+
+(define (make-level-mark l)
+  (define (make-level-mark-iter n str)
+    (if (zero? n)
+        str
+        (make-level-mark-iter (- n 1)
+                              (string-append exercise-level-mark str))))
+  (make-level-mark-iter l ""))
+
+(define eopl-exercise
+  (make-style "EoplExercise" (list (make-tex-addition "../style/exercise.tex"))))
+
+(define (exercise #:level [level 1] #:tag [tag ""] . c)
+  (nested #:style eopl-exercise
+          ($ "\\textnormal{[}" (make-level-mark level) "\\textnormal{]}")
+          (hspace 1)
+          (remove-leading-newlines c)
+          "\n"))
+
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
         [(and (string? (car c))
               (string=? (car c) "\n"))
          (remove-leading-newlines (cdr c))]
         [else c]))
-
-(define (make-exercise-prefix level tag)
-  (make-element (make-style #f (list 'exact-chars))
-                (string-append
-                 "\\begin{Exercise}"
-                 "[difficulty="
-                 (number->string level)
-                 ", "
-                 (when (> (string-length tag))
-                   (string-append "label=" tag ", "))
-                 "counter=ChapterCounter]\\begin{small}\\setlength{\\parskip}{1em}{\n")))
-
-(define exercise-postfix
-  (make-element (make-style #f (list 'exact-chars))
-                "}\\end{small}\\end{Exercise}"))
-
-(define (add-prefix-to-block block prefix)
-  (cond [(paragraph? block)
-         (if (list? (paragraph-content block))
-             (make-paragraph (paragraph-style block)
-                             (cons prefix (paragraph-content block)))
-             (make-paragraph (paragraph-style block)
-                             (list prefix (paragraph-content block))))]
-        [(compound-paragraph? block)
-         (make-compound-paragraph
-          (compound-paragraph-style block)
-          (add-prefix (compound-paragraph-blocks block) prefix))]
-        [else (list (make-paragraph (make-style #f '()) prefix) block)]))
-
-(define (add-prefix a-flow exer-prefix)
-  (if (null? a-flow)
-      (make-paragraph (make-style #f '()) exer-prefix)
-      (let ((prefixed-block
-             (add-prefix-to-block (car a-flow) exer-prefix)))
-        (if (list? prefixed-block)
-            (append prefixed-block (cdr a-flow))
-            (cons prefixed-block (cdr a-flow))))))
-
-(define (exercise #:level [level 1] #:tag [tag ""] . c)
-  (cond-block
-   [latex
-    (let* ((exer-prefix (make-exercise-prefix level tag))
-           (decoded-flow (add-prefix (decode-flow (remove-leading-newlines c)) exer-prefix))
-           (wrapped-flow
-            (make-compound-paragraph
-             (make-style #f '())
-             (append
-              decoded-flow
-              (list
-               (make-paragraph (make-style #f '(never-indents))
-                               exercise-postfix))))))
-      wrapped-flow)]
-   [else (make-compound-paragraph
-          (make-style #f '())
-          (decode-flow c))]))
-
 
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
@@ -125,7 +88,4 @@
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
 (provide (except-out (all-defined-out)
-                     add-prefix-to-block
-                     remove-leading-newlines
-                     make-exercise-prefix
-                     exercise-postfix))
+                     remove-leading-newlines))

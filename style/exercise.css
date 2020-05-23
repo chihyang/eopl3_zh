@@ -1,6 +1,6 @@
-.MyExercise {
+.EoplExercise {
 }
-.MyExercise::before {
+.EoplExercise::before {
   content: "Exercise ";
   font-weight: bold;
 }

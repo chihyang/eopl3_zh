@@ -49,15 +49,6 @@
 \fancyhead[RE]{\leftmark}
 \fancyhead[LO]{\rightmark}
 
-% use exercise package for exercise
-\usepackage{exercise}
-\renewcommand\DifficultyMarker{$\star$}
-\renewcommand{\ExerciseHeaderDifficulty}{\theExerciseDifficulty}
-\renewcommand{\ExerciseName}{练习}
-\renewcommand{\ExerciseHeader}{\noindent\textit{\ExerciseName}\thechapter.\ExerciseHeaderNB~[\ExerciseHeaderDifficulty\ignorespaces]}
-\newcounter{ChapterCounter}
-\renewcounter{ChapterCounter}[chapter]
-
 \usepackage{xpatch}
 \makeatletter
 \AtBeginDocument{\xpatchcmd{\@thm}{\thm@headpunct{.}}{\thm@headpunct{}}{}{}}
