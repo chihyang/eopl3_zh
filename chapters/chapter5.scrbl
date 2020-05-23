@@ -10,7 +10,7 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "cpi"]{传递续文的解释器}
+@title[#:style part-title-style-numbered #:tag "cpi"]{传递续文的解释器}
 
 在@secref{expr}，我们用环境的概念探讨绑定行为，建立每部分程序执行的数据上下文。
 这里，我们将用类似方式探讨每部分程序执行的@emph{控制上下文} (@emph{control
@@ -106,7 +106,7 @@ behavior})。
 的程序具有@emph{续文传递风格} (@emph{continuation-passing style})。@secref{cps}
 还展示了续文的其他一些重要应用。
 
-@section[#:tag "s5.1"]{传递续文的解释器}
+@section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
 在我们的新解释器中，诸如@tt{value-of}等主要过程将取第三个参数。这一参数，@emph{续文}，
 用来抽象每个表达式求值时的控制语境。
@@ -905,7 +905,7 @@ env var cont)}。
  (list (para "图5.4中续文的规范"))]
 }
 
-@section[#:tag "s5.2"]{跳跃式解释器}
+@section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
 
 有人可能想用普通的过程式语言转写解释器，使用数据结构表示续文，从而避免高阶函数。
 但是，用大多数过程式语言做这种翻译都很困难：它们不是只在必要时才扩大控制语境，而
@@ -1078,7 +1078,7 @@ env var cont)}。
 
 }
 
-@section[#:tag "s5.3"]{指令式解释器}
+@section[#:style section-title-style-numbered #:tag "s5.3"]{指令式解释器}
 
 在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。考虑图5.8顶部的老例
 子@tt{even}和@tt{odd}。可以用图5.8中间的程序替代它们。其中，共享变量@tt{x}供两个
@@ -1620,7 +1620,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@section[#:tag "s5.4"]{异常}
+@section[#:style section-title-style-numbered #:tag "s5.4"]{异常}
 
 迄今为止，我们只用续文管理语言中的普通控制流。但是续文还能让我们修改控制语境。让
 我们来给我们的语言添加@emph{异常处理} (@emph{exception handling})。我们给语言新
@@ -2033,7 +2033,7 @@ in ...
 
 }
 
-@section[#:tag "s5.5"]{线程}
+@section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
 
 许多编程任务中，可能需要一次进行多个计算。当这些计算作为同一进程的一部分，运行在
 同一地址空间，它们通常称为@emph{线程} (@emph{thread})。本节，我们将看到如何修改

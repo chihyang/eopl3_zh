@@ -12,7 +12,7 @@
 
 @elemtag["sllgen"]{}
 
-@title[#:tag "sllgen-parsing-system"]{SLLGEN解析系统}
+@title[#:style part-title-style-numbered #:tag "sllgen-parsing-system"]{SLLGEN解析系统}
 
 程序只是字符串。要处理程序，需要将这些字符归类为有意义的单元。这种归类通常分为两
 个阶段：@emph{扫描} (@emph{scanning})和@emph{解析} (@emph{parsing})。
@@ -24,7 +24,7 @@ items})，@emph{词素} (@emph{lexeme})，或者最常见的@emph{词牌} (@emph
 SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中，我们首先讨论扫描和解析
 的基础，然后考虑如何用SLLGEN实现这些功能。
 
-@section[#:tag "B.1"]{扫描}
+@section[#:style section-title-style-numbered #:tag "B.1"]{扫描}
 
 扫描问题如图B.1所示。我们在其中展示了一小段程序，以及应如何将其分割为基本单元。
 
@@ -135,7 +135,7 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 
 通常，词牌的内部结构只与扫描器和解析器相关，所以我们不再详加介绍。
 
-@section[#:tag "B.2"]{解析}
+@section[#:style section-title-style-numbered #:tag "B.2"]{解析}
 
 解析过程将词牌序列组织成有层次的语法结构，如表达式，语句和块。这就像用从句组织句
 子。语言的语法结构通常由BNF定义，也叫做@emph{上下文无关语法} (@emph{context-free
@@ -199,9 +199,9 @@ grammar})（@secref{s1.1.2}）。
 
 }
 
-@section[#:tag "B.3"]{SLLGEN中的扫描器和解析器}
+@section[#:style section-title-style-numbered #:tag "B.3"]{SLLGEN中的扫描器和解析器}
 
-@subsection[#:style 'unnumbered #:tag "B.3-scanners"]{定义扫描器}
+@subsection[#:style section-title-style-unumbered #:tag "B.3-scanners"]{定义扫描器}
 
 在SLLGEN中，扫描器用正则表达式定义。我们的例子用SLLGEN，要写成下面这样：
 
@@ -262,7 +262,7 @@ SLLGEN中的扫描器定义是满足如下语法语法的列表：
 如果两个正则表达式同时为最长匹配，@tt{string}优先于@tt{symbol}。这条规则意味着关
 键字会按关键字处理，而非标识符。
 
-@subsection[#:style 'unnumbered #:tag "B.3-grammars"]{定义语法}
+@subsection[#:style section-title-style-unumbered #:tag "B.3-grammars"]{定义语法}
 
 SLLGEN还包含一种定义语法的语言。上面的简单语法用SLLGEN写作
 
@@ -309,7 +309,7 @@ SLLGEN中的语法是由下列语法描述的列表：
 parser GENerator）。在实践中，这有些过于严格了，但足以应付本书需要。如果输入语法
 不满足这一条件，SLLGEN会给出一条警告。
 
-@subsection[#:style 'unnumbered #:tag "B.3-operations"]{SLLGEN的操作}
+@subsection[#:style section-title-style-unumbered #:tag "B.3-operations"]{SLLGEN的操作}
 
 SLLGEN包含几个过程，将扫描器和语法结合起来，形成可以执行的解析器。图B.2展示了用
 SLLGEN定义语言扫描器和解析器的例子。
@@ -381,7 +381,7 @@ SLLGEN也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 
 控制流程从这一循环返回Scheme读入-求值-打印循环的方式由系统决定。
 
-@subsection[#:style 'unnumbered #:tag "B.3-arbno"]{@tt{arbno}和
+@subsection[#:style section-title-style-unumbered #:tag "B.3-arbno"]{@tt{arbno}和
 @tt{separated-list}模板关键字}
 
 @tt{arbno}关键字是语法中的克莱尼星号：它匹配重复任意次数的条目。例如，生成式

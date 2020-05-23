@@ -2,7 +2,7 @@
 @(require "style.rkt"
           "bibliography.rkt")
 
-@title[#:style '(toc)]{编程语言要素}
+@title[#:style book-title-style]{编程语言要素}
 @author{Daniel P. Friedman}
 @author{Mitchell Wand}
 

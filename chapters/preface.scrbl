@@ -6,9 +6,9 @@
           scriblib/footnote
           scribble-math/dollar)
 
-@title[#:style '(unnumbered) #:tag "pf"]{前言}
+@title[#:style part-title-style-unnumbered #:tag "pf"]{前言}
 
-@section[#:style 'unnumbered #:tag "pf-obj"]{目标}
+@section[#:style section-title-style-unumbered #:tag "pf-obj"]{目标}
 
 本书是对程序语言的分析性研究。我们的目标是对程序语言的基本概念提供深入有效的理解。
 这些概念的重要性久经证实。它们是理解程序语言未来发展的基础。
@@ -63,7 +63,7 @@
 我们在这一章使用多参数过程。在对象和类一章同样如此，但这并非必然。每章都经过修订，
 新增了很多习题。
 
-@section[#:style 'unnumbered #:tag "pf-org"]{组织}
+@section[#:style section-title-style-unumbered #:tag "pf-org"]{组织}
 
 前两章为细致研究程序语言奠定了基础。@secref{isd}强调数据的归纳式定义法和递归编程
 之间的联系，介绍了关于变量作用域的一些思想。@secref{da}介绍了数据类型工具，由此
@@ -111,7 +111,7 @@
   "章节依赖关系")
 }
 
-@section[#:style 'unnumbered #:tag "pf-use"]{使用}
+@section[#:style section-title-style-unumbered #:tag "pf-use"]{使用}
 
 本书在本科生和研究生课程中均已使用，业已在职业程序员的持续教育课程中使用。我们假
 定的背景知识有数据结构，过程式语言（如C, C++, Java）和Scheme, ML, Python或

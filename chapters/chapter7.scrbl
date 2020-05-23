@@ -10,7 +10,7 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "types"]{类型}
+@title[#:style part-title-style-numbered #:tag "types"]{类型}
 
 我们已明白如何用解释器建模程序的运行时行为。现在，我们用同样的技术不加运行
 地@emph{分析}或@emph{预测}程序的行为。
@@ -91,7 +91,7 @@ in (f 1)
 虽然最后一个待求值的例子不终止，但根据上述定义，求值仍是安全的，所以我们的分析可
 以接受它。原来，由于我们的分析器不够好，无法判定本程序不会终止，因此会接受它。
 
-@section[#:tag "s7.1"]{值及其类型}
+@section[#:style section-title-style-numbered #:tag "s7.1"]{值及其类型}
 
 由于安全条件只涉及@tt{num-val}，@tt{bool-val}和@tt{proc-val}，有人可能以为记录这
 三种类型就足够了。但那是不够的：如果我们只知道@tt{f}绑定到一个@tt{proc-val}，我
@@ -268,7 +268,7 @@ proc (f)
 
 }
 
-@section[#:tag "s7.2"]{赋予表达值类型}
+@section[#:style section-title-style-numbered #:tag "s7.2"]{赋予表达值类型}
 
 目前，我们只处理了表达值的类型，要分析程序，我们要写出过程，取一表达式，预测其类
 型。
@@ -377,7 +377,7 @@ proc (f)
 
 }
 
-@section[#:tag "s7.3"]{CHECKED：带有类型检查的语言}
+@section[#:style section-title-style-numbered #:tag "s7.3"]{CHECKED：带有类型检查的语言}
 
 我们的新语言和LETREC相同，但我们要求程序员写出所有绑定变量的类型。对由
 @tt{letrec}绑定的变量，我们还要求程序员指定过程结果的类型。
@@ -464,7 +464,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 现在我们已经写出了所有规则，可以实现语言的类型检查器了。
 
-@subsection[#:tag "s7.3.1"]{检查器}
+@subsection[#:style section-title-style-numbered #:tag "s7.3.1"]{检查器}
 
 我们需要比较类型是否相等。我们用过程@tt{check-equal-type!}做比较，它比较两个类型，
 若二者不等则报错。@tt{check-equal-type!}的第三个参数是一表达式，在类型不等时提供
@@ -741,7 +741,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 }
 
-@section[#:tag "s7.4"]{INFERRED：带有类型推导的语言}
+@section[#:style section-title-style-numbered #:tag "s7.4"]{INFERRED：带有类型推导的语言}
 
 在程序中写出类型虽然有助于设计和文档，但很耗时。另一种设计是让编译器根据变量的使
 用以及程序员可能给出的信息，推断出所有变量的类型。令人惊讶的是，对设计严谨的语言，
@@ -1459,7 +1459,7 @@ in letrec
 
 }
 
-@subsection[#:tag "s7.4.1"]{代换式}
+@subsection[#:style section-title-style-numbered #:tag "s7.4.1"]{代换式}
 
 我们自底向上完成实现。首先来考虑代换式。
 
@@ -1592,7 +1592,7 @@ in letrec
 
 }
 
-@subsection[#:tag "s7.4.2"]{合一器}
+@subsection[#:style section-title-style-numbered #:tag "s7.4.2"]{合一器}
 
 合一器的主要过程是@tt{unifier}。合一器执行上述推导过程中的这一的步骤：取两个类型
 @tt{t_1}和@tt{t_2}，满足无存不变式的代换式组@${\sigma}，以及表达式@tt{exp}，将
@@ -1714,7 +1714,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
  (list (para "验存"))]
 }
 
-@subsection[#:tag "s7.4.3"]{找出表达式的类型}
+@subsection[#:style section-title-style-numbered #:tag "s7.4.3"]{找出表达式的类型}
 
 我们用@tt{otype->type}，为每个@tt{?}定义一个新类型变量，把可选类型转换为未知类型。
 

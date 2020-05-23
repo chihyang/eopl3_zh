@@ -10,7 +10,7 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "modules"]{模块}
+@title[#:style part-title-style-numbered #:tag "modules"]{模块}
 
 对只有几百行代码的系统，我们介绍的语言特性已非常强大。如果我们要设计更大的系统，
 有数千行代码，我们就还需要一些别的佐料。
@@ -48,12 +48,12 @@
 这些接口就像类型一样，决定了模块如何组合。因为求出示例程序的值非常简单，因此我们
 强调其类型。如前所见，理解这些语言的定界和绑定规则是程序分析和求值的关键。
 
-@section[#:tag "s8.1"]{简单模块系统}
+@section[#:style section-title-style-numbered #:tag "s8.1"]{简单模块系统}
 
 我们的第一种语言名叫SIMPLE-MODULES，只有简单模块。它没有模块过程，只创建非常简单
 的抽象边界。几种流行语言使用与之类似的模块系统。
 
-@subsection[#:tag "s8.1.1"]{例子}
+@subsection[#:style section-title-style-numbered #:tag "s8.1.1"]{例子}
 
 设想一个软件项目中有三名开发者：爱丽丝，鲍伯和查理。爱丽丝、鲍伯和查理正在开发项
 目中相对独立的几部分。这些开发者散居各处，时区都可能不同。项目的每部分都要实现一
@@ -258,9 +258,9 @@ module m1
 }
 }
 
-@subsection[#:tag "s8.1.2"]{实现简单模块系统}
+@subsection[#:style section-title-style-numbered #:tag "s8.1.2"]{实现简单模块系统}
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1-syntax"]{语法}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.1-syntax"]{语法}
 
 SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
 
@@ -302,7 +302,7 @@ SIMPLE-MODULES的程序包含一串模块定义，然后是一个表达式。
              &\mathrel{\phantom{::=}} \fbox{@tt{qualified-var-exp (m-name var-name)}}
             }
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1-the-interpreter"]{解释器}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.1-the-interpreter"]{解释器}
 
 求模块主体的值会得到一个@emph{模块}。在我们的简单语言中，模块是一个环境，包含输
 出的所有绑定。我们用数据类型@tt{typed-module}表示这些。
@@ -461,7 +461,7 @@ in -(z, -(from m1 take a, from m2 take a))
  (list (para "SIMPLE-MODULES的解释器，第2部分"))]
 }
 
-@subsubsection[#:style 'unnumbered #:tag "s8.1-checker"]{检查器}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.1-checker"]{检查器}
 
 检查器的工作是确保每个模块主体满足其接口，每个变量的使用符合其类型。
 
@@ -853,7 +853,7 @@ module m
 
 }
 
-@section[#:tag "s8.2"]{声明类型的模块}
+@section[#:style section-title-style-numbered #:tag "s8.2"]{声明类型的模块}
 
 至今为止，我们的接口只声明了普通变量及其类型。在下面这种模块语言OPAQUE-TYPES中，
 我们还允许接口声明类型。例如，在定义
@@ -885,7 +885,7 @@ succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take 
 我们将介绍两种类型声明：@emph{透明} (@emph{transparent}) 类型和@emph{模糊}
 (@emph{opaque})类型。好的模块系统中，二者缺一不可。
 
-@subsection[#:tag "s8.2.1"]{例子}
+@subsection[#:style section-title-style-numbered #:tag "s8.2.1"]{例子}
 
 欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含一对整数的数据结构表示点的横
 坐标和纵坐标。她使用的语言具有练习7.8那样的类型，所以她的模块@tt{Alices-points}
@@ -966,7 +966,7 @@ get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽�
 
 在本节的剩余部分中，我们探究这些组件的更多例子。
 
-@subsubsection[#:style 'unnumbered #:tag "s8.2-transparent-types"]{透明类型}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.2-transparent-types"]{透明类型}
 
 我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型
 或@emph{类型缩写} (@emph{type abbreviation})。
@@ -1023,7 +1023,7 @@ t}绑定到@tt{int}。我们称之为@emph{受限类型} (@emph{qualified type})
 当然，我们可以给类型起任意名字，也可以声明多个类型。类型声明可以出现在接口中任意
 位置，只要每个声明都先于使用。
 
-@subsubsection[#:style 'unnumbered #:tag "s8.2-opaque-types"]{模糊类型}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
 模块还可以用@tt{opaque-type}声明输出@emph{模糊}类型。模糊类型有时又称作@emph{抽
 象类型} (@emph{abstract type})。
@@ -1356,11 +1356,11 @@ in let add-binding = from tables take add-to-table
 
 }
 
-@subsection[#:tag "s8.2.2"]{实现}
+@subsection[#:style section-title-style-numbered #:tag "s8.2.2"]{实现}
 
 现在我们来扩展系统，实现透明类型和模糊类型声明，及受限类型的使用。
 
-@subsubsection[#:style 'unnumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
+@subsubsection[#:style section-title-style-unumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
 
 我们给两种新类型添加语法：有名类型（如@tt{t}）和受限类型（如@tt{from m1 take t}）。
 
@@ -1395,7 +1395,7 @@ in let add-binding = from tables take add-to-table
           (defns-to-env (cdr defns) env))))))
 ]
 
-@subsubsection[#:style 'unnumbered #:tag "the-checker"]{检查器}
+@subsubsection[#:style section-title-style-unumbered #:tag "the-checker"]{检查器}
 
 检查器的改动就多多了，因为所有关于类型的操作都要扩展，以便处理新的类型。
 
@@ -1825,7 +1825,7 @@ actual-iface <: expected-iface
  (list (para "OPAQUE-TYPES的检查器，第4部分"))]
 }
 
-@section[#:tag "s8.3"]{模块过程}
+@section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
 
 OPAQUE-TYPES中的程序有固定的依赖关系。模块@tt{m4}可能依赖@tt{m3}和@tt{m2}，
 @tt{m2}依赖@tt{m1}。有时，我们说依赖关系是@emph{写死的} (@emph{hard-coded})。通
@@ -1834,7 +1834,7 @@ OPAQUE-TYPES中的程序有固定的依赖关系。模块@tt{m4}可能依赖@tt{
 (@emph{parameterized module})）的组件，以便复用模块。我们称这种新语言为
 PROC-MODULES。
 
-@subsection[#:tag "s8.3.1"]{例子}
+@subsection[#:style section-title-style-numbered #:tag "s8.3.1"]{例子}
 
 再来看我们的三位开发者。查理想用爱丽丝模块的某些组件。但爱丽丝的模块使用了鲍伯模
 块提供的数据库，而查理想用另一数据库，由其他模块提供（戴安娜所写）。
@@ -2182,9 +2182,9 @@ module mybool-tables
 
 }
 
-@subsection[#:tag "s8.3.2"]{实现}
+@subsection[#:style section-title-style-numbered #:tag "s8.3.2"]{实现}
 
-@subsubsection[#:style 'unnumbered #:tag "s8.3-syntax"]{语法}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.3-syntax"]{语法}
 
 给我们的语言添加模块过程很像添加过程。模块过程的接口很像@tt{proc}的类型。
 
@@ -2253,7 +2253,7 @@ module mybool-tables
              &\mathrel{\phantom{::=}} \fbox{@tt{app-module-body (rator rand)}}
             }
 
-@subsubsection[#:style 'unnumbered #:tag "s8.3-interpreter"]{解释器}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.3-interpreter"]{解释器}
 
 首先，类似过程，我们新加一种模块。
 
@@ -2270,7 +2270,7 @@ module mybool-tables
 我们扩展@tt{value-of-module-body}处理新的模块主体。代码类似于表达式的变量引用和
 过程调用（图8.13）。
 
-@subsubsection[#:style 'unnumbered #:tag "s8.3-checker"]{检查器}
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
 
 我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如图8.14所示。为了能
 在一页纸内写下规则，我们用@tt{(@${\rhd} @${body} @${tenv}) = @${i}}代替

@@ -10,7 +10,7 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "cps"]{续文传递风格}
+@title[#:style part-title-style-numbered #:tag "cps"]{续文传递风格}
 
 在@secref{cpi}，我们把解释器中的所有主要过程调用重写成@emph{尾调用}。这样，我们
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
@@ -22,7 +22,7 @@
 本章，我们介绍一种系统性的方法，将任何过程转换为等效的迭代性控制行为过程。要这样，
 需要将过程转换为续文传递风格。
 
-@section[#:tag "s6.1"]{写出续文传递风格的程序}
+@section[#:style section-title-style-numbered #:tag "s6.1"]{写出续文传递风格的程序}
 
 除了写解释器，CPS另有它用。我们考虑老例子阶乘程序：
 
@@ -584,7 +584,7 @@ val)}。
 
 }
 
-@section[#:tag "s6.2"]{曳尾式}
+@section[#:style section-title-style-numbered #:tag "s6.2"]{曳尾式}
 
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择LETREC作为输
 入语言，补充多参数过程和多声明的@tt{letrec}表达式。其语法如图6.3所示，我们称之为
@@ -1064,7 +1064,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 }
 
-@section[#:tag "s6.3"]{转换为续文传递风格}
+@section[#:style section-title-style-numbered #:tag "s6.3"]{转换为续文传递风格}
 
 本节，我们开发算法，将CPS-IN程序转换为CPS-OUT程序。
 
@@ -1839,7 +1839,7 @@ CPS程序序列化计算时，命名中间结果，传递续文；而ANF程序�
 
 }
 
-@section[#:tag "s6.4"]{建模计算效果}
+@section[#:style section-title-style-numbered #:tag "s6.4"]{建模计算效果}
 
 CPS的另一重要应用是提供一个模型，显露计算效果。计算效果——像是打印或给变量赋值——
 很难用@secref{expr}中使用的方程推理建模。通过CPS变换，我们可以显露这些效果，就像

@@ -10,7 +10,7 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "oac"]{对象和类}
+@title[#:style part-title-style-numbered #:tag "oac"]{对象和类}
 
 许多编程任务都需要程序通过接口管理某些状态。例如，文件系统有内部状态，但访问和修
 改那一状态只能通过文件系统的接口。状态常常涉及多个变量，为了维护状态的一致性，必
@@ -50,7 +50,7 @@
 有提供相仿的能力。但是，PROC-MODULES这样的模块系统提供了更为灵活的方式来控制名字
 的可见性。模块和类可以相得益彰。
 
-@section[#:tag "s9.1"]{面向对象编程}
+@section[#:style section-title-style-numbered #:tag "s9.1"]{面向对象编程}
 
 本章，我们研究一种简单的面向对象编程语言，名为CLASSES。CLASSES程序包含一些类声明，
 然后是一个可能用到那些类的表达式。
@@ -167,7 +167,7 @@ in send o1 odd(13)}|
 的对象。这就像练习3.37中，用动态绑定实现递归。
 }
 
-@section[#:tag "s9.2"]{继承}
+@section[#:style section-title-style-numbered #:tag "s9.2"]{继承}
 
 通过继承，程序员能够逐步修改旧类，得到新类。在实践中，这十分有用。例如，有颜色的
 点类似一个点，但是它还有处理颜色的方法，如图9.3中的经典例子所示。
@@ -400,7 +400,7 @@ in send o3 m3()
  (list (para "解释" @tt{super} "调用与" @tt{self} "相互作用的例子"))]
 }
 
-@section[#:tag "s9.3"]{语言}
+@section[#:style section-title-style-numbered #:tag "s9.3"]{语言}
 
 我们的语言CLASSES由IMPLICIT-REFS扩展而得，新增生成式如图9.7所示。程序中首先是一
 些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超类名，0个或多个字段
@@ -470,7 +470,7 @@ in send o3 m3()
 @tt{super-call}表达式包含一个方法名，0或多个参数。它从表达式持有类的超类开始，找
 出指定的方法，然后以当前对象为@tt{self}，求出方法主体的值。
 
-@section[#:tag "s9.4"]{解释器}
+@section[#:style section-title-style-numbered #:tag "s9.4"]{解释器}
 
 求程序的值时，所有类声明都用@tt{initialize-class-env!}处理，随后求表达式的值。过
 程@tt{initialize-class-env!}创建一个全局@emph{类环境} (@emph{class environment})，
@@ -606,7 +606,7 @@ in send o3 m1(7,8)
  (list (para "简单对象"))]
 }
 
-@subsection[#:tag "s9.4.1"]{对象}
+@subsection[#:style section-title-style-numbered #:tag "s9.4.1"]{对象}
 
 我们用包含类名和字段引用的数据类型表示对象。
 
@@ -647,7 +647,7 @@ in send o3 m1(7,8)
         (class->field-names (lookup-class class-name))))))
 ]
 
-@subsection[#:tag "s9.4.2"]{方法}
+@subsection[#:style section-title-style-numbered #:tag "s9.4.2"]{方法}
 
 接下来我们处理方法。方法就像过程，但是它们不存储环境。相反，它们记录引用字段的名
 字。当调用方法时，它在如下环境中执行其主体
@@ -730,7 +730,7 @@ in send o3 m1(7,8)
 如果持有类位于类链的上端，那么位置可能多于字段变量，与字段变量对应的值将位于列表
 开头，其余值则不可见。
 
-@subsection[#:tag "s9.4.3"]{类和类环境}
+@subsection[#:style section-title-style-numbered #:tag "s9.4.3"]{类和类环境}
 
 迄今为止，我们的实现都依赖从类名获取与类相关的信息。所以，我们需要一个@emph{类环
 境} (@emph{class environment}) 完成这一工作。类环境将每个类名与描述类的数据结构
@@ -830,7 +830,7 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
             (cdr super-fields) new-fields))))))
 ]
 
-@subsection[#:tag "s9.4.4"]{方法环境}
+@subsection[#:style section-title-style-numbered #:tag "s9.4.4"]{方法环境}
 
 剩下的只有@tt{find-method}和@tt{merge-method-envs}。
 
@@ -929,7 +929,7 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
  (list (para "图9.8中的类环境"))]
 }
 
-@subsection[#:tag "s9.4.5"]{练习}
+@subsection[#:style section-title-style-numbered #:tag "s9.4.5"]{练习}
 
 @exercise[#:level 1 #:tag "ex9.1"]{
 
@@ -1291,7 +1291,7 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 
 }
 
-@section[#:tag "s9.5"]{带类型的语言}
+@section[#:style section-title-style-numbered #:tag "s9.5"]{带类型的语言}
 
 在@secref{types}，我们展示了如何用类型系统检查程序，保证它决不进行不当操作。通过
 检查器的程序决不会调用非过程处理实参，调用过程或其他操作符时，也不会使用错误数量
@@ -1575,7 +1575,7 @@ interface stringable
 
 }
 
-@section[#:tag "s9.6"]{类型检查器}
+@section[#:style section-title-style-numbered #:tag "s9.6"]{类型检查器}
 
 现在我们来看这种语言的检查器。检查器的目标是确保一些安全属性。对我们的语言来说，
 这些属性包括原有过程式语言的那部分和之后面向对象语言的那部分：通过我们类型检查器

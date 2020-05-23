@@ -6,6 +6,12 @@
          scribble/decode
          scriblib/render-cond)
 
+(define book-title-style '(toc no-index))
+(define part-title-style-numbered '(numbered no-index))
+(define part-title-style-unnumbered '(unnumbered no-index))
+(define section-title-style-numbered '(no-index))
+(define section-title-style-unumbered '(unnumbered no-index))
+
 (define question
   (make-style "Squestion" (list (make-tex-addition "../style/question.tex")
                                 (make-css-addition "../style/question.css"))))

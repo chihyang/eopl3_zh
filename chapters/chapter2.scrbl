@@ -9,9 +9,9 @@
           scribble/example
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "da"]{数据抽象}
+@title[#:style part-title-style-numbered #:tag "da"]{数据抽象}
 
-@section[#:tag "sdvi"]{用接口定义数据}
+@section[#:style section-title-style-numbered #:tag "sdvi"]{用接口定义数据}
 
 每当我们想以某种方式表示一些量时，我们就新定义了一种数据类型：它的取值是其表示，
 它的操作是处理其实例的过程。
@@ -181,7 +181,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@section[#:tag "rsdt"]{数据类型的表示策略}
+@section[#:style section-title-style-numbered #:tag "rsdt"]{数据类型的表示策略}
 
 使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关，甚至
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
@@ -196,7 +196,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
 数字（见 @secref{s3.6}）表示。
 
-@subsection[#:tag "ei"]{环境的接口}
+@subsection[#:style section-title-style-numbered #:tag "ei"]{环境的接口}
 
 环境是一函数，定义域为有限个变量的集合，值域为所有 Scheme 值的集合。数学上常说的
 有限函数是指有序数对组成的有限集合，我们采用这一含义，就得表示形如
@@ -244,7 +244,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@subsection[#:tag "dsr"]{数据结构表示法}
+@subsection[#:style section-title-style-numbered #:tag "dsr"]{数据结构表示法}
 
 环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次应用
 @tt{extend-env}，其中@${n \geqslant 0}。例如，
@@ -412,7 +412,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@subsection[#:tag "pr"]{过程表示法}
+@subsection[#:style section-title-style-numbered #:tag "pr"]{过程表示法}
 
 环境接口有一条重要性质：它只有@tt{apply-env}一个观测器。这样就能用取一变量，返回
 绑定值的Scheme过程表示环境。
@@ -494,7 +494,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@section[#:tag "irdt"]{递推数据类型的接口}
+@section[#:style section-title-style-numbered #:tag "irdt"]{递推数据类型的接口}
 
 @secref{isd}大部分都在处理递推数据类型。例如，定义1.1.8给出了lambda演算表达式的
 语法：
@@ -762,7 +762,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 }
 
-@section[#:tag "atdrdy"]{定义递推数据类型的工具}
+@section[#:style section-title-style-numbered #:tag "atdrdy"]{定义递推数据类型的工具}
 
 对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用Scheme自动设计
 和实现接口的工具。与前一节相比，这个工具产生的接口看起来很类似，却不完全相同。
@@ -1114,7 +1114,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 }
 
-@section[#:tag "s2.5"]{抽象语法及其表示}
+@section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
 语法通常指定递推数据结构的具体表示方式，后者使用前者生成的字符串或值。这种表示叫
 做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external})表示。

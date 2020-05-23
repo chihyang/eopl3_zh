@@ -10,9 +10,9 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "state"]{状态}
+@title[#:style part-title-style-numbered #:tag "state"]{状态}
 
-@section[#:tag "s4.1"]{计算的效果}
+@section[#:style section-title-style-numbered #:tag "s4.1"]{计算的效果}
 
 到目前为止，我们只考虑了计算产生的@emph{值} (@emph{value})，但是计算也有@emph{效
 果} (@emph{effect})：它可以读取，打印，修改内存或者文件系统的状态。在现实世界中，
@@ -43,7 +43,7 @@
 我们考虑两种有存储器的语言设计，分别称之为@emph{显式引用} (@emph{explicit
 reference})和@emph{隐式引用} (@emph{implicit reference})。
 
-@section[#:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
+@section[#:style section-title-style-numbered #:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
 
 在这种设计中，我们添加引用，作为另一种表达值。那么，我们有：
 
@@ -186,7 +186,7 @@ end
 第一个位置的引用。因此，@tt{deref(x)}的值是第一个位置的引用。那么程序求值
 @tt{setref}时，会修改第一个位置，整个程序返回11。
 
-@subsection[#:tag "s4.2.1"]{存储器传递规范}
+@subsection[#:style section-title-style-numbered #:tag "s4.2.1"]{存储器传递规范}
 
 在我们的语言中，任何表达式都可以有效果。要定义这些效果，我们需要描述每次求值使用
 什么样的存储器，以及求值如何修改存储器。
@@ -286,7 +286,7 @@ end
 
 }
 
-@subsection[#:tag "s4.2.2"]{指定显式引用操作}
+@subsection[#:style section-title-style-numbered #:tag "s4.2.2"]{指定显式引用操作}
 
 在EXPLICIT-REFS中，我们必须定义三个操作：@tt{newref}，@tt{deref}和@tt{setref}。
 它们的语法为：
@@ -348,7 +348,7 @@ end
 
 }
 
-@subsection[#:tag "s4.2.3"]{实现}
+@subsection[#:style section-title-style-numbered #:tag "s4.2.3"]{实现}
 
 我们当前使用的规范语言可以轻松描述有效果的计算的行为，但是它没有体现存储器的一个
 要点：引用最终指向现实世界存在的内存中一个真实的位置。因为我们只有一个现实世界，
@@ -669,7 +669,7 @@ newref: 分配位置 2
  (list (para "练习4.12，传递存储器的解释器"))]
 }
 
-@section[#:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
+@section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
 
 显式引用设计清晰描述了内存的分配、索值和修改，因为所有这些操作直接出现在程序员的
 代码之中。
@@ -746,7 +746,7 @@ in let a = (g 11)
  (list (para "IMPLICIT-REFS中的" (tt "odd") "和" (tt "even")))]
 }
 
-@subsection[#:tag "s4.3.1"]{规范}
+@subsection[#:style section-title-style-numbered #:tag "s4.3.1"]{规范}
 
 我们可以轻松写出索值和@tt{set}的规则。现在，环境总是把变量绑定到位置，所以当变量
 作为表达式时，我们需要索取它的值：
@@ -787,7 +787,7 @@ in let a = (g 11)
 
 }
 
-@subsection[#:tag "s4.3.2"]{实现}
+@subsection[#:style section-title-style-numbered #:tag "s4.3.2"]{实现}
 
 现在我们准备修改解释器。在@tt{value-of}中，我们取出每个@tt{var-exp}的值，就像规
 则描述的那样：
@@ -1135,7 +1135,7 @@ in let p = proc (y) -(y,x)
 
 }
 
-@section[#:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
+@section[#:style section-title-style-numbered #:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
 
 在练习3.9中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
 @tt{set-car!}和@tt{set-cdr!}处理它们。
@@ -1160,7 +1160,7 @@ in let p = proc (y) -(y,x)
 
 我们把这种语言叫做MUTABLE-PAIRS。
 
-@subsection[#:tag "s4.4.1"]{实现}
+@subsection[#:style section-title-style-numbered #:tag "s4.4.1"]{实现}
 
 我们可以直接用前例中的@tt{reference}数据类型实现可变序对。代码如图4.9所示。
 
@@ -1256,7 +1256,7 @@ in let p = proc (y) -(y,x)
  (list (para "给解释器添加可变序对模块"))]
 }
 
-@subsection[#:tag "s4.4.2"]{可变序对的另一种表示}
+@subsection[#:style section-title-style-numbered #:tag "s4.4.2"]{可变序对的另一种表示}
 
 把可变序对表示为两个引用没有利用@tt{MutPair}的已知信息。序对中的两个位置虽然能够
 各自赋值，但它们不是独立分配的。我们知道它们会一起分配：如果序对的左侧是一个位置，
@@ -1423,7 +1423,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 }
 
-@section[#:tag "s4.5"]{传参变体}
+@section[#:style section-title-style-numbered #:tag "s4.5"]{传参变体}
 
 当过程主体执行时，其形参绑定到一个指代值。那个值从哪儿来？它一定是过程调用传入的
 实际参数值。我们已见过两种传参方式：
@@ -1439,7 +1439,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 本节中，我们探讨其他一些传参机制。
 
-@subsection[#:tag "s4.5.1"]{按址调用}
+@subsection[#:style section-title-style-numbered #:tag "s4.5.1"]{按址调用}
 
 考虑下面的表达式：
 
@@ -1754,7 +1754,7 @@ in let swap = proc (x) proc (y)
 
 }
 
-@subsection[#:tag "s4.5.2"]{懒求值：按名调用和按需调用}
+@subsection[#:style section-title-style-numbered #:tag "s4.5.2"]{懒求值：按名调用和按需调用}
 
 迄今为止，我们讨论的所有参数传递机制都是@emph{即时} (@emph{eager})的：它们总是找
 出每个操作数的值。现在我们来看另一种截然不同的传参机制，名叫@emph{懒求值}

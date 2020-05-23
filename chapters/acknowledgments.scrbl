@@ -2,7 +2,7 @@
 @(require "style.rkt"
           scribble/manual)
 
-@title[#:style 'unnumbered #:tag "awk"]{致谢}
+@title[#:style part-title-style-unnumbered #:tag "awk"]{致谢}
 
 感谢无数同事同学，他们使用和评论了本书的前两版，又为第三版的漫长筹备提供了无价帮
 助。特别感激以下诸君的贡献，对他们我们深表谢忱。Oliver Danvy鼓励我们思考一阶组合

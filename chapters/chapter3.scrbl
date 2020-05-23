@@ -10,14 +10,14 @@
           scriblib/footnote
           racket/sandbox)
 
-@title[#:style 'numbered #:tag "expr"]{表达式}
+@title[#:style part-title-style-numbered #:tag "expr"]{表达式}
 
 本章研究变量绑定和及其作用范围。我们用一系列小型语言解释这些概念。我们为这些语言
 写出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名
 为@emph{环境} (@emph{environment})的上下文参数，以记录待求值的表达式中各个变量的
 含义。
 
-@section[#:tag "s3.1"]{规范和实现策略}
+@section[#:style section-title-style-numbered #:tag "s3.1"]{规范和实现策略}
 
 我们的规范包含若干断言，形如：
 @nested{
@@ -106,11 +106,11 @@ specification})。扫描器取一字符序列，生成词牌序列。
 另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像在 @secref{s2.5}和练习
 2.31中，处理lambda演算表达式那样。
 
-@section[#:tag "s3.2"]{LET：一门简单语言}
+@section[#:style section-title-style-numbered #:tag "s3.2"]{LET：一门简单语言}
 
 我们先来定义一种非常简单的语言，根据它最有趣的特性命名为LET。
 
-@subsection[#:tag "s3.2.1"]{定义语法}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.1"]{定义语法}
 
 图3.2展示了我们这门简单语言的语法。在这种语言中，程序只能是一个表达式。一个表达
 式是个整数常量，或差值表达式，或判零表达式，或条件表达式，或变量，或@tt{let}表达
@@ -150,7 +150,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
  (list (para "LET语言的语法"))]
 }
 
-@subsection[#:tag "s3.2.2"]{定义值}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
 
 任何编程语言规范中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两个这
 种集合：@emph{表达值} (@emph{expressed values})和@emph{指代值} (@emph{denoted
@@ -180,7 +180,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 我们假定传给@tt{expval->num}的参数不是整数，或传给@tt{expval->bool}的参数不是布
 尔值时，二者未定义。
 
-@subsection[#:tag "s3.2.3"]{环境}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.3"]{环境}
 
 若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像在
 @secref{rsdt}那样。
@@ -223,7 +223,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 }
 
-@subsection[#:tag "s3.2.4"]{指定表达式的行为}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.4"]{指定表达式的行为}
 
 我们语言中的六种表达式各对应一个左边为@${Expression}的生成式。表达式接口包含七个
 过程，六个是构造器，一个是观测器。我们用@${ExpVal}表示表达值的集合。
@@ -284,7 +284,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 
 }
 
-@subsection[#:tag "s3.2.5"]{指定程序的行为}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.5"]{指定程序的行为}
 
 在我们的语言中，整个程序只是一个表达式。要找出这个表达式的值，我们需要指定程序中
 自由变量的值。所以程序的值就是在适当的初始环境中求出的那个表达式的值。我们把初始
@@ -295,7 +295,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 = (value-of @#,elem{@${exp}} [@#,elem{@tt{i=}@${\lceil \tt{1} \rceil},@tt{v=}@${\lceil \tt{5} \rceil},@tt{x=}@${\lceil \tt{10} \rceil}}])
 ]
 
-@subsection[#:tag "s3.2.6"]{指定条件}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.6"]{指定条件}
 
 下一部分介绍我们语言的布尔值接口。语言有一个布尔值构造器，@tt{zero?}，一个布尔值
 观测器，@tt{if}表达式。
@@ -448,7 +448,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
  (list (para "条件表达式的简单计算过程"))]
  }
 
-@subsection[#:tag "s3.2.7"]{指定@tt{let}}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.7"]{指定@tt{let}}
 
 接下来我们解决用@tt{let}表达式创建新变量绑定的问题。我们给这种解释性语言添加语法，
 用关键字@tt{let}引导一个声明，关键字@tt{in}，以及主体。例如，
@@ -578,7 +578,7 @@ in let y = 2
  (list (para (tt "let") "一例"))]
  }
 
-@subsection[#:tag "s3.2.8"]{实现LET的规范}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现LET的规范}
 
 接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{见
 @elemref["sllgen"]{附录B}。——@emph{译注}}作为前端，表达式用图3.6中的数据类型表示。
@@ -923,7 +923,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 值应为4。
 }
 
-@section[#:tag "s3.3"]{PROC：有过程的语言}
+@section[#:style section-title-style-numbered #:tag "s3.3"]{PROC：有过程的语言}
 
 到现在为止，我们的语言只能做语言已定义的操作。要想让我们这种解释性语言更有用，必
 须能创建新过程。我们把新语言叫做PROC。
@@ -1031,7 +1031,7 @@ in let f = proc (z) -(z,x)
 
 }
 
-@subsection[#:tag "s3.3.1"]{一个例子}
+@subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
 
 我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
 算过程用@emph{规范}表示。令@${\rho}为任一环境。
@@ -1110,7 +1110,7 @@ in let f = proc (z) -(z,x)
 其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
 @tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
 
-@subsection[#:tag "s3.3.2"]{表示过程}
+@subsection[#:style section-title-style-numbered #:tag "s3.3.2"]{表示过程}
 
 根据@secref{pr}中介绍的方法，我们可以按照过程表示法，用过程在
 @tt{apply-procedure}中的动作表示它们。欲如此，我们定义@tt{procedure}的值为实现语
@@ -1356,7 +1356,7 @@ in let p = proc (z) a
 
 }
 
-@section[#:tag "s3.4"]{LETREC：支持递归过程的语言}
+@section[#:style section-title-style-numbered #:tag "s3.4"]{LETREC：支持递归过程的语言}
 
 现在我们来定义一门新语言LETREC，让我们的语言支持递归。因为我们的语言只有单参数过
 程，我们降低难度，只让@tt{letrec}表达式声明一个单参数过程，例如：
@@ -1637,7 +1637,7 @@ in let fact = proc (n)
 
 }
 
-@section[#:tag "s3.5"]{定界和变量绑定}
+@section[#:style section-title-style-numbered #:tag "s3.5"]{定界和变量绑定}
 
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
@@ -1810,7 +1810,7 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所以
 我们可以准确预测绑定何时可以抛弃。3.28等几道练习中的动态绑定表现类似。
 
-@section[#:tag "s3.6"]{消除变量名}
+@section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
 能会跨过很多等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
@@ -1948,7 +1948,7 @@ in proc (x) -(x,1)
 
 每个变量又一次在词深预测的位置从环境中找到。
 
-@section[#:tag "s3.7"]{实现词法地址}
+@section[#:style section-title-style-numbered #:tag "s3.7"]{实现词法地址}
 
 现在，我们来实现上面分析的词法地址。我们写个过程@tt{translation-of-program}，它
 取一程序，从声明中移除所有变量，并将每个变量引用替换为词深。
@@ -1985,7 +1985,7 @@ in proc (y)
 
 }
 
-@subsection[#:tag "s3.7.1"]{翻译器}
+@subsection[#:style section-title-style-numbered #:tag "s3.7.1"]{翻译器}
 
 因为是写翻译器，我们得知道源语言和目标语言。目标语言中的某些部分源语言中没有，像
 @tt{nameless-var-exp}和@tt{nameless-let-exp}；源语言中的某些部分目标语言中没有，
@@ -2162,7 +2162,7 @@ in proc (y)
  (list (para "词法地址翻译器"))]
 }
 
-@subsection[#:tag "s3.7.2"]{无名解释器}
+@subsection[#:style section-title-style-numbered #:tag "s3.7.2"]{无名解释器}
 
 我们的解释器利用词法分析器的预测，从而避免在运行时直接搜索变量。
 
