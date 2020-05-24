@@ -1019,7 +1019,7 @@ in let p = proc (y) -(y,x)
 
 目前为止我们的语言都是以@emph{表达式为主} (@emph{expression-oriented})的：我们感
 兴趣的主要是表达式这种句法类别，还有它们的值。扩展语言，为@emph{语句为主}
-(@emph{statement-oriented})的简单语言建立模型，其规范概述如下。一定要@emph{依照
+(@emph{statement-oriented})的简单语言建立模型，其规范概述如下。一定要@emph{遵循
 语法}，分别写出过程来处理程序、语句和表达式。
 
 @nested[#:style hangindent]{
