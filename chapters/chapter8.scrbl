@@ -1091,9 +1091,9 @@ module m1
 现在，我们的程序类型正常，类型为@tt{(from m1 take t -> bool)}。
 }
 
-通过强制抽象边界，类型检查器确保程序只能通过接口提供的过程处理接口提供的值。如
-@secref{da}所述，这给我们提供了机制来分离数据类型的用户和实现。接下来，我们给出
-这一技术的几个例子。
+通过强制抽象边界，类型检查器确保程序只能通过接口提供的过程处理接口提供的值。
+如@secref{da}所述，这给我们提供了机制来分离数据类型的用户和实现。接下来，我们给
+出这一技术的几个例子。
 
 @nested[#:style eopl-example]{
 如果程序使用了模块定义
@@ -2341,9 +2341,9 @@ module mybool-tables
  (list (para "新模块主体的判类规则"))]
 }
 
-其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。考虑
-@pageref{module-proc-eg}的例子。其中，我们用@tt{ints1}和@tt{ints2}调用模块过程
-@tt{to-int-maker}，其接口为
+其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。
+考虑@pageref{module-proc-eg}的例子。其中，我们用@tt{ints1}和@tt{ints2}调用模块过
+程@tt{to-int-maker}，其接口为
 
 @nested{
 @nested[#:style 'code-inset]{

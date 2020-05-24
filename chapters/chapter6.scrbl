@@ -510,9 +510,9 @@ val)}。
 @exercise[#:level 3 #:tag "ex6.8"]{
 
 写出@secref{s5.4}解释器的过程表示和内联过程表示。这很有挑战性，因为我们实际上有
-两个观测器，@tt{apply-cont}和@tt{apply-handler}。提示，考虑修改
-@pageref{cps-recipe}的秘方，给每个过程添加两个参数，一个表示@tt{apply-cont}中 续
-文的行为，一个表示@tt{apply-handler}中续文的行为。@linebreak[]
+两个观测器，@tt{apply-cont}和@tt{apply-handler}。提示，考虑修改@pageref{cps-recipe}的
+秘方，给每个过程添加两个参数，一个表示@tt{apply-cont}中续文的行为，一个表示
+@tt{apply-handler}中续文的行为。@linebreak[]
 
 }
 

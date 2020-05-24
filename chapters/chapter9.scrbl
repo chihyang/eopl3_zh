@@ -308,8 +308,8 @@ in list(send o1 m1(), send o2 m1(), send o2 m2())
 序。其中，我们在类@tt{colorpoint}中重写了@tt{initialize}方法，同时设置字段@tt{x}、
 @tt{y}和@tt{color}。但是，新方法的主体复制了原方法的代码。在我们的小例子中，这尚
 可接受，但在大型例子中，这显然是一种坏的做法。（为什么？）而且，如果
-@tt{colorpoint}声明了字段@tt{x}，就没法初始化@tt{point}的字段@tt{x}，就像
-@pageref{field-shadowing}的例子中，没法初始化第一个@tt{y}一样。
+@tt{colorpoint}声明了字段@tt{x}，就没法初始化@tt{point}的字段@tt{x}，
+就像@pageref{field-shadowing}的例子中，没法初始化第一个@tt{y}一样。
 
 解决方案是，把@tt{colorpoint}的@tt{initialize}方法主体中的重复代码替换为@emph{超
 类调用}，形如@tt{super initialize()}。那么@tt{colorpoint}中的@tt{initialize}方法

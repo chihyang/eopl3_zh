@@ -837,8 +837,8 @@ env var cont)}。
 @exercise[#:level 1 #:tag "ex5.14"]{
 
 前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文的
-@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所以
-@pageref{cps-computation}计算中最大续文的尺寸是3。然后，用@tt{fact}和
+@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所以@pageref{cps-computation}计
+算中最大续文的尺寸是3。然后，用@tt{fact}和
 @tt{fact-iter}计算几个操作数的值。验证@tt{fact}使用的最大续文尺寸随其参数递增，
 但@tt{fact-iter}使用的最大续文尺寸是常数。
 
