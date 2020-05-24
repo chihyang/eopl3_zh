@@ -1977,8 +1977,8 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 3 #:tag "ex5.41"]{
 
-我们已经展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{pr}中的
-步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler}和
+我们已经展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}
+中的步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler}和
 @tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程表示@tt{apply-cont}中续
 文的动作，一个无参数过程表示@tt{apply-handler}中续文的动作。
 

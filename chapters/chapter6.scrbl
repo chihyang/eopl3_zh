@@ -251,7 +251,7 @@ val)}。
 
 }
 
-这里，像@secref{apca}，@${g}作为上下文参数，性质@tt{(fact/k @${n} @${g}) =
+这里，像@secref{s1.3}，@${g}作为上下文参数，性质@tt{(fact/k @${n} @${g}) =
 (@${g} @${n!})}作为独立规范，遵循我们的原则@bold{避免神秘小工具}。
 
 现在，我们用同样的方式转换计算斐波那契数列的@tt{fib}。我们从下面的过程开始：
@@ -475,11 +475,11 @@ val)}。
 
 @itemlist[#:style 'ordered
 
- @item{@tt{remove-first}（@secref{r-f}）}
+ @item{@tt{remove-first}（@secref{s1.2.3}）}
 
- @item{@tt{list-sum}（@secref{apca}）}
+ @item{@tt{list-sum}（@secref{s1.3}）}
 
- @item{@tt{occurs-free?}（@secref{o-f}）}
+ @item{@tt{occurs-free?}（@secref{s1.2.4}）}
 
  @item{@tt{subst}（@secref{s1.2.5}）}
 

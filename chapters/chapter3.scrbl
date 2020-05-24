@@ -183,7 +183,7 @@ values})。表达值是指表达式可能的取值，指代值是指可以绑定
 @subsection[#:style section-title-style-numbered #:tag "s3.2.3"]{环境}
 
 若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像在
-@secref{rsdt}那样。
+@secref{s2.2}那样。
 
 环境是一函数，定义域为变量的有限集合，值域为指代值。写环境时我们用一些缩写。
 
@@ -463,7 +463,7 @@ in -(x, 3)
 }|
 }
 
-@tt{let}变量绑定在主体中，就像@tt{lambda}变量绑定一样（见@secref{o-f}）。
+@tt{let}变量绑定在主体中，就像@tt{lambda}变量绑定一样（见@secref{s1.2.4}）。
 }
 
 整个@tt{let}式是一个表达式，就像其主体一样，所以@tt{let}表达式可以嵌套，例如
@@ -617,7 +617,7 @@ in let y = 2
  (list (para "LET语言的语法数据类型"))]
 }
 
-只要满足@secref{rsdt}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
+只要满足@secref{s2.2}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
 建指定的初始环境，由@tt{value-of-program}使用。
 
 @nested[#:style samepage]{
@@ -1112,7 +1112,7 @@ in let f = proc (z) -(z,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.2"]{表示过程}
 
-根据@secref{pr}中介绍的方法，我们可以按照过程表示法，用过程在
+根据@secref{s2.2.3}中介绍的方法，我们可以按照过程表示法，用过程在
 @tt{apply-procedure}中的动作表示它们。欲如此，我们定义@tt{procedure}的值为实现语
 言的过程，它取一实参，返回规范指定的值：
 
@@ -1149,7 +1149,7 @@ in let f = proc (z) -(z,x)
 
 }
 
-另一种方式是用@secref{dsr}那样的数据结构表示法。
+另一种方式是用@secref{s2.2.2}那样的数据结构表示法。
 
 @racketblock[
 @#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
@@ -1575,7 +1575,7 @@ in (odd 13)
 
 @exercise[#:level 3 #:tag "ex3.34"]{
 
-用@secref{pr}环境的过程表示法实现@tt{extend-env-rec}。
+用@secref{s2.2.3}环境的过程表示法实现@tt{extend-env-rec}。
 
 }
 
@@ -1661,8 +1661,8 @@ in let fact = proc (n)
 
 }
 
-我们说变量引用由对应的声明@emph{绑定} (@emph{bound})到值。在@secref{o-f}，我们已
-经见过用声明绑定变量的例子。
+我们说变量引用由对应的声明@emph{绑定} (@emph{bound})到值。在@secref{s1.2.4}，我
+们已经见过用声明绑定变量的例子。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -2009,7 +2009,7 @@ in proc (y)
 @tt{let-exp}或@tt{proc-exp}）应被替换，我们的解释器将拒绝任何含有这些的程序。
 
 要计算任何变量引用的词法地址，我们需要它所在的作用范围。这是一种@emph{上下文}
-(@emph{context})信息，所以它就像@secref{apca}的继承属性一样。
+(@emph{context})信息，所以它就像@secref{s1.3}的继承属性一样。
 
 那么@tt{translation-of-program}将取两个参数：一个表达式和一个@emph{静态环境}
 (@emph{static environment})。静态环境是一个变量列表，表示当前表达式所在的作用范
