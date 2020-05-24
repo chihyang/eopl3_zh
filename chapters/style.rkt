@@ -69,8 +69,7 @@
   (nested #:style eopl-exercise
           ($ "\\textnormal{[}" (make-level-mark level) "\\textnormal{]}")
           (hspace 1)
-          (remove-leading-newlines c)
-          "\n"))
+          (remove-leading-newlines c)))
 
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
