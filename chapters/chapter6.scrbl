@@ -475,13 +475,13 @@ val)}。
 
 @itemlist[#:style 'ordered
 
- @item{@tt{remove-first}（@secref{s1.2.3}）}
+ @item{@tt{remove-first}（@elemref["remove-first"]{1.2.3 节}）}
 
- @item{@tt{list-sum}（@secref{s1.3}）}
+ @item{@tt{list-sum}（@elemref["list-sum"]{1.3 节}）}
 
- @item{@tt{occurs-free?}（@secref{s1.2.4}）}
+ @item{@tt{occurs-free?}（@elemref["occurs-free-1?"]{1.2.4 节}）}
 
- @item{@tt{subst}（@secref{s1.2.5}）}
+ @item{@tt{subst}（@elemref["subst"]{1.2.5 节}）}
 
 ]
 

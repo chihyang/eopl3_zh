@@ -842,7 +842,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 如果列表为空，不需要移除 @${s}，则答案为空列表。
 
 @racketblock[
-@#,elem{@bold{@tt{remove-first}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
+@#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
 (define remove-first
   (lambda (lst)
@@ -979,7 +979,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 则@tt{(or @${exp_1} @${exp_2})} 返回真值。
 
 @racketblock[
-@#,elem{@bold{@tt{occurs-free?}} : @${Sym \times LcExp \to Bool}}
+@#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${Sym \times LcExp \to Bool}}
 @#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
 (define (occurs-free? var exp)
   (cond
@@ -1072,7 +1072,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 @tt{subst} 处理它。
 
 @racketblock[
-@#,elem{@bold{@tt{subst}} : @m{Sym \times Sym \times S\mbox{-}list \to S\mbox{-}list}}
+@#,elem{@elemtag["subst"]{@bold{@tt{subst}}} : @m{Sym \times Sym \times S\mbox{-}list \to S\mbox{-}list}}
 (define subst
   (lambda (new old slist)
     (if (null? slist)
@@ -1213,7 +1213,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @; racketblock with contracts
 @racketblock[
-@#,elem{@bold{@tt{list-sum}} : @m{Listof(Int) \to Int}}
+@#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{Listof(Int) \to Int}}
 (define list-sum
   (lambda (loi)
     (if (null? loi)
