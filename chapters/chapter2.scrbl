@@ -19,8 +19,8 @@
 实例的表示通常很复杂，所以如能避免，我们不愿关心其细节。我们可能想改变数据的表示。
 最高效的表示往往难以实现，所以我们可能希望先简单实现，只在确知系统的整体性能与之
 攸关时，才改用更高效的表示。不管出于什么原因，如果我们决定改变某些数据的表示方式，
-我们得能定位程序中所有依赖表示方式的部分。这就需要借助技巧@emph{数据抽象}
-(@emph{data abstraction}) 。
+我们得能定位程序中所有依赖表示方式的部分。这就需要借助@emph{数据抽象}
+(@emph{data abstraction}) 技术。
 
 数据抽象将数据类型分为两部分：@emph{接口} (@emph{interface}) 和@emph{实现}
 (@emph{implementation})。@emph{接口}告诉我们某类型表示什么数据，能对数据做什么处
@@ -72,14 +72,14 @@
         (successor (plus (predecessor x) y)))))
 ]
 
-满足 @tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
+都满足@tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
 y\rceil}}。}
 
 大多数接口都包含：若干@emph{构造器} (@emph{constructor})，用来产生数据类型的元素；
 若干@emph{观测器} (@emph{observer})，用来从数据类型的值中提取信息。这里有三个构
 造器，@tt{zero}，@tt{successor} 和 @tt{predecessor}，一个观测器，@tt{is-zero?}。
 
-可以用多种方式表示这套接口，我们考量其中三种。
+可以用多种方式表示这套接口，我们考虑其中三种。
 
 @itemlist[#:style 'ordered
 
@@ -111,9 +111,9 @@ y\rceil}}。}
 
  @item{@emph{大数表示法} (@emph{Bignum representation})：在大数表示法中，数值以
  @${N}进制表示，@${N}是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时不
- 称数位，转称@emph{大位} (@emph{bigits})）组成的列表表示数值，这就很容易表示远超
- 机器字长的整数。这里，为了便于使用，我们把最低位放在列表的最前端。这种表示法可
- 以用归纳法定义为：
+ 称数位，而称@emph{大位} (@emph{bigits})）组成的列表表示数值，这就很容易表示远超
+ 机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可用
+ 归纳法定义为：
 
  @m{\lceil n \rceil = @env["cases"]{@tt{()} & n = 0 \\ @tt{(@m{r} . @m{\lceil q
                                     \rceil})} & n = qN + r, 0 \leqslant r < N}}
@@ -125,10 +125,10 @@ y\rceil}}。}
 
 ]
 
-这些实现都没有强制数据抽象：无法防止客户程序查看和判断表示用的是列表还是 Scheme
-整数。与之相对，有些语言直接支持数据抽象：它们允许程序员创建新的接口，确保只能通
-过接口提供的过程处理新的数据。如果类型的表示隐藏起来，不会因任何操作而暴露（包括
-打印），那就说该类型是@emph{模糊} (@emph{opaque}) 的，否则称之为@emph{透明}
+这些实现都没有强制数据抽象：无法防止客户程序查验表示用的是列表还是 Scheme 整数。
+与之相对，有些语言直接支持数据抽象：它们允许程序员创建新的接口，确保只能通过接口
+提供的过程处理新数据。如果类型的表示隐藏起来，不会因任何操作而暴露（包括打印），
+那就说该类型是@emph{模糊} (@emph{opaque}) 的，否则称之为@emph{透明}
 (@emph{transparent}) 的。
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
@@ -145,7 +145,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.2"]{
 
-客观分析上述表示法。从满足数据类型的定义上来说，它们在何种程度上成功或是失败？
+详加分析上述表示。从满足数据类型定义的角度来说，它们在何种程度上是成功或失败的？
 
 }
 
@@ -171,7 +171,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
    @tt{successor} 和 @tt{predecessor}，此外还要能表示负数。这种方式下，整数的任
    何合法表示都应该能作为你过程的参数。例如，你的过程@tt{successor}可以接受无限
    多种 @${1} 的合法表示，且都应给出一个 @${2}的合法表示。对 @${1} 的不同合法表
-   示，可以允许给出不同的 @${2} 的合法表示。}
+   示，可以给出不同的 @${2} 的合法表示。}
 
    @item{写出过程 @tt{diff-tree-plus}，用这种表示做加法。你的过程应针对不同的差
    分树进行优化，并在常数时间内得出结果（即与输入大小无关）。特别注意不可使用递
@@ -192,7 +192,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 的实现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关联
 起来。
 
-只要能够检查两个变量是否相等，变量能够用我们想用的任何方式表示。我们选用 Scheme
+只要能够检查两个变量是否相等，变量能够用我们喜欢的任何方式表示。我们选用 Scheme
 符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
 数字（见 @secref{s3.6}）表示。
 
@@ -217,7 +217,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
  }
 
 过程 @tt{empty-env} 不带参数，必须返回空环境的表示；@tt{apply-env} 用环境对变量
-求值；@tt{(extend-env @${var} @${val} @${env})} 产生一个新的环境，除了将变量
+求值；@tt{(extend-env @${var} @${val} @${env})} 产生一个新环境，除了将变量
 @${var}的值设为@${val}外，与@${env}相同。例如，表达式
 
  @nested{
@@ -238,7 +238,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.4"]{
 
- 思考数据类型@emph{堆栈} (@emph{stack})，其接口包含过程 @tt{empty-stack}，
+ 考虑数据类型@emph{堆栈} (@emph{stack})，其接口包含过程 @tt{empty-stack}，
  @tt{push}，@tt{pop}, @tt{top}和@tt{empty-stack?}。按照示例中的方式写出这些操作
  的定义。哪些操作是构造器？哪些是观测器？
 
@@ -246,7 +246,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @subsection[#:style section-title-style-numbered #:tag "s2.2.2"]{数据结构表示法}
 
-环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次应用
+环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次调用
 @tt{extend-env}，其中@${n \geqslant 0}。例如，
 
 @racketblock[
@@ -263,9 +263,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
                             @m{\mathit{Env\mbox{-}exp}})}}
 
 可以用描述列表集合的语法表示环境，由此得出图2.1中的实现。数据结构@tt{env}表示一
-环境，过程@tt{apply-env}查看和判断它表示哪种环境，并做适当操作：如果它表示空环境，
-那就报错；如果它表示由@tt{extend-env}生成的环境，那就判断要查找的变量是否与环境
-中绑定的某一变量相同，如果相同，则返回保存的值，否则在保存的环境中查找变量。
+环境，过程@tt{apply-env}查验它表示哪种环境，并做适当操作：如果它表示空环境，那就
+报错；如果它表示由@tt{extend-env}生成的环境，那就判断要查找的变量是否与环境中绑
+定的某一变量相同，如果相同，则返回保存的值，否则在保存的环境中查找变量。
 
 这是一种常见的代码模式。我们叫它@emph{解释器秘方} (@emph{interpreter recipe})：
 
@@ -285,8 +285,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @nested[#:style eopl-figure]{
 @racketblock[
-@#,elem{@${Env = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
-@#,elem{@${Var = Sym}}
+@#,elem{@${\mathit{Env} = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
+@#,elem{@${\mathit{Var} = \mathit{Sym}}}
 
 @#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
 (define empty-env
@@ -445,9 +445,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ]
 
 @tt{empty-env}创建的空环境收到任何变量都会报错，表明给定的变量不在其中。过程
-@tt{extend-env}返回的过程代表扩展的环境。这个过程收到变量@tt{search-var}后，判断
-该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的环境中查
-找它。
+@tt{extend-env}返回的过程代表扩展而得的环境。这个过程收到变量@tt{search-var}后，
+判断该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的环境
+中查找它。
 
 这种表示法中，数据由@tt{apply-env}@emph{执行的动作}表示，我们称之为@emph{过程表
 示法} (@emph{procedural representation})。
@@ -457,12 +457,13 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @itemlist[#:style 'ordered
 
- @item{找出客户代码中求取类型值的lambda表达式。为每个这样的lambda表达式创建一个
- 构造器过程。构造器过程的参数用作lambda表达式中的自由变量。在客户代码中，调用构
- 造器，替换与之对应的lambda表达式。}
+ @item{找出客户代码中求取指定类型值的lambda表达式。为每个这样的lambda表达式写一
+ 个构造器过程。构造器过程的参数用作lambda表达式中的自由变量。在客户代码中，调用
+ 构造器，替换对应的lambda表达式。}
 
  @item{像定义@tt{apply-env}那样定义一个@tt{apply-} 过程。找出客户代码中所有使用
- 类型值的地方，包括构造器过程的主体。所有使用类型值的地方都改用@tt{apply-} 过程。}
+ 指定类型值的地方，包括构造器过程的主体。所有使用指定类型值的地方都改用
+ @tt{apply-} 过程。}
 
 ]
 
@@ -471,7 +472,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 样。
 
 如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
-方实现所需接口，就像上一节那样。这个过程叫做@emph{消函}
+方实现所需接口，就像上一节那样。这种操作叫做@emph{消函}
 (@emph{defunctionalization})。环境的数据结构表示中，各种变体都是消函的简单例子。
 过程表示法和消函表示法的关系将是本书反复出现的主题。
 
@@ -483,8 +484,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.13"]{
 
-扩展过程表示法，用两个过程组成的列表表示环境：一个过程返回变量的绑定值，像前面那
-样；一个返回环境是否为空。实现@tt{empty-env?}
+扩展过程表示法，用两个过程组成的列表表示环境：一个过程像前面那样，返回变量的绑定
+值；一个返回环境是否为空。实现@tt{empty-env?}。
 
 }
 
@@ -506,38 +507,41 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 我们还写出了过程 @tt{occurs-free?}。像当时提到的，@secref{s1.2.4}中
 @tt{occurs-free?}的定义不大容易读懂。比如，很难搞明白@tt{(car (cadr exp))}指的是
-一个@tt{lambda}表达式中的变量声明，或者@tt{(caddr exp)}指的是式子的主体。
+一个@tt{lambda}表达式中的变量声明，或者@tt{(caddr exp)}指的是表达式的主体。
 
 要改善这种情况，可以给lambda演算表达式添加一套接口。我们的接口有几个构造器，以及
 两种观测器：谓词和抽词器。
 
 构造器有：
 
-@; TODO: better refinement of formula spacing
-@envalign*{
-@bold{@tt{var-exp}}    &: & \mathit{Var} \to \mathit{Lc\mbox{-}Exp} \\
-@bold{@tt{lambda-exp}} &: & \mathit{Var} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
-@bold{@tt{app-exp}}    &: & \mathit{Lc\mbox{-}Exp} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}
+@nested[#:style 'inset]{
+@verbatim|{
+|@bold{@tt{var-exp}}     |@${: \mathit{Var} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{lambda-exp}}  |@${: \mathit{Var} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp}}     |@${: \mathit{Lc\mbox{-}Exp} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+}|
 }
 
 谓词有：
 
-@; TODO: better refinement of formula spacing
-@envalign*{
-@bold{@tt{var-exp?}}    &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool} \\
-@bold{@tt{lambda-exp?}} &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool} \\
-@bold{@tt{app-exp?}}    &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}
+@nested[#:style 'inset]{
+@verbatim|{
+|@bold{@tt{var-exp?}}     |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+|@bold{@tt{lambda-exp?}}  |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+|@bold{@tt{app-exp?}}     |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+}|
 }
 
 抽词器有：
 
-@; TODO: better refinement of formula spacing
-@envalign*{
-@bold{@tt{var-exp->exp}}          &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Var} \\
-@bold{@tt{lambda-exp->bound-var}} &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Var} \\
-@bold{@tt{lambda-exp->body}}      &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
-@bold{@tt{app-exp->rator}}        &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp} \\
-@bold{@tt{app-exp->rand}}         &: & \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}
+@nested[#:style 'inset]{
+@verbatim|{
+|@bold{@tt{var-exp->exp}}           |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
+|@bold{@tt{lambda-exp->bound-var}}  |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
+|@bold{@tt{lambda-exp->body}}       |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp->rator}}         |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp->rand}}          |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+}|
 }
 
 每个抽词器对应lambda演算表达式中的一部分。现在可以写出一版只依赖接口的
@@ -559,9 +563,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
        (occurs-free? search-var (app-exp->rand exp)))))))
 ]
 
-只要使用上述构造器，这适用于lambda演算表达式的任何表示。
+只要使用上述构造器，怎样表示lambda演算表达式都可以。
 
-可以写出设计递推数据类型接口的一般步骤：
+我们可以写出设计递推数据类型接口的一般步骤：
 
 @nested[#:style tip]{
  @centered{@bold{设计递推数据类型的接口}}
@@ -569,9 +573,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
  @nested[#:style tip-content]{
  @itemlist[#:style 'ordered
 
-  @item{为数据类型的每种变体各加入一个构造器。}
+  @item{为数据类型的每种变体加入一个构造器。}
 
-  @item{为数据类型的每种变体各加入一个谓词。}
+  @item{为数据类型的每种变体加入一个谓词。}
 
   @item{为传给数据类型构造器的每段数据加入一个抽词器。}
 
@@ -728,7 +732,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.19"]{
 
-不带叶子和以整数标记中间节点的二叉树可以用语法表示为：
+空二叉树和用整数标记中间节点的二叉树可以用语法表示为：
 
 @mp{\mathit{BinTree} ::= @tt{()} \mid @tt{(@m{\mathit{Int}} @m{\mathit{BinTree}}
 @m{\mathit{BinTree}})}}
