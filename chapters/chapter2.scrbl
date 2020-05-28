@@ -64,12 +64,13 @@
 现在可以写出处理自然数的客户程序，而且不论用哪种表示方式，都保证能得出正确的结果。
 例如，不论怎样实现自然数，
 
-@nested{@racketblock[
+@nested{
+@racketblock[
 (@#,elem{@elemtag["plus"]{}}define plus
   (lambda (x y)
     (if (is-zero? x)
-        y
-        (successor (plus (predecessor x) y)))))
+      y
+      (successor (plus (predecessor x) y)))))
 ]
 
 都满足@tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
@@ -302,16 +303,16 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   (lambda (env search-var)
     (cond
       ((eqv? (car env) 'empty-env)
-       (report-no-binding-found search-var))
+        (report-no-binding-found search-var))
       ((eqv? (car env) 'extend-env)
-       (let ((saved-var (cadr env))
-             (saved-val (caddr env))
-             (saved-env (cadddr env)))
-         (if (eqv? search-var saved-var)
-             saved-val
-             (apply-env saved-env search-var))))
+        (let ((saved-var (cadr env))
+              (saved-val (caddr env))
+              (saved-env (cadddr env)))
+          (if (eqv? search-var saved-var)
+            saved-val
+            (apply-env saved-env search-var))))
       (else
-       (report-invalid-env env)))))
+        (report-invalid-env env)))))
 
 (define report-no-binding-found
   (lambda (search-var)
@@ -435,8 +436,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   (lambda (saved-var saved-val saved-env)
     (lambda (search-var)
       (if (eqv? search-var saved-var)
-          saved-val
-          (apply-env saved-env search-var)))))
+        saved-val
+        (apply-env saved-env search-var)))))
 
 @#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
 (define apply-env
@@ -549,18 +550,17 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @racketblock[
 @#,elem{@${@elemtag["occurs-free?"]{@tt{occurs-free?}} : \mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
-(define occurs-free?
-  (lambda (search-var exp)
-    (cond
-     ((var-exp? exp) (eqv? search-var (var-exp->var exp)))
-     ((lambda-exp? exp)
+(lambda (search-var exp)
+  (cond
+    ((var-exp? exp) (eqv? search-var (var-exp->var exp)))
+    ((lambda-exp? exp)
       (and
-       (not (eqv? search-var (lambda-exp->bound-var exp)))
-       (occurs-free? search-var (lambda-exp->body exp))))
-     (else
+        (not (eqv? search-var (lambda-exp->bound-var exp)))
+        (occurs-free? search-var (lambda-exp->body exp))))
+    (else
       (or
-       (occurs-free? search-var (app-exp->rator exp))
-       (occurs-free? search-var (app-exp->rand exp)))))))
+        (occurs-free? search-var (app-exp->rator exp))
+        (occurs-free? search-var (app-exp->rand exp))))))
 ]
 
 只要使用上述构造器，怎样表示lambda演算表达式都可以。
@@ -732,7 +732,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.19"]{
 
-空二叉树和用整数标记中间节点的二叉树可以用语法表示为：
+空二叉树和用整数标记内部节点的二叉树可以用语法表示为：
 
 @mp{\mathit{BinTree} ::= @tt{()} \mid @tt{(@m{\mathit{Int}} @m{\mathit{BinTree}}
 @m{\mathit{BinTree}})}}
@@ -769,9 +769,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @section[#:style section-title-style-numbered #:tag "s2.4"]{定义递推数据类型的工具}
 
 对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用Scheme自动设计
-和实现接口的工具。与前一节相比，这个工具产生的接口看起来很类似，却不完全相同。
+和实现接口的工具。这个工具产生的接口与前一节的虽不完全相同，却很类似。
 
-再来说说前一节讨论的数据类型lambda演算表达式。lambda演算表达式的接口可以这样写：
+仍考虑前一节讨论的数据类型lambda演算表达式。lambda演算表达式的接口可以这样写：
 
 @racketblock[
 (@#,elem{@elemtag["lc-exp"]{}}define-datatype lc-exp lc-exp?
@@ -792,37 +792,38 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 (@emph{operand})的缩写。
 
 这些表达式声明了三种构造器，@tt{var-exp}，@tt{lambda-exp}和@tt{app-exp}，以及一
-个谓词@tt{lc-exp?}。三个构造器用谓词@tt{identifier?}和@tt{lc-exp?}检查它们的参数，
-确保参数合规。所以，如果生成一个lc-exp只用这些构造器，可以确保它及其所有子表达式
-是合法的lc-exp。这样在处理lambda表达式时就可以跳过许多检查。
+个谓词@tt{lc-exp?}。三个构造器用谓词 @tt{identifier?} 和 @tt{lc-exp?} 检查它们的
+参数，确保参数合法。所以，如果只用这些构造器生成lc-exp，可以确保表达式及其所有子
+表达式是合法的lc-exp。如此一来，处理lambda表达式时就能跳过许多检查。
 
-我们用@elem[#:style question]{结构式}@tt{cases}代替谓词和抽词器，判断数据类型的
-实体属于哪种变体，并提取出它的组件。要搞明白这个结构式，我们用数据类型
+我们用@elem[#:style question]{结构式} @tt{cases} 代替谓词和抽词器，判断数据类型
+的实例属于哪种变体，并提取出它的组件。为解释这一结构式，我们用数据类型
 @tt{lc-exp}重写@tt{occurs-free?}（@pageref{occurs-free?}）：
 
-@nested[#:style 'noindent]{
 @racketblock[
 @#,elem{@${@tt{occurs-free?} : \mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 (define occurs-free?
   (lambda (search-var exp)
     (cases lc-exp exp
-           (var-exp
-            (var) (eqv? var search-var))
-           (lambda-exp
-            (bound-var body)
-            (and
-              (not (eqv? search-var bound-var))
-              (occurs-free? search-var body)))
-           (app-exp
-            (rator rand)
-            (or
-              (occurs-free? search-var rator)
-              (occurs-free? search-var rand))))))
+      (var-exp
+        (var) (eqv? var search-var))
+      (lambda-exp
+        (bound-var body)
+        (and
+          (not (eqv? search-var bound-var))
+          (occurs-free? search-var body)))
+      (app-exp
+        (rator rand)
+        (or
+          (occurs-free? search-var rator)
+          (occurs-free? search-var rand))))))
 ]
+
 
 要理解它，假设@tt{exp}是由@tt{app-exp}生成的lambda演算表达式。根据@tt{exp}的取值，
 分支@tt{app-exp}将被选中，@tt{rator}和@tt{rand}则绑定到两个子表达式，接着，表达式
 
+@nested{
 @racketblock[
 (or
   (occurs-free? search-var rator)
@@ -841,7 +842,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ...)
 ]
 
-递归调用@tt{occurs-free?}也是像这样完成运算。
+递归调用 @tt{occurs-free?} 像这样完成运算。
 
 }
 
@@ -854,17 +855,17 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 这新定义了一种数据类型，名为@${type\mbox{-}name}，它有一些@emph{变体}
 (@emph{variants})。每个变体有一变体名，以及0或多个字段，每个字段各有其字段名和相
-对应的谓词。不管是否分属不同的类型，变体都不能重名。类型也不能重名，且类型名不能
-用作变体名。每个字段的谓词必须是一个Scheme谓词。
+应的谓词。不论是否属于不同的类型，变体都不能重名。类型也不能重名，且类型名不能用
+作变体名。每个字段的谓词必须是一个Scheme谓词。
 
 每个变体都有一个构造器过程，用于创建该变体的值。这些过程的名字与对应的变体相同。
 如果一个变体有@${n}个字段，那么它的构造器取@${n}个参数，用对应的谓词检查每个参数
 值，并返回变体值，值的第@${i}个字段为第@${i}个参数值。
 
 @${type\mbox{-}predicate\mbox{-}name}绑定到一个谓词。这个谓词判断其参数值是否是
-对应的类型。
+相应的类型。
 
-可以将只有一种变体的记录定义为一种数据类型。为了区分数据类型及其唯一变体，我们遵
+只有一种变体的记录也可以定义为一种数据类型。为了区分数据类型及其唯一变体，我们遵
 循一种命名惯例：当只有一个变体时，我们以a-@${type\mbox{-}name}或
 an-@${type\mbox{-}name}命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name}命名构造器。
@@ -872,8 +873,8 @@ an-@${type\mbox{-}name}命名构造器；否则，以
 由@tt{define-datatype}生成的数据结构可以互递归。例如，@secref{s1.1}中的s-list语
 法为：
 
-@envalign*{S\mbox{-}list &::= {\normalfont{@tt{(@m{\{S\mbox{-}exp\}^{*}})}}} \\
-           S\mbox{-}exp &::= Symbol \mid S\mbox{-}list}
+@envalign*{\mathit{S\mbox{-}list} &::= {\normalfont{@tt{(@m{\{\mathit{S\mbox{-}exp}\}^{*}})}}} \\
+           \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
 
 s-list中的数据可以用数据类型@tt{s-list}表示为：
 
@@ -881,14 +882,14 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 (define-datatype s-list s-list?
   (empty-s-list)
   (non-empty-s-list
-   (first s-exp?)
-   (rest s-list?)))
+    (first s-exp?)
+    (rest s-list?)))
 
 (define-datatype s-exp s-exp?
   (symbol-s-exp
-   (sym symbol?))
+    (sym symbol?))
   (s-list-s-exp
-   (slst s-list?)))
+    (slst s-list?)))
 ]
 
 数据类型@tt{s-list}用@tt{(empty-s-list)}和@tt{non-empty-s-list}代替@tt{()}和
@@ -899,15 +900,15 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 @racketblock[
 (define-datatype s-list s-list?
   (an-s-list
-   (sexps (list-of s-exp?))))
+    (sexps (list-of s-exp?))))
 
 (define list-of
   (lambda (pred)
     (lambda (val)
       (or (null? val)
-          (and (pair? val)
-               (pred (car val))
-               ((list-of pred) (cdr val)))))))
+        (and (pair? val)
+          (pred (car val))
+          ((list-of pred) (cdr val)))))))
 ]
 
 这里@tt{(list-of @${pred})}生成一个谓词，检查其参数值是否是一个列表，且列表的每
@@ -924,58 +925,55 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
   (else @#,elem{@${default}}))
 ]
 
-@elem[#:style question]{结构式}指定一类型，一个待求值并检查的表达式，以及一些从
-句。每个分句以给定类型的某一变体名及对应字段名为标识。@tt{else}分句可有可无。首
-先，@${expression}求值，得到@${type\mbox{-}name}的某个值@${v}。如果@${v}是某个
-@${variant\mbox{name}}的变体，那就选中对应的分句。每个@${field-name}绑定到@${v}
-中对应的字段值。然后@${consequent}在这些绑定的作用范围内求值，并返回自身的值。如
-果@${v}不属于任何变体，且有@tt{else}分句，则求@${default}的值并返回。如果没有
-@tt{else}从句，必须给指定数据类型的@emph{每个}变体指定分句。
+该@elem[#:style question]{结构式}指定一类型，一个待求值和检查的表达式，以及一些
+从句。每个从句以指定类型的某一变体名及相应字段名为标识。@tt{else} 从句可有可无。
+首先求 @${expression} 的值，得到 @${type\mbox{-}name} 的某个值 @${v}。如果 @${v}
+是某个@${variant\mbox{-}name} 的变体，那就选中对应的从句。各
+@${type\mbox{-}name} 绑定到 @${v} 中对应的字段值。然后在这些绑定的作用范围内求取
+并返回 @${consequent} 的值。如果 @${v} 不属于任何变体，且有 @tt{else} 从句，则求
+取并返回 @${default} 的值。如果没有 @tt{else} 从句，必须为指定数据类型的@emph{每
+个}变体指定从句。
 
 }
 
-@elem[#:style question]{结构式}@tt{cases}按位置绑定变量：第@${i}个变量绑定到第
-@${i}个字段。所以，我们可以写：
+@tt{cases} @elem[#:style question]{结构式}根据位置绑定变量： 第@${i} 个变量绑定
+到第 @${i} 个字段。所以，我们可以用：
 
-@nested[#:style 'noindent]{
+@nested{
 
-@centered{
-@racketblock[
+@codeblock[#:indent 11]{
 (app-exp (exp1 exp2)
   (or
     (occurs-free? search-var exp1)
     (occurs-free? search-var exp2)))
-]
 }
 
-而不是：
+代替
 
-@centered{
-@racketblock[
+@codeblock[#:indent 11]{
 (app-exp (rator rand)
   (or
     (occurs-free? search-var rator)
     (occurs-free? search-var rand)))
-]
 }
 
 }
 
-@elem[#:style question]{结构式}@tt{define-datatype}和@tt{cases}提供了一种简洁的
-方式来定义递推数据类型，但这种方式并不是唯一的。根据使用场景，可能得用专门的表示
-方式，它们利用数据的特殊性质，更紧凑或者更高效。要获得这些优势，代价是不得不动手
-实现接口中的过程。
+@tt{define-datatype} 和 @tt{cases} @elem[#:style question]{结构式}提供了一种简洁
+的方式来定义递推数据类型，但这种方式并不是唯一的。根据使用场景，可能得用专门的表
+示方式，它们利用数据的特殊性质，更紧凑或者更高效。要获得这些优势，代价是不得不动
+手实现接口中的过程。
 
-@elem[#:style question]{结构式}@tt{define-datatype}是@emph{特定领域语言}
+@tt{define-datatype} @elem[#:style question]{结构式}是@emph{特定领域语言}
 (@emph{domain-specific language})的例子。特定领域语言是一种小巧的语言，用来描述
-一些小而精确的任务中的单一任务。本例中的任务是定义一种递归数据类型。这样的语言可
-能存在于通用语言中，就像@tt{define-datatype}，也可能是一门单独的语言，有自己的一
-套工具。要实现这样的语言，通常要找出不同种类的任务，然后设计描述各种任务的语言。
-有时这种策略非常有用。
+小而明确的任务中的单一任务。本例中的任务是定义一种递推数据类型。这种语言可能像
+@tt{define-datatype} 一样，存在于通用语言中；也可能是一门单独的语言，别有一套工
+具。一般来说，创造这类语言首先要找出任务的不同变体，然后设计语言，描述这些变体。
+这种策略通常非常有效。
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
-用@tt{define-datatype}实现@secref{s2.2.2}中的数据类型环境。然后实现练习2.9中的
+用@tt{define-datatype}实现@secref{s2.2.2}中的环境数据类型。然后实现练习2.9中的
 @tt{has-binding?}。
 
 }
@@ -988,9 +986,9 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
-@tt{lc-exp}的定义忽略了定义1.1.8中的条件：“@${Identifier}是除@tt{lambda}之外的
-任何符号。”修改@tt{identifier?}的定义，补充这一条件。提示，任何谓词都能在
-@tt{define-datatype}中使用，你定义的也能。
+@tt{lc-exp}的定义忽略了定义1.1.8中的条件：“@${\mathit{Identifier}} 是除
+@tt{lambda} 之外的任何符号。”修改 @tt{identifier?} 的定义，补充这一条件。提示：
+任何谓词都能在 @tt{define-datatype} 中使用，你定义的也能。
 
 }
 
@@ -1008,8 +1006,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
    (right bintree?)))
 ]
 
-实现二叉树过程@tt{bintree-to-list}，@tt{(bintree-to-list (interior-node 'a
-(leaf-node 3) (leaf-node 4)))}应返回列表：
+实现操作二叉树的过程 @tt{bintree-to-list}，则 @tt{(bintree-to-list
+(interior-node 'a (leaf-node 3) (leaf-node 4)))} 应返回列表：
 
 @racketblock[
 (interior-node
@@ -1084,8 +1082,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @exercise[#:level 2 #:tag "ex2.25"]{
 
-用@tt{cases}写出@tt{max-interior}，它取一棵至少有一个节点的整数二叉树（像前一道
-练习那样），返回叶子之和最大的节点对应的符号。
+用 @tt{cases} 写出 @tt{max-interior}，它取至少有一个内部节点的整数二叉树（像前一
+道练习那样），返回叶子之和最大的内部节点对应的标签。
 
 @examples[#:eval max-interior-eval
           #:label #f
@@ -1099,7 +1097,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
           (max-interior tree-3)
 ]
 
-最后一次调用@tt{max-interior}也可能返回@tt{foo}，因为节点@tt{foo}和@tt{baz}的叶子之和都为@${5}。
+最后一次调用 @tt{max-interior} 也可能返回 @tt{foo}，因为节点 @tt{foo} 和
+@tt{baz} 的叶子之和都为 5。
 
 }
 
@@ -1107,14 +1106,14 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 练习1.33还有一种写法。树的集合可以用下列语法定义：
 
-@envalign*{Red\mbox{-}blue\mbox{-}tree &::= Red\mbox{-}blue\mbox{-}subtree \\
-           Red\mbox{-}blue\mbox{-}subtree &::= @tt{(red-node @m{Red\mbox{-}blue\mbox{-}subtree} @m{Red\mbox{-}blue\mbox{-}subtree})} \\
-                                          &::= @tt{(blue-node @m{\{Red\mbox{-}blue\mbox{-}subtree\}^{*}})} \\
-                                          &::= @tt{(leaf-node @m{Int})}
+@envalign*{\mathit{Red\mbox{-}blue\mbox{-}tree} &::= \mathit{Red\mbox{-}blue\mbox{-}subtree} \\
+           \mathit{Red\mbox{-}blue\mbox{-}subtree} &::= @tt{(red-node @m{\mathit{Red\mbox{-}blue\mbox{-}subtree}} @m{\mathit{Red\mbox{-}blue\mbox{-}subtree}})} \\
+                                          &::= @tt{(blue-node @m{\{\mathit{Red\mbox{-}blue\mbox{-}subtree}\}^{*}})} \\
+                                          &::= @tt{(leaf-node @m{\mathit{Int}})}
 }
 
 用@tt{define-datatype}写出等价定义，用得到的接口写出一个过程，它取一棵树，生成形
-状相同的另一棵树，但把每个叶子改为从当前叶子节点到树根之间红色节点的数目。
+状相同的另一棵树，但把每片叶子的值改为从当前叶子节点到树根之间红色节点的数目。
 
 }
 
