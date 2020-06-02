@@ -74,8 +74,6 @@
                               (string-append exercise-level-mark str))))
   (make-level-mark-iter l ""))
 
-(define eopl-exercise
-  (make-style "EoplExercise" (list (make-tex-addition "../style/exercise.tex"))))
 
 (define (exercise #:level [level 1] #:tag [tag ""] . c)
   (nested #:style eopl-exercise
