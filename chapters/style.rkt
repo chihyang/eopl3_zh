@@ -48,8 +48,20 @@
 (define hangindent
   (make-style "Hangindent" (list (make-tex-addition "../style/hangindent.tex"))))
 
+(define normalfont
+  (make-style "NormalFont" (list (make-tex-addition "../style/normalfont.tex"))))
+
 (define eopl-example
   (make-style "EoplExample" (list (make-tex-addition "../style/example.tex"))))
+
+(define eopl-exercise
+  (make-style "EoplExercise" (list (make-tex-addition "../style/exercise.tex"))))
+
+(define eopl-definition
+  (make-style "EoplDefinition" (list (make-tex-addition "../style/definition.tex"))))
+
+(define eopl-definition-title
+  (make-style "EoplDefinitionTitle" (list (make-tex-addition "../style/definition-title.tex"))))
 
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
@@ -77,6 +89,16 @@
               (string=? (car c) "\n"))
          (remove-leading-newlines (cdr c))]
         [else c]))
+
+(define (definition #:title [title #f] #:tag [tag ""] . c)
+  (nested #:style eopl-definition
+          (elemtag tag "")
+          (if title
+              (elem #:style eopl-definition-title
+                    title)
+              (hspace 1))
+          (remove-leading-newlines c)))
+
 
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
