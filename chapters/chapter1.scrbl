@@ -36,23 +36,16 @@
 {0,1,2,...}} 的某一子集@${S}。
 
 @; definition: (def #:title title #:tag tag pre-flow ...)
-@; @def {
-@; 自然数@${n}属于@${S}，当且仅当：
-@; @itemlist[#:style 'ordered
+@definition[#:title #f #:tag "d1.1.1"]{
 
-@;  @item{@${{n = 0}}，或}
+自然数 @${n} 属于 @${S}，当且仅当：
+ @itemlist[#:style 'ordered
+  @item{@${n = 0}，或}
 
-@;  @item{@${n - 3 \in S}。
-
-@; }]
-@; }
-@env["sdef"]{
- 自然数@m{n}属于@m{S}，当且仅当：
- \begin{enumerate}
-  \item @m{n = 0}，或
-  \item @m{n - 3 \in S}
- \end{enumerate}
+  @item{@${n - 3 \in S}}
+ ]
 }
+
 
 来看看如何用这一定义判断哪些自然数属于@${S}。已知@${0 \in S}，因此@${3 \in S}，
 因为@${(3 - 3) = 0}，而@${0 \in S}。同样地，@${6 \in S}，因为@${(6 - 3) = 3}，而
@@ -93,23 +86,14 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 
 @${S}又能够定义为：
 
-@; @def{
-@; 集合@${S}为@${N}所包含的集合中，满足如下两条性质的最小集合：
 
-@; @itemlist[#:style 'ordered
+@definition[#:title #f #:tag "d1.1.2"]{
+ 集合 @${S} 为 @${N} 所包含的集合中，满足如下两条性质的最小集合：
 
-@;  @item{@${0 \in S}，且}
-
-@;  @item{若@${n \in S}，则@${n + 3 \in S}。}
-
-@; ]
-@; }
-@env["sdef"]{
- 集合@m{S}为@m{N}所包含的集合中，满足如下两条性质的最小集合：
- \begin{enumerate}
-  \item @m{0 \in S}，且
-  \item 若@m{n \in S}，则@m{n + 3 \in S}。
- \end{enumerate}
+ @itemlist[#:style 'ordered
+  @item{@${0 \in S}，且}
+  @item{若 @${n \in S}，则 @${n + 3 \in S}。}
+ ]
 }
 
 “最小集合”是指该集合满足性质 1 和 2，并且是其他任何满足性质 1 和 2 的集合的子
@@ -146,76 +130,39 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 再来看几个运用这些的例子。
 
-@; @def[ #:title
-@; （整数列表，自顶向下）
-@; ]
-@; {
-@;  Scheme列表是整数列表，当且仅当
-@;
-@;  @itemlist[#:style 'ordered
-@;   @item{列表为空，或}
-@;   @item{列表为序对，首项为整数，余项为整数列表。}
-@; ]
-@; }
-@nested[#:style samepage]{
-@env["sdef" #:opt (list (bracket "整数列表，自顶向下"))]{
+@definition[#:title "整数列表，自顶向下" #:tag "d1.1.3"]{
   Scheme列表是整数列表，当且仅当：
- \begin{enumerate}
-  \item 列表为空，或
-  \item 列表为序对，首项为整数，余项为整数列表。
- \end{enumerate}
-}
+  @itemlist[#:style 'ordered
+   @item{列表为空，或}
+   @item{列表为序对，首项为整数，余项为整数列表。}
+ ]
 }
 
 我们用@${Int}表示所有整数的集合，用@List-of-Int-$[]表示所有整数列表
 的集合。
 
-@; @def[ #:title
-@; （整数列表，自底向上）
-@; ]{
+@definition[#:title "整数列表，自底向上" #:tag "d1.1.4"]{
 
-@; 集合@List-of-Int-$[]是满足如下两条性质的最小Scheme列表集合：
+集合@List-of-Int-$[]是满足如下两条性质的最小Scheme列表集合：
 
-@; @itemlist[#:style 'ordered
+ @itemlist[#:style 'ordered
+  @item{@${\textnormal{@tt{()}} \in @List-of-Int-${}}，或}
 
-@;  @item{@${@tt{()} \in @List-of-Int{}}，或}
-
-@;  @item{若@${n \in Int}且@${l \in @List-of-Int{}}，则 @tt{(@${n} . @${l})
-@;        @${\in} @List-of-Int{}}。}
-@; ]
-@; }
-@env["sdef" #:opt (list (bracket "整数列表，自底向上"))]{
- 集合@List-of-Int-m[]是满足如下两条性质的最小Scheme列表集合：
-
- \begin{enumerate}
-
-  \item @m{\normalfont{@tt{()}} \in @List-of-Int-raw[]}，或
-
-  \item 若 @m{n \in Int}且@m{l \in @List-of-Int-raw[]}，则
-  @m{\normalfont{@tt{(@m{n} . @m{l})}} \in @List-of-Int-raw[]}。
-
- \end{enumerate}
-}
+  @item{若 @${n \in \mathit{Int}} 且 @${l \in @List-of-Int-${}}，则
+  @${\textnormal{\texttt{(}}n\phantom{x}.\phantom{x}l\textnormal{\texttt{)}} \in
+  @List-of-Int-${}}。}
+ ]
+ }
 
 
 这里，我们用中缀“@tt{.}”代表Scheme中 @racket[cons] 操作的结果。式子@tt{(@${n}
 . @${l})}代表Scheme序对的首项为@${n}，余项为@${l}。
 
-@; @def[ #:title
-@; （整数列表，推理规则）
-@; ]{
+@definition[#:title "整数列表，推理规则" #:tag "d1.1.5"]{
 
-@; @$${\infer{() \in @List-of-Int{}}{}}
+@$${\infer{() \in @List-of-Int-${}}{}}
 
-@; @$${\infer{(n . l) \in @List-of-Int{}}{n \in Int & l \in @List-of-Int{}}}
-
-@; }
-@env["sdef" #:opt (list (bracket "整数列表，推理规则"))]{
-
- @mp{\normalfont{@tt{()}} \in @List-of-Int-raw[]}
-
- @mp{\infer{\normalfont{@tt{(@m{n} . @m{l})}} \in @List-of-Int-raw[]}
-           {n \in Int & l \in @List-of-Int-raw[]}}
+@$${\infer{(n . l) \in @List-of-Int-${}}{n \in \mathit{Int} & l \in @List-of-Int-${}}}
 
 }
 
@@ -444,14 +391,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @item{许多符号操作过程用于处理只包含符号和具有类似限制的列表。我们把这些叫做
  @tt{s-list}，定义如下：
 
- @; @def[ #:title
- @; （s-list，s-exp）
- @; ]
- @; {
- @; }
-
- @env["sdef" #:opt (list (bracket "s-list, s-exp"))]{
-
+ @definition[#:title "s-list，s-exp" #:tag "d1.1.6"]{
   @envalign*{S\mbox{-}list &::= \normalfont{@tt{(@m{\{S\mbox{-}exp\}^*})}} \\
              S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
  }
@@ -471,17 +411,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @item{使用三元素列表表示内部节点，则以数值为叶子，以符号标示内部节点的二叉树可
  用语法表示为：
 
- @; @def[ #:title
- @; （二叉树）
- @; ]
- @; {
- @; @$${Bintree ::= Int \mid @tt{(@${Symbol} @${Bintree} @${Bintree})}}
- @; }
-
- @env["sdef" #:opt (list (bracket "二叉树"))]{
-
-   @mp{Bintree ::= Int \mid \normalfont{@tt{(@m{Symbol} @m{Bintree} @m{Bintree})}}}
-
+ @definition[#:title "二叉树" #:tag "d1.1.7"]{
+  @$${\mathit{Bintree} ::= \mathit{Int} \mid @tt{(@${\mathit{Symbol}} @${\mathit{Bintree}} @${\mathit{Bintree}})}}
  }
 
  这是此类树的几个例子：
@@ -499,25 +430,13 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单语言，常用于研究编
  程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
 
- @; @def[ #:title
- @; （lambda 演算）
- @; ]
- @; {
- @; @envalign*{LcExp &::= @m{Identifier} \\
- @;                  &::= @tt{(lambda (@m{Identifier}) @m{LcExp})} \\
- @;                  &::= @tt{(@m{LcExp} @m{LcExp})}}
-
- @; 其中，identifier 是除 @tt{lambda} 之外的任何符号。
- @; }
-
- @env["sdef" #:opt (list (bracket "lambda 演算"))]{
-
-  @envalign*{LcExp &::= @m{Identifier} \\
-                   &::= \normalfont{@tt{(lambda (@m{Identifier}) @m{LcExp})}} \\
-                   &::= \normalfont{@tt{(@m{LcExp} @m{LcExp})}}}
-
-  其中，identifier 是除 {\normalfont{@tt{lambda}}} 之外的任何符号。
-
+ @definition[#:title "lambda 演算" #:tag "d1.1.8"]{
+ @nested[#:style normalfont]{
+  @envalign*{\mathit{LcExp} &::= @m{\mathit{Identifier}} \\
+                            &::= @tt{(lambda (@m{\mathit{Identifier}}) @m{\mathit{LcExp}})} \\
+                            &::= @tt{(@m{\mathit{LcExp}} @m{\mathit{LcExp}})}}
+ }
+ 其中，identifier 是除 @tt{lambda} 之外的任何符号。
  }
 
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表

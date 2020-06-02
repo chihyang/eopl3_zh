@@ -153,7 +153,7 @@ in (f 1)
 
 @nested{
 
-@nested[#:style (make-style "sdef" '())]{
+@definition[#:title #f #:tag "d7.1.1"]{
  性质“表达值v的类型为t”由对t进行归纳得到：
 
  @itemlist[
