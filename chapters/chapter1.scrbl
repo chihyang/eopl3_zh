@@ -452,7 +452,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @codeblock{((lambda (x) (+ x 5)) (- x 7))}
 
  中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。
- @secref{s1.2.4}节中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
+ @secref{s1.2.4}中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
 
  该语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序来处理它们。
 
