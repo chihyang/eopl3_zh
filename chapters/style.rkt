@@ -63,6 +63,9 @@
 (define eopl-definition-title
   (make-style "EoplDefinitionTitle" (list (make-tex-addition "../style/definition-title.tex"))))
 
+(define eopl-theorem
+  (make-style "EoplTheorem" (list (make-tex-addition "../style/theorem.tex"))))
+
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
 
@@ -97,6 +100,14 @@
               (hspace 1))
           (remove-leading-newlines c)))
 
+(define (theorem #:title [title #f] #:tag [tag ""] . c)
+  (nested #:style eopl-theorem
+          (elemtag tag "")
+          (if title
+              (elem #:style eopl-definition-title
+                    title)
+              (hspace 1))
+          (remove-leading-newlines c)))
 
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
