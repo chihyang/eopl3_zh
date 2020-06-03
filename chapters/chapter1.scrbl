@@ -10,6 +10,8 @@
           scribble/example
           scriblib/footnote
           racket/sandbox)
+@(define (Int-$) @${\mathit{Int}})
+@(define (Int-m) @m{\mathit{Int}})
 @(define (List-of-Int-$) @${\mathit{List\mbox{-}of\mbox{-}Int}})
 @(define (List-of-Int-m) @m{\mathit{List\mbox{-}of\mbox{-}Int}})
 @(define (List-of-Int-raw) "\\mathit{List\\mbox{-}of\\mbox{-}Int}")
@@ -138,8 +140,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  ]
 }
 
-我们用@${Int}表示所有整数的集合，用@List-of-Int-$[]表示所有整数列表
-的集合。
+我们用 @Int-$[] 表示所有整数的集合，用 @List-of-Int-$[] 表示所有整数列表的集合。
 
 @definition[#:title "整数列表，自底向上" #:tag "d1.1.4"]{
 
@@ -159,11 +160,11 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 . @${l})}代表Scheme序对的首项为@${n}，余项为@${l}。
 
 @definition[#:title "整数列表，推理规则" #:tag "d1.1.5"]{
+@nested[#:style normalfont]{
+@$${\infer{@tt{()} \in @List-of-Int-${}}{}}
 
-@$${\infer{() \in @List-of-Int-${}}{}}
-
-@$${\infer{(n . l) \in @List-of-Int-${}}{n \in \mathit{Int} & l \in @List-of-Int-${}}}
-
+@$${\infer{@tt{(@${n} . @${l})} \in @List-of-Int-${}}{n \in \mathit{Int} & l \in
+@List-of-Int-${}}} }
 }
 
 这三个定义等价。来看看如何用它们生成一些@List-of-Int-$[]的元素。
@@ -175,21 +176,21 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @item{由定义1.1.4的性质2，@tt{(14 . ())}是整数列表。因为@tt{14}是整数，@tt{()}
        是整数列表。写成@List-of-Int-$[]规则二的形式，就是
 
-       @$${\infer{@tt{(14 . ())} \in @List-of-Int-$[]} {@tt{14} \in Int &
-           @tt{()} \in @List-of-Int-$[]}} }
+       @$${\infer{@tt{(14 . ())} \in @List-of-Int-$[]} {@tt{14} \in \mathit{Int}
+           & @tt{()} \in @List-of-Int-$[]}} }
 
  @item{由定义1.1.4的性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，
        @tt{(14 . ())}是整数列表。仍写成@List-of-Int-$[]规则二的形式，是
 
-       @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]} {@tt{3} \in Int &
-           @tt{(14 . ())} \in @List-of-Int-$[]}} }
+       @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]} {@tt{3} \in
+           \mathit{Int} & @tt{(14 . ())} \in @List-of-Int-$[]}} }
 
  @item{由定义1.1.4的性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为 @tt{-7}
        是整数，@tt{(3 . (14 . ()))}是整数列表。再次写成@List-of-Int-$[]规则二的
        形式，是
 
        @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]} {@tt{-7} \in
-           Int & @tt{(3 . (14 . ()))}\in @List-of-Int-$[]}} }
+           \mathit{Int} & @tt{(3 . (14 . ()))}\in @List-of-Int-$[]}} }
 
  @item{不按照这种方式得到的都不是整数列表。}
 
@@ -203,10 +204,11 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 (@emph{derivation}) 或@emph{推理树} (@emph{deduction tree})。
 
 @$${\infer{@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}
-          {@tt{-7} \in Int &
+          {@tt{-7} \in \mathit{Int} &
            \infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]}
-                 {@tt{3} \in Int & \infer{@tt{(14 . ())} \in @List-of-Int-$[]}
-                                       {@tt{14} \in Int & @tt{()} \in @List-of-Int-$[]}}
+                 {@tt{3} \in \mathit{Int} &
+                  \infer{@tt{(14 . ())} \in @List-of-Int-$[]}
+                        {@tt{14} \in \mathit{Int} & @tt{()} \in @List-of-Int-$[]}}
           }}
 
 @exercise[#:level 1 #:tag "ex1.1"]{
@@ -268,13 +270,13 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @; @grammar{
 
 @envalign*{@List-of-Int-raw[] &::= @tt{()} \\
-@List-of-Int-raw[] &::= @tt{(@m{Int} . @List-of-Int-m[])}
+@List-of-Int-raw[] &::= @tt{(@Int-m[] . @List-of-Int-m[])}
 }
 
 @; }
 
-这两条规则对应上述定义 1.1.4 中的两条属性。规则一是说空表属于@List-of-Int-$[]；规
-则二是说，若 @${n} 属于 @${Int} 且 @${l} 属于 @List-of-Int-$[]，则@tt{(@${n}
+这两条规则对应上述定义 1.1.4 中的两条属性。规则一是说空表属于@List-of-Int-$[]；
+规则二是说，若 @${n} 属于 @Int-$[] 且 @${l} 属于 @List-of-Int-$[]，则@tt{(@${n}
 . @${l})} 属于 @List-of-Int-$[]。这些规则叫做@emph{语法}。
 
 来看看该定义的各个部分，其中有：
@@ -303,14 +305,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 ]
 
 如果某些句法类别的含义在上下文中足够清晰，在生成式中提到它们时通常不作定义，如
-@${Int}。
+@Int-$[]。
 
 语法常常简写。当一个生成式的左边与前一生成式相同时，一般会略去。根据这一惯例，我
 们的语法可以写作
 
 @envalign*{
 @List-of-Int-raw[] &::= @tt{()} \\
-                          &::= @tt{(@m{Int} . @List-of-Int-m[])}
+                          &::= @tt{(@Int-m[] . @List-of-Int-m[])}
 }
 
 给同一句法类别编写一组规则时，也可以只写一次@${::=}和左边内容，随后的各个右边内
@@ -318,23 +320,23 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 @List-of-Int-$[]的语法可写成：
 
 
-@$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@${Int} . @List-of-Int-$[])}}
+@$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@Int-$[] . @List-of-Int-$[])}}
 
 另一种简写是@elemtag["kleene-star"]{@emph{克莱尼星号}} (@emph{Kleene Star})，写
 作 @${\{...\}^*}。当它出现在右边时，表示一个序列，由任意多个花括号之间的内容组成。
 用克莱尼星号，@List-of-Int-$[] 的定义可以简写为
 
-@$${@List-of-Int-$[] ::= @tt{(@${\{Int\}^*})}}
+@$${@List-of-Int-$[] ::= @tt{(@${\{\mathit{Int}\}^*})}}
 
 这也包含没有任何内容的情况。如果内容出现 0 次，得到的是空字符串。
 
 星号的变体是@emph{克莱尼加号} (@emph{Kleene Plus}) @${\{...\}^+}，表示一个或多个
 内容的序列。把上例中的@${^*}换成@${^+}，定义的句法类别是非空整数列表。
 
-星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，@${Int^{*(c)}} 表示
-一个序列，包含任意数量的非终止符@${Int}元素，以非空字符序列 @${c} 分隔。这也包含
-没有元素的情况。如果有 0 个元素，得到的是空字符串。例如，@${Int^{*(,)}} 包含字符
-串
+星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，
+@${\mathit{Int}^{*(c)}} 表示一个序列，包含任意数量的非终止符 @Int-$[] 元素，以非
+空字符序列 @${c} 分隔。这也包含没有元素的情况。如果有 0 个元素，得到的是空字符串。
+例如，@${\mathit{Int}^{*(,)}} 包含字符串
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -345,7 +347,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 }|
 }
 
-@${Int^{*(;)}} 包含字符串
+@${\mathit{Int}^{*(;)}} 包含字符串
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -365,15 +367,15 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 推导化为
 
 @envalign*{
- @List-of-Int-raw[] &\Rightarrow @tt{(@m{Int} . @List-of-Int-m[])} \\
+ @List-of-Int-raw[] &\Rightarrow @tt{(@Int-m[] . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(14 . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(14 . ())}}
 
 非终止符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
 
 @envalign*{
- @List-of-Int-raw[] &\Rightarrow @tt{(@m{Int} . @List-of-Int-m[])} \\
-                           &\Rightarrow @tt{(@m{Int} . ())} \\
+ @List-of-Int-raw[] &\Rightarrow @tt{(@Int-m[] . @List-of-Int-m[])} \\
+                           &\Rightarrow @tt{(@Int-m[] . ())} \\
                            &\Rightarrow @tt{(14 . ())}
 }
 
@@ -392,8 +394,10 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  @tt{s-list}，定义如下：
 
  @definition[#:title "s-list，s-exp" #:tag "d1.1.6"]{
-  @envalign*{S\mbox{-}list &::= \normalfont{@tt{(@m{\{S\mbox{-}exp\}^*})}} \\
-             S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
+ @nested[#:style normalfont]{
+  @envalign*{\mathit{S\mbox{-}list} &::= @tt{(@m{\{\mathit{S\mbox{-}exp}\}^*})} \\
+             \mathit{S\mbox{-}list} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
+ }
  }
 
  @elemtag["s-list"]{s-list} 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。
@@ -412,7 +416,9 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  用语法表示为：
 
  @definition[#:title "二叉树" #:tag "d1.1.7"]{
+ @nested[#:style normalfont]{
   @$${\mathit{Bintree} ::= \mathit{Int} \mid @tt{(@${\mathit{Symbol}} @${\mathit{Bintree}} @${\mathit{Bintree}})}}
+ }
  }
 
  这是此类树的几个例子：
@@ -436,7 +442,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
                             &::= @tt{(lambda (@m{\mathit{Identifier}}) @m{\mathit{LcExp}})} \\
                             &::= @tt{(@m{\mathit{LcExp}} @m{\mathit{LcExp}})}}
  }
- 其中，identifier 是除 @tt{lambda} 之外的任何符号。
+
+ 其中，identifier 是除 @elem[#:style normalfont]{@tt{lambda}} 之外的任何符号。
  }
 
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
@@ -454,7 +461,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。
  @secref{s1.2.4}中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
 
- 该语法定义 @${LcExp} 的元素为 Scheme 值，因此很容易写出程序来处理它们。
+ 该语法定义 @${\mathit{LcExp}} 的元素为 Scheme 值，因此很容易写出程序来处理它们。
 
  }
 
@@ -464,16 +471,16 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 类别可以在涉及它的任何上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索
 树}。其节点或者为空，或者包含一个整数、两棵子树
 
-@$${Binary\mbox{-}search\mbox{-}tree ::= @tt{()} \mid
-    @tt{(@${Int} @${Binary\mbox{-}search\mbox{-}tree} @${Binary\mbox{-}search\mbox{-}tree})}}
+@$${\mathit{Binary\mbox{-}search\mbox{-}tree} ::= @tt{()} \mid
+    @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-}tree}})}}
 
 这如实反映了每个节点的结构，但是忽略了二叉搜索树的一个要点：所有左子树的键值都小
 于（或等于）当前节点，所有右子树的键值都大于当前节点。
 
-因为这条额外限制，从 @${Binary\mbox{-}search\mbox{-}tree} 得出的句法推导并不都是
-正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成式用在哪种
-上下文。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive constraints})，
-或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants})。
+因为这条额外限制，从 @${\mathit{Binary\mbox{-}search\mbox{-}tree}} 得出的句法推
+导并不都是正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成
+式用在哪种上下文。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive
+constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants})。
 
 定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
 前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
@@ -579,7 +586,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 是一条注释，我们用打字机字体示之，以便阅读。
 
 @racketblock[
-@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@emph{的长度}}}
 (define list-length
   (lambda (lst)
@@ -588,13 +595,14 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 列表的集合定义为
 
-@$${List ::= @tt{()} \mid @tt{(@${Scheme \ value} . @${List})}}
+@$${\mathit{List} ::= @tt{()} \mid @tt{(@${Scheme \; value}
+. @${\mathit{List}})}}
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
 @nested[#:style samepage]{
 @racketblock[
-@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
@@ -609,7 +617,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
 
 @racketblock[
-@#,elem{@bold{@tt{list-length}} : @${List \to Int}}
+@#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
@@ -658,7 +666,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 这就得出定义
 
 @racketblock[
-@#,elem{@bold{@tt{nth-element}} : @${List \times Int \to SchemeVal}}
+@#,elem{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int} \to \mathit{SchemeVal}}}
 @#,elem{@bold{用法} : @tt{(nth-element @${lst} @${n}) = @${lst} 的第 @${n} 个元素}}
 (define nth-element
   (lambda (lst)
@@ -674,9 +682,10 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
                 "列表太短，没有第~s个元素.~%" (+ n 1))))
 ]
 
-这里的注释 @tt{@bold{@tt{nth-element}} : @${List \times Int \to SchemeVal}} 表示
-@bold{@tt{nth-element}}是一个过程，取两个参数，一个为列表，一个为整数，返回一个
-Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
+这里的注释 @tt{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int}
+\to \mathit{SchemeVal}}} 表示 @bold{@tt{nth-element}} 是一个过程，取两个参数，一
+个为列表，一个为整数，返回一个Scheme 值。这与数学中的表示 @${f : A \times B \to
+C} 相同。
 
 过程 @tt{report-list-too-short} 调用 @tt{eopl:} @tt{error} 来报告错误。过程
 @tt{eopl:error} 会终止计算。它的首个参数是一符号，用于在错误信息中指示调用
@@ -744,17 +753,19 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
           (remove-first 'a4 '(c1 a4 c1 a4))
           (remove-first 'x '())]
 
-写出此过程之前，我们先要定义符号列表集合 @${List\mbox{-}of\mbox{-}Symbol} ，以便
-给出问题的完整描述。不像上一节介绍的 s-lists，符号列表不包含子列表。
+写出此过程之前，我们先要定义符号列表集合
+@${\mathit{List\mbox{-}of\mbox{-}Symbol}} ，以便给出问题的完整描述。不像上一节介
+绍的 s-lists，符号列表不包含子列表。
 
-@$${List\mbox{-}of\mbox{-}Symbol ::= @tt{()} \mid @tt{(@${Symbol} . @${List\mbox{-}of\mbox{-}Symbol})}}
+@$${\mathit{List\mbox{-}of\mbox{-}Symbol} ::= @tt{()} \mid
+@tt{(@${\mathit{Symbol}} . @${\mathit{List\mbox{-}of\mbox{-}Symbol}})}}
 
 符号列表或者是空列表，或者首项为符号，余项为符号列表。
 
 如果列表为空，不需要移除 @${s}，则答案为空列表。
 
 @racketblock[
-@#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
+@#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
 (define remove-first
   (lambda (lst)
@@ -763,15 +774,15 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
         ...)))
 ]
 
-写合约时，我们用 @${Listof(Sym)} 而不是 @${List\mbox{-}of\mbox{-}Symbol}。用这种
-写法可以免除许多上面那样的定义。
+写合约时，我们用 @${\mathit{Listof}(\mathit{Sym})} 而不是
+@${\mathit{List\mbox{-}of\mbox{-}Symbol}}。用这种写法可以免除许多上面那样的定义。
 
 如果 @${los} 非空，有没有哪种情况可以立刻得出答案？如果 @${los} 的第一个元素是
 @${s}，比如 @${los = @tt{(@${s} @${s_1} @${...} @${s_{n-1}})}}，@${s} 首次出现时是
 @${los} 的第一个元素，那么把它删除之后的结果是 @tt{(@${s_1} @${...} @${s_{n-1}})}。
 
 @racketblock[
-@#,elem{@bold{@tt{remove-first}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
+@#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
   (lambda (lst)
     (if (null? lst)
@@ -796,7 +807,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 @nested[#:style samepage]{
 @racketblock[
-@#,elem{@bold{@tt{remove-first}} : @${Sym \times Listof(Sym) \to Listof(Sym)}}
+@#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
   (lambda (lst)
     (if (null? lst)
@@ -857,9 +868,11 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 遵照 lambda 演算表达式的语法，我们可以解决此问题：
 
-@envalign*{LcExp &::= @m{Identifier} \\
-                 &::= \normalfont{@tt{(lambda (@m{Identifier}) @m{LcExp})}} \\
-                 &::= \normalfont{@tt{(@m{LcExp} @m{LcExp})}}}
+@nested[#:style normalfont]{
+@envalign*{\mathit{LcExp} &::= @m{\mathit{Identifier}} \\
+                          &::= @tt{(lambda (@m{\mathit{Identifier}}) @m{\mathit{LcExp}})} \\
+                          &::= @tt{(@m{\mathit{LcExp}} @m{\mathit{LcExp}})}}
+}
 
 我们可以总结出规则的各种情况：
 
@@ -891,7 +904,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 则@tt{(or @${exp_1} @${exp_2})} 返回真值。
 
 @racketblock[
-@#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${Sym \times LcExp \to Bool}}
+@#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
 (define (occurs-free? var exp)
   (cond
@@ -939,27 +952,31 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 
 因为 @tt{subst} 定义于 s-list 上，它的结构应当反映 s-list 的定义（定义 1.1.6）：
 
-@envalign*{S\mbox{-}list &::= \normalfont{@tt{(@m{\{S\mbox{-}exp\}^*})}} \\
-           S\mbox{-}list &::= Symbol \mid S\mbox{-}list}
+@nested[#:style normalfont]{
+@envalign*{\mathit{S\mbox{-}list} &::= @tt{(@m{\{\mathit{S\mbox{-}exp}\}^*})} \\
+           \mathit{S\mbox{-}list} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
+}
 
 克莱尼星号准确描述了集合 s-list，但对写程序没什么用。因此我们的第一步是抛开克莱
 尼星号重写语法。得出的语法表明，我们的过程应当该递归处理 s-list 的首项和余项。
 
-@envalign*{S\mbox{-}list &::= {\normalfont@tt{()}} \\
-                         &::= {\normalfont{@tt{(@m{S\mbox{-}exp} . @m{S\mbox{-}list})}}} \\
-           S\mbox{-}exp &::= Symbol \mid S\mbox{-}list}
+@nested[#:style normalfont]{
+@envalign*{\mathit{S\mbox{-}list} &::= @tt{()} \\
+                                  &::= @tt{(@m{\mathit{S\mbox{-}exp}} . @m{\mathit{S\mbox{-}list}})} \\
+            \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
+}
 
 这一例子比之前的复杂，因为它的语法输入包含两个非终止符，@${S\mbox{-}list} 和
 @${S\mbox{-}exp}。因此，我们需要两个过程，一个处理 @${S\mbox{-}list}，另一个处理
 @${S\mbox{-}exp}。
 
 @racketblock[
-@#,elem{@bold{@tt{subst}} : @m{Sym \times Sym \times S\mbox{-}list \to S\mbox{-}list}}
+@#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
   (lambda (new old slist)
     ...))
 
-@#,elem{@bold{@tt{subst-in-s-exp}} : @m{Sym \times Sym \times S\mbox{-}exp \to S\mbox{-}exp}}
+@#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
   (lambda (new old sexp)
     ...))
@@ -968,7 +985,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 我们首先处理 @tt{subst}。如果列表为空，不需要替换 @tt{old}。
 
 @racketblock[
-@#,elem{@bold{@tt{subst}} : @m{Sym \times Sym \times S\mbox{-}list \to S\mbox{-}list}}
+@#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
   (lambda (new old slist)
     (if (null? slist)
@@ -984,7 +1001,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 @tt{subst} 处理它。
 
 @racketblock[
-@#,elem{@elemtag["subst"]{@bold{@tt{subst}}} : @m{Sym \times Sym \times S\mbox{-}list \to S\mbox{-}list}}
+@#,elem{@elemtag["subst"]{@bold{@tt{subst}}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
   (lambda (new old slist)
     (if (null? slist)
@@ -1002,7 +1019,7 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
 用 @tt{subst} 找出答案。
 
 @racketblock[
-@#,elem{@bold{@tt{subst-in-s-exp}} : @m{Sym \times Sym \times S\mbox{-}exp \to S\mbox{-}exp}}
+@#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
   (lambda (new old sexp)
     @; diff {
@@ -1012,9 +1029,9 @@ Scheme 值。这与数学中的表示 @${f : A \times B \to C} 相同。
     @;}
 ]
 
-因为我们严格依照 @${S\mbox{-}list} 和 @${S\mbox{-}exp} 的定义，这个递归一定会终
-止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称之为@emph{互递归}
-(@emph{mutually recursive})。
+因为我们严格依照 @${\mathit{S\mbox{-}list}} 和 @${\mathit{S\mbox{-}exp}} 的定义，
+这个递归一定会终止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称
+之为@emph{互递归} (@emph{mutually recursive})。
 
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
@@ -1076,7 +1093,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @; @racketblock with contracts and usage
 @racketblock[
-@#,elem{@bold{@tt{number-elements-from}} : @m{Listof(SchemeVal) \times Int \to Listof(List(Int, SchemeVal))}}
+@#,elem{@bold{@tt{number-elements-from}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \times \mathit{Int} \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 @#,elem{@${\begin{alignedat}{-1}@bold{用法} : &@tt{(number-elements-from '(@${v_0} @${v_1} @${v_2} ...) n)} \\ &\hphantom{x}= @tt{((@${n} @${v_0}) (@${n + 1} @${v_1}) (@${n + 2} @${v_2}) ...)}\end{alignedat}}}
 (define number-elements-from
   (lambda (lst n)
@@ -1093,7 +1110,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 一旦我们定义了 @tt{number-elements-from}，很容易写出所需的过程。
 
 @racketblock[
-@#,elem{@elemtag["n-e"]{@bold{@tt{number-elements}}} : @m{Listof(SchemeVal) \to Listof(List(Int, SchemeVal))}}
+@#,elem{@elemtag["n-e"]{@bold{@tt{number-elements}}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 (define number-elements
   (lambda (lst n)
     (number-elements-from lst 0)))
@@ -1125,7 +1142,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @; racketblock with contracts
 @racketblock[
-@#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{Listof(Int) \to Int}}
+@#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{\mathit{Listof}(\mathit{Int}) \to \mathit{Int}}}
 (define list-sum
   (lambda (loi)
     (if (null? loi)
@@ -1150,7 +1167,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
 @racketblock[
-@#,elem{@bold{@tt{partial-vector-sum}} : @${Vectorof(Int) \times Int \to Int}}
+@#,elem{@bold{@tt{partial-vector-sum}} : @${\mathit{Vectorof}(\mathit{Int}) \times \mathit{Int} \to \mathit{Int}}}
 @#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
 (define partial-vector-sum
   (lambda (v n)
@@ -1169,7 +1186,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @; racketblock with contracts and usage
 @racketblock[
-@#,elem{@bold{@tt{vector-sum}} : @m{Vectorof(Int) \to Int}}
+@#,elem{@bold{@tt{vector-sum}} : @m{\mathit{Vectorof}(\mathit{Int}) \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(vector-sum @m{v}) = @m{\sum\limits_{i=0}^{i=length(v)-1} v_i}}}
 (define vector-sum
   (lambda (v)
