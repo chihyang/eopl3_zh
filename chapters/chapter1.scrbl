@@ -549,7 +549,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 }
 
 @exercise[#:level 2 #:tag "ex1.5"]{
- 证明若 @m{e \in LcExp}，则 @m{e} 中的左右括号数量相等。
+ 证明若 @m{e \in \mathit{LcExp}}，则 @m{e} 中的左右括号数量相等。
 
 }
 
@@ -1544,7 +1544,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons (car slist)
                   (flatten (cdr slist))))))))))
 @exercise[#:level 2 #:tag "ex1.27"]{
- @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，@tt{flatten} 移除参数内的所有内层括号。
+ @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，
+ @tt{flatten} 移除参数内的所有内层括号。
 
  @examples[#:eval flatten-eval
            #:label #f
