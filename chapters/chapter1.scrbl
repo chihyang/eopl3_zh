@@ -66,7 +66,7 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 @; codeblock with contracts and usage
 @nested[#:style samepage]{
 @racketblock[
-@#,elem{@bold{@tt{in-S?}} : @${N \to Bool}}
+@#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
 (define in-S?
   (lambda (n)
@@ -78,9 +78,10 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 }
 @;
 
-这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? : @#,elem{@${N \to Bool}}]  @;contract
-是一条注释，称为该函数的@emph{合约} (@emph{contact})。它表示@racket[in-S?] 应为
-一过程，取一自然数，产生一布尔值。这样的注释对阅读和编写代码很有帮助。
+这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? :
+@#,elem{@${\mathit{N} \to \mathit{Bool}}}] 是一条注释，称为该函数的@emph{合约}
+(@emph{contact})。它表示@racket[in-S?] 应为一过程，取一自然数，产生一布尔值。这
+样的注释对阅读和编写代码很有帮助。
 
 要判断是否@${n \in S}，先判断是否@${n = 0}。如果是，那么答案为真。否则，判断是否
 @${n - 3 \in S}。欲知此，首先判断是否@${(n - 3) \geqslant 0}。如果是，那么可以用
