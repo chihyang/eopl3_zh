@@ -1181,7 +1181,6 @@ in let f = proc (z) -(z,x)
 在完整的实现中，我们向数据类型@tt{expval}添加一种变体：
 
 @nested{
-@nested[#:style samepage]{
 @racketblock[
 (define-datatype exp-val exp-val?
   (num-val
@@ -1191,7 +1190,6 @@ in let f = proc (z) -(z,x)
   (proc-val
     (val proc?)))
 ]
-}
 
 同时向@tt{value-of}添加两条新语句：
 
