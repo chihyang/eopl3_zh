@@ -24,8 +24,8 @@ Label[] lines={"\Large{\tt{(let ((x 3)}}",
                "\Large{\tt{\phantom{xxxxx}x)}}",
                "\Large{\tt{)}}"};
 
-Label[] notes={"\small{{\texttt{x = 3, y = 4}}\emph{的作用范围}}",
-               "\small{{\texttt{x = (+ y 5)}}\emph{的作用范围}}"};
+Label[] notes={"\small{{\texttt{x = 3, y = 4}}\emph{的作用域}}",
+               "\small{{\texttt{x = (+ y 5)}}\emph{的作用域}}"};
 
 real code_word_width=0;
 real code_line_height=0;

@@ -32,11 +32,11 @@ Label[] lines={"\Large{\tt{module m1}}",
                "\Large{\tt{\phantom{xxxxx}a)}}",
                };
 
-Label[] notes={"{\Large{{\texttt{a = 33}}}}\emph{的作用范围}",
+Label[] notes={"{\Large{{\texttt{a = 33}}}}\emph{的作用域}",
                "\Large{\texttt{from m1 take a}}",
                "\Large{\texttt{from m1 take b}}",
                "\Large{\texttt{from m1 take c}}",
-               "\emph{的作用范围}",
+               "\emph{的作用域}",
 };
 
 real code_word_width=0;

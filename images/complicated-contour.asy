@@ -25,11 +25,11 @@ Label[] lines={"{\tt{\phantom{}(lambda (x y)\phantom{xxxxxxxxxxxxxxxxxxxxxxxxxxx
                "{\tt{\phantom{xxxxxxxxxxxxxxxxx}(+ x y z)\phantom{x})))\phantom{xxxxxxxxxxx}; }}\small{\emph{第7行}}",
                "{\tt{\phantom{xxxxxxxx}(+ x y z)\phantom{x})\phantom{xxxxxxxxxxxxxxx} ) ) )\phantom{x}; }}\small{\emph{第8行}}"};
 
-Label[] notes={"\footnotesize{{\texttt{x1, y1}}\emph{的作用范围}}",
-               "\footnotesize{{\texttt{z}}\emph{的作用范围}}",
-               "\footnotesize{{\texttt{x2, z2}}\emph{的作用范围}}",
-               "\footnotesize{{\texttt{x4, y2}}\emph{的作用范围}}",
-               "\footnotesize{{\texttt{x3}}\emph{的作用范围}}"};
+Label[] notes={"\footnotesize{{\texttt{x1, y1}}\emph{的作用域}}",
+               "\footnotesize{{\texttt{z}}\emph{的作用域}}",
+               "\footnotesize{{\texttt{x2, z2}}\emph{的作用域}}",
+               "\footnotesize{{\texttt{x4, y2}}\emph{的作用域}}",
+               "\footnotesize{{\texttt{x3}}\emph{的作用域}}"};
 
 real code_word_width=0;
 real code_line_height=0;

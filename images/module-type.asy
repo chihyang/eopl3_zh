@@ -32,9 +32,9 @@ Label[] lines={"{\tt{module m1}}",
                "{\tt{in ...}}",
                };
 
-Label[] notes={"{\scriptsize{\texttt{opaque t}}\emph{的作用范围}}",
-               "{\scriptsize{\texttt{type t = int}}\emph{的作用范围}}",
-               "{\scriptsize{\texttt{from m1 take t}}\emph{的作用范围}}",
+Label[] notes={"{\scriptsize{\texttt{opaque t}}\emph{的作用域}}",
+               "{\scriptsize{\texttt{type t = int}}\emph{的作用域}}",
+               "{\scriptsize{\texttt{from m1 take t}}\emph{的作用域}}",
                "{\scriptsize\emph{（模糊类型）}}",
 };
 
