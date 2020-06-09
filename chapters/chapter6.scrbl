@@ -2117,10 +2117,10 @@ newrefk(33, proc (loc1)
 }
 
 最后是非局部控制流。我们来考虑练习5.42中的@tt{letcc}。@tt{letcc}表达式@tt{letcc
-@${var} in @${body}}将当前续文绑定到变量@${var}。@${body}为该绑定的范围。续文的
-唯一操作是@tt{throw}。我们用语法@tt{throw @${Expression} to @${Expression}}，它
-求值两个子表达式。第二个表达式应返回一个续文，作用于第一个表达式。@tt{throw}当前
-的续文则忽略。
+@${var} in @${body}}将当前续文绑定到变量@${var}。@${body}为该绑定的作用域。续文
+的唯一操作是@tt{throw}。我们用语法@tt{throw @${Expression} to @${Expression}}，
+它求值两个子表达式。第二个表达式应返回一个续文，作用于第一个表达式。@tt{throw}当
+前的续文则忽略。
 
 我们首先按照本章的方式分析这些表达式。这些表达式决不简单。@tt{letcc}的主体部分在
 尾端，因为它的值就是整个表达式的值。由于@tt{throw}中的两个位置都须求值，且都不是

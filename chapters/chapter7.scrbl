@@ -439,15 +439,15 @@ in |@${e_{letrec\mbox{-}body}}
 
 检查@tt{letrec}中的表达式@${e_{proc\mbox{-}body}}和@${e_{letrec\mbox{-}body}}时，
 类型环境中的每个变量必须有正确的类型。可以用我们的定界规则判断每个变量是否在作用
-范围中，并由此判断对应的类型。
+域中，并由此判断对应的类型。
 
-在@${e_{letrec\mbox{-}body}}中，过程名@${p}在范围内。如上所述，@${p}的类型声明为
-@${t_{var} \to t_{res}}。因此，检查@${e_{letrec\mbox{-}body}}时的类型环境应为：
+在@${e_{letrec\mbox{-}body}}中，过程名@${p}在作用域内。如上所述，@${p}的类型声明
+为@${t_{var} \to t_{res}}。因此，检查@${e_{letrec\mbox{-}body}}时的类型环境应为：
 
 @$${tenv_{letrec\mbox{-}body} = @tt["["]p=(t_{var} \to t_{res})@tt["]"]tenv}
 
-@${e_{proc\mbox{-}body}}呢？在@${e_{proc\mbox{-}body}}中，变量@${p}在范围内，其
-类型为@${t_{var} \to t_{res}}，变量@${var}在范围内，类型为@${t_{var}}。因此，
+@${e_{proc\mbox{-}body}}呢？在@${e_{proc\mbox{-}body}}中，变量@${p}在作用域内，
+其类型为@${t_{var} \to t_{res}}，变量@${var}在作用域内，类型为@${t_{var}}。因此，
 @${e_{proc\mbox{-}body}}的类型环境应为：
 
 @$${tenv_{proc\mbox{-}body} = @tt["["]var=t_{var}@tt["]"]tenv_{letrec\mbox{-}body}}
@@ -647,7 +647,7 @@ in |@${e_{letrec\mbox{-}body}}
        &\mathrel{\phantom{::=}} \fbox{@tt{unpair-exp (var1 var2 exp body)}}}
 
 @tt{pair}表达式生成一个序对，@tt{unpair}表达式（类似练习3.18）将两个变量绑定到表
-达式的两部分。这些变量的作用范围是@tt{body}。@tt{pair}和@tt{unpair}的判类规则为：
+达式的两部分。这些变量的作用域是@tt{body}。@tt{pair}和@tt{unpair}的判类规则为：
 
 @$${\infer{@tt{(type-of (pair-exp @${e_1} @${e_2}) @${tenv}) = pairof @${t_1} * @${t_2}}}
           {\begin{gathered}
