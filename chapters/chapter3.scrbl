@@ -940,8 +940,8 @@ in unpack x y = cons(u,cons(3,emptylist))
 \mathit{DenVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc}
 }
 
-其中，@${Proc}是一值集合，表示过程。我们把@${Proc}作为一种抽象数据类型。下面我们
-考虑它的接口和规范。
+其中，@${\mathit{Proc}} 是一值集合，表示过程。我们把 @${\mathit{Proc}} 作为一种
+抽象数据类型。下面我们考虑它的接口和规范。
 
 }
 
@@ -953,13 +953,13 @@ in unpack x y = cons(u,cons(3,emptylist))
         \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
-在@tt{(proc @${var} @${body})}中，变量@${var}是@emph{绑定变量} (@emph{bound
-variable})或@emph{形式参数} (@emph{formal parameter})。在过程调用@tt{(call-exp
-@${exp_1} @${exp_2})}中，表达式@${exp_1}是@emph{操作符} (@emph{operator})，表达
-式@${exp_2}是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
-parameter})。我们用名词@emph{实参} (@emph{argument})指代实际参数的值。
+在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @emph{绑定变量} (@emph{bound
+variable})或@emph{形式参数} (@emph{formal parameter})。在过程调用 @tt{(call-exp
+@${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@emph{操作符} (@emph{operator})，表
+达式 @${exp_2} 是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
+parameter})。我们用@emph{实参} (@emph{argument})指代实际参数的值。
 
-这里是这种语言的两个简单例子。
+这是这种语言的两个小例子。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -971,18 +971,18 @@ in (f (f 77))
 }|
 }
 
-第一个程序创建一过程，将实参减11。它调用创建的过程@tt{f}，两次对77使用@tt{f}，得
-到的答案为55。第二个程序创建一过程，它取一参数，连续两次对77使用其实参。然后该程
-序将减11的过程传给该过程。结果仍然是55。
+第一个程序创建的过程将实参减11。它两次对 77 调用创建的过程 @tt{f}，得到的答案为
+55。第二个程序创建的过程取一参数，连续两次对 77 调用该实参。然后，程序将减11的过
+程传给该过程。结果仍然是55。
 
-现在我们来看数据类型@${Proc}。它的接口包含构造器@tt{procedure}，用于创建过程值；
-观测器@tt{apply-procedure}，用于调用过程值。
+现在我们来看数据类型 @${\mathit{Proc}}。它的接口包含构造器 @tt{procedure}，用于
+创建过程值；观测器 @tt{apply-procedure}，用于调用过程值。
 
 接下来我们的任务是确定表示一个过程需要在值里面包含什么信息。欲知此，我们考虑在程
 序中任意位置写出@tt{proc}表达式时发生了什么。
 
-词法定界规则告诉我们，调用一个过程时，过程的形式参数绑定到调用时的实参，然后在该
-环境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
+词法作用域规则告诉我们，调用一个过程时，过程的形式参数绑定到调用时的实参，然后在
+该环境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -994,13 +994,13 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-这里我们两次求值表达式@tt{proc (z) -(z,x)}。第一次求值时，@tt{x}绑定到200，所以
-根据词法绑定规则，得出的过程将实参减200。我们将其命名为@tt{f}。第二次求值时，
-@tt{x}绑定到100，得出的过程应将实参减100。我们将该过程命名为@tt{g}。
+这里我们两次求值表达式 @tt{proc (z) -(z,x)}。第一次求值时，@tt{x}绑定到200，所以
+根据词法绑定规则，得到的过程将实参减200。我们将其命名为 @tt{f}。第二次求值时，
+@tt{x} 绑定到100，得出的过程应将实参减100。我们将该过程命名为 @tt{g}。
 
-这两个过程由同一个表达式生成，而表现必定不同。我们得出结论，@tt{proc}表达式的值
-一定以某种方式依赖求值时的环境。因此，构造器@tt{procedure}必定取三个参数：绑定变
-量，主体，以及环境。@tt{proc}表达式定义为：
+这两个过程由同一个表达式生成，却有不同行为。我们得出结论，@tt{proc} 表达式的值一
+定以某种方式依赖求值时的环境。因此，构造器 @tt{procedure}必定取三个参数：绑定变量，
+主体，以及环境。@tt{proc}表达式定义为：
 
 @nested{
 
@@ -1011,11 +1011,11 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-其中，@tt{proc-val}是一构造器，像@tt{bool-val}和@tt{num-val}，生成一个@${Proc}的
-表达值。
+其中，@tt{proc-val} 是一构造器，像 @tt{bool-val} 和 @tt{num-val}，生成一个
+@${\mathit{Proc}} 的表达值。
 }
 
-调用过程时，我们要找出操作符和操作数的值。如果操作符是一个@tt{proc-val}，那么我
+调用过程时，我们要找出操作符和操作数的值。如果操作符是一个 @tt{proc-val}，那么我
 们要用操作数的值调用它。
 
 @nested{
@@ -1029,9 +1029,9 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-这里，我们用了一个@elem[#:style question]{抽词器}@tt{expval->proc}，像
-@tt{expval->num}，它判断表达值@tt{(value-of @${rator} @${\rho})}是否用
-@tt{proc-val}生成，如果是，则从中提取出包含的过程。
+这里，我们用了一个判断式 @tt{expval->proc}，像 @tt{expval->num}，它判断表达值
+@tt{(value-of @${rator} @${\rho})} 是否由 @tt{proc-val} 生成，如果是，则从中提取
+出包含的过程。
 
 }
 
@@ -1109,6 +1109,7 @@ in let f = proc (z) -(z,x)
 = |@${\lceil}(- -199 -99)|@${\rceil}
 
 = |@${\lceil}-100|@${\rceil}
+
 }|
 
 其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
@@ -1148,8 +1149,8 @@ in let f = proc (z) -(z,x)
     (proc1 val)))
 ]
 
-这里定义的函数@tt{proc?}有些不大准确，因为不是每个Scheme过程都能作为我们语言中的
-过程。我们只是用来它定义数据类型@tt{expval}。
+这里定义的函数 @tt{proc?} 有些不大准确，因为不是每个 Scheme 过程都能作为我们语言
+中的过程。我们只是用来它定义数据类型 @tt{expval}。
 
 }
 
@@ -1227,9 +1228,9 @@ in ((f 3) 4)
 }|
 }
 
-这个小技巧叫做@emph{咖哩化} (@emph{Currying})，该过程则称作@emph{咖喱式}
-(@emph{Curried})的。写出一个咖喱式的过程，它取两个参数，返回二者之和。在我们的语
-言中，可以把@${x+y}写成@tt{-(x,-(0,y))}。
+这个小技巧叫做@elemtag["curry"]{@emph{咖哩化}} (@emph{Currying})，该过程则称
+作@emph{咖喱式} (@emph{Curried})的。写出一个咖喱式的过程，它取两个参数，返回二者
+之和。在我们的语言中，可以把 @${x+y} 写成 @tt{-(x,-(0,y))}。
 
 }
 }
@@ -1268,20 +1269,20 @@ in let times4 = proc (x) ((makemult makemult) x)
 }|
 }
 
-用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用咖喱化（练习3.20）定义双参
-数过程@tt{times}。
+用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖喱化}
+（练习3.20）定义双参数过程@tt{times}。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.24"]{
 
-用上述程序里的小技巧写出两个互递归程序，@tt{odd}和@tt{even}，像练习3.32那样。
+用上述程序里的小技巧写出练习3.32中的互递归程序 @tt{odd} 和 @tt{even}。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.25"]{
 
-提取上述练习中的技巧，可以用来定义任何PROC递归过程。考虑下面的代码：
+提炼上述练习中的技巧，用它在 PROC 中定义任意递归过程。考虑下面的代码：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1311,7 +1312,7 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 1 #:tag "ex3.27"]{
 
-向语言添加一种新的过程@tt{traceproc}。@tt{traceproc}像@tt{proc}一样，除了在进入
+向语言添加一种新的过程@tt{traceproc}。@tt{traceproc}像@tt{proc}一样，但会在进入
 和退出时打印一条跟踪消息。
 
 }
