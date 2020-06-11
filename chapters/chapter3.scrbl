@@ -1361,8 +1361,8 @@ in let p = proc (z) a
 
 @section[#:style section-title-style-numbered #:tag "s3.4"]{LETREC：支持递归过程的语言}
 
-现在我们来定义一门新语言LETREC，让我们的语言支持递归。因为我们的语言只有单参数过
-程，我们降低难度，只让@tt{letrec}表达式声明一个单参数过程，例如：
+现在我们来定义一门支持递归的新语言LETREC。因为我们的语言只有单参数过程，我们降低
+难度，只让@tt{letrec}表达式声明一个单参数过程，例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1372,13 +1372,13 @@ in (double 6)
 }|
 }
 
-递归声明的左边是递归过程的名字以及绑定变量。@tt{=}右边是过程主体。它的生成式为：
+递归声明的左边是递归过程的名字以及绑定变量。@tt{=}右边是过程主体。其生成式为：
 
 @envalign*{
 \mathit{Expression} &::= @tt{letrec @m{\mathit{Identifier}} (@m{\mathit{Identifier}}) = @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
   &\mathrel{\phantom{::=}} \fbox{@tt{letrec-exp (p-name b-var p-body letrec-body)}}}
 
-@tt{letrec}表达式的值是其主体的值，在符合这种行为的环境中求出：
+@tt{letrec}表达式的值是其主体的值，在符合期望行为的环境中求出：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1551,13 +1551,13 @@ in (double 6)
 
 @exercise[#:level 1 #:tag "ex3.31"]{
 
-扩展上面的语言，允许声明有任意多个参数的过程，像练习3.21那样。
+扩展上面的语言，允许声明参数数量任意的过程，像练习3.21那样。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.32"]{
 
-扩展上面的语言，允许声明有任意多个单参数互递归过程，例如：
+扩展上面的语言，允许声明任意多个单参数互递归过程，例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1572,7 +1572,7 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.33"]{
 
-扩展上面的语言，允许声明有任意多个互递归过程，且参数数量任意，像练习3.21那样。
+扩展上面的语言，允许声明任意多个参数数量任意的互递归过程，像练习3.21那样。
 
 }
 
@@ -1585,8 +1585,8 @@ in (odd 13)
 @exercise[#:level 1 #:tag "ex3.35"]{
 
 到目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包。
-但是每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为1的向量，并主动放入
-一个循环式结构中，像这样：
+但是每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为1的向量，再将其放入
+一个显式循环结构中，像这样：
 
 @centered{
 @(image "../images/vector-env"
@@ -1621,8 +1621,8 @@ in (odd 13)
 @exercise[#:level 2 #:tag "ex3.37"]{
 
 使用动态绑定（练习3.28），用@tt{let}就可以创建递归过程；不需要任何特殊的递归机制。
-这是出于历史兴趣。在早年的编程语言设计中，像@secref{s3.4}讨论的那些方法还鲜为人
-知。要明白动态绑定实现的递归，试试程序：
+这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法还鲜为人知。
+要明白动态绑定实现的递归，试试程序：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
