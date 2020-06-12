@@ -17,7 +17,7 @@
 
 @elemtag["readings"]{}
 
-@title[#:style part-title-style-numbered #:tag "further-reading"]{更多阅读}
+@title[#:style part-title-style-numbered #:tag "further-reading"]{扩展阅读}
 
 这里的一些阅读材料教会，影响，或者启发了我们创作本书。希望你能像我们一样，至少喜
 欢其中的一部分。
