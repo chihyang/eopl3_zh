@@ -77,10 +77,13 @@
                               (string-append exercise-level-mark str))))
   (make-level-mark-iter l ""))
 
+(define (make-marker level)
+  ($ "\\textnormal{[}" (make-level-mark level) "\\textnormal{]}"))
 
 (define (exercise #:level [level 1] #:tag [tag ""] . c)
   (nested #:style eopl-exercise
-          ($ "\\textnormal{[}" (make-level-mark level) "\\textnormal{]}")
+          (elemtag tag "")
+          (make-marker level)
           (hspace 1)
           (remove-leading-newlines c)))
 
