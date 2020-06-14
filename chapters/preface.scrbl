@@ -110,7 +110,6 @@
   "章节依赖关系")
 }
 
-@section[#:style section-title-style-unumbered #:tag "pf-use"]{使用}
 @section[#:style section-title-style-unumbered #:tag "pf-use"]{用法}
 
 本书在本科生和研究生课程中均已使用，也已在职业程序员的持续教育课程中使用。我们假
