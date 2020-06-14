@@ -511,7 +511,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
   @item{没有哪棵树只有 @${0} 个节点，所以 @${\mathit{IH}(0)} 显然成立。}
 
   @item{设 @${k} 为整数时，@${\mathit{IH}(k)} 成立，即，任何树的节点数 @${\leq
-  k} 时，其准确数目为奇数。需证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
+  k} 时，其准确数目为奇数。须证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
   @${\leq k + 1} 时，节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根据二叉树
   的定义，只有两种可能：
 
@@ -540,7 +540,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
  @centered{@bold{结构化归纳证明}}
 
  @para[#:style tip-content]{欲证明假设 @${\mathit{IH}(s)} 对所有结构 @${s} 为真，
- 需证明：}
+ 须证明：}
 
  @itemlist[#:style 'ordered
    @item{@${\mathit{IH}} 对简单结构（没有子结构）为真。}
@@ -569,7 +569,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
  子问题。}}
 
 已求得的子问题解随后可用来求解原问题。这可行，因为每次过程调用都是针对较小的子问
-题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
+题，直至最终调用，针对一个可以直接求解的问题，不须再次调用自身。
 
 我们用一些例子解释这一想法。
 
@@ -763,7 +763,7 @@ C} 相同。
 
 符号列表或者是空列表，或者首项为符号，余项为符号列表。
 
-如果列表为空，不需要移除 @${s}，则答案为空列表。
+如果列表为空，不须要移除 @${s}，则答案为空列表。
 
 @racketblock[
 @#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
@@ -983,7 +983,7 @@ C} 相同。
     ...))
 ]
 
-我们首先处理 @tt{subst}。如果列表为空，不需要替换 @tt{old}。
+我们首先处理 @tt{subst}。如果列表为空，不须要替换 @tt{old}。
 
 @racketblock[
 @#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
@@ -1178,7 +1178,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
            (partial-vector-sum v (- n 1))))))
 ]
 
-由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
+由于 @${n} 一定会递减至零，证明此程序的正确性须要用归纳法处理 @${n}。由 @${0
 \leq n} 且 @${n \neq 0}，可得 @${0 \leq (n - 1)}，所以递归调用过程
 @tt{partial-vector-sum} 仍然满足其合约。
 
@@ -1214,7 +1214,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @tt{x} 是任意 Scheme 值；类似地，@tt{s1} 是一个符号，@tt{los2} 是一个符号列表，
 @tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}
 (@emph{predicate})，即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除
-非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不需要检查输入是否符
+非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不须要检查输入是否符
 合合约；对每个过程，都假定输入值是指定集合的成员。
 
 定义，测试和调试每个过程。你的定义应当有合约和用法注释，像本章这样。可以随便定义

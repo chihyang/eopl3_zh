@@ -100,7 +100,7 @@ y\rceil}}。}
  (define predecessor (lambda (n) (cdr n)))]}
 
  @item{@emph{Scheme数字表示法} (@emph{Scheme number representation})：在这种表示
- 中，只需用Scheme内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil}
+ 中，只须用Scheme内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil}
  为Scheme整数 @tt{n}，则所需的四个过程可以定义为：
 
  @racketblock[(define zero (lambda () 0))
@@ -1135,10 +1135,10 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 }
 
-为了处理这样的数据，需要将其转换为@emph{内在} (@emph{internal})表示。
+为了处理这样的数据，须要将其转换为@emph{内在} (@emph{internal})表示。
 @tt{define-datatype} @elem[#:style question]{结构式}提供了一种简洁的方式来定义这
 样的内在表示。我们称之为@emph{抽象语法} (@emph{abstrat syntax})。在抽象语法中，
-不需要存储括号之类的终止符，因为它们不传达信息。另一方面，我们要确保数据结构足以
+不须要存储括号之类的终止符，因为它们不传达信息。另一方面，我们要确保数据结构足以
 区分它所表示的lambda演算表达式，并提取出各部分。@pageref{lc-exp}的数据类型
 @tt{lc-exp}使我们轻松完成这些。
 
@@ -1159,7 +1159,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
  (list (para (tt "(lambda (x) (f (f x)))") "的抽象语法树"))]
 }
 
-要为某种具体语法设计抽象语法，需要给其中的每个生成式，以及生成式中出现的每个非终
+要为某种具体语法设计抽象语法，须要给其中的每个生成式，以及生成式中出现的每个非终
 止符命名。很容易将抽象语法写成@tt{define-datatype}声明。我们为每个非终止符添加一
 个@tt{define-datatype}，为每个生成式添加一个变体。
 

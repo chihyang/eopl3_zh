@@ -111,6 +111,7 @@
 }
 
 @section[#:style section-title-style-unumbered #:tag "pf-use"]{使用}
+@section[#:style section-title-style-unumbered #:tag "pf-use"]{用法}
 
 本书在本科生和研究生课程中均已使用，也已在职业程序员的持续教育课程中使用。我们假
 定的背景知识有数据结构，过程式语言（如C、C++、Java）和 Scheme、ML、Python 或
