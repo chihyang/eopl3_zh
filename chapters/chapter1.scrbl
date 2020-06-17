@@ -23,7 +23,7 @@
 解释器与检查器一类的程序是编程语言处理器的核心，本章介绍写这些用到的基本编程工具。
 
 因为编程语言的语法通常为嵌套或者树状结构，递归将是我们的主要技巧。@secref{s1.1}
-和@secref{s1.2}介绍递推定义数据结构的方法，并展示如何用这类定义指导递归程序的编
+和@secref{s1.2}介绍归纳定义数据结构的方法，并展示如何用这类定义指导递归程序的编
 写。@secref{s1.3}展示如何将这些技巧推广到更为复杂的程序。本章以大量练习作结。这
 些练习是本章的核心。欲掌握本书余下部分依赖的递归编程技巧，得自它们的经验不可或缺。
 
@@ -49,15 +49,15 @@
 }
 
 
-来看看如何用这一定义判断哪些自然数属于@${S}。已知@${0 \in S}，因此@${3 \in S}，
-因为@${(3 - 3) = 0}，而@${0 \in S}。同样地，@${6 \in S}，因为@${(6 - 3) = 3}，而
-@${3 \in S}。依此类推，可得结论：所有@${3}的整数倍都属于@${S}。
+来看看如何用这一定义判断哪些自然数属于 @${S}。已知 @${0 \in S}，因此 @${3 \in S}，
+因为 @${(3 - 3) = 0}，且 @${0 \in S}。同样地，@${6 \in S}，因为 @${(6 - 3) = 3}，
+且 @${3 \in S}。依此类推，可得结论：所有 @${3} 的整数倍都属于 @${S}。
 
-其他自然数呢？@${1 \in S}吗？已知@${1 \ne 0}，所以条件一不满足。此外，@${(1 - 3)
-= -2}，不是自然数，故不是@${S}的元素，因此条件二不满足。因为@${1}不满足任一条件，
-所以@${1 \notin S}。同样地，@${2 \notin S}。@${4}呢？仅当@${1 \in S}时@${4 \in
-S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自然数且不是@${3}
-的整数倍，则@${n \notin S}。
+其他自然数呢？@${1 \in S}吗？已知 @${1 \ne 0}，所以条件一不满足。此外，@${(1 -
+3) = -2}，不是自然数，故不是 @${S} 的元素，因此条件二不满足。因为 @${1} 不满足任
+一条件，所以 @${1 \notin S}。同样地，@${2 \notin S}。@${4}呢？仅当 @${1 \in S}
+时 @${4 \in S}。但 @${1 \notin S}，所以 @${4 \notin S}。同理可得，如果 @${n} 是
+自然数且不是 @${3} 的整数倍，则 @${n \notin S}。
 
 据此推论，可得@${S}是@${3}的整数倍自然数集合。
 
@@ -116,11 +116,11 @@ S}。但@${1 \notin S}，所以@${4 \notin S}。同理可得，如果@${n}是自
 @$${\infer{(n + 3) \in S}{n \in S}}
 
 这只是前一定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
-inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称
-作@emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分
-称作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。要罗列
-两个或更多假设，用“和”连接（见定义1.1.5）。没有假设的规则称作@emph{公理}
-(@emph{axiom})。写公理时通常不加水平线，如：
+inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称作
+@emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分称
+作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。罗列两个
+或更多假设时，它们以隐含的“与”连接（见定义1.1.5）。没有假设的规则称作@emph{公
+理} (@emph{axiom})。写公理时通常不加水平线，如：
 
 @$${0 \in S}
 
@@ -197,7 +197,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 ]
 
-改点缀表示法为列表表示法，可知 @tt{()}、 @tt{(14)}、 @tt{(3 14)} 以及 @tt{(-7 3
+改句点表示法为列表表示法，可知 @tt{()}、 @tt{(14)}、 @tt{(3 14)} 以及 @tt{(-7 3
 14)} 都是@List-of-Int-$[]的元素。
 
 还可以结合各条规则来证明@${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}，以
@@ -284,24 +284,24 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 @itemlist[
 
-  @item{@bold{非终止符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
+  @item{@bold{非终结符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
         可能会定义数个集合。这些集合有时称为@emph{句法类别} (@emph{syntactic
         category})。
 
-        依照惯例，我们将非终止符和集合名的首字母大写，在文中提及它们的元素时，则
-        用小写。这要比听起来容易。例如， @${Expression} 是非终止符，但我们写作
+        依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
+        用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
         @${e \in Expression} 或 “@${e} 是一个 expression”。
 
         另一常见做法，名叫@emph{巴科斯-诺尔范式} (@emph{Backus-Naur Form}) 或
         @emph{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
 
-  @item{@bold{终止符}。这些是集合外在表示中的字符，在本例中，是“@tt{.}”，
+  @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是“@tt{.}”，
         “@tt{(}”和“@tt{)}”。这些常用打字机字体写出，如 @tt{lambda}。}
 
   @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的左
-        边是一个非终止符，右边包含终止符和非终止符。左右两边通常用符号 @${::=}
-        分隔，读作@emph{是}或@emph{可能是}。式子右边用其他句法类别和@emph{终止
-        符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
+        边是一个非终结符，右边包含终结符和非终结符。左右两边通常用符号 @${::=}分
+        隔，读作@emph{是}或@emph{可以是}。式子右边用其他句法类别和@emph{终结符}
+        （如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
 
 ]
 
@@ -334,8 +334,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 星号的变体是@emph{克莱尼加号} (@emph{Kleene Plus}) @${\{...\}^+}，表示一个或多个
 内容的序列。把上例中的@${^*}换成@${^+}，定义的句法类别是非空整数列表。
 
-星号的另一变体是@emph{分隔表} (@emph{separated list})。例如，
-@${\mathit{Int}^{*(c)}} 表示一个序列，包含任意数量的非终止符 @Int-$[] 元素，以非
+星号的另一变体是@emph{分隔表} (@emph{separated list}) 表示法。例如，
+@${\mathit{Int}^{*(c)}} 表示一个序列，包含任意数量的非终结符 @Int-$[] 元素，以非
 空字符序列 @${c} 分隔。这也包含没有元素的情况。如果有 0 个元素，得到的是空字符串。
 例如，@${\mathit{Int}^{*(,)}} 包含字符串
 
@@ -361,18 +361,18 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
 这些简写不是必需的，总能够不用它们重写语法。
 
-对由语法定义的集合，可以用@emph{句法推导} (@emph{syntactic derivation})证明给定
-值是其元素。这样的推导从集合对应的非终止符开始，在由箭头@${\Rightarrow} 指示的每
-一步中，如果非终止符对应的句法类别未做定义，则将其代换为该类别的已知元素，否则代
-换为对应规则右边的内容。例如，前述证明 “@tt{(14 . ())}是整数列表”，可以用句法
-推导化为
+对由语法定义的集合，可以用@index["句法推导"]{@emph{句法推导}} (@emph{syntactic
+derivation}) 证明给定值是其元素。这样的推导从集合对应的非终结符开始，在由箭头
+@${\Rightarrow} 指示的每一步中，如果非终结符对应的句法类别未做定义，则将其代换为
+该类别的已知元素，否则代换为对应规则右边的内容。例如，前述证明 “@tt{(14 . ())}
+是整数列表”，可以用句法推导化为
 
 @envalign*{
  @List-of-Int-raw[] &\Rightarrow @tt{(@Int-m[] . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(14 . @List-of-Int-m[])} \\
                            &\Rightarrow @tt{(14 . ())}}
 
-非终止符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
+非终结符的替换顺序无关紧要，所以@tt{(14 . ())}的推导也可以写成：
 
 @envalign*{
  @List-of-Int-raw[] &\Rightarrow @tt{(@Int-m[] . @List-of-Int-m[])} \\
@@ -451,7 +451,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  达式的@emph{绑定变量} (@emph{bound variable})，因为它绑定（或称捕获）主体内出现
  的任何同名变量。出现在主体内的同名变量都指代这一个。
 
- 要明白这怎么用，考虑推广到算术操作符的 lambda 演算。在这种语言里，
+ 要明白这怎么用，考虑用算术操作符扩展的 lambda 演算。在这种语言里，
 
  @codeblock{(lambda (x) (+ x 5))}
 
@@ -469,8 +469,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 ]
 
 这些语法叫做@emph{上下文无关} (@emph{context-free}) 语法，因为一条规则定义的句法
-类别可以在涉及它的任何上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索
-树}。其节点或者为空，或者包含一个整数、两棵子树
+类别可以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索
+树}。其节点或者为空，或者包含一个整数和两棵子树
 
 @$${\mathit{Binary\mbox{-}search\mbox{-}tree} ::= @tt{()} \mid
     @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-}tree}})}}
@@ -488,7 +488,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
 后再用其他方法添加上下文敏感限制。@secref{types}展示了这种技巧的一个例子。
 
-@subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳证明法}
+@subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
 
 用归纳法描述的集合，其定义有两种用法：证明关于集合元素的定理，写出操作集合元素的
 程序。这里给出一个此类证明的例子，写程序留作下节的主题。
@@ -511,7 +511,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
   @item{没有哪棵树只有 @${0} 个节点，所以 @${\mathit{IH}(0)} 显然成立。}
 
   @item{设 @${k} 为整数时，@${\mathit{IH}(k)} 成立，即，任何树的节点数 @${\leq
-  k} 时，其准确数目为奇数。须证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
+  k} 时，其实际数目为奇数。须证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
   @${\leq k + 1} 时，节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根据二叉树
   的定义，只有两种可能：
 
@@ -583,7 +583,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 我们来写出自己的过程 @tt{list-length}，做同样的事。
 
 先来写出过程的@emph{合约}。合约指定了过程可取参数和可能返回值的集合。合约也可以
-包含过程的期望用法或行为。这有助于我们在编写时及以后追查我们的意图。在代码中，这
+包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，这
 是一条注释，我们用打字机字体示之，以便阅读。
 
 @racketblock[
@@ -672,15 +672,15 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 (define nth-element
   (lambda (lst)
     (if (null? lst)
-        (report-list-too-short n)
-        (if (zero? n)
-            (car lst)
-            (nth-element (cdr lst) (- n 1))))))
+      (report-list-too-short n)
+      (if (zero? n)
+        (car lst)
+        (nth-element (cdr lst) (- n 1))))))
 
 (define report-list-too-short
   (lambda (n)
     (eopl:error 'nth-element
-                "列表太短，没有第~s个元素.~%" (+ n 1))))
+      "List too short by ~s elements.~%" (+ n 1))))
 ]
 
 这里的注释 @tt{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int}
@@ -689,10 +689,10 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 C} 相同。
 
 过程 @tt{report-list-too-short} 调用 @tt{eopl:} @tt{error} 来报告错误。过程
-@tt{eopl:error} 会终止计算。它的首个参数是一符号，用于在错误信息中指示调用
+@tt{eopl:error} 会终结计算。它的首个参数是一符号，用于在错误信息中指示调用
 @tt{eopl:error} 的过程。第二个参数是一个字符串，会打印为错误信息。对应于字符串中
 的每个字符序列 @tt{~s} ，都必须有一个额外参数。打印字符串时，这些参数的值会替换
-对应的 @tt{~s} 。@tt{~%} 代表换行。错误信息打印后，计算终止。过程@tt{eopl:error}
+对应的 @tt{~s} 。@tt{~%} 代表换行。错误信息打印后，计算终结。过程@tt{eopl:error}
 并非标准 Scheme 的一部分，但大多数 Scheme 实现提供这样的组件。在本书中，我们以类
 似方式，用名字含 @tt{report-} 的过程报告错误。
 
@@ -712,12 +712,12 @@ C} 相同。
 这里，@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
 }
 
-如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 的抱怨来获知传递了空列表，但它们
-的错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使
-用 @tt{car} 的地方。
+如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 报错来获知传递了空列表，但它们的
+错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使用
+@tt{car} 的地方。
 
 @exercise[#:level 1 #:tag "ex1.6"]{
- 如果翻转 @tt{nth-element} 中两个条件的顺序，会有什么问题？
+ 如果调换 @tt{nth-element} 中两个检测的顺序，会有什么问题？
 
 }
 
@@ -761,7 +761,7 @@ C} 相同。
 @$${\mathit{List\mbox{-}of\mbox{-}Symbol} ::= @tt{()} \mid
 @tt{(@${\mathit{Symbol}} . @${\mathit{List\mbox{-}of\mbox{-}Symbol}})}}
 
-符号列表或者是空列表，或者首项为符号，余项为符号列表。
+符号列表或者是空列表，或者是首项为符号，余项为符号列表。
 
 如果列表为空，不须要移除 @${s}，则答案为空列表。
 
@@ -769,7 +769,7 @@ C} 相同。
 @#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
 (define remove-first
-  (lambda (lst)
+  (lambda (s lst)
     (if (null? lst)
         '()
         ...)))
@@ -785,7 +785,7 @@ C} 相同。
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
-  (lambda (lst)
+  (lambda (s lst)
     (if (null? lst)
         '()
         @; diff {
@@ -797,7 +797,7 @@ C} 相同。
 ]
 
 如果 @${los} 的第一个元素不是 @${s}，比如 @${los = @tt{(@${s_0} @${s_1} @${...}
-@${s_{n-1}})}}，可知 @${s_0} 不是第首个出现的 @${s}，因此答案中的第一个元素一定
+@${s_{n-1}})}}，可知 @${s_0} 不是第一个出现的 @${s}，因此答案中的第一个元素一定
 是@${s_0}，即表达式 @tt{(car los)} 的值。而且，@${los} 中的首个 @${s} 一定在
 @tt{(@${s_1} @${...} @${s_{n-1}})} 中。所以答案的余下部分一定是移除 @${los} 余项
 中首个 @${s} 的结果。因为 @${los} 的余项比 @${los} 短，我们可以递归调用
@@ -810,7 +810,7 @@ C} 相同。
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
-  (lambda (lst)
+  (lambda (s lst)
     (if (null? lst)
         '()
         (if (eqv? (car los) s)
@@ -824,7 +824,7 @@ C} 相同。
 @exercise[#:level 1 #:tag "ex1.8"]{
 
  如果把 @tt{remove-first} 定义中的最后一行改为 @tt{(remove-first s (cdr los))}，
- 得到的过程做什么运算？对修改后的版本，给出合约，包括使用说明。
+ 得到的过程做什么运算？对修改后的版本，给出合约，包括用法。
 
 }
 
@@ -837,7 +837,7 @@ C} 相同。
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.4"]{@tt{occurs-free?}}
 
-过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号代表；一个 lambda 演算
+过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
 表达式 @${exp}，形如定义 1.1.8；判断 @${var} 是否自由出现于 @${exp}。如果一个变
 量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变量@emph{自
 由出现} (@emph{occurs free}) 于表达式 @${exp} 中。例如，
@@ -867,7 +867,7 @@ C} 相同。
           (occurs-free? 'x '((lambda (x) x) (x y)))
           (occurs-free? 'x '(lambda (y) (lambda (z) (x (y z)))))]
 
-遵照 lambda 演算表达式的语法，我们可以解决此问题：
+我们可以遵照 lambda 演算表达式的语法解决此问题：
 
 @nested[#:style normalfont]{
 @envalign*{\mathit{LcExp} &::= @m{\mathit{Identifier}} \\
@@ -907,17 +907,18 @@ C} 相同。
 @racketblock[
 @#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
-(define (occurs-free? var exp)
-  (cond
-    ((symbol? exp) (eqv? var exp))
-    ((eqv? (car exp) 'lambda)
-     (and
-      (not (eqv? var (car (cadr exp))))
-      (occurs-free? var (caddr exp))))
-    (else
-     (or
-      (occurs-free? var (car exp))
-      (occurs-free? var (cadr exp))))))
+(define occurs-free?
+  (lambda (var exp)
+    (cond
+      ((symbol? exp) (eqv? var exp))
+      ((eqv? (car exp) 'lambda)
+        (and
+          (not (eqv? var (car (cadr exp))))
+          (occurs-free? var (caddr exp))))
+      (else
+        (or
+          (occurs-free? var (car exp))
+          (occurs-free? var (cadr exp)))))))
 ]
 
 这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
@@ -958,8 +959,8 @@ C} 相同。
            \mathit{S\mbox{-}list} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
 }
 
-克莱尼星号准确描述了集合 s-list，但对写程序没什么用。因此我们的第一步是抛开克莱
-尼星号重写语法。得出的语法表明，我们的过程应当该递归处理 s-list 的首项和余项。
+克莱尼星号简洁地描述了集合 s-list，但对写程序没什么用。因此我们的第一步是抛开克
+莱尼星号重写语法。得出的语法表明，我们的过程应当该递归处理 s-list 的首项和余项。
 
 @nested[#:style normalfont]{
 @envalign*{\mathit{S\mbox{-}list} &::= @tt{()} \\
@@ -967,7 +968,7 @@ C} 相同。
             \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
 }
 
-这一例子比之前的复杂，因为它的语法输入包含两个非终止符，@${S\mbox{-}list} 和
+这一例子比之前的复杂，因为它的语法输入包含两个非终结符，@${S\mbox{-}list} 和
 @${S\mbox{-}exp}。因此，我们需要两个过程，一个处理 @${S\mbox{-}list}，另一个处理
 @${S\mbox{-}exp}。
 
@@ -1071,11 +1072,11 @@ C} 相同。
 
 @itemlist[
 
- @item{为语法中的每个非终止符编写一个过程。每一过程负责处理相应非终止符的数据，
+ @item{为语法中的每个非终结符编写一个过程。这一过程负责处理相应非终结符的数据，
  不做其他。}
 
- @item{在每个过程中，为相应非终止符的每一生成式写一分支。你可能需要额外的分支结
- 构，但这样才能写得下去。对生成式右边出现的每个非终止符，递归调用相应的过程。}
+ @item{在每个过程中，为相应非终结符的每一生成式写一分支。你可能需要额外的分支结
+ 构，但这样才能起步。对生成式右边出现的每个非终结符，递归调用相应的过程。}
 
 ]
 
@@ -1118,9 +1119,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 ]
 
 这里有两个要点。首先，过程 @tt{number-elements-from} 的定义独立于
-@tt{number-elements}。程序员经常要写一些过程，只调用其他辅助过程，多传递一些常量
-参数。除非我们理解辅助过程对参数的@emph{每个}值做什么，我们很难理解调用它的过程
-做什么。这给了我们一条口诀：
+@tt{number-elements}。程序员经常要写一些过程，只调用一些传递额外常量参数的辅助过
+程。除非我们理解辅助过程对参数的@emph{每个}值做什么，我们很难理解调用它的过程做
+什么。这给了我们一条口诀：
 
 @nested[#:style tip]{
  @centered{@bold{避免神秘小工具！}}
@@ -1163,7 +1164,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @$${\sum_{i=0}^{i=n} v_i}
 
-其中，@${0 \leq n \leq length(v)}。
+其中，@${0 \leq n < length(v)}。
 
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
@@ -1215,10 +1216,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}
 (@emph{predicate})，即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除
 非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不须要检查输入是否符
-合合约；对每个过程，都假定输入值是指定集合的成员。
+合描述；对每个过程，都假定输入值是指定集合的成员。
 
-定义，测试和调试每个过程。你的定义应当有合约和用法注释，像本章这样。可以随便定义
-辅助过程，但是你定义的每个辅助过程都应该有其说明，如同 1.3 节那样。
+定义，测试和调试每个过程。你的定义应当有本章这种合约和用法注释。可以随便定义辅助
+过程，但是你定义的每个辅助过程都应该有其说明，如同 1.3 节那样。
 
 测试这些程序时，先试试所有给出的例子，然后用其他例子测试，因为给定的例子不足以涵
 盖所有可能的错误。
@@ -1520,7 +1521,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @exercise[#:level 2 #:tag "ex1.26"]{
  @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
  则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
- (up lst))} 不一定是列表（参见练习 1.17）。
+ (up lst))} 不一定是 @tt{lst}（参见练习 1.17）。
 
  @examples[#:eval up-eval
            #:label #f
@@ -1545,7 +1546,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
             (cons (car slist)
                   (flatten (cdr slist))))))))))
 @exercise[#:level 2 #:tag "ex1.27"]{
- @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直觉上，
+ @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直观上，
  @tt{flatten} 移除参数内的所有内层括号。
 
  @examples[#:eval flatten-eval
