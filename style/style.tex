@@ -1,3 +1,50 @@
+% This style file is used both for `book' and `report' modes, copied from scribble/book
+
+\renewcommand{\ChapRef}[2]{chapter~#1}
+\renewcommand{\ChapRefUC}[2]{Chapter~#1}
+
+% sections
+\renewcommand{\Spart}[2]{\part[#1]{#2}}
+\renewcommand{\Ssection}[2]{\chapter[#1]{#2}}
+\renewcommand{\Ssubsection}[2]{\section[#1]{#2}}
+\renewcommand{\Ssubsubsection}[2]{\subsection[#1]{#2}}
+\renewcommand{\Ssubsubsubsection}[2]{\subsubsection[#1]{#2}}
+\renewcommand{\Ssubsubsubsubsection}[2]{{\bf #2}}
+
+% "star" means unnumbered and not in ToC:
+\renewcommand{\Spartstar}[1]{\part*{#1}}
+\renewcommand{\Ssectionstar}[1]{\chapter*{#1}}
+\renewcommand{\Ssubsectionstar}[1]{\section*{#1}}
+\renewcommand{\Ssubsubsectionstar}[1]{\subsection*{#1}}
+\renewcommand{\Ssubsubsubsectionstar}[1]{\subsubsection*{#1}}
+\renewcommand{\Ssubsubsubsubsectionstar}[1]{\Ssubsubsubsubsection{#1}}
+
+% "starx" means unnumbered but in ToC:
+\renewcommand{\Spartstarx}[2]{\Spartstar{#2}\addcontentsline{toc}{part}{#1}}
+\renewcommand{\Ssectionstarx}[2]{\Ssectionstar{#2}\addcontentsline{toc}{chapter}{#1}}
+\renewcommand{\Ssubsectionstarx}[2]{\Ssubsectionstar{#2}\addcontentsline{toc}{section}{#1}}
+\renewcommand{\Ssubsubsectionstarx}[2]{\Ssubsubsectionstar{#2}\addcontentsline{toc}{subsection}{#1}}
+\renewcommand{\Ssubsubsubsectionstarx}[2]{\Ssubsubsubsectionstar{#2}\addcontentsline{toc}{subsubsection}{#1}}
+\renewcommand{\Ssubsubsubsubsectionstarx}[2]{\Ssubsubsubsubsectionstar{#2}}
+
+% "grouper" is for the 'grouper style variant:
+\renewcommand{\Ssubsectiongrouper}[2]{\setcounter{GrouperTemp}{\value{section}}\Ssubsectionstarx{#1}{#2}\setcounter{section}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsectiongrouper}[2]{\setcounter{GrouperTemp}{\value{subsection}}\Ssubsubsectionstarx{#1}{#2}\setcounter{subsection}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsubsectiongrouper}[2]{\setcounter{GrouperTemp}{\value{subsubsection}}\Ssubsubsectionstarx{#1}{#2}\setcounter{subsubsection}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsubsubsectiongrouper}[2]{\Ssubsubsubsubsectionstarx{#1}{#2}}
+
+\renewcommand{\Ssubsectiongrouperstar}[1]{\setcounter{GrouperTemp}{\value{section}}\Ssubsectionstar{#1}\setcounter{section}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsectiongrouperstar}[1]{\setcounter{GrouperTemp}{\value{subsection}}\Ssubsubsectionstar{#1}\setcounter{subsection}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsubsectiongrouperstar}[1]{\setcounter{GrouperTemp}{\value{subsubsection}}\Ssubsubsectionstar{#1}\setcounter{subsubsection}{\value{GrouperTemp}}}
+\renewcommand{\Ssubsubsubsubsectiongrouperstar}[1]{\Ssubsubsubsubsectionstar{#1}}
+
+% To increment section numbers:
+\renewcommand{\Sincpart}{\stepcounter{part}}
+\renewcommand{\Sincsection}{\stepcounter{chapter}}
+\renewcommand{\Sincsubsection}{\stepcounter{section}}
+\renewcommand{\Sincsubsubsection}{\stepcounter{subsection}}
+\renewcommand{\Sincsubsubsubsection}{\stepcounter{subsubsection}}
+
 % style for page reference
 \renewcommand{\PageRef}[1]{第~#1~页}
 % style for chapter and section reference
@@ -13,13 +60,11 @@
 \renewcommand{\Ssectionstarx}[2]{\Ssectionstar{#2}\addcontentsline{toc}{chapter}{#1}\markboth{#1}{#1}\thispagestyle{empty}}
 \renewcommand{\Ssubsectionstarx}[2]{\phantomsection\Ssubsectionstar{#2}\addcontentsline{toc}{section}{#1}}
 \renewcommand{\Ssubsubsectionstarx}[2]{\phantomsection\Ssubsubsectionstar{#2}\addcontentsline{toc}{subsection}{#1}}
-\newtheorem{sdef}{定义}[section]
-\newtheorem{sthm}{定理}[section]
+
 \renewcommand{\proofname}{证明}
+\renewcommand{\contentsname}{目录}
 
 \renewenvironment{SCodeFlow}{\SCodePreSkip\begin{list}{}{\topsep=0pt\partopsep=0pt%
 \listparindent=0pt\itemindent=0pt\labelwidth=0pt\leftmargin=2em\rightmargin=2em%
 \itemsep=0pt\parsep=0pt}\item}{\end{list}\SCodePostSkip}
 \renewcommand{\SCodeInsetBox}[1]{\setbox1=\hbox{\hbox{\hspace{2em}#1\hspace{2em}}}\vbox{\SCodePreSkip\vtop{\box1\SCodePostSkip}}}
-
-\renewcommand{\contentsname}{目录}

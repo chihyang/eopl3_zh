@@ -7,11 +7,19 @@
          scriblib/render-cond
          scribble-math)
 
+(define book-prefix-and-style
+  (make-latex-defaults+replacements
+   "../style/prefix.tex"
+   "../style/style.tex"
+   '()
+   (hash "scribble-load-replace.tex"
+         "../style/style-load-prefix.tex")))
+
 ;;; for title format
-(define book-title-style '(toc no-index))
+(define book-title-style (make-style #f (list 'toc 'no-index book-prefix-and-style)))
 (define part-title-style-numbered '(numbered no-index))
 (define part-title-style-unnumbered '(unnumbered no-index))
-(define section-title-style-numbered '(no-index))
+(define section-title-style-numbered '(numbered no-index))
 (define section-title-style-unumbered '(unnumbered no-index))
 
 (define question

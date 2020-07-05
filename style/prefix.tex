@@ -1,8 +1,12 @@
 \documentclass{book}
 \usepackage[defaultlines=4,all]{nowidow}
 \usepackage[asymmetric, reversemarginpar]{geometry}
+
+\usepackage{fontspec}
+\setmainfont{QTPalatine}[BoldFont=QTPalatine-Bold, ItalicFont=QTPalatine-Italic]
+
 \usepackage{xeCJK}
-\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={AR PL UKai CN}]{Adobe Song Std}
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
 \setCJKsansfont{Adobe Song Std}
 \setCJKmonofont{Adobe Song Std}
 \xeCJKDeclarePunctStyle{mine}{
@@ -10,10 +14,7 @@
 }
 \xeCJKsetup{CJKmath=true, PlainEquation=true, PunctStyle=mine}
 \normalspacedchars{/\\-"}
-\usepackage{fontspec}
-\setmainfont{TeX Gyre Pagella}[BoldFont={WenQuanYi Micro Hei}, ItalicFont={TeX Gyre Pagella}]
-\setsansfont{TeX Gyre Pagella}
-\usepackage[T1]{fontenc}
+
 \usepackage{emptypage}
 
 % use package proof
@@ -75,3 +76,5 @@
 
 \usepackage{enumitem}
 \setlist{labelindent=0pt,leftmargin=*}
+
+\usepackage{amssymb}
