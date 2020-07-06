@@ -198,7 +198,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
  @item{@${\text{[}var = val\text{]}rho} 表示 @tt{(extend-env @${var} @${val}
  @${\rho})}。}
 
- @item{@${\text{[}[var_1 = val_1, var_2 = val2\text{]}\rho} 是 @${var_1 =
+ @item{@${\text{[}var_1 = val_1, var_2 = val2\text{]}\rho} 是 @${var_1 =
  val_1(\text{[}var_2 = val_2\text{]}\rho)} 的缩写，等等。}
 
  @item{@${\text{[}var_1 = val_1, var_2 = val2,\dots\text{]}} 表示的环境中，
