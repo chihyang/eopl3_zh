@@ -72,10 +72,10 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
 }
 
 这里，@tt{fact-iter-acc}总是在同样的控制上下文内调用：在本例中，是没有任何上下文。
-当@tt{fact-iter-acc}调用自身时，它在@tt{fact-iter-acc}执行的“尾端”，除了把返回
-值作为@tt{fact-iter-acc}调用的结果，不须再做任何保证。我们称之为@emph{尾调用}
-(@emph{tail call})。这样，上述推导中的每一步都形如@tt{(fact-iter-acc @${n}
-@${a})}。
+当@tt{fact-iter-acc}调用自身时，它在@tt{fact-iter-acc}执行的@exact-elem{“}尾端
+@exact-elem{”}，除了把返回值作为@tt{fact-iter-acc}调用的结果，不须再做任何保证。
+我们称之为@emph{尾调用} (@emph{tail call})。这样，上述推导中的每一步都形如
+@tt{(fact-iter-acc @${n} @${a})}。
 
 当@tt{fact}这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到调
 用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现@emph{递
@@ -593,7 +593,8 @@ behavior})。
 }|
 }
 
-@tt{apply-cont}打印出消息“计算结束”，返回计算的最终结果@tt{(num-val 30)}。
+@tt{apply-cont}打印出消息@exact-elem{“}计算结束@exact-elem{”}，返回计算的最终
+结果@tt{(num-val 30)}。
 
 }
 
@@ -1160,8 +1161,8 @@ odd:  if (x=0) then return(0)
 }
 
 能这样，只是因为原代码中@tt{even}和@tt{odd}的调用不扩大控制上下文：它们是尾调用。
-我们不能这样转换@tt{fact}，因为@tt{fact}的跟踪日志无限增长：不像这里，“程序计数
-器”出现在跟踪日的最外层，而是在控制上下文中。
+我们不能这样转换@tt{fact}，因为@tt{fact}的跟踪日志无限增长：不像这里，
+@exact-elem{“}程序计数器@exact-elem{”}出现在跟踪日的最外层，而是在控制上下文中。
 
 任何不需要控制上下文的程序都可以这样转换。这给了我们一条重要原则：
 
@@ -1532,7 +1533,8 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.23"]{
 
-如果删去解释器某一分支中的“goto”会怎样？解释器究竟出什么错？
+如果删去解释器某一分支中的@exact-elem{“}goto@exact-elem{”}会怎样？解释器究竟出
+什么错？
 
 }
 

@@ -99,11 +99,11 @@
  ]
 }
 
-“最小集合”是指该集合满足性质 1 和 2，并且是其他任何满足性质 1 和 2 的集合的子
-集。易知只能有一个这样的集合：如果@${S_1}和@${S_2}都满足性质 1 和 2，并且都为最
-小，那么@${S_1 \subseteq S_2}（因为@${S_1}最小）且@${S_2 \subseteq S_1}（因为
-@${S_2}最小），因此@${S_1 = S_2}。之所以需要这一额外条件，是因为否则的话将有许多
-集合满足其他两个条件（见练习1.3）。
+@exact-elem{“}最小集合@exact-elem{”}是指该集合满足性质 1 和 2，并且是其他任何
+满足性质 1 和 2 的集合的子集。易知只能有一个这样的集合：如果@${S_1}和@${S_2}都满
+足性质 1 和 2，并且都为最小，那么@${S_1 \subseteq S_2}（因为@${S_1}最小）且
+@${S_2 \subseteq S_1}（因为@${S_2}最小），因此@${S_1 = S_2}。之所以需要这一额外
+条件，是因为否则的话将有许多集合满足其他两个条件（见练习1.3）。
 
 该定义还能表示为：
 
@@ -116,16 +116,17 @@
 @$${\infer{(n + 3) \in S}{n \in S}}
 
 这只是前一定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
-inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”。线上部分称作
-@emph{假设} (@emph{hypothesis}) 或者@emph{前件} (@emph{antecedent})；线下部分称
-作@emph{结论} (@emph{conclusion}) 或者@emph{后件} (@emph{consequent})。罗列两个
-或更多假设时，它们以隐含的“与”连接（见定义1.1.5）。没有假设的规则称作@emph{公
-理} (@emph{axiom})。写公理时通常不加水平线，如：
+inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“}若-则
+@exact-elem{”}。线上部分称作@emph{假设} (@emph{hypothesis}) 或者@emph{前件}
+(@emph{antecedent})；线下部分称作@emph{结论} (@emph{conclusion}) 或者@emph{后件}
+(@emph{consequent})。罗列两个或更多假设时，它们以隐含的@exact-elem{“}与
+@exact-elem{”}连接（见定义1.1.5）。没有假设的规则称作@emph{公理} (@emph{axiom})。
+写公理时通常不加水平线，如：
 
 @$${0 \in S}
 
 该规则意为，自然数@${n}属于@${S}，当且仅当能用有限次推理规则，从公理推得陈述
-“@${n \in S}”。这一解释自然使@${S}成为闭合于该规则的最小集合。
+@exact-elem{“}@${n \in S}@exact-elem{”}。这一解释自然使@${S}成为闭合于该规则的最小集合。
 
 这些定义意思相同。我们把版本一称作@emph{自顶向下} (@emph{top-down}) 的定义，版本
 二称作@emph{自底向上} (@emph{bottom-up}) 的定义，版本三称作@emph{推理规则}
@@ -157,8 +158,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
  }
 
 
-这里，我们用中缀“@tt{.}”代表Scheme中 @racket[cons] 操作的结果。式子@tt{(@${n}
-. @${l})}代表Scheme序对的首项为@${n}，余项为@${l}。
+这里，我们用中缀@exact-elem{“}@tt{.}@exact-elem{”}代表Scheme中 @racket[cons]
+操作的结果。式子 @tt{(@${n} . @${l})} 代表Scheme序对的首项为 @${n}，余项为 @${l}。
 
 @definition[#:title "整数列表，推理规则" #:tag "d1.1.5"]{
 @nested[#:style normalfont]{
@@ -243,8 +244,9 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
   @item{@m{(0, 0, 1) \in S \qquad \infer{(n + 1, j, i + j) \in S}{(n, i, j) \in S}}}
 
-  @item{@m{\textnormal{\lbrack}\mathord{\star}\mathord{\star}\mathord{\star}\textnormal{\rbrack}} @m{\quad}
-  @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i, j) \in S}}}
+  @item{@m{\text{[}\mathord{\star}\mathord{\star}\mathord{\star}\text{]}}
+  @m{\quad} @m{(0, 1, 0) \in S \qquad \infer{(n + 1, i + 2, i + j) \in S}{(n, i,
+  j) \in S}}}
 
  ]
 
@@ -290,13 +292,16 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
-        @${e \in Expression} 或 “@${e} 是一个 expression”。
+        @${e \in Expression} 或 @exact-elem{“}@${e} 是一个 expression@exact-elem{”}。
 
         另一常见做法，名叫@emph{巴科斯-诺尔范式} (@emph{Backus-Naur Form}) 或
         @emph{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
 
-  @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是“@tt{.}”，
-        “@tt{(}”和“@tt{)}”。这些常用打字机字体写出，如 @tt{lambda}。}
+  @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是
+        @exact-elem{“}@tt{.}@exact-elem{”}、
+        @exact-elem{“}@tt{(}@exact-elem{”}和
+        @exact-elem{“}@tt{)}@exact-elem{”}。这些常用打字机字体写出，如
+        @tt{lambda}。}
 
   @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的左
         边是一个非终结符，右边包含终结符和非终结符。左右两边通常用符号 @${::=}分
@@ -317,8 +322,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 }
 
 给同一句法类别编写一组规则时，也可以只写一次@${::=}和左边内容，随后的各个右边内
-容用特殊符号“@${\mid}”（竖线，读作@emph{或}）分隔。 用“@${\mid}”，
-@List-of-Int-$[]的语法可写成：
+容用特殊符号@exact-elem{“}@${\mid}@exact-elem{”}（竖线，读作@emph{或}）分隔。
+用@exact-elem{“}@${\mid}@exact-elem{”}，@List-of-Int-$[]的语法可写成：
 
 
 @$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@Int-$[] . @List-of-Int-$[])}}
@@ -364,8 +369,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作“若-则”�
 对由语法定义的集合，可以用@index["句法推导"]{@emph{句法推导}} (@emph{syntactic
 derivation}) 证明给定值是其元素。这样的推导从集合对应的非终结符开始，在由箭头
 @${\Rightarrow} 指示的每一步中，如果非终结符对应的句法类别未做定义，则将其代换为
-该类别的已知元素，否则代换为对应规则右边的内容。例如，前述证明 “@tt{(14 . ())}
-是整数列表”，可以用句法推导化为
+该类别的已知元素，否则代换为对应规则右边的内容。例如，前述证明
+@exact-elem{“}@tt{(14 . ())}是整数列表@exact-elem{”}，可以用句法推导化为
 
 @envalign*{
  @List-of-Int-raw[] &\Rightarrow @tt{(@Int-m[] . @List-of-Int-m[])} \\
@@ -529,7 +534,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 
    也是一个奇数。}]}]
 
- 陈述“@${\mathit{IH}(k + 1)} 成立”证毕，归纳完成。
+ 陈述@exact-elem{“}@${\mathit{IH}(k + 1)} 成立@exact-elem{”}证毕，归纳完成。
  }
 @; @}
 
@@ -723,7 +728,7 @@ C} 相同。
 
 @exercise[#:level 2 #:tag "ex1.7"]{
  @tt{nth-element} 的错误信息不够详尽。重写 @tt{nth-element}，给出更详细的错误信
- 息，像是 “@tt{(a b c)} 不足 8 个元素”。
+ 息，像是 @exact-elem{“}@tt{(a b c)} 不足 8 个元素@exact-elem{”}。
 
 }
 
@@ -886,17 +891,20 @@ C} 相同。
  同于 @${x} 且 @${x} 自由出现于 @${e'} 时，变量 @${x} 自由出现于 @${e}。}
 
  @item{若表达式 @${e} 形如 @tt{(@${e_1} @${e_2})}，则当且仅当 @${x} 自由出现于
- @${e_1} 或 @${e_2} 时，@${x} 自由出现于 @${e}。这里的“或”表示@emph{涵盖或}
- (@emph{inclusive or})，意为它包含 @${x} 同时自由出现于 @${e_1} 和 @${e_2} 的情
- 况。我们通常用“或”表示这种意思。}
+ @${e_1} 或 @${e_2} 时，@${x} 自由出现于 @${e}。这里的@exact-elem{“}或
+ @exact-elem{”}表示@emph{涵盖或} (@emph{inclusive or})，意为它包含 @${x} 同时自
+ 由出现于 @${e_1} 和 @${e_2} 的情况。我们通常用@exact-elem{“}或@exact-elem{”}
+ 表示这种意思。}
 
 ]
 
-你可以说服自己，这些规则涵盖了“@${x} 不在某一 lambda 绑定之中”表示的所有意思。
+你可以说服自己，这些规则涵盖了@exact-elem{“}@${x} 不在某一 lambda 绑定之中
+@exact-elem{”}表示的所有意思。
 
 @exercise[#:level 1 #:tag "ex1.10"]{
 
- 我们常用“或”表示“涵盖或”。“或”还有什么含义？@linebreak[]
+ 我们常用@exact-elem{“}或@exact-elem{”}表示@exact-elem{“}涵盖或
+ @exact-elem{”}。@exact-elem{“}或@exact-elem{”}还有什么含义？@linebreak[]
 
 }
 

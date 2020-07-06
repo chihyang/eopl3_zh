@@ -191,18 +191,18 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @itemlist[
 
- @item{@${\rho}表示任一环境。}
+ @item{@${\rho} 表示任一环境。}
 
- @item{@${\textnormal{\lbrack\rbrack}}表示空环境。}
+ @item{@${\textnormal{[]}} 表示空环境。}
 
- @item{@${{\textnormal\lbrack}var = val{\textnormal\rbrack}\rho}表示@tt{(extend-env @${var} @${val} @${\rho})}。}
+ @item{@${\text{[}var = val\text{]}rho} 表示 @tt{(extend-env @${var} @${val}
+ @${\rho})}。}
 
- @item{@${{\textnormal\lbrack}var_1 = val_1, var_2 =
- val2{\textnormal\rbrack}\rho}是@${var_1 = val_1({\textnormal\lbrack}var_2 =
- val_2{\textnormal\rbrack}\rho)}的缩写，等等。}
+ @item{@${\text{[}[var_1 = val_1, var_2 = val2\text{]}\rho} 是 @${var_1 =
+ val_1(\text{[}var_2 = val_2\text{]}\rho)} 的缩写，等等。}
 
- @item{@${{\textnormal\lbrack}var_1 = val_1, var_2 =
- val2,\dots{\textnormal\rbrack}}表示的环境中，@${var_1}的值为@${val_1}，等等。}
+ @item{@${\text{[}var_1 = val_1, var_2 = val2,\dots\text{]}} 表示的环境中，
+ @${var_1} 的值为@${val_1}，等等。}
 
 ]
 
@@ -675,8 +675,9 @@ in let y = 2
 
 @nested[#:style 'noindent]{
 
-@smaller{@linebreak[]@elemtag["ex-note"]{}在下面的练习以及全书之中，短句“扩展语
-言，添加……”表示向语言规范添加规则或者方程，并增改相应的解释器，实现指定特性。}
+@smaller{@linebreak[]@elemtag["ex-note"]{}在下面的练习以及全书之中，短句
+@exact-elem{“}扩展语言，添加……@exact-elem{”}表示向语言规范添加规则或者方程，
+并增改相应的解释器，实现指定特性。}
 
 }
 
@@ -1734,9 +1735,9 @@ in let fact = proc (n)
 这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping})规则，这样声明的变量叫
 做@emph{词法变量} (@emph{lexical variable})。
 
-使用词法定界，我们可以重新声明一个变量，给一个作用域捅出个“洞”。这样的内层声明
-@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例的乘式 @tt{(* x y)} 中，内层
-@tt{x} 遮蔽了外层的。
+使用词法定界，我们可以重新声明一个变量，给一个作用域捅出个@exact-elem{“}洞
+@exact-elem{”}。这样的内层声明@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例
+的乘式 @tt{(* x y)} 中，内层@tt{x} 遮蔽了外层的。
 
 词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@deftech{等深线}
 (@emph{contour diagram})解释这点。图3.13展示了上例的@tech{等深线}。每个作用域
@@ -1806,7 +1807,8 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 之中。在半无限的语言中，垃圾回收器收集不能再访问的绑定。这只能在运行时确定，因此
 我们说这是一条@emph{动态} (@emph{dynamic})属性。
 
-很可惜的是，“动态”有时表示“在表达式求值期间”，有时却又表示“无法事先计算”。
+很可惜的是，@exact-elem{“}动态@exact-elem{”}有时表示@exact-elem{“}在表达式求
+值期间@exact-elem{”}，有时却又表示@exact-elem{“}无法事先计算@exact-elem{”}。
 如果我们不允许@tt{let}的值为过程，那么let绑定会在@tt{let}主体求值结束时到期。这
 叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所以
 我们可以准确预测绑定何时可以抛弃。3.28等几道练习中的动态绑定表现类似。
@@ -1815,8 +1817,8 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
 能会跨过很多等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
-depth})（或@emph{静深} (@emph{static depth})）。由于惯用“从0开始的索引”，所以
-不计最后跨过的等深线。例如，在Scheme表达式
+depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{“}从0开始的
+索引@exact-elem{”}，所以不计最后跨过的等深线。例如，在Scheme表达式
 
 @nested{
 @racketblock[
@@ -2369,8 +2371,9 @@ in let f = proc (y) -(y,x)
 }
 
 这里，不必运行我们就能看出：在过程调用处，@tt{f} 绑定到一个过程，其主体为
-@tt{-(y,x)}，@tt{x} 的值与过程创建处相同。因此我们完全可以避免在环境中查找
-@tt{f}。扩展翻译器，记录“已知过程”，生成代码，避免在调用这样的过程时搜索环境。
+@tt{-(y,x)}，@tt{x} 的值与过程创建处相同。因此我们完全可以避免在环境中查找@tt{f}。
+扩展翻译器，记录@exact-elem{“}已知过程@exact-elem{”}，生成代码，避免在调用这样
+的过程时搜索环境。
 
 }
 

@@ -191,10 +191,10 @@ end
 在我们的语言中，任何表达式都可以有效果。要定义这些效果，我们需要描述每次求值使用
 什么样的存储器，以及求值如何修改存储器。
 
-在规范中，我们用 @deftech[#:key "sigma_for_store"]{@${\sigma}}表示任一存储器。我
-们用@${\textnormal{\lbrack}l=v\textnormal{\rbrack}\sigma}表示存储器，它与
-@${\sigma}类似，只是将位置@${l}映射到@${v}。有时，指代@${\sigma}的某个具体值时，
-我们称之为存储器的@emph{状态} (@emph{state})。
+在规范中，我们用 @deftech[#:key "sigma_for_store"]{@${\sigma}} 表示任一存储器。
+我们用 @${\text{[}l=v\text{]}\sigma} 表示存储器，它与 @${\sigma} 类似，只是将位
+置 @${l} 映射到@${v}。有时，指代 @${\sigma} 的某个具体值时，我们称之为存储器的
+@emph{状态} (@emph{state})。
 
 我们使用@emph{存储器传递规范} (@emph{store-passing specifications})。在存储器传
 递规范中，存储器直接作为参数传递给@tt{value-of}，并作为@tt{value-of}的结果返回。
@@ -691,7 +691,8 @@ newref: 分配位置 2
 }
 
 当变量出现在表达式中，我们首先在环境中搜索标识符，找出绑定的位置，然后在存储器中
-找出那个位置的值。因此对@tt{var-exp}，我们有个“双层”系统。
+找出那个位置的值。因此对@tt{var-exp}，我们有个@exact-elem{“}双层@exact-elem{”}
+系统。
 
 一个位置的内容可用@tt{set}表达式修改，语法为：
 

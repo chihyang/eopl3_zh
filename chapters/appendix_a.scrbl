@@ -29,9 +29,10 @@
 入探讨了如何递归编程。
 
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
-纳大致效仿 Plotkin (1975, 1981) 的工作。我们的“自顶向下”式归纳效仿另一种技术，
-名为@emph{余归纳} (@emph{coinduction})（参见 Gordon, 1995; Jacobs & Rutten,
-1997），Felleisen et al. (2001) 也使用了这种技术。
+纳大致效仿 Plotkin (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
+@exact-elem{”}式归纳效仿另一种技术，名为@emph{余归纳} (@emph{coinduction})（参
+见 Gordon, 1995; Jacobs & Rutten, 1997），Felleisen et al. (2001) 也使用了这种技
+术。
 
 上下文无关语法是语言学和计算机科学的标准工具。大多数编译器书籍，比如 Aho et
 al. (2006)，都对语法和解析算法进行了大篇幅的讨论。将具体语法和抽象语法分开的思想
@@ -63,9 +64,10 @@ et al., 2007) 制定。
 
 Dybvig (2003) 简短介绍了 Scheme，加入了许多富有洞见的例子。
 
-解释器思想至少能追溯到图灵，他定义了能够模拟任何图灵机的“通用”机器。这种通用机
-器实际上是一个解释器，取一描述图灵机的编码，模拟解码机器 (Turing, 1936)。经典的
-冯诺依曼机 (von Neumann, 1945) 同样是硬件实现的解释器，用来解释机器语言程序。
+解释器思想至少能追溯到图灵，他定义了能够模拟任何图灵机的@exact-elem{“}通用
+@exact-elem{”}机器。这种通用机器实际上是一个解释器，取一描述图灵机的编码，模拟
+解码机器 (Turing, 1936)。经典的冯诺依曼机 (von Neumann, 1945) 同样是硬件实现的解
+释器，用来解释机器语言程序。
 
 对解释器的现代应用可追溯到 McCarthy (1960)，他提出了@emph{自循环解释器}
 (@emph{metacircular interpreter})（用待定语言本身写就的解释器），用来解释 Lisp
@@ -90,7 +92,8 @@ EXPLICIT-REFS 的设计基于 ML (Milner et al., 1989) 的存储器模型，而�
 (Wulf, 1971) 类似。IMPLICIT-REFS 的设计类似于大多数具有可变局部值的标准编程语言，
 诸如 Pascal、Scheme 和 Java。
 
-术语“左值”和“右值”，以及内存的环境-存储器模型源自 Strachey (1967)。
+术语@exact-elem{“}左值@exact-elem{”}和@exact-elem{“}右值@exact-elem{”}，以及
+内存的环境-存储器模型源自 Strachey (1967)。
 
 Fortran (Backus et al., 1957) 是第一种使用按址调用的语言，Algol 60 (Naur et al.,
 1963) 是第一种使用按名调用的语言。Friedman & Wise (1976) 较早介绍了全面使用懒求

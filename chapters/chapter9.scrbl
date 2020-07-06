@@ -57,12 +57,13 @@
 
 图9.1展示了这种语言的一个简单程序。它定义了继承于@tt{object}的类@tt{c1}。类
 @tt{c1}的每个对象都包含两个字段，名为@tt{i}和@tt{j}。字段叫做@emph{成员}
-(@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三
-个@emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
+(@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三个
+@emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
 @tt{countup}和@tt{getstate}。每个方法包含@emph{方法名} (@emph{method name})，若
 干@emph{方法变量} (@emph{method var})（又称@emph{方法参数} (@emph{method
 parameters})），以及@emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}的
-实例能够响应的@emph{消息}种类。有时，我们说成是“@tt{c1}的方法@tt{countup}”。
+实例能够响应的@emph{消息}种类。有时，我们说成是@exact-elem{“}@tt{c1}的方法
+@tt{countup}@exact-elem{”}。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -617,11 +618,12 @@ in send o3 m1(7,8)
     (fields (list-of reference?))))
 ]
 
-在列表中，我们把“最老”类的字段排在前面。这样，在图9.8中，类@tt{c1}对象的字段排
-列为@tt{(x y)}；类@tt{c2}对象的字段排列为@tt{(x y y)}，其中，第二个@tt{y}是
-@tt{c2}中的；类@tt{c3}对象的字段排列为@tt{(x y y x z)}。图9.8中对象@tt{o3}的表示
-如图9.9所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}中声明的字段@tt{x}，而不
-是@tt{c1}中声明的。我们在建立方法主体的求值环境时处理这点。
+在列表中，我们把@exact-elem{“}最老@exact-elem{”}类的字段排在前面。这样，在图
+9.8中，类@tt{c1}对象的字段排列为@tt{(x y)}；类@tt{c2}对象的字段排列为@tt{(x y
+y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列为@tt{(x y y x z)}。
+图9.8中对象@tt{o3}的表示如图9.9所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}
+中声明的字段@tt{x}，而不是@tt{c1}中声明的。我们在建立方法主体的求值环境时处理这
+点。
 
 这种方式有一条有用的性质：对@tt{c3}的任何子类，列表中同样位置具有同样的字段，因
 为随后添加的任何字段都会出现在这些字段的右边。在@tt{c3}任一子类定义的某个方法中，

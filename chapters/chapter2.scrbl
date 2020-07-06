@@ -36,10 +36,10 @@
 示，只关心能否可靠地执行算数操作。
 
 当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码与@emph{表示无关}
-(@emph{representation-independent})，因为这些代码不依赖数据类型的表示。
+(@emph{representation-independent})，因为这些代码不依赖数据类型值的表示。
 
-那么所有关于数据表示的信息必然在实现代码之中。实现最重要的部分就是指定数据如何表
-示。我们用符号@${\lceil v \rceil}指代“数据 @${v} 的表示”。
+那么所有关于数据表示的信息必然在实现代码之中。实现最重要的部分就是表示数据的规范。
+我们用符号@${\lceil v \rceil}指代@exact-elem{“}数据 @${v} 的表示@exact-elem{”}。
 
 要说得更明白些，来看一个简单例子：自然数类型。待表示的数据是自然数。接口由四个过
 程组成：@tt{zero}，@tt{is-zero?}，@tt{successor} 和 @tt{predecessor}。当然，不是
@@ -986,9 +986,9 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
-@tt{lc-exp}的定义忽略了定义1.1.8中的条件：“@${\mathit{Identifier}} 是除
-@tt{lambda} 之外的任何符号。”修改 @tt{identifier?} 的定义，补充这一条件。提示：
-任何谓词都能在 @tt{define-datatype} 中使用，你定义的也能。
+@tt{lc-exp}的定义忽略了定义1.1.8中的条件：@exact-elem{“}@${\mathit{Identifier}}
+是除 @tt{lambda} 之外的任何符号。@exact-elem{”}修改 @tt{identifier?} 的定义，补
+充这一条件。提示：任何谓词都能在 @tt{define-datatype} 中使用，你定义的也能。
 
 }
 

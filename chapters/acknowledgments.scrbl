@@ -23,12 +23,12 @@ Bogaerts、Albert Rossi、Craig Citro、Christopher Dutchyn、Jeremy Siek和Neil
 Ching也认真阅读并做了评论。
 
 尤其感谢这几位对本书的帮助。感谢Neil Ching编制了索引。在我们尝试设计
-@racket[define-datatype]和@racket[cases]语法扩展时，Jonathan Sobel和Erik
-Hilsdale完成了一些原型实现，贡献了很多想法。程序语言小组，尤其是Matthias
-Felleisen、Matthew Flatt、Robby Findler和Shriram Krishnamurthi，热心帮忙兼容他们
-的DrScheme系统。Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书作者已使用
-多年。Will Byrd在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐我们兼容
-DrScheme的模块系统，这在位于 @url{http://www.eopl3.com} 的实现中显而易见。
+@tt{define-datatype} 和 @tt{cases} 语法扩展时，Jonathan Sobel和Erik Hilsdale完成
+了一些原型实现，贡献了很多想法。程序语言小组，尤其是Matthias Felleisen、Matthew
+Flatt、Robby Findler和Shriram Krishnamurthi，热心帮忙兼容他们的DrScheme系统。
+Kent Dybvig开发了极为高效和健壮的Chez Scheme实现，本书作者已使用多年。Will Byrd
+在整个过程中都提供了无价帮助。Matthias Felleisen强烈推荐我们兼容DrScheme的模块系
+统，这在位于 @url{http://www.eopl3.com} 的实现中显而易见。
 
 特别值得一提的是体贴和关心我们进度的人。George Springer和Larry Finkelstein提供了
 无价支持。特别感谢Bob Prior，我们MIT出版社的优秀编辑，是他鼓励我们攻下本版的写作。

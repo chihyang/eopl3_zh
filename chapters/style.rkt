@@ -120,6 +120,9 @@
               (hspace 1))
           (remove-leading-newlines c)))
 
+(define (exact-elem . c)
+  (make-element (make-style #f '(exact-chars)) c))
+
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "frontmatter" '(exact-chars)) '())))
