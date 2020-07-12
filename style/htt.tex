@@ -1,0 +1,7 @@
+\newcommand{\Shtt}[1]{\texttt{
+    \hyphenchar\font=`\- % enable hyphenation
+    \hyphenpenalty=10000 % disable it again
+    \exhyphenpenalty=-50 % enable (encourage) it at explicit hyphens
+    #1
+    \hyphenchar\font=-1
+  }}

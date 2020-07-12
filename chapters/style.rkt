@@ -74,6 +74,12 @@
 (define eopl-theorem
   (make-style "EoplTheorem" (list (make-tex-addition "../style/theorem.tex"))))
 
+(define small
+  (make-style "Small" (list (make-tex-addition "../style/small.tex"))))
+
+(define htt
+  (make-style "Shtt" (list (make-tex-addition "../style/htt.tex"))))
+
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
 

@@ -2,5 +2,8 @@
 \renewcommand\theEoplExercise{\thechapter.\arabic{EoplExercise}}
 \newcommand\EoplExerciseName{\emph{练习}}
 \newenvironment{EoplExercise}{%
-  \setlength{\parskip}{1em}\setlength{\parindent}{0pt}\refstepcounter{EoplExercise}{{\small\EoplExerciseName~}\theEoplExercise\hspace{1ex}}\begin{small}}{
+  \setlength{\parskip}{1em}
+  \setlength{\parindent}{0pt}
+  \refstepcounter{EoplExercise}
+  {\small\EoplExerciseName~}\theEoplExercise\hspace{1ex}\begin{small}}{
   \end{small}}
