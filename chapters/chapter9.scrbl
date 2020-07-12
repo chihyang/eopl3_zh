@@ -599,6 +599,7 @@ in send o3 m1(7,8)
 @centered{
 @(image "../images/simple-object"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "简单对象")
 }
 
@@ -718,8 +719,8 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 @nested[#:style eopl-figure]{
 @centered{
 @(image "../images/env-for-method"
-  #:scale 0.95
-  #:suffixes (list ".pdf" ".svg")
+  #:suffixes (list ".pdf" ".svg"
+  #:width 'textwidth)
   "方法调用时的环境")
 }
 

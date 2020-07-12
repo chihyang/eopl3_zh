@@ -72,6 +72,7 @@
 @centered{
 @(image "../images/alice-view"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "项目中，爱丽丝所见的三个模块")
 }
 
@@ -161,6 +162,7 @@ module m1
 @centered{
 @(image "../images/module-contour"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "简单模块中的一些作用域")
 }
 
@@ -1002,6 +1004,7 @@ module m1
 @centered{
 @(image "../images/module-type"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "模块类型声明的作用域")
 }
 

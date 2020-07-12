@@ -108,6 +108,7 @@
 @centered{
 @(image "../images/structure"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "章节依赖关系")
 }
 

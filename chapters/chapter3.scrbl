@@ -1589,8 +1589,8 @@ in (odd 13)
 
 @centered{
 @(image "../images/vector-env"
-  #:scale 0.95
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "vector环境")
 }
 
@@ -1670,6 +1670,7 @@ in let fact = proc (n)
 @centered{
 @(image "../images/simple-contour"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "简单等深线")
 }
 
@@ -1757,6 +1758,7 @@ in let fact = proc (n)
 @centered{
 @(image "../images/complicated-contour"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "较复杂的等深线")
 }
 
