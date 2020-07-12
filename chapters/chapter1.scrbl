@@ -616,7 +616,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
         ...)))
 ]
 
-若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
+若列表非空，则其长度比其余项长度多1。这就给出了完整定义。
 
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
