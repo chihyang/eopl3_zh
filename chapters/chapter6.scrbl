@@ -1778,18 +1778,18 @@ in |@${T}
               (cps-diff-exp simp1 simp2))))))))
 ]
 
-对@tt{cps-of-call-exp}中的@tt{cps-of-exps}，我们可以用@tt{cps-of-exp/ctx}处理
-@tt{rator}，但仍需用@tt{cps-of-exps}处理@tt{rands}。删除翻译器中出现的其他
-@tt{cps-of-exps}。
+对 @tt{cps-of-call-exp} 中的 @tt{cps-of-exps}，我们可以用 @tt{cps-of-exp/ctx} 处
+理 @tt{rator}，但仍需用 @tt{cps-of-exps} 处理 @tt{rands}。删除翻译器中出现的其他
+@elem[#:style htt]{cps-of-exps}。
 
 }
 
 @exercise[#:level 3 #:tag "ex6.31"]{
 
-写一个翻译器，它取@tt{cps-of-program}的输出，产生一个等价程序，其中所有的续文都
-用@secref{cpi}中的数据结构表示。用列表表示那些用@tt{define-datatype}生成的数据结
-构。由于我们的语言不支持符号，你可以在首项位置使用整数标签，以此区分数据类型的不
-同变体。
+写一个翻译器，它取 @tt{cps-of-program} 的输出，产生一个等价程序，其中所有的续文
+都用@secref{cpi}中的数据结构表示。用列表表示那些用 @elem[#:style
+htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符号，你可以在首项位置
+使用整数标签，以此区分数据类型的不同变体。
 
 }
 

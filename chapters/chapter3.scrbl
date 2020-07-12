@@ -1039,6 +1039,7 @@ in let f = proc (z) -(z,x)
 我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
 算过程用@emph{规范}表示。令@${\rho}为任一环境。
 
+@nested[#:style small]{
 @verbatim|{
 
 (value-of
@@ -1110,6 +1111,7 @@ in let f = proc (z) -(z,x)
 = |@${\lceil}-100|@${\rceil}
 
 }|
+}
 
 其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
 @tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
@@ -2332,11 +2334,11 @@ in proc (y)
 
 @exercise[#:level 2 #:tag "ex3.40"]{
 
-扩展词法地址翻译器和解释器，处理 @tt{letrec}。修改 @tt{translation-of} 的上下文
-参数，不仅记录每个绑定变量的名字，也记录变量是否由 @tt{letrec} 绑定。对
-@tt{letrec} 绑定变量的引用，生成一种新的引用，名为 @tt{nameless-letrec-var-exp}。
-然后你可以继续用上面的无名环境表示，解释器就能以适当的方式处理
-@tt{nameless-letrec-var-exp}。
+扩展词法地址翻译器和解释器，处理 @tt{letrec}。修改 @elem[#:style
+htt]{translation-of} 的上下文参数，不仅记录每个绑定变量的名字，也记录变量是否由
+@tt{letrec} 绑定。对 @tt{letrec} 绑定变量的引用，生成一种新的引用，名为
+@elem[#:style htt]{nameless-letrec-var-exp}。然后你可以继续用上面的无名环境表示，
+解释器就能以适当的方式处理 @elem[#:style htt]{nameless-letrec-var-exp}。
 
 }
 

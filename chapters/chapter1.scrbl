@@ -1648,7 +1648,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 }
 
 @exercise[#:level 1 #:tag "ex1.31"]{
- 写出如下过程，对二叉树（定义 1.1.7）进行运算：@tt{leaf} 和 @tt{interior-node}
+ 写出如下过程，对二叉树（定义 1.1.7）做运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
  @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
  用。

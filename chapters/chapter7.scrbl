@@ -457,11 +457,14 @@ in |@${e_{letrec\mbox{-}body}}
 
 把这些写成一条规则，我们有：
 
-@$${\infer{@tt{(type-of (letrec-exp @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}) @${tenv}) = @${t}}}
+@nested[#:style small]{
+@$${\infer{@tt{(type-of}\ @tt{(letrec-exp}\ @${t_{res}}\ @${p}\ @tt{(}@${var} : @${t_{var}}@tt{)}\ @tt{=}\
+           @${e_{proc\mbox{-}body}}\ @tt{in}\ @${e_{letrec\mbox{-}body}}@tt{)}\ @${tenv}@tt{)}\ @tt{=}\ @${t}}
           {\begin{gathered}
-           @tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_var}][@${p}=@${(t_{var} \to t_{res})}]@${tenv}) = @${t_{res}}} \\
+           @tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_{var}}][@${p}=@${(t_{var} \to t_{res})}]@${tenv}) = @${t_{res}}} \\
            @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p}=@${(t_{var} \to t_{res})}]@${tenv}) = @${t}}
            \end{gathered}}}
+}
 
 现在我们已经写出了所有规则，可以实现语言的类型检查器了。
 
@@ -488,11 +491,11 @@ in |@${e_{letrec\mbox{-}body}}
       exp)))
 ]
 
-我们不使用@tt{check-equal-type!}调用的返回值，因此@tt{check-equal-type!}的执行只
-求效果，如同@secref{s4.2.2}中的@tt{setref}那样。
+我们不使用 @tt{check-equal-type!} 调用的返回值，因此 @tt{check-equal-type!} 的执
+行只求效果，如同@secref{s4.2.2}中的 @tt{setref} 那样。
 
-过程@tt{report-unequal-types}用@tt{type-to-external-form}，将类型转换为易读的列
-表。
+过程 @tt{report-unequal-types} 用 @tt{type-to-external-form}，将类型转换为易读的
+列表。
 
 @racketblock[
 @#,elem{@bold{@tt{type-to-external-form}} : @${\mathit{Type} \to \mathit{List}}}
@@ -662,7 +665,7 @@ in |@${e_{letrec\mbox{-}body}}
            @tt{(type-of @${e_{body}} [@${var_1}=@${t_1}][@${var_2}=@${t_2}]@${tenv}) = @${t_{body}}} \\
            \end{gathered}}}
 
-扩展CHECKED，实现这些规则。在@tt{type-to-external-form}中，用列表@tt{(pairof
+扩展 CHECKED，实现这些规则。在@tt{type-to-external-form} 中，用列表 @tt{(pairof
 @${t_1} @${t_2})}表示序对。
 
 }

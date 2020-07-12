@@ -1939,10 +1939,10 @@ module Charlies-points
 
 }
 
-模块@tt{Alices-points}使用@tt{Bobs-db-module}的数据库。模块@tt{Charlies-points}
-使用@tt{Dianas-db-module}的数据库。这样安排可以复用@tt{Alices-point-builder}中的
-代码。这不仅避免了写两次同样的代码，而且，在代码需要变动时，可以只改一处，自动传
-播到@tt{Alices-point}和@tt{Charlies-points}。
+模块 @tt{Alices-points} 使用 @tt{Bobs-db-module} 的数据库。模块
+@tt{Charlies-points} 使用 @tt{Dianas-db-module} 的数据库。这样安排可以复用
+@tt{Alices-point-builder} 中的代码。这不仅避免了写两次同样的代码，而且，在代码需
+要变动时，可以只改一处，自动传播到 @tt{Alices-point} 和 @tt{Charlies-points}。
 
 另一个例子，来看例8.11和8.12。在这两个例子中，我们用基本相同的代码写@tt{to-int}。
 在例8.11中它是

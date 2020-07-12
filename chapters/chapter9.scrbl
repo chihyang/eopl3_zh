@@ -1010,9 +1010,9 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 1 #:tag "ex9.9"]{
 
-添加表达式@tt{superfieldref @${field\mbox{-}name}}和@tt{superfieldset
-@${field\mbox{-}name} = @${exp}}，处理@tt{self}中被遮蔽的字段。记住，@tt{super}
-是静态的，总是指持有类的超类。
+添加两个表达式 @tt{superfieldref @${field\mbox{-}name}} 和 @tt{superfieldset
+@${field\mbox{-}name} = @${exp}}，处理 @tt{self} 中被遮蔽的字段。记住，
+@tt{super} 是静态的，总是指持有类的超类。
 
 }
 
@@ -1116,10 +1116,10 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 2 #:tag "ex9.18"]{
 
-@tt{merge-method-envs}产生的方法环境可能很长。新写一个@tt{merge-method-envs}，保
-证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在图9.8中，在
-@tt{c1}、@tt{c2}、@tt{c3}，以及@tt{c3}任意后代的方法环境中，方法@tt{m2}应出现在
-同样的位置。
+@tt{merge-method-envs} 产生的方法环境可能很长。再写出一版 @tt{merge-method-envs}，
+保证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在图9.8中，
+在 @tt{c1}、@tt{c2}、@tt{c3}，以及 @tt{c3} 任意后代的方法环境中，方法 @tt{m2} 应
+出现在同样的位置。
 
 }
 
@@ -2050,7 +2050,8 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
 @exercise[#:level 1 #:tag "ex9.35"]{
 
-扩展类型检查器，保证安全属性：@tt{initialize}方法只从@tt{new-object-exp}内部调用。
+扩展类型检查器，使 @tt{initialize} 方法只从 @tt{new-object-exp} 内部调用，从而加
+强安全性。
 
 }
 
