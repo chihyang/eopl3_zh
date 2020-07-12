@@ -400,6 +400,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @centered{
 @(image "../images/rib-cage"
   #:suffixes (list ".pdf" ".svg")
+  #:width 'textwidth
   "肋排环境表示法")
 }
 
