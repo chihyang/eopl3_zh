@@ -1,14 +1,19 @@
 \documentclass{book}
-\usepackage[defaultlines=4,all]{nowidow}
-\usepackage[asymmetric, reversemarginpar]{geometry}
+\usepackage{nowidow}
+\usepackage[asymmetric, reversemarginpar, papersize={8in,9in}, right=1.06in, hmarginratio=11:5]{geometry}
 
 \usepackage{fontspec}
 \setmainfont{QTPalatine}[BoldFont=QTPalatine-Bold, ItalicFont=QTPalatine-Italic]
+\setsansfont{Computer Modern Sans}
+\setmonofont{Courier}[
+BoldFont=QTPalatine-Bold,
+ItalicFont=Courier
+]
 
 \usepackage{xeCJK}
-\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
-\setCJKsansfont{Adobe Song Std}
-\setCJKmonofont{Adobe Song Std}
+\setCJKmainfont[BoldFont={WenQuanYi Micro Hei}, ItalicFont={Adobe Kaiti Std}]{Source Han Serif CN}
+\setCJKsansfont{Source Han Serif CN}
+\setCJKmonofont{Adobe Kaiti Std}
 \xeCJKDeclarePunctStyle{mine}{
   enabled-hanging=true,
 }
