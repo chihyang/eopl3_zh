@@ -64,7 +64,6 @@
 可以用该定义编写一个函数，判断一个自然数@${n}是否属于@${S}。
 
 @; codeblock with contracts and usage
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
@@ -75,7 +74,6 @@
             (in-S? (- n 3))
             #f))))
 ]
-}
 @;
 
 这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? :
@@ -606,7 +604,6 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -618,7 +615,6 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 @; }
         ...)))
 ]
-}
 
 若列表非空，则其长度比其余项长度多1。这就给除了完整定义。
 
@@ -811,7 +807,6 @@ C} 相同。
 @tt{cons} 结合二者，通过表达式 @tt{(cons (car los) (remove-first s (cdr los)))}
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -824,7 +819,6 @@ C} 相同。
             (cons (car los) (remove-first s (cdr los)))))))
             @; }
 ]
-}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 

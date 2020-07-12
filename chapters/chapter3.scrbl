@@ -624,7 +624,6 @@ in let y = 2
 只要满足@secref{s2.2}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
 建指定的初始环境，由@tt{value-of-program}使用。
 
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{init-env}} : @${() \to \mathit{Env}}}
 @#,elem{@bold{用法} : @tt{(init-env)} = @tt{[i=@${\lceil}1@${\rceil},v=@${\lceil}5@${\rceil},x=@${\lceil}10@${\rceil}]}}
@@ -638,7 +637,6 @@ in let y = 2
        'x (num-val 10)
        (empty-env))))))
 ]
-}
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -2099,7 +2097,6 @@ in proc (y)
 
 过程 @tt{translation-of-program} 在适当的初始静态环境中运行 @tt{translation-of}。
 
-@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
 (define translation-of-program
@@ -2117,7 +2114,6 @@ in proc (y)
         (extend-senv 'x
           (empty-senv))))))
 ]
-}
 
 @nested[#:style eopl-figure]{
 
