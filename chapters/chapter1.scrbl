@@ -908,7 +908,7 @@ C} 相同。
 
 @racketblock[
 @#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
-@#,elem{@bold{用法} : 若符号 @${var} 自由出现于 @${exp}，返回 @tt{#t}，否则返回 @tt{#f}}
+@#,elem{@bold{用法} : @tt{若符号 @${var} 自由出现于 @${exp}，返回 #t，否则返回 #f}}
 (define occurs-free?
   (lambda (var exp)
     (cond
@@ -1172,7 +1172,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
 @racketblock[
 @#,elem{@bold{@tt{partial-vector-sum}} : @${\mathit{Vectorof}(\mathit{Int}) \times \mathit{Int} \to \mathit{Int}}}
-@#,elem{@bold{用法} : 若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}
+@#,elem{@bold{用法} : @tt{若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}}
 (define partial-vector-sum
   (lambda (v n)
     (if (zero? n)
