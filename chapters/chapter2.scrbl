@@ -246,26 +246,30 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @subsection[#:style section-title-style-numbered #:tag "s2.2.2"]{数据结构表示法}
 
-环境的一种表示可由如下观察得到：生成每个环境都从空环境开始，然后@${n}次调用
-@tt{extend-env}，其中@${n \geqslant 0}。例如，
+观察可知，生成每个环境都能从空环境开始，@${n}次调用@tt{extend-env}得到，其中@${n
+\geqslant 0}。例如，
 
+@nested{
 @racketblock[
 (extend-env @#,elem{@${var_n}} @#,elem{@${val_n}}
    ...
    (extend-env @#,elem{@${var_1}} @#,elem{@${val_1}}
      (empty-env)))]
 
-所以，每个环境都能按照下列语法描述的表达式生成：
+由此可得一种环境的表示方法。
+}
+
+每个环境都能用下列语法定义的表达式生成：
 
 @envalign*{\mathit{Env\mbox{-}exp} &::= @tt{(empty-env)} \\ &::= @tt{(extend-env
                             @m{\mathit{Identifier}}
                             @m{\mathit{Scheme\mbox{-}value}}
                             @m{\mathit{Env\mbox{-}exp}})}}
 
-可以用描述列表集合的语法表示环境，由此得出图2.1中的实现。数据结构@tt{env}表示一
-环境，过程@tt{apply-env}查验它表示哪种环境，并做适当操作：如果它表示空环境，那就
-报错；如果它表示由@tt{extend-env}生成的环境，那就判断要查找的变量是否与环境中绑
-定的某一变量相同，如果相同，则返回保存的值，否则在保存的环境中查找变量。
+可以用描述列表集合的语法表示环境，由此得出图2.1中的实现。过程 @tt{apply-env} 查
+看表示环境的数据结构 @tt{env}，判断它表示哪种环境，并做适当操作。如果它表示空环
+境，那就报错；如果它表示 @tt{extend-env} 生成的环境，那就判断要查找的变量是否与
+环境中绑定的某一变量相同，如果是，则返回保存的值，否则在保存的环境中查找变量。
 
 这是一种常见的代码模式。我们叫它@emph{解释器秘方} (@emph{interpreter recipe})：
 
