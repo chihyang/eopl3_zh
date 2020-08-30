@@ -609,10 +609,10 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
 (define list-length
   (lambda (lst)
-@; diff{
+@#,exact-elem{\begin{mdframed}[style=codediff]}
     (if (null? lst)
         0
-@; }
+@#,exact-elem{\end{mdframed}}
         ...)))
 ]
 
@@ -625,9 +625,9 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
   (lambda (lst)
     (if (null? lst)
         0
-        @; diff{
+@#,exact-elem{\begin{mdframed}[style=codediff]}
         (+ 1 (list-length (cdr lst))))))
-        @; }
+@#,exact-elem{\end{mdframed}}
 ]
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
@@ -789,12 +789,11 @@ C} 相同。
   (lambda (s lst)
     (if (null? lst)
         '()
-        @; diff {
+@#,exact-elem{\begin{mdframed}[style=codediff]}
         (if (eqv? (car los) s)
             (cdr los)
-            ...
-            ))))
-        @; }
+            ...))))
+@#,exact-elem{\end{mdframed}}
 ]
 
 如果 @${los} 的第一个元素不是 @${s}，比如 @${los = @tt{(@${s_0} @${s_1} @${...}
@@ -815,9 +814,9 @@ C} 相同。
         '()
         (if (eqv? (car los) s)
             (cdr los)
-            @; diff {
+@#,exact-elem{\begin{mdframed}[style=codediff]}
             (cons (car los) (remove-first s (cdr los)))))))
-            @; }
+@#,exact-elem{\end{mdframed}}
 ]
 
 @exercise[#:level 1 #:tag "ex1.8"]{
@@ -1010,11 +1009,11 @@ C} 相同。
   (lambda (new old slist)
     (if (null? slist)
         '()
-        @; diff {
+@#,exact-elem{\begin{mdframed}[style=codediff]}
         (cons
          (subst-in-s-exp new old (car slist))
          (subst new old (cdr slist))))))
-        @; }
+@#,exact-elem{\end{mdframed}}
 ]
 
 现在来处理 @tt{subst-in-s-exp}。由语法，可知符号表达式 @tt{sexp} 或者是符号，或
@@ -1026,11 +1025,11 @@ C} 相同。
 @#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
   (lambda (new old sexp)
-    @; diff {
+@#,exact-elem{\begin{mdframed}[style=codediff]}
     (if (symbol? sexp)
         (if (eqv? sexp old) new sexp)
         (subst new old sexp))))
-    @;}
+@#,exact-elem{\end{mdframed}}
 ]
 
 因为我们严格依照 @${\mathit{S\mbox{-}list}} 和 @${\mathit{S\mbox{-}exp}} 的定义，
