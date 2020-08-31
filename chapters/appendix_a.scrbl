@@ -121,7 +121,7 @@ Scheme 的 @tt{call-with-current-continuation}，始见于 Clinger et al. (1985b
 Wand (1980a) 展示了如何用续文建模轻量级进程或线程。续文用途广泛，远超本书讨论范
 围，如@emph{协程} (@emph{coroutine}) (Haynes et al., 1986)。
 
-我们对线程的讨论模拟了 POSIX 线程 （例如，参见 Lewis & Berg, 1998）。练习 5.56
+我们对线程的讨论模拟了 POSIX 线程 （例如，参见 Lewis & Berg, 1998）。@exercise-ref{ex5.56}
 基于 Erlang 的消息传递并发模型 (Armstrong, 2007)。
 
 Steele 的 RABBIT 编译器 (Steele, 1978) 以 CPS 变换为基础。这一编译器首先对源程序
@@ -131,8 +131,8 @@ Jersey 编译器 (Appel & Jim, 1989)。
 
 @secref{cps}的 CPS 算法基于 Danvy & Nielsen (2003) 提出的一阶组合式算法。CPS 翻
 译历史悠久，包括 Sabry & Wadler (1997)，他们改进了 Sabry & Felleisen (1993)，而
-后者又是受本书初版第八章的 CPS 算法启发。练习 6.30 基于 Danvy & Filinski (1992)
-提出的高阶组合式 CPS 算法。A-normal form （练习 6.34）是 CPS 的另一选项，由
+后者又是受本书初版第八章的 CPS 算法启发。@exercise-ref{ex6.30} 基于 Danvy & Filinski (1992)
+提出的高阶组合式 CPS 算法。A-normal form （@exercise-ref{ex6.34}）是 CPS 的另一选项，由
 Sabry & Felleisen (1992); Flanagan et al. (1993) 提出。
 
 当前的大多数与带类型编程语言相关的工作都能追溯到 Milner (1978)，他在 ML 中引入了
@@ -144,7 +144,7 @@ Sabry & Felleisen (1992); Flanagan et al. (1993) 提出。
 的论文发表之前，类型推导从未广泛应用。
 
 Wand (1987) 率先阐明了如何将类型推导分为方程构建和求解。名为 Hindley-Milner 多态
-的 Milner (1978) 系统与练习 7.28 中的系统基本相同。Pierce (2002, 2004) 的两卷著
+的 Milner (1978) 系统与@exercise-ref{ex7.28} 中的系统基本相同。Pierce (2002, 2004) 的两卷著
 作对类型做了百科全书式的讨论。
 
 数据抽象思想是 1970 年代的一大创举，且广为讨论。这里我们仅仅提及 Parnas (1972)，

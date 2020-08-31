@@ -101,13 +101,13 @@ in letrec even(dummy)
 }|
 }
 
-这个程序使用多声明的 @tt{letrec}（练习3.32）和 @tt{begin} 表达式（练习4.4）。
+这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式（@exercise-ref{ex4.4}）。
 @tt{begin} 表达式按顺序求每个子表达式的值，并返回最后一个的值。
 
 }
 
 为了同我们的单参数语言保持一致，我们给 @tt{even} 和 @tt{odd} 传一个无用参数；如
-果我们的过程支持任意数量的参数（练习3.21），就可以不给这些过程传递参数。
+果我们的过程支持任意数量的参数（@exercise-ref{ex3.21}），就可以不给这些过程传递参数。
 
 当两个过程需要分享很多量时，这种通信方式很方便；只须给某些随调用而改变的量赋值。
 同样地，一个过程可能通过一长串调用间接调用另一过程。它们可以通过一个共享变量直接
@@ -282,7 +282,7 @@ end
 
 @exercise[#:level 2 #:tag "ex4.5"]{
 
-写出@tt{list}（练习3.10）的规范。
+写出@tt{list}（@exercise-ref{ex3.10}）的规范。
 
 }
 
@@ -478,13 +478,13 @@ Scheme中的效果建模效果。
 
 @exercise[#:level 1 #:tag "ex4.10"]{
 
-实现练习4.4中定义的@tt{begin}表达式。
+实现@exercise-ref{ex4.4}中定义的@tt{begin}表达式。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.11"]{
 
-实现练习4.5中的@tt{list}。
+实现@exercise-ref{ex4.5}中的@tt{list}。
 
 }
 
@@ -666,7 +666,7 @@ newref: 分配位置 2
 
 @make-nested-flow[
  (make-style "caption" (list 'multicommand))
- (list (para "练习4.12，传递存储器的解释器"))]
+ (list (para "@exercise-ref{ex4.12}，传递存储器的解释器"))]
 }
 
 @section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
@@ -964,7 +964,7 @@ in begin
 @exercise[#:level 2 #:tag "ex4.19"]{
 
 修改多过程@tt{letrec}的实现，每个闭包只需生成一次，并且只分配一个位置。本题类似
-练习3.35。
+@exercise-ref{ex3.35}。
 
 }
 
@@ -1101,21 +1101,21 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.23"]{
 
-为练习4.22中语言添加@tt{read}语句，形如@tt{read @${var}}。这种语句从输入读取一个
+为@exercise-ref{ex4.22}中语言添加@tt{read}语句，形如@tt{read @${var}}。这种语句从输入读取一个
 非负数，存入给定的变量中。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.24"]{
 
-@tt{do-while}语句类似@tt{while}，但是条件判断在其主体@emph{之后}执行。给练习4.22
+@tt{do-while}语句类似@tt{while}，但是条件判断在其主体@emph{之后}执行。给@exercise-ref{ex4.22}
 中的语言添加@tt{do-while}语句。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.25"]{
 
-扩展练习4.22语言中的块语句，允许初始化变量。在你的解答中，变量的作用域是否包含
+扩展@exercise-ref{ex4.22}语言中的块语句，允许初始化变量。在你的解答中，变量的作用域是否包含
 同一个块语句中后续声明的变量？
 
 }
@@ -1138,7 +1138,7 @@ in let p = proc (y) -(y,x)
 
 @section[#:style section-title-style-numbered #:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
 
-在练习3.9中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
+在@exercise-ref{ex3.9}中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
 @tt{set-car!}和@tt{set-cdr!}处理它们。
 
 现在，我们给IMPLICIT-REFS添加可变序对。序对是表达值，具有如下操作：
@@ -1340,7 +1340,7 @@ newref: 分配位置 7
 }
 
 同样地，堆中的任何聚合性对象都可以用其第一个位置的指针表示。但是，如果不提供区域
-的长度信息，指针本身不能指代一片内存区域（见练习4.30）。缺乏长度信息是经典安全问
+的长度信息，指针本身不能指代一片内存区域（见@exercise-ref{ex4.30}）。缺乏长度信息是经典安全问
 题的一大来源，比如写数组越界。
 
 @nested[#:style eopl-figure]{
@@ -1413,13 +1413,13 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 }
 
 这里@tt{newarray(2,-99)}要创建长度为2的数组，数组中的每个位置包含@${-99}。
-@tt{begin}表达式定义如练习4.4。让数组索引从0开始，那么长度为2的数组索引为0和1。
+@tt{begin}表达式定义如@exercise-ref{ex4.4}。让数组索引从0开始，那么长度为2的数组索引为0和1。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.30"]{
 
-给练习4.29的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
+给@exercise-ref{ex4.29}的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
 数。@tt{arrayref}和@tt{arrayset}一定要查验索引，确保其值在数组长度之内。
 
 }
@@ -1725,7 +1725,7 @@ in let swap = proc (x) proc (y)
 }|
 }
 
-这里我们用支持多声明的@tt{let}（练习3.16）。这种语言的表达值和指代值是什么？
+这里我们用支持多声明的@tt{let}（@exercise-ref{ex3.16}）。这种语言的表达值和指代值是什么？
 
 }
 
@@ -1875,7 +1875,7 @@ in let f = proc (z) 11
 
 @exercise[#:level 1 #:tag "ex4.38"]{
 
-下面的例子展示了练习3.25在按需调用中的变体。练习3.25中的原始程序在按需调用中可行
+下面的例子展示了@exercise-ref{ex3.25}在按需调用中的变体。@exercise-ref{ex3.25}中的原始程序在按需调用中可行
 吗？如果下面的程序在按值调用中运行呢？为什么？
 
 @nested[#:style 'code-inset]{

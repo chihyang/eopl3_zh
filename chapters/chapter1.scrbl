@@ -101,7 +101,7 @@
 满足性质 1 和 2 的集合的子集。易知只能有一个这样的集合：如果@${S_1}和@${S_2}都满
 足性质 1 和 2，并且都为最小，那么@${S_1 \subseteq S_2}（因为@${S_1}最小）且
 @${S_2 \subseteq S_1}（因为@${S_2}最小），因此@${S_1 = S_2}。之所以需要这一额外
-条件，是因为否则的话将有许多集合满足其他两个条件（见练习1.3）。
+条件，是因为否则的话将有许多集合满足其他两个条件（见@exercise-ref{ex1.3}）。
 
 该定义还能表示为：
 
@@ -1088,7 +1088,7 @@ C} 相同。
 @${v_1}) (2 @${v_2}) ...)}。
 
 我们用过的那种直拆法不凑效，因为没有明显的方法能从 @tt{(number-elements (cdr
-lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
+lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}）。
 
 要解决这个问题，我们@emph{放宽} (@emph{generalize}) 问题。我们写一个过程
 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用递归处理列表，
@@ -1522,7 +1522,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 @exercise[#:level 2 #:tag "ex1.26"]{
  @tt{(up lst)} 移除 @tt{lst} 中每个顶层元素周围的一对括号。如果顶层元素不是列表，
  则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
- (up lst))} 不一定是 @tt{lst}（参见练习 1.17）。
+ (up lst))} 不一定是 @tt{lst}（参见@exercise-ref{ex1.17}）。
 
  @examples[#:eval up-eval
            #:label #f
@@ -1677,7 +1677,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
       (leaf 117)
       (leaf 14)))))
   }}
- 使用练习 1.31 中定义的过程，应返回二叉树
+ 使用@exercise-ref{ex1.31}中定义的过程，应返回二叉树
 
  @codeblock{
  (red

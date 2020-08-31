@@ -210,12 +210,12 @@ from m1 take u
 }|
 }
 
-类型异常。可以弥补这一点（练习8.8，8.17）。
+类型异常。可以弥补这一点（@exercise-ref{ex8.8}、@countref{ex8.17}）。
 }
 }
 
 @nested[#:style eopl-example]{
-在我们的语言中，模块具有@tt{let*}式的作用域（练习3.17）。例如，
+在我们的语言中，模块具有@tt{let*}式的作用域（@exercise-ref{ex3.17}）。例如，
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -694,7 +694,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 @exercise[#:level 1 #:tag "ex8.4"]{
 
-修改语言的表达式，像练习7.24那样，加入多声明@tt{let}，多参数过程和多声明
+修改语言的表达式，像@exercise-ref{ex7.24}那样，加入多声明@tt{let}，多参数过程和多声明
 @tt{letrec}。
 
 }
@@ -890,7 +890,7 @@ succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take 
 @subsection[#:style section-title-style-numbered #:tag "s8.2.1"]{例子}
 
 欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含一对整数的数据结构表示点的横
-坐标和纵坐标。她使用的语言具有练习7.8那样的类型，所以她的模块@tt{Alices-points}
+坐标和纵坐标。她使用的语言具有@exercise-ref{ex7.8}那样的类型，所以她的模块@tt{Alices-points}
 接口具有如下声明
 
 @nested[#:style 'code-inset]{
@@ -1327,7 +1327,7 @@ module mybool
 写一个模块，实现抽象表。你实现的表应像环境那样，但不是把符号绑定到Scheme值，而是
 把整数值绑定到整数值。接口提供一个值，表示空表；两个过程@tt{add-to-table}和
 @tt{lookup-in-table}类似@tt{extend-env}和@tt{apply-env}。由于我们的语言只有单参
-数过程，我们用咖喱化（练习3.20）实现等效的多参数过程。你可以把任何查询都返回0的
+数过程，我们用咖喱化（@exercise-ref{ex3.20}）实现等效的多参数过程。你可以把任何查询都返回0的
 表作为空表。这是该模块的一个例子：
 
 @nested[#:style 'code-inset]{
@@ -1770,14 +1770,14 @@ actual-iface <: expected-iface
 
 @exercise[#:level 1 #:tag "ex8.16"]{
 
-用练习7.24中的语言扩展本节的系统，然后重写练习8.15，用多参数过程代替返回过程的过
+用@exercise-ref{ex7.24}中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，用多参数过程代替返回过程的过
 程。
 
 }
 
 @exercise[#:level 2 #:tag "ex8.17"]{
 
-仿照练习8.8，允许模块以不同于接口声明的顺序产生值。但是记住，定义必须遵守定界规
+仿照@exercise-ref{ex8.8}，允许模块以不同于接口声明的顺序产生值。但是记住，定义必须遵守定界规
 则，尤其是类型定义。
 
 }
@@ -1906,7 +1906,7 @@ module-proc (|@${m} : [...]) [...]
 
 本例中，爱丽丝选择@tt{m}作为模块过程中绑定变量的名字；它不必和接口中的局部名字相
 同。我们重写参数中的接口，因为模块接口的作用域不包含模块主体。可以弥补这一点
-（见练习8.27）。
+（见@exercise-ref{ex8.27}）。
 
 现在，爱丽丝把她的模块重写为
 
@@ -2161,7 +2161,7 @@ body
 
 @exercise[#:level 1 #:tag "ex8.23"]{
 
-写出模块@tt{table-of}，它与练习8.15中的@tt{table}模块类似，只是将表的内容参数化，
+写出模块@tt{table-of}，它与@exercise-ref{ex8.15}中的@tt{table}模块类似，只是将表的内容参数化，
 这样就能用
 
 @nested[#:style 'code-inset]{
@@ -2500,7 +2500,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@$
 
 @exercise[#:level 1 #:tag "ex8.25"]{
 
-扩展PROC-MODULES，像练习3.21那样，允许模块取多个参数。
+扩展PROC-MODULES，像@exercise-ref{ex3.21}那样，允许模块取多个参数。
 
 }
 

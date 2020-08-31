@@ -859,7 +859,7 @@ in list(x, -(x,1), -(x,3))
 @$${\mathit{Expression} ::= @tt{if @${\mathit{Bool\mbox{-}exp}} then @${\mathit{Expression}} else @${\mathit{Expression}}}}
 
 为 @${\mathit{Bool\mbox{-}exp}} 写出适当的生成式，实现 @tt{value-of-bool-exp}。
-按这种方式，练习3.8中的谓词应放在哪里？
+按这种方式，@exercise-ref{ex3.8}中的谓词应放在哪里？
 
 }
 
@@ -1271,13 +1271,13 @@ in let times4 = proc (x) ((makemult makemult) x)
 }
 
 用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖喱化}
-（练习3.20）定义双参数过程@tt{times}。
+（@exercise-ref{ex3.20}）定义双参数过程@tt{times}。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.24"]{
 
-用上述程序里的小技巧写出练习3.32中的互递归程序 @tt{odd} 和 @tt{even}。
+用上述程序里的小技巧写出@exercise-ref{ex3.32}中的互递归程序 @tt{odd} 和 @tt{even}。
 
 }
 
@@ -1552,7 +1552,7 @@ in (double 6)
 
 @exercise[#:level 1 #:tag "ex3.31"]{
 
-扩展上面的语言，允许声明参数数量任意的过程，像练习3.21那样。
+扩展上面的语言，允许声明参数数量任意的过程，像@exercise-ref{ex3.21}那样。
 
 }
 
@@ -1573,7 +1573,7 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.33"]{
 
-扩展上面的语言，允许声明任意多个参数数量任意的互递归过程，像练习3.21那样。
+扩展上面的语言，允许声明任意多个参数数量任意的互递归过程，像@exercise-ref{ex3.21}那样。
 
 }
 
@@ -1615,13 +1615,13 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.36"]{
 
-扩展这种实现，使之能够处理练习3.32中的语言。
+扩展这种实现，使之能够处理@exercise-ref{ex3.32}中的语言。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.37"]{
 
-使用动态绑定（练习3.28），用@tt{let}就可以创建递归过程；不需要任何特殊的递归机制。
+使用动态绑定（@exercise-ref{ex3.28}），用@tt{let}就可以创建递归过程；不需要任何特殊的递归机制。
 这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法还鲜为人知。
 要明白动态绑定实现的递归，试试程序：
 
@@ -1896,7 +1896,7 @@ in let y = |@${exp_2}
 
 }
 
-如果用关联列表表示环境（见练习2.5），那么环境看起来像是
+如果用关联列表表示环境（见@exercise-ref{ex2.5}），那么环境看起来像是
 
 @nested{
 @centered{
@@ -2075,8 +2075,8 @@ in proc (y)
 翻译器有两个过程：@tt{translation-of}处理表达式，@tt{translation-of-program}处理
 程序。
 
-@tt{senv} 表示一些声明，我们从中翻译表达式 @tt{e}。要完成这点，我们像练习1.33或
-2.26那样递归复制语法树，除了
+@tt{senv} 表示一些声明，我们从中翻译表达式 @tt{e}。要完成这点，我们像@exercise-ref{ex1.33}或
+@countref{ex2.26}那样递归复制语法树，除了
 
 @nested{
 
@@ -2322,13 +2322,13 @@ in proc (y)
 
 @exercise[#:level 1 #:tag "ex3.38"]{
 
-扩展词法地址翻译器和解释器，处理练习3.12中的 @tt{cond}。
+扩展词法地址翻译器和解释器，处理@exercise-ref{ex3.12}中的 @tt{cond}。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.39"]{
 
-扩展词法地址翻译器和解释器，处理练习3.18中的 @tt{unpack}。
+扩展词法地址翻译器和解释器，处理@exercise-ref{ex3.18}中的 @tt{unpack}。
 
 }
 
@@ -2344,15 +2344,15 @@ htt]{translation-of} 的上下文参数，不仅记录每个绑定变量的名�
 
 @exercise[#:level 2 #:tag "ex3.41"]{
 
-修改词法地址翻译器和解释器，像练习 3.21 那样处理多参数的 @tt{let} 表达式、过程和
-过程调用。用肋排表示法（练习2.21）表示无名环境。在这种表示法中，词法地址包含两个
+修改词法地址翻译器和解释器，像@exercise-ref{ex3.21}那样处理多参数的 @tt{let} 表达式、过程和
+过程调用。用肋排表示法（@exercise-ref{ex2.21}）表示无名环境。在这种表示法中，词法地址包含两个
 非负数：词深，指明跨过的等深线数目，与之前相同；位置，指明变量在声明中的位置。
 
 }
 
 @exercise[#:level 3 #:tag "ex3.42"]{
 
-修改词法地址翻译器和解释器，使用练习 3.26 中的瘦身过程表示法。要如此，你不能在
+修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26}中的瘦身过程表示法。要如此，你不能在
 @tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静态环境中，
 它指明了各个变量在瘦身表示中的位置。
 

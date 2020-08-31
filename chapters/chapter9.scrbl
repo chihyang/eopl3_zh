@@ -165,7 +165,7 @@ in send o1 odd(13)}|
 }
 
 中，方法@tt{even}和@tt{odd}递归调用彼此，因为它们执行时，@tt{self}绑定到包含二者
-的对象。这就像练习3.37中，用动态绑定实现递归。
+的对象。这就像@exercise-ref{ex3.37}中，用动态绑定实现递归。
 }
 
 @section[#:style section-title-style-numbered #:tag "s9.2"]{继承}
@@ -407,8 +407,8 @@ in send o3 m3()
 些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超类名，0个或多个字段
 声明，以及0个或多个方法声明。方法声明类似@tt{letrec}中的过程声明，有个名字，一个
 形参列表，以及主体。同时我们扩展语言，支持多参数过程，多声明@tt{let}和多声明
-@tt{letrec}表达式，还有些其他操作，如加法和@tt{list}。列表操作同练习3.9。最后，
-我们增加@tt{begin}表达式，同练习4.4，它从左到右求出子表达式的值，返回最后一个的
+@tt{letrec}表达式，还有些其他操作，如加法和@tt{list}。列表操作同@exercise-ref{ex3.9}。最后，
+我们增加@tt{begin}表达式，同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的
 值。
 
 我们新增表达值对象和列表，所以有
@@ -688,7 +688,7 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 
 ]
 
-这里，我们用练习2.10中的@tt{extend-env*}，扩展环境时，把变量列表绑定到指代值的列
+这里，我们用@exercise-ref{ex2.10}中的@tt{extend-env*}，扩展环境时，把变量列表绑定到指代值的列
 表。我们还给环境接口新增过程@tt{extend-env-with-self-and-super}，分别将
 @tt{%self}和@tt{%super}绑定到对象和类名。
 
@@ -880,7 +880,7 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
     (append new-m-env super-m-env)))
 ]
 
-还有一些方式构建的方法环境在查询方法时更高效（练习9.18）。
+还有一些方式构建的方法环境在查询方法时更高效（@exercise-ref{ex9.18}）。
 
 }
 
@@ -1036,13 +1036,13 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.12"]{
 
-像练习9.11那样，允许CLASSES指定每个字段是私有的，受保护的，还是公有的。
+像@exercise-ref{ex9.11}那样，允许CLASSES指定每个字段是私有的，受保护的，还是公有的。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.13"]{
 
-为了防止练习9.2那样的恶意子类，许多面向对象编程语言都能指定无法覆盖的@${final}方
+为了防止@exercise-ref{ex9.2}那样的恶意子类，许多面向对象编程语言都能指定无法覆盖的@${final}方
 法。给CLASSES添加这样的组件，那么就能写
 
 @nested[#:style 'code-inset]{
@@ -1133,7 +1133,7 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 3 #:tag "ex9.20"]{
 
-方法调用也能够用类似练习9.19中的方式优化吗？讨论为什么能，或为什么不能。
+方法调用也能够用类似@exercise-ref{ex9.19}中的方式优化吗？讨论为什么能，或为什么不能。
 
 }
 
@@ -1146,7 +1146,7 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 2 #:tag "ex9.22"]{
 
-在练习9.16中，我们扩展解释器，给语言添加方法重载。另一种支持重载的方法不需修改解
+在@exercise-ref{ex9.16}中，我们扩展解释器，给语言添加方法重载。另一种支持重载的方法不需修改解
 释器，而是用语法预处理器。写一个预处理器，将每个方法@${m}重命名为@$["m:@n"]的形
 式，其中@${n}是方法声明中参数的数量。同样地，它还必须根据操作数的数量，改变每个
 方法调用的名字。我们假定程序员在方法名中不使用@$[":@"]，但解释器接受使用@$[":@"]
@@ -1166,7 +1166,7 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 3 #:tag "ex9.24"]{
 
-写一个翻译器，把练习9.10中指明类调用的方法名替换为数字，数字表示运行时，指定方法
+写一个翻译器，把@exercise-ref{ex9.10}中指明类调用的方法名替换为数字，数字表示运行时，指定方法
 在指定类方法表中的偏移。为翻译后的代码实现一个解释器，在常数时间内访问指定类的方
 法。
 
@@ -1278,7 +1278,7 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 
 @exercise[#:level 3 #:tag "ex9.28"]{
 
-给练习9.27的语言添加继承。
+给@exercise-ref{ex9.27}的语言添加继承。
 
 }
 
@@ -1319,7 +1319,7 @@ TYPED-OO的示例程序如图9.12所示。这段程序定义了一个类@tt{tree
 
  @item{语言中引入了@emph{子类型多态} (@emph{subtype polymorphism})的概念。}
 
- @item{语言中引入了@emph{强制转换} (@emph{casting})的概念，同时包含练习9.6中的
+ @item{语言中引入了@emph{强制转换} (@emph{casting})的概念，同时包含@exercise-ref{ex9.6}中的
  @tt{instanceof}判断。}
 
 ]
@@ -1327,7 +1327,7 @@ TYPED-OO的示例程序如图9.12所示。这段程序定义了一个类@tt{tree
 我们依次考虑这些特性。
 
 TYPED-OO中的新生成式如图9.13所示。我们添加一种类型@tt{void}，作为@tt{set}操作的
-类型，然后添加练习7.9中的列表类型；像练习7.9那样，我们要求调用@tt{list}时至少给
+类型，然后添加@exercise-ref{ex7.9}中的列表类型；像@exercise-ref{ex7.9}那样，我们要求调用@tt{list}时至少给
 出一个实参。我们将标识符添加到类型表达式的集合中，但在本章，用作类型的标识符与同
 名的类或接口相关联。稍后我们详细思考这种对应关系。方法需要指明结果类型和参数类型，
 其语法与@secref{types}中的@tt{letrec}类似。最后是新增的两种表达式，@tt{cast}和
@@ -1622,7 +1622,7 @@ interface stringable
 
 静态类环境将每个类名映射到一个静态类，这个类包含其父类的名字，字段的名字和类型，
 以及方法的名字和类型。在我们的语言中，接口没有父类，没有字段，所以我们用只含所需
-方法名字和类型的数据结构表示它们（但是，看看练习9.36）。
+方法名字和类型的数据结构表示它们（但是，看看@exercise-ref{ex9.36}）。
 
 @racketblock[
 (define-datatype static-class static-class?
@@ -1742,7 +1742,7 @@ interface stringable
 的}(@emph{contravariant})。见图9.15。这与 @secref{s8.3.2}中@tt{<:-iface}的定义类
 似。
 
-这部分代码如图9.16所示。代码使用@tt{every2?}，它扩展练习1.24中的过程@tt{every?}，
+这部分代码如图9.16所示。代码使用@tt{every2?}，它扩展@exercise-ref{ex1.24}中的过程@tt{every?}，
 取一个双参数谓词和两个列表，当列表长度相同且对应元素满足谓词时，返回@tt{#t}，否
 则返回@tt{#f}。
 
@@ -2198,7 +2198,7 @@ in list((f o), (g o))
 
 @exercise[#:level 2 #:tag "ex9.41"]{
 
-扩展类型检查器，像练习9.8中那样，处理@tt{fieldref}和@tt{fieldset}。
+扩展类型检查器，像@exercise-ref{ex9.8}中那样，处理@tt{fieldref}和@tt{fieldset}。
 
 }
 
