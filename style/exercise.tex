@@ -1,9 +1,10 @@
 \newcounter{EoplExercise}[chapter]
 \renewcommand\theEoplExercise{\thechapter.\arabic{EoplExercise}}
-\newcommand\EoplExerciseName{\emph{练习}}
+\newcommand\EoplExerciseName{练习}
 \newenvironment{EoplExercise}{%
   \setlength{\parskip}{1em}
   \setlength{\parindent}{0pt}
   \refstepcounter{EoplExercise}
-  {\small\EoplExerciseName\nobreak\hspace{1ex}}\theEoplExercise\nobreak\hspace{1ex}\begin{small}}{
+  {\small\emph{\EoplExerciseName}\nobreak\hspace{1ex}}\theEoplExercise\nobreak\hspace{1ex}\begin{small}}{
   \end{small}}
+\newcommand{\EoplExerciseRef}[1]{\EoplExerciseName~{#1}}

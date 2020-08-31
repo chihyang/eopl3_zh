@@ -65,6 +65,9 @@
 (define eopl-exercise
   (make-style "EoplExercise" (list (make-tex-addition "../style/exercise.tex"))))
 
+(define eopl-exercise-ref
+  (make-style "EoplExerciseRef" (list (make-tex-addition "../style/exercise.tex"))))
+
 (define eopl-definition
   (make-style "EoplDefinition" (list (make-tex-addition "../style/definition.tex"))))
 
@@ -100,6 +103,9 @@
           (make-marker level)
           (hspace 1)
           (remove-leading-newlines c)))
+
+(define (exercise-ref tag)
+  (elem #:style eopl-exercise-ref (countref tag)))
 
 (define (remove-leading-newlines c)
   (cond [(null? c) c]
