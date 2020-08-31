@@ -1764,8 +1764,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看练习 1.36）。
 
  @codeblock{
  (define number-elements
-  (lambda (lst)
-    (if (null? lst) '()
-        (g (list 0 (car lst)) (number-elements (cdr lst))))))
+   (lambda (lst)
+     (if (null? lst) '()
+         (g (list 0 (car lst))
+            (number-elements (cdr lst))))))
  }
 }
