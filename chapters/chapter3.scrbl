@@ -277,7 +277,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
-列出图3.3中所有运用应用 @${\lfloor \lceil n \rceil \rfloor = n} 的地方。
+列出图3.3中所有应用 @${\lfloor \lceil n \rceil \rfloor = n} 的地方。
 
 }
 
