@@ -1621,9 +1621,9 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.37"]{
 
-使用动态绑定（@exercise-ref{ex3.28}），用@tt{let}就可以创建递归过程；不需要任何特殊的递归机制。
-这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法还鲜为人知。
-要明白动态绑定实现的递归，试试程序：
+使用动态绑定（@exercise-ref{ex3.28}），用@tt{let}就可以创建递归过程；不需要任何
+特殊的递归机制。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那
+些方法还鲜为人知。要明白动态绑定实现的递归，试试程序：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1813,7 +1813,8 @@ Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})�
 值期间@exact-elem{”}，有时却又表示@exact-elem{“}无法事先计算@exact-elem{”}。
 如果我们不允许@tt{let}的值为过程，那么let绑定会在@tt{let}主体求值结束时到期。这
 叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所以
-我们可以准确预测绑定何时可以抛弃。3.28等几道练习中的动态绑定表现类似。
+我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现类
+似。
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
