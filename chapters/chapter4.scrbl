@@ -431,9 +431,7 @@ Scheme中的效果建模效果。
     (list-ref the-store ref)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "拙劣的存储器模型"))]
+@eopl-caption["fig-4.1"]{拙劣的存储器模型}
 }
 
 @nested[#:style eopl-figure]{
@@ -459,9 +457,7 @@ Scheme中的效果建模效果。
         (setref-inner the-store ref)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "拙劣的存储器模型，续"))]
+@eopl-caption["fig-4.2"]{拙劣的存储器模型，续}
 }
 
 @exercise[#:level 1 #:tag "ex4.8"]{
@@ -529,9 +525,7 @@ interpreter})。补全这个解释器，处理整个EXPLICIT-REFS语言。
        (num-val 23)))))
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "value-of") "的显式引用操作语句"))]
+@eopl-caption["fig-4.3"]{@tt{value-of} 的显式引用操作语句}
 }
 
 @nested[#:style eopl-figure]{
@@ -580,9 +574,7 @@ newref: 分配位置 0
 ((0 #(struct:num-val 22)))
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "EXPLICIT-REFS的求值跟踪日志"))]
+@eopl-caption["fig-4.4"]{EXPLICIT-REFS的求值跟踪日志}
 }
 
 @nested[#:style eopl-figure]{
@@ -627,9 +619,7 @@ newref: 分配位置 2
 >
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "EXPLICIT-REFS的求值跟踪日志，续"))]
+@eopl-caption["fig-4.5"]{EXPLICIT-REFS的求值跟踪日志，续}
 }
 
 @nested[#:style eopl-figure]{
@@ -664,9 +654,7 @@ newref: 分配位置 2
       ...)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "@exercise-ref{ex4.12}，传递存储器的解释器"))]
+@eopl-caption["fig-4.6"]{@exercise-ref{ex4.12}，传递存储器的解释器}
 }
 
 @section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
@@ -742,9 +730,7 @@ in let a = (g 11)
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "IMPLICIT-REFS中的" (tt "odd") "和" (tt "even")))]
+@eopl-caption["fig-4.7"]{IMPLICIT-REFS中的 @tt{odd} 和 @tt{even}}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s4.3.1"]{规范}
@@ -906,9 +892,7 @@ newref: 分配位置 5
 >
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "IMPLICIT-REFS的简单求值"))]
+@eopl-caption["fig-4.8"]{IMPLICIT-REFS的简单求值}
 }
 
 @exercise[#:level 1 #:tag "ex4.15"]{
@@ -1213,9 +1197,7 @@ in let p = proc (y) -(y,x)
         (setref! right-loc val)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "可变序对的拙劣实现"))]
+@eopl-caption["fig-4.9"]{可变序对的拙劣实现}
 }
 
 @nested[#:style eopl-figure]{
@@ -1252,9 +1234,7 @@ in let p = proc (y) -(y,x)
         (num-val 83)))))
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "给解释器添加可变序对模块"))]
+@eopl-caption["fig-4.10"]{给解释器添加可变序对模块}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.2"]{可变序对的另一种表示}
@@ -1308,9 +1288,7 @@ newref: 分配位置 6
  (6 (procedure loc ... ((glo 5) (i 0) (v 1) (x 2)))))
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "MUTABLE-PAIRS求值的跟踪日志"))]
+@eopl-caption["fig-4.11"]{MUTABLE-PAIRS求值的跟踪日志}
 }
 
 @nested[#:style eopl-figure]{
@@ -1334,9 +1312,7 @@ newref: 分配位置 7
 >
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "MUTABLE-PAIRS求值的跟踪日志，续"))]
+@eopl-caption["fig-4.12"]{MUTABLE-PAIRS求值的跟踪日志，续}
 }
 
 同样地，堆中的任何聚合性对象都可以用其第一个位置的指针表示。但是，如果不提供区域
@@ -1378,9 +1354,7 @@ newref: 分配位置 7
     (setref! (+ 1 p) val)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "可变序对的另一种表示"))]
+@eopl-caption["fig-4.13"]{可变序对的另一种表示}
 }
 
 @exercise[#:level 2 #:tag "ex4.28"]{
@@ -1640,9 +1614,7 @@ newref: 分配位置 5
  (5 #(struct:num-val 55)))
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CALL-BY-REFERENCE的简单求值"))]
+@eopl-caption["fig-4.14"]{CALL-BY-REFERENCE的简单求值}
 }
 
 @nested[#:style eopl-figure]{
@@ -1671,9 +1643,7 @@ newref: 分配位置 5
 #(struct:num-val 44)
 >}|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CALL-BY-REFERENCE的简单求值，续"))]
+@eopl-caption["fig-4.15"]{CALL-BY-REFERENCE的简单求值，续}
 }
 
 @exercise[#:level 1 #:tag "ex4.31"]{

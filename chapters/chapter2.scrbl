@@ -326,9 +326,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
     (eopl:error 'apply-env "非法环境: ~s" env)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "环境的数据结构表示"))]
+@eopl-caption["fig-2.1"]{环境的数据结构表示}
 }
 
 @exercise[#:level 1 #:tag "ex2.5"]{
@@ -1158,9 +1156,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
   (tt "(lambda (x) (f (f x)))") "的抽象语法树")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "(lambda (x) (f (f x)))") "的抽象语法树"))]
+@eopl-caption["fig-2.2"]{@tt{(lambda (x) (f (f x)))} 的抽象语法树}
 }
 
 要为某种具体语法设计抽象语法，须要给其中的每个生成式，以及生成式中出现的每个非终

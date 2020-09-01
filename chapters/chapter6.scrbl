@@ -136,9 +136,7 @@
         (apply-cont)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "寄存后的" (tt "fact/k")))]
+@eopl-caption["fig-6.1"]{寄存后的 @tt{fact/k}}
 
 }
 
@@ -194,9 +192,7 @@ val)}。
         (set! pc apply-cont)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "寄存后的跳跃式" (tt "fact/k")))]
+@eopl-caption["fig-6.2"]{寄存后的跳跃式 @tt{fact/k}}
 
 }
 
@@ -651,9 +647,7 @@ call})。
             \mathit{InpExp} &::= @tt{(@m{\mathit{InpExp}} @m{\{\mathit{InpExp}\}^{*}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CPS-IN的语法"))]
+@eopl-caption["fig-6.3"]{CPS-IN的语法}
 }
 
 再回忆一下原则@bold{尾调用不扩大续文}：
@@ -718,10 +712,8 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CPS-IN中的尾端和操作数位置。尾端记为" @${T} "。操作数位置记为"
-        @${O} "。"))]
+@eopl-caption["fig-6.4"]{CPS-IN中的尾端和操作数位置。尾端记为 @${T}。操作数位置
+记为 @${O}。}
 }
 
 我们用这种区别设计CPS转换算法的目标语言CPS-OUT。这种语言的语法如图6.5所示。这套
@@ -789,9 +781,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
              \mathit{TfExp} &::= @tt{(@m{\mathit{SimpleExp}} @m{\{\mathit{SimpleExp}\}^{*}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CPS-OUT的语法"))]
+@eopl-caption["fig-6.5"]{CPS-OUT的语法}
 }
 
 @nested[#:style eopl-figure]{
@@ -838,9 +828,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
           cont)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CPS-OUT曳尾表达式的解释器"))]
+@eopl-caption["fig-6.6"]{CPS-OUT曳尾表达式的解释器}
 }
 
 @exercise[#:level 1 #:tag "ex6.11"]{
@@ -1106,9 +1094,7 @@ Scheme示例，但是更加详细。
                           (h v1 (- 44 y) v2 k)))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CPS变换示例（Scheme）"))]
+@eopl-caption["fig-6.7"]{CPS变换示例（Scheme）}
 }
 
 第一种情况是常量。常量直接传给续文，就像上面@tt{(zero? x)}这一行一样。
@@ -1417,9 +1403,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
       (else #f))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "cps-of-exps")))]
+@eopl-caption["fig-6.8"]{@tt{cps-of-exps}}
 }
 
 @racketblock[
@@ -1458,9 +1442,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
         (report-invalid-exp-to-cps-of-simple-exp exp)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "cps-of-simple-exp")))]
+@eopl-caption["fig-6.9"]{@tt{cps-of-simple-exp}}
 }
 
 @racketblock[
@@ -1526,9 +1508,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
             (car simples)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "cps-of-exp") "，第1部分"))]
+@eopl-caption["fig-6.10"]{@tt{cps-of-exp}，第1部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1579,9 +1559,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
       (cps-of-exp letrec-body k-exp))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "cps-of-exp") "，第2部分"))]
+@eopl-caption["fig-6.11"]{@tt{cps-of-exp}，第2部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1598,9 +1576,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
               (simple-exp->exp (car new-args)))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "cps-of-exp") "，第3部分"))]
+@eopl-caption["fig-6.12"]{@tt{cps-of-exp}，第3部分}
 }
 
 @exercise[#:level 1 #:tag "ex6.20"]{

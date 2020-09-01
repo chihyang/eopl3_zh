@@ -94,9 +94,7 @@ in begin
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "简单的面向对象程序"))]
+@eopl-caption["fig-9.1"]{简单的面向对象程序}
 }
 
 
@@ -136,9 +134,7 @@ in send o1 sum()
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "求树叶之和的面向对象程序"))]
+@eopl-caption["fig-9.2"]{求树叶之和的面向对象程序}
 }
 
 图9.2解释了面向对象编程中的关键思想：@emph{动态分发} (@emph{dynamic dispatch})。
@@ -229,9 +225,7 @@ in begin
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "继承的经典例子：" @tt{colorpoint}))]
+@eopl-caption["fig-9.3"]{继承的经典例子：@tt{colorpoint}}
 }
 
 接下来，我们看看重新声明类的字段或方法时会发生什么。如果@${c_1}的子读在子类
@@ -270,9 +264,7 @@ in begin
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "字段遮蔽的例子"))]
+@eopl-caption["fig-9.4"]{字段遮蔽的例子}
 }
 
 如果类@${c_1}的方法@${m}在某个子类@${c_2}中重新声明，我们说新的方法@emph{覆盖}
@@ -362,9 +354,7 @@ let o1 = new colorpoint(3,4,172)
 in send o1 get-color()}|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "演示" @tt{super} "必要性的例子"))]
+@eopl-caption["fig-9.5"]{演示 @tt{super} 必要性的例子}
 }
 
 要解释这种区别，考虑图9.6。给类@tt{c3}的对象@tt{o3}发送消息@tt{m3}，找到的是
@@ -396,9 +386,7 @@ in send o3 m3()
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "解释" @tt{super} "调用与" @tt{self} "相互作用的例子"))]
+@eopl-caption["fig-9.6"]{解释 @tt{super} 调用与 @tt{self} 相互作用的例子}
 }
 
 @section[#:style section-title-style-numbered #:tag "s9.3"]{语言}
@@ -452,9 +440,7 @@ in send o3 m3()
           &\mathrel{\phantom{::=}} \fbox{@tt{self-exp}}
           }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "简单面向对象语言中新增的生成式"))]
+@eopl-caption["fig-9.7"]{简单面向对象语言中新增的生成式}
 }
 
 我们新增了四种表达式。@tt{new}表达式创建指定类的对象，然后调用@tt{initialize}方
@@ -590,9 +576,7 @@ in send o3 m1(7,8)
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "OOP实现的示例程序"))]
+@eopl-caption["fig-9.8"]{OOP实现的示例程序}
 }
 
 @nested[#:style eopl-figure]{
@@ -603,9 +587,7 @@ in send o3 m1(7,8)
   "简单对象")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "简单对象"))]
+@eopl-caption["fig-9.9"]{简单对象}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.1"]{对象}
@@ -724,9 +706,7 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
   "方法调用时的环境")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "方法调用时的环境"))]
+@eopl-caption["fig-9.10"]{方法调用时的环境}
 }
 
 当@tt{self}的持有类和所属类相同时，变量列表的长度通常与字段位置列表的长度相同。
@@ -927,9 +907,7 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
     #(struct:a-class #f () ())))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "图9.8中的类环境"))]
+@eopl-caption["fig-9.11"]{图9.8中的类环境}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.5"]{练习}
@@ -1423,9 +1401,7 @@ in list(send o1 sum(),
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "TYPED-OO的程序示例"))]
+@eopl-caption["fig-9.12"]{TYPED-OO的程序示例}
 }
 
 @nested[#:style eopl-figure]{
@@ -1462,9 +1438,7 @@ in list(send o1 sum(),
           &\mathrel{\phantom{::=}} \fbox{@tt{list-type (type1)}}
           }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "TYPED-OO中的新生成式"))]
+@eopl-caption["fig-9.13"]{TYPED-OO中的新生成式}
 }
 
 在图9.2中，类@tt{interior-node}和@tt{leaf-node}都实现了接口@tt{tree}。类型检查器
@@ -1671,9 +1645,7 @@ interface stringable
       (report-bad-type-to-cast obj-type exp))))
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "面向对象表达式在" @tt{type-of} "中的对应语句，第1部分"))]
+@eopl-caption["fig-9.14"]{面向对象表达式在 @tt{type-of} 中的对应语句，第1部分}
 }
 
 @racketblock[
@@ -1709,9 +1681,7 @@ interface stringable
   "过程类型的子类型判定")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "过程类型的子类型判定"))]
+@eopl-caption["fig-9.15"]{过程类型的子类型判定}
 }
 
 为什么必须这样？子类多态原则是说，如果类@${c_2}扩展了@${c_1}，那么类@${c_2}的对
@@ -1840,9 +1810,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
         (memv name2 interface-names)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "TYPED-OO的子类型判定"))]
+@eopl-caption["fig-9.16"]{TYPED-OO的子类型判定}
 }
 
 @nested[#:style eopl-figure]{
@@ -1888,9 +1856,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
         (class-type class-name)))))
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "面向对象表达式在" @tt{type-of} "中的对应语句，第2部分"))]
+@eopl-caption["fig-9.17"]{面向对象表达式在 @tt{type-of} 中的对应语句，第2部分}
 }
 
 对接口声明，我们只需处理方法名与其类型。
@@ -1964,9 +1930,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
               s-name i-names f-names f-types method-tenv)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{add-class-decl-to-static-class-env!}))]
+@eopl-caption["fig-9.18"]{@tt{add-class-decl-to-static-class-env!}}
 }
 
 @nested[#:style eopl-figure]{
@@ -1993,9 +1957,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
           i-names)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{check-class-decl!}))]
+@eopl-caption["fig-9.19"]{@tt{check-class-decl!}}
 }
 
 @nested[#:style eopl-figure]{
@@ -2028,9 +1990,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
                   #t)))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{check-method-decl!}))]
+@eopl-caption["fig-9.20"]{@tt{check-method-decl!}}
 }
 
 @exercise[#:level 1 #:tag "ex9.33"]{
@@ -2091,9 +2051,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
             method-tenv))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{check-if-implements!}))]
+@eopl-caption["fig-9.21"]{@tt{check-if-implements!}}
 }
 
 @exercise[#:level 2 #:tag "ex9.37"]{
@@ -2171,9 +2129,7 @@ in list((f o), (g o))
     #(struct:a-static-class #f () () () ())))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "为示例程序生成的静态类环境"))]
+@eopl-caption["fig-9.22"]{为示例程序生成的静态类环境}
 }
 
 @exercise[#:level 2 #:tag "ex9.38"]{

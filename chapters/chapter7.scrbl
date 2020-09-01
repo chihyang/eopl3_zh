@@ -555,9 +555,7 @@ in |@${e_{letrec\mbox{-}body}}
 ...)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CHECKED的" (tt "type-of")))]
+@eopl-caption["fig-7.1"]{CHECKED的 @tt{type-of}}
 }
 
 @nested[#:style eopl-figure]{
@@ -587,9 +585,7 @@ in |@${e_{letrec\mbox{-}body}}
           rator-type rator)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CHECKED的" (tt "type-of") "，续"))]
+@eopl-caption["fig-7.2"]{CHECKED的 @tt{type-of}，续}
 
 }
 
@@ -612,9 +608,7 @@ in |@${e_{letrec\mbox{-}body}}
             (type-of letrec-body tenv-for-letrec-body)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "CHECKED的" (tt "type-of") "，续"))]
+@eopl-caption["fig-7.3"]{CHECKED的 @tt{type-of}，续}
 }
 
 @exercise[#:level 2 #:tag "ex7.5"]{
@@ -1693,9 +1687,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
         (else (report-unification-failure ty1 ty2 exp))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "合一器"))]
+@eopl-caption["fig-7.4"]{合一器}
 }
 
 @nested[#:style eopl-figure]{
@@ -1713,9 +1705,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
       (tvar-type (serial-number) (not (equal? tvar ty))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "验存"))]
+@eopl-caption["fig-7.5"]{验存}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.3"]{找出表达式的类型}
@@ -1821,9 +1811,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 ...)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "INFERRED的" (tt "type-of") "，第1部分"))]
+@eopl-caption["fig-7.6"]{INFERRED的 @tt{type-of}，第1部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1864,9 +1852,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
         subst))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "INFERRED的" (tt "type-of") "，第2部分"))]
+@eopl-caption["fig-7.7"]{INFERRED的 @tt{type-of}，第2部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1899,9 +1885,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
               (an-answer result-type subst))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "INFERRED的" (tt "type-of") "，第3部分"))]
+@eopl-caption["fig-7.8"]{INFERRED的 @tt{type-of}，第3部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1929,9 +1913,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
                   subst))))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "INFERRED的" (tt "type-of") "，第4部分"))]
+@eopl-caption["fig-7.9"]{INFERRED的 @tt{type-of}，第4部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1967,9 +1949,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
         (else table)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{equal-up-to-gensyms?} "，第1部分"))]
+@eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第1部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -2005,9 +1985,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
       (string-append "tvar" (number->string n)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{equal-up-to-gensyms?} "，第2部分"))]
+@eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第2部分}
 }
 
 @exercise[#:level 2 #:tag "ex7.23"]{

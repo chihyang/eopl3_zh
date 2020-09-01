@@ -76,9 +76,7 @@
   "项目中，爱丽丝所见的三个模块")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "项目中，爱丽丝所见的三个模块"))]
+@eopl-caption["fig-8.1"]{项目中，爱丽丝所见的三个模块}
 }
 
 这是SIMPLE-MODULES的简单例子。
@@ -166,9 +164,7 @@ module m1
   "简单模块中的一些作用域")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "简单模块中的一些作用域"))]
+@eopl-caption["fig-8.2"]{简单模块中的一些作用域}
 }
 
 @nested[#:style eopl-example]{
@@ -429,9 +425,7 @@ in -(z, -(from m1 take a, from m2 take a))
               env)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "SIMPLE-MODULES的解释器，第1部分"))]
+@eopl-caption["fig-8.3"]{SIMPLE-MODULES的解释器，第1部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -458,9 +452,7 @@ in -(z, -(from m1 take a, from m2 take a))
                   (cdr defns) new-env)))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "SIMPLE-MODULES的解释器，第2部分"))]
+@eopl-caption["fig-8.4"]{SIMPLE-MODULES的解释器，第2部分}
 }
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.1-checker"]{检查器}
@@ -530,9 +522,7 @@ in -(z, -(from m1 take a, from m2 take a))
                 m-name expected-iface actual-iface))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "SIMPLE-MODULES的检查器，第1部分"))]
+@eopl-caption["fig-8.5"]{SIMPLE-MODULES的检查器，第1部分}
 }
 
 就像@secref{types}那样，检查程序类型的过程类似于求程序的值，但我们记录的不是值，
@@ -624,9 +614,7 @@ in -(z, -(from m1 take a, from m2 take a))
                 (extend-tenv var-name ty tenv)))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "SIMPLE-MODULES的检查器，第2部分"))]
+@eopl-caption["fig-8.6"]{SIMPLE-MODULES的检查器，第2部分}
 }
 
 过程@tt{<:-decls}首先检查@tt{decls1}和@tt{decls2}。若@tt{decls2}为空，那么它对
@@ -667,9 +655,7 @@ in -(z, -(from m1 take a, from m2 take a))
             (<:-decls (cdr decls1) decls2 tenv)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "SIMPLE-MODULES的接口比较"))]
+@eopl-caption["fig-8.7"]{SIMPLE-MODULES的接口比较}
 }
 
 @exercise[#:level 1 #:tag "ex8.1"]{
@@ -1008,9 +994,7 @@ module m1
   "模块类型声明的作用域")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "模块类型声明的作用域"))]
+@eopl-caption["fig-8.8"]{模块类型声明的作用域}
 }
 
 在接口的剩余部分中，声明@tt{transparent t = int}将@tt{t}绑定到类型@tt{int}，所以
@@ -1529,9 +1513,7 @@ in let add-binding = from tables take add-to-table
                 m-name expected-iface actual-iface))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "OPAQUE-TYPES的检查器，第1部分"))]
+@eopl-caption["fig-8.9"]{OPAQUE-TYPES的检查器，第1部分}
 }
 
 过程@tt{expand-decls}遍历声明的集合，创建新的类型环境，其中的每个类型和变量名都
@@ -1631,9 +1613,7 @@ module m1
                 m-name (cdr decls) internal-tenv))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "OPAQUE-TYPES的检查器，第2部分"))]
+@eopl-caption["fig-8.10"]{OPAQUE-TYPES的检查器，第2部分}
 }
 
 @nested{
@@ -1750,9 +1730,7 @@ actual-iface <: expected-iface
           tenv)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "OPAQUE-TYPES的检查器，第3部分"))]
+@eopl-caption["fig-8.11"]{OPAQUE-TYPES的检查器，第3部分}
 }
 
 这样，我们就得出图8.12中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
@@ -1823,9 +1801,7 @@ actual-iface <: expected-iface
       (expand-type ty2 tenv))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "OPAQUE-TYPES的检查器，第4部分"))]
+@eopl-caption["fig-8.12"]{OPAQUE-TYPES的检查器，第4部分}
 }
 
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
@@ -2313,9 +2289,7 @@ module mybool-tables
               (report-bad-module-app rator-val))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para @tt{value-of-module-body}))]
+@eopl-caption["fig-8.13"]{@tt{value-of-module-body}}
 }
 
 @nested[#:style eopl-figure]{
@@ -2339,9 +2313,7 @@ module mybool-tables
             \end{array}}
     \end{array}}
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "新模块主体的判类规则"))]
+@eopl-caption["fig-8.14"]{新模块主体的判类规则}
 }
 
 其次，在结果类型@${t'{_1}}中，我们把@${m}代换为操作数@${m_2}。
@@ -2440,9 +2412,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
           (proc-iface rand-name rand-iface body-iface))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "PROC-MODULES的检查器，第1部分"))]
+@eopl-caption["fig-8.15"]{PROC-MODULES的检查器，第1部分}
 }
 
 判断这种关系的代码较为直接（图8.16）。判断
@@ -2486,9 +2456,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@$
                       tenv)))))))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "PROC-MODULES的检查器，第2部分"))]
+@eopl-caption["fig-8.16"]{PROC-MODULES的检查器，第2部分}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{

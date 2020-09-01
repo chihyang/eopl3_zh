@@ -46,9 +46,7 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
   #:suffixes (list ".pdf" ".svg")
   "扫描器的任务")
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "扫描器的任务"))]
+@eopl-caption["fig-B.1"]{扫描器的任务}
 }
 
 扫描器的任务是遍历和分析输入，产生含有这些词条的数据结构。通常的语言中，扫描器可
@@ -357,9 +355,7 @@ SLLGEN也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
     (sllgen:make-stream-parser scanner-spec-1 grammar-1)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "使用SLLGEN"))]
+@eopl-caption["fig-B.2"]{使用SLLGEN}
 }
 
 @nested[#:style 'code-inset]{

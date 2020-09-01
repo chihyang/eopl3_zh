@@ -77,9 +77,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
    "由解释器执行")
  }
 
- @make-nested-flow[
-  (make-style "caption" (list 'multicommand))
-  (list (para "由解释器执行"))]
+ @eopl-caption["fig-3.1-a"]{由解释器执行}
  }
 
  @nested[#:style eopl-subfigure]{
@@ -89,14 +87,10 @@ specification})。扫描器取一字符序列，生成词牌序列。
    "由编译器执行")
  }
 
- @make-nested-flow[
-  (make-style "caption" (list 'multicommand))
-  (list (para "由编译器执行"))]
+ @eopl-caption["fig-3.1-b"]{由编译器执行}
  }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "语言处理系统块状图"))]
+@eopl-caption["fig-3.1"]{语言处理系统块状图}
 }
 
 大多数主流语言都有解析器生成系统。如果没有解析器生成器，或者没有合适的，可以手写
@@ -144,9 +138,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
         \mathit{Expression} &::= @tt{let @m{\mathit{Identifier}} = @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{let-exp (var exp1 body)}}}
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "LET语言的语法"))]
+@eopl-caption["fig-3.2"]{LET语言的语法}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
@@ -370,10 +362,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "按照规范做简单运算"))]
-
+@eopl-caption["fig-3.3"]{按照规范做简单运算}
 }
 
 @$${
@@ -447,10 +436,8 @@ specification})。扫描器取一字符序列，生成词牌序列。
 = |@${\lceil}18|@${\rceil}
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "条件表达式的简单计算过程"))]
- }
+@eopl-caption["fig-3.4"]{条件表达式的简单计算过程}
+}
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.7"]{指定@tt{let}}
 
@@ -577,10 +564,8 @@ in let y = 2
 = |@${\lceil}-5|@${\rceil}
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "let") "一例"))]
- }
+@eopl-caption["fig-3.5"]{@tt{let}一例}
+}
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现LET的规范}
 
@@ -616,9 +601,7 @@ in let y = 2
    (body expression?)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "LET语言的语法数据类型"))]
+@eopl-caption["fig-3.6"]{LET 语言的语法数据类型}
 }
 
 只要满足@secref{s2.2}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
@@ -661,9 +644,7 @@ in let y = 2
       (else (report-expval-extractor-error 'bool val)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "LET语言的表达值"))]
+@eopl-caption["fig-3.7"]{LET 语言的表达值}
 }
 
 现在我们可以写出解析器，如图3.8和3.9所示。主过程是 @tt{run}，它取一个字符串，解
@@ -715,9 +696,7 @@ in let y = 2
 ...)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "LET语言的解释器"))]
+@eopl-caption["fig-3.8"]{LET 语言的解释器}
 }
 
 @nested[#:style eopl-figure]{
@@ -744,9 +723,7 @@ in let y = 2
             (extend-env var val1 env)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "LET语言的解释器，续"))]
+@eopl-caption["fig-3.9"]{LET 语言的解释器，续}
 }
 
 @exercise[#:level 1 #:tag "ex3.3"]{
@@ -1474,9 +1451,7 @@ in (double 6)
     -2)
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "extend-env-rec") "计算过程"))]
+@eopl-caption["fig-3.10"]{@tt{extend-env-rec} 计算过程}
 }
 
 @nested[#:style eopl-figure]{
@@ -1506,9 +1481,7 @@ in (double 6)
 = ...
 }|
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "extend-env-rec") "计算过程，续"))]
+@eopl-caption["fig-3.11"]{@tt{extend-env-rec} 计算过程，续}
 }
 
 @nested[#:style eopl-figure]{
@@ -1539,9 +1512,7 @@ in (double 6)
           (proc-val (procedure b-var p-body env))
           (apply-env saved-env search-var))))))]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "向环境添加" (tt "extend-env-rec")))]
+@eopl-caption["fig-3.12"]{向环境添加 @tt{extend-env-rec}}
 }
 
 @exercise[#:level 1 #:tag "ex3.30"]{
@@ -1676,9 +1647,7 @@ in let fact = proc (n)
   "简单等深线")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "简单等深线"))]
+@eopl-caption["fig-3.13"]{简单等深线}
 }
 
 大多数编程语言中的声明都有有限的作用域，所以同一个变量名在程序的不同部分可用于不
@@ -1764,9 +1733,7 @@ in let fact = proc (n)
   "较复杂的等深线")
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "较复杂的等深线"))]
+@eopl-caption["fig-3.14"]{较复杂的等深线}
 }
 
 变量与值的对应关系叫做@emph{绑定} (@emph{binding})。可以查看我们语言的规范来理解
@@ -2063,9 +2030,7 @@ in proc (y)
         (+ 1 (apply-senv (cdr senv) var))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "实现静态环境"))]
+@eopl-caption["fig-3.15"]{实现静态环境}
 }
 
 进入新的作用域就要给静态环境添加一个新元素。我们添加过程 @tt{extend-senv} 来完成
@@ -2161,9 +2126,7 @@ in proc (y)
         (report-invalid-source-expression exp)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "词法地址翻译器"))]
+@eopl-caption["fig-3.16"]{词法地址翻译器}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.7.2"]{无名解释器}
@@ -2221,9 +2184,7 @@ in proc (y)
     (list-ref nameless-env n)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "无名环境"))]
+@eopl-caption["fig-3.17"]{无名环境}
 }
 
 @pageref{s3.7-eg}例子中最后一行的无名环境如下
@@ -2305,9 +2266,7 @@ in proc (y)
         (report-invalid-translated-expression exp)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "无名解释器的" (tt "value-of")))]
+@eopl-caption["fig-3.18"]{无名解释器的 @tt{value-of}}
 }
 
 最后是新的@tt{value-of-program}：

@@ -163,9 +163,7 @@ behavior})。
         (value-of body (extend-env var val saved-env))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "传递环境的解释器"))]
+@eopl-caption["fig-5.1"]{传递环境的解释器}
 }
 
 我们的目标是重写解释器，避免在调用@tt{value-of}时产生控制上下文。当控制上下文需
@@ -422,9 +420,7 @@ behavior})。
     (cont v)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "用过程表示续文"))]
+@eopl-caption["fig-5.2"]{用过程表示续文}
 }
 
 @nested[#:style eopl-figure]{
@@ -465,9 +461,7 @@ behavior})。
           (value-of/k exp3 saved-env saved-cont))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "用数据结构表示续文"))]
+@eopl-caption["fig-5.3"]{用数据结构表示续文}
 }
 
 下面这个简单算例展示了各部分如何结合在一起。像在@secref{s3.3}那样，我们用
@@ -697,9 +691,7 @@ behavior})。
           (rator-cont rand env cont))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "传递续文的解释器（第1部分）"))]
+@eopl-caption["fig-5.4"]{传递续文的解释器（第1部分）}
 }
 
 @nested[#:style eopl-figure]{
@@ -714,9 +706,7 @@ behavior})。
           cont)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "传递续文的解释器（第2部分）"))]
+@eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）}
 }
 
 @elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实际参数
@@ -901,9 +891,7 @@ env var cont)}。
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "图5.4中续文的规范"))]
+@eopl-caption["fig-5.6"]{图5.4中续文的规范}
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
@@ -1031,9 +1019,7 @@ env var cont)}。
         (... (value-of/k ...))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "用过程表示跳床"))]
+@eopl-caption["fig-5.7"]{用过程表示跳床}
 }
 
 @exercise[#:level 1 #:tag "ex5.17"]{
@@ -1155,9 +1141,7 @@ odd:  if (x=0) then return(0)
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "跟踪日志相同的三个程序"))]
+@eopl-caption["fig-5.8"]{跟踪日志相同的三个程序}
 }
 
 能这样，只是因为原代码中@tt{even}和@tt{odd}的调用不扩大控制上下文：它们是尾调用。
@@ -1210,9 +1194,7 @@ odd:  if (x=0) then return(0)
     (saved-cont continuation?)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "用数据结构实现的续文（第1部分）"))]
+@eopl-caption["fig-5.9"]{用数据结构实现的续文（第1部分）}
 
 }
 
@@ -1292,9 +1274,7 @@ odd:  if (x=0) then return(0)
           (apply-procedure/k proc val saved-cont))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "用数据结构实现的续文（第2部分）"))]
+@eopl-caption["fig-5.10"]{用数据结构实现的续文（第2部分）}
 
 }
 
@@ -1411,9 +1391,7 @@ odd:  if (x=0) then return(0)
 )))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "指令式解释器（第1部分）"))]
+@eopl-caption["fig-5.11"]{指令式解释器（第1部分）}
 
 }
 
@@ -1442,9 +1420,7 @@ odd:  if (x=0) then return(0)
         (value-of/k)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "指令式解释器（第2部分）"))]
+@eopl-caption["fig-5.12"]{指令式解释器（第2部分）}
 
 }
 
@@ -1479,9 +1455,7 @@ odd:  if (x=0) then return(0)
 )))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "指令式解释器（第3部分）"))]
+@eopl-caption["fig-5.13"]{指令式解释器（第3部分）}
 
 }
 
@@ -1525,9 +1499,7 @@ odd:  if (x=0) then return(0)
         (value-of/k)))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "指令式解释器（第4部分）"))]
+@eopl-caption["fig-5.14"]{指令式解释器（第4部分）}
 
 }
 
@@ -1778,9 +1750,7 @@ let find-member-number =
       ...)))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "过程" (tt "apply-handler")))]
+@eopl-caption["fig-5.15"]{过程 @tt{apply-handler}}
 
 }
 
@@ -2101,9 +2071,7 @@ in
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "两个交错运行的线程"))]
+@eopl-caption["fig-5.16"]{两个交错运行的线程}
 
 }
 
@@ -2161,9 +2129,7 @@ in let producer = proc (n)
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "由缓存连接的生产者和消费者"))]
+@eopl-caption["fig-5.17"]{由缓存连接的生产者和消费者}
 
 }
 
@@ -2243,9 +2209,7 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9}中的�
       (list "" @elem{递减@tt{the-time-remaining}}))]
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "调度器的状态和接口"))]
+@eopl-caption["fig-5.18"]{调度器的状态和接口}
 
 }
 
@@ -2298,9 +2262,7 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9}中的�
     (set! the-time-remaining (- the-time-remaining 1))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "调度器"))]
+@eopl-caption["fig-5.19"]{调度器}
 
 }
 
@@ -2320,9 +2282,7 @@ in let mut = mutex()
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "不安全的计数器"))]
+@eopl-caption["fig-5.20"]{不安全的计数器}
 
 }
 
@@ -2469,9 +2429,7 @@ in let mut = mutex()
 }|
 }
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para "使用互斥锁的安全计数器"))]
+@eopl-caption["fig-5.21"]{使用互斥锁的安全计数器}
 
 }
 
@@ -2567,9 +2525,7 @@ in let mut = mutex()
             (th)))))))
 ]
 
-@make-nested-flow[
- (make-style "caption" (list 'multicommand))
- (list (para (tt "wait-for-mutex") "和" (tt "signal-mutex")))]
+@eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}}
 
 }
 
