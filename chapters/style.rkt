@@ -110,7 +110,7 @@
 (define (exercise-ref tag)
   (elem #:style eopl-exercise-ref (countref tag)))
 
-(define (eopl-caption [tag #f] . c)
+(define (eopl-caption tag . c)
   (nested #:style
           (make-style "caption" (list 'multicommand))
           (remove-leading-newlines c)
