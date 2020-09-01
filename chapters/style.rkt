@@ -68,6 +68,9 @@
 (define eopl-exercise-ref
   (make-style "EoplExerciseRef" (list (make-tex-addition "../style/exercise.tex"))))
 
+(define eopl-figure-ref
+  (make-style "EoplFigureRef" (list (make-tex-addition "../style/figure.tex"))))
+
 (define eopl-definition
   (make-style "EoplDefinition" (list (make-tex-addition "../style/definition.tex"))))
 
@@ -106,6 +109,15 @@
 
 (define (exercise-ref tag)
   (elem #:style eopl-exercise-ref (countref tag)))
+
+(define (eopl-caption [tag #f] . c)
+  (nested #:style
+          (make-style "caption" (list 'multicommand))
+          (remove-leading-newlines c)
+          (when tag (elemtag tag ""))))
+
+(define (figure-ref tag)
+  (elem #:style eopl-figure-ref (countref tag)))
 
 (define (remove-leading-newlines c)
   (cond [(null? c) c]

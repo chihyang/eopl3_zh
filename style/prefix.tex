@@ -61,7 +61,8 @@ ItalicFont=Courier
 \makeatother
 
 \usepackage{caption}
-\usepackage{subcaption}
+\usepackage[labelformat=simple]{subcaption}
+\renewcommand\thesubfigure{(\alph{subfigure})}
 \captionsetup[figure]{labelfont=bf, labelsep=quad, name=图}
 
 \usepackage[perpage]{footmisc}
@@ -78,6 +79,8 @@ ItalicFont=Courier
   linkcolor=black,
   citecolor=red
 }
+% make phantomsection robust
+\MakeRobust\phantomsection
 
 \usepackage{enumitem}
 \setlist{labelindent=0pt,leftmargin=*}
