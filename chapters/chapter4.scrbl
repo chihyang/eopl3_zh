@@ -824,10 +824,10 @@ in let a = (g 11)
 ]
 
 最后，要处理@tt{letrec}，我们换掉@tt{apply-env}中的语句@tt{extend-env-rec}，返回
-一个引用，指向包含适当闭包的位置。因为我们用的是声明多过程的@tt{letrec}（练习
-3.32），@tt{extend-env-rec}取一个过程名列表，一个绑定变量列表，一个过程主体列表，
-以及一个已保存的环境。过程@tt{location}取一变量，一个变量列表，若变量存在于列表
-中，返回列表中的变量位置，否则返回@tt{#f}。
+一个引用，指向包含适当闭包的位置。因为我们用的是声明多过程的
+@tt{letrec}（@exercise-ref{ex3.32}），@tt{extend-env-rec}取一个过程名列表，一个
+绑定变量列表，一个过程主体列表，以及一个已保存的环境。过程@tt{location}取一变量，
+一个变量列表，若变量存在于列表中，返回列表中的变量位置，否则返回@tt{#f}。
 
 @codeblock[#:indent 11]{
 (extend-env-rec (p-names b-vars p-bodies saved-env)
