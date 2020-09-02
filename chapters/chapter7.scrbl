@@ -259,7 +259,7 @@ proc (f)
 
 @exercise[#:level 2 #:tag "ex7.2"]{
 
-根据定义7.1.1，有没有表达值恰好有两种类型？
+根据@definition-ref{d7.1.1}，有没有表达值恰好有两种类型？
 
 }
 

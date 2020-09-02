@@ -500,7 +500,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @section[#:style section-title-style-numbered #:tag "s2.3"]{递推数据类型的接口}
 
-@secref{isd}大部分都在处理递推数据类型。例如，定义1.1.8给出了lambda演算表达式的
+@secref{isd}大部分都在处理递推数据类型。例如，@definition-ref{d1.1.8} 给出了lambda演算表达式的
 语法：
 
 @envalign*{\mathit{Lc\mbox{-}Exp}
@@ -988,7 +988,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
-@tt{lc-exp}的定义忽略了定义1.1.8中的条件：@exact-elem{“}@${\mathit{Identifier}}
+@tt{lc-exp}的定义忽略了@definition-ref{d1.1.8} 中的条件：@exact-elem{“}@${\mathit{Identifier}}
 是除 @tt{lambda} 之外的任何符号。@exact-elem{”}修改 @tt{identifier?} 的定义，补
 充这一条件。提示：任何谓词都能在 @tt{define-datatype} 中使用，你定义的也能。
 
@@ -1124,7 +1124,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 语法通常指定递推数据结构的具体表示方式，后者使用前者生成的字符串或值。这种表示叫
 做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external})表示。
 
-例如，定义1.1.8指定集合lambda演算表达式，用的就是lambda演算表达式的具体语法。我
+例如，@definition-ref{d1.1.8} 指定集合lambda演算表达式，用的就是lambda演算表达式的具体语法。我
 们可以用其他具体语法表示lambda演算表达式。例如，可以用
 
 @nested{

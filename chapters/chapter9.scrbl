@@ -1310,7 +1310,7 @@ TYPED-OO中的新生成式如@figure-ref{fig-9.13}所示。我们添加一种类
 其语法与@secref{types}中的@tt{letrec}类似。最后是新增的两种表达式，@tt{cast}和
 @tt{instanceof}。
 
-要理解这种语言的新特性，我们必须像定义7.1.1那样，定义语言的类型。
+要理解这种语言的新特性，我们必须像@definition-ref{d7.1.1} 那样，定义语言的类型。
 
 @definition[#:title #f #:tag "d9.5.1"]{
 定义类型为@${t}的表达值@${v}具有如下属性：
@@ -1325,7 +1325,7 @@ TYPED-OO中的新生成式如@figure-ref{fig-9.13}所示。我们添加一种类
   @${I}。当且仅当类具有@tt{implements @${I}}声明，或其祖先实现了@${I}时，类实现
   了@${I}。}
 
-  @item{若@${t}为其他类型，则用定义7.1.1中的规则。}
+  @item{若@${t}为其他类型，则用@definition-ref{d7.1.1} 中的规则。}
 
  ]
  }

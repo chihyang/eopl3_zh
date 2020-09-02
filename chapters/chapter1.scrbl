@@ -1,6 +1,6 @@
 #lang scribble/book
 @(require "style.rkt"
-          latex-utils/scribble/theorem
+          (except-in latex-utils/scribble/theorem definition-ref theorem-ref)
           latex-utils/scribble/math
           latex-utils/scribble/utils
           scribble/manual
@@ -118,7 +118,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 @exact-elem{”}。线上部分称作@emph{假设} (@emph{hypothesis}) 或者@emph{前件}
 (@emph{antecedent})；线下部分称作@emph{结论} (@emph{conclusion}) 或者@emph{后件}
 (@emph{consequent})。罗列两个或更多假设时，它们以隐含的@exact-elem{“}与
-@exact-elem{”}连接（见定义1.1.5）。没有假设的规则称作@emph{公理} (@emph{axiom})。
+@exact-elem{”}连接（见@definition-ref{d1.1.5}）。没有假设的规则称作@emph{公理} (@emph{axiom})。
 写公理时通常不加水平线，如：
 
 @$${0 \in S}
@@ -171,21 +171,21 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 
 @itemlist[#:style 'ordered
 
- @item{由定义1.1.4的性质1或定义1.1.5的规则1，@tt{()}是整数列表。}
+ @item{由@definition-ref{d1.1.4} 的性质1或@definition-ref{d1.1.5} 的规则1，@tt{()}是整数列表。}
 
- @item{由定义1.1.4的性质2，@tt{(14 . ())}是整数列表。因为@tt{14}是整数，@tt{()}
+ @item{由@definition-ref{d1.1.4} 的性质2，@tt{(14 . ())} 是整数列表。因为@tt{14}是整数，@tt{()}
        是整数列表。写成@List-of-Int-$[]规则二的形式，就是
 
        @$${\infer{@tt{(14 . ())} \in @List-of-Int-$[]} {@tt{14} \in \mathit{Int}
            & @tt{()} \in @List-of-Int-$[]}} }
 
- @item{由定义1.1.4的性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，
+ @item{由@definition-ref{d1.1.4} 的性质2，@tt{(3 . (14 . ()))}是整数列表。因为 @tt{3} 是整数，
        @tt{(14 . ())}是整数列表。仍写成@List-of-Int-$[]规则二的形式，是
 
        @$${\infer{@tt{(3 . (14 . ()))} \in @List-of-Int-$[]} {@tt{3} \in
            \mathit{Int} & @tt{(14 . ())} \in @List-of-Int-$[]}} }
 
- @item{由定义1.1.4的性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为 @tt{-7}
+ @item{由@definition-ref{d1.1.4} 的性质2，@tt{(-7 . (3 . (14 . ())))}是整数列表。因为 @tt{-7}
        是整数，@tt{(3 . (14 . ()))}是整数列表。再次写成@List-of-Int-$[]规则二的
        形式，是
 
@@ -253,7 +253,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 @exercise[#:level 1 #:tag "ex1.3"]{
 
  找出自然数的子集 @m{T}，满足 @m{0 \in T}，且对任何 @m{n \in T}，都有 @m{n + 3
- \in T}，但 @m{T \neq S}，@m{S} 是由定义 1.1.2 给出的集合。
+ \in T}，但 @m{T \neq S}，@m{S} 是由@definition-ref{d1.1.2} 给出的集合。
 
 }
 
@@ -276,7 +276,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 
 @; }
 
-这两条规则对应上述定义 1.1.4 中的两条属性。规则一是说空表属于@List-of-Int-$[]；
+这两条规则对应上述@definition-ref{d1.1.4} 中的两条属性。规则一是说空表属于@List-of-Int-$[]；
 规则二是说，若 @${n} 属于 @Int-$[] 且 @${l} 属于 @List-of-Int-$[]，则@tt{(@${n}
 . @${l})} 属于 @List-of-Int-$[]。这些规则叫做@emph{语法}。
 
@@ -497,7 +497,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 程序。这里给出一个此类证明的例子，写程序留作下节的主题。
 
 @theorem[#:tag "t1.1.1"]{
- 令 t 为二叉树，形如定义 1.1.7，则 t 包含奇数个节点。
+ 令 t 为二叉树，形如@definition-ref{d1.1.7}，则 t 包含奇数个节点。
 }
 
 @; @proof
@@ -836,7 +836,7 @@ C} 相同。
 @subsection[#:style section-title-style-numbered #:tag "s1.2.4"]{@tt{occurs-free?}}
 
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
-表达式 @${exp}，形如定义 1.1.8；判断 @${var} 是否自由出现于 @${exp}。如果一个变
+表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。如果一个变
 量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变量@emph{自
 由出现} (@emph{occurs free}) 于表达式 @${exp} 中。例如，
 
@@ -953,7 +953,7 @@ C} 相同。
           #:label #f
           (subst 'a 'b '((b c) (b () d)))]
 
-因为 @tt{subst} 定义于 s-list 上，它的结构应当反映 s-list 的定义（定义 1.1.6）：
+因为 @tt{subst} 定义于 s-list 上，它的结构应当反映 s-list 的定义（@definition-ref{d1.1.6}）：
 
 @nested[#:style normalfont]{
 @envalign*{\mathit{S\mbox{-}list} &::= @tt{(@m{\{\mathit{S\mbox{-}exp}\}^*})} \\
@@ -1647,7 +1647,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 1 #:tag "ex1.31"]{
- 写出如下过程，对二叉树（定义 1.1.7）做运算：@tt{leaf} 和 @tt{interior-node}
+ 写出如下过程，对二叉树（@definition-ref{d1.1.7}）做运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
  @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
  用。
@@ -1655,13 +1655,13 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 1 #:tag "ex1.32"]{
- 写出过程 @tt{double-tree}，它取一棵二叉树，形如定义 1.1.7，生成另一棵二叉树，把
+ 写出过程 @tt{double-tree}，它取一棵二叉树，形如@definition-ref{d1.1.7}，生成另一棵二叉树，把
  原二叉树中的所有整数翻倍。
 
 }
 
 @exercise[#:level 2 #:tag "ex1.33"]{
- 写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（定义 1.1.7），生成与
+ 写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（@definition-ref{d1.1.7}），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
  @nested{
