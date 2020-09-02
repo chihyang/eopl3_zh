@@ -66,7 +66,7 @@
 我们可以用@secref{expr}中的定界技术，但这些无法应对更大的工程。所以，我们使用模
 块系统。开发者们各给出一个模块，包含公开接口和私有实现。他们能看到自己模块的接口
 和实现，但爱丽丝只能看到他人模块的接口。她的所做所为不会影响其他模块的实现，其他
-模块的实现也不会影响她的。（如图8.1所示）
+模块的实现也不会影响她的。（如@figure-ref{fig-8.1}所示）
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -124,14 +124,14 @@ m1 take b}和@tt{from m1 take c}绑定到适当的值，模块定义之后在它
 型与接口命名变量时公布的相符时，称主体@emph{满足} (@emph{satisfy})接口。
 
 在主体中，定义具有@tt{let*}那样的作用域，所以@tt{x}、@tt{b}和@tt{c}在@tt{a}的
-作用域内。部分作用域如图8.2所示。
+作用域内。部分作用域如@figure-ref{fig-8.2}所示。
 
 本例中，以@tt{let a = 10}开头的表达式是@emph{程序主体} (@emph{program body})。它
 的值即程序的值。
 
 每个模块都在模块主体和程序其他部分之间建立了抽象边界。模块主体中的表达式在抽象边
 界@emph{之内}，其他部分在抽象边界@emph{之外}。模块主体也可以供应不在接口中的名字
-绑定，但那些绑定在程序主体和其他模块中不可见，正如图8.1所示。在我们的例子中，程
+绑定，但那些绑定在程序主体和其他模块中不可见，正如@figure-ref{fig-8.1}所示。在我们的例子中，程
 序主体不在@tt{from m1 take x}的作用域内。如果我们写@tt{-(from m1 take a, from
 m1 take x)}，程序就会是异常类型。
 
@@ -394,11 +394,11 @@ in -(z, -(from m1 take a, from m2 take a))
 
 欲求程序的值，我们把所有模块定义加入当前环境中，得到初始环境，然后求程序主体的值。
 过程@tt{add-module-defns-to-env}遍历模块定义，求每个模块定义主体的值，并将得到的
-模块加入当前环境中。如图8.3所示。
+模块加入当前环境中。如@figure-ref{fig-8.3}所示。
 
 最后，欲求模块主体的值，我们按照@tt{let*}式定界，在适当的环境中求每个表达式的值，
 得出一环境。过程@tt{defns-to-env}求出的环境中，只包含定义@tt{defns}产生的绑定
-（图8.4）。
+（@figure-ref{fig-8.4}）。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -461,7 +461,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 我们语言的定界规则很简单：在模块中，按@tt{let*}式定界，依次进入绑定的受限变量的
 作用域。接口告诉我们每个受限变量的类型。声明和定义也都遵循@tt{let*}式定界（见
-图8.2）。
+@figure-ref{fig-8.2}）。
 
 就像@secref{types}中的检查器那样，我们用类型环境记录与当前作用域内各名字相关的
 信息。因为我们现在有了模块名，我们要在类型环境中绑定模块名。每个模块名绑定到模块
@@ -562,7 +562,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 回忆一下，简单接口包含一个声明列表。过程@tt{defns-to-decls}创建这样一个列表，调
 用@tt{type-of}找出每个定义的类型。在每一步，它还按@tt{let*}式定界，扩展局部类型
-环境（见图8.6）。
+环境（见@figure-ref{fig-8.6}）。
 
 剩下的只是用@tt{<:-iface}比较每个模块的期望类型与实际类型。我们定义@tt{<:}为，若
 @${i_1 @tt{<:} i_2}，则满足接口@${i_1}的任何模块也满足接口@${i_2}。例如
@@ -582,7 +582,7 @@ in -(z, -(from m1 take a, from m2 take a))
 }
 
 对我们的简单模块语言，@tt{<:-iface}只需调用@tt{<:-decls}比较声明。这些过程取一
-@tt{tenv}参数，简单模块系统不使用，但@secref{s8.2}需要。见图8.7。
+@tt{tenv}参数，简单模块系统不使用，但@secref{s8.2}需要。见@figure-ref{fig-8.7}。
 
 过程@tt{<-decls}执行主要的比较工作，比较两个声明集合。如果@${decls_1}和
 @${decls_2}是两个声明集合，当且仅当模块能供应@${decls_1}中声明的绑定时，也能供应
@@ -1005,7 +1005,7 @@ t}绑定到@tt{int}。我们称之为@emph{受限类型} (@emph{qualified type})
 
 模块主体中的定义@tt{type t = int}在主体的剩余部分中，将@tt{t}绑定到@tt{int}，所
 以我们可以写@tt{s = proc (x : t) ...}。像之前那样，定义的作用域是主体的剩余部
-分（见图8.8）。
+分（见@figure-ref{fig-8.8}）。
 
 当然，我们可以给类型起任意名字，也可以声明多个类型。类型声明可以出现在接口中任意
 位置，只要每个声明都先于使用。
@@ -1466,9 +1466,9 @@ in let add-binding = from tables take add-to-table
 由于在模块主体中，所有类型绑定都是透明的，所以我们把类型定义转换为透明类型声明。
 在@tt{add-module-defns-to-tenv}中，我们调用@tt{extend-tenv-with-module}，将接口
 加入类型环境。这里，我们需要扩展接口，确保它包含的所有类型都已展开。要完成这一点，
-我们修改@tt{add-module-defns-to-tenv}，调用@tt{expand-iface}。见图8.9。
+我们修改@tt{add-module-defns-to-tenv}，调用@tt{expand-iface}。见@figure-ref{fig-8.9}。
 
-过程@tt{expand-iface}（图8.10）调用@tt{expand-decls}。我们提出这些过程，为
+过程@tt{expand-iface}（@figure-ref{fig-8.10}）调用@tt{expand-decls}。我们提出这些过程，为
 @secref{s8.3}做准备。
 
 @nested[#:style eopl-figure]{
@@ -1628,7 +1628,7 @@ y : t]
 我们处理到声明@tt{y}时，我们得知道@tt{t}指代@tt{int}类型。所以，当我们递归向下，
 处理声明列表时，我们需要随之扩展类型环境，就像在@tt{expand-decls}中生成
 @tt{internal-tenv}一样。我们调用@tt{extend-tenv-with-decl}处理这些，它取一声明，
-根据类型环境将其展开为适当的类型（图8.11）。
+根据类型环境将其展开为适当的类型（@figure-ref{fig-8.11}）。
 
 }
 
@@ -1733,7 +1733,7 @@ actual-iface <: expected-iface
 @eopl-caption["fig-8.11"]{OPAQUE-TYPES的检查器，第3部分}
 }
 
-这样，我们就得出图8.12中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
+这样，我们就得出@figure-ref{fig-8.12}中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
 样的例子
 
 @nested{
@@ -2247,11 +2247,11 @@ module mybool-tables
 ]
 
 我们扩展@tt{value-of-module-body}处理新的模块主体。代码类似于表达式的变量引用和
-过程调用（图8.13）。
+过程调用（@figure-ref{fig-8.13}）。
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
 
-我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如图8.14所示。为了能
+我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如@figure-ref{fig-8.14}所示。为了能
 在一页纸内写下规则，我们用@tt{(@${\rhd} @${body} @${tenv}) = @${i}}代替
 @tt{(interface-of @${body} @${tenv}) = @${i}}。
 
@@ -2352,7 +2352,7 @@ module mybool-tables
 
 }
 
-用这些规则，很容易写出@tt{interface-of}的代码（图8.15）。当我们检查
+用这些规则，很容易写出@tt{interface-of}的代码（@figure-ref{fig-8.15}）。当我们检查
 @tt{module-proc}的主体时，我们把参数添加到类型环境中，就好像它是一个顶层模块。这
 段代码用过程@tt{rename-in-iface}对得到的接口进行代换。
 
@@ -2415,7 +2415,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
 @eopl-caption["fig-8.15"]{PROC-MODULES的检查器，第1部分}
 }
 
-判断这种关系的代码较为直接（图8.16）。判断
+判断这种关系的代码较为直接（@figure-ref{fig-8.16}）。判断
 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
 i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@${m^{\prime}}
 添加绑定。我们将@${m^{\prime}}与@${i_1}关联起来，因为它比@${i_2}小。我们调用
