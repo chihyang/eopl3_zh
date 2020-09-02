@@ -1,6 +1,7 @@
 \newcounter{EoplTheorem}[section]
 \renewcommand\theEoplTheorem{\thesection.\arabic{EoplTheorem}}
-\newcommand\EoplTheoremName{\textbf{定理}}
+\newcommand\EoplTheoremName{定理}
 \newenvironment{EoplTheorem}{%
   \setlength{\parindent}{0pt}\refstepcounter{EoplTheorem}{\vspace{1em}\textbf{\EoplTheoremName~\theEoplTheorem~}}\itshape}{%
 }
+\newcommand{\EoplTheoremNameRef}[1]{\EoplTheoremName~{#1}}

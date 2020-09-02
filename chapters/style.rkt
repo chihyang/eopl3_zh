@@ -77,8 +77,14 @@
 (define eopl-definition-title
   (make-style "EoplDefinitionTitle" (list (make-tex-addition "../style/definition-title.tex"))))
 
+(define eopl-definition-ref
+  (make-style "EoplDefinitionRef" (list (make-tex-addition "../style/definition.tex"))))
+
 (define eopl-theorem
   (make-style "EoplTheorem" (list (make-tex-addition "../style/theorem.tex"))))
+
+(define eopl-theorem-ref
+  (make-style "EoplTheoremRef" (list (make-tex-addition "../style/theorem.tex"))))
 
 (define small
   (make-style "Small" (list (make-tex-addition "../style/small.tex"))))
@@ -135,6 +141,9 @@
               (hspace 1))
           (remove-leading-newlines c)))
 
+(define (definition-ref tag)
+  (elem #:style eopl-definition-ref (countref tag)))
+
 (define (theorem #:title [title #f] #:tag [tag ""] . c)
   (nested #:style eopl-theorem
           (elemtag tag "")
@@ -143,6 +152,9 @@
                     title)
               (hspace 1))
           (remove-leading-newlines c)))
+
+(define (theorem-ref tag)
+  (elem #:style eopl-theorem-ref (countref tag)))
 
 (define (exact-elem . c)
   (make-element (make-style #f '(exact-chars)) c))

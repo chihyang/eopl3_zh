@@ -1,7 +1,8 @@
 % for definitions
 \newcounter{EoplDefinition}[section]
 \renewcommand\theEoplDefinition{\thesection.\arabic{EoplDefinition}}
-\newcommand\EoplDefinitionName{\textbf{定义}}
+\newcommand\EoplDefinitionName{定义}
 \newenvironment{EoplDefinition}{%
   \setlength{\parindent}{0pt}\refstepcounter{EoplDefinition}{\vspace{1em}\textbf{\EoplDefinitionName~\theEoplDefinition~}}\itshape}{%
 }
+\newcommand{\EoplDefinitionRef}[1]{\EoplDefinitionName~{#1}}
