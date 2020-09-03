@@ -591,7 +591,10 @@ in |@${e_{letrec\mbox{-}body}}
 
 @nested[#:style eopl-figure]{
 @racketblock[
+@#,exact-elem{\smallskip
+\begin{comment}}
 (((
+@#,exact-elem{\end{comment}}
       @#,elem{@${\fbox{\infer{@tt{(type-of letrec @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}} @${tenv}) = @${t}}}{\begin{gathered}@tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_{var}}][@${p} =(@${t_{var} \to t_{res}})]@${tenv}) = @${t_{res}}} \\ @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p} = (@${t_{var} \to t_{res}})]@${tenv}) = @${t}}\end{gathered}}}}}
       (letrec-exp (p-result-type p-name b-var b-var-type
                     p-body letrec-body)
@@ -1808,7 +1811,10 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
             (let ((subst2
                     (unifier ty1 (int-type) subst1 exp)))
               (an-answer (bool-type) subst2)))))
+@#,exact-elem{\begin{comment}}
 ...)))
+@#,exact-elem{\end{comment}
+\smallskip}
 ]
 
 @eopl-caption["fig-7.6"]{INFERRED的 @tt{type-of}，第1部分}
@@ -1891,7 +1897,10 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 @nested[#:style eopl-figure]{
 @racketblock[
 @#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}&@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}} : \\ &\phantom{xx}t_{p} = t_{var} \to t_{e_{proc\mbox{-}body}} \\ &\phantom{xx}t_{e_{letrec\mbox{-}body}} = t_{@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}}}\end{alignedat}\end{math}}}}
+@#,exact-elem{\smallskip
+\begin{comment}}
 (((...
+@#,exact-elem{\end{comment}}
     (letrec-exp (p-result-otype p-name b-var b-var-otype
                   p-body letrec-body)
       (let ((p-result-type (otype->type p-result-otype))

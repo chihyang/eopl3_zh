@@ -693,7 +693,10 @@ in let y = 2
                 (num2 (expval->num val2)))
             (num-val
               (- num1 num2)))))
+@#,exact-elem{\begin{comment}}
 ...)))
+@#,exact-elem{\end{comment}
+\smallskip}
 ]
 
 @eopl-caption["fig-3.8"]{LET 语言的解释器}
@@ -701,7 +704,10 @@ in let y = 2
 
 @nested[#:style eopl-figure]{
 @racketblock[
+@#,exact-elem{\smallskip
+\begin{comment}}
 (((...
+@#,exact-elem{\end{comment}}
       @#,elem{@${\fbox{\infer{\begin{alignedat}{-1}&@tt{(value-of (zero?-exp @${exp_1}) @${\rho})} \\ &\hphantom{x}= \begin{cases} @tt{(bool-val #t)} & 若 @tt{(expval->num @${val_1})} = 0 \\ @tt{(bool-val #f)} & 若 @tt{(expval->num @${val_1})} \neq 0 \end{cases} \end{alignedat}}{@tt{(value-of @${exp_1} @${\rho}) = @${val_1}}}}}}
       (zero?-exp (exp1)
         (let ((val1 (value-of exp1 env)))

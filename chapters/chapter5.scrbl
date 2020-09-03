@@ -1388,7 +1388,10 @@ odd:  if (x=0) then return(0)
         (set! exp letrec-body)
         (set! env (extend-env-rec p-name b-var p-body env))
         (value-of/k))
+@#,exact-elem{\begin{comment}}
 )))
+@#,exact-elem{\end{comment}
+\smallskip}
 ]
 
 @eopl-caption["fig-5.11"]{指令式解释器（第1部分）}
@@ -1397,7 +1400,10 @@ odd:  if (x=0) then return(0)
 
 @nested[#:style eopl-figure]{
 @racketblock[
+@#,exact-elem{\smallskip
+\begin{comment}}
 (((
+@#,exact-elem{\end{comment}}
       (zero?-exp (exp1)
         (set! cont (zero1-cont cont))
         (set! exp exp1)
@@ -1452,7 +1458,10 @@ odd:  if (x=0) then return(0)
           (set! exp exp3))
         (set! env saved-env)
         (value-of/k))
+@#,exact-elem{\begin{comment}}
 )))
+@#,exact-elem{\end{comment}
+\smallskip}
 ]
 
 @eopl-caption["fig-5.13"]{指令式解释器（第3部分）}
@@ -1461,7 +1470,10 @@ odd:  if (x=0) then return(0)
 
 @nested[#:style eopl-figure]{
 @racketblock[
+@#,exact-elem{\smallskip
+\begin{comment}}
 (((
+@#,exact-elem{\end{comment}}
       (diff1-cont (exp2 saved-env saved-cont)
         (set! cont (diff2-cont val saved-cont))
         (set! exp exp2)
