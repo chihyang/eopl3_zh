@@ -552,7 +552,10 @@ in |@${e_{letrec\mbox{-}body}}
           (check-equal-type! ty1 (bool-type) exp1)
           (check-equal-type! ty2 ty3 exp)
           ty2))
+@#,exact-elem{\begin{comment}}
 ...)))
+@#,exact-elem{\end{comment}
+\smallskip}
 ]
 
 @eopl-caption["fig-7.1"]{CHECKED的 @tt{type-of}}
