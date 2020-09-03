@@ -767,13 +767,13 @@ behavior})。
 
 @exercise[#:level 1 #:tag "ex5.5"]{
 
-给语言添加@exercise-ref{ex3.9}中的列表。
+给语言添加@exercise-ref{ex3.9} 中的列表。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.6"]{
 
-给语言添加@exercise-ref{ex3.10}中的@tt{list}表达式。提示：添加两个续文构造器，一个用来求列表
+给语言添加@exercise-ref{ex3.10} 中的@tt{list}表达式。提示：添加两个续文构造器，一个用来求列表
 首元素的值，一个用来求列表剩余元素的值。
 
 }
@@ -805,7 +805,7 @@ env var cont)}。
 
 @exercise[#:level 2 #:tag "ex5.11"]{
 
-给传递续文的解释器添加@exercise-ref{ex4.4}中的@tt{begin}表达式。确保@tt{value-of}和
+给传递续文的解释器添加@exercise-ref{ex4.4} 中的@tt{begin}表达式。确保@tt{value-of}和
 @tt{value-of-rands}不在需要生成控制上下文的位置调用。
 
 }
@@ -846,7 +846,7 @@ env var cont)}。
 
 @exercise[#:level 2 #:tag "ex5.16"]{
 
-扩展传递续文的解释器，处理@exercise-ref{ex4.22}中的语言。给@tt{result-of}传递一个续文参数，确
+扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给@tt{result-of}传递一个续文参数，确
 保@tt{result-of}不在扩大控制上下文的位置调用。因为语句不返回值，需要区分普通续文和
 语句续文；后者通常叫@emph{命令续文} (@emph{command continuation})。续文接口应包
 含过程@tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和无参数过程两
@@ -1039,21 +1039,20 @@ env var cont)}。
 
 不要在@tt{apply-procedure/k}主体周围插入@tt{(lambda () ...)}，改为在
 @tt{apply-cont}的主体周围插入。修改合约，使之符合这一更改。@${Bounce}的定义需要
-修改吗？然后，用数据结构表示法替换过程表示法表示@${Bounce}，像@exercise-ref{ex5.18}那样。
+修改吗？然后，用数据结构表示法替换过程表示法表示@${Bounce}，像@exercise-ref{ex5.18} 那样。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.20"]{
 
-在@exercise-ref{ex5.18}中，@tt{trampoline}返回@${FinalAnswer}之前的最后一颗弹珠形如
-@tt{(apply-cont (end-cont) @${val})}，其中，@${val}是@${ExpVal}。利用这一点优化
-@exercise-ref{ex5.19}中弹珠的表示。
+在@exercise-ref{ex5.18} 中，@tt{trampoline}返回@${FinalAnswer}之前的最后一颗弹珠形如
+@tt{(apply-cont (end-cont) @${val})}，其中，@${val}是@${ExpVal}。利用这一点优化@exercise-ref{ex5.19} 中弹珠的表示。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.21"]{
 
-用普通的过程式语言实现跳跃式解释器。用@exercise-ref{ex5.18}中的数据结构表示快照，把
+用普通的过程式语言实现跳跃式解释器。用@exercise-ref{ex5.18} 中的数据结构表示快照，把
 @tt{trampoline}中对自身的递归调用替换为普通的@tt{while}或其它循环结构。
 
 }
@@ -1543,8 +1542,8 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.28"]{
 
-给这个解释器添加@exercise-ref{ex5.12}中的辅助组件。由于续文表示方式相同，可以复用那里的代码。
-验证本节的指令式解释器生成的跟踪日志与@exercise-ref{ex5.12}中的解释器@emph{完全}相同。
+给这个解释器添加@exercise-ref{ex5.12} 中的辅助组件。由于续文表示方式相同，可以复用那里的代码。
+验证本节的指令式解释器生成的跟踪日志与@exercise-ref{ex5.12} 中的解释器@emph{完全}相同。
 
 }
 
@@ -1556,8 +1555,8 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.30"]{
 
-修改本节的解释器，让过程使用@exercise-ref{ex3.28}中的动态绑定。提示：像本章这样转换@exercise-ref{ex3.28}中
-的解释器；只有原解释器与本节解释器不同的部分，转换后的部分才会不同。像@exercise-ref{ex5.28}那
+修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样转换@exercise-ref{ex3.28} 中
+的解释器；只有原解释器与本节解释器不同的部分，转换后的部分才会不同。像@exercise-ref{ex5.28} 那
 样给解释器添加辅助组件。观察可知，就像当前状态中只有一个续文，也只有一个压入和弹
 出的环境，而且它与续文同时压入弹出。由此可得，动态绑定具有@emph{动态期限}
 (@emph{dynamic extent})：即，形式参数的绑定保留到过程返回为止。词法绑定则与之不
@@ -1589,8 +1588,7 @@ odd:  if (x=0) then return(0)
 
 如@pageref{imperative-lang}所述，大多数指令式语言都很难完成这种翻译，因为不论哪
 种过程调用它们都要使用堆栈，即使是尾调用。而且，对大型解释器，使用@tt{goto}链接
-的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为指令式语言，用
-@exercise-ref{ex5.26}中的跳跃技术避免这种困难。
+的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为指令式语言，用@exercise-ref{ex5.26} 中的跳跃技术避免这种困难。
 
 }
 
@@ -2134,7 +2132,7 @@ in let producer = proc (n)
 }
 
 实现从IMPLICIT-REFS语言传递续文的解释器开始。这与@secref{s5.1}中的类似，只是多了
-IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9}中的续文构造器@tt{set-rhs-cont}。
+IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的续文构造器@tt{set-rhs-cont}。
 
 我们给这个解释器添加一个调度器。调度器状态由四个值组成，接口提供六个过程来操作这
 些值，如@figure-ref{fig-5.18} 所示。
@@ -2538,7 +2536,7 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.46"]{
 
-在@exercise-ref{ex5.45}的系统中，线程放入就绪队列，既可能是因因为耗尽时间片，也可能是因为它选
+在@exercise-ref{ex5.45} 的系统中，线程放入就绪队列，既可能是因因为耗尽时间片，也可能是因为它选
 择让步。在后一种情况下，线程会以一个完整的时间片重启。修改系统，让就绪队列记录每
 个线程的剩余时间片（如果有的话），并线程重启时仍用剩余的时间片。
 
@@ -2595,7 +2593,7 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.54"]{
 
-给@exercise-ref{ex5.53}的解释器添加组件@tt{kill}。结构式@tt{kill}取一线程号，找到就绪队列或任
+给@exercise-ref{ex5.53} 的解释器添加组件@tt{kill}。结构式@tt{kill}取一线程号，找到就绪队列或任
 何等待队列中对应的线程，然后删除它。此外，目标线程找到时，@tt{kill}返回真，任何
 队列中都没有指定线程号时，返回假。
 
@@ -2603,14 +2601,14 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.55"]{
 
-给@exercise-ref{ex5.53}的解释器添加线程通信组件，一个线程可以用另一线程的描述符给它发一个值。
+给@exercise-ref{ex5.53} 的解释器添加线程通信组件，一个线程可以用另一线程的描述符给它发一个值。
 线程可以选择接收消息，没有线程给它发消息时可以阻塞。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.56"]{
 
-修改@exercise-ref{ex5.55}的解释器，不要使用共享存储器，而是让每个线程具有自己的存储器。在这种
+修改@exercise-ref{ex5.55} 的解释器，不要使用共享存储器，而是让每个线程具有自己的存储器。在这种
 语言中，几乎可以排除互斥锁。重写本节语言的示例程序，不要使用互斥锁。
 
 }

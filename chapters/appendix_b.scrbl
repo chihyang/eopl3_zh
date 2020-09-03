@@ -143,7 +143,7 @@ grammar})（@secref{s1.1.2}）。
 象语法树可用@tt{define-datatype}描述。对给定的语法，每个非终止符都对应一个数据类
 型。对每个非终止符，每个以其为左边内容的生成式都对应一个变体。式子右边出现的每个
 非终止符，标识符和数字都对应变体中的一个字段。@secref{s2.5}有一个简单示例。当语
-法中有多个非终止符时，可以考虑@exercise-ref{ex4.22}中的语法。
+法中有多个非终止符时，可以考虑@exercise-ref{ex4.22} 中的语法。
 
 @envalign*{
       \mathit{Statement} &::= @tt{{ @m{\mathit{Statement}} ; @m{\mathit{Statement}} }} \\[-3pt]

@@ -728,8 +728,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 简单代码，对我们来说它们简单到不需使用控制堆栈。简单表达式包括@tt{proc}表达式，
 因为@tt{proc}表达式立即返回一个过程值，但过程的主体必须是曳尾式。
 
-曳尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参数，我们用
-@exercise-ref{ex2.10}中的@tt{extend-env*}创建多个绑定，并用类似方式扩展
+曳尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参数，我们用@exercise-ref{ex2.10} 中的@tt{extend-env*}创建多个绑定，并用类似方式扩展
 @tt{extend-env-rec}得到@tt{extend-env-rec*}。
 
 在这个解释器中，所有递归调用都在（Scheme的）尾端，所以运行解释器不会在Scheme中产
@@ -1352,7 +1351,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 处理求和表达式和过程调用时唯一不同之处，是所有参数都简单时。在这种情况下，我们要
 把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个曳尾式。
 
-我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8} 所示。它用@exercise-ref{ex1.23}中的
+我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8} 所示。它用@exercise-ref{ex1.23} 中的
 @tt{list-index}，找出列表中第一个复杂表达式的位置。如果找到复杂表达式，则变换该
 表达式，变换时的续文给表达式的结果命名（绑定到@tt{var}的标识符），然后递归处理修
 改后的表达式列表。
@@ -1360,10 +1359,10 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 如果不存在复杂表达式，那么我们用@tt{builder}处理表达式列表。这些表达式虽然是简单
 的，但它们仍属CPS-IN的语法。因此，我们用过程@tt{cps-of-simple-exp}把每个表达式转
 换为CPS-OUT的语法。然后，我们把@${SimpleExp}的列表传给@tt{builder}。
-（@tt{list-set}如@exercise-ref{ex1.19}所述。）
+（@tt{list-set}如@exercise-ref{ex1.19} 所述。）
 
 过程@tt{inp-exp-simple?}取一CPS-IN表达式，判断表示它的字符串能否解析为
-@${SimpleExp}。它使用@exercise-ref{ex1.24}中的过程@tt{every?}。若@${lst}中的每个元素满足
+@${SimpleExp}。它使用@exercise-ref{ex1.24} 中的过程@tt{every?}。若@${lst}中的每个元素满足
 @${pred}，@tt{(every? @${pred} @${lst})}返回@tt{#t}，否则返回@tt{#f}。
 
 我们可以用@tt{cps-of-exps}生成求和表达式和过程调用的曳尾式。
@@ -1649,7 +1648,7 @@ in ...
 @exercise[#:level 2 #:tag "ex6.26"]{
 
 由@tt{cps-of-exps}引入的变量在续文中只会只会出现一次。修改@tt{make-send-to-cont}，
-不是生称@exercise-ref{ex6.22}中的
+不是生称@exercise-ref{ex6.22} 中的
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1777,7 +1776,7 @@ htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符�
 
 @exercise[#:level 3 #:tag "ex6.33"]{
 
-写一个翻译器，它取@exercise-ref{ex6.32}的输出，将其转换为@figure-ref{fig-6.1} 那样的寄存器程序。
+写一个翻译器，它取@exercise-ref{ex6.32} 的输出，将其转换为@figure-ref{fig-6.1} 那样的寄存器程序。
 
 }
 
@@ -1801,8 +1800,7 @@ htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符�
 CPS程序序列化计算时，命名中间结果，传递续文；而ANF程序序列化计算时，用@tt{let}表
 达式命名所有中间结果。
 
-重写@tt{cps-of-exp}，生成ANF程序而非CPS程序。（对不在尾端的条件表达式，用
-@exercise-ref{ex6.23}中的办法处理。）然后，用修改后的@tt{cps-of-exp}处理例子程序
+重写@tt{cps-of-exp}，生成ANF程序而非CPS程序。（对不在尾端的条件表达式，用@exercise-ref{ex6.23} 中的办法处理。）然后，用修改后的@tt{cps-of-exp}处理例子程序
 @tt{fib}的定义，验证结果是否为@tt{fib/anf}。最后，验证对已经是ANF的输入程序，除
 绑定变量名不同外，你的翻译器产生的程序与输入相同。
 
@@ -1810,7 +1808,7 @@ CPS程序序列化计算时，命名中间结果，传递续文；而ANF程序�
 
 @exercise[#:level 1 #:tag "ex6.35"]{
 
-用几个例子验证：若采用@exercise-ref{ex6.27}中的优化方法，对ANF转换器（@exercise-ref{ex6.34}）的输入和输出
+用几个例子验证：若采用@exercise-ref{ex6.27} 中的优化方法，对ANF转换器（@exercise-ref{ex6.34}）的输入和输出
 程序进行CPS变换，所得结果相同。
 
 }
@@ -2092,7 +2090,7 @@ newrefk(33, proc (loc1)
 
 }
 
-最后是非局部控制流。我们来考虑@exercise-ref{ex5.42}中的@tt{letcc}。@tt{letcc}表达式@tt{letcc
+最后是非局部控制流。我们来考虑@exercise-ref{ex5.42} 中的@tt{letcc}。@tt{letcc}表达式@tt{letcc
 @${var} in @${body}}将当前续文绑定到变量@${var}。@${body}为该绑定的作用域。续文
 的唯一操作是@tt{throw}。我们用语法@tt{throw @${Expression} to @${Expression}}，
 它求值两个子表达式。第二个表达式应返回一个续文，作用于第一个表达式。@tt{throw}当

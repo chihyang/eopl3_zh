@@ -99,7 +99,7 @@ in (f 1)
 息。这些更细致的信息叫做语言的@emph{类型结构} (@emph{type structure})。
 
 我们的语言将有一种非常简单的类型结构。现在，考虑LETREC中的表达值。这些值只包含单
-参数过程，但处理@exercise-ref{ex3.33}中的多参数过程也很直接：只需做些额外工作，没有任何新思想。
+参数过程，但处理@exercise-ref{ex3.33} 中的多参数过程也很直接：只需做些额外工作，没有任何新思想。
 
 @bold{类型语法}
 @; TODO: big bracket
@@ -665,7 +665,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 2 #:tag "ex7.9"]{
 
-给语言添加类型@tt{listof}，其操作与@exercise-ref{ex3.9}类似。当且仅当值是列表，且所有元素类型
+给语言添加类型@tt{listof}，其操作与@exercise-ref{ex3.9} 类似。当且仅当值是列表，且所有元素类型
 均为@${t}时，值类型为@tt{listof @${t}}。用下列生成式扩展语言：
 
 @envalign*{\mathit{Type} &::= @tt{listof @m{\mathit{Type}}} \\[-3pt]
@@ -1377,7 +1377,7 @@ in (odd 13)
 
 @exercise[#:level 1 #:tag "ex7.12"]{
 
-用本节的方法，推导@exercise-ref{ex7.1}中每个表达式的类型，或者断定没有类型。就像本节的其他练
+用本节的方法，推导@exercise-ref{ex7.1} 中每个表达式的类型，或者断定没有类型。就像本节的其他练
 习那样，假设每个绑定变量都有个对应的@tt{?}。
 
 }
@@ -1645,7 +1645,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.21"]{
 
-我们说代换式组就像存储器。用@exercise-ref{ex7.17}中的代换式组表示实现合一器，用全局Scheme变量
+我们说代换式组就像存储器。用@exercise-ref{ex7.17} 中的代换式组表示实现合一器，用全局Scheme变量
 记录代换式组，就像@figure-ref{fig-4.1} 和@countref{fig-4.2}那样。
 
 }
@@ -1754,7 +1754,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 类型环境将各类型表达式与程序变量对应起来。代换式组表明了类型表达式中每个类型变量
 的含义。我们把代换式组比作@emph{存储器}，把类型变量比作存储器中的@emph{引用}。因
 此，@tt{type-of}返回两个值：一个类型表达式，和一个解释表达式中类型变量的代换式组。
-其实现就像@exercise-ref{ex4.12}那样，新定义一种包含两个值的数据类型，用作返回值。
+其实现就像@exercise-ref{ex4.12} 那样，新定义一种包含两个值的数据类型，用作返回值。
 
 @tt{type-of}的定义如@figure-ref{fig-7.6} - @countref{fig-7.8} 所示。对每个表达式，我们递归处理子表达式，一路传递
 代换式组参数中现有的解。然后，我们根据规范，为当前表达式建立方程，调用
@@ -1988,7 +1988,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.23"]{
 
-扩展推导器，像@exercise-ref{ex7.8}那样处理序对类型。
+扩展推导器，像@exercise-ref{ex7.8} 那样处理序对类型。
 
 }
 
@@ -2000,7 +2000,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.25"]{
 
-扩展推导器，像@exercise-ref{ex7.9}那样处理列表类型。修改语言，用
+扩展推导器，像@exercise-ref{ex7.9} 那样处理列表类型。修改语言，用
 
 @$${\mathit{Expression} ::= @tt{emptylist}}
 
@@ -2013,7 +2013,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.26"]{
 
-扩展推导器，像@exercise-ref{ex7.10}那样处理EXPLICIT-REFS。
+扩展推导器，像@exercise-ref{ex7.10} 那样处理EXPLICIT-REFS。
 
 }
 

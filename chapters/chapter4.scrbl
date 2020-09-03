@@ -474,13 +474,13 @@ Scheme中的效果建模效果。
 
 @exercise[#:level 1 #:tag "ex4.10"]{
 
-实现@exercise-ref{ex4.4}中定义的@tt{begin}表达式。
+实现@exercise-ref{ex4.4} 中定义的@tt{begin}表达式。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.11"]{
 
-实现@exercise-ref{ex4.5}中的@tt{list}。
+实现@exercise-ref{ex4.5} 中的@tt{list}。
 
 }
 
@@ -947,8 +947,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.19"]{
 
-修改多过程@tt{letrec}的实现，每个闭包只需生成一次，并且只分配一个位置。本题类似
-@exercise-ref{ex3.35}。
+修改多过程@tt{letrec}的实现，每个闭包只需生成一次，并且只分配一个位置。本题类似@exercise-ref{ex3.35}。
 
 }
 
@@ -1085,7 +1084,7 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.23"]{
 
-为@exercise-ref{ex4.22}中语言添加@tt{read}语句，形如@tt{read @${var}}。这种语句从输入读取一个
+为@exercise-ref{ex4.22} 中语言添加@tt{read}语句，形如@tt{read @${var}}。这种语句从输入读取一个
 非负数，存入给定的变量中。
 
 }
@@ -1099,7 +1098,7 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.25"]{
 
-扩展@exercise-ref{ex4.22}语言中的块语句，允许初始化变量。在你的解答中，变量的作用域是否包含
+扩展@exercise-ref{ex4.22} 语言中的块语句，允许初始化变量。在你的解答中，变量的作用域是否包含
 同一个块语句中后续声明的变量？
 
 }
@@ -1122,7 +1121,7 @@ in let p = proc (y) -(y,x)
 
 @section[#:style section-title-style-numbered #:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
 
-在@exercise-ref{ex3.9}中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
+在@exercise-ref{ex3.9} 中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
 @tt{set-car!}和@tt{set-cdr!}处理它们。
 
 现在，我们给IMPLICIT-REFS添加可变序对。序对是表达值，具有如下操作：
@@ -1393,7 +1392,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 @exercise[#:level 2 #:tag "ex4.30"]{
 
-给@exercise-ref{ex4.29}的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
+给@exercise-ref{ex4.29} 的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
 数。@tt{arrayref}和@tt{arrayset}一定要查验索引，确保其值在数组长度之内。
 
 }
@@ -1845,7 +1844,7 @@ in let f = proc (z) 11
 
 @exercise[#:level 1 #:tag "ex4.38"]{
 
-下面的例子展示了@exercise-ref{ex3.25}在按需调用中的变体。@exercise-ref{ex3.25}中的原始程序在按需调用中可行
+下面的例子展示了@exercise-ref{ex3.25} 在按需调用中的变体。@exercise-ref{ex3.25} 中的原始程序在按需调用中可行
 吗？如果下面的程序在按值调用中运行呢？为什么？
 
 @nested[#:style 'code-inset]{

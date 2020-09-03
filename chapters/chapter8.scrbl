@@ -680,7 +680,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 @exercise[#:level 1 #:tag "ex8.4"]{
 
-修改语言的表达式，像@exercise-ref{ex7.24}那样，加入多声明@tt{let}，多参数过程和多声明
+修改语言的表达式，像@exercise-ref{ex7.24} 那样，加入多声明@tt{let}，多参数过程和多声明
 @tt{letrec}。
 
 }
@@ -876,7 +876,7 @@ succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take 
 @subsection[#:style section-title-style-numbered #:tag "s8.2.1"]{例子}
 
 欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含一对整数的数据结构表示点的横
-坐标和纵坐标。她使用的语言具有@exercise-ref{ex7.8}那样的类型，所以她的模块@tt{Alices-points}
+坐标和纵坐标。她使用的语言具有@exercise-ref{ex7.8} 那样的类型，所以她的模块@tt{Alices-points}
 接口具有如下声明
 
 @nested[#:style 'code-inset]{
@@ -1748,7 +1748,7 @@ actual-iface <: expected-iface
 
 @exercise[#:level 1 #:tag "ex8.16"]{
 
-用@exercise-ref{ex7.24}中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，用多参数过程代替返回过程的过
+用@exercise-ref{ex7.24} 中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，用多参数过程代替返回过程的过
 程。
 
 }
@@ -2137,7 +2137,7 @@ body
 
 @exercise[#:level 1 #:tag "ex8.23"]{
 
-写出模块@tt{table-of}，它与@exercise-ref{ex8.15}中的@tt{table}模块类似，只是将表的内容参数化，
+写出模块@tt{table-of}，它与@exercise-ref{ex8.15} 中的@tt{table}模块类似，只是将表的内容参数化，
 这样就能用
 
 @nested[#:style 'code-inset]{
@@ -2468,7 +2468,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@$
 
 @exercise[#:level 1 #:tag "ex8.25"]{
 
-扩展PROC-MODULES，像@exercise-ref{ex3.21}那样，允许模块取多个参数。
+扩展PROC-MODULES，像@exercise-ref{ex3.21} 那样，允许模块取多个参数。
 
 }
 

@@ -1677,7 +1677,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
       (leaf 117)
       (leaf 14)))))
   }}
- 使用@exercise-ref{ex1.31}中定义的过程，应返回二叉树
+ 使用@exercise-ref{ex1.31} 中定义的过程，应返回二叉树
 
  @codeblock{
  (red
