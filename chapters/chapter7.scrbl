@@ -511,7 +511,8 @@ in |@${e_{letrec\mbox{-}body}}
           (type-to-external-form result-type))))))
 ]
 
-现在，我们可以将规则转换为程序，就像处理@secref{expr}中的解释器那样。结果如@figure-ref{fig-7.1}- @countref{fig-7.3} 所示。
+现在，我们可以将规则转换为程序，就像处理 @secref{expr} 中的解释器那样。结果
+如@figure-ref{fig-7.1}-@countref{fig-7.3} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1645,8 +1646,8 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.21"]{
 
-我们说代换式组就像存储器。用@exercise-ref{ex7.17} 中的代换式组表示实现合一器，用全局Scheme变量
-记录代换式组，就像@figure-ref{fig-4.1} 和@countref{fig-4.2}那样。
+我们说代换式组就像存储器。用@exercise-ref{ex7.17} 中的代换式组表示实现合一器，用
+全局Scheme变量记录代换式组，就像@figure-ref{fig-4.1} 和 @countref{fig-4.2} 那样。
 
 }
 
@@ -1756,9 +1757,9 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 此，@tt{type-of}返回两个值：一个类型表达式，和一个解释表达式中类型变量的代换式组。
 其实现就像@exercise-ref{ex4.12} 那样，新定义一种包含两个值的数据类型，用作返回值。
 
-@tt{type-of}的定义如@figure-ref{fig-7.6} - @countref{fig-7.8} 所示。对每个表达式，我们递归处理子表达式，一路传递
-代换式组参数中现有的解。然后，我们根据规范，为当前表达式建立方程，调用
-@tt{unifier}，在代换式组中记录这些。
+@tt{type-of} 的定义如@figure-ref{fig-7.6}-@countref{fig-7.8} 所示。对每个表达式，
+我们递归处理子表达式，一路传递代换式组参数中现有的解。然后，我们根据规范，为当前
+表达式建立方程，调用 @tt{unifier}，在代换式组中记录这些。
 
 因为多态的缘故，测试推导器比测试之前的解释器较为麻烦。例如，如果给推导器@tt{proc
 (x) x}，它给出的外在表示可能是@tt{(tvar1 -> tvar1)}，@tt{(tvar2 -> tvar2)}，
@@ -1767,7 +1768,8 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 绝@tt{(tvar3 -> tvar4)}或是@tt{(int -> tvar17)}。
 
 要比较两种类型的外在表示，我们统一未知类型的名字，遍历每个外在表示，给类型变量重
-新编号，使之从@tt{ty1}开始。然后，我们就能用@tt{equal?}比较重新编号的类型（@figure-ref{fig-7.10} - @countref{fig-7.11}）。
+新编号，使之从@tt{ty1}开始。然后，我们就能用@tt{equal?}比较重新编号的类型
+（@figure-ref{fig-7.10}-@countref{fig-7.11}）。
 
 要逐个命名所有未知变量，我们用 @tt{canonical-subst} 生成代换式组。用 @tt{table}
 做累加器，直接递归即可。@tt{table} 的长度告诉我们已找出多少个不同的未知类型，我

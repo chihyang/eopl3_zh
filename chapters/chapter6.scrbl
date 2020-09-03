@@ -499,7 +499,8 @@ val)}。
 
 @exercise[#:level 2 #:tag "ex6.7"]{
 
-写出@figure-ref{fig-5.4}，@countref{fig-5.5}和@countref{fig-5.6}中解释器的过程表示和内联过程表示。
+写出@figure-ref{fig-5.4}，@countref{fig-5.5} 和 @countref{fig-5.6} 中解释器的过
+程表示和内联过程表示。
 
 }
 
@@ -1455,13 +1456,13 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
           (append (cdr simples) (list k-exp)))))))
 ]
 
-现在，我们可以写出CPS翻译器剩余部分（@figure-ref{fig-6.10} - @countref{fig-6.12}）。它@tt{紧随语法}。当表达式一
-定是简单的，如常量、变量和过程，我们直接用@tt{make-send-to-cont}生成代码。否则，
-我们调用辅助过程，每个辅助过程调用@tt{cps-of-exps}求值它的子表达式，用适当的生成
-器构造CPS子表达式输出的内部。一个例外是@tt{cps-of-letrec-exp}，它没有
-@elem[#:style question]{紧挨着的}子表达式，所以它直接生成CPS输出。最后，我们调用
-@tt{cps-of-exps}翻译整个程序，使用的生成器直接返回 @elem[#:style question]{一简
-单表达式作为值}。
+现在，我们可以写出CPS翻译器剩余部分（@figure-ref{fig-6.10}-@countref{fig-6.12}）。
+它 @tt{紧随语法}。当表达式一定是简单的，如常量、变量和过程，我们直接用
+@tt{make-send-to-cont} 生成代码。否则，我们调用辅助过程，每个辅助过程调用
+@tt{cps-of-exps} 求值它的子表达式，用适当的生成器构造CPS子表达式输出的内部。一个
+例外是 @tt{cps-of-letrec-exp}，它没有@elem[#:style question]{紧挨着的}子表达式，
+所以它直接生成CPS输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，使用的生成
+器直接返回@elem[#:style question]{一简单表达式作为值}。
 
 在下面的练习中，用COS-OUT的语法和解释器运行输出表达式，确保它们是曳尾式。
 

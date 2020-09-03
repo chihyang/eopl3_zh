@@ -648,8 +648,8 @@ behavior})。
 ]
 }
 
-传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4} 和@countref{fig-5.5}所示。续文的完整规范如@figure-ref{fig-5.6}
-所示。
+传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4} 和
+@countref{fig-5.5} 所示。续文的完整规范如@figure-ref{fig-5.6} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -812,7 +812,8 @@ env var cont)}。
 
 @exercise[#:level 1 #:tag "ex5.12"]{
 
-给@figure-ref{fig-5.4}-@countref{fig-5.6} 的解释器添加辅助过程，生成类似@pageref{cps-computation}计算的输出。
+给@figure-ref{fig-5.4}-@countref{fig-5.6} 的解释器添加辅助过程，生成类似
+@pageref{cps-computation} 计算的输出。
 
 }
 
@@ -1158,8 +1159,8 @@ odd:  if (x=0) then return(0)
 
 本节，我们用这一原则翻译传递续文的解释器，将其转换为适合无高阶过程语言的形式。
 
-我们首先从@figure-ref{fig-5.4} 和@countref{fig-5.5}的解释器开始，用数据结构表示
-续文。续文的数据结构表示如@figure-ref{fig-5.9} 和@countref{fig-5.10}所示。
+我们首先从@figure-ref{fig-5.4} 和 @countref{fig-5.5} 的解释器开始，用数据结构表
+示续文。续文的数据结构表示如@figure-ref{fig-5.9} 和 @countref{fig-5.10} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[

@@ -1405,7 +1405,8 @@ in (double 6)
 
 ]
 
-@figure-ref{fig-3.10} 和@countref{fig-3.11}展示了一个例子。@figure-ref{fig-3.11} 的最后一行，递归调用@tt{double}找出了原来的
+@figure-ref{fig-3.10} 和 @countref{fig-3.11} 展示了一个例
+子。@figure-ref{fig-3.11} 的最后一行，递归调用 @tt{double} 找出了原来的
 @tt{double}，正合所愿。
 
 我们按这些要求实现@tt{extend-env-rec}。这里我们用抽象语法树表示。练习中讨论其他
@@ -2042,7 +2043,7 @@ in proc (y)
 程序。
 
 @tt{senv} 表示一些声明，我们从中翻译表达式 @tt{e}。要完成这点，我们像@exercise-ref{ex1.33} 或
-@countref{ex2.26}那样递归复制语法树，除了
+@countref{ex2.26} 那样递归复制语法树，除了
 
 @nested{
 
