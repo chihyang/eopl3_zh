@@ -1646,7 +1646,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 @exercise[#:level 2 #:tag "ex7.21"]{
 
 我们说代换式组就像存储器。用@exercise-ref{ex7.17}中的代换式组表示实现合一器，用全局Scheme变量
-记录代换式组，就像@figure-ref{fig-4.1}和4.2那样。
+记录代换式组，就像@figure-ref{fig-4.1}和@countref{fig-4.2}那样。
 
 }
 

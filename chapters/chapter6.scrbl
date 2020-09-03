@@ -499,7 +499,7 @@ val)}。
 
 @exercise[#:level 2 #:tag "ex6.7"]{
 
-写出@figure-ref{fig-5.4}，5.5和5.6中解释器的过程表示和内联过程表示。
+写出@figure-ref{fig-5.4}，@countref{fig-5.5}和@countref{fig-5.6}中解释器的过程表示和内联过程表示。
 
 }
 

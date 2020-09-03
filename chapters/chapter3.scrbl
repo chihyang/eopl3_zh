@@ -647,7 +647,7 @@ in let y = 2
 @eopl-caption["fig-3.7"]{LET 语言的表达值}
 }
 
-现在我们可以写出解析器，如@figure-ref{fig-3.8}和 @countref{fig-3.9} 所示。主过程
+现在我们可以写出解析器，如@figure-ref{fig-3.8}和@countref{fig-3.9} 所示。主过程
 是 @tt{run}，它取一个字符串，解析它，把结果交给 @tt{value-of-program}。最有意思
 的过程是 @tt{value-of}，它取一表达式和一环境，用解释器秘方计算规范要求的答案。在
 代码中，我们插入了相关的推理规则定义，以便观察 @tt{value-of} 的代码如何与规范对
@@ -1406,7 +1406,7 @@ in (double 6)
 
 ]
 
-@figure-ref{fig-3.10}和@figure-ref{fig-3.11}展示了一个例子。@figure-ref{fig-3.11}的最后一行，递归调用@tt{double}找出了原来的
+@figure-ref{fig-3.10}和@countref{fig-3.11}展示了一个例子。@figure-ref{fig-3.11}的最后一行，递归调用@tt{double}找出了原来的
 @tt{double}，正合所愿。
 
 我们按这些要求实现@tt{extend-env-rec}。这里我们用抽象语法树表示。练习中讨论其他
