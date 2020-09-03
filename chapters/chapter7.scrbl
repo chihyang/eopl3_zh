@@ -598,20 +598,20 @@ in |@${e_{letrec\mbox{-}body}}
 \begin{comment}}
 (((
 @#,exact-elem{\end{comment}}
-      @#,elem{@${\fbox{\infer{@tt{(type-of letrec @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}} @${tenv}) = @${t}}}{\begin{gathered}@tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_{var}}][@${p} =(@${t_{var} \to t_{res}})]@${tenv}) = @${t_{res}}} \\ @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p} = (@${t_{var} \to t_{res}})]@${tenv}) = @${t}}\end{gathered}}}}}
-      (letrec-exp (p-result-type p-name b-var b-var-type
-                    p-body letrec-body)
-        (let ((tenv-for-letrec-body
-                (extend-tenv p-name
-                  (proc-type b-var-type p-result-type)
-                  tenv)))
-          (let ((p-body-type
-                  (type-of p-body
-                    (extend-tenv b-var b-var-type
-                      tenv-for-letrec-body))))
-            (check-equal-type!
-              p-body-type p-result-type p-body)
-            (type-of letrec-body tenv-for-letrec-body)))))))
+@#,elem{@${\fbox{\infer{@tt{(type-of letrec @${t_{res}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}} @${tenv}) = @${t}}}{\begin{gathered}@tt{(type-of @${e_{proc\mbox{-}body}} [@${var}=@${t_{var}}][@${p} =(@${t_{var} \to t_{res}})]@${tenv}) = @${t_{res}}} \\ @tt{(type-of @${e_{letrec\mbox{-}body}} [@${p} = (@${t_{var} \to t_{res}})]@${tenv}) = @${t}}\end{gathered}}}}}
+(letrec-exp (p-result-type p-name b-var b-var-type
+              p-body letrec-body)
+  (let ((tenv-for-letrec-body
+          (extend-tenv p-name
+            (proc-type b-var-type p-result-type)
+            tenv)))
+    (let ((p-body-type
+            (type-of p-body
+              (extend-tenv b-var b-var-type
+                tenv-for-letrec-body))))
+      (check-equal-type!
+        p-body-type p-result-type p-body)
+      (type-of letrec-body tenv-for-letrec-body)))))))
 ]
 
 @eopl-caption["fig-7.3"]{CHECKED的 @tt{type-of}，续}

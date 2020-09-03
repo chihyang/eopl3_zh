@@ -1375,7 +1375,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 (define cps-of-exps
   (lambda (exps builder)
     (let cps-of-rest ((exps exps))
-      cps-of-rest : Listof(InpExp)→TfExp
+      @#,elem{@bold{@tt{cps-of-rest}} : @${\mathit{Listof(InpExp)} \to \mathit{TfExp}}}
       (let ((pos (list-index
                    (lambda (exp)
                      (not (inp-exp-simple? exp)))
