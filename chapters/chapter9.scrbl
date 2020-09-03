@@ -1280,9 +1280,9 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 性，此外，通过我们检查器的程序决不会给没有对应方法的对象发送消息，也不会给对象发
 送实参数量或类型错误的消息。
 
-TYPED-OO的示例程序如@figure-ref{fig-9.12} 所示。这段程序定义了一个类@tt{tree}，其方法@tt{sum}像
-@figure-ref{fig-9.2} 那样求出叶子之和，方法@tt{equal}取另一棵树，递归向下处理树，判断二者是否相
-等。
+TYPED-OO 的示例程序如@figure-ref{fig-9.12} 所示。这段程序定义了一个类 @tt{tree}，
+其方法 @tt{sum} 像@figure-ref{fig-9.2} 那样求出叶子之和，方法 @tt{equal} 取另一
+棵树，递归向下处理树，判断二者是否相等。
 
 这种语言的主要新特性是：
 
