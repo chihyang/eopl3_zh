@@ -1598,7 +1598,7 @@ in letrec
 t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指明是表达式@tt{exp}。这通常
 是包含方程@${t_1 = t_2}的表达式。
 
-这个算法用@tt{cases}来写十分不便，所以我们改用类型的谓词和抽词器。算法如@figure-ref{fig-7.4}所
+这个算法用@tt{cases}来写十分不便，所以我们改用类型的谓词和抽词器。算法如@figure-ref{fig-7.4} 所
 示，其流程如下：
 
 @itemlist[
@@ -1628,7 +1628,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 储器中某位置的@emph{引用}。@tt{unifier}把@tt{ty1 = ty2}添加到存储器中，生成一个
 新的存储器。
 
-最后，我们要验存。直接递归处理类型即可，如@figure-ref{fig-7.5}所示。
+最后，我们要验存。直接递归处理类型即可，如@figure-ref{fig-7.5} 所示。
 
 @exercise[#:level 1 #:tag "ex7.19"]{
 
@@ -1646,7 +1646,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 @exercise[#:level 2 #:tag "ex7.21"]{
 
 我们说代换式组就像存储器。用@exercise-ref{ex7.17}中的代换式组表示实现合一器，用全局Scheme变量
-记录代换式组，就像@figure-ref{fig-4.1}和@countref{fig-4.2}那样。
+记录代换式组，就像@figure-ref{fig-4.1} 和@countref{fig-4.2}那样。
 
 }
 
@@ -1771,7 +1771,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 要逐个命名所有未知变量，我们用 @tt{canonical-subst} 生成代换式组。用 @tt{table}
 做累加器，直接递归即可。@tt{table} 的长度告诉我们已找出多少个不同的未知类型，我
-们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。这与@figure-ref{fig-4.1}中
+们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。这与@figure-ref{fig-4.1} 中
 使用的 @tt{length} 类似。
 
 @nested[#:style eopl-figure]{

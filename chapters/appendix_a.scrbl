@@ -53,7 +53,7 @@ Lambda 演算由邱奇发明 (Church, 1941)，用于研究数理逻辑，但已�
 理论的灵感来源。Lambda 演算的介绍参见 Hankin (1994)、Peyton Jones (1987) 或 Stoy
 (1977)。Barendregt (1981, 1991) 提供了百科全书式的参考。
 
-@figure-ref{fig-3.13}那样的等深线用来解释词法作用域，首先由 Johnston (1971) 提出。无名解释器
+@figure-ref{fig-3.13} 那样的等深线用来解释词法作用域，首先由 Johnston (1971) 提出。无名解释器
 和翻译器基于德布鲁金索引 (de Bruijn, 1972)。
 
 Scheme 由 Sussman & Steele (1975) 发明。其开发过程记录在 Steele & Sussman

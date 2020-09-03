@@ -106,7 +106,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.1"]{定义语法}
 
-@figure-ref{fig-3.2}展示了我们这门简单语言的语法。在这种语言中，程序只能是一个表达式。表达式是
+@figure-ref{fig-3.2} 展示了我们这门简单语言的语法。在这种语言中，程序只能是一个表达式。表达式是
 个整数常量、差值表达式、判零表达式、条件表达式、变量、或 @tt{let} 表达式。
 
 这里是本门语言写成的一个简单表达式，及其抽象语法表示。
@@ -261,7 +261,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 式的值为第一个操作数在某一环境中的值减去第二个操作数在该环境中的值。当然，准确来
 说，我们得确保操作数的值是数字，且结果是表达值表示的数字。
 
-@figure-ref{fig-3.3}展示了如何结合这些规则求取一个构造器生成的表达式的值。在本例以及其他例子中，
+@figure-ref{fig-3.3} 展示了如何结合这些规则求取一个构造器生成的表达式的值。在本例以及其他例子中，
 我们用@${\textnormal{\guillemotleft} exp \textnormal{\guillemotright}}表示表达式
 @${exp}的抽象语法树。我们还用@${\lceil n \rceil}代替@tt{(num-val @${n})}，用
 @${\lfloor val \rfloor}代替@tt{(expval->num @${val})}。我们也运用了一点事实：
@@ -269,7 +269,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
-列出@figure-ref{fig-3.3}中所有应用 @${\lfloor \lceil n \rceil \rfloor = n} 的地方。
+列出@figure-ref{fig-3.3} 中所有应用 @${\lfloor \lceil n \rceil \rfloor = n} 的地方。
 
 }
 
@@ -409,7 +409,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 }|
 }
 
-@figure-ref{fig-3.4}展示了用这些规则进行简单运算的过程。
+@figure-ref{fig-3.4} 展示了用这些规则进行简单运算的过程。
 
 @nested[#:style eopl-figure]{
 令@${\rho =} @tt{[x=@${\lceil}33@${\rceil},y=@${\lceil}22@${\rceil}]}。@linebreak[]
@@ -514,7 +514,7 @@ in let y = 2
 }|
 }
 
-@figure-ref{fig-3.5}展示了一个例子，其中@${\rho_0}表示任意环境。
+@figure-ref{fig-3.5} 展示了一个例子，其中@${\rho_0}表示任意环境。
 }
 
 @nested[#:style eopl-figure]{
@@ -570,8 +570,8 @@ in let y = 2
 @subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现LET的规范}
 
 接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{
-见@elemref["sllgen"]{附录B}。——@emph{译注}}作为前端，表达式用@figure-ref{fig-3.6}中的数据类型表示。
-我们的实现中，表达值的表示如@figure-ref{fig-3.7}所示。数据类型声明了构造器@tt{num-val}和
+见@elemref["sllgen"]{附录B}。——@emph{译注}}作为前端，表达式用@figure-ref{fig-3.6} 中的数据类型表示。
+我们的实现中，表达值的表示如@figure-ref{fig-3.7} 所示。数据类型声明了构造器@tt{num-val}和
 @tt{bool-val}，用来将整数和布尔值转换为表达值。我们还定义了抽词器，用来将表达值
 转为整数或布尔值。如果表达值类型不符预期，则抽词器报错。
 
@@ -647,7 +647,7 @@ in let y = 2
 @eopl-caption["fig-3.7"]{LET 语言的表达值}
 }
 
-现在我们可以写出解析器，如@figure-ref{fig-3.8}和@countref{fig-3.9} 所示。主过程
+现在我们可以写出解析器，如@figure-ref{fig-3.8} 和@countref{fig-3.9} 所示。主过程
 是 @tt{run}，它取一个字符串，解析它，把结果交给 @tt{value-of-program}。最有意思
 的过程是 @tt{value-of}，它取一表达式和一环境，用解释器秘方计算规范要求的答案。在
 代码中，我们插入了相关的推理规则定义，以便观察 @tt{value-of} 的代码如何与规范对
@@ -735,13 +735,13 @@ in let y = 2
 
 @exercise[#:level 1 #:tag "ex3.4"]{
 
-把@figure-ref{fig-3.4}中的推导写成@pageref{deriv-tree}那样的推理树。
+把@figure-ref{fig-3.4} 中的推导写成@pageref{deriv-tree}那样的推理树。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.5"]{
 
-把@figure-ref{fig-3.5}中的推导写成@pageref{deriv-tree}那样的推理树。
+把@figure-ref{fig-3.5} 中的推导写成@pageref{deriv-tree}那样的推理树。
 
 }
 
@@ -1406,7 +1406,7 @@ in (double 6)
 
 ]
 
-@figure-ref{fig-3.10}和@countref{fig-3.11}展示了一个例子。@figure-ref{fig-3.11}的最后一行，递归调用@tt{double}找出了原来的
+@figure-ref{fig-3.10} 和@countref{fig-3.11}展示了一个例子。@figure-ref{fig-3.11} 的最后一行，递归调用@tt{double}找出了原来的
 @tt{double}，正合所愿。
 
 我们按这些要求实现@tt{extend-env-rec}。这里我们用抽象语法树表示。练习中讨论其他
@@ -1711,10 +1711,10 @@ in let fact = proc (n)
 的乘式 @tt{(* x y)} 中，内层@tt{x} 遮蔽了外层的。
 
 词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@deftech{等深线}
-(@emph{contour diagram})解释这点。@figure-ref{fig-3.13}展示了上例的@tech{等深线}。每个作用域
+(@emph{contour diagram})解释这点。@figure-ref{fig-3.13} 展示了上例的@tech{等深线}。每个作用域
 用一个框圈起来，垂线连接声明与其作用域。
 
-@figure-ref{fig-3.14}展示了一个更复杂的程序和它的等深线。这里面，在第 5 行、第 7 行和第 8 行，
+@figure-ref{fig-3.14} 展示了一个更复杂的程序和它的等深线。这里面，在第 5 行、第 7 行和第 8 行，
 表达式 @tt{(+ x y z)} 出现了三次。第5行在 @tt{x2} 和 @tt{z2} 的作用域内，@tt{x2}
 和 @tt{z2} 的作用域在 @tt{z1} 的作用域内，@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1}
 的作用域内。所以，第5行的 @tt{x} 指代 @tt{x2}，@tt{y} 指代 @tt{y1}，@tt{z} 指代
@@ -2037,7 +2037,7 @@ in proc (y)
 进入新的作用域就要给静态环境添加一个新元素。我们添加过程 @tt{extend-senv} 来完成
 这一步。
 
-由于静态环境只是变量列表，这些过程很容易实现，如@figure-ref{fig-3.15}所示。
+由于静态环境只是变量列表，这些过程很容易实现，如@figure-ref{fig-3.15} 所示。
 
 翻译器有两个过程：@tt{translation-of}处理表达式，@tt{translation-of-program}处理
 程序。
@@ -2062,7 +2062,7 @@ in proc (y)
 
 ]
 
-@tt{translation-of} 代码如@figure-ref{fig-3.16}所示。
+@tt{translation-of} 代码如@figure-ref{fig-3.16} 所示。
 
 }
 
@@ -2160,7 +2160,7 @@ in proc (y)
 }
 
 我们可以用指代值列表实现无名环境，这样 @tt{apply-nameless-env} 只须调用
-@tt{list-ref}。这种实现如@figure-ref{fig-3.17}所示。
+@tt{list-ref}。这种实现如@figure-ref{fig-3.17} 所示。
 
 @nested[#:style eopl-figure]{
 
@@ -2230,7 +2230,7 @@ in proc (y)
 现在，我们可以写出@tt{value-of}。它的大部分与前一个解释器相同，只是原先使用
 @tt{env} 的地方现在用 @tt{nameless-env}。但我们要处理新的部分：
 @tt{nameless-var-exp}、@tt{nameless-let-exp} 和 @tt{nameless-proc-exp}，它们分别
-取代对应的 @tt{var-exp}、@tt{let-exp} 和 @tt{proc-exp}。其实现如@figure-ref{fig-3.18}所示。
+取代对应的 @tt{var-exp}、@tt{let-exp} 和 @tt{proc-exp}。其实现如@figure-ref{fig-3.18} 所示。
 @tt{nameless-var-exp} 用于环境查询。@tt{nameless-let-exp} 先求出式子右边的
 @${exp_1}，然后用式子右边的值扩展环境，并在该环境内求主体的值。这和 @tt{let} 所
 做相同，只是没有变量。@tt{nameless-proc} 生成一个 @tt{proc}，随后可供

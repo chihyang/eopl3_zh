@@ -364,7 +364,7 @@ Scheme中的效果建模效果。
 
 我们还是要确定如何用Scheme值建模存储器。我们的选择可能是最简单的模型：以表达值列
 表作为存储器，以代表列表位置的数字表示引用。分配新引用就是给列表末尾添加新值；更
-新存储器则是尽量复制列表中需要的部分。代码如@figure-ref{fig-4.1}和@countref{fig-4.2}所示。
+新存储器则是尽量复制列表中需要的部分。代码如@figure-ref{fig-4.1} 和@countref{fig-4.2}所示。
 
 这种表示法极其低效。一般的内存操作大致要在常数时间内完成，但是用我们的表示法，这
 些操作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但是这足以达到
@@ -385,13 +385,13 @@ Scheme中的效果建模效果。
 ]
 
 现在，我们可以写出@tt{value-of}中与@tt{newref}，@tt{deref}和@tt{setref}相关的语
-句。这些语句如@figure-ref{fig-4.3}所示。
+句。这些语句如@figure-ref{fig-4.3} 所示。
 
 }
 
 我们可以给该系统添加一些辅助过程，把环境、过程和存储器转换为更易读的形式，也可以
 增强系统，在代码中的关键位置打印消息。我们还使用过程把环境、过程和存储器转换为更
-易读的形式。得出的日志详细描述了系统的动作。典型例子如@figure-ref{fig-4.4}和@countref{fig-4.5}所示。此外，这个
+易读的形式。得出的日志详细描述了系统的动作。典型例子如@figure-ref{fig-4.4} 和@countref{fig-4.5}所示。此外，这个
 跟踪日志还标明差值表达式的参数从左到右进行求值。
 
 @nested[#:style eopl-figure]{
@@ -489,7 +489,7 @@ Scheme中的效果建模效果。
 像解释器中展示的，我们对存储器的理解基于Scheme效果的含义。具体地说，我们得知道在
 Scheme程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避免这
 种依赖。在这个解释器中，@tt{value-of}同时返回值和存储器，就像规范中那样。这个解
-释器的片段如@figure-ref{fig-4.6}所示。我们称之为@emph{传递存储器的解释器} (@emph{store-passing
+释器的片段如@figure-ref{fig-4.6} 所示。我们称之为@emph{传递存储器的解释器} (@emph{store-passing
 interpreter})。补全这个解释器，处理整个EXPLICIT-REFS语言。
 
 过程可能修改存储器时，不仅返回通常的值，还要返回一个新的存储器。它们包含在名为
@@ -695,7 +695,7 @@ newref: 分配位置 2
 (@emph{implicit reference})。大多数编程语言，包括Scheme，都使用这种设计的一些变
 体。
 
-@figure-ref{fig-4.7}是这种设计的两个示例程序。因为引用不再是表达值，我们不能做链式引用，像
+@figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能做链式引用，像
 @secref{s4.2}中的那个例子那样。
 
 @nested[#:style eopl-figure]{
@@ -842,7 +842,7 @@ in let a = (g 11)
       (apply-env saved-env search-var))))
 }
 
-@figure-ref{fig-4.8}用前述辅助组件，展示了IMPLICIT-REFS求值的简单例子。
+@figure-ref{fig-4.8} 用前述辅助组件，展示了IMPLICIT-REFS求值的简单例子。
 
 @nested[#:style eopl-figure]{
 @verbatim|{
@@ -897,7 +897,7 @@ newref: 分配位置 5
 
 @exercise[#:level 1 #:tag "ex4.15"]{
 
-在@figure-ref{fig-4.8}中，环境中的变量为什么绑定到平常的整数，而不是@figure-ref{fig-4.5}中的那样的表达值？
+在@figure-ref{fig-4.8} 中，环境中的变量为什么绑定到平常的整数，而不是@figure-ref{fig-4.5} 中的那样的表达值？
 
 }
 
@@ -1147,12 +1147,12 @@ in let p = proc (y) -(y,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.1"]{实现}
 
-我们可以直接用前例中的@tt{reference}数据类型实现可变序对。代码如@figure-ref{fig-4.9}所示。
+我们可以直接用前例中的@tt{reference}数据类型实现可变序对。代码如@figure-ref{fig-4.9} 所示。
 
 一旦完成之后，向语言添加这些就很直接了。我们给表达值数据类型新增一种变体
-@tt{mutpair-val}，给@tt{value-of}新增5行代码。这些如@figure-ref{fig-4.10}所示。我们随便选取
+@tt{mutpair-val}，给@tt{value-of}新增5行代码。这些如@figure-ref{fig-4.10} 所示。我们随便选取
 @tt{setleft}的返回值为82，@tt{setright}的返回值为83。用前述辅助组件得到的示例跟
-踪日志如@figure-ref{fig-4.11}所示。
+踪日志如@figure-ref{fig-4.11} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1241,7 +1241,7 @@ in let p = proc (y) -(y,x)
 
 把可变序对表示为两个引用没有利用@tt{MutPair}的已知信息。序对中的两个位置虽然能够
 各自赋值，但它们不是独立分配的。我们知道它们会一起分配：如果序对的左侧是一个位置，
-那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。代码如@figure-ref{fig-4.13}所示。其他
+那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。代码如@figure-ref{fig-4.13} 所示。其他
 不需要修改。
 
 @nested[#:style eopl-figure]{
@@ -1461,7 +1461,7 @@ in let g = proc (y) (f y)
 调用过程@tt{g}时，@tt{y}绑定到@tt{z}的位置，而不是那个位置处的内容。类似地，调用
 @tt{f}时，@tt{x}绑定到同一个位置。所以，@tt{x}、@tt{y}和@tt{z}都绑定到同一位置，
 @tt{set x = 44}的效果是把那个位置的内容设为44。因此，整个表达式的值是44。执行这
-个表达式的跟踪日志如@figure-ref{fig-4.14}和@countref{fig-4.15}所示。在本例中，@tt{x}、@tt{y}和@tt{z}最终都绑
+个表达式的跟踪日志如@figure-ref{fig-4.14} 和@countref{fig-4.15}所示。在本例中，@tt{x}、@tt{y}和@tt{z}最终都绑
 定到位置5。
 
 }

@@ -80,12 +80,12 @@
         (apply-cont saved-cont (* saved-n val))))))
 ]
 
-这个程序还能做多种变换，比如@figure-ref{fig-6.1}中的寄存。
+这个程序还能做多种变换，比如@figure-ref{fig-6.1} 中的寄存。
 
 如@figure-ref{fig-6.2}，我们还可以将其转为跳跃式。如果我们用普通的指令式语言，我们可以把跳床改
 为适当的循环。
 
-但是，我们本章的焦点是用@figure-ref{fig-5.2}中的过程表示法会怎样。回忆一下，在过程表示法中，续
+但是，我们本章的焦点是用@figure-ref{fig-5.2} 中的过程表示法会怎样。回忆一下，在过程表示法中，续
 文由它在@tt{apply-cont}中的工作表示。过程表示法如下：
 
 @racketblock[
@@ -583,7 +583,7 @@ val)}。
 @section[#:style section-title-style-numbered #:tag "s6.2"]{曳尾式}
 
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择LETREC作为输
-入语言，补充多参数过程和多声明的@tt{letrec}表达式。其语法如@figure-ref{fig-6.3}所示，我们称之为
+入语言，补充多参数过程和多声明的@tt{letrec}表达式。其语法如@figure-ref{fig-6.3} 所示，我们称之为
 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些叫做@emph{输入表达式}
 (@emph{input expression})。
 
@@ -695,7 +695,7 @@ call})。
 择真值分支，也可能选择假值分支。对尾端的子表达式，不需要保存信息，因此也就不会产
 生控制上下文。
 
-CPS-IN中的尾端如@figure-ref{fig-6.4}所示。尾端的每个子表达式值都可以成为整个表达式的值。在传递
+CPS-IN中的尾端如@figure-ref{fig-6.4} 所示。尾端的每个子表达式值都可以成为整个表达式的值。在传递
 续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达式在原表达式的续
 文中求值，如@pageref{tail-call-explain}所述。
 
@@ -716,7 +716,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 记为 @${O}。}
 }
 
-我们用这种区别设计CPS转换算法的目标语言CPS-OUT。这种语言的语法如@figure-ref{fig-6.5}所示。这套
+我们用这种区别设计CPS转换算法的目标语言CPS-OUT。这种语言的语法如@figure-ref{fig-6.5} 所示。这套
 语法定义了CPS-IN的子集，但略有不同。生成式的名字总以@tt{cps-}开头，这样它们不会
 与CPS-IN中生成式的名字混淆。
 
@@ -728,7 +728,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 简单代码，对我们来说它们简单到不需使用控制堆栈。简单表达式包括@tt{proc}表达式，
 因为@tt{proc}表达式立即返回一个过程值，但过程的主体必须是曳尾式。
 
-曳尾表达式的传递续文解释器如@figure-ref{fig-6.6}所示。由于这种语言的过程取多个参数，我们用
+曳尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参数，我们用
 @exercise-ref{ex2.10}中的@tt{extend-env*}创建多个绑定，并用类似方式扩展
 @tt{extend-env-rec}得到@tt{extend-env-rec*}。
 
@@ -833,7 +833,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.11"]{
 
-写出@tt{value-of-simple-exp}，完成@figure-ref{fig-6.6}中的解释器。
+写出@tt{value-of-simple-exp}，完成@figure-ref{fig-6.6} 中的解释器。
 
 }
 
@@ -859,8 +859,9 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.13"]{
 
-用上面@pageref{cps-recipe}的CPS秘方，把下列CPS-IN表达式翻译为续文传递风格。用@figure-ref{fig-6.6}中的解释器运行转换后的程序，测试它们，确保原程序和转换后的版本对所有输入都给
-出同样的结果。
+用上面@pageref{cps-recipe}的CPS秘方，把下列CPS-IN表达式翻译为续文传递风格。
+用@figure-ref{fig-6.6} 中的解释器运行转换后的程序，测试它们，确保原程序和转换后
+的版本对所有输入都给出同样的结果。
 
 @itemlist[#:style 'ordered
 
@@ -1014,7 +1015,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.14"]{
 
-补充@tt{value-of-program}和@tt{apply-cont}，完成@figure-ref{fig-6.6}中的解释器。
+补充@tt{value-of-program}和@tt{apply-cont}，完成@figure-ref{fig-6.6} 中的解释器。
 
 }
 
@@ -1027,13 +1028,13 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.16"]{
 
-寄存@figure-ref{fig-6.6}中的解释器。
+寄存@figure-ref{fig-6.6} 中的解释器。
 
 }
 
 @exercise[#:level 1 #:tag "ex6.17"]{
 
-把@figure-ref{fig-6.6}中的解释器转换为跳跃式。
+把@figure-ref{fig-6.6} 中的解释器转换为跳跃式。
 
 }
 
@@ -1046,8 +1047,8 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 2 #:tag "ex6.19"]{
 
-写出Scheme过程@tt{tail-form?}，它取一CPS-IN程序的语法树，语法如@figure-ref{fig-6.3}所示，判断同
-一字符串是否是@figure-ref{fig-6.5}中语法定义的曳尾式。
+写出Scheme过程@tt{tail-form?}，它取一CPS-IN程序的语法树，语法如@figure-ref{fig-6.3} 所示，判断同
+一字符串是否是@figure-ref{fig-6.5} 中语法定义的曳尾式。
 
 }
 
@@ -1058,7 +1059,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}，同样另取一个表示续文的参
 数。多出的这个续文参数是一个简单表达式。
 
-就像之前那样，我们给出例子，提出规范，然后写出程序。@figure-ref{fig-6.7}展示了与前一节类似的
+就像之前那样，我们给出例子，提出规范，然后写出程序。@figure-ref{fig-6.7} 展示了与前一节类似的
 Scheme示例，但是更加详细。
 
 @nested[#:style eopl-figure]{
@@ -1146,8 +1147,8 @@ Scheme示例，但是更加详细。
 
 但是在规范中，我们仍然使用具体语法，因为具体语法通常更易懂。
 
-过程呢？转换@figure-ref{fig-6.7}中的过程@tt{(lambda (x) ...)}时，我们给过程新增一个参数@tt{k}，
-转换其主体，并将主体的值传给续文@tt{k}。我们在@figure-ref{fig-6.7}中正是这样做的。所以
+过程呢？转换@figure-ref{fig-6.7} 中的过程@tt{(lambda (x) ...)}时，我们给过程新增一个参数@tt{k}，
+转换其主体，并将主体的值传给续文@tt{k}。我们在@figure-ref{fig-6.7} 中正是这样做的。所以
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1192,7 +1193,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 这个新生成式仍有该属性：过程调用决不出现在简单表达式中。
 
 @tt{(cps-of-exp <<+(@${exp_1}, ..., @${exp_n})>> @${K})}可能是什么呢？有可能
-@${exp_1}, @${\dots}, @${exp_n}都是简单的，就像@figure-ref{fig-6.7}中@tt{(= x 2)}这种。那么，整
+@${exp_1}, @${\dots}, @${exp_n}都是简单的，就像@figure-ref{fig-6.7} 中@tt{(= x 2)}这种。那么，整
 个表达式都是简单的，我们可以将其直接传给续文。设@${simp}为一简单表达式，那么我们
 可以说：
 
@@ -1351,7 +1352,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 处理求和表达式和过程调用时唯一不同之处，是所有参数都简单时。在这种情况下，我们要
 把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个曳尾式。
 
-我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8}所示。它用@exercise-ref{ex1.23}中的
+我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8} 所示。它用@exercise-ref{ex1.23}中的
 @tt{list-index}，找出列表中第一个复杂表达式的位置。如果找到复杂表达式，则变换该
 表达式，变换时的续文给表达式的结果命名（绑定到@tt{var}的标识符），然后递归处理修
 改后的表达式列表。
@@ -1709,7 +1710,7 @@ in |@${T}
                     acc))))))))))
 ]
 
-为什么@tt{cps-of-exp}的这种变体比@figure-ref{fig-6.8}中的更高效？
+为什么@tt{cps-of-exp}的这种变体比@figure-ref{fig-6.8} 中的更高效？
 
 }
 
@@ -1776,7 +1777,7 @@ htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符�
 
 @exercise[#:level 3 #:tag "ex6.33"]{
 
-写一个翻译器，它取@exercise-ref{ex6.32}的输出，将其转换为@figure-ref{fig-6.1}那样的寄存器程序。
+写一个翻译器，它取@exercise-ref{ex6.32}的输出，将其转换为@figure-ref{fig-6.1} 那样的寄存器程序。
 
 }
 

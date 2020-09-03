@@ -266,7 +266,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
                             @m{\mathit{Scheme\mbox{-}value}}
                             @m{\mathit{Env\mbox{-}exp}})}}
 
-可以用描述列表集合的语法表示环境，由此得出@figure-ref{fig-2.1}中的实现。过程 @tt{apply-env} 查
+可以用描述列表集合的语法表示环境，由此得出@figure-ref{fig-2.1} 中的实现。过程 @tt{apply-env} 查
 看表示环境的数据结构 @tt{env}，判断它表示哪种环境，并做适当操作。如果它表示空环
 境，那就报错；如果它表示 @tt{extend-env} 生成的环境，那就判断要查找的变量是否与
 环境中绑定的某一变量相同，如果是，则返回保存的值，否则在保存的环境中查找变量。
@@ -351,7 +351,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.7"]{
 
-重写@figure-ref{fig-2.1}中的@tt{apply-env}，给出更详细的错误信息。
+重写@figure-ref{fig-2.1} 中的@tt{apply-env}，给出更详细的错误信息。
 
 }
 
@@ -1163,7 +1163,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 止符命名。很容易将抽象语法写成@tt{define-datatype}声明。我们为每个非终止符添加一
 个@tt{define-datatype}，为每个生成式添加一个变体。
 
-@figure-ref{fig-2.2}中挑出的内容可以精确表示如下：
+@figure-ref{fig-2.2} 中挑出的内容可以精确表示如下：
 
 @elemtag["lc-grammar2"]{}@envalign*{\mathit{Lc\mbox{-}Exp} &::= \mathit{Identifier} \\[-3pt]
                                   &\mathrel{\phantom{::=}} \fbox{@tt{var-exp (var)}} \\[5pt]

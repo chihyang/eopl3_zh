@@ -377,7 +377,7 @@ behavior})。
 }
 
 现在，我们有了四个续文构造器。我们可以用过程表示法或者数据结构表示法实现它们。过
-程表示法如@figure-ref{fig-5.2}所示，数据结构表示法使用@tt{define-datatype}，如@figure-ref{fig-5.3}所示。
+程表示法如@figure-ref{fig-5.2} 所示，数据结构表示法使用@tt{define-datatype}，如@figure-ref{fig-5.3} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -648,7 +648,7 @@ behavior})。
 ]
 }
 
-传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4}和@countref{fig-5.5}所示。续文的完整规范如@figure-ref{fig-5.6}
+传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4} 和@countref{fig-5.5}所示。续文的完整规范如@figure-ref{fig-5.6}
 所示。
 
 @nested[#:style eopl-figure]{
@@ -891,7 +891,7 @@ env var cont)}。
 }|
 }
 
-@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4}中续文的规范}
+@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范}
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
@@ -913,7 +913,7 @@ env var cont)}。
 体周围插入一个@tt{(lambda () ...)}，因为在我们的语言中，只要不执行过程调用，表达
 式的运行时间不会超出某个界限。
 
-得出的代码如@figure-ref{fig-5.7}所示，它还展示了解释器中所有的尾调用。因为我们修改了
+得出的代码如@figure-ref{fig-5.7} 所示，它还展示了解释器中所有的尾调用。因为我们修改了
 @tt{apply-procedure/k}，不再让它返回一个@${ExpVal}，而是返回一个过程，我们得重写
 它和它调用的所有过程的合约。因此，我们必须检查解释器中所有过程的合约。
 
@@ -1031,7 +1031,7 @@ env var cont)}。
 
 @exercise[#:level 1 #:tag "ex5.18"]{
 
-@figure-ref{fig-5.7}中的跳床系统使用过程表示@${Bounce}。改用数据结构表示法。
+@figure-ref{fig-5.7} 中的跳床系统使用过程表示@${Bounce}。改用数据结构表示法。
 
 }
 
@@ -1067,12 +1067,12 @@ env var cont)}。
 
 @section[#:style section-title-style-numbered #:tag "s5.3"]{指令式解释器}
 
-在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。考虑@figure-ref{fig-5.8}顶部的老例
-子@tt{even}和@tt{odd}。可以用@figure-ref{fig-5.8}中间的程序替代它们。其中，共享变量@tt{x}供两个
+在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。考虑@figure-ref{fig-5.8} 顶部的老例
+子@tt{even}和@tt{odd}。可以用@figure-ref{fig-5.8} 中间的程序替代它们。其中，共享变量@tt{x}供两个
 过程交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们
 从存储器中查找相关数据。
 
-考虑@figure-ref{fig-5.8}底部的计算跟踪日志。两个程序的计算跟踪日志都是可以是它。我们记录调用的
+考虑@figure-ref{fig-5.8} 底部的计算跟踪日志。两个程序的计算跟踪日志都是可以是它。我们记录调用的
 过程和实参时，它是第一个计算的跟踪日志；我们记录调用的过程和寄存器@tt{x}的值时，
 它是第二个计算的跟踪日志。
 
@@ -1155,12 +1155,12 @@ odd:  if (x=0) then return(0)
 }
 
 如果一组过程只通过尾调用互相调用，那么我们翻译程序，用赋值代替绑定，然后把赋值程
-序转译为流程图程序，就像@figure-ref{fig-5.8}那样。
+序转译为流程图程序，就像@figure-ref{fig-5.8} 那样。
 
 本节，我们用这一原则翻译传递续文的解释器，将其转换为适合无高阶过程语言的形式。
 
-我们首先从@figure-ref{fig-5.4}和5.5的解释器开始，用数据结构表示续文。续文的数据结构表示如@figure-ref{fig-5.9}
-和5.10所示。
+我们首先从@figure-ref{fig-5.4} 和@countref{fig-5.5}的解释器开始，用数据结构表示
+续文。续文的数据结构表示如@figure-ref{fig-5.9} 和@countref{fig-5.10}所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1346,8 +1346,8 @@ odd:  if (x=0) then return(0)
 
 ]
 
-翻译完成的解释器如@figure-ref{fig-5.11} - @countref{fig-5.14} 所示。这个过程叫做@emph{寄存}
-(@emph{registerization})。很容易把它翻译成支持跳转的指令式语言。
+翻译完成的解释器如@figure-ref{fig-5.11}-@countref{fig-5.14} 所示。这个过程叫
+做@emph{寄存} (@emph{registerization})。很容易把它翻译成支持跳转的指令式语言。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -2032,7 +2032,7 @@ scheduling})。
 传递一个未指明的参数。该线程不是立刻运行，而是放入就绪队列中，轮到它时才运行。
 @tt{spawn}的执行只求效果；在我们的系统中，我们随机为它挑选一个返回值73。
 
-我们来看这种语言的两个示例程序。@figure-ref{fig-5.16}定义了一个过程@tt{noisy}，它取一个列表，打
+我们来看这种语言的两个示例程序。@figure-ref{fig-5.16} 定义了一个过程@tt{noisy}，它取一个列表，打
 印出列表的第一个元素，然后递归处理列表剩余部分。这里，主体表达式创建两个线程，分
 别打印列表@tt{[1,2,3,4,5]}和@tt{[6,7,8,9,10]}。列表究竟怎样穿插取决于调度器；在
 本例中，在被调度器打断之前，每个线程打印出列表中的两个元素，
@@ -2075,7 +2075,7 @@ in
 
 }
 
-@figure-ref{fig-5.17}展示了一个生产者和一个消费者，由初始值为0的缓存相联系。生产者取一参数
+@figure-ref{fig-5.17} 展示了一个生产者和一个消费者，由初始值为0的缓存相联系。生产者取一参数
 @tt{n}，进入@tt{wait}循环5次，然后把@tt{n}放入缓存。每次进入@tt{wait}循环，它打
 印一个倒数计时器（以200s为单位）。消费者取一参数（但忽略它），进入一循环，等待缓
 存变成非零值。每次进入循环，它打印一个计数器（以100s为单位），以展示它等结果等了
@@ -2137,9 +2137,9 @@ in let producer = proc (n)
 IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9}中的续文构造器@tt{set-rhs-cont}。
 
 我们给这个解释器添加一个调度器。调度器状态由四个值组成，接口提供六个过程来操作这
-些值，如@figure-ref{fig-5.18}所示。
+些值，如@figure-ref{fig-5.18} 所示。
 
-@figure-ref{fig-5.19}展示了本接口的实现。这里@tt{(enqueue @${q} @${val})}返回一队列，除了把
+@figure-ref{fig-5.19} 展示了本接口的实现。这里@tt{(enqueue @${q} @${val})}返回一队列，除了把
 @${val}放在末尾外，与@${q}相同。@tt{(dequeue @${q} @${f})}取出队头及剩余部分，将
 它们作为参数传递给@${f}。
 
@@ -2349,12 +2349,12 @@ in let mut = mutex()
           ...)))))
 ]
 
-共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，考虑@figure-ref{fig-5.20}中的
+共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，考虑@figure-ref{fig-5.20} 中的
 程序。这里，我们创建了三个线程，试图累加同一个计数器@tt{x}。如果一个线程读取了计
 数器，但在更新计数器之前终端，那么两个线程将把计数器设置成同样的值。因此，计数器
 可能变成2，甚至是1，而不是3。
 
-我们想要确保不出这种乱子。同样地，我们想要组织我们的程序，那么@figure-ref{fig-5.17}中的程序不需
+我们想要确保不出这种乱子。同样地，我们想要组织我们的程序，那么@figure-ref{fig-5.17} 中的程序不需
 要繁忙的等待。相反，它应该能够进入休眠状态，并在生产者向同一缓存插入一个值时唤醒。
 
 有许多方式设计这类同步组件，一种简单的方式是使用@emph{互斥锁}（@emph{mutex
@@ -2405,7 +2405,7 @@ exclusion}，简称@emph{mutex}）或@emph{二元信号量} (@emph{binary semaph
 
 这些属性保证在一对连续的@tt{wait}和@tt{signal}之间，只有一个线程可以执行。这部分
 程序叫做@emph{关键区域} (@emph{critical region})。在关键区域内，两个线程不可能同
-时执行。例如，@figure-ref{fig-5.21}展示了我们只前的例子，只在关键行周围插入了一把互斥锁。在这个
+时执行。例如，@figure-ref{fig-5.21} 展示了我们只前的例子，只在关键行周围插入了一把互斥锁。在这个
 程序中，一次只有一个线程可以执行@tt{set x = -(x,-1)}；所以计数器一定能够到达终值
 3。
 
@@ -2570,7 +2570,7 @@ in let mut = mutex()
 
 @exercise[#:level 3 #:tag "ex5.51"]{
 
-我们想要组织我们的程序，使@figure-ref{fig-5.17}中的程序不需要繁忙的等待。相反，它应该能够进入休
+我们想要组织我们的程序，使@figure-ref{fig-5.17} 中的程序不需要繁忙的等待。相反，它应该能够进入休
 眠状态，并在生产者向同一缓存插入一个值时唤醒。用具有互斥锁的程序完成这些，或者实
 现一种同步操作符完成这些。
 

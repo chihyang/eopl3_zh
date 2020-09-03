@@ -66,7 +66,7 @@
 我们可以用@secref{expr}中的定界技术，但这些无法应对更大的工程。所以，我们使用模
 块系统。开发者们各给出一个模块，包含公开接口和私有实现。他们能看到自己模块的接口
 和实现，但爱丽丝只能看到他人模块的接口。她的所做所为不会影响其他模块的实现，其他
-模块的实现也不会影响她的。（如@figure-ref{fig-8.1}所示）
+模块的实现也不会影响她的。（如@figure-ref{fig-8.1} 所示）
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -124,14 +124,14 @@ m1 take b}和@tt{from m1 take c}绑定到适当的值，模块定义之后在它
 型与接口命名变量时公布的相符时，称主体@emph{满足} (@emph{satisfy})接口。
 
 在主体中，定义具有@tt{let*}那样的作用域，所以@tt{x}、@tt{b}和@tt{c}在@tt{a}的
-作用域内。部分作用域如@figure-ref{fig-8.2}所示。
+作用域内。部分作用域如@figure-ref{fig-8.2} 所示。
 
 本例中，以@tt{let a = 10}开头的表达式是@emph{程序主体} (@emph{program body})。它
 的值即程序的值。
 
 每个模块都在模块主体和程序其他部分之间建立了抽象边界。模块主体中的表达式在抽象边
 界@emph{之内}，其他部分在抽象边界@emph{之外}。模块主体也可以供应不在接口中的名字
-绑定，但那些绑定在程序主体和其他模块中不可见，正如@figure-ref{fig-8.1}所示。在我们的例子中，程
+绑定，但那些绑定在程序主体和其他模块中不可见，正如@figure-ref{fig-8.1} 所示。在我们的例子中，程
 序主体不在@tt{from m1 take x}的作用域内。如果我们写@tt{-(from m1 take a, from
 m1 take x)}，程序就会是异常类型。
 
@@ -394,7 +394,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 欲求程序的值，我们把所有模块定义加入当前环境中，得到初始环境，然后求程序主体的值。
 过程@tt{add-module-defns-to-env}遍历模块定义，求每个模块定义主体的值，并将得到的
-模块加入当前环境中。如@figure-ref{fig-8.3}所示。
+模块加入当前环境中。如@figure-ref{fig-8.3} 所示。
 
 最后，欲求模块主体的值，我们按照@tt{let*}式定界，在适当的环境中求每个表达式的值，
 得出一环境。过程@tt{defns-to-env}求出的环境中，只包含定义@tt{defns}产生的绑定
@@ -1733,7 +1733,7 @@ actual-iface <: expected-iface
 @eopl-caption["fig-8.11"]{OPAQUE-TYPES的检查器，第3部分}
 }
 
-这样，我们就得出@figure-ref{fig-8.12}中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
+这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
 样的例子
 
 @nested{
@@ -2251,7 +2251,7 @@ module mybool-tables
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
 
-我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如@figure-ref{fig-8.14}所示。为了能
+我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则如@figure-ref{fig-8.14} 所示。为了能
 在一页纸内写下规则，我们用@tt{(@${\rhd} @${body} @${tenv}) = @${i}}代替
 @tt{(interface-of @${body} @${tenv}) = @${i}}。
 

@@ -55,7 +55,7 @@
 本章，我们研究一种简单的面向对象编程语言，名为CLASSES。CLASSES程序包含一些类声明，
 然后是一个可能用到那些类的表达式。
 
-@figure-ref{fig-9.1}展示了这种语言的一个简单程序。它定义了继承于@tt{object}的类@tt{c1}。类
+@figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于@tt{object}的类@tt{c1}。类
 @tt{c1}的每个对象都包含两个字段，名为@tt{i}和@tt{j}。字段叫做@emph{成员}
 (@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三个
 @emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
@@ -101,7 +101,7 @@ in begin
 本例中，类的每个方法都维护完整性约束或@emph{不变式}@${i = -j}。当然，现实中程序
 例子的完整性约束可能复杂得多。
 
-@figure-ref{fig-9.1}中的程序首先初始化三个变量。@tt{t1}和@tt{t2}初始化为0。@tt{o1}初始化为
+@figure-ref{fig-9.1} 中的程序首先初始化三个变量。@tt{t1}和@tt{t2}初始化为0。@tt{o1}初始化为
 @tt{c1}的一个对象。我们说这个对象是类@tt{c1}的一个@emph{实例}。对象通过操作
 @tt{new}创建。它会触发调用类的方法@tt{initialize}，在本例中，是将对象的字段
 @tt{i}设置为3，字段@tt{j}设置为-3。然后，程序调用@tt{o1}的方法@tt{getstate}，返
@@ -137,7 +137,7 @@ in send o1 sum()
 @eopl-caption["fig-9.2"]{求树叶之和的面向对象程序}
 }
 
-@figure-ref{fig-9.2}解释了面向对象编程中的关键思想：@emph{动态分发} (@emph{dynamic dispatch})。
+@figure-ref{fig-9.2} 解释了面向对象编程中的关键思想：@emph{动态分发} (@emph{dynamic dispatch})。
 在这段程序中，我们的树有两种节点，@tt{interior-node}和@tt{leaf-node}。通常，我们
 不知道是在给哪种节点发消息。相反，每个节点接受@tt{sum}消息，并用自身的@tt{sum}方
 法做适当操作。这叫做@emph{动态分发}。这里，表达式生成一棵树，有两个内部节点，三
@@ -167,7 +167,7 @@ in send o1 odd(13)}|
 @section[#:style section-title-style-numbered #:tag "s9.2"]{继承}
 
 通过继承，程序员能够逐步修改旧类，得到新类。在实践中，这十分有用。例如，有颜色的
-点类似一个点，但是它还有处理颜色的方法，如@figure-ref{fig-9.3}中的经典例子所示。
+点类似一个点，但是它还有处理颜色的方法，如@figure-ref{fig-9.3} 中的经典例子所示。
 
 如果类@${c_2}扩展类@${c_1}，我们说@${c_1}是@${c_2}的@emph{父类} (@emph{parent})
 或@emph{超类} (@emph{superclass})，@${c_2}是@${c_1}的@emph{子类} (@emph{child})。
@@ -297,7 +297,7 @@ in list(send o1 m1(), send o2 m1(), send o2 m2())
 动态分发告诉我们，应查看绑定到@tt{self}的对象属于哪个类。@tt{self}的值是@tt{o2}，
 属于类@tt{c2}。因此，调用@tt{send self m1()}应返回22。
 
-我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。考虑@figure-ref{fig-9.5}中的程
+我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。考虑@figure-ref{fig-9.5} 中的程
 序。其中，我们在类@tt{colorpoint}中重写了@tt{initialize}方法，同时设置字段@tt{x}、
 @tt{y}和@tt{color}。但是，新方法的主体复制了原方法的代码。在我们的小例子中，这尚
 可接受，但在大型例子中，这显然是一种坏的做法。（为什么？）而且，如果
@@ -391,7 +391,7 @@ in send o3 m3()
 
 @section[#:style section-title-style-numbered #:tag "s9.3"]{语言}
 
-我们的语言CLASSES由IMPLICIT-REFS扩展而得，新增生成式如@figure-ref{fig-9.7}所示。程序中首先是一
+我们的语言CLASSES由IMPLICIT-REFS扩展而得，新增生成式如@figure-ref{fig-9.7} 所示。程序中首先是一
 些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超类名，0个或多个字段
 声明，以及0个或多个方法声明。方法声明类似@tt{letrec}中的过程声明，有个名字，一个
 形参列表，以及主体。同时我们扩展语言，支持多参数过程，多声明@tt{let}和多声明
@@ -536,7 +536,7 @@ in send o3 m3()
     obj))
 }
 
-接下来，我们决定如何表示对象、方法和类。我们通过一个示例解释这种表示，如@figure-ref{fig-9.8}所
+接下来，我们决定如何表示对象、方法和类。我们通过一个示例解释这种表示，如@figure-ref{fig-9.8} 所
 示。
 
 @nested[#:style eopl-figure]{
@@ -603,7 +603,7 @@ in send o3 m1(7,8)
 
 在列表中，我们把@exact-elem{“}最老@exact-elem{”}类的字段排在前面。这样，在@figure-ref{fig-9.8}中，类@tt{c1}对象的字段排列为@tt{(x y)}；类@tt{c2}对象的字段排列为@tt{(x y
 y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列为@tt{(x y y x z)}。
-@figure-ref{fig-9.8}中对象@tt{o3}的表示如@figure-ref{fig-9.9}所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}
+@figure-ref{fig-9.8} 中对象@tt{o3}的表示如@figure-ref{fig-9.9} 所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}
 中声明的字段@tt{x}，而不是@tt{c1}中声明的。我们在建立方法主体的求值环境时处理这
 点。
 
@@ -675,7 +675,7 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 
 要确保各方法看到正确的字段，我们构建@tt{field-names}列表时要小心。各方法只应见到
 最后一个声明的同名字段，其他同名字段应被遮蔽。所以，我们构建@tt{field-names}列表
-时，将把最右边之外的出现的每个名字替换为新名。对@figure-ref{fig-9.8}中的程序，得出的
+时，将把最右边之外的出现的每个名字替换为新名。对@figure-ref{fig-9.8} 中的程序，得出的
 @tt{field-names}如下
 
 @nested{
@@ -690,7 +690,7 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 
 }
 
-@figure-ref{fig-9.10}展示了求值@figure-ref{fig-9.8}中方法主体内的@tt{send o3 m1(7,8)}时创建的环境。这张图表明，
+@figure-ref{fig-9.10} 展示了求值@figure-ref{fig-9.8} 中方法主体内的@tt{send o3 m1(7,8)}时创建的环境。这张图表明，
 引用列表可能比变量列表长：变量列表只是@tt{(x y%1 y)}，因为从@tt{c2}的方法@tt{m1}
 中只能见到这些字段变量，但@tt{(object->fields self)}的值是对象中所有字段的列表。
 不过，由于三个可见字段变量的值是列表中的头三个元素，而且我们把第一个@tt{y}重命名
@@ -906,7 +906,7 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
     #(struct:a-class #f () ())))
 ]
 
-@eopl-caption["fig-9.11"]{@figure-ref{fig-9.8}中的类环境}
+@eopl-caption["fig-9.11"]{@figure-ref{fig-9.8} 中的类环境}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.5"]{练习}
@@ -938,7 +938,7 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.3"]{
 
-在@figure-ref{fig-9.11}中，哪里是共享的方法环境？哪里是共享的@tt{field-names}列表？
+在@figure-ref{fig-9.11} 中，哪里是共享的方法环境？哪里是共享的@tt{field-names}列表？
 
 }
 
@@ -1093,8 +1093,8 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 2 #:tag "ex9.18"]{
 
-@tt{merge-method-envs} 产生的方法环境可能很长。再写出一版 @tt{merge-method-envs}，
-保证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在@figure-ref{fig-9.8}中，
+@tt{merge-method-envs} 产生的方法环境可能很长。再写出一版 @tt{merge- method-envs}，
+保证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在@figure-ref{fig-9.8} 中，
 在 @tt{c1}、@tt{c2}、@tt{c3}，以及 @tt{c3} 任意后代的方法环境中，方法 @tt{m2} 应
 出现在同样的位置。
 
@@ -1151,7 +1151,7 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 3 #:tag "ex9.25"]{
 
-我们给@figure-ref{fig-9.5}第一个继承例子中的类@tt{point}添加一个方法，判断两个点是否具有相同的
+我们给@figure-ref{fig-9.5} 第一个继承例子中的类@tt{point}添加一个方法，判断两个点是否具有相同的
 横纵坐标。我们照下面这样给点类添加方法@tt{similarpoints}：
 
 @nested[#:style 'code-inset]{
@@ -1281,8 +1281,8 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 性，此外，通过我们检查器的程序决不会给没有对应方法的对象发送消息，也不会给对象发
 送实参数量或类型错误的消息。
 
-TYPED-OO的示例程序如@figure-ref{fig-9.12}所示。这段程序定义了一个类@tt{tree}，其方法@tt{sum}像
-@figure-ref{fig-9.2}那样求出叶子之和，方法@tt{equal}取另一棵树，递归向下处理树，判断二者是否相
+TYPED-OO的示例程序如@figure-ref{fig-9.12} 所示。这段程序定义了一个类@tt{tree}，其方法@tt{sum}像
+@figure-ref{fig-9.2} 那样求出叶子之和，方法@tt{equal}取另一棵树，递归向下处理树，判断二者是否相
 等。
 
 这种语言的主要新特性是：
@@ -1303,7 +1303,7 @@ TYPED-OO的示例程序如@figure-ref{fig-9.12}所示。这段程序定义了一
 
 我们依次考虑这些特性。
 
-TYPED-OO中的新生成式如@figure-ref{fig-9.13}所示。我们添加一种类型@tt{void}，作为@tt{set}操作的
+TYPED-OO中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种类型@tt{void}，作为@tt{set}操作的
 类型，然后添加@exercise-ref{ex7.9}中的列表类型；像@exercise-ref{ex7.9}那样，我们要求调用@tt{list}时至少给
 出一个实参。我们将标识符添加到类型表达式的集合中，但在本章，用作类型的标识符与同
 名的类或接口相关联。稍后我们详细思考这种对应关系。方法需要指明结果类型和参数类型，
@@ -1440,7 +1440,7 @@ in list(send o1 sum(),
 @eopl-caption["fig-9.13"]{TYPED-OO中的新生成式}
 }
 
-在@figure-ref{fig-9.2}中，类@tt{interior-node}和@tt{leaf-node}都实现了接口@tt{tree}。类型检查器
+在@figure-ref{fig-9.2} 中，类@tt{interior-node}和@tt{leaf-node}都实现了接口@tt{tree}。类型检查器
 允许这样，因为它们都实现了@tt{tree}要求的方法。
 
 当@${e}的值是一个对象，且是类@${c}或其后代的实例时，表达式@tt{instanceof @${e}
@@ -1537,7 +1537,7 @@ interface stringable
 
 @exercise[#:level 1 #:tag "ex9.31"]{
 
-在@figure-ref{fig-9.12}中，把@tt{tree}定义为类，然后让两个节点类继承@tt{tree}可行吗？在什么情况
+在@figure-ref{fig-9.12} 中，把@tt{tree}定义为类，然后让两个节点类继承@tt{tree}可行吗？在什么情况
 下这种方法比使用类似@tt{summable}的接口更好？在什么情况下更糟？
 
 }
@@ -1621,7 +1621,7 @@ interface stringable
 @tt{cast @${e} @${c}}如果返回值，值的类型是@${c}。所以我们总能将@tt{cast @${e}
 @${c}}的类型视为@${c}。对@tt{instanceof}和@tt{cast}表达式，解释器求出参数的值，
 并用它执行@tt{object->class-name}，所以我们也必须确保操作数类型正常，且返回值是
-一个对象。这三种情况的代码如@figure-ref{fig-9.14}所示。
+一个对象。这三种情况的代码如@figure-ref{fig-9.14} 所示。
 
 接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
 用。我们抽象出一个过程来检查它们。
@@ -1669,7 +1669,7 @@ interface stringable
 这个过程等价于CHECKED中@tt{call-exp}对应的那一行（@figure-ref{fig-7.2}），但有两处明显区别。首
 先，由于我们的过程现在取多个参数，我们要确保调用时的实参数目正确，而在
 @tt{for-each}这行，我们逐一对照每个操作数的类型和过程类型中相对应的参数类型。更
-有意思的是第二点，我们把@figure-ref{fig-7.2}中的@tt{check-equal-type!}换成了
+有意思的是第二点，我们把@figure-ref{fig-7.2} 中的@tt{check-equal-type!}换成了
 @tt{check-is-subtype!}。
 
 @nested[#:style eopl-figure]{
@@ -1711,7 +1711,7 @@ interface stringable
 的}(@emph{contravariant})。见@figure-ref{fig-9.15}。这与 @secref{s8.3.2}中@tt{<:-iface}的定义类
 似。
 
-这部分代码如@figure-ref{fig-9.16}所示。代码使用@tt{every2?}，它扩展@exercise-ref{ex1.24}中的过程@tt{every?}，
+这部分代码如@figure-ref{fig-9.16} 所示。代码使用@tt{every2?}，它扩展@exercise-ref{ex1.24}中的过程@tt{every?}，
 取一个双参数谓词和两个列表，当列表长度相同且对应元素满足谓词时，返回@tt{#t}，否
 则返回@tt{#f}。
 
@@ -1878,7 +1878,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查类是否提供了同名
 且类型兼容的方法。
 
-为@figure-ref{fig-9.12}中示例程序生成的静态类环境如@figure-ref{fig-9.22}所示。静态类是逆序的，这反映了建立类环
+为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。静态类是逆序的，这反映了建立类环
 境的顺序。三个类中的方法顺序相同，且类型相同，符合期望。
 
 这样，检查器就完成了。
