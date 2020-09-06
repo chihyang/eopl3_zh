@@ -15,6 +15,8 @@
    (hash "scribble-load-replace.tex"
          "../style/style-load-prefix.tex")))
 
+(define racket-block-offset 7)
+
 ;;; for title format
 (define book-title-style (make-style #f (list 'toc 'no-index book-prefix-and-style)))
 (define part-title-style-numbered '(numbered no-index))
