@@ -26,3 +26,5 @@
 @include-section["appendix_b.scrbl"]
 
 @generate-bibliography[#:sec-title "参考书目"]
+
+@index-section[]
