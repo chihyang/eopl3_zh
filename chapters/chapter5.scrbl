@@ -73,7 +73,7 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
 
 这里，@tt{fact-iter-acc}总是在同样的控制上下文内调用：在本例中，是没有任何上下文。
 当@tt{fact-iter-acc}调用自身时，它在@tt{fact-iter-acc}执行的@exact-elem{“}尾端
-@exact-elem{”}，除了把返回值作为@tt{fact-iter-acc}调用的结果，不须再做任何保证。
+@exact-elem{”}，除了把返回值作为@tt{fact-iter-acc}调用的结果，不需再做任何保证。
 我们称之为@emph{尾调用} (@emph{tail call})。这样，上述推导中的每一步都形如
 @tt{(fact-iter-acc @${n} @${a})}。
 
@@ -81,7 +81,7 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
 用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现@emph{递
 归性控制行为} (@emph{recursive control behavior})。
 
-与之相对，@tt{fact-iter-acc}调用自身时，不须记录额外的控制信息。递归调用发生在表
+与之相对，@tt{fact-iter-acc}调用自身时，不需记录额外的控制信息。递归调用发生在表
 达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对应
 返回的递归调用数目）增加时，系统不需要不断增长的内存安放控制上下文。只需使用有限内
 存安放控制信息的过程呈现出@emph{迭代性控制行为} (@emph{iterative control
@@ -241,7 +241,7 @@ behavior})。
 境中求主体的值。主体的值就是整个表达式的值。这表明主体和整个表达式在同样的控制语
 境中执行。因此，主体的值应返还给整个表达式的续文。所以我们写：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (value-of/k letrec-body
     (extend-env-rec p-name p-var p-body env)
@@ -261,7 +261,7 @@ behavior})。
 写成这样是不对的：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (apply-cont cont
     (value-of/k letrec-body
@@ -281,7 +281,7 @@ behavior})。
 那么，在@tt{value-of/k}中，我们写：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (value-of/k exp1 env
     (zero1-cont cont)))
@@ -303,7 +303,7 @@ behavior})。
 就像@tt{letrec}，我们不能把@tt{value-of/k}写成：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (let ((val (value-of/k exp1 env (end-cont))))
     (apply-cont cont
@@ -323,7 +323,7 @@ behavior})。
 展环境内求主体的值。原来的@tt{let}代码为：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
     (value-of body
@@ -333,7 +333,7 @@ behavior})。
 在传递续文的解释器中，求值@${exp_1}所在的上下文应完成计算。所以，在
 @tt{value-of/k}中我们写：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (value-of/k exp1 env
     (let-exp-cont var body env cont)))
@@ -358,7 +358,7 @@ behavior})。
 达式或假值表达式。所以在@tt{value-of/k}中我们写：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (if-exp (exp1 exp2 exp3)
   (value-of/k exp1 env
     (if-test-cont exp2 exp3 body env cont)))
@@ -493,7 +493,7 @@ behavior})。
 差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像@tt{if}
 那样开始，先求第一个实参：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (diff-exp (exp1 exp2)
   (value-of/k exp1 env
     (diff1-cont exp2 env cont)))
@@ -594,7 +594,7 @@ behavior})。
 
 我们的语言中最后要处理的是过程调用。在传递环境的解释器中，我们写：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (let ((proc1 (expval->proc (value-of rator env)))
         (arg (value-of rand env)))
@@ -608,7 +608,7 @@ behavior})。
 我们选择先求操作符的值，所以在@tt{value-of/k}中我们写：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (value-of/k rator
     (rator-cont rand env cont)))
@@ -1689,7 +1689,7 @@ let find-member-number =
 示中，我们添加两个构造器：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (try-cont
   (var identifier?)
   (handler-exp expression?)
@@ -1701,7 +1701,7 @@ let find-member-number =
 
 在@tt{value-of/k}中我们给@tt{try}添加下面的从句：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (try-exp (exp1 var handler-exp)
   (value-of/k exp1 env
     (try-cont var handler-exp env cont)))
@@ -1721,7 +1721,7 @@ let find-member-number =
 
 如果抛出一个异常呢？首先，我们当然要求出@tt{raise}参数的值。
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (raise-exp (exp1)
   (value-of/k exp1 env
     (raise1-cont cont)))
@@ -1969,7 +1969,7 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 2 #:tag "ex5.42"]{
 
-前一道练习只在抛出异常时捕获续文。添加结构式@tt{letcc @${\mathit{Identifier}} in
+前一道练习只在抛出异常时捕获续文。添加形式 @tt{letcc @${\mathit{Identifier}} in
 @${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
 
 @nested[#:style 'code-inset]{
@@ -2170,7 +2170,7 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的�
 任意值（这里传28）。要完成这些，我们给@tt{value-of/k}新增从句：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (spawn-exp (exp)
   (value-of/k exp env
     (spawn-cont cont)))
@@ -2178,7 +2178,7 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的�
 
 给@tt{apply-cont}新增从句：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (spawn-cont (saved-cont)
   (let ((proc1 (expval->proc val)))
     (place-on-ready-queue!
@@ -2316,7 +2316,7 @@ in let mut = mutex()
 
 这给我们两种新续文，其行为由@tt{apply-cont}中的以下几行实现：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (end-main-thread-cont ()
   (set-final-answer! val)
   (run-next-thread))
@@ -2457,7 +2457,7 @@ in let mut = mutex()
 我们给@tt{value-of/k}添加适当的行：
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (mutex-exp ()
   (apply-cont cont (mutex-val (new-mutex))))
 }
@@ -2479,7 +2479,7 @@ in let mut = mutex()
 @tt{signal-mutex}。@tt{wait}和@tt{signal}都要求它们唯一参数的值，所以，在
 @tt{apply-cont}中我们写：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (wait-cont
   (saved-cont)
   (wait-for-mutex
@@ -2542,8 +2542,9 @@ in let mut = mutex()
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 
-给本节的语言添加结构式@tt{yield}。线程不论何时执行@tt{yield}，都将自身放入就绪队
-列之中，就绪队列头部的线程接着执行。当线程继续时，就像调用@tt{yield}返回数值99。
+给本节的语言添加形式 @tt{yield}。线程不论何时执行 @tt{yield}，都将自身放入就绪队
+列之中，就绪队列头部的线程接着执行。当线程继续时，就像调用 @tt{yield} 返回数值
+99。
 
 }
 
@@ -2606,9 +2607,9 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.54"]{
 
-给@exercise-ref{ex5.53} 的解释器添加组件@tt{kill}。结构式@tt{kill}取一线程号，找到就绪队列或任
-何等待队列中对应的线程，然后删除它。此外，目标线程找到时，@tt{kill}返回真，任何
-队列中都没有指定线程号时，返回假。
+给@exercise-ref{ex5.53} 的解释器添加组件 @tt{kill}。形式 @tt{kill} 取一线程号，
+找到就绪队列或任何等待队列中对应的线程，然后删除它。此外，目标线程找到时，
+@tt{kill} 返回真，任何队列中都没有指定线程号时，返回假。
 
 }
 

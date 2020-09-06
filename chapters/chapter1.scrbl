@@ -64,6 +64,7 @@
 可以用该定义编写一个函数，判断一个自然数@${n}是否属于@${S}。
 
 @; codeblock with contracts and usage
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
@@ -74,6 +75,7 @@
             (in-S? (- n 3))
             #f))))
 ]
+}
 @;
 
 这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? :
@@ -514,7 +516,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
   @item{没有哪棵树只有 @${0} 个节点，所以 @${\mathit{IH}(0)} 显然成立。}
 
   @item{设 @${k} 为整数时，@${\mathit{IH}(k)} 成立，即，任何树的节点数 @${\leq
-  k} 时，其实际数目为奇数。须证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
+  k} 时，其实际数目为奇数。需证明 @${\mathit{IH}(k + 1)} 也成立：任何树的节点数
   @${\leq k + 1} 时，节点数为奇数。若 @${t} 有 @${\leq k + 1} 个节点，根据二叉树
   的定义，只有两种可能：
 
@@ -543,7 +545,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
  @centered{@bold{结构化归纳证明}}
 
  @para[#:style tip-content]{欲证明假设 @${\mathit{IH}(s)} 对所有结构 @${s} 为真，
- 须证明：}
+ 需证明：}
 
  @itemlist[#:style 'ordered
    @item{@${\mathit{IH}} 对简单结构（没有子结构）为真。}
@@ -572,7 +574,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
  子问题。}}
 
 已求得的子问题解随后可用来求解原问题。这可行，因为每次过程调用都是针对较小的子问
-题，直至最终调用，针对一个可以直接求解的问题，不须再次调用自身。
+题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
 
 我们用一些例子解释这一想法。
 
@@ -589,6 +591,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，这
 是一条注释，我们用打字机字体示之，以便阅读。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@emph{的长度}}}
@@ -596,6 +599,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
   (lambda (lst)
     ...))
 ]
+}
 
 列表的集合定义为
 
@@ -604,6 +608,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -615,9 +620,11 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 @#,exact-elem{\end{mdframed}}
         ...)))
 ]
+}
 
 若列表非空，则其长度比其余项长度多1。这就给出了完整定义。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -629,9 +636,11 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
         (+ 1 (list-length (cdr lst))))))
 @#,exact-elem{\end{mdframed}}
 ]
+}
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
   (list-length '(a (b c) d))
@@ -641,6 +650,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 = (+ 1 (+ 1 (+ 1 0)))
 = 3
 }|
+}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.2"]{@tt{nth-element}}
@@ -667,6 +677,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 
 这就得出定义
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int} \to \mathit{SchemeVal}}}
 @#,elem{@bold{用法} : @tt{(nth-element @${lst} @${n}) = @${lst} 的第 @${n} 个元素}}
@@ -683,6 +694,7 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
     (eopl:error 'nth-element
       "List too short by ~s elements.~%" (+ n 1))))
 ]
+}
 
 这里的注释 @tt{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int}
 \to \mathit{SchemeVal}}} 表示 @bold{@tt{nth-element}} 是一个过程，取两个参数，一
@@ -764,8 +776,9 @@ C} 相同。
 
 符号列表或者是空列表，或者是首项为符号，余项为符号列表。
 
-如果列表为空，不须要移除 @${s}，则答案为空列表。
+如果列表为空，不需要移除 @${s}，则答案为空列表。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
@@ -775,6 +788,7 @@ C} 相同。
         '()
         ...)))
 ]
+}
 
 写合约时，我们用 @${\mathit{Listof}(\mathit{Sym})} 而不是
 @${\mathit{List\mbox{-}of\mbox{-}Symbol}}。用这种写法可以免除许多上面那样的定义。
@@ -783,6 +797,7 @@ C} 相同。
 @${s}，比如 @${los = @tt{(@${s} @${s_1} @${...} @${s_{n-1}})}}，@${s} 首次出现时是
 @${los} 的第一个元素，那么把它删除之后的结果是 @tt{(@${s_1} @${...} @${s_{n-1}})}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -795,6 +810,7 @@ C} 相同。
             ...))))
 @#,exact-elem{\end{mdframed}}
 ]
+}
 
 如果 @${los} 的第一个元素不是 @${s}，比如 @${los = @tt{(@${s_0} @${s_1} @${...}
 @${s_{n-1}})}}，可知 @${s_0} 不是第一个出现的 @${s}，因此答案中的第一个元素一定
@@ -806,6 +822,7 @@ C} 相同。
 @tt{cons} 结合二者，通过表达式 @tt{(cons (car los) (remove-first s (cdr los)))}
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -818,6 +835,7 @@ C} 相同。
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
 ]
+}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 
@@ -905,6 +923,7 @@ C} 相同。
 的 @tt{if}，而是用 @tt{cond}。在 Scheme 中，若 @${exp_1} 或 @${exp_2} 返回真值，
 则@tt{(or @${exp_1} @${exp_2})} 返回真值。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{若符号 @${var} 自由出现于 @${exp}，返回 #t，否则返回 #f}}
@@ -921,6 +940,7 @@ C} 相同。
           (occurs-free? var (car exp))
           (occurs-free? var (cadr exp)))))))
 ]
+}
 
 这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
 中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在
@@ -973,6 +993,7 @@ C} 相同。
 @${S\mbox{-}exp}。因此，我们需要两个过程，一个处理 @${S\mbox{-}list}，另一个处理
 @${S\mbox{-}exp}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
@@ -984,9 +1005,11 @@ C} 相同。
   (lambda (new old sexp)
     ...))
 ]
+}
 
-我们首先处理 @tt{subst}。如果列表为空，不须要替换 @tt{old}。
+我们首先处理 @tt{subst}。如果列表为空，不需要替换 @tt{old}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
@@ -995,6 +1018,7 @@ C} 相同。
         '()
         ...)))
 ]
+}
 
 如果 @tt{slist} 非空，它的首项是一个 @${S\mbox{-}exp}，余项是另一 s-list。这时，
 答案应当是一个列表，它的首项是把 @tt{slist} 首项中的 @tt{old} 替换为 @tt{new} 的
@@ -1003,6 +1027,7 @@ C} 相同。
 子问题。因为 @tt{slist} 的余项是 @${S\mbox{-}list} 的元素，我们递归调用
 @tt{subst} 处理它。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["subst"]{@bold{@tt{subst}}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
@@ -1015,12 +1040,14 @@ C} 相同。
          (subst new old (cdr slist))))))
 @#,exact-elem{\end{mdframed}}
 ]
+}
 
 现在来处理 @tt{subst-in-s-exp}。由语法，可知符号表达式 @tt{sexp} 或者是符号，或
 者是 s-list。如果它是符号，那么得检查它与符号 @tt{old} 是否相同。如果是，答案为
 @tt{new}；否则，答案还是 @tt{sexp}。如果 @tt{sexp} 是一个 s-list，那么我们递归调
 用 @tt{subst} 找出答案。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
@@ -1031,6 +1058,7 @@ C} 相同。
         (subst new old sexp))))
 @#,exact-elem{\end{mdframed}}
 ]
+}
 
 因为我们严格依照 @${\mathit{S\mbox{-}list}} 和 @${\mathit{S\mbox{-}exp}} 的定义，
 这个递归一定会终止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称
@@ -1094,7 +1122,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用递归处理列表，
 这个过程很容易写。
 
-@; @racketblock with contracts and usage
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{number-elements-from}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \times \mathit{Int} \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 @#,elem{@${\begin{alignedat}{-1}@bold{用法} : &@tt{(number-elements-from '(@${v_0} @${v_1} @${v_2} ...) n)} \\ &\hphantom{x}= @tt{((@${n} @${v_0}) (@${n + 1} @${v_1}) (@${n + 2} @${v_2}) ...)}\end{alignedat}}}
@@ -1105,19 +1133,21 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
          (list n (car lst))
          (number-elements-from (cdr lst) (+ n 1))))))
 ]
-@;
+}
 
 合约的标题告诉我们这个过程取两个参数，一个列表（包含任意 Scheme 值）和一个整数，
 返回一个列表，列表中的每个元素是包含两个元素的列表：一个整数，一个 Scheme 值。
 
 一旦我们定义了 @tt{number-elements-from}，很容易写出所需的过程。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["n-e"]{@bold{@tt{number-elements}}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 (define number-elements
   (lambda (lst n)
     (number-elements-from lst 0)))
 ]
+}
 
 这里有两个要点。首先，过程 @tt{number-elements-from} 的定义独立于
 @tt{number-elements}。程序员经常要写一些过程，只调用一些传递额外常量参数的辅助过
@@ -1143,7 +1173,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 要求列表中各项的和，我们可以遵循语法，递归处理列表的余项。那么我们的过程看起来像
 是：
 
-@; racketblock with contracts
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{\mathit{Listof}(\mathit{Int}) \to \mathit{Int}}}
 (define list-sum
@@ -1153,6 +1183,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
         (+ (car loi)
            (list-sum (cdr loi))))))
 ]
+}
 
 但是无法按照这种方式处理向量，因为它们不能够很方便地拆解。
 
@@ -1169,6 +1200,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{partial-vector-sum}} : @${\mathit{Vectorof}(\mathit{Int}) \times \mathit{Int} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}}
@@ -1179,15 +1211,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
         (+ (vector-ref v n)
            (partial-vector-sum v (- n 1))))))
 ]
+}
 
-由于 @${n} 一定会递减至零，证明此程序的正确性须要用归纳法处理 @${n}。由 @${0
+由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
 \leq n} 且 @${n \neq 0}，可得 @${0 \leq (n - 1)}，所以递归调用过程
 @tt{partial-vector-sum} 仍然满足其合约。
 
 现在，要解决原问题就简单多了。因为向量长度为0时无法使用过程
 @tt{partial-vector-sum}，所以得另行处理这种情况。
 
-@; racketblock with contracts and usage
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{vector-sum}} : @m{\mathit{Vectorof}(\mathit{Int}) \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(vector-sum @m{v}) = @m{\sum\limits_{i=0}^{i=length(v)-1} v_i}}}
@@ -1198,6 +1231,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
           0
           (partial-vector-sum v (- n 1))))))
 ]
+}
 
 还有许多情况下，引入辅助变量或过程来解决问题会有帮助，甚至必不可少。只要能对新过
 程做什么给出独立的定义，尽可以如此。
@@ -1216,7 +1250,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @tt{x} 是任意 Scheme 值；类似地，@tt{s1} 是一个符号，@tt{los2} 是一个符号列表，
 @tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}
 (@emph{predicate})，即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除
-非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不须要检查输入是否符
+非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不需要检查输入是否符
 合描述；对每个过程，都假定输入值是指定集合的成员。
 
 定义，测试和调试每个过程。你的定义应当有本章这种合约和用法注释。可以随便定义辅助

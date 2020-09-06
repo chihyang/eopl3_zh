@@ -1476,7 +1476,7 @@ method bool equal(t : tree)
 我们的实现从@secref{s9.4.1}中的解释器开始。我们给@tt{value-of}添加两条从句，求
 @tt{instanceof}和@tt{cast}表达式的值：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (cast-exp (exp c-name)
   (let ((obj (value-of exp env)))
     (if (is-subclass? (object->class-name obj) c-name)
@@ -1626,7 +1626,7 @@ interface stringable
 用。我们抽象出一个过程来检查它们。
 
 @nested[#:style eopl-figure]{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (self-exp ()
   (apply-tenv tenv '%self))
 
@@ -1812,7 +1812,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 }
 
 @nested[#:style eopl-figure]{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (method-call-exp (obj-exp method-name rands)
   (let ((arg-types (types-of-exps rands tenv))
          (obj-type (type-of obj-exp tenv)))

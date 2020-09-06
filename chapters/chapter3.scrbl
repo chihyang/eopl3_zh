@@ -2165,7 +2165,7 @@ in proc (y)
 }|
 }
 
-我们可以用指代值列表实现无名环境，这样 @tt{apply-nameless-env} 只须调用
+我们可以用指代值列表实现无名环境，这样 @tt{apply-nameless-env} 只需调用
 @tt{list-ref}。这种实现如@figure-ref{fig-3.17} 所示。
 
 @nested[#:style eopl-figure]{
@@ -2202,10 +2202,10 @@ in proc (y)
   "无名环境")
 }
 
-由于更改了环境接口，我们须要查看代码中所有依赖接口的地方。我们的解释器中使用环境
+由于更改了环境接口，我们需要查看代码中所有依赖接口的地方。我们的解释器中使用环境
 的只有两处：过程和 @tt{value-of}。
 
-修改过程规范时，只须把旧规范中的变量名移除：
+修改过程规范时，只需把旧规范中的变量名移除：
 
 @nested[#:style 'code-inset]{
 @verbatim|{

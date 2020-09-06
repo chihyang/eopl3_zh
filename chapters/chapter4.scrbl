@@ -109,7 +109,7 @@ in letrec even(dummy)
 为了同我们的单参数语言保持一致，我们给 @tt{even} 和 @tt{odd} 传一个无用参数；如
 果我们的过程支持任意数量的参数（@exercise-ref{ex3.21}），就可以不给这些过程传递参数。
 
-当两个过程需要分享很多量时，这种通信方式很方便；只须给某些随调用而改变的量赋值。
+当两个过程需要分享很多量时，这种通信方式很方便；只需给某些随调用而改变的量赋值。
 同样地，一个过程可能通过一长串调用间接调用另一过程。它们可以通过一个共享变量直接
 交换数据，居间的过程不需要知道它。如此，以共享变量通信可作为一种隐藏信息的方式。
 
@@ -506,7 +506,7 @@ interpreter})。补全这个解释器，处理整个EXPLICIT-REFS语言。
 }
 
 @nested[#:style eopl-figure]{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (newref-exp
  (exp1)
  (let ((v1 (value-of exp1 env)))
@@ -783,11 +783,11 @@ in let a = (g 11)
 
 @nested{
 
-@codeblock[#:indent 11]{(var-exp (var) (deref (apply-env env var)))}
+@codeblock[#:indent racket-block-offset]{(var-exp (var) (deref (apply-env env var)))}
 
 @tt{assign-exp}的代码也显而易见：
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (assign-exp (var exp1)
   (begin
     (setref!
@@ -806,7 +806,7 @@ in let a = (g 11)
 对@tt{let}，我们修改@tt{value-of}中相应的行，分配包含值的新位置，并把变量绑定到
 指向该位置的引用。
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
     (value-of body
@@ -831,7 +831,7 @@ in let a = (g 11)
 绑定变量列表，一个过程主体列表，以及一个已保存的环境。过程@tt{location}取一变量，
 一个变量列表，若变量存在于列表中，返回列表中的变量位置，否则返回@tt{#f}。
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (extend-env-rec (p-names b-vars p-bodies saved-env)
   (let ((n (location search-var p-names)))
     (if n
@@ -984,7 +984,7 @@ in begin
           &\mathrel{\phantom{::=}} \fbox{@tt{setdynamic-exp (var exp1 body)}}}
 
 @tt{setdynamic}表达式的效果是暂时把@${var}赋为@${exp_1}的值，求@${body}的值，重
-新给@${var}赋其原值，然后返回@${body}的值。变量@${var}必须已绑定。例如，在下列表
+新给@${var}赋其原值，然后返回@${body}的值。变量@${var}必需已绑定。例如，在下列表
 达式中：
 
 @nested[#:style 'code-inset]{
@@ -1202,7 +1202,7 @@ in let p = proc (y) -(y,x)
 }
 
 @nested[#:style eopl-figure]{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (newpair-exp (exp1 exp2)
   (let ((val1 (value-of exp1 env))
         (val2 (value-of exp2 env)))
@@ -1504,7 +1504,7 @@ in let a = 33
 唯一需要改变的是新位置的分配。按值调用中，求值每个操作数都要分配新位置；按址调用
 中，只在求值@emph{非变量}操作数时才分配新位置。
 
-这很容易实现。函数@tt{apply-procedure}必须修改，因为不是每个过程调用都要分配新位
+这很容易实现。函数@tt{apply-procedure}必需修改，因为不是每个过程调用都要分配新位
 置。@tt{value-of}中的@tt{call-exp}能作出判断，因此分配的责任上移其中。
 
 @racketblock[
@@ -1520,7 +1520,7 @@ in let a = 33
 然后我们修改@tt{value-of}中的@tt{call-exp}，引入新函数@tt{value-of-operand}来做
 必要的判断。
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (call-exp
  (rator rand)
  (let ((proc (expval->proc (value-of rator env)))
@@ -1719,7 +1719,7 @@ in let swap = proc (x) proc (y)
 @exercise[#:level 2 #:tag "ex4.37"]{
 
 @emph{按值和结果调用} (@emph{call-by-value-result})是按址调用的一种变体。在按值和
-结果调用中，实际参数必须是变量。传递参数时，形式参数绑定到新的引用，初值为实际参
+结果调用中，实际参数必需是变量。传递参数时，形式参数绑定到新的引用，初值为实际参
 数的值，就像按值调用一样。然后照常执行过程主体。但过程主体返回时，新引用处的值复
 制到实际参数指代的引用中。因为这样可以改进内存非陪，这可能比按址调用更高效。实现
 按值和结果调用，写出一个过程，采用按址调用与按值和结果调用产生不同的答案。
@@ -1795,7 +1795,7 @@ in let f = proc (z) 11
 这个值，作为@tt{var-exp}的值。如果它包含一个值箱，那么我们求取并返回值箱的值。这
 叫@emph{按名调用} (@emph{call by name})。
 
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (var-exp (var)
   (let ((ref1 (apply-env env var)))
     (let ((w (deref ref1)))
@@ -1819,7 +1819,7 @@ in let f = proc (z) 11
 值。这种方式叫做@emph{按需调用} (@emph{call by need})。
 
 @nested{
-@codeblock[#:indent 11]{
+@codeblock[#:indent racket-block-offset]{
 (var-exp (var)
   (let ((ref1 (apply-env env var)))
     (let ((w (deref ref1)))
