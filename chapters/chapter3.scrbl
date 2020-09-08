@@ -28,17 +28,18 @@
 
 }
 
-而我们的目标是写出程序，实现语言。概况如@figure-ref{fig-3.1-a}所示。首先是程序，由我们要实现的
-语言写出。这叫做@emph{源语言} (@emph{source language})或@emph{待定语言}
-(@emph{defined language})。前端接收程序文本（由源语言写成的程序），将其转化为抽
-象语法树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根据结构执
-行一些动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@emph{实现语言}
-(@emph{implementation language}) 或@emph{施定语言} (@emph{defining language})。
-我们的大多数实现都遵照这种方式。
+而我们的目标是写出程序，实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，
+由我们要实现的语言写出。这叫做@emph{源语言} (@emph{source language})或@emph{被定
+语言} (@emph{defined language})。前端接收程序文本（由源语言写成的程序），将其转
+化为抽象语法树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根据
+结构执行一些动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@emph{实现
+语言} (@emph{implementation language}) 或@emph{定义语言} (@emph{defining
+language})。我们的大多数实现都遵照这种方式。
 
-另一种常见的组织方式如@figure-ref{fig-3.1-b}所示。其中，编译器替代了解释器，将抽象语法树翻译为
-另一种语言（称为@emph{目标语言} (@emph{target language})）写成的程序，然后执行。
-目标语言可能像@figure-ref{fig-3.1-b}那样，由一个解释器执行，也可能为执行而翻译成更底层的语言。
+另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
+抽象语法树翻译为另一种语言（称为@emph{目标语言} (@emph{target language})）写成的
+程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
+可能翻译成更底层的语言执行。
 
 通常，目标语言是一种机器语言，由硬件解释。但目标语言也可能是一种特定用途的语言，
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
@@ -47,7 +48,7 @@ code})，称其解释器称为@emph{虚拟机} (@emph{virtual machine})。
 
 编译器常常分为两部分：@emph{分析器} (@emph{analyzer})，尝试推断关于程序的有效信
 息；@emph{翻译器} (@emph{translator})，执行翻译，可能用到来自分析器的信息。这些
-阶段既能用推理规则指定，也能用专做规范的语言指定。之后就是实现。@secref{cps}和
+阶段既能用推理规则指定，也能用专写规范的语言指定。然后是实现。@secref{cps}和
 @secref{types}探讨了一些简单的分析器和翻译器。
 
 不论采用哪种实现策略，我们都需要一个@emph{前端} (@emph{front end})，将程序转换为
@@ -94,14 +95,14 @@ specification})。扫描器取一字符序列，生成词牌序列。
 }
 
 大多数主流语言都有解析器生成系统。如果没有解析器生成器，或者没有合适的，可以手写
-扫描器和解析器。编译器教材描述了这一过程。我们使用的解析技术及相关语法设计从简，
-专门满足我们的需求。
+扫描器和解析器。编译器教材描述了这一过程。本书使用的解析技术及相关语法设计从简，
+专为满足我们的需求。
 
-另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像 @secref{s2.5}和@exercise-ref{ex2.31} 中，处理lambda演算表达式那样。
+另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像@secref{s2.5}和@exercise-ref{ex2.31}中，处理 lambda 演算表达式那样。
 
 @section[#:style section-title-style-numbered #:tag "s3.2"]{LET：一门简单语言}
 
-我们先来定义一种非常简单的语言，根据它最有趣的特性命名为LET。
+我们先来定义一种非常简单的语言，根据它最有趣的特性，将其命名为 LET。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.1"]{定义语法}
 
@@ -110,6 +111,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 这里是本门语言写成的一个简单表达式，及其抽象语法表示。
 
+@nested[#:style small]{
 @racketblock[
 (scan&parse "-(55, -(x,11))")
 #(struct:a-program
@@ -118,6 +120,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
     #(struct:diff-exp
       #(struct:var-exp x)
       #(struct:const-exp 11))))]
+}
 
 @nested[#:style eopl-figure]{
 
@@ -142,12 +145,12 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
 
-任何编程语言的规范之中，最重要的一部分就是语言可处理值的集合。每种语言至少有两个
-这样的集合：@emph{表达值} (@emph{expressed values})和@emph{指代值}
+任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
+个这样的集合：@emph{表达值} (@emph{expressed values})和@emph{指代值}
 (@emph{denoted values})。表达值是指表达式可能的取值，指代值是指可以绑定到变量的
 值。
 
-本章的语言中，表达值和指代值总是相同。现在，它们是：
+本章的语言中，表达值和指代值总是相同。它们是：
 
 @nested{
 @elemtag["pass-by-value"]{}@envalign*{
@@ -170,15 +173,14 @@ specification})。扫描器取一字符序列，生成词牌序列。
 }|
 }
 
-我们假定，当传给@tt{expval->num}的参数不是整数，或传给@tt{expval->bool}的参数不
-是布尔值时，二者未定义。
+我们假定，当传给@tt{expval->num}的参数不是整数值，或传给@tt{expval->bool}的参数
+不是布尔值时，二者未定义。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.3"]{环境}
 
-若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像在
-@secref{s2.2}那样。
+若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像@secref{s2.2}那样。
 
-环境是一函数，定义域为变量的有限集合，值域为指代值。写环境时我们用一些缩写。
+环境是一函数，定义域为变量的有限集合，值域为指代值。我们用一些缩写表示环境。
 
 @itemlist[
 
@@ -190,10 +192,10 @@ specification})。扫描器取一字符序列，生成词牌序列。
  @${\rho})}。}
 
  @item{@${\text{[}var_1 = val_1, var_2 = val2\text{]}\rho} 是 @${var_1 =
- val_1(\text{[}var_2 = val_2\text{]}\rho)} 的缩写，等等。}
+ val_1(\text{[}var_2 = val_2\text{]}\rho)} 的缩写，其余同理。}
 
  @item{@${\text{[}var_1 = val_1, var_2 = val2,\dots\text{]}} 表示的环境中，
- @${var_1} 的值为@${val_1}，等等。}
+ @${var_1} 的值为@${val_1}，其余同理。}
 
 ]
 
@@ -201,17 +203,21 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 @nested{
 
+@nested[#:style small]{
 @racketblock[
 (extend-env 'x 3
   (extend-env 'y 7
     (extend-env 'u 5 @#,elem{@${\rho}})))]
+}
 
 缩写为
 
+@nested[#:style small]{
 @racketblock[
 [x=3]
  [y=7]
   [u=5]@#,elem{@${\rho}}]
+}
 
 }
 
@@ -256,15 +262,16 @@ specification})。扫描器取一字符序列，生成词牌序列。
 }|
 }
 
-任何环境中，常量表达式的值都是该常量。变量引用的值从某一环境中查询而得。差值表达
-式的值为第一个操作数在某一环境中的值减去第二个操作数在该环境中的值。当然，准确来
-说，我们得确保操作数的值是数字，且结果是表达值表示的数字。
+任何环境中，常量表达式的值都是这个常量。变量引用的值从某一环境中查询而得。差值表
+达式的值为第一个操作数在某一环境中的值减去第二个操作数在同一环境中的值。当然，准
+确来说，我们得确保操作数的值是数字，且结果是表示为表达值的数字。
 
-@figure-ref{fig-3.3} 展示了如何结合这些规则求取一个构造器生成的表达式的值。在本例以及其他例子中，
-我们用@${\textnormal{\guillemotleft} exp \textnormal{\guillemotright}}表示表达式
-@${exp}的抽象语法树。我们还用@${\lceil n \rceil}代替@tt{(num-val @${n})}，用
-@${\lfloor val \rfloor}代替@tt{(expval->num @${val})}。我们也运用了一点事实：
-@${\lfloor \lceil n \rceil \rfloor = n}。
+@figure-ref{fig-3.3} 展示了如何结合这些规则求取构造器生成的表达式的值。在本例以
+及其他例子中，我们用 @${\textnormal{\guillemotleft} exp
+\textnormal{\guillemotright}} 表示表达式 @${exp} 的抽象语法树，用 @${\lceil n
+\rceil} 表示 @tt{(num-val @${n})}，用 @${\lfloor val \rfloor} 表示
+@tt{(expval->num @${val})}。我们还运用了一点事实：@${\lfloor \lceil n \rceil
+\rfloor = n}。
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
@@ -297,7 +304,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 当且仅当操作数的值为0，@tt{zero?} 表达式的值为真。像@definition-ref{d1.1.5} 那样，可将其写成
 一条推理规则。我们以 @tt{bool-val} 为构造器，把布尔值转换为表达值；以
-@tt{expval->num} 为抽词器，判断表达式的值是否为整数，如果是，则返回该整数。
+@tt{expval->num} 为提取器，判断表达式的值是否为整数，如果是，则返回该整数。
 
 @nested[#:style eopl-figure]{
 令@${\rho =} @tt{[i=1,v=5,x=10]}。@linebreak[]
