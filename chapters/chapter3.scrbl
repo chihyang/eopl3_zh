@@ -221,7 +221,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 }
 
-@subsection[#:style section-title-style-numbered #:tag "s3.2.4"]{指定表达式的行为}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.4"]{定义表达式的行为}
 
 我们语言中的六种表达式各对应一个左边为@${\mathit{Expression}}的生成式。表达式接
 口包含七个过程，六个是构造器，一个是观测器。我们用@${\mathit{ExpVal}}表示表达值
@@ -286,25 +286,25 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 }
 
-@subsection[#:style section-title-style-numbered #:tag "s3.2.5"]{指定程序的行为}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.5"]{定义程序的行为}
 
-在我们的语言中，整个程序只是一个表达式。要找出这个表达式的值，我们要指定程序中自
+在我们的语言中，整个程序只是一个表达式。要找出这个表达式的值，我们要定义程序中自
 由变量的值。所以程序的值就是在适当的初始环境中求出的该表达式的值。我们把初始环境
-设为@tt{[i=1,v=5,x=10]}。
+设为 @tt{[i=1,v=5,x=10]}。
 
 @racketblock[
 (value-of-program @#,elem{@${exp}})
 = (value-of @#,elem{@${exp}} [@#,elem{@tt{i=}@${\lceil \tt{1} \rceil},@tt{v=}@${\lceil \tt{5} \rceil},@tt{x=}@${\lceil \tt{10} \rceil}}])
 ]
 
-@subsection[#:style section-title-style-numbered #:tag "s3.2.6"]{指定条件}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.6"]{定义条件}
 
 接下来是这门语言的布尔值接口。这门语言有一个布尔值构造器 @tt{zero?}，一个布尔值
 观测器 @tt{if} 表达式。
 
-当且仅当操作数的值为0，@tt{zero?} 表达式的值为真。像@definition-ref{d1.1.5} 那样，可将其写成
-一条推理规则。我们以 @tt{bool-val} 为构造器，把布尔值转换为表达值；以
-@tt{expval->num} 为提取器，判断表达式的值是否为整数，如果是，则返回该整数。
+当且仅当操作数的值为0，@tt{zero?} 表达式的值为真。像@definition-ref{d1.1.5} 那样，
+可将其写成一条推理规则。我们以 @tt{bool-val} 为构造器，把布尔值转换为表达值；以
+@tt{expval->num} 为抽词器，判断表达式的值是否为整数，如果是，则返回该整数。
 
 @nested[#:style eopl-figure]{
 令@${\rho =} @tt{[i=1,v=5,x=10]}。@linebreak[]
@@ -382,11 +382,11 @@ specification})。扫描器取一字符序列，生成词牌序列。
       {@tt{(value-of @${exp_1} @${\rho}) = @${val_1}}}
 }
 
-一个 @tt{if} 表达式就是一个布尔值观测器。要求取 @tt{if} 表达式 @tt{(if-exp
-@${exp_1} @${exp_2} @${exp_3})} 的值，首先要判断子表达式 @${exp_1} 的值。如果该
-值为真，整个表达式的值应该是子表达式 @${exp_2} 的值，否则是子表达式 @${exp_3} 的
-值。这也很容易写成推理规则。我们用 @tt{expval->bool} 提取表达值的布尔部分，就像
-在前一个例子中使用 @tt{expval->num} 一样。
+一个 @tt{if} 表达式就是一个布尔值观测器。欲求 @tt{if} 表达式 @tt{(if-exp
+@${exp_1} @${exp_2} @${exp_3})} 的值，首先判断子表达式 @${exp_1} 的值；若该值为
+真，整个表达式的值应为子表达式 @${exp_2} 的值，否则为子表达式 @${exp_3} 的值。这
+也很容易写成推理规则。就像在前一个例子中使用 @tt{expval->num} 一样，我们用
+@tt{expval->bool} 提取表达值的布尔部分。
 
 @$${
 \infer{\begin{alignedat}{-1}
@@ -399,10 +399,10 @@ specification})。扫描器取一字符序列，生成词牌序列。
       {@tt{(value-of @${exp_1} @${\rho}) = @${val_1}}}
 }
 
-用这种推理规则很容易指定任何单个表达式的期望行为，但却不适合展示推理过程。像
+用这种推理规则很容易指定任意表达式的期望行为，但却不适合展示推理过程。像
 @tt{(value-of @${exp_1} @${\rho})} 这样的前件表示一部分计算，所以一个计算过程应
-该是一棵树，就像@pageref{deriv-tree}那种。很不幸的是，这种树很难读懂。因此，我们
-经常把规则转为方程，然后就能用相等代换展示计算过程。
+该是一棵树，就像@pageref{deriv-tree}那种。很不幸的是，这样的树极为晦涩。因此，我
+们经常把规则转为方程，然后就能用相等代换展示计算过程。
 
 @tt{if-exp}的方程式规范是：
 
@@ -445,10 +445,10 @@ specification})。扫描器取一字符序列，生成词牌序列。
 @eopl-caption["fig-3.4"]{条件表达式的简单计算过程}
 }
 
-@subsection[#:style section-title-style-numbered #:tag "s3.2.7"]{指定@tt{let}}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.7"]{定义@tt{let}}
 
-接下来我们解决用 @tt{let} 表达式创建新变量绑定的问题。我们给这种解释性语言添加语
-法，用关键字 @tt{let} 引导一个声明，后跟关键字 @tt{in} 及其主体。例如，
+接下来我们处理用 @tt{let} 表达式创建新变量绑定的问题。我们给这门解释性语言添加语
+法，以关键字 @tt{let} 起始，然后是一个声明，关键字 @tt{in}，及其主体。例如，
 
 @nested{
 
@@ -459,11 +459,11 @@ in -(x, 3)
 }|
 }
 
-@tt{let}变量绑定在主体中，就像 @tt{lambda} 变量绑定一样（见@secref{s1.2.4}）。
+像 @tt{lambda} 变量绑定一样（见@secref{s1.2.4}），@tt{let} 变量绑定于主体之中。
 
 }
 
-像其主体一样，@tt{let} 全式也是一个表达式，所以 @tt{let} 表达式可以嵌套，例如
+如同其主体，整个 @tt{let} 形式也是一个表达式，所以 @tt{let} 表达式可以嵌套，例如
 
 @nested{
 
@@ -477,11 +477,10 @@ in let x = 3
 }|
 }
 
-在本例中，前一个差值表达式中使用的 @tt{x} 指代外层声明，后一个差值表达式中使用的
-@tt{x} 指代内层声明，所以整个表达式的值是3。
-}
+在本例中，第一个差值表达式中使用的 @tt{x} 指代外层声明，另一个差值表达式中使用的
+@tt{x} 指代内层声明，所以整个表达式的值是3。}
 
-@tt{let}声明的右边也是一个表达式，所以它可以任意复杂。例如
+@tt{let} 声明的右边也是一个表达式，所以它可以任意复杂。例如
 
 @nested{
 
@@ -495,9 +494,8 @@ in let y = 2
 }|
 }
 
-这里第三行声明的@tt{x}绑定到6，所以@tt{y}的值是4，整个表达式的值是@${((-1)-4) =
--5}。
-}
+这里第三行声明的 @tt{x} 绑定到 6，所以 @tt{y} 的值是 4，整个表达式的值是
+@${((-1)-4) = -5}。}
 
 可以将规范写成一条规则。
 
@@ -520,7 +518,7 @@ in let y = 2
 }|
 }
 
-@figure-ref{fig-3.5} 展示了一个例子，其中@${\rho_0}表示任意环境。
+@figure-ref{fig-3.5} 展示了一个例子，其中 @${\rho_0} 表示任意环境。
 }
 
 @nested[#:style eopl-figure]{
@@ -573,13 +571,14 @@ in let y = 2
 @eopl-caption["fig-3.5"]{@tt{let}一例}
 }
 
-@subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现LET的规范}
+@subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现 LET 规范}
 
-接下来的任务是用一组Scheme过程实现这一规范。我们的实现采用SLLGEN@note{
-见@elemref["sllgen"]{附录B}。——@emph{译注}}作为前端，表达式用@figure-ref{fig-3.6} 中的数据类型表示。
-我们的实现中，表达值的表示如@figure-ref{fig-3.7} 所示。数据类型声明了构造器@tt{num-val}和
-@tt{bool-val}，用来将整数和布尔值转换为表达值。我们还定义了抽词器，用来将表达值
-转为整数或布尔值。如果表达值类型不符预期，则抽词器报错。
+接下来的任务是用一组Scheme过程实现这一规范。我们的实现以 SLLGEN@note{见
+@elemref["sllgen"]{附录B}。——@emph{译注}} 为前端，表达式用@figure-ref{fig-3.6}
+中的数据类型表示。在我们的实现中，表达值的表示如@figure-ref{fig-3.7} 所示。数据
+类型声明了构造器 @tt{num-val} 和 @tt{bool-val}，用来将整数值和布尔值转换为表达值。
+我们还定义了抽词器，用来将表达值转为整数或布尔值。如果表达值类型不符预期，抽词器
+报错。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -610,8 +609,8 @@ in let y = 2
 @eopl-caption["fig-3.6"]{LET 语言的语法数据类型}
 }
 
-只要满足@secref{s2.2}中的定义，我们可以用任意一种环境的实现。过程@tt{init-env}创
-建指定的初始环境，由@tt{value-of-program}使用。
+只要满足@secref{s2.2}中的定义，任意一种环境实现都可使用。过程 @tt{init-env} 创建
+指定的初始环境，供 @tt{value-of-program} 使用。
 
 @racketblock[
 @#,elem{@bold{@tt{init-env}} : @${() \to \mathit{Env}}}
@@ -654,14 +653,14 @@ in let y = 2
 }
 
 现在我们可以写出解析器，如@figure-ref{fig-3.8} 和@countref{fig-3.9} 所示。主过程
-是 @tt{run}，它取一个字符串，解析它，把结果交给 @tt{value-of-program}。最有意思
-的过程是 @tt{value-of}，它取一表达式和一环境，用解释器秘方计算规范要求的答案。在
-代码中，我们插入了相关的推理规则定义，以便观察 @tt{value-of} 的代码如何与规范对
-应。
+是 @tt{run}，它取一个字符串，解析它，把结果传给 @tt{value-of-program}。最令人感
+兴趣的过程是 @tt{value-of}，它取一表达式和一环境，用解释器秘方计算规范所要求的答
+案。在代码中，我们插入了相关的推理规则定义，以便观察 @tt{value-of} 的代码如何与
+规范对应。
 
 @nested[#:style 'noindent]{
 
-@smaller{@linebreak[]@elemtag["ex-note"]{}在下面的练习以及全书之中，短句
+@smaller{@linebreak[]@elemtag["ex-note"]{}在下面的练习以及全书之中，短语
 @exact-elem{“}扩展语言，添加……@exact-elem{”}表示向语言规范添加规则或者方程，
 并增改相应的解释器，实现指定特性。}
 
@@ -741,7 +740,7 @@ in let y = 2
 
 @exercise[#:level 1 #:tag "ex3.3"]{
 
-只能选一个算数操作的话，减法为什么比加法好？
+我们只有一个算数操作，选减法为什么比加法好？
 
 }
 
@@ -825,19 +824,19 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 1 #:tag "ex3.12"]{
 
-向该语言添加组件，用来增加@tt{cond}表达式。语法为：@linebreak[]
+向该语言添加 @tt{cond} 表达式。语法为：
 
 @$${\mathit{Expression} ::= @tt{cond @${\{}@${\mathit{Expression}} @tt{ ==> } @${\mathit{Expression}}@${\}^{*}} end}}
 
 在这种表达式里，@tt{==>}左边的表达式按序求值，直到其中一个返回真。整个表达式的值
-则是真值右边对应表达式的值。如果没有条件为真，表达式应报错。
+是真值表达式右边对应表达式的值。如果没有条件为真，该表达式应报错。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.13"]{
 
-改变语言，把整数作为唯一的表达值。修改@tt{if}，把0作为假，所有其他值作为真。相应
-地修改谓词。
+修改语言，把整数作为唯一的表达值。修改 @tt{if}，以 0 为假，以所有其他值为真。相
+应地修改谓词。
 
 }
 
@@ -855,8 +854,8 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 1 #:tag "ex3.15"]{
 
-扩展语言，添加新操作@tt{print}，它取一参数，打印出来，返回整数1。照我们这样定义
-规范，为什么不能表示这一操作？
+扩展语言，添加新操作 @tt{print}，它取一参数，打印出来，返回整数1。在我们的规范框
+架下，为什么不能表示这一操作？
 
 }
 
@@ -866,8 +865,8 @@ in list(x, -(x,1), -(x,3))
 
 @$${\mathit{Expression} ::= @tt{let @${\{}@${\mathit{Identifier}} = @${\mathit{Expression}\}^*} in @${\mathit{Expression}}}}
 
-像Scheme中的@tt{let}那样，声明右边在当前环境中求值，每个新变量绑定到对应的声明右
-边的值，然后求值主体。例如：
+像 Scheme 中的@tt{let}那样，声明右边在当前环境中求值，每个新变量绑定到对应声明右
+边的值，然后求主体的值。例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -883,7 +882,7 @@ in let x = -(x,1)
 
 @exercise[#:level 2 #:tag "ex3.17"]{
 
-扩展语言，添加表达式@tt{let*}，像Scheme的@tt{let*}那样。则：
+扩展语言，添加表达式 @tt{let*}，像 Scheme 的 @tt{let*} 那样。则：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -898,12 +897,12 @@ in let* x = -(x,1) y = -(x,2)
 
 @exercise[#:level 2 #:tag "ex3.18"]{
 
-向该语言添加表达式：@linebreak[]
+向该语言添加表达式：
 
 @$${\mathit{Expression} ::= @tt{unpack @${\{\mathit{Identifier}\}^*} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
 
-则：如果@tt{lst}恰好是有三个元素的列表，@tt{unpack x y z = lst in ...}将@tt{x}，
-@tt{y}，@tt{z}绑定到@tt{lst}的各元素；否则报错。例如：
+则：如果 @tt{lst} 恰好是三元素的列表，@tt{unpack x y z = lst in ...} 将 @tt{x}、
+@tt{y} 和 @tt{z} 绑定到 @tt{lst} 的各元素；否则报错。例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
