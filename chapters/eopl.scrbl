@@ -11,6 +11,7 @@
 @include-section["foreword.scrbl"]
 @include-section["preface.scrbl"]
 @include-section["acknowledgments.scrbl"]
+@include-section["glossary.scrbl"]
 
 @include-section["chapter1.scrbl"]
 @include-section["chapter2.scrbl"]
