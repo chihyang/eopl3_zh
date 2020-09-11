@@ -917,10 +917,10 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 @section[#:style section-title-style-numbered #:tag "s3.3"]{PROC：有过程的语言}
 
-到现在为止，我们的语言只能做语言已定义的操作。要想让我们这种解释性语言更有用，必
-须能创建新过程。我们把新语言叫做PROC。
+目前为止，我们的语言只能进行定义好的操作。要想让这种解释性语言更有用，必须能创建
+新过程。我们把新语言叫做 PROC。
 
-我们将按照Scheme的设计，把过程作为语言的表达值，则：
+按照 Scheme 的设计，我们把过程作为语言的表达值，则：
 
 @nested{
 @envalign*{
@@ -942,7 +942,7 @@ in unpack x y = cons(u,cons(3,emptylist))
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @emph{绑定变量} (@emph{bound
-variable})或@emph{形式参数} (@emph{formal parameter})。在过程调用 @tt{(call-exp
+variable})或@emph{形参} (@emph{formal parameter})。在过程调用 @tt{(call-exp
 @${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@emph{操作符} (@emph{operator})，表
 达式 @${exp_2} 是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
 parameter})。我们用@emph{实参} (@emph{argument})指代实际参数的值。
@@ -959,18 +959,18 @@ in (f (f 77))
 }|
 }
 
-第一个程序创建的过程将实参减11。它两次对 77 调用创建的过程 @tt{f}，得到的答案为
-55。第二个程序创建的过程取一参数，连续两次对 77 调用该实参。然后，程序将减11的过
-程传给该过程。结果仍然是55。
+第一个程序创建过程 @tt{f}，将实参减11，然后用 77 两次调用 @tt{f}，得到的答案为55。
+第二个程序创建的过程取一参数，连续两次用 77 调用该参数；然后将减 11 的过程传给创
+建的过程，结果仍为 55。
 
 现在我们来看数据类型 @${\mathit{Proc}}。它的接口包含构造器 @tt{procedure}，用于
 创建过程值；观测器 @tt{apply-procedure}，用于调用过程值。
 
-接下来我们的任务是确定表示一个过程需要在值里面包含什么信息。欲知此，我们考虑在程
-序中任意位置写出@tt{proc}表达式时发生了什么。
+接下来的任务是，明确表示过程的值需要包含哪些信息。欲知此，我们考虑在程序中任意位
+置写 @tt{proc} 表达式时发生了什么。
 
-词法作用域规则告诉我们，调用一个过程时，过程的形式参数绑定到调用时的实参，然后在
-该环境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
+词法作用域规则告诉我们，调用一个过程时，过程的形参绑定到调用时的实参，然后在该环
+境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -982,13 +982,13 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-这里我们两次求值表达式 @tt{proc (z) -(z,x)}。第一次求值时，@tt{x}绑定到200，所以
-根据词法绑定规则，得到的过程将实参减200。我们将其命名为 @tt{f}。第二次求值时，
-@tt{x} 绑定到100，得出的过程应将实参减100。我们将该过程命名为 @tt{g}。
+这里我们两次求值表达式 @tt{proc (z) -(z,x)}。第一次求值时，@tt{x} 绑定到 200，所
+以根据词法绑定规则，得到的过程将实参减 200，我们将其命名为 @tt{f}。第二次求值时，
+@tt{x} 绑定到 100，得出的过程应将实参减 100，我们将该过程命名为 @tt{g}。
 
-这两个过程由同一个表达式生成，却有不同行为。我们得出结论，@tt{proc} 表达式的值一
-定以某种方式依赖求值时的环境。因此，构造器 @tt{procedure}必定取三个参数：绑定变量，
-主体，以及环境。@tt{proc}表达式定义为：
+这两个过程由同一个表达式生成，而行为不同。由此可得，@tt{proc} 表达式的值一定以某
+种方式依赖求值环境。因此，构造器 @tt{procedure} 必定取三个参数：绑定变量、主体以
+及环境。@tt{proc}表达式定义为：
 
 @nested{
 
@@ -999,12 +999,11 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-其中，@tt{proc-val} 是一构造器，像 @tt{bool-val} 和 @tt{num-val}，生成一个
-@${\mathit{Proc}} 的表达值。
-}
+像 @tt{bool-val} 和 @tt{num-val}一样，@tt{proc-val} 是一构造器，生成一个
+@${\mathit{Proc}} 的表达值。}
 
 调用过程时，我们要找出操作符和操作数的值。如果操作符是一个 @tt{proc-val}，那么我
-们要用操作数的值调用它。
+们要以操作数的值调用它。
 
 @nested{
 
@@ -1021,6 +1020,17 @@ in let f = proc (z) -(z,x)
 @tt{(value-of @${rator} @${\rho})} 是否由 @tt{proc-val} 生成，如果是，则从中提取
 出包含的过程。
 
+}
+
+最后，我们考虑调用 @tt{apply-procedure} 时发生了什么。词法作用域规则告诉我们，调
+用过程时，过程主体的求值环境将其形参绑定到调用时的实参；而且，任何其他变量的值必
+须和过程创建时相同。因此，这些过程应满足条件
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
+= (value-of |@${body} [|@${var=val}]|@${\rho})
+}|
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
@@ -1102,14 +1112,14 @@ in let f = proc (z) -(z,x)
 }|
 }
 
-其中，绑定到的@tt{f}过程将实参减@${200}，绑定到@tt{g}的过程将实参减@${100}，所以
-@tt{(f 1)}的值是@${-199}，@tt{(g 1)}的值是@${-99}。
+其中，绑定到的 @tt{f} 过程将实参减 200，绑定到 @tt{g} 的过程将实参减 100，所以
+@tt{(f 1)} 的值是 -199，@tt{(g 1)} 的值是 -99。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.2"]{表示过程}
 
 根据@secref{s2.2.3}中介绍的方法，我们可以按照过程表示法，用过程在
-@tt{apply-procedure}中的动作表示它们。欲如此，我们定义@tt{procedure}的值为实现语
-言的过程，它取一实参，返回规范指定的值：
+@tt{apply-procedure} 中的动作表示它们。欲如此，我们将@tt{procedure} 的值定义为实
+现语言的过程，它取一实参，返回下面规范要求的值：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1121,6 +1131,7 @@ in let f = proc (z) -(z,x)
 
 因此，完整的实现是：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 (define proc?
@@ -1138,14 +1149,16 @@ in let f = proc (z) -(z,x)
   (lambda (proc1 val)
     (proc1 val)))
 ]
+}
 
-这里定义的函数 @tt{proc?} 有些不大准确，因为不是每个 Scheme 过程都能作为我们语言
-中的过程。我们只是用来它定义数据类型 @tt{expval}。
+这里定义的函数 @tt{proc?} 不完全准确，因为不是每个 Scheme 过程都能作为我们语言中
+的过程。我们需要它，只是为了定义数据类型 @tt{expval}。
 
 }
 
 另一种方式是用@secref{s2.2.2}那样的数据结构表示法。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
@@ -1162,6 +1175,7 @@ in let f = proc (z) -(z,x)
       (procedure (var body saved-env)
         (value-of body (extend-env var val saved-env))))))
 ]
+}
 
 这些数据结构常称为@emph{闭包} (@emph{closure})，因为它们自给自足，包含过程调用所
 需要的一切。有时，我们说过程@emph{闭合于}（@emph{closed over} 或@emph{closed in}）
@@ -1169,9 +1183,10 @@ in let f = proc (z) -(z,x)
 
 显然，这些实现都满足过程接口的定义。
 
-在完整的实现中，我们向数据类型@tt{expval}添加一种变体：
+不论哪种实现，我们都要给数据类型 @tt{expval} 添加变体：
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (define-datatype exp-val exp-val?
   (num-val
@@ -1181,9 +1196,11 @@ in let f = proc (z) -(z,x)
   (proc-val
     (val proc?)))
 ]
+}
 
-同时向@tt{value-of}添加两条新语句：
+同时给 @tt{value-of} 添加两条新语句：
 
+@nested[#:style small]{
 @codeblock[#:indent 7]{
 (proc-exp (var body)
   (proc-val (procedure var body env)))
@@ -1193,8 +1210,9 @@ in let f = proc (z) -(z,x)
         (arg (value-of rand env)))
     (apply-procedure proc arg)))
 }
+}
 
-提醒：为语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
+记住：一定要给语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
 
 }
 
@@ -1237,9 +1255,9 @@ in ((f 3) 4)
 
 @exercise[#:level 3 #:tag "ex3.22"]{
 
-本节的具体语法中，内置操作（如差值）和过程调用使用不同的语法。修改具体语法，不要
-让该语言的用户区分哪些是内置操作，哪些是定义的过程。根据所使用的解析技术，这道练
-习可能很容易，也可能非常难。
+本节的内置操作（如差值）和过程调用使用不同的具体语法。修改具体语法，不要让语言的
+用户区分哪些是内置操作，哪些是自定义的过程。根据所使用的解析技术，这道练习可能很
+容易，也可能非常难。
 
 }
 
@@ -1259,8 +1277,8 @@ in let times4 = proc (x) ((makemult makemult) x)
 }|
 }
 
-用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖喱化}
-（@exercise-ref{ex3.20}）定义双参数过程@tt{times}。
+用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖
+喱化}（@exercise-ref{ex3.20}）定义双参数过程 @tt{times}。
 
 }
 
@@ -1302,15 +1320,15 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 1 #:tag "ex3.27"]{
 
-向语言添加一种新的过程@tt{traceproc}。@tt{traceproc}像@tt{proc}一样，但会在进入
-和退出时打印一条跟踪消息。
+给语言添加另一种过程 @tt{traceproc}。@tt{traceproc} 类似 @tt{proc}，但会在入口和
+出口处打印跟踪消息。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.28"]{
 
 设计过程的另一种方法是@emph{动态绑定} (@emph{dynamic binding})（或称@emph{动态定
-界} (@emph{dynamic scoping})）：过程主体求值时的环境由扩展调用处的环境得到。例如，
+界} (@emph{dynamic scoping})）：求值过程主体的环境由调用处的环境扩展而得。例如，
 在
 
 @nested[#:style 'code-inset]{
@@ -1322,18 +1340,18 @@ in let p = proc (x) -(x,a)
 }|
 }
 
-中，过程主体内的@tt{a}绑定到5，而不是3。修改语言，使用动态绑定。做两次，一次使用
-过程表示法表示过程，一次使用数据结构表示法。
+中，过程主体内的 @tt{a} 绑定到 5，而不是 3。修改语言，使用动态绑定。做两次，一次
+用过程表示法表示过程，一次用数据结构表示法。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.29"]{
 
-很不幸的是，使用动态绑定的程序很可能异常难懂。例如，在词法绑定中，批量替换过程的
+很不幸的是，使用动态绑定的程序很可能异常晦涩。例如，在词法绑定中，批量替换过程的
 绑定变量，决不会改变程序的行为：我们甚至可以像@secref{s3.6}那样，删除所有变量，
-将它们替换为词法地址。但是在动态绑定中，这种转换是危险的。
+将它们替换为词法地址。但在动态绑定中，这种转换就危险了。
 
-例如，在动态绑定中，过程@tt{proc (z) a}返回调用者环境中的变量@tt{a}。那么程序
+例如，在动态绑定中，过程 @tt{proc (z) a} 返回调用者环境中的变量 @tt{a}。那么程序
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1345,7 +1363,7 @@ in let p = proc (z) a
 }|
 }
 
-返回5，因为调用处@tt{a}的值为5。如果@tt{f}的形式参数为@tt{a}呢？
+返回 5，因为调用处 @tt{a} 的值为 5。如果 @tt{f} 的形参为 @tt{a} 呢？
 
 }
 
