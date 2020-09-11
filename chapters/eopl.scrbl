@@ -28,4 +28,4 @@
 
 @generate-bibliography[#:sec-title "参考书目"]
 
-@index-section[]
+@index-section[#:title "索引"]
