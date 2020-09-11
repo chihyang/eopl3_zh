@@ -1,6 +1,9 @@
 \usepackage{multicol}
-\setlength{\columnseprule}{0.8pt}
+\newlength{\originalColumnseprule}
 \def\columnseprulecolor{\color{black}}
 \newenvironment{TwoColumns}{%
+  \setlength{\originalColumnseprule}{\columnseprule}
+  \setlength{\columnseprule}{0.8pt}
   \begin{multicols}{2}}{%
-  \end{multicols}}
+  \end{multicols}
+  \setlength{\columnseprule}{\originalColumnseprule}}
