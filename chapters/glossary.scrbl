@@ -15,6 +15,7 @@
 @list["Derivation" "推导"]
 @list["Form" "形式"]
 @list["Formal parameter" "形参"]
+@list["Implementation" "实现"]
 @list["Rule of inference" "推理规则"]
 @list["Scope" "作用域"]
 @list["Scoping" "定界"]
