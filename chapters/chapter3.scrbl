@@ -1369,9 +1369,10 @@ in let p = proc (z) a
 
 @section[#:style section-title-style-numbered #:tag "s3.4"]{LETREC：支持递归过程的语言}
 
-现在我们来定义一门支持递归的新语言LETREC。因为我们的语言只有单参数过程，我们降低
-难度，只让@tt{letrec}表达式声明一个单参数过程，例如：
+现在我们来定义支持递归的新语言 LETREC。因为我们的语言只有单参数过程，所以我们降
+低难度，只让 @tt{letrec} 表达式声明一个单参数过程，例如：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 letrec double (x)
@@ -1379,14 +1380,17 @@ letrec double (x)
 in (double 6)
 }|
 }
+}
 
-递归声明的左边是递归过程的名字以及绑定变量。@tt{=}右边是过程主体。其生成式为：
+递归声明的左边是递归过程的名字和绑定变量，@tt{=} 右边是过程主体，其生成式为：
 
+@nested[#:style small]{
 @envalign*{
 \mathit{Expression} &::= @tt{letrec @m{\mathit{Identifier}} (@m{\mathit{Identifier}}) = @m{\mathit{Expression}} in @m{\mathit{Expression}}} \\[-3pt]
   &\mathrel{\phantom{::=}} \fbox{@tt{letrec-exp (p-name b-var p-body letrec-body)}}}
+}
 
-@tt{letrec}表达式的值是其主体的值，在符合期望行为的环境中求出：
+@tt{letrec} 表达式的值是其主体的值，在符合期望行为的环境中求出：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1400,22 +1404,22 @@ in (double 6)
 }|
 }
 
-这里，我们给环境接口新添一个过程@tt{extend-env-rec}。但我们仍然得回答这个问题：
+这里，我们给环境接口新增一个过程 @tt{extend-env-rec}。但我们仍然得回答这个问题：
 @tt{(extend-env-rec @${proc\mbox{-}name} @${bound\mbox{-}var}
-@${proc\mbox{-}body} @${\rho})}应符合什么行为？
+@${proc\mbox{-}body} @${\rho})} 的期望行为是什么？
 
 }
 
-我们定义该环境的行为如下：设@${\rho_1}为@tt{(extend-env-rec @${proc\mbox{-}name}
-@${bound\mbox{-}var} @${proc\mbox{-}body} @${\rho})}产生的环境，那么
-@tt{(apply-env @${\rho_1} @${var})}应返回什么？
+我们定义该环境的行为如下：设 @${\rho_1} 为 @tt{(extend-env-rec
+@${proc\mbox{-}name} @${bound\mbox{-}var} @${proc\mbox{-}body} @${\rho})} 产生的
+环境。那么 @tt{(apply-env @${\rho_1} @${var})} 应返回什么？
 
 @itemlist[#:style 'ordered
 
- @item{如果变量@${var}与@${proc\mbox{-}name}相同，那么@tt{(apply-env @${\rho_1}
- @${var})}应返回一个闭包，其绑定变量是@${bound\mbox{-}var}，其主体为
- @${proc\mbox{-}body}，其环境为绑定@${proc\mbox{-}name}时所在的环境。但我们已经
- 有这个环境了，那就是@${\rho_1}本身！所以：
+ @item{如果变量 @${var} 与 @${proc\mbox{-}name} 相同，那么 @tt{(apply-env
+ @${\rho_1} @${var})} 应返回一个闭包，其绑定变量为 @${bound\mbox{-}var}，主体为
+ @${proc\mbox{-}body}，环境为绑定 @${proc\mbox{-}name} 时所在的环境。而我们已经
+ 有这个环境了：就是 @${\rho_1}！所以：
 
  @nested[#:style 'code-inset]{
  @verbatim|{
@@ -1425,7 +1429,7 @@ in (double 6)
  }
  }
 
- @item{如果@${var}与@${proc\mbox{-}name}不同，那么：
+ @item{如果 @${var} 与 @${proc\mbox{-}name} 不同，那么：
 
  @nested[#:style 'code-inset]{
  @verbatim|{
@@ -1435,15 +1439,15 @@ in (double 6)
 
 ]
 
-@figure-ref{fig-3.10} 和 @countref{fig-3.11} 展示了一个例
-子。@figure-ref{fig-3.11} 的最后一行，递归调用 @tt{double} 找出了原来的
-@tt{double}，正合所愿。
+@figure-ref{fig-3.10} 和 @countref{fig-3.11} 展示了一个例子。
+@figure-ref{fig-3.11} 的最后一行递归调用 @tt{double}，找出了原来的 @tt{double}，
+正合所愿。
 
-我们按这些要求实现@tt{extend-env-rec}。这里我们用抽象语法树表示。练习中讨论其他
-实现策略。
+满足这些要求的任何方法都能够用来实现 @tt{extend-env-rec}。这里我们使用对应于抽象
+语法表示的方法。练习讨论了其他实现策略。
 
-如@figure-ref{fig-3.12}，在抽象语法树表示中，我们新添一种变体@tt{extend-env-rec}。
-@tt{apply-env}倒数第二行中的@tt{env}对应上述@${\rho_1}。
+如@figure-ref{fig-3.12}，在抽象语法表示中，我们为 @tt{extend-env-rec} 新增一种变
+体。@tt{apply-env} 倒数第二行的 @tt{env} 对应上述 @${\rho_1}。
 
 @nested[#:style eopl-figure]{
 @verbatim|{
@@ -1548,19 +1552,19 @@ in (double 6)
 
 @exercise[#:level 1 #:tag "ex3.30"]{
 
-@tt{apply-env}倒数第二行调用@tt{proc-val}的目的是什么？
+@tt{apply-env} 倒数第二行调用 @tt{proc-val} 的目的是什么？
 
 }
 
 @exercise[#:level 1 #:tag "ex3.31"]{
 
-扩展上面的语言，允许声明参数数量任意的过程，像@exercise-ref{ex3.21} 那样。
+扩展上面的语言，允许声明任意数量参数的过程，像@exercise-ref{ex3.21} 那样。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.32"]{
 
-扩展上面的语言，允许声明任意多个单参数互递归过程，例如：
+扩展上面的语言，允许声明任意数量的单参数互递归过程，例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1575,20 +1579,21 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.33"]{
 
-扩展上面的语言，允许声明任意多个参数数量任意的互递归过程，像@exercise-ref{ex3.21} 那样。
+扩展上面的语言，允许声明任意数量的互递归过程，每个过程的参数数量也任意，就
+像@exercise-ref{ex3.21} 那样。
 
 }
 
 @exercise[#:level 3 #:tag "ex3.34"]{
 
-用@secref{s2.2.3}环境的过程表示法实现@tt{extend-env-rec}。
+用@secref{s2.2.3}中环境的过程表示法实现 @tt{extend-env-rec}。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.35"]{
 
-到目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包。
-但是每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为1的向量，再将其放入
+目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包，
+但每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为 1 的向量，再将其放入
 一个显式循环结构中，像这样：
 
 @centered{
@@ -1605,27 +1610,27 @@ in (odd 13)
   (lambda (p-names b-vars bodies saved-env)
     (let ((vec (make-vector (length p-names))))
       (let ((new-env (extend-env p-names vec saved-env)))
-        (make-proc-vec! vec 0
-          b-vars bodies new-env)
+        (vector-set! vec 0
+          (proc-val (procedure b-var body new-env)))
         new-env))))
 ]
 
-按此修改环境数据结构的定义和@tt{apply-env}，实现这种表示法。确保@tt{apply-env}总
-是返回表达值。
+修改环境数据类型和 @tt{apply-env} 的定义，完成这种表示的实现。确保
+@tt{apply-env} 总是返回表达值。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.36"]{
 
-扩展这种实现，使之能够处理@exercise-ref{ex3.32} 中的语言。
+扩展这种实现，处理@exercise-ref{ex3.32} 中的语言。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.37"]{
 
-使用动态绑定（@exercise-ref{ex3.28}），用@tt{let}就可以创建递归过程；不需要任何
-特殊的递归机制。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那
-些方法还鲜为人知。要明白动态绑定实现的递归，试试程序：
+使用动态绑定（@exercise-ref{ex3.28}），不需要任何特殊机制，靠 @tt{let} 就能创建
+递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
+还鲜为人知。要验证动态绑定实现的递归，试试程序：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1638,8 +1643,8 @@ in let fact = proc (n)
 }|
 }
 
-试试词法绑定，再试试动态绑定。用动态绑定写出@secref{s3.4}中的互递归过程@tt{even}
-和@tt{odd}。
+试试词法绑定，再试试动态绑定。用动态绑定的被定语言写出@secref{s3.4}中的互递归过
+程 @tt{even} 和 @tt{odd}。
 
 }
 
@@ -1648,27 +1653,33 @@ in let fact = proc (n)
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@emph{引用} (@emph{reference})
-或@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在Scheme表达式
+或@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在 Scheme 表达式
 
 @nested{
+@nested[#:style small]{
 @codeblock{(f x y)}
+}
 
-中出现的所有变量 @tt{f}、@tt{x} 和 @tt{y} 都为引用。但在
+中出现的变量 @tt{f}、@tt{x} 和 @tt{y} 均为引用。但在
 
+@nested[#:style small]{
 @codeblock{(lambda (x) (+ x 3))}
+}
 
 或
 
+@nested[#:style small]{
 @codeblock{(let ((x (+ y 7))) (+ x 3))}
+}
 
 中，第一个出现的 @tt{x} 是声明：引入一个变量，作为某个值的名字。在 @tt{lambda}
-表达式中，变量的值在过程调用时提供。在这个 @tt{let} 表达式中，变量的值由表达式
-@tt{(+ y z)} 求得。
+表达式中，变量的值在过程调用时提供。在 @tt{let} 表达式中，变量的值由表达式@tt{(+
+y z)} 求得。
 
 }
 
-我们说变量引用由对应的声明@emph{绑定} (@emph{bound})，且@emph{绑定}到它的值。在
-@secref{s1.2.4}，我们已经见过用声明绑定变量的例子。
+我们说变量引用由对应的声明@emph{绑定} (@emph{bound})，且@emph{绑定}到它的值。
+在@secref{s1.2.4}，我们已经见过用声明绑定变量的例子。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -1682,32 +1693,33 @@ in let fact = proc (n)
 }
 
 大多数编程语言中的声明都有有限的作用域，所以同一个变量名在程序的不同部分可用于不
-同的目的。例如，我们反复把 @tt{lst} 用作绑定变量，每次它的作用域都限制到对应的
+同的目的。例如，我们反复把 @tt{lst} 用作绑定变量，它的作用域每次都限制在对应的
 @tt{lambda} 表达式主体内。
 
-每种编程语言都有一些规则来判断每个变量引用指代哪个声明。这些规则通常叫做@emph{定
-界} (@emph{scoping})规则。声明在程序中有效的部分叫做声明的@emph{作用域}
+每种编程语言都有一些规则来判断各个变量引用指代哪一声明。这些规则通常叫做@emph{定
+界} (@emph{scoping}) 规则。声明在程序中生效的部分叫做声明的@emph{作用域}
 (@emph{scope})。
 
-不必执行程序，就能判断各个变量引用对应于哪个声明。这样的属性不需要执行程序就能算
-出来，叫做@emph{静态} (@emph{static})属性。
+我们可以不加执行地判断程序中的各个变量引用对应于哪个声明。这样的属性不必执行程序
+就能计算出来，名为@emph{静态} (@emph{static}) 属性。
 
-要找出某个变量引用对应于哪一声明，我们@emph{向外} (@emph{outward})查找，直到找出
-变量的声明。这里有个简单的Scheme示例。
+要找出某个变量引用对应于哪一声明，我们@emph{向外} (@emph{outward}) 查找，直到找
+出变量的声明。这里是一个简单的 Scheme 示例。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
-(let ((x 3)                             |@elem{称之为@tt{x1}}
+(let ((x 3)              |@emph{称之为@tt{x1}}
       (y 4))
-  (+ (let ((x                           |@elem{称之为@tt{x2}}
+  (+ (let ((x            |@emph{称之为@tt{x2}}
              (+ y 5)))
-       (* x y))                         |@elem{这个@tt{x}指代@tt{x2}}
-     x))                                |@elem{这个@tt{x}指代@tt{x1}}
+       (* x y))          |@emph{这个@tt{x}指代@tt{x2}}
+     x))                 |@emph{这个@tt{x}指代@tt{x1}}
 }|
 }
 
-在这个例子中，内层的@tt{x}绑定到9，所以表达式的值为
+在这个例子中，内层的 @tt{x} 绑定到 9，所以表达式的值为
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (let ((x 3)
@@ -1732,29 +1744,31 @@ in let fact = proc (n)
 = 39
 }|
 }
+}
 
 这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping})规则，这样声明的变量叫
 做@emph{词法变量} (@emph{lexical variable})。
 
-使用词法定界，我们可以重新声明一个变量，给一个作用域捅出个@exact-elem{“}洞
-@exact-elem{”}。这样的内层声明@emph{遮蔽} (@emph{shadow})外层声明。例如，在上例
-的乘式 @tt{(* x y)} 中，内层@tt{x} 遮蔽了外层的。
+使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
+@exact-elem{”}。这样的内层声明@emph{遮蔽} (@emph{shadow}) 外层声明。例如，在上
+例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
 
 词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@deftech{等深线}
-(@emph{contour diagram})解释这点。@figure-ref{fig-3.13} 展示了上例的@tech{等深线}。每个作用域
-用一个框圈起来，垂线连接声明与其作用域。
+(@emph{contour diagram}) 解释这点。@figure-ref{fig-3.13} 展示了上例的@tech{等深线}。
+每个作用域用一个框圈起来，箭头连接声明与其作用域。
 
-@figure-ref{fig-3.14} 展示了一个更复杂的程序和它的等深线。这里面，在第 5 行、第 7 行和第 8 行，
-表达式 @tt{(+ x y z)} 出现了三次。第5行在 @tt{x2} 和 @tt{z2} 的作用域内，@tt{x2}
-和 @tt{z2} 的作用域在 @tt{z1} 的作用域内，@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1}
-的作用域内。所以，第5行的 @tt{x} 指代 @tt{x2}，@tt{y} 指代 @tt{y1}，@tt{z} 指代
-@tt{z2}。第7行在 @tt{x4} 和 @tt{y2} 的作用域内，@tt{x4} 和 @tt{y2} 的作用域在
-@tt{x2} 和 @tt{z2} 的作用域内，@tt{x2} 和 @tt{z2} 的作用域在 @tt{z1} 的作用域内，
-@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1} 的作用域内。所以，第7行的 @tt{x} 指代
-@tt{x4}，@tt{y} 指代 @tt{y2}，@tt{z} 指代 @tt{z2}。最后，第8行在 @tt{x3} 的作用
-域内，@tt{x3} 的作用域在 @tt{x2} 和 @tt{z2} 的作用域内，@tt{x2} 和 @tt{z2} 的作
-用域在 @tt{z1} 的作用域内，@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1} 的作用域内。所
-以，第8行的 @tt{x} 指代 @tt{x3}，@tt{y} 指代 @tt{y1}，@tt{z} 指代 @tt{z2}。
+@figure-ref{fig-3.14} 展示了一个更复杂的程序和它的等深线。其中的第 5 行、第 7 行
+和第 8 行，表达式 @tt{(+ x y z)} 出现了三次。第 5 行在 @tt{x2} 和 @tt{z2} 的作用
+域内，@tt{x2}和 @tt{z2} 的作用域在 @tt{z1} 的作用域内，@tt{z1} 的作用域在
+@tt{x1} 和 @tt{y1}的作用域内。所以，第5行的 @tt{x} 指代 @tt{x2}，@tt{y} 指代
+@tt{y1}，@tt{z} 指代@tt{z2}。第7行在 @tt{x4} 和 @tt{y2} 的作用域内，@tt{x4} 和
+@tt{y2} 的作用域在@tt{x2} 和 @tt{z2} 的作用域内，@tt{x2} 和 @tt{z2} 的作用域在
+@tt{z1} 的作用域内，@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1} 的作用域内。所以，第7
+行的 @tt{x} 指代@tt{x4}，@tt{y} 指代 @tt{y2}，@tt{z} 指代 @tt{z2}。最后，第8行在
+@tt{x3} 的作用域内，@tt{x3} 的作用域在 @tt{x2} 和 @tt{z2} 的作用域内，@tt{x2} 和
+@tt{z2} 的作用域在 @tt{z1} 的作用域内，@tt{z1} 的作用域在 @tt{x1} 和 @tt{y1} 的
+作用域内。所以，第8行的 @tt{x} 指代 @tt{x3}，@tt{y} 指代 @tt{y1}，@tt{z} 指代
+@tt{z2}。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -1767,10 +1781,10 @@ in let fact = proc (n)
 @eopl-caption["fig-3.14"]{较复杂的等深线}
 }
 
-变量与值的对应关系叫做@emph{绑定} (@emph{binding})。可以查看我们语言的规范来理解
-绑定如何创建。
+变量与值的对应关系叫做@emph{绑定} (@emph{binding})。我们可以通过规范来理解如何创
+建绑定。
 
-由@tt{proc}声明的变量在过程调用时绑定。
+由 @tt{proc} 声明的变量在过程调用时绑定。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1779,7 +1793,7 @@ in let fact = proc (n)
 }|
 }
 
-@tt{let}变量绑定到声明右边的值。
+@tt{let} 声明的变量绑定到声明右边的值。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1788,7 +1802,7 @@ in let fact = proc (n)
 }|
 }
 
-@tt{letrec}声明的变量也要绑定到声明右边。
+@tt{letrec} 声明的变量也要绑定到声明右边的值。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1801,41 +1815,45 @@ in let fact = proc (n)
 }|
 }
 
-绑定的@emph{期限} (@emph{extent})是指绑定保持的时长。在我们的语言中，就像在
-Scheme中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite})的，意思是变量一
-旦绑定，该绑定就要（至少是有可能）无限制地保留。这是因为绑定可能藏在已返回的闭包
-之中。在半无限的语言中，垃圾回收器收集不能再访问的绑定。这只能在运行时确定，因此
-我们说这是一条@emph{动态} (@emph{dynamic})属性。
+绑定的@emph{期限} (@emph{extent}) 指绑定保持的时长。在我们的语言中，就像在
+Scheme 中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite}) 的，意思是变量
+一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
+闭包之中。在半无限的语言中，垃圾回收器收集不能再访问的绑定。这只能在运行时判定，
+因此我们说这是一条@emph{动态} (@emph{dynamic}) 属性。
 
 很可惜的是，@exact-elem{“}动态@exact-elem{”}有时表示@exact-elem{“}在表达式求
-值期间@exact-elem{”}，有时却又表示@exact-elem{“}无法事先计算@exact-elem{”}。
-如果我们不允许@tt{let}的值为过程，那么let绑定会在@tt{let}主体求值结束时到期。这
-叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所以
-我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现类
-似。
+值期间@exact-elem{”}，有时又表示@exact-elem{“}无法事先计算@exact-elem{”}。如
+果我们不允许 @tt{let} 的值为过程，那么 let 绑定会在 @tt{let} 主体求值结束时到期。
+这叫做@emph{动态}期限，而它是一条@emph{静态}属性。因为这种期限是一条静态属性，所
+以我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现
+类似。
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
-定界算法的执行过程可以看作始自变量引用的外出旅行。在旅程中，到达对应的声明之前可
-能会跨过很多等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
+定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
+能会跨越多条等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
 depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{“}从0开始的
-索引@exact-elem{”}，所以不计最后跨过的等深线。例如，在Scheme表达式
+索引@exact-elem{”}，所以不计最后跨过的等深线。例如，在 Scheme 表达式
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (lambda (x)
   ((lambda (a)
      (x a))
    x))
 ]
+}
 
-中，最后一行@tt{x}的引用以及@tt{a}的引用词深均为0，而第三行@tt{x}的引用词深为1。
+中，最后一行 @tt{x} 的引用以及 @tt{a} 的引用词深均为 0，而第三行 @tt{x} 的引用词
+深为 1。
 
 }
 
 因此，我们可以完全消除变量名，写成这样
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (nameless-lambda
@@ -1844,9 +1862,10 @@ depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{�
    #0))
 }|
 }
+}
 
-这里，每个 @tt{nameless-lambda} 声明了一个新的无名变量，每个变量引用由其词深替代；
-这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
+这里，每个 @tt{nameless-lambda} 都声明了一个新的无名变量，每个变量引用由其词深替
+代；这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
 address})或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
 引用的词法地址。除非用来提供调试信息，计算一旦完成，变量名即可丢弃。
 
@@ -1857,6 +1876,7 @@ address})或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行
 考虑我们语言中的表达式
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = |@${exp_1}
@@ -1864,14 +1884,16 @@ in let y = |@${exp_2}
    in -(x,y)
 }|
 }
+}
 
 在差值表达式中，@tt{y} 和 @tt{x} 的词深分别为0和1。
 }
 
-现在，设在某个适当环境中，@${exp_1} 和 @${exp_2} 的值分别为 @${val_1} 和
+现在假设在某个适当环境中求得 @${exp_1} 和 @${exp_2} 的值，分别为 @${val_1} 和
 @${val_2}，那么这个表达式的值为
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (value-of
@@ -1890,8 +1912,9 @@ in let y = |@${exp_2}
   [y=|@${val_2}][x=|@${val_1}]|@${\rho})
 }|
 }
+}
 
-那么求值差值表达式时，@tt{y} 深度为0，@tt{x} 深度为1，正如词深预测的那样。
+所以，求差值表达式的值时，@tt{y} 深度为 0，@tt{x} 深度为 1，正如词深预测的那样。
 
 }
 
@@ -1912,19 +1935,22 @@ in let y = |@${exp_2}
 过程的主体也是这样。考虑
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let a = 5
 in proc (x) -(x,1)
 }|
 }
+}
 
-在过程的主体中，@tt{x} 的词深是0，@tt{a} 的词深是1。
+在过程的主体中，@tt{x} 的词深是 0，@tt{a} 的词深是 1。
 
 }
 
 这个表达式的值为：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (value-of
@@ -1935,9 +1961,11 @@ in proc (x) -(x,1)
 = (proc-val (procedure x <<-(x,a)>> [a=|@${\lceil}5|@${\rceil}]|@${\rho}))
 }|
 }
+}
 
-这个过程的主体只能通过 @tt{apply-procedure} 求值
+这个过程的主体只能通过 @tt{apply-procedure} 求值：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (apply-procedure
@@ -1946,6 +1974,7 @@ in proc (x) -(x,1)
 = (value-of <<-(x,a)>>
     [x=|@${\lceil}7|@${\rceil}][a=|@${\lceil}5|@${\rceil}]|@${\rho})
 }|
+}
 }
 
 每个变量又一次出现在词深预测的环境位置。
@@ -1958,6 +1987,7 @@ in proc (x) -(x,1)
 例如，程序
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 |@elemtag["s3.7-eg"]{}let x = 37
@@ -1966,9 +1996,11 @@ in proc (y)
     in -(x,y)
 }|
 }
+}
 
 将翻译为
 
+@nested[#:style small]{
 @racketblock[
 #(struct:a-program
    #(struct:nameless-let-exp
@@ -1982,6 +2014,7 @@ in proc (y)
                #(struct:nameless-var-exp 2)
                #(struct:nameless-var-exp 1))))))
 ]
+}
 
 然后，我们写出新版的 @tt{value-of-program} 来求无名程序的值，它不需要把变量放入
 环境中。
@@ -1990,12 +2023,12 @@ in proc (y)
 
 @subsection[#:style section-title-style-numbered #:tag "s3.7.1"]{翻译器}
 
-因为是写翻译器，我们得知道源语言和目标语言。目标语言中的某些部分源语言中没有，比
+因为是写翻译器，我们得知道源语言和目标语言。目标语言中的某些部分源语言中没有，例
 如 @tt{nameless-var-exp} 和 @tt{nameless-let-exp}；源语言中的某些部分目标语言中
-没有，它们由后者中的对应构造器取代，比如 @tt{var-exp} 和 @tt{let-exp}。
+没有，它们由后者中的对应结构取代，例如 @tt{var-exp} 和 @tt{let-exp}。
 
-我们可以给每种语言写一个@tt{define-datatype}，也可以让二者共用一个。因为我们使用
-的前端是 SLLGEN，后者更容易。我们给 SLLGEN 的语法添加生成式：
+我们可以为每种语言写一个 @tt{define-datatype}，也可以让二者共用一个。因为我们使
+用的前端是 SLLGEN，后者更容易。我们给 SLLGEN 的语法添加生成式：
 
 @envalign*{
         \mathit{Expression} &::= @tt{%lexref @m{\mathit{number}}} \\[-3pt]
@@ -2007,15 +2040,14 @@ in proc (y)
 
 新的构造器名字用 @tt{%} 开头，因为在我们的语言中，@tt{%} 通常是注释字符。
 
-我们的翻译器将拒绝任何含有无名构造器（@tt{nameless-var-exp}、
-@tt{nameless-let-exp} 或 @tt{nameless-proc-exp}）的程序。有名构造器
-（@tt{var-exp}、@tt{let-exp}或@tt{proc-exp}）应被替换，我们的解释器将拒绝任何含
-有这些的程序。
+我们的翻译器将拒绝任何含有无名结构（@tt{nameless-var-exp}、@tt{nameless-let-exp}
+或 @tt{nameless-proc-exp}）的程序。我们的解释器将拒绝任何含有原先具名结构
+（@tt{var-exp}、@tt{let-exp}或@tt{proc-exp}）的程序，因为它们理应被替换。
 
 要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@emph{上下文}
 (@emph{context}) 信息，所以它和@secref{s1.3}的继承属性类似。
 
-那么 @tt{translation-of-program} 将取两个参数：一个表达式和一个@emph{静态环境}
+所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@emph{静态环境}
 (@emph{static environment})。静态环境是一个变量列表，表示当前表达式所在的作用域。
 最内部作用域声明的变量成为列表的第一个元素。
 
@@ -2073,19 +2105,19 @@ in proc (y)
 程序。
 
 @tt{senv} 表示一些声明，我们从中翻译表达式 @tt{e}。要完成这点，我们像@exercise-ref{ex1.33} 或
-@countref{ex2.26} 那样递归复制语法树，除了
+@countref{ex2.26} 那样递归复制语法树，除了@linebreak[]
 
 @nested{
-
 @itemlist[#:style 'ordered
 
  @item{调用 @tt{apply-senv}，用正确的词法地址，把每个 @tt{var-exp} 替换为
  @tt{nameless-var-exp}。}
 
  @item{把每个 @tt{let-exp} 替换为一个 @tt{nameless-let-exp}。新表达式的右侧由旧
- 表达式右侧译得。它与原式的作用域相同，所以我们在同样的静态环境 @tt{senv} 中翻译。
- 新表达式的主体由旧表达式的主体译得。但是主体位于新的作用域内，多了一个绑定变量
- @${var}。所以我们在静态环境 @tt{(extend-senv @${var} @${senv})} 中翻译主体。}
+ 表达式的右侧译得。它与原式的作用域相同，所以我们在同样的静态环境 @tt{senv} 中翻
+ 译它。新表达式的主体由旧表达式的主体译得。但是主体位于新的作用域内，多了一个绑
+ 定变量 @${var}。所以我们在静态环境 @tt{(extend-senv @${var} @${senv})} 中翻译主
+ 体。}
 
  @item{把每个 @tt{proc-exp} 替换为一个 @tt{nameless-proc-exp}，主体在新的作用域
  内译得，该作用域由静态环境 @tt{(extend-senv @${var} senv)} 表示。}
@@ -2096,8 +2128,9 @@ in proc (y)
 
 }
 
-过程 @tt{translation-of-program} 在适当的初始静态环境中运行 @tt{translation-of}。
+过程 @tt{translation-of-program} 在适当的初始静态环境中执行 @tt{translation-of}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
 (define translation-of-program
@@ -2115,6 +2148,7 @@ in proc (y)
         (extend-senv 'x
           (empty-senv))))))
 ]
+}
 
 @nested[#:style eopl-figure]{
 
@@ -2162,13 +2196,14 @@ in proc (y)
 
 @subsection[#:style section-title-style-numbered #:tag "s3.7.2"]{无名解释器}
 
-凭借词法分析器的预测，我们的解释器不必在运行时直接搜索变量。
+凭借词法地址分析器的预测，我们的解释器不必在运行时直接搜索变量。
 
 由于我们的程序中没有任何变量，我们不能把变量放入环境中；但是因为我们明确知道如何
 从环境中寻找它们，我们不需要！
 
 我们的顶层过程是@tt{run}：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{run}} : @${\mathit{String} \to \mathit{ExpVal}}}
 (define run
@@ -2177,6 +2212,7 @@ in proc (y)
      (translation-of-program
       (scan&parse string)))))
 ]
+}
 
 我们不用全功能的环境，而是用无名环境，其接口如下：
 
@@ -2226,8 +2262,8 @@ in proc (y)
   "无名环境")
 }
 
-由于更改了环境接口，我们需要查看代码中所有依赖接口的地方。我们的解释器中使用环境
-的只有两处：过程和 @tt{value-of}。
+由于更改了环境接口，我们需要查看代码中所有依赖这套接口的地方。我们的解释器中使用
+环境的只有两处：过程和 @tt{value-of}。
 
 修改过程规范时，只需把旧规范中的变量名移除：
 
@@ -2238,8 +2274,9 @@ in proc (y)
 }|
 }
 
-实现这一规范时可定义
+这一规范的实现可定义为：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{Proc}}}
 (define-datatype proc proc?
@@ -2256,13 +2293,14 @@ in proc (y)
         (value-of body
           (extend-nameless-env val saved-nameless-env))))))
 ]
+}
 
-现在，我们可以写出@tt{value-of}。它的大部分与前一个解释器相同，只是原先使用
+现在，我们可以写出 @tt{value-of}。它的大部分与前一个解释器相同，只是原先使用
 @tt{env} 的地方现在用 @tt{nameless-env}。但我们要处理新的部分：
 @tt{nameless-var-exp}、@tt{nameless-let-exp} 和 @tt{nameless-proc-exp}，它们分别
-取代对应的 @tt{var-exp}、@tt{let-exp} 和 @tt{proc-exp}。其实现如@figure-ref{fig-3.18} 所示。
-@tt{nameless-var-exp} 用于环境查询。@tt{nameless-let-exp} 先求出式子右边的
-@${exp_1}，然后用式子右边的值扩展环境，并在该环境内求主体的值。这和 @tt{let} 所
+取代对应的 @tt{var-exp}、@tt{let-exp} 和 @tt{proc-exp}。其实现如@figure-ref{fig-3.18}
+所示。@tt{nameless-var-exp} 用于环境查询。@tt{nameless-let-exp} 先求出式子右边的
+@${exp_1}，然后用式子右边的值扩展环境，并在新环境内求主体的值。这和 @tt{let} 所
 做相同，只是没有变量。@tt{nameless-proc} 生成一个 @tt{proc}，随后可供
 @tt{apply-procedure} 调用。
 
@@ -2300,8 +2338,9 @@ in proc (y)
 @eopl-caption["fig-3.18"]{无名解释器的 @tt{value-of}}
 }
 
-最后是新的@tt{value-of-program}：
+最后是新的 @tt{value-of-program}：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Nameless\mbox{-}program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -2310,6 +2349,7 @@ in proc (y)
       (a-program (exp1)
         (value-of exp1 (init-nameless-env))))))
 ]
+}
 
 @exercise[#:level 1 #:tag "ex3.38"]{
 
@@ -2325,27 +2365,28 @@ in proc (y)
 
 @exercise[#:level 2 #:tag "ex3.40"]{
 
-扩展词法地址翻译器和解释器，处理 @tt{letrec}。修改 @elem[#:style
-htt]{translation-of} 的上下文参数，不仅记录每个绑定变量的名字，也记录变量是否由
-@tt{letrec} 绑定。对 @tt{letrec} 绑定变量的引用，生成一种新的引用，名为
-@elem[#:style htt]{nameless-letrec-var-exp}。然后你可以继续用上面的无名环境表示，
-解释器就能以适当的方式处理 @elem[#:style htt]{nameless-letrec-var-exp}。
+扩展词法地址翻译器和解释器，处理 @tt{letrec}。修改 @tt{translation-of} 的上下文
+参数，不仅记录每个绑定变量的名字，也记录变量是否由 @tt{letrec} 绑定。对
+@tt{letrec} 绑定变量的引用，生成一种新的引用，名为 @tt{nameless-letrec-var-exp}。
+然后你可以继续用上面的无名环境表示，解释器则要以适当的方式处理@elem[#:style
+htt]{nameless-letrec-var-exp}。
 
 }
 
 @exercise[#:level 2 #:tag "ex3.41"]{
 
-修改词法地址翻译器和解释器，像@exercise-ref{ex3.21} 那样处理多参数的 @tt{let} 表达式、过程和
-过程调用。用肋排表示法（@exercise-ref{ex2.21}）表示无名环境。在这种表示法中，词法地址包含两个
-非负数：词深，指明跨过的等深线数目，与之前相同；位置，指明变量在声明中的位置。
+修改词法地址翻译器和解释器，像@exercise-ref{ex3.21} 那样处理多参数的 @tt{let} 表
+达式、过程和过程调用。用肋排表示法（@exercise-ref{ex2.21}）表示无名环境。在这种
+表示法中，词法地址包含两个非负数：词深，指明跨越的等深线数目，与之前相同；位置，
+指明变量在声明中的位置。
 
 }
 
 @exercise[#:level 3 #:tag "ex3.42"]{
 
-修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26} 中的瘦身过程表示法。要如此，你不能在
-@tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静态环境中，
-它指明了各个变量在瘦身表示中的位置。
+修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26} 中的瘦身过程表示法。要如此，
+你不能 在@tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静
+态环境中，它指明了各个变量在瘦身表示中的位置。
 
 }
 
@@ -2362,9 +2403,9 @@ in let f = proc (y) -(y,x)
 }
 
 这里，不必运行我们就能看出：在过程调用处，@tt{f} 绑定到一个过程，其主体为
-@tt{-(y,x)}，@tt{x} 的值与过程创建处相同。因此我们完全可以避免在环境中查找@tt{f}。
-扩展翻译器，记录@exact-elem{“}已知过程@exact-elem{”}，生成代码，避免在调用这样
-的过程时搜索环境。
+@tt{-(y,x)}，@tt{x} 的值与过程创建处相同。因此我们完全可以避免在环境中查找
+@tt{f}。扩展翻译器，记录@exact-elem{“}已知过程@exact-elem{”}，生成代码，避免在
+调用这样的过程时搜索环境。
 
 }
 
