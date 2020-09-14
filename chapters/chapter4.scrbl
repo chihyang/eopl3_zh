@@ -19,7 +19,7 @@
 我们@emph{总是}对效果很感兴趣：如果一次计算不显示答案，那对我们完全没用！
 
 产生值和产生效果有何不同？效果是@emph{全局性} (@emph{global})的，整个计算都能看
-到。效果感染整个计算（故意用双关语）。
+到。效果@emph{感染}整个计算（故意用双关语）。
 
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
 是局部的，但变量赋值有可能是全局的。那是在本不相关的几部分计算之间@emph{共享}
@@ -40,8 +40,8 @@
 左边变量的联系。类似地，表达值，比如赋值语句右边表达式的值，叫做@emph{右值}
 (@emph{R-values})。
 
-我们考虑两种带有存储器的语言设计。我们把这些设计叫做@emph{显式引用}
-(@emph{explicit reference})和@emph{隐式引用} (@emph{implicit reference})。
+我们考虑两种带有存储器的语言设计。这些设计叫做@emph{显式引用} (@emph{explicit
+reference})和@emph{隐式引用} (@emph{implicit reference})。
 
 @section[#:style section-title-style-numbered #:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
 
@@ -63,13 +63,13 @@
 
  @item{@tt{newref}，分配新的位置，返回其引用。}
 
- @item{@tt{deref}，@emph{解引用} (@emph{deference}) ：返回引用指向位置中的内容。}
+ @item{@tt{deref}，@emph{解引用} (@emph{deference}) ：返回引用指向位置处的内容。}
 
- @item{@tt{setref}，改变引用指向位置中的内容。}
+ @item{@tt{setref}，改变引用指向位置处的内容。}
 
 ]
 
-我们把得到的语言称作 EXPLICIT-REFS。让我们用这些构造器写几个程序。
+我们把得到的语言称作 EXPLICIT-REFS。让我们用这些结构写几个程序。
 
 下面是两个过程 @tt{even} 和 @tt{odd}。它们取一参数，但是忽略它，并根据位置
 @tt{x} 处的内容是偶数还是奇数返回 1 或 0。它们不是通过直接传递数据来通信，而是改
@@ -80,6 +80,7 @@
 
 @nested{
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = newref (0)
@@ -100,21 +101,25 @@ in letrec even(dummy)
    in begin setref(x,13); (odd 888) end
 }|
 }
+}
 
-这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式（@exercise-ref{ex4.4}）。
-@tt{begin} 表达式按顺序求每个子表达式的值，并返回最后一个的值。
+这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式
+（@exercise-ref{ex4.4}）。@tt{begin} 表达式按顺序求每个子表达式的值，并返回最后
+一个表达式的值。
 
 }
 
 为了同我们的单参数语言保持一致，我们给 @tt{even} 和 @tt{odd} 传一个无用参数；如
-果我们的过程支持任意数量的参数（@exercise-ref{ex3.21}），就可以不给这些过程传递参数。
+果我们的过程支持任意数量的参数（@exercise-ref{ex3.21}），这些过程的参数就可以去
+掉。
 
 当两个过程需要分享很多量时，这种通信方式很方便；只需给某些随调用而改变的量赋值。
-同样地，一个过程可能通过一长串调用间接调用另一过程。它们可以通过一个共享变量直接
-交换数据，居间的过程不需要知道它。如此，以共享变量通信可作为一种隐藏信息的方式。
+同样地，一个过程可能通过一长串调用间接调用另一过程。二者可以通过一个共享变量直接
+交换数据，居间的过程不需要知道它。因此，以共享变量通信可作为一种隐藏信息的方式。
 
-赋值的另一用途是通过私有变量创建隐藏状态。这里是一个例子。
+赋值的另一用途是通过私有变量创建隐藏状态。例如：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 |@elemtag["g-counter"]{}let g = let counter = newref(0)
@@ -128,12 +133,12 @@ in let a = (g 11)
       in -(a,b)
 }|
 }
+}
 
 这里，过程 @tt{g} 保留了一个私有变量，用来存储 @tt{g} 被调用的次数。因此，第一次
-调用 @tt{g} 返回 1，第二次返回 2，整个程序的值为 @${-1}。
+调用 @tt{g} 返回 1，第二次返回 2，整个程序的值为 -1。
 
-@nested[#:style samepage]{
-下图是@tt{g}绑定时所在的环境。
+下图是 @tt{g} 绑定时所在的环境。
 
 @nested{
 @centered{
@@ -143,15 +148,14 @@ in let a = (g 11)
   "g绑定时的环境")
 }
 
-可以认为，这是在@tt{g}的不同调用之间共享信息。Scheme过程@tt{gensym}用这种技术创
-建唯一符号。
+可以认为，这是在 @tt{g} 的不同调用之间共享信息。Scheme 过程 @tt{gensym} 用这种技
+术创建唯一符号。
 
-}
 }
 
 @exercise[#:level 1 #:tag "ex4.1"]{
 
-如果程序写成下面这样会怎样？
+这个程序如果写成下面这样会怎样？
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -172,6 +176,7 @@ in let a = (g 11)
 在EXPLICIT-REFS中，我们可以存储任何表达值。引用也是表达值。这意味着我们可以在一
 个位置存储引用。考虑下面的程序：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = newref(newref(0))
@@ -181,45 +186,46 @@ in begin
 end
 }|
 }
+}
 
-这段程序分配了一个新位置，内容为0。然后，它将@tt{x}绑定到一个位置，其内容为指向
-第一个位置的引用。因此，@tt{deref(x)}的值是第一个位置的引用。那么程序求值
-@tt{setref}时，会修改第一个位置，整个程序返回11。
+这段程序分配了一个新位置，内容为 0。然后，它将 @tt{x} 绑定到一个位置，其内容为指
+向第一个位置的引用。因此，@tt{deref(x)} 的值是第一个位置的引用。那么程序求
+@tt{setref} 的值时，会修改第一个位置，整个程序返回 11。
 
 @subsection[#:style section-title-style-numbered #:tag "s4.2.1"]{存储器传递规范}
 
 在我们的语言中，任何表达式都可以有效果。要定义这些效果，我们需要描述每次求值使用
 什么样的存储器，以及求值如何修改存储器。
 
-在规范中，我们用 @deftech[#:key "sigma_for_store"]{@${\sigma}} 表示任一存储器。
-我们用 @${\text{[}l=v\text{]}\sigma} 表示存储器，它与 @${\sigma} 类似，只是将位
-置 @${l} 映射到@${v}。有时，指代 @${\sigma} 的某个具体值时，我们称之为存储器的
-@emph{状态} (@emph{state})。
+在规范中，我们用 @deftech[#:key "sigma_for_store"]{@${\sigma}} 表示任一存储器，
+用 @${\text{[}l=v\text{]}\sigma} 表示另一存储器，除了将位置 @${l} 映射到 @${v}
+外，它与 @${\sigma} 相同。有时，涉及 @${\sigma} 的某个具体值时，我们称之为存储器
+的@emph{状态} (@emph{state})。
 
 我们使用@emph{存储器传递规范} (@emph{store-passing specifications})。在存储器传
-递规范中，存储器直接作为参数传递给@tt{value-of}，并作为@tt{value-of}的结果返回。
-那么我们可以写：
+递规范中，存储器作为显式参数传递给 @tt{value-of}，并作为 @tt{value-of} 的结果返
+回。那么我们可以写：
 
 @nested{
 
 @$${@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
 
-它断定表达式@${exp_1}在环境为@${\rho}，存储器状态为@${\sigma_0}求值时，返回值
-@${val_1}，并且可能把存储器改成不同的状态@${\sigma_1}。
+它断言在环境为 @${\rho}，存储器状态为 @${\sigma_0} 时，表达式 @${exp_1} 的返回值
+为 @${val_1}，并且可能把存储器修改为另一状态 @${\sigma_1}。
 
 }
 
-那么我们可以写
+这样我们就能写出 @tt{const-exp} 之类的无效果操作：
 
 @nested{
 
 @$${@tt{(value-of (const-exp @${n}) @${\rho} @${\sigma})} = @tt{(@${n},@${\sigma})}}
 
-来指定@tt{const-exp}这样无效果的操作。这表明求值该表达式时，存储器不变。
+以此表明求表达式的值不会修改存储器。
 
 }
 
-@tt{diff-exp}的规范展示了如何定义有序行为。
+@tt{diff-exp} 的规范展示了如何定义有顺序的行为。
 
 @nested{
 
@@ -230,15 +236,16 @@ end
              @tt{(value-of (diff-exp @${exp_2}) @${\rho} @${\sigma_1})} &= @tt{(@${val_2},@${\sigma_2})}
            \end{alignedat}}}
 
-这里，我们从状态为@${\sigma_0}的存储器开始，首先求值@${exp_1}。@${exp_1}返回值为
-@${val_1}，而且它可能有效果，把存储器状态改为@${\sigma_1}。然后我们求值@${exp_2}，
-这时存储器的状态由@${exp_1}修改过，也就是@${\sigma_1}。@${exp_2}同样返回一个值
-@${val_2}，并把存储器状态改为@${\sigma_2}。之后，整个表达式返回@${val_1 - val2}，
-不再更改存储器，所以存储器状态留在@${\sigma_2}。
+这里，我们从状态为 @${\sigma_0} 的存储器开始，首先求 @${exp_1} 的值。@${exp_1}
+返回值为 @${val_1}，但它可能有效果，把存储器状态修改为 @${\sigma_1}。然后我们从
+@${exp_1} 修改过的存储器——也就是 @${\sigma_1}——开始，求 @${exp_2} 的值。
+@${exp_2} 同样返回一个值 @${val_2}，并把存储器状态修改为 @${\sigma_2}。之后，整
+个表达式返回 @${val_1 - val2}，对存储器不再有任何效果，所以存储器状态留在
+@${\sigma_2}。
 
 }
 
-再来看看条件表达式。
+再来试试条件表达式。
 
 @$${
 \infer{\begin{alignedat}{-1}
@@ -251,45 +258,46 @@ end
       {@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
 }
 
-从状态@${\sigma_0}开始，@tt{if-exp}求值条件表达式@${exp_1}，返回值为@${val_1}，
-存储器状态改为@${\sigma_1}。整个表达式的结果可能是@${exp_2}或@${exp_3}的结果，二
-者都在当前环境@${\rho}中求值，此时存储器状态是@${exp_1}留下的@${\sigma_1}。
+一个 @tt{if-exp} 从状态 @${\sigma_0} 开始，求条件表达式 @${exp_1} 的值，返回值
+@${val_1}，将存储器状态修改为 @${\sigma_1}。整个表达式的结果可能是 @${exp_2} 或
+@${exp_3} 的结果，二者都在当前环境 @${\rho} 和 @${exp_1} 留下的存储器状态
+@${\sigma_1} 中求值。
 
 @exercise[#:level 1 #:tag "ex4.2"]{
 
-写出@tt{zero?-exp}的规范。
+写出 @tt{zero?-exp} 的规范。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.3"]{
 
-写出@tt{call-exp}的规范。
+写出 @tt{call-exp} 的规范。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.4"]{
 
-写出@tt{begin}表达式的规范。
+写出 @tt{begin} 表达式的规范。
 
 @nested{
 @$${\mathit{Expression} ::= @tt{begin @${\mathit{Expression}} @${\{}@tt{; }@${\mathit{Expression}}@${\}^{*}} end}}
 }
 
-@tt{begin}表达式可能包含一个或多个子表达式，由分号分隔。这些子表达式按顺序求值，
-最后一个的作为返回值。
+@tt{begin} 表达式包含一个或多个分号分隔的子表达式，按顺序求这些子表达的值，并返
+回最后一个的结果。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.5"]{
 
-写出@tt{list}（@exercise-ref{ex3.10}）的规范。
+写出 @tt{list}（@exercise-ref{ex3.10}）的规范。
 
 }
 
-@subsection[#:style section-title-style-numbered #:tag "s4.2.2"]{指定显式引用操作}
+@subsection[#:style section-title-style-numbered #:tag "s4.2.2"]{定义显式引用操作}
 
-在EXPLICIT-REFS中，我们必须定义三个操作：@tt{newref}，@tt{deref}和@tt{setref}。
-它们的语法为：
+在 EXPLICIT-REFS 中，我们必须定义三个操作：@tt{newref}、@tt{deref} 和
+@tt{setref}。它们的语法为：
 
 @envalign*{
         \mathit{Expression} &::= @tt{newref (@m{\mathit{Expression}})} \\[-3pt]
@@ -304,12 +312,12 @@ end
 @$${
 \infer{@tt{(value-of (newref-exp @${exp}) @${\rho} @${\sigma_0}) =
            ((ref-val @${l}),[@${l}=@${val}]@${\sigma_1})}}
-      {@tt{(value-of @${exp} @${\rho} @${\sigma_0})} = @tt{(@${val},@${\sigma_1})} \quad l \notin dom(\sigma_1)}
+      {@tt{(value-of @${exp} @${\rho} @${\sigma_0})} = @tt{(@${val},@${\sigma_1})} \quad l \notin \text{dom}(\sigma_1)}
 }
 
-这条规则是说@tt{newref-exp}求操作数的值。它扩展得到的存储器：新分配一个位置@${l}，
-把它的参数值@${val}放到那个位置。然后它返回新位置@${l}的引用。这是说@${l}不在
-@${\sigma_1}的定义域内。
+这条规则是说：@tt{newref-exp} 求出操作数的值，得到一个存储器，然后分配一个新位置
+@${l}，将参数值 @${val} 放到这一位置，以此来扩展那个存储器。然后它返回新位置
+@${l} 的引用。这意味着 @${l} 不在 @${\sigma_1} 的定义域内。
 
 @$${
 \infer{@tt{(value-of (deref-exp @${exp}) @${\rho} @${\sigma_0}) =
@@ -317,9 +325,9 @@ end
       {@tt{(value-of @${exp} @${\rho} @${\sigma_0})} = @tt{(@${val},@${\sigma_1})}}
 }
 
-这条规则是说@tt{deref-exp}求操作数的值，把存储器状态改为@${\sigma_1}。参数的值应
-是位置@${l}的引用。然后@tt{deref-exp}返回@${\sigma_1}中@${l}处的内容，不再更改存
-储器。
+这条规则是说：@tt{deref-exp} 求出操作数的值，然后把存储器状态改为 @${\sigma_1}。
+参数的值应是位置 @${l} 的引用。然后 @tt{deref-exp} 返回 @${\sigma_1} 中 @${l} 处
+的内容，不再更改存储器。
 
 @$${
 \infer{@tt{(value-of (setref-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0}) =
@@ -330,51 +338,52 @@ end
        \end{gathered}}
 }
 
-这条规则是说@tt{setref-exp}从左到右求操作数的值。第一个操作数的值必须是某个位置
-@${l}的引用。然后@tt{setref-exp}把第二个参数的值@${val}放到位置@${l}处，从而更新
-存储器。@tt{setref-exp}应该返回什么呢？它可以返回任何值。为了突出这种随机性，我
-们让它返回23。因为我们对@tt{setref-exp}的返回值不感兴趣，我们说这个表达式的
-执行@emph{求效果} (@emph{for effect})而不求值。
+这条规则是说：@tt{setref-exp} 从左到右求操作数的值。第一个操作数的值必须是某个位
+置 @${l} 的引用；然后 @tt{setref-exp} 把第二个参数的值 @${val} 放到位置 @${l} 处，
+以此更新存储器。@tt{setref-exp} 应该返回什么呢？它可以返回任何值。为了强调这一选
+择的随意性，我们让它返回 23。因为我们对 @tt{setref-exp} 的返回值不感兴趣，我们说
+这个表达式的执行@emph{求效果} (@emph{for effect}) 而不求值。
 
 @exercise[#:level 1 #:tag "ex4.6"]{
 
-修改上面的规则，让@tt{setref-exp}返回右边表达式的值。
+修改上面的规则，让 @tt{setref-exp} 返回右边表达式的值。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.7"]{
 
-修改上面的规则，让@tt{setref-exp}返回位置原有内容。
+修改上面的规则，让 @tt{setref-exp} 返回位置的原内容。
 
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s4.2.3"]{实现}
 
-我们当前使用的规范语言可以轻松描述有效果的计算的行为，但是它没有体现存储器的一个
-要点：引用最终指向现实世界存在的内存中一个真实的位置。因为我们只有一个现实世界，
-我们的程序只能记录存储器的一个状态@${\sigma}。
+迄今为止，我们使用的规范语言可以轻松描述有效果计算的期望行为，但是它没有体现存储
+器的一个要点：引用最终指向现实世界的内存中某一真实的位置。因为我们只有一个现实世
+界，我们的程序只能记录存储器的一个状态 @${\sigma}。
 
-在我们的实现中，我们利用这一事实，用Scheme中的存储器建模存储器。这样，我们就能用
-Scheme中的效果建模效果。
+在我们的实现中，我们利用这一事实，用 Scheme 中的存储器建模存储器。这样，我们就能
+用 Scheme 中的效果建模效果。
 
-我们用一个Scheme值表示存储器状态，但是我们不像规范建议的那样直接传递和返回它，相
-反，我们在一个全局变量中记录状态，实现代码中的所有过程都能访问它。这很像在示例程
-序@tt{even/odd}中，我们使用共享位置，而不是直接传递参数。使用单一全局变量时，我
-们也几乎不需要理解Scheme中的效果。
+我们用一个 Scheme 值表示存储器状态，但是我们不像规范建议的那样直接传递和返回它，
+相反，我们在一个全局变量中记录状态，实现代码中的所有过程都能访问它。这很像示例程
+序 @tt{even/odd} 使用共享位置，而不是直接传递参数。使用单一全局变量时，我们也几
+乎不需要理解 Scheme 中的效果。
 
-我们还是要确定如何用Scheme值建模存储器。我们的选择可能是最简单的模型：以表达值列
-表作为存储器，以代表列表位置的数字表示引用。分配新引用就是给列表末尾添加新值；更
-新存储器则是尽量复制列表中需要的部分。代码如@figure-ref{fig-4.1} 和
-@countref{fig-4.2} 所示。
+我们还是要选择如何用 Scheme 值建模存储器。我们选择的可能是最简单的模型：以表达值
+列表作为存储器，以代表列表位置的数字表示引用。分配新引用就是给列表末尾添加新值；
+更新存储器则建模为按需复制列表的一大部分。代码如@figure-ref{fig-4.1}
+和@countref{fig-4.2} 所示。
 
-这种表示法极其低效。一般的内存操作大致要在常数时间内完成，但是用我们的表示法，这
-些操作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但是这足以达到
-我们的目的。
+这种表示极其低效。一般的内存操作大致在常数时间内完成，但是采用我们的表示，这些操
+作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但这足以达到我们的
+目的。
 
-我们给数据类型表达值新增一种变体@tt{ref-val}，然后修改@tt{value-of-program}，在
-每次求值之前初始化存储器。
+我们给表达值数据类型新增一种变体 @tt{ref-val}，然后修改 @tt{value-of-program}，
+在每次求值之前初始化存储器。
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{SchemeVal}}}
 (define value-of-program
@@ -384,17 +393,18 @@ Scheme中的效果建模效果。
       (a-program (exp1)
         (value-of exp1 (init-env))))))
 ]
+}
 
-现在，我们可以写出@tt{value-of}中与@tt{newref}，@tt{deref}和@tt{setref}相关的语
-句。这些语句如@figure-ref{fig-4.3} 所示。
+现在，我们可以写出 @tt{value-of} 中与 @tt{newref}、@tt{deref} 和 @tt{setref} 相
+关的语句。这些语句如@figure-ref{fig-4.3} 所示。
 
 }
 
 我们可以给该系统添加一些辅助过程，把环境、过程和存储器转换为更易读的形式，也可以
-增强系统，在代码中的关键位置打印消息。我们还使用过程把环境、过程和存储器转换为更
+改善系统，在代码中的关键位置打印消息。我们还使用过程把环境、过程和存储器转换为更
 易读的形式。得出的日志详细描述了系统的动作。典型例子如@figure-ref{fig-4.4} 和
-@countref{fig-4.5} 所示。此外，这个跟踪日志还标明差值表达式的参数从左到右进行求
-值。
+@countref{fig-4.5} 所示。此外，这一跟踪日志还标明差值表达式的参数按从左到右的顺
+序求值。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -402,7 +412,7 @@ Scheme中的效果建模效果。
 (define empty-store
   (lambda () '()))
 
-@#,elem{@bold{用法} : Scheme变量，包含存储器当前的状态。初始值无意义。}
+@#,emph{@bold{用法} : Scheme 变量，包含存储器当前的状态。初始值无意义。}
 (define the-store 'uninitialized)
 
 @#,elem{@bold{@tt{get-store}} : @${() \to \mathit{Sto}}}
@@ -410,7 +420,7 @@ Scheme中的效果建模效果。
   (lambda () the-store))
 
 @#,elem{@bold{@tt{initialize-store!}} : @${() \to \mathit{Unspecified}}}
-@#,elem{@bold{用法} : @tt{(initialize-store!)}将存储器设为空。}
+@#,emph{@bold{用法} : @tt{(initialize-store!)} 将存储器设为空。}
 (define initialize-store!
   (lambda ()
     (set! the-store (empty-store))))
@@ -439,23 +449,25 @@ Scheme中的效果建模效果。
 @nested[#:style eopl-figure]{
 @racketblock[
 @#,elem{@bold{@tt{setref!}} : @${\mathit{Ref} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
-@#,elem{@bold{用法} : 把位置@tt{ref}处的值设为@tt{val}，此外@tt{the-store}与原状态相同。}
+@#,emph{@bold{用法} : 除了把位置 @tt{ref} 的值设为 @tt{val}，@tt{the-store} 与原状态相同。}
 (define setref!
   (lambda (ref val)
     (set! the-store
-      (letrec ((setref-inner
-                 @#,elem{@bold{用法} : 返回一列表，在位置@tt{ref1}处值为@tt{val}，此外与@tt{store1}相同。}
-                 (lambda (store1 ref1)
-                   (cond
-                     ((null? store1)
-                      (report-invalid-reference ref the-store))
-                     ((zero? ref1)
-                      (cons val (cdr store1)))
-                     (else
-                       (cons
-                         (car store1)
-                         (setref-inner
-                           (cdr store1) (- ref1 1))))))))
+      (letrec
+        ((setref-inner
+           @#,emph{@bold{用法} : 返回一列表，除了位置 ref1 处}
+           @#,emph{值为 val，与 store1 相同。}
+           (lambda (store1 ref1)
+             (cond
+               ((null? store1)
+                 (report-invalid-reference ref the-store))
+               ((zero? ref1)
+                 (cons val (cdr store1)))
+               (else
+                 (cons
+                   (car store1)
+                   (setref-inner
+                     (cdr store1) (- ref1 1))))))))
         (setref-inner the-store ref)))))
 ]
 
@@ -470,32 +482,32 @@ Scheme中的效果建模效果。
 
 @exercise[#:level 1 #:tag "ex4.9"]{
 
-用Scheme向量表示存储器，从而实现常数时间操作。用这种表示方法会失去什么？
+用 Scheme 向量表示存储器，从而实现常数时间操作。用这种表示会失去什么？
 
 }
 
 @exercise[#:level 1 #:tag "ex4.10"]{
 
-实现@exercise-ref{ex4.4} 中定义的@tt{begin}表达式。
+实现@exercise-ref{ex4.4} 中定义的 @tt{begin} 表达式。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.11"]{
 
-实现@exercise-ref{ex4.5} 中的@tt{list}。
+实现@exercise-ref{ex4.5} 中的 @tt{list}。
 
 }
 
 @exercise[#:level 3 #:tag "ex4.12"]{
 
-像解释器中展示的，我们对存储器的理解基于Scheme效果的含义。具体地说，我们得知道在
-Scheme程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避免这
-种依赖。在这个解释器中，@tt{value-of}同时返回值和存储器，就像规范中那样。这个解
-释器的片段如@figure-ref{fig-4.6} 所示。我们称之为@emph{传递存储器的解释器} (@emph{store-passing
-interpreter})。补全这个解释器，处理整个EXPLICIT-REFS语言。
+像解释器中展示的，我们对存储器的理解基于 Scheme 效果的含义。具体地说，我们得知道
+在 Scheme 程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避
+免这种依赖。在这一解释器中，@tt{value-of} 同时返回值和存储器，就像规范中那样。这
+一解释器的片段如@figure-ref{fig-4.6} 所示。我们称之为@emph{传递存储器的解释器}
+(@emph{store-passing interpreter})。补全这个解释器，处理整个 EXPLICIT-REFS 语言。
 
-过程可能修改存储器时，不仅返回通常的值，还要返回一个新的存储器。它们包含在名为
-@tt{answer}的数据类型之中。完成这个@tt{value-of}的定义。
+过程可能修改存储器时，不仅返回通常的值，还要返回一个新存储器。它们包含在名为
+@tt{answer} 的数据类型之中。完成这个 @tt{value-of} 的定义。
 
 }
 

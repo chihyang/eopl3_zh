@@ -19,4 +19,6 @@
 @list["Rule of inference" "推理规则"]
 @list["Scope" "作用域"]
 @list["Scoping" "定界"]
+@list["Specification" "规范"]
+@list["Specifying" "定义"]
 )]
