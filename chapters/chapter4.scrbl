@@ -673,14 +673,14 @@ newref: 分配位置 2
 
 @section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
 
-显式引用设计清晰描述了内存的分配、索值和修改，因为所有这些操作直接出现在程序员的
-代码之中。
+显式引用设计清晰描述了内存的分配、解引用和修改，因为显而易见，这些操作都在程序员
+的代码之中。
 
-大多数编程语言以同样的方式处理分配、索值和修改，并把它们打包为语言的一部分。这样，
-程序员不需要担心何时执行这些操作，因为它们存在于语言内部。
+大多数编程语言都用共同的方式处理分配、解引用和修改，并把它们打包为语言的一部分。
+这样，由于这些操作存在于语言内部，程序员不需要担心何时执行它们。
 
 在这种设计中，每个变量都表示一个引用。指代值是包含表达值的位置的引用。引用不再是
-表达值。它们只能作为变量绑定。
+表达值，只能作为变量绑定。
 
 @nested{
 @envalign*{
@@ -688,29 +688,29 @@ newref: 分配位置 2
 \mathit{DenVal} &= \mathit{Ref(ExpVal)}
 }
 
-每次绑定操作都会分配一个位置：在每个过程调用处，在@tt{let}和@tt{letrec}中。
+每次绑定操作都会分配一个位置：在每个过程调用处，在 @tt{let} 和 @tt{letrec} 中。
 
 }
 
-当变量出现在表达式中，我们首先在环境中搜索标识符，找出绑定的位置，然后在存储器中
-找出那个位置的值。因此对@tt{var-exp}，我们有个@exact-elem{“}双层@exact-elem{”}
+当变量出现在表达式中，我们首先在环境中查找标识符，找到绑定的位置，然后在存储器中
+找出那个位置的值。因此对 @tt{var-exp}，我们有@exact-elem{“}二级@exact-elem{”}
 系统。
 
-一个位置的内容可用@tt{set}表达式修改，语法为：
+一个位置的内容可用 @tt{set} 表达式修改，语法为：
 
 @envalign*{
         \mathit{Expression} &::= @tt{set @m{\mathit{Identifier}} = @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{assign-exp (var exp1)}}}
 
-这里的@${\mathit{Identifier}}不是表达式的一部分，所以无法对其索值。在这种设计中，
+这里的 @${\mathit{Identifier}} 不是表达式的一部分，所以无法解引用。在这种设计中，
 我们说变量是@emph{可变的} (@emph{mutable})，意为可以修改。
 
 这种设计叫做@emph{按值调用} (@emph{call-by-value})，或@emph{隐式引用}
-(@emph{implicit reference})。大多数编程语言，包括Scheme，都使用这种设计的一些变
+(@emph{implicit reference})。大多数编程语言，包括 Scheme，都采纳这一设计的某种变
 体。
 
-@figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能做链式引用，像
-@secref{s4.2}中的那个例子那样。
+@figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能
+像@secref{s4.2}中的那个例子那样做链式引用。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -749,14 +749,14 @@ in let a = (g 11)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.3.1"]{规范}
 
-我们可以轻松写出索值和@tt{set}的规则。现在，环境总是把变量绑定到位置，所以当变量
-作为表达式时，我们需要索取它的值：
+我们可以轻松写出解引用和 @tt{set} 的规则。现在，环境总是把变量绑定到位置，所以当
+变量作为表达式时，我们需要将其解引用：
 
 @$${@tt{(value-of (var-exp @${var}) @${\rho} @${\sigma})} = @tt{(@${\sigma(\rho(var))},@${\sigma})}}
 
-赋值就像我们预想的那样：我们在环境中搜索式子左侧的标识符，获取一个位置，在环境中
-求值式子右侧的表达式，修改指定位置的内容。就像@tt{setref}，@tt{set}表达式的返回
-值是任意的。我们让它返回表达值27。
+赋值就像我们预想的那样：我们在环境中查找式子左侧的标识符，获取一个位置，在环境中
+求右边表达式的值，修改指定位置的内容。就像 @tt{setref}，@tt{set} 表达式的返回值
+任意。我们让它返回表达值 27。
 
 @$${
 \infer{@tt{(value-of (assign-exp @${var} @${exp_1}) @${\rho} @${\sigma_0}) =
@@ -764,7 +764,7 @@ in let a = (g 11)
       {@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
 }
 
-我们还要重写过程调用和@tt{let}规则，体现出对存储器的修改。对过程调用，规则变成：
+我们还要重写过程调用和 @tt{let} 规则，体现出对存储器的修改。对过程调用，规则变成：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -774,31 +774,34 @@ in let a = (g 11)
 }|
 }
 
-其中，@${l}是不在@${\sigma}定义域中的某一位置。
+其中，@${l} 是不在 @${\sigma} 定义域中的某一位置。
 
 }
 
-@tt{(let-exp @${var} @${exp_1} @${body})}的规则类似。式子右边的@${exp_1}求值，环
-境中的变量@${var}绑定到包含@${exp_1}值的新位置，@tt{let}表达式的主体在该环境中求
-值，并作为表达式的值。
+@tt{(let-exp @${var} @${exp_1} @${body})} 的规则类似。我们首先求右边 @${exp_1}
+的值，然后将该值放入一个新位置，将变量 @${var} 绑定到这个位置，在得到的环境中求
+@tt{let} 主体的值，作为整个表达式的值。
 
 @exercise[#:level 1 #:tag "ex4.14"]{
 
-写出@tt{let}的规则。
+写出 @tt{let} 的规则。
 
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s4.3.2"]{实现}
 
-现在我们准备修改解释器。在@tt{value-of}中，我们取出每个@tt{var-exp}的值，就像规
-则描述的那样：
+现在我们着手修改解释器。在 @tt{value-of} 中，我们取出每个 @tt{var-exp} 的值，就像
+规则描述的那样：
 
 @nested{
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{(var-exp (var) (deref (apply-env env var)))}
+}
 
-@tt{assign-exp}的代码也显而易见：
+@tt{assign-exp} 的代码也显而易见：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (assign-exp (var exp1)
   (begin
@@ -807,26 +810,29 @@ in let a = (g 11)
       (value-of exp1 env))
     (num-val 27)))
 }
-
+}
 }
 
-创建引用呢？新的位置应在每个绑定处创建。语言中只有四个创建新绑定的地方：初始环境
-中，@tt{let}中，过程调用中，以及@tt{letrec}中。
+创建引用呢？新的位置应在每一新绑定处创建。这门语言中只有四处地方创建新绑定：初始
+环境中、@tt{let} 中、过程调用以及 @tt{letrec} 中。
 
 在初始环境中，我们直接分配新位置。
 
-对@tt{let}，我们修改@tt{value-of}中相应的行，分配包含值的新位置，并把变量绑定到
-指向该位置的引用。
+对 @tt{let}，我们修改 @tt{value-of} 中相应的行，分配包含值的新位置，并把变量绑定
+到指向该位置的引用。
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
     (value-of body
       (extend-env var (newref val1) env))))
 }
+}
 
-对过称调用，我们照样修改@tt{apply-procedure}，调用@tt{newref}。
+对过程调用，我们同样修改 @tt{apply-procedure}，调用 @tt{newref}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
 (define apply-procedure
@@ -836,13 +842,15 @@ in let a = (g 11)
         (value-of body
           (extend-env var (newref val) saved-env))))))
 ]
+}
 
-最后，要处理@tt{letrec}，我们换掉@tt{apply-env}中的语句@tt{extend-env-rec}，返回
-一个引用，指向包含适当闭包的位置。因为我们用的是声明多过程的
-@tt{letrec}（@exercise-ref{ex3.32}），@tt{extend-env-rec}取一个过程名列表，一个
-绑定变量列表，一个过程主体列表，以及一个已保存的环境。过程@tt{location}取一变量，
-一个变量列表，若变量存在于列表中，返回列表中的变量位置，否则返回@tt{#f}。
+最后，要处理 @tt{letrec}，我们替换 @tt{apply-env} 中的 @tt{extend-env-rec} 从句，
+令其返回一个引用，指向包含适当闭包的位置。由于我们使用多声明的
+@tt{letrec}（@exercise-ref{ex3.32}），@tt{extend-env-rec} 取一个过程名列表，一个
+绑定变量列表，一个过程主体列表，以及已保存的环境。过程 @tt{location} 取一变量，
+一个变量列表；若变量存在于列表中，返回列表中的变量位置，若不存在，返回 @tt{#f}。
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (extend-env-rec (p-names b-vars p-bodies saved-env)
   (let ((n (location search-var p-names)))
@@ -855,8 +863,9 @@ in let a = (g 11)
             env)))
       (apply-env saved-env search-var))))
 }
+}
 
-@figure-ref{fig-4.8} 用前述辅助组件，展示了IMPLICIT-REFS求值的简单例子。
+@figure-ref{fig-4.8} 用前述辅助组件，展示了 IMPLICIT-REFS 求值的简单例子。
 
 @nested[#:style eopl-figure]{
 @verbatim|{
@@ -911,7 +920,8 @@ newref: 分配位置 5
 
 @exercise[#:level 1 #:tag "ex4.15"]{
 
-在@figure-ref{fig-4.8} 中，环境中的变量为什么绑定到平常的整数，而不是@figure-ref{fig-4.5} 中的那样的表达值？
+在@figure-ref{fig-4.8} 中，环境中的变量为什么绑定到一般的整数，而不
+是@figure-ref{fig-4.5} 中那样的表达值？
 
 }
 
@@ -943,42 +953,43 @@ in begin
 }|
 }
 
-手动跟踪这个程序，验证这种转换可行。
+手动跟踪这个程序，验证这种翻译可行。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.17"]{
 
-写出规则并实现多参数过程和声明多变量的@tt{let}。
+写出规则，实现多参数过程和声明多变量的 @tt{let}。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.18"]{
 
-写出规则并实现多过程的@tt{letrec}表达式。
+写出规则并实现声明多过程的 @tt{letrec} 表达式。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.19"]{
 
-修改多过程@tt{letrec}的实现，每个闭包只需生成一次，并且只分配一个位置。本题类似@exercise-ref{ex3.35}。
+修改声明多过程的 @tt{letrec} 实现，让每个闭包只生成一次，并且只分配一个位置。本
+题类似@exercise-ref{ex3.35}。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.20"]{
 
-在本节的语言中，所有变量都是可变的，就像在Scheme中一样。另一种设计是同时允许可变
-和不可边的变量绑定：
+在本节的语言中，就像在 Scheme 中一样，所有变量都是可变的。另一种设计是同时允许可
+变和不可变的变量绑定：
 
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
 \mathit{DenVal} &= \mathit{Ref(ExpVal)} + \mathit{ExpVal}
 }
 
-只有变量绑定可变时，变量才能赋值。当表达值是引用时，索值自动进行。
+只有变量绑定可变时，才能赋值。当指代值是引用时，解引用自动进行。
 
-修改本节的语言，让@tt{let}像之前那样引入不可变变量，可变变量则由@tt{letmutable}
-表达式引入，语法为：
+修改本节的语言，让 @tt{let} 像之前那样引入不可变变量，可变变量则由
+@tt{letmutable} 表达式引入，语法为：
 
 @$${\mathit{Expression} ::= @tt{letmutable @${\mathit{Identifier}} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
 
@@ -986,18 +997,18 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.21"]{
 
-之前，我们建议用赋值让两个相去很远的过程交换信息，这样二者之间的过程不需要知道，
-程序更加模块化。这样的赋值经常是暂时性的，只在执行函数调用时生效。向语言
-添加@emph{动态赋值} (@emph{dynamic assignment})（又称@emph{流式绑定}
-(@emph{fluid binding})）组件，完成这一操作。生成式为：
+之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
+更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言添加
+@emph{动态赋值} (@emph{dynamic assignment})（又称@emph{流式绑定} (@emph{fluid
+binding})）组件，完成这一操作。生成式为：
 
 @envalign*{
         \mathit{Expression} &::= @tt{setdynamic @m{\mathit{Identifier}} = @m{\mathit{Expression}} during @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{setdynamic-exp (var exp1 body)}}}
 
-@tt{setdynamic}表达式的效果是暂时把@${var}赋为@${exp_1}的值，求@${body}的值，重
-新给@${var}赋其原值，然后返回@${body}的值。变量@${var}必需已绑定。例如，在下列表
-达式中：
+@tt{setdynamic} 表达式的效果是把@${exp_1} 的值临时赋给 @${var}，求 @${body} 的值，
+重新给 @${var} 赋其原值，然后返回 @${body} 的值。变量 @${var} 必需已绑定。例如，
+在下列表达式中：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1008,27 +1019,27 @@ in let p = proc (y) -(y,x)
 }|
 }
 
-@${x}是过程@tt{p}中的自由变量，在调用@tt{(p 22)}中值为17，在调用@tt{(p 13)}中重
-设为11，所以表达式的值为@${5-2=3}。
+@${x} 是过程 @tt{p} 中的自由变量，在调用 @tt{(p 22)} 中值为 17，在调用 @tt{(p
+13)} 中重设为 11，所以表达式的值为 @${5-2=3}。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.22"]{
 
-目前为止我们的语言都是以@emph{表达式为主} (@emph{expression-oriented})的：我们感
-兴趣的主要是表达式这种句法类别，还有它们的值。扩展语言，为@emph{语句为主}
-(@emph{statement-oriented})的简单语言建立模型，其规范概述如下。一定要@emph{遵循
-语法}，分别写出过程来处理程序、语句和表达式。
+迄今为止，我们的语言都是以@emph{表达式为主} (@emph{expression-oriented})：我们感
+兴趣的主要是表达式这种句法类别和它们的值。扩展语言，建模简单的@emph{语句为主}
+(@emph{statement-oriented})的语言，其规范概述如下。一定要@emph{遵循语法}，分别写
+出过程来处理程序、语句和表达式。
 
 @nested[#:style hangindent]{
 
-@bold{值} 与IMPLICIT-REFS相同。
+@bold{值}@hspace[1]同 IMPLICIT-REFS。
 
 }
 
 @nested[#:style hangindent]{
 
-@bold{语法} 使用下列语法：
+@bold{语法}@hspace[1]使用下列语法：
 
 @nested{
 @envalign*{
@@ -1042,17 +1053,17 @@ in let p = proc (y) -(y,x)
                          }
 }
 
-非终止符@${\mathit{Expression}}指的是表达式语言IMPLICIT-REFS，可能有一些扩展。
+非终止符 @${\mathit{Expression}} 指的是表达式语言 IMPLICIT-REFS，可能有一些扩展。
 
 }
 
 @nested[#:style hangindent]{
 
-@bold{语义} 程序是一个语句。语句不返回值，而是修改并打印存储器。
+@bold{语义}@hspace[1]程序是一个语句。语句不返回值，而是修改和打印存储器。
 
-赋值语句工作如常。打印语句求值实参并打印结果。@tt{if}语句工作如常。块语句由
-@${\mathit{Statement}}中的最后一个生成式定义，把每个绑定变量绑定到一个未初始化的
-引用，然后执行块主体。这些绑定的作用域是其主体。
+赋值语句仍按通常的方式执行。打印语句求出实参的值，打印结果。@tt{if} 语句仍按通常
+的方式执行。块语句定义见 @${\mathit{Statement}} 中的最后一个生成式。它把每个声明
+变量绑定到一个未初始化的引用，然后执行块主体。这些绑定的作用域是块主体。
 
 用如下断言写出语句的规范：
 
@@ -1062,9 +1073,9 @@ in let p = proc (y) -(y,x)
 
 @nested[#:style hangindent]{
 
-@bold{例子} 这里是一些例子。
+@bold{例子}@hspace[1]这里是一些例子。
 
-@codeblock{
+@verbatim|{
 (run "var x,y; {x = 3; y = 4; print +(x,y)}") % 例1
 7
 (run "var x,y,z; {x = 3;                      % 例2
@@ -1085,12 +1096,12 @@ in let p = proc (y) -(y,x)
                 x = 3;
                 print (f 4 x)}")
 12
-}
+}|
 
-例3解释了块语句的作用域。
+例 3 解释了块语句的作用域。
 
-例4解释了语句和表达式的交互。过程值创建并存储于变量@tt{f}。最后一行用实参4和
-@tt{x}调用这个过程；因为@tt{x}绑定到一个引用，取其值得3。
+例 4 解释了语句和表达式的交互。过程值创建并存储于变量 @tt{f}。最后一行用实参 4
+和 @tt{x} 调用这个过程；因为 @tt{x} 绑定到一个引用，解引用得 3。
 
 }
 
@@ -1098,22 +1109,22 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.23"]{
 
-为@exercise-ref{ex4.22} 中语言添加@tt{read}语句，形如@tt{read @${var}}。这种语句从输入读取一个
-非负数，存入给定的变量中。
+给@exercise-ref{ex4.22} 中的语言添加 @tt{read} 语句，形如 @tt{read @${var}}。这
+一语句从输入读取一个非负数，存入指定的变量中。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.24"]{
 
-@tt{do-while}语句类似@tt{while}，但是条件判断在其主体@emph{之后}执行。给@exercise-ref{ex4.22}
-中的语言添加@tt{do-while}语句。
+@tt{do-while} 语句类似 @tt{while}，但是条件判断在其主体@emph{之后}执行。
+给@exercise-ref{ex4.22}中的语言添加 @tt{do-while} 语句。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.25"]{
 
-扩展@exercise-ref{ex4.22} 语言中的块语句，允许初始化变量。在你的解答中，变量的作用域是否包含
-同一个块语句中后续声明的变量？
+扩展@exercise-ref{ex4.22} 语言中的块语句，允许初始化变量。在你的解答中，变量的作
+用域是否包含同一个块语句中后续声明的变量？
 
 }
 
@@ -1127,9 +1138,9 @@ in let p = proc (y) -(y,x)
 @exercise[#:level 3 #:tag "ex4.27"]{
 
 扩展前一道练习中的解答，增加@emph{子程序} (@emph{subroutine})。我们把子程序当过
-程用，但是它不返回值，且其主体为语句而非表达式。此外，增加新语句子程序调用，扩展
-块语法，允许同时声明过程和子程序。这会如何影响指代值和表达值？如果在子程序调用中
-使用过程会怎样？反过来呢？
+程用，但是它不返回值，且其主体为语句而非表达式。然后增加子程序调用，作为一种新语
+句。扩展块的语法，允许同时声明过程和子程序。这将如何影响指代值和表达值？如果在子
+程序调用中使用过程会怎样？反过来呢？
 
 }
 
@@ -1718,7 +1729,7 @@ in let swap = proc (x) proc (y)
 组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调用交换
 过程的常见情形是对换数组元素，传递数组引用就能用上交换过程。给按址调用语言添加练
 习4.29中的数组操作符，扩展@tt{value-of-operand}，处理这种情况。使下例中的过程调
-用能够如愿工作：
+用能够如愿执行：
 
 @centered{@code{((swap (arrayref a i)) (arrayref a j))}}
 
