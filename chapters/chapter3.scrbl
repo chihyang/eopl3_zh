@@ -946,7 +946,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 variable})或@emph{形参} (@emph{formal parameter})。在过程调用 @tt{(call-exp
 @${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@emph{操作符} (@emph{operator})，表
 达式 @${exp_2} 是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
-parameter})。我们用@emph{实参} (@emph{argument})指代实际参数的值。
+parameter})。我们用@emph{实参} (@emph{argument}) 指代实参的值。
 
 这是这种语言的两个小例子。
 

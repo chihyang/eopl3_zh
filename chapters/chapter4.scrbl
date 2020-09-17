@@ -1148,10 +1148,10 @@ in let p = proc (y) -(y,x)
 
 @section[#:style section-title-style-numbered #:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
 
-在@exercise-ref{ex3.9} 中，我们给语言添加了列表，但它们是不可变的：不像Scheme中，有
-@tt{set-car!}和@tt{set-cdr!}处理它们。
+在@exercise-ref{ex3.9} 中，我们给语言添加了列表，但它们是不可变的：不像 Scheme
+中，有 @tt{set-car!} 和 @tt{set-cdr!} 处理它们。
 
-现在，我们给IMPLICIT-REFS添加可变序对。序对是表达值，具有如下操作：
+现在，我们给 IMPLICIT-REFS 添加可变序对。序对是表达值，具有如下操作：
 
 @envalign*{
 @bold{@tt{make-pair}}  &: \mathit{Expval} \times \mathit{Expval} \to \mathit{MutPair} \\
@@ -1161,7 +1161,8 @@ in let p = proc (y) -(y,x)
 @bold{@tt{setright}}  &: \mathit{MutPair} \times \mathit{Expval} \to \mathit{Unspecified}
 }
 
-序对包含两个位置，二者均可自行赋值。这给出 @elem[#:style question]{定义域方程}：
+序对包含两个位置，二者可以分别赋值。由此得出语言值的@emph{定义域方程}
+(@emph{domain equations})：
 
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} + \mathit{MutPair} \\
@@ -1169,16 +1170,18 @@ in let p = proc (y) -(y,x)
 \mathit{MutPair} &= \mathit{Ref(ExpVal)} \times \mathit{Ref(ExpVal)}
 }
 
-我们把这种语言叫做MUTABLE-PAIRS。
+我们把这种语言叫做 MUTABLE-PAIRS。
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.1"]{实现}
 
-我们可以直接用前例中的@tt{reference}数据类型实现可变序对。代码如@figure-ref{fig-4.9} 所示。
+我们可以直接用前例中的 @tt{reference} 数据类型实现可变序对。
+代码如@figure-ref{fig-4.9} 所示。
 
-一旦完成之后，向语言添加这些就很直接了。我们给表达值数据类型新增一种变体
-@tt{mutpair-val}，给@tt{value-of}新增5行代码。这些如@figure-ref{fig-4.10} 所示。我们随便选取
-@tt{setleft}的返回值为82，@tt{setright}的返回值为83。用前述辅助组件得到的示例跟
-踪日志如@figure-ref{fig-4.11} 所示。
+完成图中的代码，给语言添加这些就很直接了。如@figure-ref{fig-4.10} 所示，我们给表
+达值数据类型新增一种变体 @tt{mutpair-val}，给 @tt{value-of} 新增 5 行代码。我们
+让 @tt{setleft} 返回任意值 82，让 @tt{setright} 返回 83。
+用@elemref["trace-instrument"]{前述}辅助组件得到的示例跟踪日志
+如@figure-ref{fig-4.11} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1265,10 +1268,10 @@ in let p = proc (y) -(y,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.2"]{可变序对的另一种表示}
 
-把可变序对表示为两个引用没有利用@tt{MutPair}的已知信息。序对中的两个位置虽然能够
-各自赋值，但它们不是独立分配的。我们知道它们会一起分配：如果序对的左侧是一个位置，
-那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。代码如@figure-ref{fig-4.13} 所示。其他
-不需要修改。
+把可变序对表示为两个引用没有利用与 @tt{MutPair} 相关的已知信息。序对中的两个位置
+虽然能够各自赋值，但它们不是独立分配的。我们知道它们会一起分配：如果序对的左侧是
+一个位置，那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。
+代码如@figure-ref{fig-4.13} 所示，不需再做其他修改。
 
 @nested[#:style eopl-figure]{
 @verbatim|{
@@ -1341,9 +1344,9 @@ newref: 分配位置 7
 @eopl-caption["fig-4.12"]{MUTABLE-PAIRS求值的跟踪日志，续}
 }
 
-同样地，堆中的任何聚合性对象都可以用其第一个位置的指针表示。但是，如果不提供区域
-的长度信息，指针本身不能指代一片内存区域（见@exercise-ref{ex4.30}）。缺乏长度信息是经典安全问
-题的一大来源，比如写数组越界。
+与之类似，堆中的任何聚合对象都可以用其第一个位置的指针表示。但是，如果不提供区域
+的长度信息，指针本身无法指明一片内存区域（见@exercise-ref{ex4.30}）。缺乏长度信
+息是经典安全问题的一大来源，比如写数组越界。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1385,14 +1388,14 @@ newref: 分配位置 7
 
 @exercise[#:level 2 #:tag "ex4.28"]{
 
-写出五个可变序对操作的规则定义。
+写出五个可变序对操作的推理规则规范。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.29"]{
 
-给语言添加数组。添加新操作符@tt{newarray}、@tt{arrayref}、@tt{arrayset}，来创建、
-索值和更新数组。这引出：
+给语言添加数组。添加新操作符 @tt{newarray}、@tt{arrayref} 和 @tt{arrayset}，用它
+们来创建、解引用和更新数组。这需要：
 
 @envalign*{
 \mathit{ArrVal} &= \mathit{(Ref(ExpVal))} \\
@@ -1400,7 +1403,7 @@ newref: 分配位置 7
 \mathit{DenVal} &= \mathit{Ref(ExpVal)}
 }
 
-由于数组中的位置是连续的，用上述第二种表示。下列程序的结果是什么？
+由于数组中的位置是连续的，用上述第二种表示。下面程序的结果是什么？
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1412,39 +1415,42 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 }|
 }
 
-这里@tt{newarray(2,-99)}要创建长度为2的数组，数组中的每个位置包含@${-99}。
-@tt{begin}表达式定义如@exercise-ref{ex4.4}。让数组索引从0开始，那么长度为2的数组索引为0和1。
+这里 @tt{newarray(2,-99)} 要创建长度为 2 的数组，数组中的每个位置都包含 -99。
+@tt{begin} 表达式定义同@exercise-ref{ex4.4}。令数组索引从 0 开始，所以长度为 2
+的数组索引为 0 和 1。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.30"]{
 
-给@exercise-ref{ex4.29} 的语言添加过程@tt{arraylength}，返回数组的长度。你的过程运行时间应为常
-数。@tt{arrayref}和@tt{arrayset}一定要查验索引，确保其值在数组长度之内。
+给@exercise-ref{ex4.29} 的语言添加过程 @tt{arraylength}，返回数组的长度。你的过
+程运行时间应为常数。@tt{arrayref} 和 @tt{arrayset} 一定要查验索引，确保索引值在
+数组长度之内。
 
 }
 
 @section[#:style section-title-style-numbered #:tag "s4.5"]{传参变体}
 
-当过程主体执行时，其形参绑定到一个指代值。那个值从哪儿来？它一定是过程调用传入的
-实际参数值。我们已见过两种传参方式：
+当过程主体执行时，其形参绑定到一个指代值。那个值从哪儿来？它一定是过程调用传入实
+参的值。我们已见过两种传参方式：
 
 @itemlist[
 
- @item{自然传参，指代值与实际参数的表达值相同（@pageref{pass-by-value}）。}
+ @item{自然传参，指代值与实参的表达值相同（@pageref{pass-by-value}）。}
 
- @item{按值调用，指代值是一个引用，指向一个位置，该位置包含实际参数的表达值
+ @item{按值调用，指代值是一个引用，指向一个位置，该位置包含实参的表达值
  （@secref{s4.3}）。这是最常用的传参方式。}
 
 ]
 
-本节中，我们探讨其他一些传参机制。
+本节探讨其他一些传参机制。
 
-@subsection[#:style section-title-style-numbered #:tag "s4.5.1"]{按址调用}
+@subsection[#:style section-title-style-numbered #:tag "s4.5.1"]{按指调用}
 
 考虑下面的表达式：
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let p = proc (x) set x = 4
@@ -1452,29 +1458,31 @@ in let a = 3
    in begin (p a); a end
 }|
 }
+}
 
-按值调用时，绑定到@tt{x}的指代值是一个引用，它包含的初始值与绑定到@tt{a}的引用相
-同，但这些引用互不相干。那么赋值给@tt{x}不会影响引用@tt{a}的内容，所以，整个表达
-式的值是3。
+按值调用时，绑定到 @tt{x} 的指代值是一个引用，它包含的初始值与绑定到 @tt{a} 的引
+用相同，但这些引用互不相干。所以赋值给 @tt{x} 不会影响引用 @tt{a} 的内容，整个表
+达式的值是 3。
 
 }
 
 按值调用时，当过程给某个参数赋新值，调用者无法获悉。当然，如果传给调用者的参数像
-@secref{s4.4}那样包含可变序对，那么调用者能看到@tt{setleft}和@tt{setright}的效果
-的效果，但看不到@tt{set}的效果。
+@secref{s4.4}那样包含可变序对，那么调用者能看到 @tt{setleft} 和 @tt{setright} 的
+效果，但看不到 @tt{set} 的效果。
 
-虽然这样隔离调用者和受调者符合通常期望，但有时给过程传递一个位置，并要求过程给这
-个位置赋值也很有用。要这样做，可以给过程传递一个引用，指向调用者变量的位置，而不
-是变量的内容。这种传参机制叫做@emph{按址调用} (@emph{call-by-reference})。如果操
-作数正是变量引用，那就传递变量的位置。然后，过程的形式参数绑定到这个位置。如果操
-作数是其他类型的表达式，那么形式参数绑定到一个新位置，其值为操作数的值，就像按值
-调用一样。在上例中使用按址调用，给@tt{x}赋值4等效于给@tt{a}赋值4，所以整个表达式
-返回4，而不是3。
+虽然这样隔离调用者和被调者常合所愿，但有些时候，给过程传递一个位置，并让过程给这
+个位置赋值也不无好处。要这样做，可以给过程传递一个引用，该引用指向调用者变量的位
+置，而不是变量的内容。这种传参机制叫做@emph{按指调用} (@emph{call-by-reference})。
+如果操作数正是变量引用，那就传递变量位置的引用。然后，过程的形参绑定到这个位置。
+如果操作数是其他类型的表达式，那么形参绑定到一个新位置，该位置包含操作数的值，就
+像按值调用一样。在上例中使用按指调用，把 4 赋给 @tt{x} 等效于把 4 赋给 @tt{a}，
+所以整个表达式返回 4，而不是 3。
 
-按址调用过程，且实际参数为变量时，传递的不是按值调用中变量所在位置的内容，而是那
-个变量的@emph{位置}。例如，考虑：
+按指调用过程，且实参为变量时，传递的不是按值调用中变量所在位置的内容，而是那个变
+量的@emph{位置}。例如，考虑：
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let p = proc (x) set x = 44
@@ -1483,19 +1491,21 @@ in let g = proc (y) (f y)
       in begin (g z); z end
 }|
 }
+}
 
-调用过程@tt{g}时，@tt{y}绑定到@tt{z}的位置，而不是那个位置处的内容。类似地，调用
-@tt{f}时，@tt{x}绑定到同一个位置。所以，@tt{x}、@tt{y}和@tt{z}都绑定到同一位置，
-@tt{set x = 44}的效果是把那个位置的内容设为44。因此，整个表达式的值是44。执行这
-个表达式的跟踪日志如@figure-ref{fig-4.14} 和 @countref{fig-4.15} 所示。在本例中，
-@tt{x}、@tt{y}和@tt{z}最终都绑定到位置5。
+调用过程 @tt{g} 时，@tt{y} 绑定到 @tt{z} 的位置，而不是那个位置的内容。类似地，
+调用 @tt{f} 时，@tt{x} 绑定到同一个位置。所以，@tt{x}、@tt{y} 和 @tt{z} 都绑定到
+同一位置，@tt{set x = 44} 的效果是把那个位置的内容设为 44。因此，整个表达式的值
+是 44。执行这个表达式的跟踪日志如@figure-ref{fig-4.14} 和 @countref{fig-4.15} 所
+示。在本例中，@tt{x}、@tt{y} 和 @tt{z} 最终都绑定到位置 5。
 
 }
 
-按址调用的常见用法是返回多个值。一个过程以通常方式返回一个值，并给按址传递的参数
-赋其他值。另一种例子，考虑变量换值问题：
+按指调用的常见用法是返回多个值。过程以通常方式返回一个值，并给按指传递的参数赋其
+他值。另一种例子，对换变量的值：
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let swap = proc (x) proc (y)
@@ -1512,26 +1522,29 @@ in let a = 33
          end
 }|
 }
+}
 
-使用按址调用，这会交换@tt{a}和@tt{b}的值，所以它返回11。但如果用我们已有的按值调
-用解释器执行这个程序，它会返回@${-11}，因为在换值过程内部赋值对变量@tt{a}和
-@tt{b}毫无影响。
+采用按指调用，这会对换 @tt{a} 和 @tt{b} 的值，所以它返回 11。但如果用已有的按值
+调用解释器执行这个程序，它会返回 -11，因为在对换过程的内部赋值对变量 @tt{a} 和
+@tt{b} 毫无影响。
 
 }
 
-按址调用中，变量仍然指代表达值的引用，就像按值调用一样：
+就像在按值调用中一样，在按指调用中，变量仍然指代表达值的引用：
 
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
 \mathit{DenVal} &= \mathit{Ref(ExpVal)} + \mathit{ExpVal}
 }
 
-唯一需要改变的是新位置的分配。按值调用中，求值每个操作数都要分配新位置；按址调用
-中，只在求值@emph{非变量}操作数时才分配新位置。
+唯一需要改变的是新位置的分配。按值调用中，求每个操作数的值都要分配新位置；按指调
+用中，只在求@emph{非变量}操作数的值时才分配新位置。
 
-这很容易实现。函数@tt{apply-procedure}必需修改，因为不是每个过程调用都要分配新位
-置。@tt{value-of}中的@tt{call-exp}能作出判断，因此分配的责任上移其中。
+这很容易实现。函数 @tt{apply-procedure} 必需修改，因为不是每个过程调用都要分配新
+位置。那份责任必须上移至 @tt{value-of} 中的 @tt{call-exp} ，因为它才具有做出判断
+所需的信息。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
 (define apply-procedure
@@ -1541,10 +1554,12 @@ in let a = 33
         (value-of body
           (extend-env var val saved-env))))))
 ]
+}
 
-然后我们修改@tt{value-of}中的@tt{call-exp}，引入新函数@tt{value-of-operand}来做
-必要的判断。
+然后我们修改 @tt{value-of} 中的 @tt{call-exp}，引入新函数 @tt{value-of-operand}
+来做必要的判断。
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (call-exp
  (rator rand)
@@ -1552,11 +1567,13 @@ in let a = 33
        (arg (value-of-operand rand env)))
    (apply-procedure proc arg)))
 }
+}
 
-过程@tt{value-of-operand}检查操作数是否为变量。如果是，则返回那个变量指代的引用，
-然后传给过程@tt{apply-procedure}。否则，求值操作数，返回指向新位置的引用，位置中
-包含该值。
+过程 @tt{value-of-operand} 检查操作数是否为变量。如果是，则返回那个变量指代的引
+用，然后传给过程 @tt{apply-procedure}；否则，它求出操作数的值，在新位置放入那个
+值，并返回指向该位置的引用。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-operand}} : @${\mathit{Exp} \times \mathit{Env} \to \mathit{Ref}}}
 (define value-of-operand
@@ -1566,13 +1583,15 @@ in let a = 33
       (else
         (newref (value-of exp env))))))
 ]
+}
 
-我们也可以按照同样地方式修改@tt{let}，但我们不这样做，所以语言中仍会保留按值调用
-功能。
+我们也可以按照同样的方式修改 @tt{let}，但我们不这样做，因此语言中仍然保留按值调
+用的功能。
 
-多个按址调用参数可以指向同一个位置，如下列程序所示。
+多个按指调用参数可以指向同一个位置，如下面的程序所示。
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let b = 3
@@ -1584,11 +1603,12 @@ in let p = proc (x) proc(y)
    in ((p b) b)
 }|
 }
+}
 
-它的值为4，因为@tt{x}和@tt{y}指向同一个位置，即@tt{b}的绑定。这种现象
-叫做@emph{变量别名} (@emph{variable aliasing})。这里@tt{x}和@tt{y}是同一个位置的
-别名（名字）。通常，我们不希望给一个变量赋值会改变另一个的值，所以别名会导致程序
-难以理解。
+它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫
+做@emph{变量别名} (@emph{variable aliasing})。这里的 @tt{x} 和 @tt{y} 是同一个位
+置的别名（名字）。通常，我们在给一个变量赋值时并不想改变另一个变量的值，所以别名
+会导致程序难以理解。
 
 }
 
@@ -1640,7 +1660,7 @@ newref: 分配位置 5
  (5 #(struct:num-val 55)))
 }|
 
-@eopl-caption["fig-4.14"]{CALL-BY-REFERENCE的简单求值}
+@eopl-caption["fig-4.14"]{CALL-BY-REFERENCE 的简单求值}
 }
 
 @nested[#:style eopl-figure]{
@@ -1669,43 +1689,44 @@ newref: 分配位置 5
 #(struct:num-val 44)
 >}|
 
-@eopl-caption["fig-4.15"]{CALL-BY-REFERENCE的简单求值，续}
+@eopl-caption["fig-4.15"]{CALL-BY-REFERENCE 的简单求值，续}
 }
 
 @exercise[#:level 1 #:tag "ex4.31"]{
 
-写出CALL-BY-REFERENCE的规则定义。
+写出 CALL-BY-REFERENCE 的推理规则规范。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.32"]{
 
-扩展语言CALL-BY-REFERENCE，支持多参数过程。
+扩展语言 CALL-BY-REFERENCE，支持多参数过程。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.33"]{
 
-扩展语言CALL-BY-REFERENCE，同时支持按值调用过程。
+扩展语言 CALL-BY-REFERENCE，也令其支持按值调用的过程。
 
 }
 
 @exercise[#:level 1 #:tag "ex4.34"]{
 
-给语言添加按址调用的@tt{let}，名为@tt{letref}。写出规范并实现。
+给语言添加按指调用的 @tt{let}，名为 @tt{letref}。写出规范并实现。
 
 }
 
 @exercise[#:level 2 #:tag "ex4.35"]{
 
-在按值调用框架下，我们仍能享受按址调用的便利。扩展语言IMPLICIT-REF，添加新表达式：
+在按值调用框架下，我们仍能享受按指调用的便利。扩展语言 IMPLICIT-REF，添加新表达
+式：
 
 @envalign*{
         \mathit{Expression} &::= @tt{ref @m{\mathit{Identifier}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{ref-exp (var)}}}
 
-这与语言EXPLICIT-REF不同。因为引用只能从变量获得。这就使我们能用按值调用语言写出
-类似@tt{swap}的程序。下列表达式的值是什么？
+这与语言 EXPLICIT-REF 不同。因为引用只能从变量获得。这就使我们能用按值调用语言写
+出类似 @tt{swap} 的程序。下面表达式的值是什么？
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1721,17 +1742,18 @@ in let swap = proc (x) proc (y)
 }|
 }
 
-这里我们用支持多声明的@tt{let}（@exercise-ref{ex3.16}）。这种语言的表达值和指代值是什么？
+此处使用支持多声明的 @tt{let}（@exercise-ref{ex3.16}）。这种语言的表达值和指代值
+是什么？
 
 }
 
 @exercise[#:level 1 #:tag "ex4.36"]{
 
-大多数语言支持数组，在按址调用中，数组引用通常像变量引用那样处理。如果操作数是数
-组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调用交换
-过程的常见情形是对换数组元素，传递数组引用就能用上交换过程。给按址调用语言添加练
-习4.29中的数组操作符，扩展@tt{value-of-operand}，处理这种情况。使下例中的过程调
-用能够如愿执行：
+大多数语言支持数组，在按指调用中，数组引用通常以类似变量引用的方式处理。如果操作
+数是数组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调
+用对换过程的常见情形是交换数组元素，传递数组引用就能用上对换过程。给按指调用语言
+添加@exercise-ref{ex4.29} 中的数组操作符，扩展 @tt{value-of-operand}，处理这种情
+况，使下例中的过程调用能够如愿执行：
 
 @centered{@code{((swap (arrayref a i)) (arrayref a j))}}
 
@@ -1743,11 +1765,11 @@ in let swap = proc (x) proc (y)
 
 @exercise[#:level 2 #:tag "ex4.37"]{
 
-@emph{按值和结果调用} (@emph{call-by-value-result})是按址调用的一种变体。在按值和
-结果调用中，实际参数必需是变量。传递参数时，形式参数绑定到新的引用，初值为实际参
-数的值，就像按值调用一样。然后照常执行过程主体。但过程主体返回时，新引用处的值复
-制到实际参数指代的引用中。因为这样可以改进内存非陪，这可能比按址调用更高效。实现
-按值和结果调用，写出一个过程，采用按址调用与按值和结果调用产生不同的答案。
+@emph{按值和结果调用} (@emph{call-by-value-result}) 是按指调用的一种变体。在按值
+和结果调用中，实参必需是变量。传递参数时，形参绑定到新的引用，初值为实参的值，就
+像按值调用一样。然后过程主体照常执行。但过程主体返回时，新引用处的值复制到实参指
+代的引用中。因为这样可以改进内存分配，所以可能比按指调用更高效。实现按值和结果调
+用，写出一个过程，使之在按指调用与按值和结果调用中产生不同的答案。
 
 }
 
@@ -1803,7 +1825,7 @@ in let f = proc (z) 11
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc}
 }
 
-我们的位置分配策略与按址调用类似：如果操作数是变量，那么我们传递指代的引用。否则，
+我们的位置分配策略与按指调用类似：如果操作数是变量，那么我们传递指代的引用。否则，
 我们给未求值的参数在新位置放一个值箱，传递该位置的引用。
 
 @racketblock[

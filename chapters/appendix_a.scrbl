@@ -95,7 +95,7 @@ EXPLICIT-REFS 的设计基于 ML (Milner et al., 1989) 的存储器模型，而�
 术语@exact-elem{“}左值@exact-elem{”}和@exact-elem{“}右值@exact-elem{”}，以及
 内存的环境-存储器模型源自 Strachey (1967)。
 
-Fortran (Backus et al., 1957) 是第一种使用按址调用的语言，Algol 60 (Naur et al.,
+Fortran (Backus et al., 1957) 是第一种使用按指调用的语言，Algol 60 (Naur et al.,
 1963) 是第一种使用按名调用的语言。Friedman & Wise (1976) 较早介绍了全面使用懒求
 值的威力。Haskell (Hudak et al., 1990) 是第一种使用按需调用的实际语言。为了建模
 按名调用，Ingerman (1961) 发明了@emph{值箱} (@emph{thunk})。我们用它们和效果建模
