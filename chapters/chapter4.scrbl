@@ -400,11 +400,11 @@ end
 
 }
 
-我们可以给该系统添加一些辅助过程，把环境、过程和存储器转换为更易读的形式，也可以
-改善系统，在代码中的关键位置打印消息。我们还使用过程把环境、过程和存储器转换为更
-易读的形式。得出的日志详细描述了系统的动作。典型例子如@figure-ref{fig-4.4} 和
-@countref{fig-4.5} 所示。此外，这一跟踪日志还标明差值表达式的参数按从左到右的顺
-序求值。
+我们可以给该系统添加一些@elemtag["trace-instrument"]{辅助过程}，把环境、过程和存
+储器转换为更易读的形式，也可以改善系统，在代码中的关键位置打印消息。我们还使用过
+程把环境、过程和存储器转换为更易读的形式。得出的日志详细描述了系统的动作。典型例
+子如@figure-ref{fig-4.4} 和@countref{fig-4.5} 所示。此外，这一跟踪日志还标明差值
+表达式的参数按从左到右的顺序求值。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -693,8 +693,7 @@ newref: 分配位置 2
 }
 
 当变量出现在表达式中，我们首先在环境中查找标识符，找到绑定的位置，然后在存储器中
-找出那个位置的值。因此对 @tt{var-exp}，我们有@exact-elem{“}二级@exact-elem{”}
-系统。
+找出那个位置的值。因此对 @tt{var-exp}，我们有个@exact-elem{“}二级@exact-elem{”}系统。
 
 一个位置的内容可用 @tt{set} 表达式修改，语法为：
 
@@ -710,7 +709,7 @@ newref: 分配位置 2
 体。
 
 @figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能
-像@secref{s4.2}中的那个例子那样做链式引用。
+像@secref{s4.2}中的例子那样做链式引用。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -813,7 +812,7 @@ in let a = (g 11)
 }
 }
 
-创建引用呢？新的位置应在每一新绑定处创建。这门语言中只有四处地方创建新绑定：初始
+创建引用呢？新的位置应在每一新绑定处创建。这门语言中只有四个地方创建新绑定：初始
 环境中、@tt{let} 中、过程调用以及 @tt{letrec} 中。
 
 在初始环境中，我们直接分配新位置。
@@ -848,7 +847,8 @@ in let a = (g 11)
 令其返回一个引用，指向包含适当闭包的位置。由于我们使用多声明的
 @tt{letrec}（@exercise-ref{ex3.32}），@tt{extend-env-rec} 取一个过程名列表，一个
 绑定变量列表，一个过程主体列表，以及已保存的环境。过程 @tt{location} 取一变量，
-一个变量列表；若变量存在于列表中，返回列表中的变量位置，若不存在，返回 @tt{#f}。
+一个变量列表。若变量存在于列表中，@tt{location} 返回变量在列表中的位置；若不存在，
+返回 @tt{#f}。
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -865,7 +865,8 @@ in let a = (g 11)
 }
 }
 
-@figure-ref{fig-4.8} 用前述辅助组件，展示了 IMPLICIT-REFS 求值的简单例子。
+@figure-ref{fig-4.8} 用@elemref["trace-instrument"]{前面}介绍的辅助组件，展示了
+IMPLICIT-REFS 求值的简单例子。
 
 @nested[#:style eopl-figure]{
 @verbatim|{
@@ -959,7 +960,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.17"]{
 
-写出规则，实现多参数过程和声明多变量的 @tt{let}。
+写出规则并实现多参数过程和声明多变量的 @tt{let}。
 
 }
 
@@ -998,9 +999,9 @@ in begin
 @exercise[#:level 2 #:tag "ex4.21"]{
 
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
-更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言添加
-@emph{动态赋值} (@emph{dynamic assignment})（又称@emph{流式绑定} (@emph{fluid
-binding})）组件，完成这一操作。生成式为：
+更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
+添加@emph{动态赋值} (@emph{dynamic assignment})（又称@emph{流式绑定}
+(@emph{fluid binding})）组件，完成这一操作。生成式为：
 
 @envalign*{
         \mathit{Expression} &::= @tt{setdynamic @m{\mathit{Identifier}} = @m{\mathit{Expression}} during @m{\mathit{Expression}}} \\[-3pt]
@@ -1053,7 +1054,8 @@ in let p = proc (y) -(y,x)
                          }
 }
 
-非终止符 @${\mathit{Expression}} 指的是表达式语言 IMPLICIT-REFS，可能有一些扩展。
+非终止符 @${\mathit{Expression}} 指的是 IMPLICIT-REFS 语言中的表达式，可能稍有扩
+展。
 
 }
 

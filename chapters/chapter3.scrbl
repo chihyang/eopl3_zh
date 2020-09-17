@@ -98,7 +98,8 @@ specification})。扫描器取一字符序列，生成词牌序列。
 扫描器和解析器。编译器教材描述了这一过程。本书使用的解析技术及相关语法设计从简，
 专为满足我们的需求。
 
-另一种方式是忽略具体语法的细节，把表达式写成列表结构，就像@secref{s2.5}和@exercise-ref{ex2.31}中，处理 lambda 演算表达式那样。
+另一种方式是忽略具体语法的细节，把表达式写成列表结构，
+就像@secref{s2.5}和@exercise-ref{ex2.31}中，处理 lambda 演算表达式那样。
 
 @section[#:style section-title-style-numbered #:tag "s3.2"]{LET：一门简单语言}
 
