@@ -17,7 +17,7 @@
 @list["Continuation" "续文"]
 @list["Dereference" "解引用"]
 @list["Derivation" "推导"]
-@list["Explicit reference" "隐式引用"]
+@list["Explicit reference" "显式引用"]
 @list["Form" "形式"]
 @list["Formal parameter" "形参"]
 @list["Implementation" "实现"]
