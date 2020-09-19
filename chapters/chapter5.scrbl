@@ -15,18 +15,21 @@
 在@secref{expr}，我们用环境的概念探讨绑定行为，建立每部分程序执行的数据上下文。
 这里，我们将用类似方式探讨每部分程序执行的@emph{控制上下文} (@emph{control
 context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来抽象控制上下文。
-我们将要编写的解释器会取一续文参数，从而突出控制上下文。
+我们将要编写的解释器会取一续文参数，从而彰显控制上下文。
 
 考虑下面的Scheme阶乘函数定义。
 
+@nested[#:style small]{
 @racketblock[
 (define fact
   (lambda (n)
     (if (zero? n) 1 (* n (fact (- n 1))))))
 ]
+}
 
-我们可以用推导模拟@tt{fact}的计算过程：
+我们可以用推导建模 @tt{fact} 的计算过程：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
   (fact 4)
@@ -41,11 +44,14 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
 = 24
 }|
 }
+}
 
-这是阶乘的自然递归定义。每次调用@tt{fact}都保证返回值与调用处的@tt{n}相乘。这样，
-随着计算进行，@tt{fact}在越来越大的@emph{控制上下文}中调用。比较这一行为与下列过程。
+这是阶乘的自然递归定义。每次调用 @tt{fact} 都保证返回值与调用处的 @tt{n} 相乘。
+这样，随着计算进行，@tt{fact} 在越来越大的@emph{控制上下文} 中调用。比较这一行为
+与下列过程。
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (define fact-iter
   (lambda (n)
@@ -55,9 +61,11 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
   (lambda (n a)
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
 ]
+}
 
 用这个定义，我们计算：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
   (|@elemtag["fact-iter"]{}fact-iter 4)
@@ -70,49 +78,50 @@ context})。我们将介绍@emph{续文} (@emph{continuation})的概念，用来
 }|
 }
 }
+}
 
-这里，@tt{fact-iter-acc}总是在同样的控制上下文内调用：在本例中，是没有任何上下文。
-当@tt{fact-iter-acc}调用自身时，它在@tt{fact-iter-acc}执行的@exact-elem{“}尾端
-@exact-elem{”}，除了把返回值作为@tt{fact-iter-acc}调用的结果，不需再做任何保证。
-我们称之为@emph{尾调用} (@emph{tail call})。这样，上述推导中的每一步都形如
-@tt{(fact-iter-acc @${n} @${a})}。
+这里，@tt{fact-iter-acc} 总是在同样的控制上下文内调用：在本例中，是没有任何上下
+文。当 @tt{fact-iter-acc} 调用自身时，它在 @tt{fact-iter-acc} 执行的
+@exact-elem{“}尾端@exact-elem{”}，除了把返回值作为 @tt{fact-iter-acc} 调用的结
+果，不需再做任何保证。我们称之为@emph{尾调用} (@emph{tail call})。这样，上述推导
+中的每一步都形如 @tt{(fact-iter-acc @${n} @${a})}。
 
-当@tt{fact}这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到调
-用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现@emph{递
-归性控制行为} (@emph{recursive control behavior})。
+当 @tt{fact} 这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到
+调用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现
+出@emph{递归性控制行为} (@emph{recursive control behavior})。
 
-与之相对，@tt{fact-iter-acc}调用自身时，不需记录额外的控制信息。递归调用发生在表
-达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对应
-返回的递归调用数目）增加时，系统不需要不断增长的内存安放控制上下文。只需使用有限内
-存安放控制信息的过程呈现出@emph{迭代性控制行为} (@emph{iterative control
+与之相对，@tt{fact-iter-acc} 调用自身时，不需记录额外的控制信息。递归调用发生在
+表达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对
+应返回的递归调用数目）增加时，系统不需要不断增长的内存存放控制上下文。只需使用有
+限内存存放控制信息的过程呈现出@emph{迭代性控制行为} (@emph{iterative control
 behavior})。
 
-为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程@tt{fact}在@emph{操作数位置}
-(@emph{operand position})调用。我们需要保存这个调用的上下文，因为我们需要记住，
-过程调用执行完毕之后，我们仍需求出操作数的值，并执行外层调用，在本例中，是完成待
-做的乘法。这给出一条重要原则：
+为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程 @tt{fact}
+在@emph{操作数位置} (@emph{operand position}) 调用。我们需要保存这个调用的上下文，
+因为我们需要记住，过程调用执行完毕之后，仍需求出操作数的值，并执行外层调用，在本
+例中，是完成待做的乘法。这给出一条重要原则：
 
 @nested[#:style tip]{
  @centered{@bold{不是过程调用导致控制上下文扩大，而是操作数的求值。}}
 }
 
 本章，我们学习如何跟踪和操作控制上下文。我们的核心工具是名为@emph{续文}
-(@emph{continuation})的数据类型。续文是控制上下文的抽象表示，就像环境是数据上下
+(@emph{continuation}) 的数据类型。就像环境是数据上下文的抽象表示，续文是控制上下
 文的抽象表示。我们将探索续文，编写直接传递续文参数的解释器，就像之前直接传递环境
 参数的解释器。一旦处理了简单情况，我们就能明白如何给语言添加组件，以更加复杂的方
 式处理控制上下文，譬如异常和线程。
 
 在@secref{cps}，我们展示如何用转换解释器的技术转换所有程序。我们说以这种方式转换
-的程序具有@emph{续文传递风格} (@emph{continuation-passing style})。@secref{cps}
-还展示了续文的其他一些重要应用。
+而得的程序具有@emph{续文传递风格} (@emph{continuation-passing style})。
+@secref{cps}还展示了续文的其他一些重要应用。
 
 @section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
-在我们的新解释器中，诸如@tt{value-of}等主要过程将取第三个参数。这一参数，@emph{续文}，
-用来抽象每个表达式求值时的控制上下文。
+在我们的新解释器中，@tt{value-of} 等主要过程将取第三个参数。这一参数——@emph{续
+文}——用来抽象每个表达式求值时的控制上下文。
 
-我们从@figure-ref{fig-5.1}，即@secref{s3.4}中的LETREC语言解释器入手。我们把
-@tt{value-of-program}的结果叫做@${FinalAnswer}，以强调这个表达值是程序的最终值。
+我们从@figure-ref{fig-5.1}，即@secref{s3.4}中的 LETREC 语言解释器入手。我们把
+@tt{value-of-program} 的结果叫做 @${FinalAnswer}，以强调这个表达值是程序的最终值。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -166,30 +175,32 @@ behavior})。
 @eopl-caption["fig-5.1"]{传递环境的解释器}
 }
 
-我们的目标是重写解释器，避免在调用@tt{value-of}时产生控制上下文。当控制上下文需
-要增加时，我们扩展续文参数，就像在@secref{expr}，程序产生数据上下文时，扩展解释
-器的环境一样。突出控制上下文，我们能看到它如何消长。之后，从@secref{s5.4}到
-@secref{s5.5}，我们将用它给我们的语言添加新的控制行为。
+我们的目标是重写解释器，避免在调用 @tt{value-of} 时产生控制上下文。当控制上下文
+需要增加时，我们扩展续文参数，就像在@secref{expr}中，程序产生数据上下文时，扩展
+解释器的环境一样。彰显控制上下文，我们就能看到它如何消长。之后，
+从@secref{s5.4}到@secref{s5.5}，我们将用它给我们的语言添加新的控制行为。
 
 现在，我们知道环境表示一个从符号到指代值的函数。续文表示什么呢？表达式的续文表示
 一个过程，它取表达式的结果，完成计算。所以我们的接口必须包含一个过程
-@tt{apply-cont}，它取一续文@tt{cont}，一个表达值@tt{val}，完成由@tt{cont}指定的
-计算。@tt{apply-cont}的合约为：
+@tt{apply-cont}，它取一续文 @tt{cont}，一个表达值 @tt{val}，完成由 @tt{cont} 指
+定的计算。@tt{apply-cont} 的合约为：
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 @#,elem{@${\mathit{FinalAnswer}} = @${\mathit{ExpVal}}}
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
 ]
+}
 
-我们把@tt{apply-cont}的结果叫做@${FinalAnswer}是为了提醒自己，它是计算最终的值：
-程序的其他部分都不用它。
+我们把 @tt{apply-cont} 的结果叫做 @${FinalAnswer} 是为了提醒自己，它是计算最终的
+值：程序的其他部分都不用它。
 
 }
 
-接口应该包含什么样的续文构造器？随我们分析解释器，这些续文构造器自会显现。首先，
-我们需要一个续文构造器，生成不需再对计算值进行操作的上下文。我们把这个续文叫做
-@tt{(end-cont)}，定义为：
+接口应该包含什么样的续文构造器？随着我们分析解释器，这些续文构造器自会显现。首先，
+我们需要一个续文构造器，在不需再对计算值进行操作时生成上下文。我们把这个续文叫做
+@tt{(end-cont)}，其定义为：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -201,13 +212,15 @@ behavior})。
 }|
 }
 
-调用@tt{(end-cont)}打印出一条计算结束消息，并返回程序的值。因为@tt{(end-cont)}打
-印出一条消息，我们可以看出它调用了多少次。在正确的计算中，它只应调用一次。
+调用 @tt{(end-cont)} 打印出一条计算结束消息，并返回程序的值。因为
+@tt{(end-cont)} 打印出一条消息，我们可以看出它调用了多少次。在正确的计算中，它只
+应调用一次。
 
 }
 
-我们把@tt{value-of-program}重写为：
+我们把 @tt{value-of-program} 重写为：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
 (define value-of-program
@@ -216,11 +229,13 @@ behavior})。
       (a-program (exp1)
         (value-of/k exp1 (init-env) (end-cont))))))
 ]
+}
 
-现在我们可以写出@tt{value-of/k}。我们一次考虑@tt{value-of}的每个分支。
-@tt{value-of}的前几行只是算出一个值，然后返回，不会再次调用@tt{value-of}。在传递
-续文的解释器中，这些行调用@tt{apply-cont}，把对应的值传给续文：
+现在我们可以写出 @tt{value-of/k}。我们依次考虑 @tt{value-of} 的各个分支。
+@tt{value-of} 的前几行只是算出一个值，然后返回，不会再次调用 @tt{value-of}。在传
+递续文的解释器中，这些行调用 @tt{apply-cont}，把对应的值传给续文：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of/k}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{ExpVal}}}
 (define value-of/k
@@ -233,19 +248,22 @@ behavior})。
           (proc-val (procedure var body env))))
       ...)))
 ]
+}
 
-目前，@tt{cont}唯一可能的值是终止续文，但这马上就会改变。很容易看出，如果程序为
-上述表达式之一，表达式的值将传给@tt{end-cont}（通过@tt{apply-cont}）。
+目前，@tt{cont} 唯一可能的值是终止续文，但这马上就会改变。很容易看出，如果程序为
+上述表达式之一，表达式的值将传给 @tt{end-cont}（通过 @tt{apply-cont}）。
 
-@tt{letrec}的行为也不复杂：它不调用@tt{value-of}，而是创建一个新环境，然后在新环
-境中求主体的值。主体的值就是整个表达式的值。这表明主体和整个表达式在同样的控制语
-境中执行。因此，主体的值应返还给整个表达式的续文。所以我们写：
+@tt{letrec} 的行为也不复杂：它不调用 @tt{value-of}，而是创建一个新环境，然后在新
+环境中求主体的值，主体的值就是整个表达式的值。这表明主体和整个表达式在同样的控制
+上下文中执行。因此，主体的值应返还给整个表达式的续文。所以我们写：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (value-of/k letrec-body
     (extend-env-rec p-name p-var p-body env)
     cont))
+}
 }
 
 这解释了一条通用原则：
@@ -253,14 +271,13 @@ behavior})。
 @nested[#:style tip]{
  @centered{@bold{尾调用不扩大续文}}
 
- @para[#:style tip-content]{若@${exp_1}的值作为@${exp_2}的值返回，则@${exp_1}和
- @${exp_2}应在同样的续文中执行。
- }
-}
+ @para[#:style tip-content]{若 @${exp_1} 的值作为 @${exp_2} 的值返回，则
+ @${exp_1} 和@${exp_2} 应在同样的续文中执行。} }
 
 写成这样是不对的：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (apply-cont cont
@@ -268,26 +285,30 @@ behavior})。
       (extend-env-rec p-name p-var p-body env)
       (end-cont))))
 }
+}
 
-因为调用@tt{value-of/k}是在操作数位置：它要作为@tt{apply-cont}的操作数。此外，由
-于使用续文@tt{(end-cont)}会在计算完成之前打印出计算结束消息，这种错误很容易排查。
+因为调用 @tt{value-of/k} 是在操作数位置：它要作为 @tt{apply-cont} 的操作数。另外，
+由于使用续文 @tt{(end-cont)} 会在计算完成之前打印出计算结束消息，这种错误很容易
+排查。
 
 }
 
-接下来我们考虑@tt{zero?}表达式。在@tt{zero?}表达式中，我们得求出实参的值，然后返
-还给依赖该值的续文。所以我们要在新的续文中求实参的值，这个续文会取得返回值，然后
-做适当处理。
+接下来我们考虑 @tt{zero?} 表达式。在 @tt{zero?} 表达式中，我们得求出实参的值，然
+后返还给依赖该值的续文。所以我们要在新的续文中求实参的值，这个续文会取得返回值，
+然后做适当处理。
 
-那么，在@tt{value-of/k}中，我们写：
+那么，在 @tt{value-of/k} 中，我们写：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (value-of/k exp1 env
     (zero1-cont cont)))
 }
+}
 
-其中，@tt{(zero1-cont cont)}是一续文，具有如下属性：
+其中，@tt{(zero1-cont cont)} 是一续文，具有如下属性：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -300,9 +321,10 @@ behavior})。
 
 }
 
-就像@tt{letrec}，我们不能把@tt{value-of/k}写成：
+就像 @tt{letrec}，我们不能把 @tt{value-of/k} 写成：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (let ((val (value-of/k exp1 env (end-cont))))
@@ -310,36 +332,41 @@ behavior})。
       (bool-val
         (zero? (expval->num val))))))
 }
+}
 
-因为调用@tt{value-of/k}是在操作数位置。@tt{let}声明的右边是在操作数位置，因为
-@tt{(let ((@${var} @${exp_1})) @${exp_2})}等效于@tt{((lambda (@${var})
-@${exp_2}) @${exp_1})}。@tt{value-of/k}调用的值最终成为@tt{expval->num}的操作数。
-像之前那样，如果我们运行这段代码，计算结束消息会出现两次：一次在计算中间，一次在
-真正结束时。
+因为调用 @tt{value-of/k} 是在操作数位置。@tt{let} 声明的右边是在操作数位置，因为
+@tt{(let ((@${var} @${exp_1})) @${exp_2})} 等效于 @tt{((lambda (@${var})
+@${exp_2}) @${exp_1})}。@tt{value-of/k} 调用的值最终成为 @tt{expval->num} 的操作
+数。像之前那样，如果我们运行这段代码，计算结束消息会出现两次：一次在计算中间，一
+次在真正结束时。
 
 }
 
-@tt{let}表达式只比@tt{zero?}表达式稍微复杂一点：求值声明右侧之后，我们在适当的扩
-展环境内求主体的值。原来的@tt{let}代码为：
+@tt{let} 表达式只比 @tt{zero?} 表达式稍微复杂一点：求出声明右侧的值之后，我们在
+适当的扩展环境内求主体的值。原来的 @tt{let} 代码为：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
     (value-of body
       (extend-env var val1 env))))
 }
+}
 
-在传递续文的解释器中，求值@${exp_1}所在的上下文应完成计算。所以，在
-@tt{value-of/k}中我们写：
+在传递续文的解释器中，我们在完成剩余计算的上下文中求 @${exp_1} 的值。所以，在
+@tt{value-of/k} 中我们写：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (value-of/k exp1 env
     (let-exp-cont var body env cont)))
 }
+}
 
-然后给续文的接口添加规范：
+然后我们给续文的接口添加规范：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -350,21 +377,23 @@ behavior})。
 
 }
 
-@tt{let}表达式主体的值称为@tt{let}表达式的值，所以求值@tt{let}表达式主体时的续文
-与求值整个@tt{let}表达式相同。这是@bold{尾调用不扩大续文}原则的又一例子。
+@tt{let} 表达式主体的值成为 @tt{let} 表达式的值，所以求 @tt{let} 表达式主体时的
+续文与求整个 @tt{let} 表达式的相同。这是@bold{尾调用不扩大续文}原则的又一例子。
 
-下面我们处理@tt{if}表达式。在@tt{if}表达式中，首先要求值条件，但条件的结果不是整
-个表达式的值。我们要新生成一个续文，查看条件表达式的结果是否为真，然后求值真值表
-达式或假值表达式。所以在@tt{value-of/k}中我们写：
+下面我们处理 @tt{if} 表达式。在 @tt{if} 表达式中，我们首先求条件的值，但条件的结
+果不是整个表达式的值。我们要新生成一个续文，查看条件表达式的结果是否为真，然后求
+真值表达式或假值表达式的值。所以在 @tt{value-of/k} 中我们写：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (if-exp (exp1 exp2 exp3)
   (value-of/k exp1 env
     (if-test-cont exp2 exp3 body env cont)))
 }
+}
 
-其中，@tt{if-test-cont}是另一个续文构造器，满足如下规范：
+其中，@tt{if-test-cont} 是另一个续文构造器，满足如下规范：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -377,7 +406,8 @@ behavior})。
 }
 
 现在，我们有了四个续文构造器。我们可以用过程表示法或者数据结构表示法实现它们。过
-程表示法如@figure-ref{fig-5.2} 所示，数据结构表示法使用@tt{define-datatype}，如@figure-ref{fig-5.3} 所示。
+程表示法如@figure-ref{fig-5.2} 所示，数据结构表示法使用 @tt{define-datatype}，
+如@figure-ref{fig-5.3} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -464,11 +494,12 @@ behavior})。
 @eopl-caption["fig-5.3"]{用数据结构表示续文}
 }
 
-下面这个简单算例展示了各部分如何结合在一起。像在@secref{s3.3}那样，我们用
-@${<<exp>>}指代表达式@${exp}的抽象语法树。设@${\rho_0}是一环境，@tt{b}在其中绑定
-到@tt{(bool-val #t)}；@${cont_0}是初始续文，即@tt{(end-cont)}的值。注释说明应与
-@tt{value-of/k}的定义和@tt{apply-cont}的规范对读。这个例子是预测性的，因为我们让
-@tt{letrec}引入了过程，但还不知道如何调用它。
+下面这个简单算例展示了各部分如何配合。像 @secref{s3.3}那样，我们用
+@${\textnormal{\guillemotleft} exp \textnormal{\guillemotright}} 指代表达式
+@${exp} 的抽象语法树。设 @${\rho_0} 是一环境，@tt{b} 在其中绑定到 @tt{(bool-val
+#t)}；@${cont_0} 是初始续文，即 @tt{(end-cont)} 的值。注释说明应与
+@tt{value-of/k} 的定义和 @tt{apply-cont} 的规范对照阅读。这个例子是预测性的，因
+为我们让 @tt{letrec} 引入了过程，但还不知道如何调用它。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -490,17 +521,19 @@ behavior})。
 }|
 }
 
-差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像@tt{if}
+差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像 @tt{if}
 那样开始，先求第一个实参：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (diff-exp (exp1 exp2)
   (value-of/k exp1 env
     (diff1-cont exp2 env cont)))
 }
+}
 
-当@tt{(diff1-cont exp2 env cont)}收到一个值，它求值@tt{exp2}时的上下文应保存
-@tt{exp1}的值。我们将其定义为：
+当 @tt{(diff1-cont exp2 env cont)} 收到一个值，它应求 @tt{exp2} 的值，求值时的上
+下文应保存 @tt{exp1} 的值。我们将其定义为：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -510,8 +543,8 @@ behavior})。
 }|
 }
 
-当@tt{(diff2-cont val1 cont)}收到一个值，我们得到了两个操作数的值，所以，我们可
-以把二者的差继续传给等待中的@tt{cont}。定义为：
+当 @tt{(diff2-cont val1 cont)} 收到一个值，我们得到了两个操作数的值，所以，我们
+可以把二者的差继续传给等待中的 @tt{cont}。定义为：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -526,6 +559,7 @@ behavior})。
 让我们看看该系统的例子。
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 |@elemtag["cps-computation"]{}(value-of/k
@@ -586,36 +620,42 @@ behavior})。
   (num-val 30))
 }|
 }
+}
 
-@tt{apply-cont}打印出消息@exact-elem{“}计算结束@exact-elem{”}，返回计算的最终
-结果@tt{(num-val 30)}。
+@tt{apply-cont} 打印出消息@exact-elem{“}计算结束@exact-elem{”}，返回计算的最终
+结果 @tt{(num-val 30)}。
 
 }
 
 我们的语言中最后要处理的是过程调用。在传递环境的解释器中，我们写：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (let ((proc1 (expval->proc (value-of rator env)))
         (arg (value-of rand env)))
     (apply-procedure proc1 arg)))
 }
+}
 
-就像在@tt{diff-exp}中一样，这里要处理两个调用。所以我们必须先选其一，然后转换余
-下部分，再处理第二个。此外，我们必须把续文传给@tt{apply-procedure}，因为
-@tt{apply-procedure}要调用@tt{value-of/k}。
+就像在 @tt{diff-exp} 中一样，这里要处理两个调用。所以我们必须先择其一，然后转换
+余下部分来处理第二个。此外，我们必须把续文传给 @tt{apply-procedure}，因为
+@tt{apply-procedure} 要调用 @tt{value-of/k}。
 
-我们选择先求操作符的值，所以在@tt{value-of/k}中我们写：
+我们选择先求操作符的值，所以在 @tt{value-of/k} 中我们写：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (value-of/k rator
     (rator-cont rand env cont)))
 }
+}
 
-就像@tt{diff-exp}，@tt{rator-cont}在适当的环境中求值操作数：
+就像 @tt{diff-exp}，@tt{rator-cont} 在适当的环境中求操作数的值：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
@@ -623,9 +663,11 @@ behavior})。
     (rand-cont |@${val1} |@${cont}))
 }|
 }
+}
 
-当@tt{rand-cont}收到一个值，它就可以调用过程了：
+当 @tt{rand-cont} 收到一个值，它就可以调用过程了：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
@@ -633,9 +675,11 @@ behavior})。
     (apply-procedure/k proc1 |@${val2} |@${cont}))
 }|
 }
+}
 
-最后，我们还要修改@tt{apply-procedure}，以符合续文传递风格：
+最后，我们还要修改 @tt{apply-procedure}，以符合续文传递风格：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
 (define apply-procedure/k
@@ -646,6 +690,7 @@ behavior})。
           (extend-env var val saved-env)
           cont)))))
 ]
+}
 }
 
 传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4} 和
@@ -709,13 +754,15 @@ behavior})。
 @eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）}
 }
 
-@elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实际参数
-的求值扩大了控制上下文。具体来说，如果我们在某个续文@${cont_1}中求过程调用
-@tt{(@${exp_1} @${exp_2})}的值，求@${exp_1}得到的过程主体也将在@${cont_1}中求值。
+@elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实参的求
+值扩大了控制上下文。具体来说，如果我们在某个续文 @${cont_1} 中求过程调用
+@tt{(@${exp_1} @${exp_2})} 的值，求 @${exp_1} 得到的过程主体也将在 @${cont_1} 中
+求值。
 
-但过程调用本身不会增大控制上下文。考虑@tt{(@${exp_1} @${exp_2})}的求值，其中
-@${exp_1}的值是一个过程@${proc_1}，@${exp_2}的值是某个表达值@${val_2}。
+但过程调用本身不会增大控制上下文。考虑 @tt{(@${exp_1} @${exp_2})} 的求值，其中
+@${exp_1} 的值是一个过程 @${proc_1}，@${exp_2} 的值是某个表达值 @${val_2}。
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (value-of/k <<(|@${exp_1} |@${exp_2})>> |@${\rho_1} |@${cont_1})
@@ -737,9 +784,10 @@ behavior})。
 (apply-procedure/k |@${proc_1} |@${val_2} |@${cont_1})
 }|
 }
+}
 
-所以，过程调用时，主体在调用所在的续文中求值。操作数的求值需要控制上下文，进入过程
-主体不需要。
+所以，过程调用时，过程主体在过程调用所在的续文中求值。操作数的求值需要控制上下文，
+进入过程主体则不需要。
 
 @exercise[#:level 1 #:tag "ex5.1"]{
 
@@ -755,13 +803,13 @@ behavior})。
 
 @exercise[#:level 1 #:tag "ex5.3"]{
 
-给解释器添加@tt{let2}。@tt{let2}表达式就像@tt{let}表达式，但要指定两个变量。
+给解释器添加 @tt{let2}。@tt{let2} 表达式就像 @tt{let} 表达式，但要指定两个变量。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.4"]{
 
-给解释器添加@tt{let3}。@tt{let3}表达式就像@tt{let}表达式，但要指定三个变量。
+给解释器添加 @tt{let3}。@tt{let3} 表达式就像 @tt{let} 表达式，但要指定三个变量。
 
 }
 
@@ -773,14 +821,14 @@ behavior})。
 
 @exercise[#:level 2 #:tag "ex5.6"]{
 
-给语言添加@exercise-ref{ex3.10} 中的@tt{list}表达式。提示：添加两个续文构造器，一个用来求列表
-首元素的值，一个用来求列表剩余元素的值。
+给语言添加@exercise-ref{ex3.10} 中的 @tt{list} 表达式。提示：添加两个续文构造器，
+一个用来求列表首元素的值，一个用来求列表剩余元素的值。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.7"]{
 
-给解释器添加多声明@tt{let}（@exercise-ref{ex3.16}）。
+给解释器添加多声明的 @tt{let}（@exercise-ref{ex3.16}）。
 
 }
 
@@ -792,8 +840,8 @@ behavior})。
 
 @exercise[#:level 2 #:tag "ex5.9"]{
 
-修改这个解释器，实现IMPLICIT-REFS语言。提示：添加新的续文构造器@tt{(set-rhs-cont
-env var cont)}。
+修改这个解释器，实现 IMPLICIT-REFS 语言。提示：添加新的续文构造器
+@tt{(set-rhs-cont env var cont)}。
 
 }
 
@@ -805,8 +853,8 @@ env var cont)}。
 
 @exercise[#:level 2 #:tag "ex5.11"]{
 
-给传递续文的解释器添加@exercise-ref{ex4.4} 中的@tt{begin}表达式。确保@tt{value-of}和
-@tt{value-of-rands}不在需要生成控制上下文的位置调用。
+给传递续文的解释器添加@exercise-ref{ex4.4} 中的 @tt{begin} 表达式。确保调用
+@tt{value-of} 和 @tt{value-of-rands} 时不需要生成控制上下文。
 
 }
 
@@ -819,39 +867,39 @@ env var cont)}。
 
 @exercise[#:level 1 #:tag "ex5.13"]{
 
-把@tt{fact}和@tt{fact-iter}翻译为LETREC语言。你可以给语言添加乘法操作符。然后，
-用前一道练习中添加了辅助组件解释器计算@tt{(fact 4)}和@tt{(fact-iter 4)}。将它们
-和本章开头的计算比较。在@tt{(fact 4)}的跟踪日志中找出@tt{(* 4 (* 3 (* 2 (fact
-1))))}。调用@tt{(fact 1)}时，@tt{apply-procedure/k}的续文是什么？
+把 @tt{fact} 和 @tt{fact-iter} 翻译为 LETREC 语言。你可以给语言添加乘法操作符。
+然后，用前一道练习中带有辅助组件的解释器计算 @tt{(fact 4)} 和 @tt{(fact-iter 4)}。
+将它们和本章开头的计算比较。在 @tt{(fact 4)} 的跟踪日志中找出 @tt{(* 4 (* 3 (* 2
+(fact 1))))}。调用 @tt{(fact 1)} 时，@tt{apply-procedure/k} 的续文是什么？
 
 }
 
 @exercise[#:level 1 #:tag "ex5.14"]{
 
-前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文的
-@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所以@pageref{cps-computation}计
-算中最大续文的尺寸是3。然后，用@tt{fact}和
-@tt{fact-iter}计算几个操作数的值。验证@tt{fact}使用的最大续文尺寸随其参数递增，
-但@tt{fact-iter}使用的最大续文尺寸是常数。
+前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文
+的@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所
+以@pageref{cps-computation}的计算中，续文最大尺寸是 3。然后，用 @tt{fact} 和
+@tt{fact-iter} 计算几个操作数的值。验证 @tt{fact} 使用的续文最大尺寸随其参数递增，
+但 @tt{fact-iter} 使用的续文最大尺寸是常数。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.15"]{
 
-我们的续文数据类型只有一个常量@tt{end-cont}，所有其他续文构造器都有一个续文参数。
-用列表表示和实现续文。用空列表表示@tt{end-cont}，用首项为其他数据结构（名为@emph{帧}
-(@emph{frame})或@emph{活跃记录} (@emph{activation record})），余项为已保存续文的
-非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
+我们的续文数据类型只有一个常量 @tt{end-cont}，所有其他续文构造器都有一个续文参数。
+用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构（名为@emph{帧}
+(@emph{frame}) 或@emph{活跃记录} (@emph{activation record})），余项为
+已保存续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.16"]{
 
-扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给@tt{result-of}传递一个续文参数，确
-保@tt{result-of}不在扩大控制上下文的位置调用。因为语句不返回值，需要区分普通续文和
-语句续文；后者通常叫@emph{命令续文} (@emph{command continuation})。续文接口应包
-含过程@tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和无参数过程两
-种方式实现命令续文。
+扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给 @tt{result-of} 传递
+一个续文参数，确保 @tt{result-of} 不在扩大控制上下文的位置调用。因为语句不返回值，
+需要区分普通续文和语句续文；后者通常叫@emph{命令续文} (@emph{command
+continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一命令续文并使用
+它。用数据结构和无参数过程两种方式实现命令续文。
 
 }
 

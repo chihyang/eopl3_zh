@@ -17,6 +17,7 @@
 @list["Call by value and result" "按值和结果调用"]
 @list["Contact" "合约"]
 @list["Continuation" "续文"]
+@list["Control context" "控制上下文"]
 @list["Dereference" "解引用"]
 @list["Derivation" "推导"]
 @list["Effect" "效果、计算效果"]
