@@ -1126,17 +1126,19 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 
 @section[#:style section-title-style-numbered #:tag "s5.3"]{指令式解释器}
 
-在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。考虑@figure-ref{fig-5.8} 顶部的老例
-子@tt{even}和@tt{odd}。可以用@figure-ref{fig-5.8} 中间的程序替代它们。其中，共享变量@tt{x}供两个
-过程交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们
-从存储器中查找相关数据。
+在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。
+考虑@figure-ref{fig-5.8} 顶部的老例子 @tt{even} 和 @tt{odd}。
 
-考虑@figure-ref{fig-5.8} 底部的计算跟踪日志。两个程序的计算跟踪日志都是可以是它。我们记录调用的
-过程和实参时，它是第一个计算的跟踪日志；我们记录调用的过程和寄存器@tt{x}的值时，
-它是第二个计算的跟踪日志。
+可以用@figure-ref{fig-5.8} 中间的程序替代它们。其中，共享变量 @tt{x} 供两个过程
+交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们从存
+储器中查找相关数据。
 
-而当我们记录程序计数器的位置和寄存器@tt{x}的内容时，这又可以解释为
-@emph{goto}（名为流程图程序）的跟踪日志。
+考虑@figure-ref{fig-5.8} 底部的计算跟踪日志。它可能是二者中任一计算跟踪日志。当
+我们记录调用的过程和实参时，它是第一个计算的跟踪日志；当我们记录调用的过程和寄存
+器 @tt{x} 的值时，它是第二个计算的跟踪日志。
+
+而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为 @emph{goto}
+（名为@emph{流程图程序}）的跟踪日志。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -1203,23 +1205,23 @@ odd:  if (x=0) then return(0)
 @eopl-caption["fig-5.8"]{跟踪日志相同的三个程序}
 }
 
-能这样，只是因为原代码中@tt{even}和@tt{odd}的调用不扩大控制上下文：它们是尾调用。
-我们不能这样转换@tt{fact}，因为@tt{fact}的跟踪日志无限增长：不像这里，
+能这样，只是因为原代码中 @tt{even} 和 @tt{odd} 的调用不扩大控制上下文：它们是尾
+调用。我们不能这样转换 @tt{fact}，因为 @tt{fact} 的跟踪日志无限增长：不像这里，
 @exact-elem{“}程序计数器@exact-elem{”}出现在跟踪日的最外层，而是在控制上下文中。
 
-任何不需要控制上下文的程序都可以这样转换。这给了我们一条重要原则：
+任何不需要控制上下文的程序都可以这样转换。这给了我们一条重要原理：
 
 @nested[#:style tip]{
  @centered{@bold{无参数的尾调用等同于跳转。}}
 }
 
-如果一组过程只通过尾调用互相调用，那么我们翻译程序，用赋值代替绑定，然后把赋值程
-序转译为流程图程序，就像@figure-ref{fig-5.8} 那样。
+如果一组过程只通过尾调用互相调用，那么我们可以像像@figure-ref{fig-5.8} 那样，翻
+译程序，用赋值代替绑定，然后把赋值程序转译为流程图程序。
 
-本节，我们用这一原则翻译传递续文的解释器，将其转换为适合无高阶过程语言的形式。
+本节，我们用这一原理翻译传递续文的解释器，将其转换为适合无高阶过程语言的形式。
 
-我们首先从@figure-ref{fig-5.4} 和 @countref{fig-5.5} 的解释器开始，用数据结构表
-示续文。续文的数据结构表示如@figure-ref{fig-5.9} 和 @countref{fig-5.10} 所示。
+我们首先从@figure-ref{fig-5.4} 和 @countref{fig-5.5} 中的解释器开始，用数据结构
+表示续文。续文的数据结构表示如@figure-ref{fig-5.9} 和 @countref{fig-5.10} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1260,18 +1262,21 @@ odd:  if (x=0) then return(0)
 我们的第一个任务是列出需要通过共享寄存器通信的过程。这些过程及其形参为：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent 0]{
 (value-of/k exp env cont)
 (apply-cont cont val)
 (apply-procedure/k proc1 val cont)
 }
 }
+}
 
-所以我们需要五个寄存器：@tt{exp}，@tt{env}，@tt{cont}，@tt{val}和@tt{proc1}。上
-面的三个过程各改为一个无参数过程，每个实参的值存入对应的寄存器，调用无参数过程，
+所以我们需要五个寄存器：@tt{exp}、@tt{env}、@tt{cont}、@tt{val} 和 @tt{proc1}。
+上面的三个过程各改为一个无参数过程，每个实参的值存入对应的寄存器，调用无参数过程，
 换掉上述过程的调用。所以，这段代码
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (define value-of/k
   (lambda (exp env cont)
@@ -1279,9 +1284,11 @@ odd:  if (x=0) then return(0)
       (const-exp (num) (apply-cont cont (num-val num)))
       ...)))
 ]
+}
 
 可以替换为：
 
+@nested[#:style small]{
 @racketblock[
 (define value-of/k
   (lambda ()
@@ -1292,6 +1299,7 @@ odd:  if (x=0) then return(0)
         (apply-cont))
       ...)))
 ]
+}
 
 }
 
@@ -1337,34 +1345,39 @@ odd:  if (x=0) then return(0)
 
 }
 
-现在，我们依次转换四个过程。我们还要修改@tt{value-of-program}的主体，因为那是最
-初调用@tt{value-of/k}的地方。只有三点小麻烦：
+现在，我们依次转换四个过程。我们还要修改 @tt{value-of-program} 的主体，因为那是
+最初调用 @tt{value-of/k}的地方。只有三点小麻烦：
 
 @itemlist[#:style 'ordered
 
- @item{从一个过程调用到另一个时，常常有存储器保持不变。这就得出应上例中的
- @tt{(set! cont cont)}赋值。我们大可移除这样的赋值。}
+ @item{存储器在过程调用之间往往保持不变。这对应上例中的赋值 @tt{(set! cont
+ cont)}。我们大可移除这样的赋值。}
 
- @item{我们必须确保@tt{cases}表达式中的字段不与寄存器重名。否则字段会遮蔽寄存器，
- 寄存器就无法访问。例如，在@tt{value-of-program}中，我们如果写：
+ @item{我们必须确保 @tt{cases} 表达式中的字段不与寄存器重名。否则字段会遮蔽寄存
+ 器，寄存器就无法访问了。例如，在 @tt{value-of-program} 中，如果我们写：
 
+ @nested[#:style small]{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp)
      (value-of/k exp (init-env) (end-cont))))
  }
+ }
 
- 那么@tt{exp}绑定到局部变量，我们无法给全局寄存器@tt{exp}赋值。解决方法是重命名
- 局部变量，避免冲突：
+ 那么 @tt{exp} 绑定到局部变量，我们无法给全局寄存器 @tt{exp} 赋值。解决方法是重
+ 命名局部变量，避免冲突：
 
+ @nested[#:style small]{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp1)
      (value-of/k exp1 (init-env) (end-cont))))
  }
+ }
 
  然后，可以写：
 
+ @nested[#:style small]{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp1)
@@ -1373,40 +1386,45 @@ odd:  if (x=0) then return(0)
      (set! env (init-env))
      (value-of/k)))
  }
+ }
 
  我们已仔细挑选数据类型中的字段名，避免这种冲突。
 
  }
 
- @item{一次调用中如果两次使用同一寄存器，又会造成一点麻烦。考虑转换@tt{(cons (f
- (car x)) (f (cdr x)))}中的第一个调用，其中，@tt{x}是@tt{f}的形式参数。不假思索
- 的话，调用可以转换为：
+ @item{一次调用中如果两次使用同一寄存器，又会造成一点麻烦。考虑转换 @tt{(cons (f
+ (car x)) (f (cdr x)))} 中的第一个调用，其中，@tt{x} 是 @tt{f} 的形参。不做过多
+ 考虑的话，这个调用可以转换为：
 
+ @nested[#:style small]{
  @racketblock[
  (begin
    (set! x (car x))
    (set! cont (arg1-cont x cont))
    (f))
  ]
+ }
 
- 但这是不对的，因为它给寄存器@tt{x}赋了新值，但@tt{x}原先的值还有用。解决方法是
- 调整赋值顺序，把正确的值放入寄存器中，或者，使用临时变量。大多情况下，要避免这
- 种问题，可以先给续文变量赋值：
+ 但这是不对的，因为它给寄存器 @tt{x} 赋了新值，但 @tt{x} 原先的值还有用。解决方
+ 法是调整赋值顺序，把正确的值放入寄存器中，或者使用临时变量。大多情况下，要避免
+ 这种问题，可以先给续文变量赋值：
 
+ @nested[#:style small]{
  @racketblock[
  (begin
    (set! cont (arg1-cont x cont))
    (set! x (car x))
    (f))
  ]
+ }
 
- 有时临时变量无法避免；考虑@tt{(f y x)}，其中@tt{x}和@tt{y}是@tt{f}的形式参数。
- 我们的例子中还没有这种麻烦。}
+ 有时临时变量无法避免；考虑 @tt{(f y x)}，其中 @tt{x} 和 @tt{y} 是 @tt{f} 的形参。
+ 我们的例子中还未遇到这种麻烦。}
 
 ]
 
-翻译完成的解释器如@figure-ref{fig-5.11}-@countref{fig-5.14} 所示。这个过程叫
-做@emph{寄存} (@emph{registerization})。很容易把它翻译成支持跳转的指令式语言。
+翻译完的解释器如@figure-ref{fig-5.11}-@countref{fig-5.14} 所示。这个过程
+叫做@emph{寄存} (@emph{registerization})。很容易用支持跳转的指令式语言翻译它。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1576,8 +1594,8 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.23"]{
 
-如果删去解释器某一分支中的@exact-elem{“}goto@exact-elem{”}会怎样？解释器究竟出
-什么错？
+如果删去解释器某一分支中的@exact-elem{“}goto@exact-elem{”}会怎样？解释器会出什
+么错？
 
 }
 
@@ -1589,14 +1607,14 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.25"]{
 
-寄存多参数过程的解释器（@exercise-ref{ex3.21}）。
+寄存支持多参数过程的解释器（@exercise-ref{ex3.21}）。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.26"]{
 
-用跳床转换这个解释器，用@tt{(set! pc apply-procedure/k)}替换
-@tt{apply-procedure/k}的调用，并使用下面这样的驱动器：
+用跳床转换这个解释器，用 @tt{(set! pc apply-procedure/k)} 替换
+@tt{apply-procedure/k} 的调用，并使用下面这样的驱动器：
 
 @racketblock[
 (define trampoline
@@ -1608,59 +1626,61 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.27"]{
 
-设计一个语言特性，导致最后给@tt{cont}赋值时，必须用临时变量。
+设计一个语言特性，导致最后给 @tt{cont} 赋值时，必须用临时变量。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.28"]{
 
-给这个解释器添加@exercise-ref{ex5.12} 中的辅助组件。由于续文表示方式相同，可以复用那里的代码。
-验证本节的指令式解释器生成的跟踪日志与@exercise-ref{ex5.12} 中的解释器@emph{完全}相同。
+给本节的解释器添加@exercise-ref{ex5.12} 中的辅助组件。由于续文表示方式相同，可以
+复用那里的代码。验证本节的指令式解释器生成的跟踪日志与@exercise-ref{ex5.12} 中的
+解释器@emph{完全}相同。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.29"]{
 
-转换本节的@tt{fact-iter}（@pageref{fact-iter}）。
+转换本节的 @tt{fact-iter}（@pageref{fact-iter}）。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.30"]{
 
-修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样转换@exercise-ref{ex3.28} 中
-的解释器；只有原解释器与本节解释器不同的部分，转换后的部分才会不同。像@exercise-ref{ex5.28} 那
-样给解释器添加辅助组件。观察可知，就像当前状态中只有一个续文，也只有一个压入和弹
-出的环境，而且它与续文同时压入弹出。由此可得，动态绑定具有@emph{动态期限}
-(@emph{dynamic extent})：即，形式参数的绑定保留到过程返回为止。词法绑定则与之不
-同，牵涉闭包时可以一直保留。
+修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
+转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
+像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
+个续文，当前状态只会压入或弹出一个环境，而且环境与续文同时压入或弹出。由此我们得
+出结论，动态绑定具有@emph{动态期限} (@emph{dynamic extent})：即，形参的绑定保留
+到过程返回为止。词法绑定则与之不同，绑定包裹在闭包内时可以无限期地保留。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.31"]{
 
-添加全局寄存器，排除本节代码中剩下的@tt{let}表达式。
+添加全局寄存器，排除本节代码中剩余的 @tt{let} 表达式。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.32"]{
 
-改进前一题的解答，尽可能减少全局寄存器的数量。不到5个就可以。除了本节解释器中已
-经用到的外，不要使用其他数据结构。
+改进前一题的解答，尽可能减少全局寄存器的数量。不到 5 个就可以。除了本节解释器中
+已经用到的，不要使用其他数据结构。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.33"]{
 
 把本节的解释器翻译为指令式语言。做两次，一次使用宿主语言中的无参数过程调用，一次
-使用@tt{goto}。计算量增加时，这二者性能如何？
+使用 @tt{goto}。计算量增加时，这二者性能如何？
 
 }
 
 @exercise[#:level 2 #:tag "ex5.34"]{
 
-如@pageref{imperative-lang}所述，大多数指令式语言都很难完成这种翻译，因为不论哪
-种过程调用它们都要使用堆栈，即使是尾调用。而且，对大型解释器，使用@tt{goto}链接
-的程序可能太过庞大，以至编译器无法处理。把本节的解释器翻译为指令式语言，用@exercise-ref{ex5.26} 中的跳跃技术避免这种困难。
+如@pageref{imperative-lang}所述，用大多数指令式语言都难以完成这种翻译，因为它们
+在所有过程调用中使用堆栈，即使是尾调用。而且，对大型解释器，由 @tt{goto} 链接的
+代码可能太过庞大，以致某些编译器无法处理。把本节的解释器翻译为指令式语言，
+用@exercise-ref{ex5.26} 中的跳跃技术规避这一难题。
 
 }
 
