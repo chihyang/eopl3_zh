@@ -1137,8 +1137,8 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 我们记录调用的过程和实参时，它是第一个计算的跟踪日志；当我们记录调用的过程和寄存
 器 @tt{x} 的值时，它是第二个计算的跟踪日志。
 
-而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为 @emph{goto}
-（名为@emph{流程图程序}）的跟踪日志。
+而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为
+@emph{goto}（名为@emph{流程图程序}）的跟踪日志。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -1690,23 +1690,26 @@ odd:  if (x=0) then return(0)
 我们来给我们的语言添加@emph{异常处理} (@emph{exception handling})。我们给语言新
 增两个生成式：
 
+@nested[#:style small]{
 @envalign*{
         \mathit{Expression} &::= @tt{try @m{\mathit{Expression}} catch (@m{\mathit{Identifier}}) @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{try-exp (exp1 var handler-exp)}} \\[5pt]
         \mathit{Expression} &::= @tt{raise @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{raise-exp (exp)}}}
+}
 
-@tt{try}表达式在@tt{catch}从句描述的异常处理上下文中求第首个参数的值。如果该表达
-式正常返回，它的值就是整个@tt{try}表达式的值，异常处理器则抛弃。
+@tt{try} 表达式在 @tt{catch} 从句描述的异常处理上下文中求第一个参数的值。如果该
+表达式正常返回，它的值就是整个 @tt{try} 表达式的值，异常处理器则抛弃。
 
-@tt{raise}表达式求出参数的值，用该值抛出异常，并把这个值传给最近建立的异常处理器，
-绑定到处理器的变量，然后，求出处理器主体的值。处理器主体可以返回一个值，这个值称
-为对应@tt{try}表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
-(@emph{propagate})出去；这时，异常会传给次近的异常处理器。
+@tt{raise} 表达式求出参数的值，用该值抛出异常，并把这个值传给最近建立的异常处理
+器，绑定到处理器的变量，然后，求出处理器主体的值。处理器主体可以返回一个值，这个
+值称为对应 @tt{try} 表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
+(@emph{propagate}) 出去；这时，异常会传给次近的异常处理器。
 
 暂时假设我们已经给语言添加了字符串，这里是一个例子。
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let list-index =
@@ -1719,16 +1722,18 @@ let list-index =
               else -((inner cdr(lst)), -1)
 }|
 }
+}
 
-过程@tt{list-index}是个咖喱式过程，它取一个字符串，一个字符串列表，返回字符串在
-列表中的位置。如果找不到期望的列表元素，@tt{inner}抛出一个异常，跳过所有待做的减
-法，把@tt{"ListIndexFailed"}传给最近建立的异常处理器。
+过程 @tt{list-index} 是个咖喱式过程，它取一个字符串，一个字符串列表，返回字符串
+在列表中的位置。如果找不到期望的列表元素，@tt{inner} 抛出一个异常，跳过所有待做
+的减法，把 @tt{"ListIndexFailed"} 传给最近建立的异常处理器。
 
 }
 
 异常处理器可以利用调用处的信息对异常做适当处理。
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let find-member-number =
@@ -1738,17 +1743,20 @@ let find-member-number =
              raise("CantFindMemberNumber")
 }|
 }
+}
 
-过程@tt{find-member-number}取一字符串，用@tt{list-index}找出字符串在列表
-@tt{member-name}中的位置。@tt{find-member-number}的调用者没办法知道
-@tt{list-index}，所以@tt{find-member-number}把错误消息翻译成调用者能够理解的异常。
+过程 @tt{find-member-number} 取一字符串，用 @tt{list-index} 找出字符串在列表
+@tt{member-name} 中的位置。@tt{find-member-number} 的调用者没办法知道
+@tt{list-index}，所以 @tt{find-member-number} 把错误消息翻译成调用者能够理解的异
+常。
 
 }
 
-根据程序的用途，还有一种可能是，元素名不在列表中时，@tt{find-member-number}返回
+根据程序的用途，还有一种可能是，元素名不在列表中时，@tt{find-member-number} 返回
 一个默认值。
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let find-member-number =
@@ -1758,16 +1766,18 @@ let find-member-number =
             the-default-member-number
 }|
 }
+}
 
-在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise}传出的值可能包含可供调
-用者利用的部分信息。
+在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise} 传出的值可能包含可供
+调用者利用的部分信息。
 
 }
 
-用续文实现这种异常处理机制直截了当。我们从@tt{try}表达式开始。在续文的数据结构表
-示中，我们添加两个构造器：
+用续文实现这种异常处理机制直截了当。我们从 @tt{try} 表达式开始。在续文的数据结构
+表示中，我们添加两个构造器：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (try-cont
   (var identifier?)
@@ -1777,37 +1787,42 @@ let find-member-number =
 (raise1-cont
   (saved-cont continuation?))
 }
+}
 
-在@tt{value-of/k}中我们给@tt{try}添加下面的从句：
+在 @tt{value-of/k} 中我们给 @tt{try} 添加下面的从句：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (try-exp (exp1 var handler-exp)
   (value-of/k exp1 env
     (try-cont var handler-exp env cont)))
 }
+}
 
 }
 
-求@tt{try}表达式的主体值时会发生什么呢？如果主体正常返回，那么这个值因该传给
-@tt{try}表达式的续文，也就是此处的@tt{cont}：
+求 @tt{try} 表达式主体的值时会发生什么呢？如果主体正常返回，那么这个值因该传给
+@tt{try} 表达式的续文，也就是此处的 @tt{cont}：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
-(apply-cont (try-cont |@${var} |@${handler-exp} |@${env} |@${cont}) |@${val})
+(apply-cont (try-cont |@${var} |@${handler\mbox{-}exp} |@${env} |@${cont}) |@${val})
 = (apply-cont |@${cont} |@${val})
 }|
 }
 
-如果抛出一个异常呢？首先，我们当然要求出@tt{raise}参数的值。
+如果抛出一个异常呢？首先，我们当然要求出 @tt{raise} 参数的值。
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (raise-exp (exp1)
   (value-of/k exp1 env
     (raise1-cont cont)))
 }
+}
 
-当@tt{exp1}的值返还给@tt{raise1-cont}时，我们要查找续文中最近的异常处理器，即最
-上层的@tt{try-cont}续文。所以，在我们把续文规范写成：
+当 @tt{exp1} 的值返还给 @tt{raise1-cont} 时，我们要查找续文中最近的异常处理器，
+即最上层的 @tt{try-cont} 续文。所以，在我们把续文规范写成：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1817,7 +1832,8 @@ let find-member-number =
 }|
 }
 
-其中，@tt{apply-handler}是一过程，它找出最近的异常处理器并调用它（@figure-ref{fig-5.15}）。
+其中，@tt{apply-handler} 是一过程，它找出最近的异常处理器并调用它
+（@figure-ref{fig-5.15}）。
 
 }
 
@@ -1844,8 +1860,9 @@ let find-member-number =
 
 }
 
-要看出这些怎样配合，我们考虑用待定语言实现的@tt{index}。令@${exp_0}表示表达式：
+要看出这些怎样配合，我们考虑用被定语言实现的 @tt{index}。令 @${exp_0} 表示表达式：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let index
@@ -1862,10 +1879,12 @@ let index
 in ((index 5) list(2, 3))
 }|
 }
+}
 
-我们从任意环境@${\rho_0}和续文@${cont_0}开始求值@${exp_0}。我们只展示计算的关键
-部分，并插入注释。
+我们从任意环境 @${\rho_0} 和续文 @${cont_0} 开始求 @${exp_0} 的值。我们只展示计
+算的关键部分，并插入注释。
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (value-of/k
@@ -1992,48 +2011,49 @@ in ((index 5) list(2, 3))
 #(struct:const-exp -1)
 }|
 }
+}
 
-如果列表包含期望值，那么我们不调用@tt{apply-handler}，而是调用@tt{apply-cont}，
-并执行续文中所有待完成的@tt{diff}。
+如果列表包含期望值，那么我们不调用 @tt{apply-handler}，而是调用 @tt{apply-cont}，
+并执行续文中所有待完成的 @tt{diff}。
 
 @exercise[#:level 2 #:tag "ex5.35"]{
 
-这种实现很低效，因为异常抛出时，@tt{apply-handler}必须在续文中线性查找处理器。让
-每个续文直接使用@tt{try-cont}续文，从而避免这种查找。
+这种实现很低效，因为异常抛出时，@tt{apply-handler} 必须在续文中线性查找处理器。
+让每个续文直接使用 @tt{try-cont} 续文，从而避免这种查找。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.36"]{
 
-另一种避免@tt{apply-handler}线性查找的设计是使用两个续文，一个正常续文，一个异常
-续文。修改本节的解释器，改用两个续文，实现这一目标。
+另一种避免 @tt{apply-handler} 线性查找的设计是使用两个续文，一个正常续文，一个异
+常续文。修改本节的解释器，改用两个续文，实现这一目标。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.37"]{
 
-修改待定语言，在过程调用的实参数目错误时抛出异常。
+修改被定语言，在过程调用的实参数目错误时抛出异常。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.38"]{
 
-修改待定语言，添加除法表达式。除以零时抛出异常。
+修改被定语言，添加除法表达式。除以零时抛出异常。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.39"]{
 
-现在，异常处理器可以重新抛出异常，把它传播出去；或者返回一个值，作为@tt{try}表达
-式的值。还可以这样设计语言：允许计算从异常抛出的位置继续。修改本节的解释器，在
-@tt{raise}调用处的续文中运行异常处理器的主体，从而完成这种设计。
+现在，异常处理器可以重新抛出异常，把它传播出去；或者返回一个值，作为 @tt{try} 表
+达式的值。还可以这样设计语言：允许计算从异常抛出的位置继续。修改本节的解释器，在
+@tt{raise} 调用处的续文中运行异常处理器的主体，从而完成这种设计。
 
 }
 
 @exercise[#:level 3 #:tag "ex5.40"]{
 
-把@tt{raise}异常处的续文作为第二个参数传递，使待定语言中的异常处理器既可返回也可
-继续。这可能需要把续文作为一种新的表达值。为用值调用续文设计恰当的语法。
+把 @tt{raise} 异常处的续文作为第二个参数传递，使被定语言中的异常处理器既可返回也
+可继续。这可能需要把续文作为一种新的表达值。为用值调用续文设计恰当的语法。
 
 }
 
@@ -2041,8 +2061,8 @@ in ((index 5) list(2, 3))
 
 我们已经展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}中
 的步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler} 和
-@tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程表示 @tt{apply-cont}中
-续文的动作，一个无参数过程表示 @tt{apply-handler} 中续文的动作。
+@tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程，表示 @tt{apply-cont}
+中续文的动作；一个无参数过程，表示 @tt{apply-handler} 中续文的动作。
 
 }
 
@@ -2058,26 +2078,27 @@ in ((index 5) list(2, 3))
 }|
 }
 
-这样捕获的续文可用@tt{throw}调用：表达式@tt{throw @${\mathit{Expression}} to
-@${\mathit{Expression}}}求出两个子表达式的值。第二个表达式应返回一续文，应用于第
-一个表达式的值。@tt{throw}表达式当前的续文则被忽略。
+这样捕获的续文可用 @tt{throw} 调用：表达式 @tt{throw @${\mathit{Expression}} to
+@${\mathit{Expression}}} 求出两个子表达式的值。第二个表达式应返回一续文，应用于
+第一个表达式的值。@tt{throw} 表达式当前的续文则被忽略。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.43"]{
 
-修改前一道练习待定语言中的@tt{letcc}，把捕获的续文作为一种新的过程，这样就可以写
-@tt{(@${exp_1} @${exp_2})}，而不用写@tt{throw @${\mathit{Expression}} to
+修改前一道练习被定语言中的 @tt{letcc}，把捕获的续文作为一种新的过程，这样就可以
+写 @tt{(@${exp_1} @${exp_2})}，而不用写 @tt{throw @${\mathit{Expression}} to
 @${\mathit{Expression}}}。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.44"]{
 
-前面练习里的@tt{letcc}和@tt{throw}还有一种设计方式，只需给语言添加一个过程。这个
-过程在Scheme中叫做@tt{call-with-current-continuation}，它取一个单参数过程@tt{p}，
-并给@tt{p}传递一个单参数过程，该过程在调用时，将其参数传递给当前的续文@tt{cont}。
-可以用@tt{letcc}和@tt{throws}，把@tt{call-with-current-continuation}定义如下：
+前面练习里的 @tt{letcc} 和 @tt{throw} 还有一种设计方式，只需给语言添加一个过程。
+这个过程在 Scheme 中叫做 @tt{call-with-current-continuation}，它取一个单参数过程
+@tt{p}，并给 @tt{p} 传递一个单参数过程，该过程在调用时，将其参数传递给当前的续文
+@tt{cont}。可以用 @tt{letcc} 和 @tt{throw}，把
+@tt{call-with-current-continuation} 定义如下：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2089,9 +2110,9 @@ in ...
 }|
 }
 
-给语言添加@tt{call-with-current-continuation}。然后写一个翻译器，把具有
-@tt{letcc}和@tt{throw}的语言翻译为只有@tt{call-with-current-continuation}，没有
-@tt{letcc}和@tt{throw}的语言。
+给语言添加 @tt{call-with-current-continuation}。然后写一个翻译器，用只有
+@tt{call-with-current-continuation} 的语言翻译具有 @tt{letcc} 和 @tt{throw} 的语
+言。
 
 }
 
