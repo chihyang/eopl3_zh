@@ -976,8 +976,8 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 @tt{apply-procedure/k} 的任何结果都可能成为 @tt{value-of/k} 的结果。而我们修改了
 @tt{apply-procedure/k}，它的返回值与之前不同。
 
-我们引入@emph{弹珠} (@${\mathit{Bounce}})，作为 @tt{value-of/k}的可能结果（我们
-叫它弹珠，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归
+我们引入@emph{弹球} (@${\mathit{Bounce}})，作为 @tt{value-of/k}的可能结果（我们
+叫它弹球，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归
 调用自身和 @tt{apply-cont}，这些是它里面所有的尾递归。所以能成为 @tt{value-of/k}
 结果的值只能是 @tt{apply-cont} 的结果。而且，@tt{apply-procedure/k} 在尾部递归调
 用@tt{value-of/k}，所以不论 @${\mathit{Bounce}} 是什么，它是 @tt{value-of/k}、
@@ -1104,8 +1104,8 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 @exercise[#:level 1 #:tag "ex5.20"]{
 
 在@exercise-ref{ex5.18} 中，@tt{trampoline} 返回 @${\mathit{FinalAnswer}} 之前的
-最后一颗弹珠形如 @tt{(apply-cont (end-cont) @${val})}，其中，@${val} 是
-@${\mathit{ExpVal}}。利用这一点优化@exercise-ref{ex5.19} 中弹珠的表示。
+最后一颗弹球形如 @tt{(apply-cont (end-cont) @${val})}，其中，@${val} 是
+@${\mathit{ExpVal}}。利用这一点优化@exercise-ref{ex5.19} 中弹球的表示。
 
 }
 

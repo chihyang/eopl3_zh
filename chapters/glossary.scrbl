@@ -12,7 +12,7 @@
 
 @tabular[#:sep @hspace[1]
 (list
-@list["Bounce" "弹珠，或不译"]
+@list["Bounce" "弹球，或不译"]
 @list["Call by name" "按名调用"]
 @list["Call by need" "按需调用"]
 @list["Call by reference" "按指调用"]
