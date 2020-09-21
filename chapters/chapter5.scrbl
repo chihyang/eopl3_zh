@@ -256,7 +256,7 @@ behavior})。
 
 @tt{letrec} 的行为也不复杂：它不调用 @tt{value-of}，而是创建一个新环境，然后在新
 环境中求主体的值，主体的值就是整个表达式的值。这表明主体和整个表达式在同样的控制
-上下文中执行。因此，主体的值应返还给整个表达式的续文。所以我们写：
+上下文中执行。因此，主体的值应返回给整个表达式的续文。所以我们写：
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -295,7 +295,7 @@ behavior})。
 }
 
 接下来我们考虑 @tt{zero?} 表达式。在 @tt{zero?} 表达式中，我们得求出实参的值，然
-后返还给依赖该值的续文。所以我们要在新的续文中求实参的值，这个续文会取得返回值，
+后返回给依赖该值的续文。所以我们要在新的续文中求实参的值，这个续文会取得返回值，
 然后做适当处理。
 
 那么，在 @tt{value-of/k} 中，我们写：
@@ -1699,14 +1699,15 @@ odd:  if (x=0) then return(0)
 }
 
 @tt{try} 表达式在 @tt{catch} 从句描述的异常处理上下文中求第一个参数的值。如果该
-表达式正常返回，它的值就是整个 @tt{try} 表达式的值，异常处理器则抛弃。
+表达式正常返回，它的值就是整个 @tt{try} 表达式的值，异常处理器（即
+@tt{handler-exp}）则被移除。
 
-@tt{raise} 表达式求出参数的值，用该值抛出异常，并把这个值传给最近建立的异常处理
-器，绑定到处理器的变量，然后，求出处理器主体的值。处理器主体可以返回一个值，这个
-值称为对应 @tt{try} 表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
-(@emph{propagate}) 出去；这时，异常会传给次近的异常处理器。
+@tt{raise} 表达式求出参数的值，以该值抛出一个异常。这个值会传给最接近的异常处理
+器，并绑定到这个处理器的变量。然后，处理器主体将被求值。处理器主体可以返回一个值，
+这个值称为对应 @tt{try} 表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
+(@emph{propagate}) 出去；这时，该异常会传给第二接近的异常处理器。
 
-暂时假设我们已经给语言添加了字符串，这里是一个例子。
+这里是一个例子（暂时假设我们给语言添加了字符串）。
 
 @nested{
 @nested[#:style small]{
@@ -1726,11 +1727,11 @@ let list-index =
 
 过程 @tt{list-index} 是个咖喱式过程，它取一个字符串，一个字符串列表，返回字符串
 在列表中的位置。如果找不到期望的列表元素，@tt{inner} 抛出一个异常，跳过所有待做
-的减法，把 @tt{"ListIndexFailed"} 传给最近建立的异常处理器。
+的减法，把 @tt{"ListIndexFailed"} 传给最接近的异常处理器。
 
 }
 
-异常处理器可以利用调用处的信息对异常做适当处理。
+这个异常处理器可以利用调用处的信息对异常做适当处理。
 
 @nested{
 @nested[#:style small]{
@@ -1768,13 +1769,13 @@ let find-member-number =
 }
 }
 
-在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise} 传出的值可能包含可供
-调用者利用的部分信息。
+在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise} 传出的值可能包含一部
+分可供调用者利用的信息。
 
 }
 
-用续文实现这种异常处理机制直截了当。我们从 @tt{try} 表达式开始。在续文的数据结构
-表示中，我们添加两个构造器：
+用传递续文的解释器实现这种异常处理机制直截了当。我们从 @tt{try} 表达式开始。在续
+文的数据结构表示中，我们添加两个构造器：
 
 @nested{
 @nested[#:style small]{
@@ -1789,7 +1790,7 @@ let find-member-number =
 }
 }
 
-在 @tt{value-of/k} 中我们给 @tt{try} 添加下面的从句：
+在 @tt{value-of/k} 中，我们给 @tt{try} 添加下面的从句：
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -1801,7 +1802,7 @@ let find-member-number =
 
 }
 
-求 @tt{try} 表达式主体的值时会发生什么呢？如果主体正常返回，那么这个值因该传给
+求 @tt{try} 表达式主体的值时会发生什么呢？如果主体正常返回，那么这个值应该传给
 @tt{try} 表达式的续文，也就是此处的 @tt{cont}：
 
 @nested[#:style 'code-inset]{
@@ -1811,7 +1812,7 @@ let find-member-number =
 }|
 }
 
-如果抛出一个异常呢？首先，我们当然要求出 @tt{raise} 参数的值。
+如果一个异常抛出了呢？首先，我们当然得求出 @tt{raise} 参数的值。
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -1821,8 +1822,8 @@ let find-member-number =
 }
 }
 
-当 @tt{exp1} 的值返还给 @tt{raise1-cont} 时，我们要查找续文中最近的异常处理器，
-即最上层的 @tt{try-cont} 续文。所以，在我们把续文规范写成：
+当 @tt{exp1} 的值返回给 @tt{raise1-cont} 时，我们要查找续文中最接近的异常处理器，
+即最上层的 @tt{try-cont} 续文。所以，我们把续文规范写成：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1832,7 +1833,7 @@ let find-member-number =
 }|
 }
 
-其中，@tt{apply-handler} 是一过程，它找出最近的异常处理器并调用它
+其中，@tt{apply-handler} 是一过程，它找出最接近的异常处理器，然后调用它
 （@figure-ref{fig-5.15}）。
 
 }
@@ -1860,7 +1861,8 @@ let find-member-number =
 
 }
 
-要看出这些怎样配合，我们考虑用被定语言实现的 @tt{index}。令 @${exp_0} 表示表达式：
+要明白怎样将这些结合到一起，我们考虑用被定语言实现的 @tt{index}。令 @${exp_0} 指
+代表达式：
 
 @nested[#:style small]{
 @nested[#:style 'code-inset]{
@@ -1881,9 +1883,10 @@ in ((index 5) list(2, 3))
 }
 }
 
-我们从任意环境 @${\rho_0} 和续文 @${cont_0} 开始求 @${exp_0} 的值。我们只展示计
-算的关键部分，并插入注释。
+我们从任意环境 @${\rho_0} 和续文 @${cont_0} 开始求 @${exp_0} 的值，只展示计算的
+关键部分，并插入注释。
 
+@nested{
 @nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2012,14 +2015,16 @@ in ((index 5) list(2, 3))
 }|
 }
 }
+}
 
-如果列表包含期望值，那么我们不调用 @tt{apply-handler}，而是调用 @tt{apply-cont}，
-并执行续文中所有待完成的 @tt{diff}。
+如果列表包含期望值，那么我们不需调用 @tt{apply-handler}，而是调用
+@tt{apply-cont}，并执行续文中所有待完成的 @tt{diff}。
+
 
 @exercise[#:level 2 #:tag "ex5.35"]{
 
 这种实现很低效，因为异常抛出时，@tt{apply-handler} 必须在续文中线性查找处理器。
-让每个续文直接使用 @tt{try-cont} 续文，从而避免这种查找。
+让所有续文都能直接使用 @tt{try-cont} 续文，从而避免这种查找。
 
 }
 
@@ -2038,29 +2043,29 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 1 #:tag "ex5.38"]{
 
-修改被定语言，添加除法表达式。除以零时抛出异常。
+修改被定语言，添加除法表达式，并在被零除时抛出异常。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.39"]{
 
-现在，异常处理器可以重新抛出异常，把它传播出去；或者返回一个值，作为 @tt{try} 表
+目前，异常处理器可以重新抛出异常，把它传播出去；或者返回一个值，作为 @tt{try} 表
 达式的值。还可以这样设计语言：允许计算从异常抛出的位置继续。修改本节的解释器，在
-@tt{raise} 调用处的续文中运行异常处理器的主体，从而完成这种设计。
+@tt{raise} 调用处的续文中运行异常处理器的主体，完成这种设计。
 
 }
 
 @exercise[#:level 3 #:tag "ex5.40"]{
 
-把 @tt{raise} 异常处的续文作为第二个参数传递，使被定语言中的异常处理器既可返回也
-可继续。这可能需要把续文作为一种新的表达值。为用值调用续文设计恰当的语法。
+把 @tt{raise} 异常处的续文作为第二个参数传递，使被定语言中的异常处理器既能返回也
+能继续。这可能需要把续文作为一种新的表达值。为用值调用续文设计恰当的语法。
 
 }
 
 @exercise[#:level 3 #:tag "ex5.41"]{
 
-我们已经展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}中
-的步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler} 和
+我们展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}中的
+步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler} 和
 @tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程，表示 @tt{apply-cont}
 中续文的动作；一个无参数过程，表示 @tt{apply-handler} 中续文的动作。
 
@@ -2086,8 +2091,8 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 2 #:tag "ex5.43"]{
 
-修改前一道练习被定语言中的 @tt{letcc}，把捕获的续文作为一种新的过程，这样就可以
-写 @tt{(@${exp_1} @${exp_2})}，而不用写 @tt{throw @${\mathit{Expression}} to
+修改前一道练习被定语言中的 @tt{letcc}，把捕获的续文作为一种新的过程，这样就能写
+@tt{(@${exp_1} @${exp_2})}，而不必写 @tt{throw @${\mathit{Expression}} to
 @${\mathit{Expression}}}。
 
 }
@@ -2096,9 +2101,9 @@ in ((index 5) list(2, 3))
 
 前面练习里的 @tt{letcc} 和 @tt{throw} 还有一种设计方式，只需给语言添加一个过程。
 这个过程在 Scheme 中叫做 @tt{call-with-current-continuation}，它取一个单参数过程
-@tt{p}，并给 @tt{p} 传递一个单参数过程，该过程在调用时，将其参数传递给当前的续文
-@tt{cont}。可以用 @tt{letcc} 和 @tt{throw}，把
-@tt{call-with-current-continuation} 定义如下：
+@tt{p}，并给 @tt{p} 传递一个单参数过程，这个过程在调用时，将其参数传递给当前的续
+文@tt{cont}。@tt{call-with-current-continuation} 可用 @tt{letcc} 和 @tt{throw}
+定义如下：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2118,35 +2123,37 @@ in ...
 
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
 
-许多编程任务中，可能需要一次进行多个计算。当这些计算作为同一进程的一部分，运行在
-同一地址空间，它们通常称为@emph{线程} (@emph{thread})。本节，我们将看到如何修改
+许多编程任务中，可能需要一次进行多项计算。当这些计算作为同一进程的一部分，运行在
+同一地址空间，通常称它们为@emph{线程} (@emph{thread})。本节，我们将看到如何修改
 解释器，模拟多线程程序的执行。
 
-我们的多线程解释器不只做单线程计算，而是维护多个线程。每个线程包含一个正在进行的
-计算，就像本章之前展示的那样。线程使用@secref{state}中的赋值，通过共享内存通信。
+我们的多线程解释器不是做单线程计算，而且维护多个线程。就像本章之前展示的那样，每
+个线程包含一项正在进行的计算。线程使用@secref{state}中的赋值，通过共享内存通信。
 
 在我们的系统中，整个计算包含一个线程@emph{池} (@emph{pool})。每个线程@emph{在运
-行} (@emph{running})、@@emph{可运行} (@emph{runnable})或者@emph{受阻塞}
-(@emph{blocked})。在我们的系统中，一次只能有一个线程在运行。在多CPU系统中，可以
-有若干线程同时运行。可运行的线程记录在名为@emph{就绪队列} (@emph{ready queue})的
-队列中。还有线程因为种种原因未能就绪。我们说这些线程@emph{受阻塞}。本节稍后介绍
-阻塞的线程。
+行} (@emph{running})、@@emph{可运行} (@emph{runnable}) 或者@emph{受阻塞}
+(@emph{blocked})。在我们的系统中，一次只能有一个线程在运行。在多 CPU 系统中，可
+以有若干线程同时运行。可运行的线程记录在名为@emph{就绪队列} (@emph{ready queue})
+的队列中。还有些线程因为种种原因未能就绪，我们说这些线程@emph{受阻塞}。本节稍后
+介绍受阻塞线程。
 
-线程调用由@emph{调度器} (@emph{scheduler})执行，它将就绪队列保存为状态的一部分。
-此外，它保存一个计时器，当一个线程完成若干步（即线程的@emph{时间片} (@emph{time
-slice})或@emph{量子} (@emph{quantum})）时，它中断线程，将其放入就绪队列中，并从
-就绪队列中选出一个新的线程来运行。这叫做@emph{抢占式调度} (@emph{pre-emptive
-scheduling})。
+线程调度由@emph{调度器} (@emph{scheduler}) 执行，它将就绪队列保存为自身状态的一
+部分。此外，它保存一个计时器，当一个线程完成若干步（即线程的@emph{时间片}
+(@emph{time slice}) 或@emph{量子} (@emph{quantum})）时，它中断线程，将其放入就绪
+队列中，并从就绪队列中选出一个新的线程来运行。这叫做@emph{抢占式调度}
+(@emph{pre-emptive scheduling})。
 
-我们的新语言基于IMPLICIT-REFS，名叫THREADS。在THREADS中，新线程由名为@tt{spawn}
-的构造器创建。@tt{spawn}取一参数，其值为一个过程。新创建的线程运行时，给那个过程
-传递一个未指明的参数。该线程不是立刻运行，而是放入就绪队列中，轮到它时才运行。
-@tt{spawn}的执行只求效果；在我们的系统中，我们随机为它挑选一个返回值73。
+我们的新语言基于 IMPLICIT-REFS，名叫 THREADS。在 THREADS 中，新线程由名为
+@tt{spawn} 的结构创建。@tt{spawn} 取一参数，该参数的值应为一个过程。新创建的线程
+运行时，给那个过程传递一个未定义的参数。该线程不是立刻运行，而是放入就绪队列中，
+轮到它时才运行。@tt{spawn} 的执行只求效果；在我们的系统中，我们为它任选一个返回
+值 73。
 
-我们来看这种语言的两个示例程序。@figure-ref{fig-5.16} 定义了一个过程@tt{noisy}，它取一个列表，打
-印出列表的第一个元素，然后递归处理列表剩余部分。这里，主体表达式创建两个线程，分
-别打印列表@tt{[1,2,3,4,5]}和@tt{[6,7,8,9,10]}。列表究竟怎样穿插取决于调度器；在
-本例中，在被调度器打断之前，每个线程打印出列表中的两个元素，
+我们来看这种语言的两个示例程序。@figure-ref{fig-5.16} 定义了一个过程 @tt{noisy}，
+它取一个列表，打印出列表的第一个元素，然后递归处理列表的剩余部分。这里，主体中的
+表达式创建两个线程，分别打印列表 @tt{[1,2,3,4,5]} 和 @tt{[6,7,8,9,10]}。两个列表
+究竟如何穿插取决于调度器；在本例中，在被调度器打断之前，每个线程打印出列表中的两
+个元素，
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -2186,14 +2193,15 @@ in
 
 }
 
-@figure-ref{fig-5.17} 展示了一个生产者和一个消费者，由初始值为0的缓存相联系。生产者取一参数
-@tt{n}，进入@tt{wait}循环5次，然后把@tt{n}放入缓存。每次进入@tt{wait}循环，它打
-印一个倒数计时器（以200s为单位）。消费者取一参数（但忽略它），进入一循环，等待缓
-存变成非零值。每次进入循环，它打印一个计数器（以100s为单位），以展示它等结果等了
-多久。主线程将生产者放入就绪队列，打印出300，并在自身中启动消费者。所以，前两项，
-300和205，分别由主线程和生产者线程打印。@note{原文为So the first two items, 300
-and 205, are printed by the main thread. 实则205是生产者所在线程打印。}就像前一
-个例子那样，在被打断之前，消费者线程和生产者线程各自循环大约两次。
+@figure-ref{fig-5.17} 展示了一个生产者和一个消费者，由初始值为 0 的缓存相联系。
+生产者取一参数 @tt{n}，进入 @tt{wait}，循环 5 次，然后把 @tt{n} 放入缓存。每次进
+入 @tt{wait} 循环，它打印一个倒数计时器（以 200s 为单位）的值。消费者取一参数
+（但忽略它），进入一循环，等待缓存变成非零值。每次进入循环时，它打印一个计数器
+（以 100s 为单位）的值，以展示它等结果等了多久。主线程将生产者放入就绪队列，打印
+出 300，并在自身中启动消费者。所以，前两项，300 和 205，分别由主线程和生产者线程
+打印。@note{原文为So the first two items, 300 and 205, are printed by the main
+thread. 实则205是生产者所在线程打印。}就像前一个例子那样，在被打断之前，消费者线
+程和生产者线程各自循环大约两次。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -2244,40 +2252,47 @@ in let producer = proc (n)
 
 }
 
-实现从IMPLICIT-REFS语言传递续文的解释器开始。这与@secref{s5.1}中的类似，只是多了
-IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的续文构造器@tt{set-rhs-cont}。
+实现从 IMPLICIT-REFS 语言传递续文的解释器开始。这与@secref{s5.1}中的类似，只是多
+了 IMPLICIT-REFS 中的存储器（当然！），以及@exercise-ref{ex5.9} 中的续文构造器
+@tt{set-rhs-cont}。
 
 我们给这个解释器添加一个调度器。调度器状态由四个值组成，接口提供六个过程来操作这
 些值，如@figure-ref{fig-5.18} 所示。
 
-@figure-ref{fig-5.19} 展示了本接口的实现。这里@tt{(enqueue @${q} @${val})}返回一队列，除了把
-@${val}放在末尾外，与@${q}相同。@tt{(dequeue @${q} @${f})}取出队头及剩余部分，将
-它们作为参数传递给@${f}。
+@figure-ref{fig-5.19} 展示了本接口的实现。这里 @tt{(enqueue @${q} @${val})} 返回
+一队列，除了把 @${val} 放在末尾之外，与 @${q} 相同。@tt{(dequeue @${q} @${f})}
+取出队头及剩余部分，将它们作为参数传递给 @${f}。
 
-我们用无参数且返回表达值的Scheme过程表示线程：
+我们用无参数且返回表达值的 Scheme 过程表示线程：
 
+@nested[#:style small]{
 @nested[#:style 'inset]{
 @elem{@${\mathit{Thread} = () \to \mathit{ExpVal}}}
 }
+}
 
-如果就绪队列非空，那么过程@tt{run-next-thread}从就绪队列取出第一个线程并运行，赋
-予它一个大小为@tt{the-max-time-slice}的新时间片。如果还有就绪线程，它还把
-@tt{the-ready-queue}设置为剩余线程队列。如果就绪队列为空，@tt{run-next-thread}返
-回@tt{the-final-answer}。计算到这里全部终止。
+如果就绪队列非空，那么过程 @tt{run-next-thread} 从就绪队列取出第一个线程并运行，
+赋予它一个大小为 @tt{the-max-time-slice} 的新时间片。如果还有就绪线程，它还把
+@tt{the-ready-queue} 设置为剩余线程队列。如果就绪队列为空，@tt{run-next-thread}
+返回 @tt{the-final-answer}，计算至此全部终止。
 
-然后我们来看解释器。@tt{spawn}表达式的求参续文在执行时，在就绪队列中放入一个新线
-程，把73返还给调用者，然后继续。新的线程在执行时，给@tt{spawn}参数的过程值传一个
-任意值（这里传28）。要完成这些，我们给@tt{value-of/k}新增从句：
+然后我们来看解释器。@tt{spawn} 表达式在某个续文中求参数的值，这个续文执行时，将
+一个新线程放入就绪队列，并将 73 返回给 @tt{spawn} 的调用者。新的线程执行时，将一
+个任意值（这里选 28）传给 @tt{spawn} 参数求值得到的过程。要完成这些，我们给
+@tt{value-of/k} 新增从句：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (spawn-exp (exp)
   (value-of/k exp env
     (spawn-cont cont)))
 }
+}
 
-给@tt{apply-cont}新增从句：
+给 @tt{apply-cont} 新增从句：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (spawn-cont (saved-cont)
   (let ((proc1 (expval->proc val)))
@@ -2287,6 +2302,7 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的�
           (num-val 28)
           (end-subthread-cont))))
     (apply-cont saved-cont (num-val 73))))
+}
 }
 
 @; TODO: format for interface in figure 5.18
@@ -2352,10 +2368,10 @@ IMPLICIT-REFS中的存储器（当然！），以及@exercise-ref{ex5.9} 中的�
           (when (debug-mode?)
             (eopl:printf "切换到另一线程.~%"))
           (dequeue the-ready-queue
-                   (lambda (first-ready-thread other-ready-thread)
-                     (set! the-ready-queue other-ready-thread)
-                     (set! the-time-remaining the-max-time-slice)
-                     (first-ready-thread)))))))
+            (lambda (first-ready-thread other-ready-thread)
+              (set! the-ready-queue other-ready-thread)
+              (set! the-time-remaining the-max-time-slice)
+              (first-ready-thread)))))))
 
 @#,elem{@bold{@tt{set-final-answer!}} : @${\mathit{ExpVal} \to \mathit{Unspecified}}}
 (define set-final-answer!
@@ -2397,9 +2413,10 @@ in let mut = mutex()
 
 }
 
-跳跃式解释器生成快照时也是这样：它打包出一个续文（这里的@tt{(lambda ()
-(apply-procedure/k ...))}），把它传给另一个过程处理。在跳床的示例中，跳床只是接
-收线程并运行它。这里，我们把新线程放入就绪队列，继续我们的现有计算。
+跳跃式解释器生成快照时也要做这样：它将计算打包（这里的 @tt{(lambda ()
+(apply-procedure/k ...))}），然后把它传给另一个过程处理。在跳床的例子中，我们把
+线程传给跳床，后者直接执行前者。这里，我们把新线程放入就绪队列，继续我们的现有计
+算。
 
 }
 
@@ -2407,15 +2424,16 @@ in let mut = mutex()
 
 @itemlist[
 
- @item{运行主线程的续文应记录主线程的值，作为最终答案，然后运行残存线程。}
+ @item{运行主线程的续文应记录主线程的值，作为最终答案，然后运行剩余线程。}
 
  @item{子线程结束时无法报告它的值，所以运行子线程的续文应忽略其值，然后直接运行
- 残存线程。}
+ 剩余线程。}
 
 ]
 
-这给我们两种新续文，其行为由@tt{apply-cont}中的以下几行实现：
+由此我们得出两种新续文，其行为由 @tt{apply-cont} 中的以下几行实现：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (end-main-thread-cont ()
   (set-final-answer! val)
@@ -2424,9 +2442,11 @@ in let mut = mutex()
 (end-subthread-cont ()
   (run-next-thread))
 }
+}
 
-我们从@tt{value-of-program}入手整个系统：
+我们从 @tt{value-of-program} 入手整个系统：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Int} \times \mathit{Program} \to \mathit{FinalAnswer}}}
 (define value-of-program
@@ -2440,11 +2460,13 @@ in let mut = mutex()
           (init-env)
           (end-main-thread-cont))))))
 ]
+}
 
-最后，我们修改@tt{apply-cont}，让它在每次调用时递减计时器。如果计时器到期，那就
-中止当前计算。实现时，我们在就绪队列中放入一个新线程，它用调用
-@tt{run-next-thread}时恢复的计时器再次调用@tt{apply-cont}。
+最后，我们修改 @tt{apply-cont}，让它在每次调用时递减计时器。如果计时器到期，那就
+中止当前计算。在实现时，我们先把一个线程放入就绪队列，它用调用
+@tt{run-next-thread} 时恢复的计时器再次调用 @tt{apply-cont}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
 (define apply-cont
@@ -2459,66 +2481,68 @@ in let mut = mutex()
         (cases continuation cont
           ...)))))
 ]
+}
 
-共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，考虑@figure-ref{fig-5.20} 中的
-程序。这里，我们创建了三个线程，试图累加同一个计数器@tt{x}。如果一个线程读取了计
-数器，但在更新计数器之前终端，那么两个线程将把计数器设置成同样的值。因此，计数器
-可能变成2，甚至是1，而不是3。
+共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，
+考虑@figure-ref{fig-5.20} 中的程序。这里，我们创建了三个线程，试图累加同一个计数
+器 @tt{x}。如果一个线程读取了计数器，但在更新计数器之前被打断，那么两个线程将把
+计数器设置成同样的值。因此，计数器可能变成 2，甚至是 1，而不是 3。
 
-我们想要确保不出这种乱子。同样地，我们想要组织我们的程序，那么@figure-ref{fig-5.17} 中的程序不需
-要繁忙的等待。相反，它应该能够进入休眠状态，并在生产者向同一缓存插入一个值时唤醒。
+我们想要确保不会发生这种混乱。同样地，我们想要组织我们的程序，
+避免@figure-ref{fig-5.17} 中的程序空转。恰恰相反，它应该能够进入休眠状态，并在生
+产者向共享缓存插入值时唤醒。
 
-有许多方式设计这类同步组件，一种简单的方式是使用@emph{互斥锁}（@emph{mutex
-exclusion}，简称@emph{mutex}）或@emph{二元信号量} (@emph{binary semaphore})。
+有许多方式设计这类同步组件。一种简单的方式是使用@emph{互斥锁}（@emph{mutex
+exclusion}，简称 @emph{mutex}）或@emph{二元信号量} (@emph{binary semaphore})。
 
-互斥锁可能@emph{打开} (@emph{open})或@emph{关闭} (@emph{closed})。它还包含一个等
-待互斥锁打开的线程队列。互斥锁有三种操作：
+互斥锁可能@emph{打开} (@emph{open}) 或@emph{关闭} (@emph{closed})。它还包含一个
+等待互斥锁打开的线程队列。互斥锁有三种操作：
 
 @itemlist[
 
- @item{@tt{mutex}，没有参数，创建一个初始状态为打开的互斥锁。}
+ @item{@tt{mutex}，无参数操作，创建一个初始状态为打开的互斥锁。}
 
- @item{@tt{waite}，取一个参数，线程用它表示自身想要访问一把互斥锁。它的参数必须
- 是一把互斥锁。它的行为取决于互斥锁的状态。
+ @item{@tt{wait}，单参数操作，线程用它表明想要访问某一互斥锁。它的参数必须是一把
+ 互斥锁。它的行为取决于互斥锁的状态。
 
  @itemlist[
 
-  @item{若互斥锁关闭，当前线程放入护斥锁的等待队列并中止。我们说当前线程@emph{受
-  阻塞}，等待这把互斥锁。}
+  @item{若互斥锁关闭，当前线程放入互斥锁的等待队列中，并中止。我们说当前线
+  程@emph{受阻塞}，等待这把互斥锁。}
 
-  @item{若互斥锁打开，则将其关闭，当前线程继续执行。}
+  @item{若互斥锁打开，则将其关闭，并让当前线程继续执行。}
 
  ]
 
  @tt{wait}的执行只求效果；它的返回值未定义。
  }
 
- @item{@tt{signal}，取一个参数，线程用它表示自身准备释放一把互斥锁。它的参数必须
- 是一把互斥锁。
+ @item{@tt{signal}，单参数操作，线程用它表明准备释放某一互斥锁。它的参数必须是一
+ 把互斥锁。
 
  @itemlist[
 
-  @item{若互斥锁关闭，且等待队列中没有线程，则将其打开，当前线程继续执行。}
+  @item{若互斥锁关闭，且等待队列中没有线程，则将其打开，并让当前线程继续执行。}
 
   @item{若互斥锁关闭，且等待队列中仍有线程，则从中选出一个线程，放入调度器的等待
-  队列，而互斥锁保持关闭。执行@tt{signal}的线程继续计算。}
+  队列，互斥锁则保持关闭。执行 @tt{signal} 的线程继续计算。}
 
-  @item{若互斥锁打开，则仍保持打开，线程继续执行。}
+  @item{若互斥锁打开，则保持打开，线程继续执行。}
 
  ]
 
- @tt{signal}的执行只求效果；它的返回值未定义。@tt{signal}操作总是成功：执行它的
- 线程仍然是正在运行的线程。
+ @tt{signal}的执行只求效果；它的返回值未定义。@tt{signal} 操作总是成功：执行它的
+ 线程仍然是运行线程。
 
  }
 
 ]
 
-这些属性保证在一对连续的@tt{wait}和@tt{signal}之间，只有一个线程可以执行。这部分
-程序叫做@emph{关键区域} (@emph{critical region})。在关键区域内，两个线程不可能同
-时执行。例如，@figure-ref{fig-5.21} 展示了我们只前的例子，只在关键行周围插入了一把互斥锁。在这个
-程序中，一次只有一个线程可以执行@tt{set x = -(x,-1)}；所以计数器一定能够到达终值
-3。
+这些属性保证在一对连续的 @tt{wait} 和 @tt{signal} 之间，只有一个线程可以执行。这
+部分程序叫做@emph{关键区域} (@emph{critical region})。在关键区域内，两个线程不可
+能同时执行。例如，@figure-ref{fig-5.21} 展示了我们之前的例子，只是在关键行周围插
+入了一把互斥锁。在这个程序中，一次只有一个线程可以执行 @tt{set x = -(x,-1)}；所
+以计数器一定能够到达终值 3。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -2547,23 +2571,28 @@ in let mut = mutex()
 我们用两个引用模拟互斥锁：一个指向其状态（开启或关闭），一个指向等待这把锁的线程
 列表。我们还把互斥锁作为一种表达值。
 
+@nested[#:style small]{
 @racketblock[
 (define-datatype mutex mutex?
   (a-mutex
     (ref-to-closed? reference?)
     (ref-to-wait-queue reference?)))
 ]
+}
 
-我们给@tt{value-of/k}添加适当的行：
+我们给 @tt{value-of/k} 添加适当的行：
 
 @nested{
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (mutex-exp ()
   (apply-cont cont (mutex-val (new-mutex))))
 }
+}
 
 其中：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{new-mutex}} : @${\mathit{()} \to \mathit{Mutex}}}
 (define new-mutex
@@ -2572,13 +2601,14 @@ in let mut = mutex()
      (newref #f)
      (newref '()))))
 ]
-
+}
 }
 
-@tt{wait}和@tt{signal}作为新的单参数操作，只是调用过程@tt{wait-for-mutex}和
-@tt{signal-mutex}。@tt{wait}和@tt{signal}都要求它们唯一参数的值，所以，在
-@tt{apply-cont}中我们写：
+@tt{wait} 和 @tt{signal} 作为新的单参数操作，只是调用过程 @tt{wait-for-mutex} 和
+@tt{signal-mutex}。@tt{wait} 和 @tt{signal} 都求出它们唯一参数的值，所以，在
+@tt{apply-cont} 中我们写：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (wait-cont
   (saved-cont)
@@ -2592,14 +2622,15 @@ in let mut = mutex()
     (expval->mutex val)
     (lambda () (apply-cont saved-cont (num-val 53)))))
 }
+}
 
-现在，我们可以写出@tt{wait-for-mutex}和@tt{signal-mutex}。这些过程取两个参数：一
-个互斥锁，一个线程，其工作方式如上所述（@figure-ref{fig-5.22}）。
+现在，我们可以写出 @tt{wait-for-mutex} 和 @tt{signal-mutex}。这些过程取两个参数：
+一个互斥锁，一个线程，其工作方式如上所述（@figure-ref{fig-5.22}）。
 
 @nested[#:style eopl-figure]{
 @racketblock[
 @#,elem{@bold{@tt{wait-for-mutex}} : @${\mathit{Mutex} \times \mathit{Thread} \to \mathit{FinalAnswer}}}
-@#,elem{@bold{用法} : 等待互斥锁开启，然后关闭它}
+@#,elem{@bold{用法} : @tt{等待互斥锁开启，然后关闭它}}
 (define wait-for-mutex
   (lambda (m th)
     (cases mutex m
@@ -2645,7 +2676,7 @@ in let mut = mutex()
 @exercise[#:level 1 #:tag "ex5.45"]{
 
 给本节的语言添加形式 @tt{yield}。线程不论何时执行 @tt{yield}，都将自身放入就绪队
-列之中，就绪队列头部的线程接着执行。当线程继续时，就像调用 @tt{yield} 返回数值
+列之中，就绪队列头部的线程接着执行。当线程继续时，就好像调用 @tt{yield} 返回了
 99。
 
 }
@@ -2654,13 +2685,13 @@ in let mut = mutex()
 
 在@exercise-ref{ex5.45} 的系统中，线程放入就绪队列，既可能是因为耗尽时间片，也可
 能是因为它选择让步。在后一种情况下，线程会以一个完整的时间片重启。修改系统，让就
-绪队列记录每个线程的剩余时间片（如果有的话），并线程重启时仍用剩余的时间片。
+绪队列记录每个线程的剩余时间片（如果有的话），在线程重启时仍使用剩余的时间片。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.47"]{
 
-如果剩余两个子线程，每个等待另一个子线程持有的互斥锁会怎样？
+如果剩余两个子线程，二者都在等待另一个子线程持有的互斥锁会怎样？
 
 }
 
@@ -2672,7 +2703,7 @@ in let mut = mutex()
 
 @exercise[#:level 1 #:tag "ex5.49"]{
 
-为THREADS完成@exercise-ref{ex5.15}（用堆栈上的帧表示续文）。
+为 THREADS 完成@exercise-ref{ex5.15}（用堆栈上的帧表示续文）。
 
 }
 
@@ -2684,34 +2715,34 @@ in let mut = mutex()
 
 @exercise[#:level 3 #:tag "ex5.51"]{
 
-我们想要组织我们的程序，使@figure-ref{fig-5.17} 中的程序不需要繁忙的等待。相反，它应该能够进入休
-眠状态，并在生产者向同一缓存插入一个值时唤醒。用具有互斥锁的程序完成这些，或者实
-现一种同步操作符完成这些。
+我们想要组织我们的程序，避免@figure-ref{fig-5.17} 中的程序空转。恰恰相反，它应该
+能够进入休眠状态，并在生产者向共享缓存插入值时唤醒。用具有互斥锁的程序完成这些，
+或者实现一种同步操作符完成这些。
 
 }
 
 @exercise[#:level 3 #:tag "ex5.52"]{
 
-写出使用互斥锁的程序，如@figure-ref{fig-5.21}，但主线程等待所有三个子线程终止，然后返回@tt{x}的
-值。
+写出使用互斥锁的程序，如@figure-ref{fig-5.21}，但主线程等待所有三个子线程终止，
+然后返回 @tt{x} 的值。
 
 }
 
 @exercise[#:level 3 #:tag "ex5.53"]{
 
 修改线程的表示，添加@emph{线程描述符} (@emph{thread identifier})。每个新线程都有
-一个新的线程描述符。创建子线程时，把它的线程描述符作为值传进去，而不是传递本节的
-任意值28。子线程的描述符也作为@tt{spawn}表达式的值返还给父线程。给解释器添加辅助
-组件，跟踪线程描述符的创建。验证就绪队列中一个线程描述符至多出现一次。子线程如何
-获知父线程的描述符？程序原有的描述符应如何处理？
+一个新的线程描述符。当子线程创建时，传给它的值不是本节中的任意值 28，而是它的线
+程描述符。子线程的描述符也作为 @tt{spawn} 表达式的值返回给父线程。给解释器添加辅
+助组件，跟踪线程描述符的创建。验证就绪队列中一个线程描述符至多出现一次。子线程如
+何获知父线程的描述符？原程序的线程描述符应如何处理？
 
 }
 
 @exercise[#:level 2 #:tag "ex5.54"]{
 
-给@exercise-ref{ex5.53} 的解释器添加组件 @tt{kill}。形式 @tt{kill} 取一线程号，
-找到就绪队列或任何等待队列中对应的线程，然后删除它。此外，目标线程找到时，
-@tt{kill} 返回真，任何队列中都没有指定线程号时，返回假。
+给@exercise-ref{ex5.53} 的解释器添加组件 @tt{kill}。@tt{kill} 结构取一线程号，在
+就绪队列或任何等待队列中找出对应的线程，然后删除它。此外，当它找到目标线程时，返
+回真；在任何队列中都找不到指定线程号时，返回假。
 
 }
 
@@ -2724,15 +2755,14 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.56"]{
 
-修改@exercise-ref{ex5.55} 的解释器，不要使用共享存储器，而是让每个线程具有自己的存储器。在这种
-语言中，几乎可以排除互斥锁。重写本节语言的示例程序，不要使用互斥锁。
+修改@exercise-ref{ex5.55} 的解释器，不要使用共享存储器，而是让每个线程具有自己的
+存储器。在这种语言中，几乎可以排除互斥锁。重写本节语言的示例程序，但不用互斥锁。
 
 }
 
 @exercise[#:level 2 #:tag "ex5.57"]{
 
-在你最喜欢的操作系统教材中，有许多不同的同步机制。挑出三种，在本节的框架下实现它
-们。
+在你最爱的操作系统教材中，有各种同步机制。挑出三种，在本节的框架下实现它们。
 
 }
 
