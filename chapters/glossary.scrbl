@@ -40,6 +40,7 @@
 @list["Implementation language" "定义语言"]
 @list["Implementation" "实现"]
 @list["Implicit reference" "隐式引用"]
+@list["Lazy evaluation" "懒求值"]
 @list["List" "列表"]
 @list["Memoization" "助记法"]
 @list["Mutex exclusion" "互斥锁"]
