@@ -1155,7 +1155,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 什么。这给了我们一条口诀：
 
 @nested[#:style tip]{
- @centered{@bold{避免神秘小工具！}}
+ @centered{@elemtag["no-myth"]{@bold{避免神秘小工具！}}}
 
  @para[#:style tip-content]{定义辅助过程时，总是指明它对所有参数值做什么，而不只
  是初始值。}}
