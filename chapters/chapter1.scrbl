@@ -462,11 +462,11 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
 
  要明白这怎么用，考虑用算术操作符扩展的 lambda 演算。在这种语言里，
 
- @codeblock{(lambda (x) (+ x 5))}
+ @nested[#:style small]{@codeblock{(lambda (x) (+ x 5))}}
 
  是一表达式，@tt{x} 是其绑定变量。这式子表示一个过程，把它的参数加5。因此，在
 
- @codeblock{((lambda (x) (+ x 5)) (- x 7))}
+ @nested[#:style small]{@codeblock{((lambda (x) (+ x 5)) (- x 7))}}
 
  中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。
  @secref{s1.2.4}中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
@@ -1774,19 +1774,20 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @exercise[#:level 3 #:tag "ex1.35"]{
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
- @nested{
-  @codeblock{
-  (number-leaves
-   (interior-node 'foo
-    (interior-node 'bar
-     (leaf 26)
-     (leaf 12))
-    (interior-node 'baz
-     (leaf 11)
-     (interior-node 'quux
-      (leaf 117)
-      (leaf 14)))))
-  }}
+
+ @codeblock{
+ (number-leaves
+  (interior-node 'foo
+   (interior-node 'bar
+    (leaf 26)
+    (leaf 12))
+   (interior-node 'baz
+    (leaf 11)
+    (interior-node 'quux
+     (leaf 117)
+     (leaf 14)))))
+ }
+
  应返回
 
  @codeblock{
