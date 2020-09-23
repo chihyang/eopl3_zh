@@ -345,23 +345,25 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 例如，@${\mathit{Int}^{*(,)}} 包含字符串
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 8
 14, 12
 7, 3, 14, 16
 }|
-}
+}}
 
 @${\mathit{Int}^{*(;)}} 包含字符串
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 8
 14; 12
 7; 3; 14; 16
 }|
-}
+}}
 }
 
 这些简写不是必需的，总能够不用它们重写语法。
@@ -409,10 +411,11 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
  @elemtag["s-list"]{s-list} 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。
  这里是一些 s-list。
 
+ @nested[#:style small]{
  @verbatim[#:indent 2]{
  (a b c)
  (an (((s-list)) (with () lots) ((of) nesting)))
- }
+ }}
 
  有时也使用更宽松的 s-list 定义，既允许整数，也允许符号。
 
@@ -429,6 +432,7 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
 
  这是此类树的几个例子：
 
+ @nested[#:style small]{
  @verbatim[#:indent 2]{
  1
  2
@@ -436,7 +440,7 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
  (bar 1 (foo 1 2))
  (baz
   (bar 1 (foo 1 2))
-  (biz 4 5))}
+  (biz 4 5))}}
  }
 
  @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单语言，常用于研究编
@@ -712,6 +716,7 @@ C} 相同。
 来看看 @tt{nth-element} 如何算出答案：
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
   (nth-element '(a b c d e) 3)
@@ -720,7 +725,7 @@ C} 相同。
 = (nth-element       '(d e) 0)
 = d
 }|
-}
+}}
 
 这里，@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
 }
@@ -1698,19 +1703,20 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（@definition-ref{d1.1.7}），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
- @nested{
-  @codeblock{
-  (mark-leaves-with-red-depth
+
+ @codeblock{
+ (mark-leaves-with-red-depth
+  (interior-node 'red
+   (interior-node 'bar
+    (leaf 26)
+    (leaf 12))
    (interior-node 'red
-    (interior-node 'bar
-     (leaf 26)
-     (leaf 12))
-    (interior-node 'red
-     (leaf 11)
-     (interior-node 'quux
-      (leaf 117)
-      (leaf 14)))))
-  }}
+    (leaf 11)
+    (interior-node 'quux
+     (leaf 117)
+     (leaf 14)))))
+ }
+
  使用@exercise-ref{ex1.31} 中定义的过程，应返回二叉树
 
  @codeblock{
