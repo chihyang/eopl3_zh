@@ -812,9 +812,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 们的参数，确保参数合法。所以，如果生成 lc-exp 时只用这些构造器，可以确保表达式及
 其所有子表达式合法。如此一来，处理 lambda 表达式时就能跳过许多检查。
 
-我们用@elem[#:style question]{形式} @tt{cases} 代替谓词和抽词器，判断数据类型的
-实例属于哪种变体，并提取出它的组件。为解释这一形式，我们用数据类型 @tt{lc-exp}
-重写 @tt{occurs-free?}（@pageref{occurs-free?}）：
+我们用形式 @tt{cases} 代替谓词和提取器，判断数据类型的实例属于哪种变体，并提取出
+它的组件。为解释这一形式，我们用数据类型 @tt{lc-exp} 重写
+@tt{occurs-free?}（@pageref{occurs-free?}）：
 
 @nested[#:style small]{
 @racketblock[
