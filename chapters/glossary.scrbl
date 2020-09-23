@@ -65,6 +65,8 @@
 @list["Specification" "规范"]
 @list["Specifying" "定义"]
 @list["Store" "存储器"]
+@list["Tail call" "尾调用"]
+@list["Tail form" "尾式"]
 @list["Thawed" "解冻"]
 @list["Thread" "线程"]
 @list["Thunk" "值箱"]

@@ -609,33 +609,35 @@ val1 val2)} 的值传给当前续文。
 
 }
 
-@section[#:style section-title-style-numbered #:tag "s6.2"]{曳尾式}
+@section[#:style section-title-style-numbered #:tag "s6.2"]{尾式}
 
-要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择LETREC作为输
-入语言，补充多参数过程和多声明的@tt{letrec}表达式。其语法如@figure-ref{fig-6.3} 所示，我们称之为
-CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些叫做@emph{输入表达式}
-(@emph{input expression})。
+要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择 LETREC 作为
+输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。其语法如@figure-ref{fig-6.3}
+所示，我们称之为 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些
+叫做@emph{输入表达式} (@emph{input expression})。
 
-要定义CPS变换算法的可能输出，我们要找出CPI-IN的子集，在这个集合中，过程调用不产
-生任何控制上下文。
+要定义 CPS 变换算法的可能输出，我们要找出 CPI-IN 的子集，在这个集合中，过程调用
+不产生任何控制上下文。
 
 回忆@secref{cpi}中的原则：
 
 @nested{
 @nested[#:style tip]{
- @centered{@bold{不是过程调用导致控制上下文扩大，而是操作数的求值。}}
+ @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}}
 }
 
 那么，在
 
+@nested[#:style small]{
 @racketblock[
 (define fact
   (lambda (n)
     (if (zero? n) 1 (* n (fact (- n 1))))))
-]
+]}
 
-中，是@emph{操作数}位置调用@tt{fact}导致了控制上下文的产生。相反，在
+中，是 @tt{fact} 的调用位置@emph{作为操作数}导致了控制上下文的产生。相反，在
 
+@nested[#:style small]{
 @racketblock[
 (define fact-iter
   (lambda (n)
@@ -644,7 +646,7 @@ CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些�
 (define fact-iter-acc
   (lambda (n a)
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
-]
+]}
 
 中， 过程调用都不在操作数位置。我们说这些调用在@emph{尾端} (@emph{tail
 position})，因为它们的值就是整个调用的结果。我们称之为@emph{尾调用} (@emph{tail
@@ -684,49 +686,50 @@ call})。
 @nested[#:style tip]{
  @centered{@bold{尾调用不扩大续文}}
 
- @para[#:style tip-content]{若@${exp_1}的值作为@${exp_2}的值返回，则@${exp_1}和
- @${exp_2}应在同样的续文中执行。
- }
-}
+ @para[#:style tip-content]{若 @${exp_1} 的值作为 @${exp_2} 的值返回，则
+ @${exp_1} 和@${exp_2} 应在同样的续文中执行。} }
 
-若每个过程调用，以及每个包含过程调用的子表达式都在尾端，我们称一个表达式为@emph{曳尾式}
+若所有过程调用和所有包含过程调用的子表达式都在尾端，我们称一个表达式为@emph{尾式}
 (@emph{tail form})。这个条件表明所有过程调用都不会产生控制上下文。
 
-因此，在Scheme中，
+因此，在 Scheme 中，
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (if (zero? x) (f y) (g z))
-]
+]}
 
-是曳尾式，
+是尾式，
 
+@nested[#:style small]{
 @racketblock[
 (if b
   (if (zero? x) (f y) (g z))
   (h u))
-]
+]}
 
-也是，但
+也是尾式，但
 
+@nested[#:style small]{
 @racketblock[
 (+
   (if (zero? x) (f y) (g z))
   37)
-]
+]}
 
-不是。因为@tt{if}表达式包含一个不在尾端过程调用。
+不是。因为 @tt{if} 表达式包含一个不在尾端的过程调用。
 
 }
 
-通常，要判定语言的尾端，我们必须理解其含义。尾端的子表达式具有如下属性：求值时，
-其值立刻成为整个表达式的值。一个表达式可能有多个尾端。例如，@tt{if}表达式可能选
-择真值分支，也可能选择假值分支。对尾端的子表达式，不需要保存信息，因此也就不会产
-生控制上下文。
+通常，要判定语言的尾端，我们必须理解其含义。处于尾端的子表达式具有如下属性：该表
+达式求值后，其值随即成为整个表达式的值。一个表达式可能有多个尾端。例如，@tt{if}
+表达式可能选择真值分支，也可能选择假值分支。对尾端的子表达式，不需要保存信息，因
+此也就不会产生控制上下文。
 
-CPS-IN中的尾端如@figure-ref{fig-6.4} 所示。尾端的每个子表达式值都可以成为整个表达式的值。在传递
-续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达式在原表达式的续
-文中求值，如@pageref{tail-call-explain}所述。
+CPS-IN 中的尾端如@figure-ref{fig-6.4} 所示。尾端每个子表达式的值都可能成为整个表
+达式的值。在传递续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达
+式在原表达式的续文中求值，如@pageref{tail-call-explain}所述。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -741,51 +744,55 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 }|
 }
 
-@eopl-caption["fig-6.4"]{CPS-IN中的尾端和操作数位置。尾端记为 @${T}。操作数位置
+@eopl-caption["fig-6.4"]{CPS-IN 中的尾端和操作数位置。尾端记为 @${T}。操作数位置
 记为 @${O}。}
 }
 
-我们用这种区别设计CPS转换算法的目标语言CPS-OUT。这种语言的语法如@figure-ref{fig-6.5} 所示。这套
-语法定义了CPS-IN的子集，但略有不同。生成式的名字总以@tt{cps-}开头，这样它们不会
-与CPS-IN中生成式的名字混淆。
+我们根据这种区别设计 CPS 转换算法的目标语言 CPS-OUT。这种语言的语法
+如@figure-ref{fig-6.5} 所示。这套语法定义了 CPS-IN 的子集，但略有不同。生成式的
+名字总以 @tt{cps-} 开头，这样它们不会与 CPS-IN 中生成式的名字混淆。
 
-新的语法有两个非终止符，@${\mathit{SimpleExp}}和@${\mathit{TfExp}}。这种设计中，
-@${\mathit{SimpleExp}}表达式决不包含任何过程调用，@${\mathit{TfExp}}表达式一定是
-曳尾式。
+新的语法有两个非终止符，@${\mathit{SimpleExp}} 和 @${\mathit{TfExp}}。这种设计中，
+@${\mathit{SimpleExp}} 表达式不包含任何过程调用，@${\mathit{TfExp}} 表达式一定是
+尾式。
 
-因为@${\mathit{SimpleExp}}表达式决不包含任何过程调用，它们大致可以看成只有一行的
-简单代码，对我们来说它们简单到不需使用控制堆栈。简单表达式包括@tt{proc}表达式，
-因为@tt{proc}表达式立即返回一个过程值，但过程的主体必须是曳尾式。
+因为 @${\mathit{SimpleExp}} 表达式不包含任何过程调用，它们大致可以看成只有一行的
+简单代码，对我们来说，它们简单到不需使用控制堆栈。简单表达式包括 @tt{proc} 表达
+式，因为 @tt{proc} 表达式立即返回一个过程值，但过程的主体必须是尾式。
 
-曳尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参数，我们用@exercise-ref{ex2.10} 中的@tt{extend-env*}创建多个绑定，并用类似方式扩展
-@tt{extend-env-rec}得到@tt{extend-env-rec*}。
+尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参
+数，我们用@exercise-ref{ex2.10} 中的 @tt{extend-env*} 创建多个绑定，并用类似方式
+扩展 @tt{extend-env-rec}，得到 @tt{extend-env-rec*}。
 
-在这个解释器中，所有递归调用都在（Scheme的）尾端，所以运行解释器不会在Scheme中产
-生控制上下文。（不全是这样：过程@tt{value-of-simple-exp}（@exercise-ref{ex6.11}）会在Scheme中产
-生控制上下文，但这可以避免（参见@exercise-ref{ex6.18}）。）
+在这个解释器中，所有递归调用都在（Scheme 的）尾端，所以运行解释器不会在 Scheme
+中产生控制上下文（不全是这样：过程
+@tt{value-of-simple-exp}（@exercise-ref{ex6.11}）会在 Scheme 中产生控制上下文，
+但这可以避免（参见@exercise-ref{ex6.18}））。
 
-更重要的是，解释器不会产生新的续文。过程@tt{value-of/k}取一个续文参数，原封不动
-地传给每个递归调用。所以，我们可以很容易地移除续文参数。
+更重要的是，解释器不会产生新的续文。过程 @tt{value-of/k} 取一个续文参数，原封不
+动地传给每个递归调用。所以，我们可以很容易地移除续文参数。
 
 当然，没有通用的方式判断一个过程的控制行为是否是迭代式的。考虑
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (lambda (n)
   (if (strange-predicate? n)
     (fact n)
     (fact-iter n)))
-]
+]}
 
-只有@tt{strange-predicate?}对所有足够大的@tt{n}都返回假时，这个过程才是迭代式的。
-但即使能查看@tt{strange-predicate?}的代码，也可能无法判断这一条件的真假。因此，
-我们最多只能希望程序中的过程调用不产生控制上下文，不论其是否执行。
+只有 @tt{strange-predicate?} 对所有足够大的 @tt{n} 都返回假时，这个过程才是迭代
+式的。但即使能查看 @tt{strange-predicate?} 的代码，也可能无法判断这一条件的真假。
+因此，我们最多只能寄希望于程序中的过程调用不产生控制上下文，而不论其是否执行。
 
 }
 
 @nested[#:style eopl-figure]{
 
 @linebreak[]
+@nested[#:style small]{
 @envalign*{\mathit{Program} &::= \mathit{TfExp} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{cps-a-program (exp1)}} \\[5pt]
          \mathit{SimpleExp} &::= \mathit{Number} \\[-3pt]
@@ -803,13 +810,13 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
             \mathit{TfExp} &::= @tt{let @m{\mathit{Identifier}} = @m{\mathit{SimpleExp}} in @m{\mathit{TfExp}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{cps-let-exp (var simple1 body)}} \\[5pt]
              \mathit{TfExp} &::= @tt{letrec @m{\{\mathit{Identifier}\ }@tt["("]@m{\{\mathit{Identifier}\}^{*(,)}}@tt[")"] = @m{\mathit{TfExp}\}^{*}} in @m{\mathit{TfExp}}} \\[-3pt]
-          &\mathrel{\phantom{::=}} \fbox{@tt{cps-letrec-exp (p-names b-varss p-bodies letrec-body)}} \\[5pt]
+          &\mathrel{\phantom{::=}} \fbox{@tt{cps-letrec-exp (p-names b-varss p-bodies body)}} \\[5pt]
              \mathit{TfExp} &::= @tt{if @m{\mathit{SimpleExp}} then @m{\mathit{TfExp}} else @m{\mathit{TfExp}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{cps-if-exp (simple1 body1 body2)}} \\[5pt]
              \mathit{TfExp} &::= @tt{(@m{\mathit{SimpleExp}} @m{\{\mathit{SimpleExp}\}^{*}})} \\[-3pt]
-          &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
+          &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}}
 
-@eopl-caption["fig-6.5"]{CPS-OUT的语法}
+@eopl-caption["fig-6.5"]{CPS-OUT 的语法}
 }
 
 @nested[#:style eopl-figure]{
@@ -856,12 +863,12 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
           cont)))))
 ]
 
-@eopl-caption["fig-6.6"]{CPS-OUT曳尾表达式的解释器}
+@eopl-caption["fig-6.6"]{CPS-OUT 中的尾式解释器}
 }
 
 @exercise[#:level 1 #:tag "ex6.11"]{
 
-写出@tt{value-of-simple-exp}，完成@figure-ref{fig-6.6} 中的解释器。
+写出 @tt{value-of-simple-exp}，完成@figure-ref{fig-6.6} 中的解释器。
 
 }
 
@@ -887,7 +894,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.13"]{
 
-用上面@pageref{cps-recipe}的CPS秘方，把下列CPS-IN表达式翻译为续文传递风格。
+用上面@pageref{cps-recipe}的 CPS 秘方，把下列 CPS-IN 表达式翻译为续文传递风格。
 用@figure-ref{fig-6.6} 中的解释器运行转换后的程序，测试它们，确保原程序和转换后
 的版本对所有输入都给出同样的结果。
 
@@ -931,7 +938,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  }
  }
 
- @item{@tt{remfirst}。它使用前面例子中的@tt{occurs-in?}。
+ @item{@tt{remfirst}。它使用前面例子中的 @tt{occurs-in?}。
 
  @nested[#:style 'code-inset]{
  @verbatim|{
@@ -1007,9 +1014,9 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  }
  }
 
- @item{@tt{fnlrgtn}。n-list类似s-list（@pageref{s-list}），只不过其中的元素不是
- 符号，而是数字。@tt{fnlrgtn}取一n-list，一个数字@tt{n}，返回列表中（从左向右数）
- 第一个大于@tt{n}的数字。一旦找到结果，就不再检查列表中剩余元素。例如，
+ @item{@tt{fnlrgtn}。n-list 类似 s-list（@pageref{s-list}），只不过其中的元素不
+ 是符号，而是数字。@tt{fnlrgtn} 取一 n-list，一个数字 @tt{n}，返回列表中（从左向
+ 右数）第一个大于 @tt{n} 的数字。一旦找到结果，就不再检查列表中剩余元素。例如，
 
  @nested[#:style 'code-inset]{
  @verbatim|{
@@ -1018,10 +1025,10 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  }|
  }
 
- 返回7。
+ 返回 7。
  }
 
- @item{@tt{every}。这个过程取一谓词，一个列表，当且仅当谓词对列表中每个元素都为
+ @item{@tt{every}。这个过程取一谓词，一个列表，当且仅当谓词对列表中所有元素都为
  真时，返回真。
 
  @nested[#:style 'code-inset]{
@@ -1043,14 +1050,15 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.14"]{
 
-补充@tt{value-of-program}和@tt{apply-cont}，完成@figure-ref{fig-6.6} 中的解释器。
+补充 @tt{value-of-program} 和 @tt{apply-cont}，完成@figure-ref{fig-6.6} 中的解释
+器。
 
 }
 
 @exercise[#:level 1 #:tag "ex6.15"]{
 
-观察前一道练习中的解释器可知，@tt{cont}只有一个值。根据这一观察完全移除@tt{cont}
-参数。
+观察前一道练习中的解释器可知，@tt{cont} 只有一个值。根据这一观察完全移除
+@tt{cont} 参数。
 
 }
 
@@ -1068,15 +1076,16 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 2 #:tag "ex6.18"]{
 
-修改CPS-OUT的语法，把简单@tt{diff-exp}和@tt{zero?-exp}的参数限制为常量和变量。这
-样，语言中的@tt{value-of-simple-exp}就不必递归。
+修改 CPS-OUT 的语法，把简单 @tt{diff-exp} 和 @tt{zero?-exp} 的参数限制为常量和变
+量。这样，语言中的 @tt{value-of-simple-exp} 就不必递归。
 
 }
 
 @exercise[#:level 2 #:tag "ex6.19"]{
 
-写出Scheme过程@tt{tail-form?}，它取一CPS-IN程序的语法树，语法如@figure-ref{fig-6.3} 所示，判断同
-一字符串是否是@figure-ref{fig-6.5} 中语法定义的曳尾式。
+写出 Scheme 过程 @tt{tail-form?}，它取一 CPS-IN 程序的语法树，语法
+如@figure-ref{fig-6.3} 所示，判断同一字符串是否是@figure-ref{fig-6.5} 中语法定义
+的尾式。
 
 }
 
@@ -1378,7 +1387,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }
 
 处理求和表达式和过程调用时唯一不同之处，是所有参数都简单时。在这种情况下，我们要
-把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个曳尾式。
+把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个尾式。
 
 我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8} 所示。它用@exercise-ref{ex1.23} 中的
 @tt{list-index}，找出列表中第一个复杂表达式的位置。如果找到复杂表达式，则变换该
@@ -1394,7 +1403,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @${SimpleExp}。它使用@exercise-ref{ex1.24} 中的过程@tt{every?}。若@${lst}中的每个元素满足
 @${pred}，@tt{(every? @${pred} @${lst})}返回@tt{#t}，否则返回@tt{#f}。
 
-我们可以用@tt{cps-of-exps}生成求和表达式和过程调用的曳尾式。
+我们可以用@tt{cps-of-exps}生成求和表达式和过程调用的尾式。
 
 @nested[#:style eopl-figure]{
 
@@ -1492,7 +1501,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 所以它直接生成CPS输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，使用的生成
 器直接返回@elem[#:style question]{一简单表达式作为值}。
 
-在下面的练习中，用COS-OUT的语法和解释器运行输出表达式，确保它们是曳尾式。
+在下面的练习中，用COS-OUT的语法和解释器运行输出表达式，确保它们是尾式。
 
 @nested[#:style eopl-figure]{
 
