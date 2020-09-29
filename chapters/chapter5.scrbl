@@ -498,7 +498,7 @@ behavior})。
 下面这个简单算例展示了各部分如何配合。像 @secref{s3.3}那样，我们用
 @${\textnormal{\guillemotleft} exp \textnormal{\guillemotright}} 指代表达式
 @${exp} 的抽象语法树。设 @${\rho_0} 是一环境，@tt{b} 在其中绑定到 @tt{(bool-val
-#t)}；@${cont_0} 是初始续文，即 @tt{(end-cont)} 的值。注释说明应与
+#t)}；@${cont_0} 是初始续文，即 @tt{(end-cont)} 的值。注释说明不是正式的，应与
 @tt{value-of/k} 的定义和 @tt{apply-cont} 的规范对照阅读。这个例子是预测性的，因
 为我们让 @tt{letrec} 引入了过程，但还不知道如何调用它。
 

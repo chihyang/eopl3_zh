@@ -1091,13 +1091,13 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @section[#:style section-title-style-numbered #:tag "s6.3"]{转换为续文传递风格}
 
-本节，我们开发算法，将CPS-IN程序转换为CPS-OUT程序。
+本节，我们开发算法，将任意程序从 CPS-IN 转换为 CPS-OUT。
 
-就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}，同样另取一个表示续文的参
-数。多出的这个续文参数是一个简单表达式。
+就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}。也像传递续文的解释器一样，
+我们的翻译器再取一个表示续文的参数。多出的这个参数是一个表示续文的简单表达式。
 
-就像之前那样，我们给出例子，提出规范，然后写出程序。@figure-ref{fig-6.7} 展示了与前一节类似的
-Scheme示例，但是更加详细。
+像之前那样，我们首先给出例子，然后提出规范，最后写出程序。@figure-ref{fig-6.7}
+展示了与前一节类似的 Scheme 例子，只是更加详细。
 
 @nested[#:style eopl-figure]{
 
@@ -1131,10 +1131,10 @@ Scheme示例，但是更加详细。
                           (h v1 (- 44 y) v2 k)))))))))
 ]
 
-@eopl-caption["fig-6.7"]{CPS变换示例（Scheme）}
+@eopl-caption["fig-6.7"]{CPS 变换示例（Scheme）}
 }
 
-第一种情况是常量。常量直接传给续文，就像上面@tt{(zero? x)}这一行一样。
+第一种情况是常量。常量直接传给续文，就像上面 @tt{(zero? x)} 这一行。
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1143,7 +1143,7 @@ Scheme示例，但是更加详细。
 }|
 }
 
-其中，@${K}表示续文，是某个简单表达式。
+其中，@${K} 表示续文，是一个 simple-exp。
 
 }
 
@@ -1155,8 +1155,8 @@ Scheme示例，但是更加详细。
 }|
 }
 
-当然，我们算法的输入输出是抽象语法树，所以我们应该用抽象语法构造器，而不是具体语
-法，像：
+当然，我们算法的输入输出都是抽象语法树，所以我们应该用抽象语法构造器，而不是具体
+语法，就像：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1171,39 +1171,43 @@ Scheme示例，但是更加详细。
 
 其中：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{make-send-to-cont}} : @${\mathit{SimpleExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define make-send-to-cont
   (lambda (k-exp simple-exp)
     (cps-call-exp k-exp (list simple-exp))))
-]
+]}
 
-我们需要@tt{list}，因为在CPS-OUT中，每个调用表达式都取一个操作数列表。
+我们需要 @tt{list}，因为在 CPS-OUT 中，每个调用表达式都取一个操作数列表。
 
 }
 
-但是在规范中，我们仍然使用具体语法，因为具体语法通常更易懂。
+但是在规范中，我们仍然使用具体语法，因为具体语法通常更容易读懂。
 
-过程呢？转换@figure-ref{fig-6.7} 中的过程@tt{(lambda (x) ...)}时，我们给过程新增一个参数@tt{k}，
-转换其主体，并将主体的值传给续文@tt{k}。我们在@figure-ref{fig-6.7} 中正是这样做的。所以
+过程呢？我们转换@figure-ref{fig-6.7} 中那样的 @tt{(lambda (x) ...)} 过程时，为其
+新增一个参数 @tt{k}，然后转换主体，并将主体的值传给续文 @tt{k}。我们在
+@figure-ref{fig-6.7} 中正是这样做的。所以
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 proc (|@${var_1}, ..., |@${var_n}) |@${exp}
 }|
-}
+}}
 
-成为：
+变成：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 }|
-}
+}}
 
-像图中那样。但是，这还没完。我们的目标是产生代码，求值@tt{proc}表达式，并把结果
-传给续文@${K}。所以@tt{proc}表达式的完整规范为：
+就像图中那样。但是，这还没完。我们的目标是生成代码，求 @tt{proc} 表达式的值，并
+将结果传给续文 @${K}。所以 @tt{proc} 表达式的完整规范为：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1214,25 +1218,28 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 
 }
 
-其中，@tt{k}是新变量，@${K}表示续文，是任意简单表达式。
+其中，@tt{k} 是新变量，@${K} 表示续文，是任意简单表达式。
 
-有操作数的表达式呢？我们临时给语言添加任意多个操作数的求和表达式。要添加这种表达
-式，我们给CPS-IN添加生成式：
+有操作数的表达式呢？我们暂时给语言添加任意多个操作数的求和表达式。要添加这种表达
+式，我们给 CPS-IN 的语法添加生成式：
 
+@nested[#:style small]{
 @envalign*{\mathit{InpExp} &::= @tt{+(@m{\mathit{\{InpExp\}^{*(,)}}})} \\[-3pt]
-         &\mathrel{\phantom{::=}} \fbox{@tt{sum-exp (exps)}}}
+         &\mathrel{\phantom{::=}} \fbox{@tt{sum-exp (exps)}}}}
 
-给CPS-OUT添加生成式：
+给 CPS-OUT 的语法添加生成式：
 
+@nested[#:style small]{
 @envalign*{\mathit{SimpleExp} &::= @tt{+(@m{\mathit{\{SimpleExp\}^{*(,)}}})} \\[-3pt]
-            &\mathrel{\phantom{::=}} \fbox{@tt{cps-sum-exp (simple-exps)}}}
+            &\mathrel{\phantom{::=}} \fbox{@tt{cps-sum-exp (simple-exps)}}}}
 
-这个新生成式仍有该属性：过程调用决不出现在简单表达式中。
+这个新生成式仍保持的属性为：简单表达式内不会出现过程调用。
 
-@tt{(cps-of-exp <<+(@${exp_1}, ..., @${exp_n})>> @${K})}可能是什么呢？有可能
-@${exp_1}, @${\dots}, @${exp_n}都是简单的，就像@figure-ref{fig-6.7} 中@tt{(= x 2)}这种。那么，整
-个表达式都是简单的，我们可以将其直接传给续文。设@${simp}为一简单表达式，那么我们
-可以说：
+@tt{(cps-of-exp @${\textnormal{\guillemotleft}}+(@${exp_1}, ...,
+@${exp_n})@${\textnormal{\guillemotright}} @${K})} 可能是什么呢？可能 @${exp_1},
+@${\dots}, @${exp_n} 都是简单的，就像@figure-ref{fig-6.7} 中的 @tt{(= x 2)}。那
+么，整个表达式都是简单的，我们可以将它的值接传给续文。设 @${simp} 为一简单表达式，
+那么有：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1241,8 +1248,9 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 }|
 }
 
-如果操作数不是简单的呢？那么求值续文需要给其值命名，然后继续求和，就像上面@tt{(=
-x 3)}这行。其中，第二个操作数是第一个不简单的操作数。那么我们的CPS转换器有属性：
+如果操作数不是简单的呢？那么求值续文需要给其值命名，然后继续求和，就像上面
+@tt{(= x 3)} 这行。其中，第二个操作数是第一个复杂的操作数。那么我们的 CPS 转换器
+具有属性：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1252,24 +1260,26 @@ x 3)}这行。其中，第二个操作数是第一个不简单的操作数。那
 }|
 }
 
-如果@${exp_2}只是一个过程调用，那么输出和图中相同。但@${exp_2}可能更复杂，所以我
-们递归调用@tt{cps-of-exp}处理@${exp_2}和扩大的续文：
+如果 @${exp_2} 只是一个过程调用，那么输出和图中相同。但 @${exp_2} 可能更复杂，所
+以我们递归调用 @tt{cps-of-exp} 处理 @${exp_2} 和更大的续文：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, |@${simp_3}, ..., |@${simp_n}))
 }|
-}
+}}
 
-但是，求和表达式中，还有一种复杂操作数，就像@tt{(= x 5)}这种。所以，不是直接使用
+而求和表达式中，还有另一种复杂操作数，就像 @tt{(= x 5)} 这种。所以，不是直接使用
 续文
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }|
-}
+}}
 
 我们还要递归处理更大的参数。我们可以把这条规则总结为：
 
@@ -1284,11 +1294,13 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 }
 
-每次调用@tt{cps-of-exp}都保证会终止。第一次调用会终止是因为@${exp_2}比原表达式小。
-第二次调用会终止是还是因为其参数比原参数小：@${var_2}总是比@${exp_2}小。
+@tt{cps-of-exp} 的每个递归调用都保证会终止。第一个调用会终止是因为 @${exp_2} 比
+原表达式小。第二个调用会终止是还是因为其参数也比原来的小：@${var_2} 总是比
+@${exp_2} 小。
 
-例如，查看@tt{(= x 5)}这一行，用CPS-IN的语法，我们有：
+例如，查看 @tt{(= x 5)} 这一行，并使用 CPS-IN 的语法，我们有：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (cps-of-exp <<+((f x), 33, (g y))>> |@${K})
@@ -1311,10 +1323,10 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
      proc (v2)
       (|@${K} <<+(v1, 33, v2)>>)))
 }|
-}
+}}
 
-过程调用也这样处理。如果操作符操作数都是简单的，我们只需添加续文参数，调用过程，
-就像@tt{(= x 2)}这行。
+过程调用与之类似。如果操作符和操作数都是简单的，那么我们添加续文参数，直接调用过
+程，就像 @tt{(= x 2)} 这行。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1323,7 +1335,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }|
 }
 
-如果某个操作数不是简单的，那么我们必须先求其值，像@tt{(= x 4)}这行。
+另一方面，如果某个操作数是复杂的，那么我们必须先求它的值，像 @tt{(= x 4)} 这行。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1334,11 +1346,12 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }|
 }
 
-像之前那样，第二次调用@tt{cps-of-exp}进入过程调用之中，递归处理每个复杂参数，直
-到所有参数都是简单参数。
+而且，像之前那样，@tt{cps-of-exp} 的第二个调用递归进入过程调用之中，为每个复杂参
+数调用 @tt{cps-of-exp}，直到所有参数都是简单参数。
 
-这里是这些规则如何处理@tt{(= x 5)}这一行的例子，写成CPS-IN。
+写成 CPS-IN 的例子 @tt{(= x 5)} 可用这些规则处理如下：
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (cps-of-exp <<(h (f x) -(44,y) (g y))>> |@${K})
@@ -1364,13 +1377,14 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
      proc (v2)
       (h v1 -(44,y) v2 |@${K})))
 }|
-}
+}}
 
 求和表达式和过程调用的规范遵循同样的模式：找出第一个复杂操作数，递归处理那个操作
-数和修改过的操作数列表。这对求值操作数的任何表达式都有效。如果@tt{complex-exp}是
-某个需要求值操作数的CPS-IN表达式，那么我们有：
+数和修改过的操作数列表。这对任何求值操作数的表达式都有效。如果 @tt{complex-exp}
+是某个需要求值操作数的 CPS-IN 表达式，那么我们有：
 
 @nested{
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (cps-of-exp (complex-exp |@${simp_0} |@${simp_1} |@${exp_2} |@${exp_3} ... |@${exp_n}) |@${K})
@@ -1380,30 +1394,35 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
          (complex-exp |@${simp_0} |@${simp_1} |@${exp_2} |@${exp_3} ... |@${exp_n})
          |@${K})>>)
 }|
+}}
+
+其中，@${var_2} 是一个新变量。
+
 }
 
-其中，@${var_2}是一个新变量。
+处理求和表达式和过程调用的唯一不同之处是在所有参数都简单时。在这种情况下，我们要
+把每个参数转换为 CPS-OUT 中的 @tt{simple-exp}，并用转换结果生成一个尾式。
 
-}
+我们可以把这种行为封装到过程 @tt{cps-of-exps} 中，如@figure-ref{fig-6.8} 所示。
+它的参数是输入表达式的列表和过程 @tt{builder}。它用@exercise-ref{ex1.23} 中的
+@tt{list-index}，找出列表中第一个复杂表达式的位置。如果有这样的复杂表达式，那么
+它转换该表达式，转换所在的续文给表达式的结果命名（绑定到 @tt{var} 的标识符），然
+后递归处理修改后的表达式列表。
 
-处理求和表达式和过程调用时唯一不同之处，是所有参数都简单时。在这种情况下，我们要
-把每个参数转换为CPS-OUT中的@tt{simple-exp}，并用结果生成一个尾式。
+如果不存在复杂表达式，那么我们用 @tt{builder} 处理表达式列表。但这些表达式虽是简
+单的，它们仍属于 CPS-IN 的语法。因此，我们用过程 @tt{cps-of-simple-exp} 把每个表
+达式转换为 CPS-OUT 的语法。然后，我们把 @${SimpleExp} 的列表传给
+@tt{builder}（@tt{list-set} 如@exercise-ref{ex1.19} 所述）。
 
-我们可以把这种行为装入过程@tt{cps-of-exps}中，如@figure-ref{fig-6.8} 所示。它用@exercise-ref{ex1.23} 中的
-@tt{list-index}，找出列表中第一个复杂表达式的位置。如果找到复杂表达式，则变换该
-表达式，变换时的续文给表达式的结果命名（绑定到@tt{var}的标识符），然后递归处理修
-改后的表达式列表。
+过程 @tt{inp-exp-simple?} 取一 CPS-IN 表达式，判断表示它的字符串能否解析为
+@${SimpleExp}。它使用@exercise-ref{ex1.24} 中的过程 @tt{every?}。若 @${lst} 中的
+所有元素满足 @${pred}，@tt{(every? @${pred} @${lst})} 返回 @tt{#t}，否则返回
+@tt{#f}。
 
-如果不存在复杂表达式，那么我们用@tt{builder}处理表达式列表。这些表达式虽然是简单
-的，但它们仍属CPS-IN的语法。因此，我们用过程@tt{cps-of-simple-exp}把每个表达式转
-换为CPS-OUT的语法。然后，我们把@${SimpleExp}的列表传给@tt{builder}。
-（@tt{list-set}如@exercise-ref{ex1.19} 所述。）
+@tt{cps-of-simple-exp} 的代直截了当，如@figure-ref{fig-6.9} 所示。它还将
+@tt{proc-exp} 的主体翻译做 CPS 变换。若要使输出为 @${SimpleExp}，这是必要的。
 
-过程@tt{inp-exp-simple?}取一CPS-IN表达式，判断表示它的字符串能否解析为
-@${SimpleExp}。它使用@exercise-ref{ex1.24} 中的过程@tt{every?}。若@${lst}中的每个元素满足
-@${pred}，@tt{(every? @${pred} @${lst})}返回@tt{#t}，否则返回@tt{#f}。
-
-我们可以用@tt{cps-of-exps}生成求和表达式和过程调用的尾式。
+我们可以用 @tt{cps-of-exps} 生成求和表达式和过程调用的尾式。
 
 @nested[#:style eopl-figure]{
 
@@ -1443,6 +1462,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @eopl-caption["fig-6.8"]{@tt{cps-of-exps}}
 }
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{cps-of-sum-exp}} : @${\mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-sum-exp
@@ -1452,7 +1472,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
         (make-send-to-cont
           k-exp
           (cps-sum-exp simples))))))
-]
+]}
 
 @nested[#:style eopl-figure]{
 
@@ -1482,6 +1502,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @eopl-caption["fig-6.9"]{@tt{cps-of-simple-exp}}
 }
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{cps-of-call-exp}} : @${\mathit{InpExp} \times \mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-call-exp
@@ -1491,17 +1512,17 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
         (cps-call-exp
           (car simples)
           (append (cdr simples) (list k-exp)))))))
-]
+]}
 
-现在，我们可以写出CPS翻译器剩余部分（@figure-ref{fig-6.10}-@countref{fig-6.12}）。
-它 @tt{紧随语法}。当表达式一定是简单的，如常量、变量和过程，我们直接用
-@tt{make-send-to-cont} 生成代码。否则，我们调用辅助过程，每个辅助过程调用
-@tt{cps-of-exps} 求值它的子表达式，用适当的生成器构造CPS子表达式输出的内部。一个
-例外是 @tt{cps-of-letrec-exp}，它没有@elem[#:style question]{紧挨着的}子表达式，
-所以它直接生成CPS输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，使用的生成
-器直接返回@elem[#:style question]{一简单表达式作为值}。
+现在，我们可以写出 CPS 翻译器的剩余部分
+（@figure-ref{fig-6.10}-@countref{fig-6.12}）。它@emph{跟随语法}。当表达式总是简
+单的，如常量、变量和过程，我们直接用 @tt{make-send-to-cont} 生成代码。否则，我们
+调用辅助过程，每个辅助过程都调用 @tt{cps-of-exps} 求子表达式的值，用适当的生成器
+构造 CPS 输出的最内部。一个例外是 @tt{cps-of-letrec-exp}，它没有紧邻的子表达式，
+所以它直接生成 CPS 输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，它取一生
+成器，该生成器直接返回一个简单表达式的值。
 
-在下面的练习中，用COS-OUT的语法和解释器运行输出表达式，确保它们是尾式。
+在下面的练习中，用 CPS-OUT 的语法和解释器运行输出表达式，确保它们是尾式。
 
 @nested[#:style eopl-figure]{
 
@@ -1618,20 +1639,21 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 @exercise[#:level 1 #:tag "ex6.20"]{
 
-过程@tt{cps-of-exps}使子表达式从左向右求值。修改@tt{cps-of-exps}，使子表达式从右
-向左求值。
+我们的过程 @tt{cps-of-exps} 迫使子表达式从左向右求值。修改 @tt{cps-of-exps}，使
+子表达式从右向左求值。
 
 }
 
 @exercise[#:level 1 #:tag "ex6.21"]{
 
-修改@tt{cps-of-call-exp}，先从左向右求出操作数的值，再求操作符的值。
+修改 @tt{cps-of-call-exp}，先从左向右求出操作数的值，再求操作符的值。
 
 }
 
 @exercise[#:level 1 #:tag "ex6.22"]{
 
-有时，生成@tt{(@${K} @${simp})}时，@${K}已经是一个@tt{proc-exp}。所以，不是生成：
+有时，当我们生成 @tt{(@${K} @${simp})}，@${K} 已经是一个 @tt{proc-exp}。所以，不
+是生成：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1648,7 +1670,7 @@ in ...
 }|
 }
 
-那么，CPS代码具有性质：形如
+那么，CPS 代码具有性质：形如
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1657,17 +1679,17 @@ in ...
 }|
 }
 
-的表达式若不在原表达式中，则不会出现在CPS代码中。
+的子表达式若不在原表达式中，则不会出现在 CPS 代码中。
 
-修改@tt{make-send-to-cont}，生成更好的代码。新的规则何时生效？
+修改 @tt{make-send-to-cont}，生成更好的代码。新的规则何时使用？
 
 }
 
 @exercise[#:level 2 #:tag "ex6.23"]{
 
-观察可知，@tt{if}的规则导致续文@${K}复制两次，所以嵌套@tt{if}中，转换后的代码尺
-寸会以指数增加。运行一个例子，验证这一观察。然后，修改转换过程，把@${K}绑定到新
-的变量，避免这种增加。
+观察可知，@tt{if} 的规则导致续文 @${K} 复制两次，所以在嵌套的 @tt{if} 中，转换后
+的代码尺寸呈指数增长。运行一个例子，验证这一观察。然后，修改转换，把 @${K} 绑定
+到新的变量，从而避免这种增长。
 
 }
 
@@ -1679,14 +1701,14 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.25"]{
 
-扩展CPS-IN，让@tt{let}表达式声明任意数量的变量（@exercise-ref{ex3.16}）。
+扩展 CPS-IN，让 @tt{let} 表达式声明任意数量的变量（@exercise-ref{ex3.16}）。
 
 }
 
 @exercise[#:level 2 #:tag "ex6.26"]{
 
-由@tt{cps-of-exps}引入的变量在续文中只会只会出现一次。修改@tt{make-send-to-cont}，
-不是生称@exercise-ref{ex6.22} 中的
+由 @tt{cps-of-exps} 引入的续文变量在续文中只会只会出现一次。修改
+@tt{make-send-to-cont}，不是生成@exercise-ref{ex6.22} 中的
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1695,8 +1717,8 @@ in |@${T}
 }|
 }
 
-而是生成@${T[simp_1/var_1]}。其中，@${E_1[E_2/var]}意为，把表达式@${E_1}中出现的
-每个自由变量@${var}替换为@${E_2}。
+而是生成 @${T[simp_1/var_1]}。其中，符号 @${E_1[E_2/var]} 意为，把表达式 @${E_1}
+中自由出现的所有变量 @${var} 替换为 @${E_2}。
 
 }
 
