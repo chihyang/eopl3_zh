@@ -11,7 +11,7 @@
   innertopmargin=0pt,
   innerbottommargin=0pt,
   linewidth=0.8pt,
-  leftmargin=-2ex,
+  leftmargin=-2em,
   innerleftmargin=2em}
 \usepackage{comment}
 
@@ -80,6 +80,11 @@
 
 \renewcommand{\proofname}{证明}
 \renewcommand{\contentsname}{目录}
+
+\renewenvironment{SCodeFlow}{\SCodePreSkip\begin{list}{}{\topsep=0pt\partopsep=0pt%
+\listparindent=0pt\itemindent=0pt\labelwidth=0pt\leftmargin=2em\rightmargin=2em%
+\itemsep=0pt\parsep=0pt}\small\item}{\end{list}\SCodePostSkip}
+\renewcommand{\SCodeInsetBox}[1]{\setbox1=\hbox{\hbox{\hspace{2em}#1\hspace{2em}}}\vbox{\SCodePreSkip\vtop{\box1\SCodePostSkip}}}
 
 % cancel <, >, and | font encoding
 \renewcommand{\Stttextmore}{>}
