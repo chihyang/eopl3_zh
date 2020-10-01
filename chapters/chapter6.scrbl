@@ -1186,8 +1186,8 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 但是在规范中，我们仍然使用具体语法，因为具体语法通常更容易读懂。
 
 过程呢？我们转换@figure-ref{fig-6.7} 中那样的 @tt{(lambda (x) ...)} 过程时，为其
-新增一个参数 @tt{k}，然后转换主体，并将主体的值传给续文 @tt{k}。我们在
-@figure-ref{fig-6.7} 中正是这样做的。所以
+新增一个参数 @tt{k}，然后转换主体，并将主体的值传给续文 @tt{k}。我们
+在@figure-ref{fig-6.7} 中正是这样做的。所以
 
 @nested{
 @nested[#:style small]{
@@ -1233,7 +1233,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 @envalign*{\mathit{SimpleExp} &::= @tt{+(@m{\mathit{\{SimpleExp\}^{*(,)}}})} \\[-3pt]
             &\mathrel{\phantom{::=}} \fbox{@tt{cps-sum-exp (simple-exps)}}}}
 
-这个新生成式仍保持的属性为：简单表达式内不会出现过程调用。
+这个新生成式仍保持属性：简单表达式内不会出现过程调用。
 
 @tt{(cps-of-exp @${\textnormal{\guillemotleft}}+(@${exp_1}, ...,
 @${exp_n})@${\textnormal{\guillemotright}} @${K})} 可能是什么呢？可能 @${exp_1},
@@ -1249,8 +1249,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 }
 
 如果操作数不是简单的呢？那么求值续文需要给其值命名，然后继续求和，就像上面
-@tt{(= x 3)} 这行。其中，第二个操作数是第一个复杂的操作数。那么我们的 CPS 转换器
-具有属性：
+@tt{(= x 3)} 这行。其中的第二个是首个复杂操作数。那么我们的 CPS 转换器应具有属性：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1419,7 +1418,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 所有元素满足 @${pred}，@tt{(every? @${pred} @${lst})} 返回 @tt{#t}，否则返回
 @tt{#f}。
 
-@tt{cps-of-simple-exp} 的代直截了当，如@figure-ref{fig-6.9} 所示。它还将
+@tt{cps-of-simple-exp} 的代码直截了当，如@figure-ref{fig-6.9} 所示。它还将
 @tt{proc-exp} 的主体翻译做 CPS 变换。若要使输出为 @${SimpleExp}，这是必要的。
 
 我们可以用 @tt{cps-of-exps} 生成求和表达式和过程调用的尾式。
@@ -1520,7 +1519,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 调用辅助过程，每个辅助过程都调用 @tt{cps-of-exps} 求子表达式的值，用适当的生成器
 构造 CPS 输出的最内部。一个例外是 @tt{cps-of-letrec-exp}，它没有紧邻的子表达式，
 所以它直接生成 CPS 输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，它取一生
-成器，该生成器直接返回一个简单表达式的值。
+成器，该生成器直接返回一个简单表达式。
 
 在下面的练习中，用 CPS-OUT 的语法和解释器运行输出表达式，确保它们是尾式。
 
@@ -1639,8 +1638,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 @exercise[#:level 1 #:tag "ex6.20"]{
 
-我们的过程 @tt{cps-of-exps} 迫使子表达式从左向右求值。修改 @tt{cps-of-exps}，使
-子表达式从右向左求值。
+我们的过程 @tt{cps-of-exps} 迫使子表达式按从左向右的顺序求值。修改
+@tt{cps-of-exps}，使子表达式从右向左求值。
 
 }
 
@@ -1681,7 +1680,7 @@ in ...
 
 的子表达式若不在原表达式中，则不会出现在 CPS 代码中。
 
-修改 @tt{make-send-to-cont}，生成更好的代码。新的规则何时使用？
+修改 @tt{make-send-to-cont}，生成更好的代码。新的规则何时生效？
 
 }
 
@@ -1695,7 +1694,7 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.24"]{
 
-给语言添加列表（@exercise-ref{ex3.10}）。记住，列表的参数不在尾端。
+给语言添加列表（@exercise-ref{ex3.10}）。记住：列表的参数不在尾端。
 
 }
 
@@ -1724,8 +1723,8 @@ in |@${T}
 
 @exercise[#:level 2 #:tag "ex6.27"]{
 
-如前所述，@tt{cps-of-let-exp}生成一个无用的@tt{let}表达式。（为什么？）修改这个
-过程，直接把@tt{let}变量作为续文变量。那么，若@${exp_1}是复杂的，
+按当前方式，@tt{cps-of-let-exp} 生成一个无用的 @tt{let} 表达式（为什么？）。修改
+这个过程，直接把 @tt{let} 变量作为续文变量。那么，若 @${exp_1} 是复杂的，
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1738,14 +1737,14 @@ in |@${T}
 
 @exercise[#:level 1 #:tag "ex6.28"]{
 
-试想：有一个Scheme程序的CPS转换器，用它转换@secref{expr}中的第一个解释器，结果会
-怎样？
+试想：有一个 Scheme 程序的 CPS 转换器，用它转换@secref{expr}中的第一个解释器，结
+果会怎样？
 
 }
 
 @exercise[#:level 2 #:tag "ex6.29"]{
 
-考虑@tt{cps-of-exps}的变体。
+考虑 @tt{cps-of-exps} 的变体。
 
 @racketblock[
 (define cps-of-exps
@@ -1769,13 +1768,13 @@ in |@${T}
                     acc))))))))))
 ]
 
-为什么@tt{cps-of-exp}的这种变体比@figure-ref{fig-6.8} 中的更高效？
+为什么 @tt{cps-of-exp} 的这种变体比@figure-ref{fig-6.8} 中的更高效？
 
 }
 
 @exercise[#:level 2 #:tag "ex6.30"]{
 
-调用@tt{cps-of-exps}处理长度为1的表达式列表如下：
+调用 @tt{cps-of-exps} 处理长度为 1 的表达式列表可以简化如下：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1798,9 +1797,9 @@ in |@${T}
             (context (cps-var-exp var))))))))
 ]
 
-这样，我们可以简化@tt{(cps-of-exps (list ...))}，因为列表参数的数目已经确定。那
-么，诸如@tt{cps-of-diff-exp}可以不用@tt{cps-of-exps}，而用@tt{cps-of-exp/ctx}定
-义。
+这样，由于列表的参数数量已经确定，我们可以简化出现 @tt{(cps-of-exps (list ...))}
+的地方。那么，诸如 @tt{cps-of-diff-exp} 可以用 @tt{cps-of-exp/ctx} 定义，而不需
+要 @tt{cps-of-exps}。
 
 @racketblock[
 (define cps-of-diff-exp
@@ -1813,18 +1812,18 @@ in |@${T}
               (cps-diff-exp simp1 simp2))))))))
 ]
 
-对 @tt{cps-of-call-exp} 中的 @tt{cps-of-exps}，我们可以用 @tt{cps-of-exp/ctx} 处
-理 @tt{rator}，但仍需用 @tt{cps-of-exps} 处理 @tt{rands}。删除翻译器中出现的其他
-@elem[#:style htt]{cps-of-exps}。
+对 @tt{cps-of-call-exp} 中用到的 @tt{cps-of-exps}，我们可以用
+@tt{cps-of-exp/ctx} 处理 @tt{rator}，但仍需使用 @tt{cps-of-exps} 处理 @tt{rands}。
+删除翻译器中其他地方出现的 @tt{cps-of-exps}。
 
 }
 
 @exercise[#:level 3 #:tag "ex6.31"]{
 
-写一个翻译器，它取 @tt{cps-of-program} 的输出，产生一个等价程序，其中所有的续文
-都用@secref{cpi}中的数据结构表示。用列表表示那些用 @elem[#:style
-htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符号，你可以在首项位置
-使用整数标签，以此区分数据类型的不同变体。
+写一个翻译器，它取 @tt{cps-of-program} 的输出，生成一个等价程序，其中所有的续文
+都用@secref{cpi}中的数据结构表示。用列表表示那些用 @tt{define-datatype} 生成的数
+据结构。由于我们的语言不支持符号，你可以在首项位置使用整数标签，以此区分数据类型
+的变体。
 
 }
 
@@ -1836,16 +1835,17 @@ htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符�
 
 @exercise[#:level 3 #:tag "ex6.33"]{
 
-写一个翻译器，它取@exercise-ref{ex6.32} 的输出，将其转换为@figure-ref{fig-6.1} 那样的寄存器程序。
+写一个翻译器，它取@exercise-ref{ex6.32} 的输出，将其转换为@figure-ref{fig-6.1}
+那样的寄存器程序。
 
 }
 
 @exercise[#:level 2 #:tag "ex6.34"]{
 
-我们把程序转换为CPS时，不仅仅是产生一个明确控制上下文的程序，我们还明确了操作的顺
-序，以及每个中间结果的名字。后者叫做@emph{序列化} (@emph{sequentialization})。如
-果我们不关心迭代性控制行为，我们序列化程序时可将其转换为@emph{单调式}
-(@emph{A-normal form})，或称@emph{ANF}。这里是ANF程序的一个例子。
+我们把程序转换为 CPS 时，不仅将程序中的控制上下文变为显式的，而且还确定了操作的
+执行顺序，以及所有中间结果的名字。后者叫做@emph{序列化}
+(@emph{sequentialization})。如果我们不关心能否获得迭代性控制行为，我们序列化程序
+时可将其转换为@emph{A-normal form}，或称@emph{ANF}。这里是一个 ANF 程序的例子。
 
 @racketblock[
 (define fib/anf
@@ -1857,19 +1857,20 @@ htt]{define-datatype} 生成的数据结构。由于我们的语言不支持符�
           (+ val1 val2))))))
 ]
 
-CPS程序序列化计算时，命名中间结果，传递续文；而ANF程序序列化计算时，用@tt{let}表
-达式命名所有中间结果。
+CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序用 @tt{let} 表达式命名所
+有中间结果，从而序列化计算。
 
-重写@tt{cps-of-exp}，生成ANF程序而非CPS程序。（对不在尾端的条件表达式，用@exercise-ref{ex6.23} 中的办法处理。）然后，用修改后的@tt{cps-of-exp}处理例子程序
-@tt{fib}的定义，验证结果是否为@tt{fib/anf}。最后，验证对已经是ANF的输入程序，除
-绑定变量名不同外，你的翻译器产生的程序与输入相同。
+重写 @tt{cps-of-exp}，生成 ANF 程序而非 CPS 程序（对不在尾端的条件表达式，
+用@exercise-ref{ex6.23} 中的方法处理）。然后，用修改后的 @tt{cps-of-exp} 处理例
+@tt{fib} 的定义，验证其结果是否为 @tt{fib/anf}。最后，验证对已经是 ANF 的输入程
+序，你的翻译器产生的程序与输入只有绑定变量名不同。
 
 }
 
 @exercise[#:level 1 #:tag "ex6.35"]{
 
-用几个例子验证：若采用@exercise-ref{ex6.27} 中的优化方法，对ANF转换器（@exercise-ref{ex6.34}）的输入和输出
-程序进行CPS变换，所得结果相同。
+用几个例子验证：若采用@exercise-ref{ex6.27} 中的优化方法，对 ANF 转换器
+（@exercise-ref{ex6.34}）的输入和输出程序进行 CPS 变换，所得结果相同。
 
 }
 
