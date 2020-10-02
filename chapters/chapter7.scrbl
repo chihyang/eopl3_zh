@@ -282,8 +282,8 @@ proc (f)
 个将每个变量映射到一个类型的@emph{类型环境} (@emph{type environment})（名为
 @${tenv}），赋给@${exp}一个类型@${t}，且@${t}具有性质：
 
-@bold{type-of规范}
 @; TODO: big bracket
+@big-bracket[#:title @elem{@tt{type-of} 规范}]{
 @nested[#:style 'noindent]{
 
 不论何时求值@${exp}，若环境中每个变量的值类型都由@${tenv}指定，则发生如下之一：
@@ -299,7 +299,7 @@ proc (f)
 ]
 
 }
-@; TODO: big bracket
+}
 
 如果我们可以赋予表达式一个类型，我们说该表达式是@emph{正常类型}
 (@emph{well-typed})的，否则我们说它是@emph{异常类型} (@emph{ill-typed})或@emph{无类型}
@@ -310,8 +310,8 @@ proc (f)
 我们用这一想法写出@tt{type-of}遵循的一些规则。设@${tenv}为一@emph{类型环境}，将
 各个变量映射到一类型。那么我们有：
 
-@bold{简单@elem[#:style question]{判类(typing)}规则}
 @; TODO: big bracket
+@big-bracket[#:title "简单判类规则"]{
 @verbatim|{
 (type-of (const-exp |@${num}) |@${tenv}) = int
 
@@ -339,7 +339,7 @@ proc (f)
           {@tt{(type-of @${rator} @${tenv}) = @${t_1 \to t_2}} &
            @tt{(type-of @${rand} @${tenv}) = @${t_1}}}}
 }|
-@; TODO: big bracket
+}
 
 @elemtag["suitable-env"]{若我们在适当的环境中求类型为@${t}的表达式@${exp}的值}，我们不仅知道值
 的类型为@${t}，也知道与这个值有关的历史信息。因为求值@${exp}保证是安全的，我们知
@@ -408,8 +408,8 @@ proc (f : (bool -> int)) proc (n : int) (f zero?(n))
 
 要定义这种语言的语法，我们改变@tt{proc}和@tt{letrec}表达式的生成式。
 
-@bold{修改后的生成式，适用于CHECKED}
 @; TODO: big bracket
+@big-bracket[#:title "修改后的生成式，适用于 CHECKED"]{
 @envalign*{
         \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier : Type}}) @m{\mathit{Expression}}} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{proc-exp (var ty body)}} \\[5pt]
@@ -422,7 +422,7 @@ proc (f : (bool -> int)) proc (n : int) (f zero?(n))
                                           &\phantom{xxx}@tt{p-body} \\
                                           &\phantom{xxx}@tt{letrec-body}@tt[")"]
                                          \end{alignedat}\end{math}}}
-@; TODO: big bracket
+}
 
 对指定绑定变量类型的@tt{proc}表达式，规则变为：
 
@@ -1379,10 +1379,10 @@ in (odd 13)
 
 这个条件也意味着我们生成的代换式应满足如下不变式：
 
-@bold{无存不变式}
 @; TODO: big bracket
+@big-bracket[#:title "无存不变式"]{
 代换式中绑定的变量不应出现在任何代换式的右边。
-@; TODO: big bracket
+}
 
 我们解方程的代码极度依赖这条不变式。
 
