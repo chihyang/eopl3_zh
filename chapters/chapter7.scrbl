@@ -105,7 +105,6 @@ structure})。
 单参数过程，但处理@exercise-ref{ex3.33} 中的多参数过程也很明了：只需做些额外工作，
 没有任何新思想。
 
-@; TODO: big bracket
 @big-bracket[#:title "类型语法"]{
 @envalign*{\mathit{Type} &::= \mathit{int} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{int-type ()}} \\[5pt]
@@ -117,7 +116,6 @@ structure})。
 
 要理解这个系统如何工作，让我们来看些例子。
 
-@; TODO: big bracket
 @big-bracket[#:title "值及其类型的例子"]{
 @nested[#:style 'noindent]{
 
@@ -275,42 +273,39 @@ proc (f)
 
 @section[#:style section-title-style-numbered #:tag "s7.2"]{赋予表达值类型}
 
-目前，我们只处理了表达值的类型，要分析程序，我们要写出过程，取一表达式，预测其类
-型。
+现在，我们只解决了表达值的类型。为了分析程序，我们要写出过程，预测表达式值的类型。
 
-更准确地说，我们的目标是写出过程@tt{type-of}，它取一个表达式（名为@${exp}），一
-个将每个变量映射到一个类型的@emph{类型环境} (@emph{type environment})（名为
-@${tenv}），赋给@${exp}一个类型@${t}，且@${t}具有性质：
+更准确地说，我们的目标是写出过程 @tt{type-of}。给定一个表达式（名为 @${exp}）和
+一个将变量映射到某一类型的@emph{类型环境} (@emph{type environment})（名为
+@${tenv}），它赋给 @${exp} 一个类型 @${t}，且 @${t} 具有性质：
 
-@; TODO: big bracket
 @big-bracket[#:title @elem{@tt{type-of} 规范}]{
 @nested[#:style 'noindent]{
 
-不论何时求值@${exp}，若环境中每个变量的值类型都由@${tenv}指定，则发生如下之一：
+不论何时求 @${exp} 的值，若环境中所有变量对应值的类型都由 @${tenv} 指定，则发生
+如下之一：
 
 @itemlist[
 
-@item{结果类型为@${t}，}
+@item{结果类型为 @${t}，}
 
 @item{求值不终止，或}
 
 @item{求值因类型错误之外的原因失败。}
-
 ]
-
 }
 }
 
 如果我们可以赋予表达式一个类型，我们说该表达式是@emph{正常类型}
-(@emph{well-typed})的，否则我们说它是@emph{异常类型} (@emph{ill-typed})或@emph{无类型}
-(@emph{has no type})的。
+(@emph{well-typed}) 的，否则说它是@emph{异常类型} (@emph{ill-typed})
+或@emph{无类型} (@emph{has no type})的。
 
-我们分析的原则是，如果能预测表达式中每个子表达式的值类型，就能预测表达式的值类型。
+我们的分析基于以下原则：如果我们能预测表达式中所有子表达式的值类型，就能预测表达
+式的值类型。
 
-我们用这一想法写出@tt{type-of}遵循的一些规则。设@${tenv}为一@emph{类型环境}，将
-各个变量映射到一类型。那么我们有：
+我们用这一想法写出 @tt{type-of} 遵循的一些规则。设 @${tenv} 为一@emph{类型环境}，
+将各个变量映射到类型。那么我们有：
 
-@; TODO: big bracket
 @big-bracket[#:title "简单判类规则"]{
 @verbatim|{
 (type-of (const-exp |@${num}) |@${tenv}) = int
@@ -341,26 +336,27 @@ proc (f)
 }|
 }
 
-@elemtag["suitable-env"]{若我们在适当的环境中求类型为@${t}的表达式@${exp}的值}，我们不仅知道值
-的类型为@${t}，也知道与这个值有关的历史信息。因为求值@${exp}保证是安全的，我们知
-道@${exp}的值一定是由符合类型@${t}的操作符产生的。在@secref{modules}，我们更细致
-地思考数据抽象时，这种观点会很有帮助。
+@elemtag["suitable-env"]{若我们在适当的环境中求类型为 @${t} 的表达式 @${exp} 的
+值}，我们不仅知道值的类型为 @${t}，而且知道与这个值有关的历史信息。因为求
+@${exp} 的值保证是安全的，我们知道 @${exp} 的值一定是由符合类型 @${t} 的操作符产
+生的。在@secref{modules}，我们更细致地思考数据抽象时，这种观点会很有帮助。
 
-过程如何呢？如果@tt{proc(@${var}) @${body}}类型为@${t_1 \to t_2}，那么应该用类型
-为@${t_1}的参数调用它。求值@${body}时，绑定到变量@${var}的值类型为@${t_1}。
+过程呢？如果 @tt{proc(@${var}) @${body}} 类型为 @${t_1 \to t_2}，那么应该用类型
+为 @${t_1} 的参数调用它。求 @${body} 的值时，绑定到变量 @${var} 的值类型为
+@${t_1}。
 
-这给出如下规则：
+这意味着如下规则：
 
 @$${\infer{@tt{(type-of (proc-exp @${var} @${body}) @${tenv}) = @${t_1 \to t_2}}}
           {@tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}}}}
 
-这条规则是健壮的：如果@${type-of}正确预测了@${body}，那么它也能正确预测
-@tt{(proc-exp @${var} @${body})}。
+这条规则是健壮的：如果 @tt{type-of} 对 @${body} 做出了正确预测，那么它也能对
+@tt{(proc-exp @${var} @${body})} 做出正确预测。
 
-只有一个问题：如果我们要计算@tt{proc}表达式的值，我们怎么找出绑定变量的类型
+只有一个问题：如果我们要计算 @tt{proc} 表达式的类型，我们怎么找出绑定变量的类型
 @${t_1}？它无处可寻。
 
-处理这个问题，有两种标准设计：
+要解决这个问题，有两种标准设计：
 
 @itemlist[
 
@@ -368,8 +364,8 @@ proc (f)
  绑定变量类型，类型检查器推断其他表达式的类型，检查它们是否一致。}
 
  @item{@emph{类型推导} (@emph{Type Inference})：按这种方法，类型检查器根据程序中
- 变量的使用，尝试@emph{推断} (@emph{infer})绑定变量的类型。如果语言设计得当，类
- 型检查器可以推断处大多数或所有这样的类型。}
+ 变量的使用，尝试@emph{推断} (@emph{infer}) 绑定变量的类型。如果语言设计得当，类
+ 型检查器可以推断出大多数甚至所有这样的类型。}
 
 ]
 
@@ -377,8 +373,9 @@ proc (f)
 
 @exercise[#:level 1 #:tag "ex7.4"]{
 
-用本节的规则，像@pageref{deriv-tree}那样，写出@tt{proc (x) x}和@tt{proc (x) (x y)}的类型推导。
-运用规则，给每个表达式赋予至少两种类型。这些表达式的值类型相同吗？
+用本节的规则，像@pageref{deriv-tree}那样，写出 @tt{proc (x) x} 和 @tt{proc (x)
+(x y)} 的类型推导。运用规则，给每个表达式赋予至少两种类型。这些表达式的值类型相
+同吗？
 
 }
 
@@ -408,7 +405,6 @@ proc (f : (bool -> int)) proc (n : int) (f zero?(n))
 
 要定义这种语言的语法，我们改变@tt{proc}和@tt{letrec}表达式的生成式。
 
-@; TODO: big bracket
 @big-bracket[#:title "修改后的生成式，适用于 CHECKED"]{
 @envalign*{
         \mathit{Expression} &::= @tt{proc (@m{\mathit{Identifier : Type}}) @m{\mathit{Expression}}} \\[-3pt]
@@ -1379,7 +1375,6 @@ in (odd 13)
 
 这个条件也意味着我们生成的代换式应满足如下不变式：
 
-@; TODO: big bracket
 @big-bracket[#:title "无存不变式"]{
 代换式中绑定的变量不应出现在任何代换式的右边。
 }
