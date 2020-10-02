@@ -73,6 +73,8 @@
 @list["Time slice" "时间片"]
 @list["Trampoline" "跳床"]
 @list["Trampolining" "跳跃"]
+@list["Type error" "类型错误"]
+@list["Type structure" "类型结构"]
 @list[@tt{car} "首项，或不译"]
 @list[@tt{cdr} "余项，或不译"]
 )]
