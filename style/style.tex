@@ -1,3 +1,49 @@
+% for big bracket since chapter 7
+\usepackage[most]{tcolorbox}
+\usetikzlibrary{calc}
+\tcbset{
+  leftlength/.store in={\tcbcornerruleleftlength},
+  leftlength=0.5em,
+  rightlength/.store in={\tcbcornerrulerightlength},
+  rightlength=0.5em,
+  cornerruleshift/.store in={\tcbcornerruleshift},
+  cornerruleshift=1pt,
+  topcornercolor/.store in={\tcbtopcornercolor},
+  bottomcornercolor/.store in={\tcbbottomcornercolor},
+  topcornercolor=black,
+  bottomcornercolor=black,
+  colback=white,
+  colbacktitle=white,
+  coltitle=black,
+  fonttitle=\bfseries,
+  bottomtitle=1pt,
+  leftupper=0pt
+}
+
+\newtcolorbox{cornerbox}[1][]{%
+  enhanced jigsaw,
+  sharp corners,
+  breakable,
+  boxrule=0pt,
+  underlay={
+    \coordinate (topleftend) at ($(interior.north west) - (90:\tcbcornerruleleftlength)$);
+    \coordinate (toprightend) at ($(interior.north east) - (90:\tcbcornerruleleftlength)$);
+    \coordinate (bottomrightend) at ($(interior.south east) + (90:\tcbcornerrulerightlength)$);
+    \coordinate (bottomleftend) at ($(interior.south west) + (90:\tcbcornerrulerightlength)$);
+    \draw[line width=0.8pt,\tcbtopcornercolor] %
+    ([xshift=-\tcbcornerruleshift]topleftend) -- %
+    ([shift={(-\tcbcornerruleshift,\tcbcornerruleshift)}]interior.north west) -- %
+    ([shift={(\tcbcornerruleshift,\tcbcornerruleshift)}]interior.north east) -- %
+    ([xshift=\tcbcornerruleshift]toprightend);
+    \draw[line width=0.8pt,\tcbbottomcornercolor] %
+    ([xshift=\tcbcornerruleshift]bottomrightend) -- %
+    ([shift={(\tcbcornerruleshift,-\tcbcornerruleshift)}]interior.south east) -- %
+    ([shift={(-\tcbcornerruleshift,-\tcbcornerruleshift)}]interior.south west) -- %
+    ([xshift=-\tcbcornerruleshift]bottomleftend);
+  },
+  #1,
+}
+
 % for code diff
 \usepackage[usetwoside=false]{mdframed}
 \mdfdefinestyle{codediff}{usetwoside=false,

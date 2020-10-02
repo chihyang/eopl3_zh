@@ -161,6 +161,15 @@
 (define (exact-elem . c)
   (make-element (make-style #f '(exact-chars)) c))
 
+(define (big-bracket #:title [title #f] . c)
+  (nested
+   (exact-elem "\\begin{cornerbox}")
+   (when title
+     (exact-elem "[title=" title "]"))
+   (exact-elem "\n")
+   c
+   (exact-elem "\n\\end{cornerbox}")))
+
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "frontmatter" '(exact-chars)) '())))
