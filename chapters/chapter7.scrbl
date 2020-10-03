@@ -91,7 +91,7 @@ in (f 1)
 }}
 
 虽然最后一个例子求值不终止，但根据上述定义，求值仍是安全的，所以我们的分析可以接
-受它。这是由于我们的分析器不够好，不足以判定这个程序不会终止，因此会接受它。
+受它。之所以接受它，是因为我们的分析器不够好，不足以判定这个程序不会终止。
 
 @section[#:style section-title-style-numbered #:tag "s7.1"]{值及其类型}
 
@@ -755,12 +755,11 @@ in |@${e_{letrec\mbox{-}body}}
 
 在程序中写出类型虽然有助于设计和文档，但很耗时。另一种设计是让编译器根据变量的使
 用以及程序员可能给出的信息，推断出所有变量的类型。令人惊讶的是，对设计严谨的语言，
-编译器@emph{总}能推断出变量的类型。这种策略叫做@emph{类型推导} (@emph{type
-inference})。它适用于LETREC这样的语言，@elem[#:style question]{也应付得了大小合
-适的语言}。
+编译器@emph{总}能推断出变量的类型。这种策略叫做@emph{类型推导}。它适用于 LETREC
+这样的语言，也适用于相当大的语言。
 
-要研究类型推导，我们从语言CHECKED开始。然后，我们修改语言，令所有的类型表达式成
-为可选项。我们用标记@tt{?}替代缺失的类型表达式。因此，典型的程序看起来像是：
+我们从语言 CHECKED 入手研究类型推导的实例。然后，我们修改语言，令所有类型表达式
+成为可选项。我们用标记 @tt{?} 替代缺失的类型表达式。因此，典型的程序看起来像是：
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -773,11 +772,11 @@ in foo
 }|
 }
 
-每个问号（除了@tt{zero?}结尾那个）表示所在之处有一个待指出的类型。
+每个问号（当然，除了 @tt{zero?} 结尾那个）指出所在之处有一个待推导的类型。
 
 }
 
-由于类型表达式是可选的，我们可以用类型替代某些@tt{?}，例如：
+由于类型表达式是可选的，我们可以用类型替代某些 @tt{?}，例如：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -788,9 +787,10 @@ in (odd 13)
 }|
 }
 
-要定义这种语法，我们新添一个非终止符，@${Optional\mbox{-}type}，并修改@tt{proc}
-和@tt{letrec}的生成式，令其用可选类型替代类型。
+要定义这种语法，我们新添一个非终止符，@${\mathit{Optional\mbox{-}type}}，并修改
+@tt{proc} 和 @tt{letrec} 的生成式，令其用可选类型替代类型。
 
+@nested[#:style small]{
 @envalign*{
 \mathit{Optinal\mbox{-}Type} &::= @tt{?} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{no-type ()}} \\[5pt]
@@ -806,16 +806,17 @@ in (odd 13)
                                           &\phantom{xx}@tt["("]{p-result-otype p-name} \\
                                           &\phantom{xxx}@tt{b-var b-var-otype p-body} \\
                                           &\phantom{xxx}@tt{letrec-body}@tt[")"]
-                                         \end{alignedat}\end{math}}}
+                                         \end{alignedat}\end{math}}
+}}
 
-排除的类型就是我们要找出的类型。要找出它们，我们遍历抽象语法树，生成类型之间的方
-程，方程中也可能含有这些未知类型。然后，我们求解含有未知类型的方程。
+排除的类型就是需要我们找出的类型。要找出它们，我们遍历抽象语法树，生成类型之间的
+方程，方程中可能含有这些未知类型。然后，我们求解含有未知类型的方程。
 
-要明白这怎么用，我们需要给未知类型起个名字。对每个表达式@${e}或绑定变量@${var}，
-设@${t_e}或@${t_{var}}表示表达式或绑定变量的类型。
+要理解这一流程，我们需要给未知类型起名字。对每个表达式 @${e} 或绑定变量 @${var}，
+设 @${t_e} 或 @${t_{var}} 表示表达式或绑定变量的类型。
 
 对表达式抽象语法树中的每个节点，类型规则决定了类型之间必须成立的某些方程。对我们
-的PROC语言，这些方程是：
+的 PROC 语言，这些方程是：
 
 @envalign*{
 @tt{(diff-exp @m{e_1} @m{e_2})} &: t_{e_1} = @tt{int} \\
@@ -832,29 +833,29 @@ in (odd 13)
 
 @itemlist[
 
- @item{第一条规则是说，@tt{diff-exp}的参数和结果均为@tt{int}。}
+ @item{第一条规则是说，@tt{diff-exp} 的参数和结果类型均为 @tt{int}。}
 
- @item{第二条规则是说，@tt{zero?-exp}的参数为@tt{int}，结果为@tt{bool}。}
+ @item{第二条规则是说，@tt{zero?-exp} 的参数为 @tt{int}，结果为 @tt{bool}。}
 
- @item{第三条规则是说，@tt{if}表达式中的条件类型必须为@tt{bool}，两个分支的类型
- 必须与整个@tt{if}表达式的类型相同。}
+ @item{第三条规则是说，@tt{if} 表达式中的条件类型必须为 @tt{bool}，两个分支的类
+ 型必须与整个 @tt{if} 表达式的类型相同。}
 
- @item{第四条规则是说，@tt{proc}表达式是一过程，其参数类型为绑定变量的类型，其结
- 果类型为主体的类型。}
+ @item{第四条规则是说，@tt{proc} 表达式的类型是一过程，其参数类型为绑定变量的类
+ 型，其结果类型为主体的类型。}
 
- @item{第五条规则是说，在过程调用中，操作符必须是一过程，其参数类型必须与操作数
- 相同，其结果类型与整个调用表达式的类型相同。}
+ @item{第五条规则是说，在过程调用中，操作符类型必须是一过程，其参数类型必须与操
+ 作数相同，其结果类型与整个调用表达式的类型相同。}
 
 ]
 
-要推导表达式的类型，我们为每个子表达式和绑定变量引入一个类型变量，给出每个子表达
-式的约束，然后求解得到的方程。要理解这一过程，我们来推导几个示例表达式的类型。
+要推导表达式的类型，我们为所有子表达式和绑定变量分配一个类型变量，给出所有子表达
+式的约束条件，然后求解得出的方程。要理解这一流程，我们来推导几个示例表达式的类型。
 
-我们从表达式@tt{proc(f) proc(x) -((f 3),(f x))}开始。我们首先做一张表，涵盖这个
-表达式中的所有绑定变量、@tt{proc}表达式、@tt{if}表达式和过程调用，并给它们分别安
-排一个变量。
+我们从表达式 @tt{proc(f) proc(x) -((f 3),(f x))} 开始。我们首先做一张表，涵盖这
+个表达式中的所有绑定变量、@tt{proc} 表达式、@tt{if} 表达式和过程调用，并给它们分
+别分配一个变量。
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                         @bold{类型变量})
                (list @tt{f}                                @${t_f})
                (list @tt{x}                                @${t_x})
@@ -866,38 +867,38 @@ in (odd 13)
 
 现在，对每个复杂表达式，都可以根据上述规则写出一个类型方程。
 
-@; TODO: numbered list in equations
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                         @bold{方程})
-               (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${t_0 = t_f \to t_1})
-               (list @tt{proc(x)-((f 3),(f x))}            @${t_1 = t_x \to t_2})
-               (list @tt{-((f 3),(f x))}                   @${t_3 = @tt{int}})
-               (list ""                                    @${t_4 = @tt{int}})
-               (list ""                                    @${t_2 = @tt{int}})
-               (list @tt{(f 3)}                            @${t_f = @tt{int} \to t_3})
-               (list @tt{(f x)}                            @${t_f = t_x \to t_4}))]
+               (list @tt{proc(f)proc(x)-((f 3),(f x))}     @${\text{1.\quad}t_0 = t_f \to t_1})
+               (list @tt{proc(x)-((f 3),(f x))}            @${\text{2.\quad}t_1 = t_x \to t_2})
+               (list @tt{-((f 3),(f x))}                   @${\text{3.\quad}t_3 = @tt{int}})
+               (list ""                                    @${\text{4.\quad}t_4 = @tt{int}})
+               (list ""                                    @${\text{5.\quad}t_2 = @tt{int}})
+               (list @tt{(f 3)}                            @${\text{6.\quad}t_f = @tt{int} \to t_3})
+               (list @tt{(f x)}                            @${\text{7.\quad}t_f = t_x \to t_4}))]
 
 @itemlist[
 
- @item{方程1是说，整个表达式产生一过程，其参数类型为@${t_f}，结果类型与
- @tt{proc(x)-((f 3),(f x))}相同。}
+ @item{方程 1 是说，整个表达式生成一个过程，其参数类型为 @${t_f}，结果类型与
+ @tt{proc(x)-((f 3),(f x))} 相同。}
 
- @item{方程2是说，@tt{proc(x)-((f 3),(f x))}产生一过程，其参数类型为@${t_x}，结
- 果类型与@tt{-((f 3),(f x))}相同。}
+ @item{方程 2 是说，@tt{proc(x)-((f 3),(f x))} 产生一过程，其参数类型为 @${t_x}，
+ 结果类型与 @tt{-((f 3),(f x))} 相同。}
 
- @item{方程3-5是说，减法操作@tt{-((f 3),(f x))}的参数和结果都是整数。}
+ @item{方程 3-5 是说，减法操作 @tt{-((f 3),(f x))} 的参数和结果都是整数。}
 
- @item{方程6是说，@tt{f}期望的参数类型为@tt{int}，返回值类型与@tt{(f 3)}相同。}
+ @item{方程 6 是说，@tt{f} 期望的参数类型为 @tt{int}，返回值类型与 @tt{(f 3)} 相
+ 同。}
 
- @item{类似得，方程7是说，@tt{f}期望的参数类型与@tt{x}相同，返回值类型与@tt{(f
- x)}相同。}
+ @item{类似地，方程 7 是说，@tt{f} 期望的参数类型与 @tt{x} 相同，返回值类型与
+ @tt{(f x)} 相同。}
 
 ]
 
-只要满足如下方程，怎样求解@${t_f}，@${t_x}，@${t_0}，@${t_1}，@${t_2}，@${t_3}和
-@${t_4}都可以：
+只要满足如下方程，@${t_f}、@${t_x}、@${t_0}、@${t_1}、@${t_2}、@${t_3} 和
+@${t_4} 的解可以是任意值：
 
-@nested[#:style 'code-inset]{
+@nested[#:style 'inset]{
 @verbatim|{
 |@${t_0 = t_f \to t_1}
 |@${t_1 = t_x \to t_2}
@@ -909,16 +910,16 @@ in (odd 13)
 }|
 }
 
-我们的目标是找出是所有方程成立的变量值。可以用方程组表示这些解，方程的左边都是变
-量。我们称这组方程为@emph{代换式组} (@emph{substitution})，称代换式左边的变量@emph{绑定}
-(@emph{bound})于代换式。
+我们的目标是找出变量的值，使所有方程成立。我们可以把这样的解表示为一组方程，方程
+的左边都是变量。我们称这组方程为一组@emph{代换式} (@emph{substitution})，称代换
+式方程左边的变量@emph{绑定} (@emph{bound}) 于代换式。
 
-我们可以依次求解这些方程。这一过程叫做@emph{合一} (@emph{unification})。
+我们可以按部就班地求解这些方程。这一过程叫做@emph{合一} (@emph{unification})。
 
-我们把计算分为两种状态，一种是仍待求解的方程，一种是已发现的代换式。最开始，所有
-方程都待求解，没有一个代换式。
+我们把计算分为两种状态，一种是待求解的方程，一种是已发现的代换式。最开始，所有方
+程都待求解，没有一个代换式。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -935,7 +936,7 @@ in (odd 13)
 
 我们依次考虑每个方程。如果方程左边是一个变量，我们将其移到代换式组中。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -950,11 +951,11 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to t_1}))]))]
 
-但是，这样可能会改变代换式组。例如，下一个方程给出了@${t_1}的值。代换式@${t_0}右
-边的值包含@${t_1}，我们要在其中使用这一信息。所以，我们把代换式右边出现的每个
-@${t_1}换掉。那么，我们有：
+但是，这样做可能会改变代换式组。例如，下一个方程给出了 @${t_1} 的值。代换式
+@${t_0} 右边的值包含 @${t_1}，我们要在其中使用这一信息。所以，我们把代换式右边出
+现的每个 @${t_1} 换掉。那么，我们有：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -969,10 +970,10 @@ in (odd 13)
            (list @${t_0 = t_f \to (t_x \to t_2)})
            (list @${t_1 = t_x \to t_2}))]))]
 
-如果方程右边是一变量，我们调换两侧，然后一仍其旧。我们可以按照这种方式，继续处理
-接下来的三个方程。
+如果方程右边是一变量，我们调换两侧，然后仍照上面操作。我们可以按照这种方式，继续
+处理下面的的三个方程。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -987,7 +988,7 @@ in (odd 13)
            (list @${t_1 = t_x \to t_2})
            (list @${t_3 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1002,7 +1003,7 @@ in (odd 13)
            (list @${t_3 = @tt{int}})
            (list @${t_4 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1017,11 +1018,11 @@ in (odd 13)
            (list @${t_4 = @tt{int}})
            (list @${t_2 = @tt{int}}))]))]
 
-现在，下一个要处理的方程含有@${t_3}，已经在代换式组中绑定到@tt{int}。所以，我们
-用@tt{int}替换方程中的@${t_3}。方程中的其他类型变量也这样处理。我们称之为对方程@emph{应用}
-(@emph{apply})代换式。
+现在，下一个要处理的方程含有 @${t_3}，已经在代换式组中绑定到 @tt{int}。所以，我
+们用 @tt{int} 替换方程中的 @${t_3}。方程中的其他类型变量也这样处理。我们称之为对
+方程@emph{应用} (@emph{apply}) 代换式。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1038,7 +1039,7 @@ in (odd 13)
 
 我们把得到的方程移入代换式组中，并更新需要更新的代换式。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1053,10 +1054,10 @@ in (odd 13)
            (list @${t_2 = @tt{int}})
            (list @${t_f = @tt{int} \to @tt{int}}))]))]
 
-下一个方程，@${t_f = t_x \to t_4}，包含@${t_f}和@${t_4}，均已绑定于代换式，所以
-我们对该方程应用代换式，得：
+下一个方程，@${t_f = t_x \to t_4}，包含 @${t_f} 和 @${t_4}，均已绑定于代换式，所
+以我们对该方程应用代换式，得：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1073,7 +1074,7 @@ in (odd 13)
 
 如果方程两边都不是变量，我们可以将其化简，得到两个方程：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1089,9 +1090,9 @@ in (odd 13)
            (list @${t_2 = @tt{int}})
            (list @${t_f = @tt{int} \to @tt{int}}))]))]
 
-还是照常处理：像之前那样，交换第一个方程的两侧，加入代换式组，更新代换式组。
+我们还是照常处理：像之前那样，对调第一个方程的两侧，加入代换式组，更新代换式组。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1107,9 +1108,9 @@ in (odd 13)
            (list @${t_f = @tt{int} \to @tt{int}})
            (list @${t_x = @tt{int}}))]))]
 
-最后一个方程，@${@tt{int} = @tt{int}}总是成立，所以可以丢弃。
+最后一个方程 @${@tt{int} = @tt{int}} 总是成立，所以可以丢弃。
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border)
@@ -1124,20 +1125,20 @@ in (odd 13)
            (list @${t_f = @tt{int} \to @tt{int}})
            (list @${t_x = @tt{int}}))]))]
 
-没有方程了，所以我们全部完成。从这个计算，我们得出原表达式@tt{proc (f) proc (x)
--((f 3),(f x))}的类型应为：
+没有方程了，所以我们已完成。从这个计算，我们得出结论：原表达式 @tt{proc (f) proc
+(x) -((f 3),(f x))} 的类型应为：
 
-@nested[#:style 'code-inset]{
-@${(@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int})}|
+@nested[#:style 'inset]{
+@${((@tt{int} \to @tt{int}) \to (@tt{int} \to @tt{int}))}
 }
 
-这是合理的：@tt{f}的第一个参数必须是个@tt{int}，因为它接受@tt{3}做参数。它必须产
-生一个@tt{int}，因为它的值用作减法操作的第一个参数。@tt{x}必定是一个@tt{int}，因
-为它也用作@tt{f}的参数。
+这是合理的：@tt{f} 的第一个参数必须是一个 @tt{int}，因为它接受 @tt{3} 做参数。它
+必须生成一个 @tt{int}，因为它的值用作减法操作的参数。@tt{x} 也必须是一个
+@tt{int}，因为它也用作 @tt{f} 的参数。
 
-我们再看另一个例子：@tt{proc (f) (f 11)}。我们仍从指定类型变量开始。
+我们再看另一个例子：@tt{proc (f) (f 11)}。我们仍从分配类型变量开始。
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}         @bold{类型变量})
                (list @tt{f}                @${t_f})
                (list @tt{proc (f) (f 11)}  @${t_0})
@@ -1145,14 +1146,14 @@ in (odd 13)
 
 接下来我们写出方程：
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}          @bold{方程})
                (list @tt{proc(f)(f 11)}     @${t_0 = t_f \to t_1})
                (list @tt{(f 11)}            @${t_f = @tt{int} \to t_1}))]
 
 然后求解：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1162,7 +1163,7 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border)
      (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[8]
+@tabular[#:style 'inset #:sep @hspace[8]
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1172,7 +1173,7 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to t_1}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border)
@@ -1182,16 +1183,16 @@ in (odd 13)
            (list @${t_0 = (@tt{int} \to t_1) \to t_1})
            (list @${t_f = @tt{int} \to t_1}))]))]
 
-这意味着可以给@tt{proc (f) (f 11)}赋予类型@${(@tt{int} \to t_1) \to t_1}，
-@${t_1}是任何类型。这也是合理的：我们可以推出@tt{f}必须取一@tt{int}参数，但对
-@tt{f}结果的类型一无所知。而且，对任何@${t_1}，这个代码都切实可行，只要@tt{f}取
-一@tt{int}参数，返回一类型为@${t_1}的值。我们称@${t_1}是@emph{多态}
-(@emph{polymorphic})的。
+这意味着可以给 @tt{proc (f) (f 11)} 赋予类型 @${(@tt{int} \to t_1) \to t_1}，其
+中 @${t_1} 是任何类型。这也是合理的：我们可以推出 @tt{f} 必须取一 @tt{int} 参数，
+但对 @tt{f} 结果的类型一无所知。而且，对任何 @${t_1}，这个代码都切实可行，只要
+@tt{f} 取一 @tt{int} 参数，返回一类型为 @${t_1} 的值。我们称@${t_1} 对它
+是@emph{多态} (@emph{polymorphic})的。
 
-再来看一个例子。考虑@tt{if x then -(x,1) else 0}。我们还是给每个不是常数的子表达
-式分配一个类型变量。
+再来看一个例子。考虑 @tt{if x then -(x,1) else 0}。我们还是给每个不是常数的子表
+达式分配一个类型变量。
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                 @bold{类型变量})
                (list @tt{x}                        @${t_x})
                (list @tt{if x then -(x,1) else 0}  @${t_0})
@@ -1199,7 +1200,7 @@ in (odd 13)
 
 然后给出方程：
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                @bold{方程})
                (list @tt{if x then -(x,1) else 0} @${t_x = @tt{bool}})
                (list ""                           @${t_1 = t_0})
@@ -1207,9 +1208,9 @@ in (odd 13)
                (list @tt{-(x,1)}                  @${t_x = @tt{int}})
                (list ""                           @${t_1 = @tt{int}}))]
 
-像之前那样求解这些方程，我们有：
+像之前那样处理这些方程，我们有：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1222,7 +1223,7 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border)
      (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1235,7 +1236,7 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_x = @tt{bool}}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1248,7 +1249,7 @@ in (odd 13)
            (list @${t_x = @tt{bool}})
            (list @${t_1 = t_0}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1261,7 +1262,7 @@ in (odd 13)
            (list @${t_x = @tt{bool}})
            (list @${t_1 = t_0}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1274,9 +1275,9 @@ in (odd 13)
            (list @${t_1 = t_0})
            (list @${t_0 = @tt{int}}))]))]
 
-由于@${t_x}已经绑定于代换式，我们对下一方程应用代换，得：
+由于 @${t_x} 已经绑定于代换式组，我们对下一方程应用代换，得：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1289,30 +1290,30 @@ in (odd 13)
            (list @${t_1 = t_0})
            (list @${t_0 = @tt{int}}))]))]
 
-怎么回事？从这些方程，我们推出@tt{bool = int}。所以在这些方程中的解中，均有
-@tt{bool = int}。但@tt{bool}和@tt{int}不可能相等。因此，这些方程无解，也就无法赋
-予这个表达式类型。这是合理的，因为表达式@tt{if x then -(x,1) else 0}中，@tt{x}同
-时用作布尔值和整数值，而在我们的类型系统中，这是不允许的。
+怎么回事？从这些方程，我们推出 @tt{bool = int}。所以在这些方程中的解中，均有
+@tt{bool = int}。但 @tt{bool} 和 @tt{int} 不可能相等。因此，这些方程无解，也就无
+法赋予这个表达式类型。这是合理的，因为表达式 @tt{if x then -(x,1) else 0} 中，
+@tt{x} 同时用作布尔值和整数值，而在我们的类型系统中，这是不允许的。
 
-再来看一个例子。考虑@tt{proc (f) zero?((f f))}。仍像之前那样处理。
+再来看一个例子。考虑 @tt{proc (f) zero?((f f))}。我们仍像之前那样处理。
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                 @bold{类型变量})
                (list @tt{proc (f) zero?((f f))}    @${t_0})
                (list @tt{f}                        @${t_f})
                (list @tt{zero?((f f))}             @${t_1})
                (list @tt{(f f)}                    @${t_2}))]
 
-@tabular[#:sep @hspace[4] #:row-properties '(bottom-border ())
+@tabular[#:style 'inset #:sep @hspace[4] #:row-properties '(bottom-border ())
          (list (list @bold{表达式}                @bold{方程})
                (list @tt{proc (f) zero?((f f))}   @${t_0 = t_f \to t_1})
                (list @tt{zero?((f f))}            @${t_1 = @tt{bool}})
                (list ""                           @${t_2 = @tt{int}})
                (list @tt{(f f)}                   @${t_f = t_f \to t_2}))]
 
-然后仍像之前那样求解：
+然后，我们仍像之前那样求解：
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1324,7 +1325,7 @@ in (odd 13)
    @tabular[#:row-properties '(bottom-border)
      (list (list @bold{代换式}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1336,7 +1337,7 @@ in (odd 13)
      (list (list @bold{代换式})
            (list @${t_0 = t_f \to t_1}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1348,7 +1349,7 @@ in (odd 13)
            (list @${t_0 = t_f \to @tt{bool}})
            (list @${t_1 = @tt{bool}}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1360,7 +1361,7 @@ in (odd 13)
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}}))]))]
 
-@tabular[#:sep @hspace[8] #:column-properties '(baseline baseline)
+@tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
   (list
    @tabular[#:row-properties '(bottom-border ())
@@ -1372,12 +1373,13 @@ in (odd 13)
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}}))]))]
 
-现在，有个问题。我们推导出@${t_f = t_f \to @tt{int}}。但没有一种类型具有这种属性，
-因为这个方程的右边总是比左边大：如果@${t_f}的语法树包含@${k}个节点，那么方程右边
-总是包含@${k+2}个节点。
+问题来了。我们推导出 @${t_f = t_f \to @tt{int}}。但没有一种类型具有这种属性，因
+为这个方程的右边总是比左边大：如果 @${t_f} 的语法树包含 @${k} 个节点，那么方程右
+边总是包含 @${k+2} 个节点。
 
-所以，如果我们推导的方程形如@${tv = t}，且类型变量@${tv}出现在类型@${t}中，我们
-只能得出结论：原方程误解。这个附加条件叫做@emph{验存} (@emph{occurrence check})。
+所以，如果我们推导的方程形如 @${tv = t}，且类型变量 @${tv} 出现在类型 @${t} 中，
+我们只能得出结论：原方程无解。这个附加条件叫做@emph{验存} (@emph{occurrence
+check})。
 
 这个条件也意味着我们生成的代换式应满足如下不变式：
 
@@ -1385,20 +1387,20 @@ in (odd 13)
 代换式中绑定的变量不应出现在任何代换式的右边。
 }
 
-我们解方程的代码极度依赖这条不变式。
+我们解方程的代码极度依赖这个不变式。
 
 @exercise[#:level 1 #:tag "ex7.12"]{
 
-用本节的方法，推导@exercise-ref{ex7.1} 中每个表达式的类型，或者断定没有类型。就像本节的其他练
-习那样，假设每个绑定变量都有个对应的@tt{?}。
+用本节的方法，推导@exercise-ref{ex7.1} 中每个表达式的类型，或者判定表达式没有类
+型。就像本节的其他练习那样，假设每个绑定变量都有对应的 @tt{?}。
 
 }
 
 
 @exercise[#:level 1 #:tag "ex7.13"]{
 
-写出@tt{let}表达式的类型推导规则。用你的规则，推导下列各表达式的类型，或者断定表
-达式无类型。
+写出 @tt{let} 表达式的类型推导规则。用你的规则，推导下列各表达式的类型，或者判定
+表达式无类型。
 
 @itemlist[#:style 'ordered
 
@@ -1434,7 +1436,8 @@ in letrec
 
 @exercise[#:level 2 #:tag "ex7.15"]{
 
-写出@tt{letrec}表达式的类型推导规则。你的规则应能处理多声明的@tt{letrec}。用你的规则推导下列每个表达式的类型，或断定表达式无类型。
+写出 @tt{letrec} 表达式的类型推导规则。你的规则应能处理多声明的 @tt{letrec}。用
+你的规则推导下列每个表达式的类型，或者判定表达式无类型。
 
 @itemlist[#:style 'ordered
 
@@ -1464,7 +1467,7 @@ in letrec
 
 @exercise[#:level 3 #:tag "ex7.16"]{
 
-修改INFERRED的语法，不必再用@tt{?}标记缺失的类型，而可以直接排除。
+修改 INFERRED 的语法，排除缺失类型，不再用 @tt{?} 做标记。
 
 }
 

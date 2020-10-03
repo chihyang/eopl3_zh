@@ -292,7 +292,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
-        @${e \in Expression} 或 @exact-elem{“}@${e} 是一个 expression@exact-elem{”}。
+        @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
+        expression@exact-elem{”}。
 
         另一常见做法，名叫@emph{巴科斯-诺尔范式} (@emph{Backus-Naur Form}) 或
         @emph{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
