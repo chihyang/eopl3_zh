@@ -83,6 +83,7 @@
 @list["Type structure" "类型结构"]
 @list["Typing" "判类"]
 @list["Unification" "合一"]
+@list["Value restriction" "值约束"]
 @list["Well typed" "正常类型"]
 @list[@tt{car} "首项，或不译"]
 @list[@tt{cdr} "余项，或不译"]

@@ -1473,19 +1473,21 @@ in letrec
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.1"]{代换式}
 
-我们自底向上完成实现。首先来考虑代换式。
+我们按自底向上的方式实现。我们首先来考虑代换式。
 
-我们给数据类型@tt{type}新增一种变体来表示类型变量，就像之前处理@secref{s3.7}中的
-词法地址一样。我们给语法添加生成式：
+我们将类型变量表示为数据类型 @tt{type} 的新变体。这里用到的技术和@secref{s3.7}中
+处理词法地址的相同。我们给语法添加生成式：
 
+@nested[#:style small]{
 @envalign*{\mathit{Type} &::= @tt{%tvar-type} \mathit{Number} \\[-3pt]
-       &\mathrel{\phantom{::=}} \fbox{@tt{tvar-type (serial-number)}}}
+       &\mathrel{\phantom{::=}} \fbox{@tt{tvar-type (serial-number)}}}}
 
-我们把这些增改后的类型称为@emph{类型表达式} (@emph{type expression})。类型表达式
-的基本操作是用类型代换类型变量，由@tt{apply-one-subst}定义。@tt{(apply-one-subst
-@${t_0} @${tv} @${t_1})}将@${t_0}中出现的每个@${tv}代换为@${t_1}，返回代换后的表
-达式。有时，这写作@tt{@${t_0}[@${tv=t_1}]}。
+我们把这些扩展后的类型称为@emph{类型表达式} (@emph{type expression})。类型表达式
+的基本操作是用类型代换类型变量，由 @tt{apply-one-subst}
+定义。@tt{(apply-one-subst @${t_0} @${tv} @${t_1})} 将 @${t_0} 中出现的每个
+@${tv} 代换为 @${t_1}，返回代换后的表达式。有时，这写作 @tt{@${t_0}[@${tv=t_1}]}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-one-subst}} : @${\mathit{Type} \times \mathit{Tvar} \times \mathit{Type} \to \mathit{Type}}}
 (define apply-one-subst
@@ -1499,22 +1501,24 @@ in letrec
           (apply-one-subst result-type tvar ty1)))
       (tvar-type (sn)
         (if (equal? ty0 tvar) ty1 ty0)))))
-]
+]}
 
-这个过程用来代换单个类型变量。它不能够像上节中描述的那样处理所有代换。
+这个过程用来代换单个类型变量。它不能像上节中描述的那样处理所有代换。
 
 代换式组是一个方程列表，方程两边分别为类型变量和类型。该列表也可视为类型变量到类
 型的函数。当且仅当类型变量出现于代换式组中某个方程的左侧时，我们说该变量@emph{绑
 定}于代换式。
 
-我们用序对@tt{(类型变量 . 类型)}的列表表示代换式组。代换式组的必要观测器是
-@tt{apply-subst-to-type}。它遍历类型@${t}，把每个类型变量替换为代换式组
-@${\sigma}中的绑定。如果一个变量未绑定于代换式，那么保持不变。我们用@${t\sigma}
-表示得到的类型。
+我们用序对 @tt{(类型变量 . 类型)} 的列表表示代换式组。代换式组的必要观测器是
+@tt{apply-subst-to-type}。它遍历类型 @${t}，把每个类型变量替换为代换式组
+@${\sigma} 中的绑定。如果一个变量未绑定于代换式，那么保持不变。我们用
+@${t\sigma} 表示得到的类型。
 
-这一实现用Scheme过程@tt{assoc}在代换式组中查找类型变量。若给定类型是列表中某个序
-对的首项，@tt{assoc}返回对应的（类型变量，类型）序对，否则返回@tt{#f}。写出来是：
+这一实现用 Scheme 过程 @tt{assoc} 在代换式组中查找类型变量。若给定类型是列表中某
+个序对的首项，@tt{assoc} 返回对应的（类型变量，类型）序对，否则返回 @tt{#f}。我
+们将它写出来：
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{apply-subst-to-type}} : @${\mathit{Type} \times \mathit{Subst} \to \mathit{Type}}}
 (define apply-subst-to-type
@@ -1531,12 +1535,13 @@ in letrec
           (if tmp
             (cdr tmp)
             ty))))))
-]
+]}
 
-代换式组的构造器有@tt{empty-subst}和@tt{extend-subst}。@tt{(empty-subst)}生成空
-代换式组。@tt{(extend-subst @${\sigma} @${tv} @${t})}取一代换式组@${\sigma}，像
-上节那样给它添加方程@${tv = t}。这个操作分两步：首先把代换式组中每个方程右边的
-@${tv}替换为@${t}，然后把方程@${tv = t}添加到列表中。用公式表示为：
+代换式组的构造器有 @tt{empty-subst} 和 @tt{extend-subst}。@tt{(empty-subst)} 生
+成空代换式组的表示。@tt{(extend-subst @${\sigma} @${tv} @${t})} 取一代换式组
+@${\sigma}，像上节那样给它添加方程 @${tv = t}。这个操作分两步：首先把代换式组中
+所有方程右边的 @${tv} 替换为 @${t}，然后把方程 @${tv = t} 添加到列表中。用公式表
+示为：
 
 @$${
 \begin{pmatrix}
@@ -1551,13 +1556,14 @@ in letrec
  tv_n = t_n[tv = t]
 \end{pmatrix}}
 
-该定义具有如下属性：对任意类型@${t}，
+该定义具有如下属性：对任意类型 @${t}，
 
 @$${(t\sigma)[tv = t'] = t(\sigma[tv = t'])}
 
-@tt{extend-subst}的实现按上式进行。它把@${\sigma_0}所有绑定中的@${t_0}代换为
+@tt{extend-subst} 的实现依照上式。它把 @${\sigma_0} 所有绑定中的 @${t_0} 代换为
 @${tv_0}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{empty-subst}} : @${\mathit{()} \to \mathit{Subst}}}
 (define empty-subst (lambda () '()))
@@ -1576,15 +1582,15 @@ in letrec
               oldlhs
               (apply-one-subst oldrhs tvar ty))))
         subst))))
-]
+]}
 
-这一实现保留了无存不变式，但既不依赖它，也不强制它。那是下一节中合一器的工作。
+这一实现保持无存不变式，但既不依赖它，也不强制它。那是下一节中合一器的工作。
 
 
 @exercise[#:level 2 #:tag "ex7.17"]{
 
-在我们的实现中，当@${\sigma}很大时，@tt{extend-subst}要做大量工作。实现另一种表
-示法，则@tt{extend-subst}变成：
+在我们的实现中，当 @${\sigma} 很大时，@tt{extend-subst} 要做大量工作。实现另一种
+表示，则 @tt{extend-subst} 变成：
 
 @racketblock[
 (define extend-subst
@@ -1592,76 +1598,77 @@ in letrec
     (cons (cons tvar ty) subst)))
 ]
 
-其余工作移至@tt{apply-subst-to-type}，而属性@${t(\sigma[tv = t']) = (t\sigma)[tv
-= t']}仍然满足。这样定义@tt{extend-subst}还需要无存不变式吗？
+其余工作移至 @tt{apply-subst-to-type}，而属性 @${t(\sigma[tv = t']) =
+(t\sigma)[tv = t']} 仍然满足。这样定义 @tt{extend-subst} 还需要无存不变式吗？
 
 }
 
 @exercise[#:level 2 #:tag "ex7.18"]{
 
-修改前一道练习中的实现，则对任意变量，@tt{apply-subst-to-type}最多只需计算一次代
-换。
+修改前一道练习中的实现，则对任意类型变量，@tt{apply-subst-to-type} 最多只需计算
+一次代换。
 
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.2"]{合一器}
 
-合一器的主要过程是@tt{unifier}。合一器执行上述推导过程中的这一的步骤：取两个类型
-@tt{t_1}和@tt{t_2}，满足无存不变式的代换式组@${\sigma}，以及表达式@tt{exp}，将
-@${t_1 = t_2}添加到@${\sigma}，返回得到的代换式组。这是统一@${t_1\sigma}和
-@${t_2\sigma}所得的最小@${\sigma}扩展。这组代换式仍满足无存不变式。若@${t_1 =
-t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指明是表达式@tt{exp}。这通常
-是包含方程@${t_1 = t_2}的表达式。
+合一器的主要过程是 @tt{unifier}。合一器执行上述推导流程中的这一的步骤：取两个类
+型 @tt{t_1} 和 @tt{t_2}，满足无存不变式的代换式组 @${\sigma}，以及表达式
+@tt{exp}，将 @${t_1 = t_2} 添加到 @${\sigma}，返回得到的代换式组。这是合并
+@${t_1\sigma} 和 @${t_2\sigma} 后所得的最小 @${\sigma} 扩展。这组代换式仍满足无
+存不变式。若添加 @${t_1 = t_2} 导致矛盾，或者违反了无存不变式，那么合一器报错，
+指出错误所在的表达式 @tt{exp}。这通常是得出方程 @${t_1 = t_2} 的表达式。
 
-这个算法用@tt{cases}来写十分不便，所以我们改用类型的谓词和抽词器。算法如@figure-ref{fig-7.4} 所
-示，其流程如下：
+这个算法用 @tt{cases} 来写十分不便，所以我们改用类型的谓词和抽词器。算法
+如@figure-ref{fig-7.4} 所示，其流程如下：
 
 @itemlist[
 
- @item{首先，像上面那样，我们对类型@${t_1}和@${t_2}分别应用代换式。}
+ @item{首先，像上面那样，我们对类型 @${t_1} 和 @${t_2} 分别应用代换式。}
 
- @item{如果结果类型相同，立即返回。这一步对应上面的删除简单方程。}
+ @item{如果结果类型相同，我们立即返回。这一步对应上面的删除简单方程。}
 
- @item{如果@tt{ty1}为未知类型，那么无存不变式告诉我们，它未绑定于代换式。由于它
- 未绑定，我们试着把@${t_1 = t_2}添加到代换式组。但我们要验存，以保证无存不变式成
- 立。当且仅当类型变量@${tv}不在@${t}中时，调用@tt{(no-occurrence? @${tv} @${t})}
- 返回@tt{#t}。}
+ @item{如果 @tt{ty1} 为未知类型，那么无存不变式告诉我们，它未绑定于代换式。由于
+ 它未绑定，我们尝试把 @${t_1 = t_2} 添加到代换式组。但我们要验存，以保证无存不变
+ 式成立。当且仅当类型变量 @${tv} 不在 @${t} 中时，调用 @tt{(no-occurrence?
+ @${tv} @${t})} 返回 @tt{#t}（@figure-ref{fig-7.5}）。}
 
- @item{如果@${t_2}是未知类型，则交换@${t_1}和@${t_2}的位置，也照这样处理。}
+ @item{如果 @${t_2} 为未知类型，则对调 @${t_1} 和 @${t_2}，也照这样处理。}
 
- @item{如果@${t_1}和@${t_2}都不是类型变量，那么我们再做进一步分析。
+ @item{如果 @${t_1} 和 @${t_2} 都不是类型变量，那么我们再做进一步分析。
 
- 如果它们的类型都是@tt{proc}，那么我们在两个参数类型之间建立方程，得到一组代换式，
- 然后用这组代换式在结果类型之间建立方程。
+ 如果它们都是 @tt{proc} 类型，那么我们化简方程，在两个参数类型之间建立方程，得到
+ 一组代换式，然后用这组代换式在结果类型之间建立方程。
 
- 否则，@${t_1}和@${t_2}中一个是@tt{int}，另一个是@tt{bool}，或一个是@tt{proc}，
- 另一个是@tt{int}或@tt{bool}。不管是哪种情况，方程都无解，所以报错。}
+ 否则，@${t_1} 和 @${t_2} 中一个是 @tt{int}，另一个是 @tt{bool}，或一个是
+ @tt{proc}，另一个是 @tt{int} 或 @tt{bool}。不管是哪种情况，方程都无解，引发报错。}
 
 ]
 
 从另一种角度来思考这些有助于理解。代换式组是一个@emph{存储器}，未知类型是指向存
-储器中某位置的@emph{引用}。@tt{unifier}把@tt{ty1 = ty2}添加到存储器中，生成一个
-新的存储器。
+储器中某位置的@emph{引用}。@tt{unifier} 把 @tt{ty1 = ty2} 添加到存储器中，得到一
+个新的存储器。
 
-最后，我们要验存。直接递归处理类型即可，如@figure-ref{fig-7.5} 所示。
+最后，我们必须验存。直接递归处理类型即可，如@figure-ref{fig-7.5} 所示。
 
 @exercise[#:level 1 #:tag "ex7.19"]{
 
 我们说：@exact-elem{“}如果@tt{ty1}为未知类型，那么无存不变式告诉我们，它未绑定
-于代换式。@exact-elem{”}详细解释为什么是这样。
+于代换式。@exact-elem{”}详细解释为什么如此。
 
 }
 
 @exercise[#:level 2 #:tag "ex7.20"]{
 
-修改合一器，只用@tt{apply-subst-to-type}处理类型变量，而非合一器的实参。
+修改合一器，不是对合一器的实参，而是只对类型变量调用 @tt{apply-subst-to-type}。
 
 }
 
 @exercise[#:level 2 #:tag "ex7.21"]{
 
 我们说代换式组就像存储器。用@exercise-ref{ex7.17} 中的代换式组表示实现合一器，用
-全局Scheme变量记录代换式组，就像@figure-ref{fig-4.1} 和 @countref{fig-4.2} 那样。
+全局 Scheme 变量记录代换式组，就像@figure-ref{fig-4.1} 和 @countref{fig-4.2} 那
+样。
 
 }
 
@@ -1724,8 +1731,10 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.3"]{找出表达式的类型}
 
-我们用@tt{otype->type}，为每个@tt{?}定义一个新类型变量，把可选类型转换为未知类型。
+我们用 @tt{otype->type} 为每个 @tt{?} 定义一个新类型变量，把可选类型转换为未知类
+型。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{otype->type}} : @${\mathit{OptionalType} \to \mathit{Type}}}
 (define otype->type
@@ -1740,10 +1749,11 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
     (lambda ()
       (set! sn (+ sn 1))
       (tvar-type sn))))
-]
+]}
 
 把类型转换为外在表示时，我们用包含序号的符号表示类型变量。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{type-to-external-form}} : @${\mathit{Type} \to \mathit{List}}}
 (define type-to-external-form
@@ -1761,34 +1771,35 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
           (string-append
             "ty"
             (number->string serial-number)))))))
-]
+]}
 
-现在可以写@tt{type-of}了。它取一表达式，一个将程序变量映射到类型表达式的类型环境，
-和一个满足无存不变式的代换式组，返回一个类型和一个满足无存不变式的新代换式组。
+现在我们可以写 @tt{type-of} 了。它取一表达式，一个将程序变量映射到类型表达式的类
+型环境，和一个满足无存不变式的代换式组，返回一个类型和满足无存不变式的新代换式组。
 
-类型环境将各类型表达式与程序变量对应起来。代换式组表明了类型表达式中每个类型变量
-的含义。我们把代换式组比作@emph{存储器}，把类型变量比作存储器中的@emph{引用}。因
-此，@tt{type-of}返回两个值：一个类型表达式，和一个解释表达式中类型变量的代换式组。
-其实现就像@exercise-ref{ex4.12} 那样，新定义一种包含两个值的数据类型，用作返回值。
+类型环境将各类型表达式与程序变量对应起来。代换式组解释了类型表达式中每个类型变量
+的含义。我们把代换式组比作@emph{存储器}，把类型变量比作存储器@emph{引用}。因此，
+@tt{type-of} 返回两个值：一个类型表达式，和一个解释表达式中类型变量的代换式组。
+像@exercise-ref{ex4.12} 那样，我们在实现时新定义一种包含两个值的数据类型，用作返
+回值。
 
 @tt{type-of} 的定义如@figure-ref{fig-7.6}-@countref{fig-7.8} 所示。对每个表达式，
 我们递归处理子表达式，一路传递代换式组参数中现有的解。然后，我们根据规范，为当前
 表达式建立方程，调用 @tt{unifier}，在代换式组中记录这些。
 
-因为多态的缘故，测试推导器比测试之前的解释器较为麻烦。例如，如果给推导器@tt{proc
-(x) x}，它给出的外在表示可能是@tt{(tvar1 -> tvar1)}，@tt{(tvar2 -> tvar2)}，
-@tt{(tvar3 -> tvar3)}，等等。每次调用推导器可能都不同，所以我们写测试用例时不能
-直接用它们，否则就无法比较推导出的类型和正确类型。我们需要接受上述所有可能，但拒
-绝@tt{(tvar3 -> tvar4)}或是@tt{(int -> tvar17)}。
+因为多态的缘故，测试推导器比测试之前的解释器稍微麻烦。例如，如果给推导器输入
+@tt{proc (x) x}，它给出的外在表示可能是 @tt{(tvar1 -> tvar1)}、@tt{(tvar2 ->
+tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可能不同，所以我们写
+测试项时不能直接使用它们，否则就无法比较推导出的类型和正确类型。我们需要接受上述
+所有可能，但拒绝 @tt{(tvar3 -> tvar4)} 或是 @tt{(int -> tvar17)}。
 
 要比较两种类型的外在表示，我们统一未知类型的名字，遍历每个外在表示，给类型变量重
-新编号，使之从@tt{ty1}开始。然后，我们就能用@tt{equal?}比较重新编号的类型
+新编号，使之从 @tt{ty1} 开始。然后，我们就能用 @tt{equal?} 比较重新编号的类型
 （@figure-ref{fig-7.10}-@countref{fig-7.11}）。
 
-要逐个命名所有未知变量，我们用 @tt{canonical-subst} 生成代换式组。用 @tt{table}
-做累加器，直接递归即可。@tt{table} 的长度告诉我们已找出多少个不同的未知类型，我
-们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。这与@figure-ref{fig-4.1} 中
-使用的 @tt{length} 类似。
+要逐个命名所有未知变量，我们用 @tt{canonical-subst} 生成代换式组。我们用
+@tt{table}做累加器，即可直接递归。@tt{table} 的长度告诉我们已找出多少个不同的未
+知类型，我们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。
+这和我们在@figure-ref{fig-4.1} 中使用的 @tt{length} 类似。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1828,7 +1839,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 \smallskip}
 ]
 
-@eopl-caption["fig-7.6"]{INFERRED的 @tt{type-of}，第1部分}
+@eopl-caption["fig-7.6"]{INFERRED 的 @tt{type-of}，第 1 部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1869,7 +1880,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
         subst))))
 ]
 
-@eopl-caption["fig-7.7"]{INFERRED的 @tt{type-of}，第2部分}
+@eopl-caption["fig-7.7"]{INFERRED 的 @tt{type-of}，第 2 部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1902,8 +1913,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
               (an-answer result-type subst))))))))
 ]
 
-@eopl-caption["fig-7.8"]{INFERRED的 @tt{type-of}，第3部分}
-}
+@eopl-caption["fig-7.8"]{INFERRED 的 @tt{type-of}，第 3 部分}}
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1933,7 +1943,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
                   subst))))))))))
 ]
 
-@eopl-caption["fig-7.9"]{INFERRED的 @tt{type-of}，第4部分}
+@eopl-caption["fig-7.9"]{INFERRED 的 @tt{type-of}，第 4 部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -1969,7 +1979,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
         (else table)))))
 ]
 
-@eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第1部分}
+@eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分}
 }
 
 @nested[#:style eopl-figure]{
@@ -2005,7 +2015,7 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
       (string-append "tvar" (number->string n)))))
 ]
 
-@eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第2部分}
+@eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第 2 部分}
 }
 
 @exercise[#:level 2 #:tag "ex7.23"]{
@@ -2016,13 +2026,13 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @exercise[#:level 2 #:tag "ex7.24"]{
 
-扩展推导器，处理多声明@tt{let}，多参数过程，以及多声明@tt{letrec}。
+扩展推导器，处理多声明 @tt{let}、多参数过程和多声明 @tt{letrec}。
 
 }
 
 @exercise[#:level 2 #:tag "ex7.25"]{
 
-扩展推导器，像@exercise-ref{ex7.9} 那样处理列表类型。修改语言，用
+扩展推导器，像@exercise-ref{ex7.9} 那样处理列表类型。修改语言，用生成式
 
 @$${\mathit{Expression} ::= @tt{emptylist}}
 
@@ -2030,26 +2040,27 @@ t_2}导致矛盾，或者违反了无存不变式，那么合一器报错，指�
 
 @$${\mathit{Expression} ::= @tt{emptylist_@${\mathit{Type}}}}
 
-提示：用类型变量代替缺失的@tt{_@${t}}。
+提示：考虑用类型变量代替缺失的 @tt{_@${t}}。
 }
 
 @exercise[#:level 2 #:tag "ex7.26"]{
 
-扩展推导器，像@exercise-ref{ex7.10} 那样处理EXPLICIT-REFS。
+扩展推导器，像@exercise-ref{ex7.10} 那样处理 EXPLICIT-REFS。
 
 }
 
 @exercise[#:level 2 #:tag "ex7.27"]{
 
-重写推导器，将其分为两步。第一步生成一系列方程，第二步反复调用@tt{unify}求解它们。
+重写推导器，将其分为两步。第一步生成一系列方程，第二步重复调用 @tt{unify} 求解它
+们。
 
 }
 
 @exercise[#:level 2 #:tag "ex7.28"]{
 
 我们的推导器虽很有用，却不够强大，不允许程序员定义多态过程，像定义多态原语
-@tt{pair}或@tt{cons}那样，适用于多种类型。例如，即使执行是安全的，我们的推导器也
-会拒绝程序
+@tt{pair} 或 @tt{cons} 那样，适用于多种类型。例如，即使执行是安全的，我们的推导
+器也会拒绝程序
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2060,8 +2071,8 @@ in if (f zero?(0))
 }|
 }
 
-因为@tt{f}既是@tt{(bool -> bool)}也是@tt{(int -> int)}。由于本节的推导器至多只能
-找出@tt{f}的一种类型，它将拒绝这段程序。
+因为 @tt{f} 既是 @tt{(bool -> bool)} 也是 @tt{(int -> int)}。由于本节的推导器至
+多只能找出 @tt{f} 的一种类型，它将拒绝这段程序。
 
 更实际的例子是这样的程序
 
@@ -2088,29 +2099,30 @@ in letrec
 }|
 }
 
-这个表达式用了两次@tt{map}，一次产生@tt{int}列表，一次产生@tt{bool}列表。因此，
-两次使用它需要两个不同的类型。由于本节的推导器至多只能找出@tt{map}的一种类型，它
-会发现@tt{int}和@tt{bool}冲突，拒绝程序。
+这个表达式用了两次 @tt{map}，一次产生 @tt{int} 列表，一次产生 @tt{bool} 列表。因
+此，两次使用它需要两个不同的类型。由于本节的推导器至多只能找出 @tt{map} 的一种类
+型，它检测到 @tt{int} 和 @tt{bool} 冲突，拒绝程序。
 
-避免这个问题的一种方法是只允许@tt{let}引入多态，然后在类型检查时区分@tt{(let-exp
-@${var} @${e_1} @${e_2})}和@tt{(call-exp (proc-exp @${var} @${e_2}) @${e_1})}。
+避免这个问题的一种方法是只允许 @tt{let} 引入多态，然后在类型检查时区分
+@tt{(let-exp @${var} @${e_1} @${e_2})} 和 @tt{(call-exp (proc-exp @${var}
+@${e_2}) @${e_1})}。
 
-给推导器添加多态绑定，处理表达式@tt{(let-exp @${var} @${e_1} @${e_2})}时，把
-@${e_2}中自由出现的每个@${var}代换为@${e_1}。那么，在推导器看来，@tt{let}主体中
-有多个不同的@${e_1}，它们就可以有不同的类型，上述程序就可接受了。
+给推导器添加多态绑定，处理表达式 @tt{(let-exp @${var} @${e_1} @${e_2})} 时，把
+@${e_2} 中自由出现的每个 @${var} 代换为 @${e_1}。那么，在推导器看来，@tt{let} 主
+体中有多个不同的 @${e_1} 副本，它们可以有不同的类型，上述程序就能通过。
 
 }
 
 @exercise[#:level 3 #:tag "ex7.29"]{
 
-对@${e_2}中出现的每个@${e_1}，前一道练习指出的类型推导算法会进行多次分析。实现
-Milner的W算法，只需分析@${e_1}一次。
+前一道练习指出的类型推导算法会多次分析@${e_1}，每次对应 @${e_2} 中出现的一个
+@${e_1}。实现 Milner 的 W 算法，只需分析 @${e_1} 一次。
 
 }
 
 @exercise[#:level 3 #:tag "ex7.30"]{
 
-多态和副作用之间的相互作用很微妙。考虑下文开头的一段程序
+多态和副作用之间的相互作用很微妙。考虑以下文开头的一段程序
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2123,8 +2135,8 @@ in ...
 
  @item{完成这段程序，使之通过推导器的检查，但根据本章开头的定义，求值不安全。}
 
- @item{限制@tt{let}右边，不能有作用于存储器的效果，从而避免这种麻烦。这叫做@emph{值约束}
- (@emph{value restriction})。}
+ @item{限制 @tt{let} 声明的右边，不允许出现作用于存储器的效果，从而避免这一问题。
+ 这叫做@emph{值约束} (@emph{value restriction})。}
 
 ]
 
