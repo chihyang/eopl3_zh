@@ -12,6 +12,7 @@
 
 @tabular[#:sep @hspace[1]
 (list
+@list["Abstraction boundary" "抽象边界"]
 @list["Binary semaphore" "二元信号量"]
 @list["Bounce" "弹球，或不译"]
 @list["Call by name" "按名调用"]
@@ -47,6 +48,7 @@
 @list["Lazy evaluation" "懒求值"]
 @list["List" "列表"]
 @list["Memoization" "助记法"]
+@list["Module" "模块"]
 @list["Mutex exclusion" "互斥锁"]
 @list["Mutex" "互斥锁"]
 @list["Occurrence check" "验存"]
