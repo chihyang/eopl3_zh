@@ -1479,7 +1479,7 @@ in letrec
 处理词法地址的相同。我们给语法添加生成式：
 
 @nested[#:style small]{
-@envalign*{\mathit{Type} &::= @tt{%tvar-type} \mathit{Number} \\[-3pt]
+@envalign*{\mathit{Type} &::= @tt{%tvar-type} \ \mathit{Number} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{tvar-type (serial-number)}}}}
 
 我们把这些扩展后的类型称为@emph{类型表达式} (@emph{type expression})。类型表达式
@@ -1660,7 +1660,7 @@ in letrec
 
 @exercise[#:level 2 #:tag "ex7.20"]{
 
-修改合一器，不是对合一器的实参，而是只对类型变量调用 @tt{apply-subst-to-type}。
+修改合一器，不是对合一器的实参，而是只对类型变量调用 @tt{apply- subst-to-type}。
 
 }
 
