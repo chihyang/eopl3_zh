@@ -187,7 +187,12 @@
 ;;; margin-page, every call to this increments the internal counter
 (define (margin-page)
   (set! origin-page-number (+ origin-page-number 1))
-  (margin-note (elem #:style margin-page-number (number->string origin-page-number))))
+  (margin-note* (elem #:style margin-page-number (number->string origin-page-number))))
+
+;;; set page number to the specified value, used when the translation crosses
+;;; some pages of the original
+(define (set-margin-page page)
+  (set! origin-page-number page))
 
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
