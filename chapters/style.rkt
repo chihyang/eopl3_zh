@@ -16,6 +16,7 @@
          "../style/style-load-prefix.tex")))
 
 (define racket-block-offset 6)
+(define origin-page-number 0)
 
 ;;; for title format
 (define book-title-style (make-style #f (list 'toc 'no-index book-prefix-and-style)))
@@ -96,6 +97,9 @@
 
 (define htt
   (make-style "Shtt" (list (make-tex-addition "../style/htt.tex"))))
+
+(define margin-page-number
+  (make-style "MarginPage" (list (make-tex-addition "../style/margin-page.tex"))))
 
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
@@ -180,6 +184,11 @@
    c
    (exact-elem "\n\\end{cornerbox}")))
 
+;;; margin-page, every call to this increments the internal counter
+(define (margin-page)
+  (set! origin-page-number (+ origin-page-number 1))
+  (margin-note (elem #:style margin-page-number (number->string origin-page-number))))
+
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "frontmatter" '(exact-chars)) '())))
@@ -189,4 +198,5 @@
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
 (provide (except-out (all-defined-out)
-                     remove-leading-newlines))
+                     remove-leading-newlines
+                     origin-page-number))
