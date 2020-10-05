@@ -64,6 +64,9 @@
 (define eopl-example
   (make-style "EoplExample" (list (make-tex-addition "../style/example.tex"))))
 
+(define eopl-example-ref
+  (make-style "EoplExampleRef" (list (make-tex-addition "../style/example.tex"))))
+
 (define eopl-exercise
   (make-style "EoplExercise" (list (make-tex-addition "../style/exercise.tex"))))
 
@@ -117,6 +120,13 @@
 
 (define (exercise-ref tag)
   (elem #:style eopl-exercise-ref (countref tag)))
+
+(define (example #:tag [tag ""] . c)
+  (nested #:style eopl-example
+          (elemtag tag "") c))
+
+(define (example-ref tag)
+  (elem #:style eopl-example-ref (countref tag)))
 
 (define (eopl-caption tag . c)
   (nested #:style

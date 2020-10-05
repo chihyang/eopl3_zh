@@ -1,3 +1,5 @@
 \newcounter{EoplExample}[chapter]
 \renewcommand\theEoplExample{\thechapter.\arabic{EoplExample}}
-\newenvironment{EoplExample}{\setlength{\parskip}{1em}\refstepcounter{EoplExample}{\textbf{例~\theEoplExample}\hspace{1em}}}{}
+\newcommand\EoplExampleName{例}
+\newenvironment{EoplExample}{\setlength{\parskip}{1em}\refstepcounter{EoplExample}{\textbf{\EoplExampleName~\theEoplExample}\hspace{1em}}}{}
+\newcommand{\EoplExampleRef}[1]{\EoplExampleName~{#1}}
