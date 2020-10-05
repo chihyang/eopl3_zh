@@ -35,6 +35,7 @@
 @list["Effect" "效果、计算效果"]
 @list["Exception" "异常"]
 @list["Explicit reference" "显式引用"]
+@list["Expanded type" "展开类型"]
 @list["Flowchart program" "流程图程序"]
 @list["Form" "形式，在本书中，这一术语和 construct 意思相近"]
 @list["Formal parameter" "形参"]

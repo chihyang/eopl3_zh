@@ -82,7 +82,7 @@
 
 这里是 SIMPLE-MODULES 的简短例子。
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.1"]{
 @nested{
 @nested[#:style 'code-inset]{
 @nested[#:style small]{
@@ -139,7 +139,7 @@ in -(-(from m1 take a,
 我们的例子中，程序主体不在 @tt{from m1 take x} 的作用域内。如果我们写 @tt{-(from
 m1 take a, from m1 take x)}，程序就会类型异常。
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.2"]{
 程序
 
 @nested{
@@ -170,7 +170,7 @@ module m1
 @eopl-caption["fig-8.2"]{简单模块中的一些作用域}
 }
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.3"]{
 模块主体必须提供接口中声明的所有绑定。例如，
 
 @nested{
@@ -190,7 +190,7 @@ module m1
 
 类型异常，因为 @tt{m1} 的主体没有提供接口中公布的所有值。} }
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.4"]{
 为了让实现简单一点，我们的语言要求模块主体按照接口声明的顺序给出各值。因此
 
 @nested{
@@ -213,7 +213,7 @@ from m1 take u
 }
 }
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.5"]{
 在我们的语言中，模块具有 @tt{let*} 式的作用域（@exercise-ref{ex3.17}）。例如，
 
 @nested{
@@ -864,11 +864,12 @@ module m
 
 @section[#:style section-title-style-numbered #:tag "s8.2"]{声明类型的模块}
 
-至今为止，我们的接口只声明了普通变量及其类型。在下面这种模块语言OPAQUE-TYPES中，
+至今为止，我们的接口只声明了普通变量及其类型。在下面这种模块语言 OPAQUE-TYPES 中，
 我们还允许接口声明类型。例如，在定义
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module m1
  interface
@@ -880,37 +881,39 @@ module m1
 body
  ...
 }|
-}
+}}
 
-中，接口声明了类型@tt{t}，以及该类型值的一些操作@tt{zero}，@tt{succ}，@tt{pred}
-和@tt{is-zero}。如同@secref{s2.1}，这套接口可能与算数操作的实现相关。这里@tt{t}
-声明为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类型的
-值如何表示。所有的外部代码都知道，可以用@tt{from m1 take zero}、@tt{from m1 take
-succ}等过程处理@tt{from m1 take t}类型的值。这样，@tt{from m1 take t}就像原生类
-型@tt{int}和@tt{bool}一样。
+中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
+@tt{is-zero}。如同@secref{s2.1}，这套接口可能与算数操作的实现相关。这里的声明
+@tt{t} 为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类
+型的值如何表示。所有的外部代码都知道可以用 @tt{from m1 take zero} 和 @tt{from m1
+take succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 take t} 的
+表现就像 @tt{int} 和 @tt{bool} 之类的原生类型一样。
 
 }
 
 我们将介绍两种类型声明：@emph{透明} (@emph{transparent}) 类型和@emph{模糊}
-(@emph{opaque})类型。好的模块系统中，二者缺一不可。
+(@emph{opaque}) 类型。好的模块系统中，二者缺一不可。
 
 @subsection[#:style section-title-style-numbered #:tag "s8.2.1"]{例子}
 
-欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含一对整数的数据结构表示点的横
-坐标和纵坐标。她使用的语言具有@exercise-ref{ex7.8} 那样的类型，所以她的模块@tt{Alices-points}
-接口具有如下声明
+欲知其用途，再想想我们的几位开发者。爱丽丝一直用包含整数对的数据结构表示点的横纵
+坐标。她使用的语言具有@exercise-ref{ex7.8} 那样的类型，所以她的模块
+@tt{Alices-points} 接口具有如下声明：
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 initial-point : (int -> pairof int * int)
 increment-x : (pairof int * int -> pairof int * int)
 }|
-}
+}}
 
-鲍伯和查理对此直发牢骚。他们不想一遍又一遍地写@tt{pairof int * int}。因此，爱丽
+鲍伯和查理对此直发牢骚。他们不想一遍又一遍地写 @tt{pairof int * int}。因此，爱丽
 丝用透明类型声明重写她的接口。这样，她可以写
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module Alices-points
  interface
@@ -920,58 +923,61 @@ module Alices-points
    get-x : (point -> int)
    ...]
 }|
-}
+}}
 
-这减轻了她的工作，因为她写得更少；这也简化了她合作者的工作，因为在他们的实现中可
-以写
+这减轻了她的工作，因为她写得更少；这也减轻了她合作者的工作，因为他们在实现中可以
+写这样的定义：
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 [transparent point = from Alices-points take point
  foo = proc (p1 : point)
         proc (p2 : point) ...
  ...]
 }|
-}
+}}
 
-在某些项目中，这样做很不错。不过，爱丽丝的项目中，正好要用点表示固定形状金属导轨
-上的点，所以横纵坐标不是相互独立的。@note{不妨将金属导轨视为有长度无宽度的圆形轨
-迹，以圆心为坐标原点。要保证横坐标变化时，得到的点仍在圆上，则纵坐标也要相应改变。
-反之亦然。——@emph{译注}}爱丽丝实现@tt{increment-x}时，要仔细更新纵坐标，以匹配横
-坐标的改变。但是鲍伯不知道这点，所以他的过程写作
+对某些项目中，这很不错。不过，爱丽丝的项目正好要表示固定形状金属导轨上的点，所以
+横纵坐标不是相互独立的。@note{不妨将金属导轨视为有长度无宽度的圆形轨迹，以圆心为
+坐标原点。要保证横坐标变化时，得到的点仍在圆上，则纵坐标也要相应改变。反之亦
+然。——@emph{译注}}爱丽丝实现 @tt{increment-x} 时，要小心翼翼地更新纵坐标，以匹配
+横坐标的改变。但是鲍伯不知道这点，所以他的过程写作
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 increment-y = proc (p : point)
                unpair x y = p
                in newpair(x, -(y,-1))
 }|
-}
+}}
 
-由于鲍伯的代码修改纵坐标时不随之修改横坐标。爱丽丝的代码就没法正常工作了。
+由于鲍伯的代码修改纵坐标时不随之修改横坐标，爱丽丝的代码就没法正常工作了。
 
 }
 
 更糟糕的是，如果爱丽丝打算修改点的表示，把纵坐标作为第一部分呢？她可以按照新的表
-示修改她的代码。但是现在，鲍伯的代码就坏掉了，因为过程@tt{increment-y}修改了序对
-中的错误部分。
+示修改她的代码。但是鲍伯的代码就坏掉了，因为过程 @tt{increment-y} 修改了序对中的
+错误部分。
 
-爱丽丝可以把@tt{point}声明为@emph{模糊}数据类型来解决她的问题。她把接口重写为
+爱丽丝可以把 @tt{point} 声明为@emph{模糊}数据类型来解决她的问题。她把接口重写为
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 opaque point
 initial-point : (int -> point)
 increment-x : (point -> point)
 get-x : (point -> int)
 }|
-}
+}}
 
-现在鲍伯用过程@tt{initial-point}创建新的点，可以用@tt{from Alices-points take
-get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽丝接口中过程
-外，他无法用其他过程处理点。尤其是，他写不出过程@tt{increment-y}，因为它用了爱丽
-丝接口之外的过程处理点。
+现在鲍伯用过程 @tt{initial-point} 创建新的点，而且他可以用 @tt{from
+Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点，但
+是除了爱丽丝接口中的过程外，他无法用其他过程处理点。尤其是，他写不出过程
+@tt{increment-y}，因为它用了爱丽丝接口之外的过程处理点。
 
 在本节的剩余部分中，我们探究这些组件的更多例子。
 
@@ -980,11 +986,12 @@ get-x}和@tt{from Alices-points take increment-x}处理点，但是除了爱丽�
 我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型
 或@emph{类型缩写} (@emph{type abbreviation})。
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.6"]{
 程序
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module m1
  interface
@@ -1001,11 +1008,10 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? -(x,0))
 }|
-}
+}}
 
-类型为@tt{(int -> bool)}。
-}
-}
+类型为 @tt{(int -> bool)}。
+}}
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -1018,14 +1024,13 @@ module m1
 @eopl-caption["fig-8.8"]{模块类型声明的作用域}
 }
 
-在接口的剩余部分中，声明@tt{transparent t = int}将@tt{t}绑定到类型@tt{int}，所以
-我们可以写@tt{z : t}。更重要的是，在程序的剩余部分中，声明也将@tt{from m1 take
-t}绑定到@tt{int}。我们称之为@emph{受限类型} (@emph{qualified type})。这里，我们
-用它声明了绑定到变量@tt{z}的类型。声明的作用域是接口的剩余部分，以及模块定义之
-后，程序的剩余部分。
+在接口的剩余部分中，声明 @tt{transparent t = int} 将 @tt{t} 绑定到类型 @tt{int}，
+所以我们可以写 @tt{z : t}。更重要的是，在程序的剩余部分中，声明也将 @tt{from m1
+take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我们用它声明了绑定到变
+量 @tt{z} 的类型。声明的作用域是接口的剩余部分，以及模块定义之后程序的剩余部分。
 
-模块主体中的定义@tt{type t = int}在主体的剩余部分中，将@tt{t}绑定到@tt{int}，所
-以我们可以写@tt{s = proc (x : t) ...}。像之前那样，定义的作用域是主体的剩余部
+模块主体中的定义 @tt{type t = int} 在主体的剩余部分中，将 @tt{t} 绑定到 @tt{int}，
+所以我们可以写 @tt{s = proc (x : t) ...}。像之前那样，定义的作用域是主体的剩余部
 分（见@figure-ref{fig-8.8}）。
 
 当然，我们可以给类型起任意名字，也可以声明多个类型。类型声明可以出现在接口中任意
@@ -1033,14 +1038,15 @@ t}绑定到@tt{int}。我们称之为@emph{受限类型} (@emph{qualified type})
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
-模块还可以用@tt{opaque-type}声明输出@emph{模糊}类型。模糊类型有时又称作@emph{抽
-象类型} (@emph{abstract type})。
+模块还可以用 @tt{opaque-type} 声明输出@emph{模糊}类型。模糊类型有时又
+称作@emph{抽象类型} (@emph{abstract type})。
 
-@nested[#:style eopl-example]{
-我们把例8.6程序中的透明类型替换为模糊类型。得出的程序是
+@example[#:tag "eg-8.7"]{我们把@example-ref{eg-8.6} 程序中的透明类型替换为模糊
+类型。得出的程序是
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module m1
  interface
@@ -1057,27 +1063,30 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? -(x,0))
 }|
-}
+}}
 }
 }
 
-接口中的声明@tt{opaque t}用@tt{t}作为一种新的模糊类型名字。模糊类型就像@tt{int}
-或@tt{bool}之类的原生类型一样。名为@tt{t}的类型在接口的剩余部分中绑定到这种模糊
-类型，而受限类型@tt{from m1 take t}在程序的剩余部分中绑定到同一模糊类型。程序的
-剩余部分都知道@tt{from m1 take z}绑定到一个值，其类型为@tt{from m1 take t}；
-@tt{from m1 take s}和@tt{from m1 take is-z?}绑定到过程，用来处理这种类型的值。这
-就是抽象边界。类型检查器确保表达式的类型为@tt{from m1 take t}时，求值是安全的，
-所以表达式的值只能通过这些操作符产生，如@pageref{suitable-env}所述。
+接口中的声明 @tt{opaque t} 把 @tt{t} 作为一种新的模糊类型名字。模糊类型的行为就
+像 @tt{int} 或 @tt{bool} 之类的原生类型。名为 @tt{t} 的类型在接口的剩余部分中绑
+定到这种模糊类型，而受限类型 @tt{from m1 take t} 在程序的剩余部分中绑定到同一模
+糊类型。程序的剩余部分都知道 @tt{from m1 take z} 绑定到一个值，其类型为 @tt{from
+m1 take t}；@tt{from m1 take s} 和 @tt{from m1 take is-z?} 绑定到过程，用来处理
+这种类型的值。这就是抽象边界。类型检查器保障表达式的类型为 @tt{from m1 take t}
+时，求值是安全的，所以表达式的值只能通过这些操作符生成，
+如@pageref{suitable-env}所述。
 
-与之对应，定义@tt{type t = int}在模块主体内部，将@tt{t}作为@tt{int}的名字，但是，
-由于程序的剩余部分是从模块接口得出绑定的，所以对此一无所知。
+与之对应，定义 @tt{type t = int} 在模块主体内部将 @tt{t} 作为 @tt{int} 的名字，
+但是，由于程序的剩余部分从模块接口获得绑定，所以对此一无所知。
 
-所以@tt{-(x,0)}类型异常，因为主程序不知道类型@tt{from m1 take t}实为类型@tt{int}。
+所以 @tt{-(x,0)} 类型异常，因为主程序不知道类型 @tt{from m1 take t} 为的值就是类
+型为 @tt{int} 的值。
 
 我们改变程序，删掉算数操作，得
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module m1
  interface
@@ -1094,20 +1103,21 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? x)
 }|
-}
+}}
 
-现在，我们的程序类型正常，类型为@tt{(from m1 take t -> bool)}。
+现在，我们的程序类型正常，类型为 @tt{(from m1 take t -> bool)}。
 }
 
 通过强制抽象边界，类型检查器确保程序只能通过接口提供的过程处理接口提供的值。
 如@secref{da}所述，这给我们提供了机制来分离数据类型的用户和实现。接下来，我们给
 出这一技术的几个例子。
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.8"]{
 如果程序使用了模块定义
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module colors
  interface
@@ -1121,18 +1131,18 @@ module colors
    green = 1
    is-red? = proc (c : color) zero?(c)]
 }|
-}
+}}
 
-程序没法知道@tt{from colors take color}实为@tt{int}，也不知道@tt{from colors
-take green}实为1（也许有个例外：返回颜色作为最终答案，然后打印出来）。
-}
-}
+程序没法知道 @tt{from colors take color} 实际为 @tt{int}，也不知道 @tt{from
+colors take green} 实际为 1（也许有一个例外：返回颜色作为最终答案，然后打印出
+来）。}}
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.9"]{
 程序
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module ints1
  interface
@@ -1152,16 +1162,14 @@ let z = from ints1 take zero
 in let s = from ints1 take succ
    in (s (s z))
 }|
-}
+}}
 
-类型为@tt{from ints1 take t}，值为10。但我们只能通过@tt{ints1}输出的过程处理这个
-值。这个模块用表达值@${5*k}表示整数@${k}。用 @secref{s2.1}的表示法，是@${\lceil k
-\rceil = 5 * k}。
-}
-}
+类型为 @tt{from ints1 take t}，值为 10。但我们只能通过 @tt{ints1} 输出的过程处理
+这个值。这个模块用表达值 @${5*k} 表示整数 @${k}。用@secref{s2.1}的表示法，写作
+@${\lceil k \rceil = 5 * k}。}}
 
-@nested[#:style eopl-example]{
-在本模块中，@${\lceil k \rceil = -3 * k}。
+@example[#:tag "eg-8.10"]{
+在这个模块中，@${\lceil k \rceil = -3 * k}。
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1186,17 +1194,18 @@ in let s = from ints2 take succ
 }|
 }
 
-类型为@tt{from ints2 take t}，值为-6。
+类型为 @tt{from ints2 take t}，值为 -6。
 
 }
 }
 
-@nested[#:style eopl-example]{在前面的例子中，我们不能直接处理值，但我们能用模块
-输出的过程处理它们。像@secref{da}那样，我们可以结合这些过程做有用的工作。这里，
-我们用它们写出过程@tt{to-int}，把模块中的值转回类型@tt{int}的值。
+@example[#:tag "eg-8.11"]{在前面的例子中，我们不能直接处理值，但我们能用模块输出
+的过程处理它们。像@secref{da}那样，我们可以结合这些过程做有用的工作。这里，我们
+将它们结合起来，写出过程 @tt{to-int}，把模块中的值转回 @tt{int} 类型。
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module ints1 |@emph{...同前...}
 
@@ -1210,18 +1219,19 @@ in letrec int to-int (x : from ints1 take t) =
               else -((to-int (p x)), -1)
 in (to-int (s (s z)))
 }|
+}}
+
+类型为 @tt{int}，值为 2。
+
+}
 }
 
-类型为@tt{int}，值为2。
-
-}
-}
-
-@nested[#:style eopl-example]{
-这例用到的技术与@tt{ints2}中算数操作的实现相同。
+@example[#:tag "eg-8.12"]{
+这里用到的技术与 @tt{ints2} 中算数操作的实现相同。
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module ints2 |@emph{...同前...}
 
@@ -1235,21 +1245,22 @@ in letrec int to-int (x : from ints2 take t) =
               else -((to-int (p x)), -1)
 in (to-int (s (s z)))
 }|
+}}
+
+类型同样为 @tt{int}，值为 2。
+
+}
 }
 
-同样类型为@tt{int}，值为2。
+在@secref{s8.3}中，我们展示如何将两个抽象出来。
 
-}
-}
-
-在@secref{s8.3}中，我们展示如何抽象这两个例子中的模式。
-
-@nested[#:style eopl-example]{
-在下面的程序中，我们设计一个模块来封装布尔类型。布尔值用整数值表示，但是像例8.8
-那样，程序的剩余部分对此一无所知。
+@example[#:tag "eg-8.13"]{
+在下面的程序中，我们设计一个模块来封装布尔类型。布尔值用整数值表示，
+但是像@example-ref{eg-8.8} 那样，程序的剩余部分对此一无所知。
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module mybool
  interface
@@ -1275,28 +1286,29 @@ in let false = from mybool take false
    in let and = from mybool take and
       in ((and true) false)
 }|
-}
+}}
 
-类型为@tt{from mybool take t}，值为13。
+类型为 @tt{from mybool take t}，值为 13。
 
 }
 }
 
 @exercise[#:level 1 #:tag "ex8.12"]{
 
-在例8.13中，@tt{and}和@tt{not}的定义可以从模块内部移到外面吗？@tt{to-bool}呢？
+在@example-ref{eg-8.13} 中，@tt{and} 和 @tt{not} 的定义可以从模块内部移到外面
+吗？@tt{to-bool} 呢？
 
 }
 
 @exercise[#:level 1 #:tag "ex8.13"]{
 
-写一个模块，用@${5*k+3}表示整数@${k}，实现算数操作。
+写一个模块，用 @${5*k+3} 表示整数 @${k}，实现算数操作。
 
 }
 
 @exercise[#:level 1 #:tag "ex8.14"]{
 
-下面是@tt{mybool}（例8.13）的另一种定义：
+下面是 @tt{mybool}（@example-ref{eg-8.13}）的另一种定义：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1322,18 +1334,18 @@ module mybool
 }|
 }
 
-有没有程序类型为@tt{int}，用@tt{mybool}原来的定义返回一个值，用新的定义返回另一
-个值？
+有没有程序类型为 @tt{int}，用 @tt{mybool} 原来的定义返回一个值，用新的定义返回另
+一个值？
 
 }
 
 @exercise[#:level 2 #:tag "ex8.15"]{
 
-写一个模块，实现抽象表。你实现的表应像环境那样，但不是把符号绑定到Scheme值，而是
-把整数值绑定到整数值。接口提供一个值，表示空表；两个过程@tt{add-to-table}和
-@tt{lookup-in-table}类似@tt{extend-env}和@tt{apply-env}。由于我们的语言只有单参
-数过程，我们用咖喱化（@exercise-ref{ex3.20}）实现等效的多参数过程。你可以把任何查询都返回0的
-表作为空表。这是该模块的一个例子：
+写一个模块，实现抽象表。你实现的表应类似环境，但不是把符号绑定到 Scheme 值，而是
+把整数值绑定到整数值。接口提供一个值，表示空表；两个过程 @tt{add-to-table} 和
+@tt{lookup-in-table} 类似 @tt{extend-env} 和 @tt{apply-env}。由于我们的语言只有
+单参数过程，我们用咖喱化（@exercise-ref{ex3.20}）实现等效的多参数过程。你可以用
+查询任何值都返回 0 的表模拟空表。这是该模块的一个例子：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1359,38 +1371,43 @@ in let add-binding = from tables take add-to-table
 }|
 }
 
-这个程序类型应为@tt{int}。表@tt{table1}把4绑定到400，把3绑定到300，所以程序的值
-应为100。
+这个程序类型应为 @tt{int}。表 @tt{table1} 把 4 绑定到 400，把 3 绑定到 300，所以
+程序的值应为 100。
 
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s8.2.2"]{实现}
 
-现在我们来扩展系统，实现透明类型和模糊类型声明，及受限类型的使用。
+现在我们来扩展系统，实现透明类型和模糊类型声明，及受限类型的引用。
 
 @subsubsection[#:style section-title-style-unumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
 
-我们给两种新类型添加语法：有名类型（如@tt{t}）和受限类型（如@tt{from m1 take t}）。
+我们给两种新类型添加语法：有名类型（如 @tt{t}）和受限类型（如 @tt{from m1 take
+t}）。
 
+@nested[#:style small]{
 @envalign*{\mathit{Type} &::= \mathit{Identifier} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{named-type (name)}} \\[5pt]
            \mathit{Type} &::= @tt{from @m{\mathit{Identifier}} take @m{\mathit{Identifier}}} \\[-3pt]
-       &\mathrel{\phantom{::=}} \fbox{@tt{qualified-type (m-name t-name)}}}
+       &\mathrel{\phantom{::=}} \fbox{@tt{qualified-type (m-name t-name)}}}}
 
 我们为模糊类型和透明类型新增两种声明。
 
+@nested[#:style small]{
 @envalign*{\mathit{Decl} &::= @tt{opaque @m{\mathit{Identifier}}} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{opaque-type-decl (t-name)}} \\[5pt]
            \mathit{Decl} &::= @tt{transparent @m{\mathit{Identifier}} = @m{\mathit{Type}}} \\[-3pt]
-       &\mathrel{\phantom{::=}} \fbox{@tt{transparent-type-decl (t-name ty)}}}
+       &\mathrel{\phantom{::=}} \fbox{@tt{transparent-type-decl (t-name ty)}}}}
 
 我们还要新增一种定义：类型定义，用来定义模糊类型和透明类型。
 
+@nested[#:style small]{
 @envalign*{\mathit{Defn} &::= @tt{type @m{\mathit{Identifier}} = @m{\mathit{Type}}} \\[-3pt]
-       &\mathrel{\phantom{::=}} \fbox{@tt{type-defn (name ty)}}}
+       &\mathrel{\phantom{::=}} \fbox{@tt{type-defn (name ty)}}}}
 
 解释器不需要查看类型和声明，所以解释器的唯一改动是忽略类型定义。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{defns-to-env}} : @${\mathit{Listof(Defn)} \times \mathit{Env} \to \mathit{Env}}}
 (define defns-to-env
@@ -1401,26 +1418,29 @@ in let add-binding = from tables take add-to-table
         (val-defn (var exp) ...as before...)
         (type-defn (type-name type)
           (defns-to-env (cdr defns) env))))))
-]
+]}
 
 @subsubsection[#:style section-title-style-unumbered #:tag "the-checker"]{检查器}
 
 检查器的改动就多多了，因为所有关于类型的操作都要扩展，以便处理新的类型。
 
-首先，我们介绍处理模糊类型和透明类型的系统性方法。模糊类型就像@tt{int}或
-@tt{bool}之类的原生类型一样。而透明类型名副其实，是透明的：它们的行为与定义相同。
-所以每个类型都等价于下列语法：
+首先，我们介绍一种系统性的方法来处理模糊类型和透明类型。模糊类型就像 @tt{int} 或
+@tt{bool} 之类的原生类型一样。而透明类型名副其实，是透明的：它们的行为与定义相同。
+所以每个类型都等价于下列语法描述的：
 
 @nested{
-@$${\mathit{Type} ::= @tt{int} | @tt{bool} | @tt{from @${m} take @${t}} | @tt{(@${\mathit{Type}} -> @${\mathit{Type}})}}
+@nested[#:style small]{
+@$${\mathit{Type} ::= @tt{int}\ |\ @tt{bool}\ |\ @tt{from @${m} take @${t}}\ |\ @tt{(@${\mathit{Type}} -> @${\mathit{Type}})}}}
 
-其中，@${t}为@${m}中的模糊类型声明。我们称这种形式的类型为@emph{展开类型}
-(@emph{expanded type})。}
+其中，@${t} 为 @${m} 中的模糊类型声明。我们称这种形式的类型为@emph{展开类型}
+(@emph{expanded type})。
+}
 
 接下来我们扩展类型环境，处理新类型。我们的类型环境将每个有名类型或受限类型绑定到
 一个展开类型。新的类型环境定义为
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (define-datatype type-environment type-environment?
   (empty-tenv)
@@ -1430,17 +1450,18 @@ in let add-binding = from tables take add-to-table
     (t-name symbol?)
     (type type?)
     (saved-tenv type-environment?)))
-]
+]}
 
-它满足条件，@tt{type}总是一个展开类型。像@pageref{invariant}讨论的，这个条件是一
-@emph{不变式}。
+它满足条件：@tt{type} 总是一个展开类型。像@pageref{invariant}讨论的，这个条件是
+一@emph{不变式}。
 
 }
 
-接着我们写函数@tt{expand-type}，它取一类型和一类型环境，用类型环境中绑定的类型扩
-展类型参数。根据结果类型总是展开这一不变式，它在类型环境中查询有名类型和受限类型，
-对@tt{proc}类型，它递归处理参数和结果类型。
+接着我们写出函数 @tt{expand-type}，它取一个类型和一个类型环境，用后者中的绑定展
+开前者。根据不变式@exact-elem{“}结果类型已展开@exact-elem{”}，它在类型环境中查
+询有名类型和受限类型，对@tt{proc} 类型，它递归处理参数和结果类型。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{expand-type}} : @${\mathit{Type} \times \mathit{Tenv} \to \mathit{ExpandedType}}}
 (define expand-type
@@ -1456,41 +1477,44 @@ in let add-binding = from tables take add-to-table
         (lookup-type-name-in-tenv tenv name))
       (qualified-type (m-name t-name)
         (lookup-qualified-type-in-tenv m-name t-name tenv)))))
-]
+]}
 
-为了维持这一不变式，我们必须保证不论何时扩展类型环境，都要调用@tt{expand-type}。
+为了维持这一不变式，我们必须保证不论何时扩展类型环境，都要调用 @tt{expand-type}。
 这种地方有三处：
 
 @itemlist[
 
- @item{在检查器中的@tt{type-of}内；}
+ @item{在检查器中的 @tt{type-of} 内；}
 
- @item{用@tt{defns-to-decls}处理类型定义列表之处；}
+ @item{用 @tt{defns-to-decls} 处理类型定义列表之处；}
 
- @item{在@tt{add-module-defns-to-tenv}中，向类型环境添加模块之处。}
+ @item{在 @tt{add-module-defns-to-tenv} 中，向类型环境添加模块之处。}
 
 ]
 
 在检查器中，我们把形如
 
 @nested{
-@racketblock[(extend-tenv sym ty tenv)]
+@nested[#:style small]{
+@racketblock[(extend-tenv sym ty tenv)]}
 
 的调用替换为
 
-@racketblock[(extend-tenv var (expand-type ty tenv) tenv)]
+@nested[#:style small]{
+@racketblock[(extend-tenv var (expand-type ty tenv) tenv)]}
 
 }
 
-在@tt{defns-to-decls}中，当我们遇到类型定义时，我们扩展定义右边，然后将其加入类
-型环境中。@tt{type-of}返回的类型一定是展开的，所以我们不需要再次扩展它。当我们把
-由于在模块主体中，所有类型绑定都是透明的，所以我们把类型定义转换为透明类型声明。
-在@tt{add-module-defns-to-tenv}中，我们调用@tt{extend-tenv-with-module}，将接口
-加入类型环境。这里，我们需要扩展接口，确保它包含的所有类型都已展开。要完成这一点，
-我们修改@tt{add-module-defns-to-tenv}，调用@tt{expand-iface}。见@figure-ref{fig-8.9}。
+在 @tt{defns-to-decls} 中，当我们遇到类型定义时，我们展开右边的定义，然后将其加
+入类型环境中。@tt{type-of} 返回的类型一定是展开的，所以我们不需要再次展开它。由
+于在模块主体中，所有类型绑定都是透明的，所以我们把类型定义转换为透明类型声明。在
+@tt{add-module-defns-to-tenv} 中，我们调用 @tt{extend-tenv-with-module}，将接口
+添加到类型环境中。这里，我们需要展开接口，以确保它包含的所有类型都已展开。要完成
+这一点，我们修改 @tt{add-module-defns-to-tenv}，调用 @tt{expand-iface}。
+见@figure-ref{fig-8.9}。
 
-过程@tt{expand-iface}（@figure-ref{fig-8.10}）调用@tt{expand-decls}。我们提出这些过程，为
-@secref{s8.3}做准备。
+过程 @tt{expand-iface}（@figure-ref{fig-8.10}）调用 @tt{expand-decls}。我们提取
+出这些过程，为@secref{s8.3}做准备。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1534,16 +1558,17 @@ in let add-binding = from tables take add-to-table
                 m-name expected-iface actual-iface))))))))
 ]
 
-@eopl-caption["fig-8.9"]{OPAQUE-TYPES的检查器，第1部分}
+@eopl-caption["fig-8.9"]{OPAQUE-TYPES 的检查器，第 1 部分}
 }
 
-过程@tt{expand-decls}遍历声明的集合，创建新的类型环境，其中的每个类型和变量名都
-绑定到一个展开类型。麻烦之处是声明遵循@tt{let*}式作用域：集合中的每个声明的作用
-域包含它之后的所有声明。
+过程 @tt{expand-decls} 遍历声明集合，创建新的类型环境，其中的每个类型和变量名都
+绑定到一个展开类型。麻烦之处是声明遵循 @tt{let*} 式作用域：集合中的每个声明的作
+用域包含它之后的所有声明。
 
-要理解这些，考虑模块定义
+要明白这意味着什么，考虑模块定义
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 module m1
  interface
@@ -1556,11 +1581,12 @@ module m1
  body
   [...]
 }|
-}
+}}
 
-要满足不变式，类型环境中的@tt{m1}应绑定到包含如下声明的借口
+要满足不变式，类型环境中的 @tt{m1} 应绑定到包含如下声明的接口
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 [transparent t = from m1 take t
  transparent u = int
@@ -1568,27 +1594,28 @@ module m1
  f : (from m1 take t -> int)
  ...]
 }|
-}
+}}
 
-只要我们这样做，不论何时我们从类型环境中查询类型时，得到的都是期望中的展开类型。
+只要我们这样做，不论何时我们从类型环境中查询类型时，得到的都是期望的展开类型。
 
-在A处，紧随声明@tt{f}之后，类型环境应绑定到
+在 A 处，紧随声明 @tt{f} 之后，类型环境应绑定到
 
+@nested[#:style small]{
 @nested[#:style 'code-inset]{
 @tabular[#:sep @hspace[1]
          (list (list @tt{t}  @elem{绑定到} @tt{from m1 take t})
                (list @tt{u}  @elem{绑定到} @tt{int})
                (list @tt{uu} @elem{绑定到} @tt{(from m1 take t -> int)}))]
-}
+}}
 
-我们把A处即类似位置之上的类型环境称为@emph{内部}类型环境。它作为参数传给
+我们把类似上面 A 处的类型环境称为@emph{内部}类型环境。它作为参数传给
 @tt{expand-decls}。
 
-现在我们可以写出@tt{expand-decls}。像@tt{defns-to-decls}，这个过程只创建透明类型，
-因为它的用途就是创建一种查询受限类型的数据结构。
+现在我们可以写出 @tt{expand-decls}。像 @tt{defns-to-decls}，这个过程只创建透明声
+明，因为它的用途就是创建查询受限类型所用的数据结构。
 
-最后，我们修改@tt{<:-decls}，处理两种新声明。我们必须处理声明集合内部的作用域
-关系。例如，如果我们比较
+最后，我们修改 @tt{<:-decls}，处理两种新声明。我们必须处理声明集合内部的作用域关
+系。例如，如果我们比较
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1634,64 +1661,68 @@ module m1
                 m-name (cdr decls) internal-tenv))))))))
 ]
 
-@eopl-caption["fig-8.10"]{OPAQUE-TYPES的检查器，第2部分}
+@eopl-caption["fig-8.10"]{OPAQUE-TYPES 的检查器，第 2 部分}
 }
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 [transparent t = int
 x : bool                <:    [y : int]
 y : t]
 }|
+}}
+
+处理声明 @tt{y} 时，我们需要知道 @tt{t} 指代 @tt{int} 类型。所以，当我们递归向下
+处理声明列表时，我们需要随之扩展类型环境，就像在 @tt{expand-decls} 中生成
+@tt{internal-tenv} 一样。我们调用 @tt{extend-tenv-with-decl} 处理这些，它取一声
+明，根据类型环境将其展开为适当的类型（@figure-ref{fig-8.11}）。
+
 }
 
-我们处理到声明@tt{y}时，我们得知道@tt{t}指代@tt{int}类型。所以，当我们递归向下，
-处理声明列表时，我们需要随之扩展类型环境，就像在@tt{expand-decls}中生成
-@tt{internal-tenv}一样。我们调用@tt{extend-tenv-with-decl}处理这些，它取一声明，
-根据类型环境将其展开为适当的类型（@figure-ref{fig-8.11}）。
-
-}
-
-展开时，我们总使用@tt{decls1}。欲知其原因，考虑比较
+在展开过程中，我们总是用 @tt{decls1}。欲知其原因，考虑比较
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 [transparent t = int           [opaque t
 transparent u = (t -> t)  <:    transparent u = (t -> int)
 f : (t -> u)]                   f : (t -> (int -> int))]
 }|
-}
+}}
 
-这一比较应该通过，因为模块主体提供左侧的绑定时，也是右侧接口的正确实现。
+这一比较应该通过，因为当模块主体提供左侧的绑定时，也是右侧接口的正确实现。
 
-比较类型@tt{u}的两个定义时，我们得知道类型@tt{t}实为@tt{int}。像上面第一个例子中
-的声明@tt{t}所展示的，即使左边的声明在右边没出现，同样的技巧也适用。我们调用
-@tt{expand-type}维持不变式，展开类型环境中的所有类型。@tt{extend-tenv-with-decl}
-最后一句中选什么模块名无关紧要，因为受限类型支持的唯一操作是@tt{equal?}。所以用
-@tt{fresh-module-name}足以保证这一受限类型是新生成的。
+比较类型 @tt{u} 的两个定义时，我们得知道类型 @tt{t} 实际上是 @tt{int}。即使左边
+的声明没有出现在右边，同样的技巧也适用，就像上面第一个例子中的声明 @tt{t} 所展示
+的。我们调用 @tt{expand-type} 来维持不变式@exact-elem{“}类型环境中的所有类型均
+已展开@exact-elem{”}。@tt{extend-tenv-with-decl} 最后一句中选什么模块名无关紧要，
+因为受限类型支持的唯一操作是 @tt{equal?}。所以用 @tt{fresh-module-name} 足以保证
+这一受限类型是新生成的。
 
 现在来处理关键问题：如何比较声明？仅当二者使用相同的名字（变量或类型）时，声明才
-能匹配。如果一对声明名字相同，有四种匹配方式：
+能匹配。如果一对声明同名，有四种匹配方式：
 
 @itemlist[
 
- @item{二者均为值声明，类型匹配。}
+ @item{二者均为值声明，且类型匹配。}
 
  @item{二者均为模糊类型声明。}
 
- @item{二者均为透明类型声明，定义匹配。}
+ @item{二者均为透明类型声明，且定义匹配。}
 
- @item{@tt{decl1}为透明类型声明，@tt{decl2}为模糊类型声明。例如，假设有个模块声
- 明了@tt{opaque t}，主体中的定义为@tt{type t = int}。应当接受这种做法。过程
- @tt{defns-to-decls}将定义@tt{type t = int}转换为透明类型声明，所以
- @tt{add-module-defns-to-tenv}中的条件
+ @item{@tt{decl1} 为透明类型声明，@tt{decl2} 为模糊类型声明。例如，假设有个模块
+ 的接口声明了 @tt{opaque t}，主体中的定义为 @tt{type t = int}，应当接受这种做法。
+ 过程 @tt{defns-to-decls} 将定义 @tt{type t = int} 转换为透明类型声明，所以
+ @tt{add-module-defns-to-tenv} 中的条件
 
-@nested[#:style 'code-inset]{
-@verbatim|{
-actual-iface <: expected-iface
-}|
-}
+ @nested[#:style 'code-inset]{
+ @nested[#:style small]{
+ @verbatim|{
+ actual-iface <: expected-iface
+ }|
+ }}
 
  需要检查
 
@@ -1699,14 +1730,14 @@ actual-iface <: expected-iface
 
  是否成立。
 
- 要接受这一模块，该条件应返回真。
+ 由于这一模块应被接受，该项测试应返回真。
 
- 这就是说，类型已知的对象总能作为类型未知的对象，反之不然。例如，
+ 这告诉我们，类型已知的对象总能作为类型未知的对象。反之则不然。例如，
 
  @$${@tt{(opaque @${t})} <: @tt{(transparent @${t} = int)}}
 
- 不成立，因为值的类型为模糊类型时，其实际类型可能不是@tt{int}，而且满足
- @tt{opaque t}的模块可能不满足@tt{transparent t = int}。}
+ 应为假，因为模糊类型值的实际类型可能不是 @tt{int}，而且满足 @tt{opaque t} 的模
+ 块可能无法满足 @tt{transparent t = int}。}
 
 ]
 
@@ -1751,11 +1782,11 @@ actual-iface <: expected-iface
           tenv)))))
 ]
 
-@eopl-caption["fig-8.11"]{OPAQUE-TYPES的检查器，第3部分}
+@eopl-caption["fig-8.11"]{OPAQUE-TYPES 的检查器，第 3 部分}
 }
 
-这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?}的定义扩展其类型，所以，在上面那
-样的例子
+这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?} 的定义扩展其类
+型，所以，在上面的例子
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1764,28 +1795,28 @@ actual-iface <: expected-iface
 }|
 }
 
-中，左边的@tt{t}展开为@tt{int}，匹配成功。
+中，左边的 @tt{t} 展开为 @tt{int}，匹配成功。
 }
 
 @exercise[#:level 1 #:tag "ex8.16"]{
 
-用@exercise-ref{ex7.24} 中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，用多参数过程代替返回过程的过
-程。
+用@exercise-ref{ex7.24} 中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，
+用多参数过程代替返回过程的过程。
 
 }
 
 @exercise[#:level 2 #:tag "ex8.17"]{
 
-仿照@exercise-ref{ex8.8}，允许模块以不同于接口声明的顺序产生值。但是记住，定义必须遵守定界规
-则，尤其是类型定义。
+仿照@exercise-ref{ex8.8}，允许模块以不同于接口声明的顺序产生值。但是记住，定义——
+尤其是类型的定义——必须遵守定界规则。
 
 }
 
 @exercise[#:level 2 #:tag "ex8.18"]{
 
-我们代码依赖的不变式是，类型环境中的每个类型都已展开。我们在代码中多次调用
-@tt{expand-type}来维持这一不变式。这就很容易因忘记调用@tt{expand-type}而破坏系统。
-重构代码，减少@tt{expand-type}的调用，以便更稳定地维持不变式。
+我们代码依赖的不变式是：类型环境中的所有类型均已展开。我们在代码中多次调用
+@tt{expand-type} 来维持这一不变式。这就很容易因忘记调用 @tt{expand-type} 而破坏
+系统。重构代码，减少 @tt{expand-type} 的调用，以便更稳定地维持不变式。
 
 }
 
@@ -1822,7 +1853,7 @@ actual-iface <: expected-iface
       (expand-type ty2 tenv))))
 ]
 
-@eopl-caption["fig-8.12"]{OPAQUE-TYPES的检查器，第4部分}
+@eopl-caption["fig-8.12"]{OPAQUE-TYPES 的检查器，第 4 部分}
 }
 
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
@@ -1941,8 +1972,8 @@ module Charlies-points
 @tt{Alices-point-builder} 中的代码。这不仅避免了写两次同样的代码，而且，在代码需
 要变动时，可以只改一处，自动传播到 @tt{Alices-point} 和 @tt{Charlies-points}。
 
-另一个例子，来看例8.11和8.12。在这两个例子中，我们用基本相同的代码写@tt{to-int}。
-在例8.11中它是
+另一个例子，来看@example-ref{eg-8.11} 和@example-ref{eg-8.12}。在这两个例子中，
+我们用基本相同的代码写 @tt{to-int}。在@example-ref{eg-8.11} 中它是
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1954,12 +1985,12 @@ letrec int to-int (x : from ints1 take t)
 }|
 }
 
-在例8.12中，@tt{x}的类型是@tt{from ints2 take t}。所以我们将其重写为模块过程，其
-参数模块产生所需的整数。
+在@example-ref{eg-8.12} 中，@tt{x}的类型是@tt{from ints2 take t}。所以我们将其
+重写为模块过程，其参数模块产生所需的整数。
 
 }
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.14"]{
 声明
 
 @nested{
@@ -1999,7 +2030,7 @@ module to-int-maker
 }
 }
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.15"]{
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -2030,7 +2061,7 @@ in (from ints1-to-int take to-int
 
 下面这个例子两次使用@tt{to-int-maker}，处理两种不同的算数操作实现。
 
-@nested[#:style eopl-example]{
+@example[#:tag "eg-8.16"]{
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -2072,7 +2103,7 @@ in -((to-ints1 two1), (to-ints2 two2))
 
 @exercise[#:level 1 #:tag "ex8.19"]{
 
-例8.16中，创建@tt{two1}和@tt{two2}的代码重复，因此可以抽象出来。完成模块定义
+@example-ref{eg-8.16} 中，创建@tt{two1}和@tt{two2}的代码重复，因此可以抽象出来。完成模块定义
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2089,8 +2120,8 @@ module from-int-maker
 }|
 }
 
-将整数表达值转换为模块@tt{ints}中的表示。用你的模块重做例8.16中的计算。用大于2的
-参数测试。
+将整数表达值转换为模块@tt{ints}中的表示。用你的模块重做@example-ref{eg-8.16}
+中的计算。用大于2的参数测试。
 
 }
 
@@ -2210,8 +2241,9 @@ module mybool-tables
 }
 
 @tt{to-int-maker}取一模块@tt{ints}，返回一模块，其类型不仅依赖@tt{ints}中的固定
-类型，也依赖@tt{ints}本身。@elemtag["module-proc-eg"]{}当我们像例8.16中那样用
-@tt{ints1}调用@tt{to-int-maker}时，得到的模块接口是
+类型，也依赖@tt{ints}本身。@elemtag["module-proc-eg"]{}当我们像
+@example-ref{eg-8.16} 中那样用@tt{ints1}调用@tt{to-int-maker}时，得到的模块接
+口是
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2477,7 +2509,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}时，我们扩展类型环境，给@$
                       tenv)))))))))))
 ]
 
-@eopl-caption["fig-8.16"]{PROC-MODULES的检查器，第2部分}
+@eopl-caption["fig-8.16"]{PROC-MODULES 的检查器，第 2 部分}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{
