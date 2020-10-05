@@ -884,7 +884,7 @@ body
 }}
 
 中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
-@tt{is-zero}。如同@secref{s2.1}，这套接口可能与算数操作的实现相关。这里的声明
+@tt{is-zero}。如同@secref{s2.1}，这套接口可能与算术操作的实现相关。这里的声明
 @tt{t} 为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类
 型的值如何表示。所有的外部代码都知道可以用 @tt{from m1 take zero} 和 @tt{from m1
 take succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 take t} 的
@@ -1227,7 +1227,7 @@ in (to-int (s (s z)))
 }
 
 @example[#:tag "eg-8.12"]{
-这里用到的技术与 @tt{ints2} 中算数操作的实现相同。
+这里用到的技术与 @tt{ints2} 中算术操作的实现相同。
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1302,7 +1302,7 @@ in let false = from mybool take false
 
 @exercise[#:level 1 #:tag "ex8.13"]{
 
-写一个模块，用 @${5*k+3} 表示整数 @${k}，实现算数操作。
+写一个模块，用 @${5*k+3} 表示整数 @${k}，实现算术操作。
 
 }
 

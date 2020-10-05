@@ -572,7 +572,7 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 @exercise[#:level 1 #:tag "exB.1"]{
 
-下列语法按照通常的算数操作符优先级，定义了算数操作表达式：
+下列语法按照通常的算术操作符优先级，定义了算术操作表达式：
 
 @envalign*{
          \mathit{Arith\mbox{-}exp} &::= \mathit{Arith\mbox{-}term} \ \{\mathit{Additive\mbox{-}op} \mathit{Arith\mbox{-}term}\}^{*} \\[-3pt]
@@ -583,7 +583,7 @@ Nonterminal <seplist3> can’t begin with string "}"
  \mathit{Multiplicative\mbox{-}op} &::= @tt{*} \mid @tt{/}
                          }
 
-这套语法是说，每个算数表达式是非空项序列的和；每一项都是非空因数序列的生成式；每
+这套语法是说，每个算术表达式是非空项序列的和；每一项都是非空因数序列的生成式；每
 个因数是一常数或者括号表达式。
 
 用SLLGEN写出词法规范和语法，根据这套语法扫描和解析。验证这套语法能正确处理优先级，
@@ -599,8 +599,8 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 @exercise[#:level 2 #:tag "exB.3"]{
 
-定义一个解释器，取@exercise-ref{exB.1}中解析器生成的抽象语法树，将其当作算数表达
-式求值。解析器处理通常的算数操作优先级；但解释器要处理关联性，即，确保同一优先级
+定义一个解释器，取@exercise-ref{exB.1}中解析器生成的抽象语法树，将其当作算术表达
+式求值。解析器处理通常的算术操作优先级；但解释器要处理关联性，即，确保同一优先级
 （比如加和减）的操作从左向右进行。由于这些表达式中没有变量，解释器不需要取环境参
 数。
 
