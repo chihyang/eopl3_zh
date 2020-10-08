@@ -12,58 +12,59 @@
 
 @title[#:style part-title-style-numbered #:tag "oac"]{对象和类}
 
-许多编程任务都需要程序通过接口管理某些状态。例如，文件系统有内部状态，但访问和修
-改那一状态只能通过文件系统的接口。状态常常涉及多个变量，为了维护状态的一致性，必
-须协同修改那些变量。因此，需要某种技术，确保组成状态的多个变量能协同更新。@emph{面向对象编程}
-(@emph{Object-oriented programming})正是用来完成此任务的技术。
+许多编程任务都需要程序通过接口管理某些状态。例如，文件系统具有内部状态，但访问和
+修改那一状态只能通过文件系统的接口。状态常常涉及多个变量，为了维护状态的一致性，
+必须协同修改那些变量。因此，需要某种技术，确保组成状态的多个变量能协同更新。
+@emph{面向对象编程} (@emph{Object-oriented programming}) 正是用来完成此任务的技
+术。
 
-在面向对象编程中，每种受管理的状态称为一个@emph{对象} (@emph{object})。一个对象
+在面向对象编程中，每个受管理的状态称为一个@emph{对象} (@emph{object})。一个对象
 中存有多个量，称为@emph{字段} (@emph{field})；有多个相关过程，称为@emph{方法}
 (@emph{method})，方法能够访问字段。调用方法常被视为将方法名和参数当作消息传给对
-象；有时，又说这是从@emph{消息传递} (@emph{message-psasing})的视角看待面向对象编
-程。
+象；有时，又说这是从@emph{消息传递} (@emph{message-psasing}) 的视角看待面向对象
+编程。
 
-在@secref{state}那样的有状态语言中，过程就是用对象编程的绝佳示例。过程是一种对象，
-其状态包含在自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
-@pageref{g-counter}的@tt{g}控制计数器的状态，对这一状态，唯一能做的就是将其递增。
-但是，更常见的是让一个对象具有多种行为。面向对象编程语言提供这种功能。
+在@secref{state}那样的有状态语言中，过程同样展现了用对象编程的优势。过程是一种对
+象，其状态包含于自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
+@pageref{g-counter}的 @tt{g} 控制计数器的状态，对这一状态，唯一能做的就是将其递
+增。但是，更常见的是让一个对象具有多种行为。面向对象编程语言提供这种能力。
 
-同一方法常常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
-面向对象编程系统通常提供名为@emph{类} (@emph{class})的结构，用来指定某种对象的字
-段及方法。每个对象都创建为类的@emph{实例} (@emph{instance})。
+同一方法通常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
+面向对象编程系统通常提供名为@emph{类} (@emph{class}) 的结构，用来指定某种对象的
+字段及方法。每个对象都创建为类的@emph{实例} (@emph{instance})。
 
 类似地，多个类可能有相似而不相同的字段和方法。为便于共享实现，面向对象编程语言通
 常提供@emph{继承} (@emph{inheritance})，允许程序员增改某些方法的行为，添加字段，
 对现有类小做修改，就能定义新类。这时，由于新类的其他行为从原类继承而得，我们说新
-类@emph{继承于} (@emph{inherit from})或@emph{扩展} (@emph{extend})旧类。
+类@emph{继承于} (@emph{inherit from}) 或@emph{扩展} (@emph{extend}) 旧类。
 
-不论程序元素是在建模真实世界中的对象还是人为层面的系统状态，都要弄清楚，程序结构
-能否由结合行为和状态的对象组成。将行为类似的对象与同一个类关联起来，也是自然而然
-的。
+不论程序元素是在建模真实世界中的对象还是人工层面的系统状态，通常都要阐明：程序结
+构能否由结合行为和状态的对象组成。将行为类似的对象与同一个类关联起来，也是自然而
+然的。
 
 真实世界中的对象通常具有某种@emph{状态}和@emph{行为}，后者要么控制前者，要么受前
-者控制。例如，猫能吃，打呼噜，跳和躺下，这些活动都由猫当前的状态控制，包括它们有
-多饿，有多累。
+者控制。例如，猫能吃，打呼噜，跳，躺下，这些活动都由猫当前的状态控制，包括有多饿，
+有多累。
 
 对象和模块颇多相似，但又截然不同。模块和类都提供了定义模糊类型的机制。但对象是一
-种有行为的数据结构，模块只是一组绑定。同一个类可以有很多个对象；大多数模块系统没
-有提供相仿的能力。但是，PROC-MODULES这样的模块系统提供了更为灵活的方式来控制名字
-的可见性。模块和类可以相得益彰。
+种具有行为的数据结构，模块只是一组绑定。同一个类可以有很多个对象；大多数模块系统
+没有提供相仿的能力。但是，PROC-MODULES 这样的模块系统提供了更为灵活的方式来控制
+名字的可见性。模块和类可以相得益彰。
 
 @section[#:style section-title-style-numbered #:tag "s9.1"]{面向对象编程}
 
-本章，我们研究一种简单的面向对象编程语言，名为CLASSES。CLASSES程序包含一些类声明，
+本章，我们研究一种简单的面向对象语言，名为 CLASSES。CLASSES 程序包含一些类声明，
 然后是一个可能用到那些类的表达式。
 
-@figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于@tt{object}的类@tt{c1}。类
-@tt{c1}的每个对象都包含两个字段，名为@tt{i}和@tt{j}。字段叫做@emph{成员}
-(@emph{member})或@emph{实例变量} (@emph{instance variable})。类@tt{c1}支持三个
-@emph{方法}或@emph{成员函数} (@emph{member function})，名为 @tt{initialize}、
-@tt{countup}和@tt{getstate}。每个方法包含@emph{方法名} (@emph{method name})，若
-干@emph{方法变量} (@emph{method var})（又称@emph{方法参数} (@emph{method
-parameters})），以及@emph{方法主体} (@emph{method body})。方法名对应于@tt{c1}的
-实例能够响应的@emph{消息}种类。有时，我们说成是@exact-elem{“}@tt{c1}的方法
-@tt{countup}@exact-elem{”}。
+@figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于 @tt{object} 的
+类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。字段叫做
+@emph{成员} (@emph{member}) 或@emph{实例变量} (@emph{instance variable})。类
+@tt{c1} 支持三个@emph{方法}或@emph{成员函数} (@emph{member function})，名为
+@tt{initialize}、@tt{countup} 和 @tt{getstate}。每个方法包含@emph{方法名}
+(@emph{method name})，若干@emph{方法变量} (@emph{method var})（又称@emph{方法参
+数} (@emph{method parameters})），以及@emph{方法主体} (@emph{method body})。方法
+名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
+@exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -98,16 +99,17 @@ in begin
 }
 
 
-本例中，类的每个方法都维护完整性约束或@emph{不变式}@${i = -j}。当然，现实中程序
-例子的完整性约束可能复杂得多。
+本例中，类的每个方法都维护完整性约束或@emph{不变式} @${i = -j}。当然，真实程序的
+完整性约束可能复杂得多。
 
-@figure-ref{fig-9.1} 中的程序首先初始化三个变量。@tt{t1}和@tt{t2}初始化为0。@tt{o1}初始化为
-@tt{c1}的一个对象。我们说这个对象是类@tt{c1}的一个@emph{实例}。对象通过操作
-@tt{new}创建。它会触发调用类的方法@tt{initialize}，在本例中，是将对象的字段
-@tt{i}设置为3，字段@tt{j}设置为-3。然后，程序调用@tt{o1}的方法@tt{getstate}，返
-回列表@tt{(3 -3)}。接着，它调用@tt{o1}的方法@tt{countup}，将两个字段的值改为5和-5。
-然后再次调用@tt{getstate}，返回@tt{(5 -5pt)}。最后，值@tt{list(t1,t2)}，即
-@tt{((3 -3) (5 -5))}成为整段程序的返回值。
+@figure-ref{fig-9.1} 中的程序首先初始化三个变量。@tt{t1} 和 @tt{t2} 初始化为 0。
+@tt{o1} 初始化为类 @tt{c1} 的一个对象。我们说这个对象是类 @tt{c1} 的一个@emph{实
+例}。对象通过 @tt{new} 操作创建。它会触发调用类的方法 @tt{initialize}，在本例中，
+是将对象的字段 @tt{i} 设置为 3，字段 @tt{j} 设置为 -3。然后，程序调用 @tt{o1} 的
+方法 @tt{getstate}，返回列表 @tt{(3 -3)}。接着，它调用 @tt{o1} 的方法
+@tt{countup}，将两个字段的值改为 5 和 -5，然后再次调用 @tt{getstate}，返回
+@tt{(5 -5pt)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))} 成为整段程序的
+返回值。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -137,18 +139,20 @@ in send o1 sum()
 @eopl-caption["fig-9.2"]{求树叶之和的面向对象程序}
 }
 
-@figure-ref{fig-9.2} 解释了面向对象编程中的关键思想：@emph{动态分发} (@emph{dynamic dispatch})。
-在这段程序中，我们的树有两种节点，@tt{interior-node}和@tt{leaf-node}。通常，我们
-不知道是在给哪种节点发消息。相反，每个节点接受@tt{sum}消息，并用自身的@tt{sum}方
-法做适当操作。这叫做@emph{动态分发}。这里，表达式生成一棵树，有两个内部节点，三
-个叶子节点。它将@tt{sum}消息发给节点@tt{o1}；@tt{o1}将@tt{sum}消息发给子树，依此
-类推，最终返回12。这段程序也展示了，所有方法都是互递归的。
+@figure-ref{fig-9.2} 解释了面向对象编程中的关键思想：@emph{动态分发}
+(@emph{dynamic dispatch})。在这段程序中，我们的树有两种节点，@tt{interior-node}
+和 @tt{leaf-node}。通常，我们不知道是在给哪种节点发消息。相反，每个节点接受
+@tt{sum} 消息，并用自身的 @tt{sum} 方法做适当操作。这叫做@emph{动态分发}。这里，
+表达式生成一棵树，有两个内部节点，三个叶子节点。它将 @tt{sum} 消息发给节点
+@tt{o1}；@tt{o1} 将 @tt{sum} 消息发给子树，依此类推，最终返回 12。这段程序也标明：
+所有方法都是互递归的。
 
-方法主体可通过标识符@tt{self}（有时叫做@tt{this}）调用同一对象的其他方法，
-@tt{self}总是绑定于方法调用时的对象。例如，在
+方法主体可通过标识符 @tt{self}（有时叫做 @tt{this}）调用同一对象的其他方法，
+@tt{self} 总是绑定于方法调用时的对象。例如，在
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 class oddeven extends object
  method initialize () 1
@@ -158,41 +162,41 @@ class oddeven extends object
   if zero?(n) then 0 else send self even(-(n,1))
 let o1 = new oddeven()
 in send o1 odd(13)}|
-}
+}}
 
-中，方法@tt{even}和@tt{odd}递归调用彼此，因为它们执行时，@tt{self}绑定到包含二者
-的对象。这就像@exercise-ref{ex3.37} 中，用动态绑定实现递归。
-}
+中，方法 @tt{even} 和 @tt{odd} 递归调用彼此，因为它们执行时，@tt{self} 绑定到包
+含二者的对象。这就像@exercise-ref{ex3.37} 中，用动态绑定实现递归。}
 
 @section[#:style section-title-style-numbered #:tag "s9.2"]{继承}
 
-通过继承，程序员能够逐步修改旧类，得到新类。在实践中，这十分有用。例如，有颜色的
-点类似一个点，但是它还有处理颜色的方法，如@figure-ref{fig-9.3} 中的经典例子所示。
+通过继承，程序员能够增量式地修改旧类，得到新类。在实践中，这十分有用。例如，有色
+点与点类似，但是它还有处理颜色的方法，如@figure-ref{fig-9.3} 中的经典例子所示。
 
-如果类@${c_2}扩展类@${c_1}，我们说@${c_1}是@${c_2}的@emph{父类} (@emph{parent})
-或@emph{超类} (@emph{superclass})，@${c_2}是@${c_1}的@emph{子类} (@emph{child})。
-继承时，由于@${c_2}定义为@${c_1}的扩展，@${c_1}必须在@${c_2}之前定义。在此之前，
-语言包含了一个预先定义的类，名为@tt{object}，它没有任何方法或字段。由于类
-@tt{object}没有@tt{initialize}方法，因此无法创建它的对象。除@tt{object}之外的所
-有类都有唯一父类，但可以有许多子类。因此，由@tt{extends}得出的关系在类与类之间产
-生了树状结构，其根为@tt{object}。因为每个类至多只有一个直接超类，这是一
-种@emph{单继承} (@emph{single-inheritance})语言。有些语言允许类继承自多个超类。@emph{多继承}
-(@emph{multiple inheritance})虽然强大，却不无问题。在练习中，我们
-考虑一些困难之处。
+如果类 @${c_2} 扩展类 @${c_1}，我们说 @${c_1} 是 @${c_2} 的@emph{父类}
+(@emph{parent}) 或@emph{超类} (@emph{superclass})，@${c_2} 是 @${c_1} 的@emph{子
+类} (@emph{child})。继承时，由于 @${c_2} 定义为 @${c_1} 的扩展，@${c_1} 必须在
+@${c_2} 之前定义。在此之前，语言包含了一个预先定义的类，名为 @tt{object}，它没有
+任何方法或字段。由于类 @tt{object} 没有 @tt{initialize} 方法，因此无法创建它的对
+象。除 @tt{object} 之外的所有类都有唯一父类，但可以有许多子类。因此，由
+@tt{extends} 得出的关系在类与类之间产生了树状结构，其根为 @tt{object}。因为每个
+类至多只有一个直接超类，这是一种@emph{单继承} (@emph{single-inheritance}) 语言。
+有些语言允许类继承自多个超类。@emph{多继承} (@emph{multiple inheritance}) 虽然强
+大，却不无问题。在练习中，我们考虑一些不便之处。
 
 术语@emph{继承}源于对宗谱的类比。我们常常引申这一类比，说类的@emph{祖先}
-(@emph{ancestor})（从类的父类到根部的类@tt{object}）和@emph{后代}
-(@emph{descendant})。如果@${c_2}是@${c_1}的后代，我们有时说@${c_2}是@${c_1}的@emph{子类}
-(@emph{subclass})，写作@${c_2 < c_1}。
+(@emph{ancestor})（从类的父类到根部的类 @tt{object}）和@emph{后代}
+(@emph{descendant})。如果 @${c_2} 是 @${c_1} 的后代，我们有时说 @${c_2} 是
+@${c_1} 的@emph{子类} (@emph{subclass})，写作@${c_2 < c_1}。
 
-如果类@${c_2}继承自类@${c_1}，@${c_1}的所有字段和方法都对@${c_2}的方法可见，除非
-在@${c_2}中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例可以在
-任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实例的地
-方使用。有时，这叫做@emph{子类多态} (@emph{subclass polymorphism})。我们的语言选
-择这种设计，其他面向对象语言可能有不同的可见性规则。
+如果类 @${c_2} 继承自类 @${c_1}，@${c_1} 的所有字段和方法都对 @${c_2}的方法可见，
+除非在 @${c_2} 中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例
+可以在任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实
+例的地方使用。有时，这叫做@emph{子类多态} (@emph{subclass polymorphism})。我们的
+语言选择这种设计，其他面向对象语言可能有不同的可见性规则。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 class point extends object
  field x
@@ -223,17 +227,17 @@ in begin
          send cp get-color())     % |@emph{返回} 87
    end
 }|
-}
+}}
 
 @eopl-caption["fig-9.3"]{继承的经典例子：@tt{colorpoint}}
 }
 
-接下来，我们看看重新声明类的字段或方法时会发生什么。如果@${c_1}的子读在子类
-@${c_2}中重新声明，新的声明@emph{遮蔽} (@emph{shadow})旧的，就像词法定界一样。例
-如，考虑@figure-ref{fig-9.4}。类@tt{c2}的对象有两个名为@tt{y}的字段：@tt{c1}中声明的和@tt{c2}中
-声明的。@tt{c1}中声明的方法能看到@tt{c1}的字段@tt{x}和@tt{y}。在@tt{c2}中，
-@tt{getx2}中的@tt{x}指代@tt{c1}的字段@tt{x}，但@tt{gety2}中的@tt{y}指代@tt{c2}的
-字段@tt{y}。
+接下来，我们考虑重新声明类的字段或方法时会发生什么。如果 @${c_1} 的某个字段在某
+个子类 @${c_2} 中重新声明，新的声明@emph{遮蔽} (@emph{shadow}) 旧的，就像词法定
+界一样。例如，考虑@figure-ref{fig-9.4}。类 @tt{c2} 的对象有两个名为 @tt{y} 的字
+段：@tt{c1} 中声明的和 @tt{c2} 中声明的。@tt{c1} 中声明的方法能看到 @tt{c1} 的字
+段 @tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
+@tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -267,16 +271,17 @@ in begin
 @eopl-caption["fig-9.4"]{字段遮蔽的例子}
 }
 
-如果类@${c_1}的方法@${m}在某个子类@${c_2}中重新声明，我们说新的方法@emph{覆盖}
-(@emph{override})旧的方法。我们将方法声明所在的类称为方法的@emph{持有类}
-(@emph{host class})。同样地，我们将表达式的持有类定义为表达式所在方法（如果有的
-话）的持有类。我们还将方法或表达式的超类定义为持有类的父类。
+如果类 @${c_1} 的方法 @${m} 在某个子类 @${c_2} 中重新声明，我们说新的方法
+@emph{覆盖} (@emph{override}) 旧的方法。我们将方法声明所在的类称为方法的@emph{持
+有类} (@emph{host class})。同样地，我们将表达式的持有类定义为表达式所在方法（如
+果有的话）的持有类。我们还将方法或表达式的超类定义为持有类的父类。
 
-如果给类@${c_2}的对象发送消息@${m}，应使用新的方法。这条规则很简单，其结果却很微
-妙。考虑如下例子：
+如果给类 @${c_2} 的对象发送消息 @${m}，应使用新的方法。这条规则很简单，结果却很
+微妙。考虑下面的例子：
 
 @nested{
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 class c1 extends object
  method initialize () 1
@@ -287,28 +292,29 @@ class c2 extends c1
 let o1 = new c1() o2 = new c2()
 in list(send o1 m1(), send o2 m1(), send o2 m2())
 }|
-}
+}}
 
-我们希望@tt{send o1 m1()}返回11，因为@tt{o1}是@tt{c1}的实例。同样地，我们希望
-@tt{send o2 m1()}返回22，因为@tt{o2}是@tt{c2}的实例。那么@tt{send o2 m2()}呢？方
-法@tt{m2}只是调用方法@tt{m1}，但这是哪一个？
-}
+我们希望 @tt{send o1 m1()} 返回 11，因为 @tt{o1} 是 @tt{c1} 的实例。同样地，我们
+希望 @tt{send o2 m1()} 返回 22，因为 @tt{o2} 是 @tt{c2} 的实例。那么 @tt{send o2
+m2()} 呢？方法 @tt{m2} 直接调用方法 @tt{m1}，但调用的是哪个 @tt{m1}？}
 
-动态分发告诉我们，应查看绑定到@tt{self}的对象属于哪个类。@tt{self}的值是@tt{o2}，
-属于类@tt{c2}。因此，调用@tt{send self m1()}应返回22。
+动态分发告诉我们，应查看绑定到 @tt{self} 的对象属于哪个类。@tt{self} 的值是
+@tt{o2}，属于类 @tt{c2}。因此，调用 @tt{send self m1()} 应返回 22。
 
-我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。考虑@figure-ref{fig-9.5} 中的程
-序。其中，我们在类@tt{colorpoint}中重写了@tt{initialize}方法，同时设置字段@tt{x}、
-@tt{y}和@tt{color}。但是，新方法的主体复制了原方法的代码。在我们的小例子中，这尚
-可接受，但在大型例子中，这显然是一种坏的做法。（为什么？）而且，如果
-@tt{colorpoint}声明了字段@tt{x}，就没法初始化@tt{point}的字段@tt{x}，
-就像@pageref{field-shadowing}的例子中，没法初始化第一个@tt{y}一样。
+我们的语言还有一个重要特性，@emph{超类调用} (@emph{super call})。
+考虑@figure-ref{fig-9.5} 中的程序。其中，我们在类 @tt{colorpoint} 中重写了
+@tt{initialize} 方法，同时设置字段 @tt{x}、@tt{y} 和 @tt{color}。但是，新方法的
+主体复制了原方法的代码。在我们的小例子中，这尚可接受，但在大型例子中，这显然是一
+种坏的做法（为什么？）。而且，如果 @tt{colorpoint} 声明了字段 @tt{x}，就没法初始
+化 @tt{point} 的字段 @tt{x}，正如@pageref{field-shadowing}的例子中，没法初始化第
+一个 @tt{y} 一样。
 
-解决方案是，把@tt{colorpoint}的@tt{initialize}方法主体中的重复代码替换为@emph{超
-类调用}，形如@tt{super initialize()}。那么@tt{colorpoint}中的@tt{initialize}方法
-写作：
+解决方案是，把 @tt{colorpoint} 的 @tt{initialize} 方法主体中的重复代码替换为
+@emph{超类调用}，形如 @tt{super initialize()}。那么 @tt{colorpoint} 中的
+@tt{initialize} 方法写作：
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 method initialize (initx, inity, initcolor)
  begin
@@ -316,12 +322,12 @@ method initialize (initx, inity, initcolor)
   set color = initcolor
  end
 }|
-}
+}}
 
-方法@${m}主体中的超类调用@tt{super @${n}(...)}使用的是@${m}持有类父类的方法@${n}。
-这不一定是@tt{self}所指类的父类。@tt{self}所指类总是@${m}持有类的子类，但不一定
-是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为@${m}可能在目
-标对象的某个祖先中声明。
+方法 @${m} 主体中的超类调用 @tt{super @${n}(...)} 使用的是 @${m} 持有类父类的方
+法 @${n}。这不一定是 @tt{self} 所指类的父类。@tt{self} 所指类总是 @${m} 持有类的
+子类，但不一定是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为
+@${m} 可能在目标对象的某个祖先中声明。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -357,15 +363,15 @@ in send o1 get-color()}|
 @eopl-caption["fig-9.5"]{演示 @tt{super} 必要性的例子}
 }
 
-要解释这种区别，考虑@figure-ref{fig-9.6}。给类@tt{c3}的对象@tt{o3}发送消息@tt{m3}，找到的是
-@tt{c2}的方法@tt{m3}，它执行@tt{super m1()}。@tt{o3}的类是@tt{c3}，其父类是
-@tt{c2}，但方法的持有类是@tt{c2}，@tt{c2}的超类是@tt{c1}。所以，执行的是@tt{c1}
-的方法@tt{m1}。这是@emph{静态方法分发} (@emph{static method dispatch})的例子。虽
-然进行超类方法调用的对象是@tt{self}，方法分发却是静态的，因为要使用的方法可以从
-程序文本中判断，与@tt{self}所指类无关。
+要解释这种区别，考虑@figure-ref{fig-9.6}。给类 @tt{c3} 的对象 @tt{o3} 发送消息
+@tt{m3}，找到的是 @tt{c2} 的方法 @tt{m3}，它执行 @tt{super m1()}。@tt{o3} 的类是
+@tt{c3}，其父类是 @tt{c2}，但方法的持有类是 @tt{c2}，@tt{c2} 的超类是 @tt{c1}。
+所以，执行的是 @tt{c1} 的方法 @tt{m1}。这是@emph{静态方法分发} (@emph{static
+method dispatch})的例子。虽然进行超类方法调用的对象是 @tt{self}，方法分发却是静
+态的，因为要使用的方法可以从程序文本中判断，与 @tt{self} 所指类无关。
 
-本例中，@tt{c1}的方法@tt{m1}调用@tt{o3}的方法@tt{m2}。这是普通方法调用，所以使用
-动态分发，找出的是@tt{c3}的方法@tt{m2}，返回33。
+本例中，@tt{c1} 的方法 @tt{m1} 调用 @tt{o3} 的方法 @tt{m2}。这是普通方法调用，所
+以使用动态分发，找出的是 @tt{c3} 的方法 @tt{m2}，返回 33。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -391,29 +397,31 @@ in send o3 m3()
 
 @section[#:style section-title-style-numbered #:tag "s9.3"]{语言}
 
-我们的语言CLASSES由IMPLICIT-REFS扩展而得，新增生成式如@figure-ref{fig-9.7} 所示。程序中首先是一
-些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超类名，0个或多个字段
-声明，以及0个或多个方法声明。方法声明类似@tt{letrec}中的过程声明，有个名字，一个
-形参列表，以及主体。同时我们扩展语言，支持多参数过程，多声明@tt{let}和多声明
-@tt{letrec}表达式，还有些其他操作，如加法和@tt{list}。列表操作同@exercise-ref{ex3.9}。最后，
-我们增加@tt{begin}表达式，同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的
-值。
+我们的语言 CLASSES 由 IMPLICIT-REFS 扩展而得，新增生成式如@figure-ref{fig-9.7}
+所示。程序中首先是一些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超
+类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec} 中的
+过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过程，
+多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
+列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
+同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的值。
 
 我们新增表达值对象和列表，所以有
 
 @nested{
 
+@nested[#:style small]{
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} + \mathit{Listof(ExpVal)} + \mathit{Obj}\\
 \mathit{DenVal} &= \mathit{Ref(ExpVal)}
+}}
+
+我们写 @${\mathit{Listof(ExpVal)}}，表示列表可以包含任何表达值。
+
 }
 
-我们写@${\mathit{Listof(ExpVal)}}，表示列表可以包含任何表达值。
-
-}
-
-我们将在@secref{s9.4.1}考察@${\mathit{Obj}}。在我们的语言中，类既不是指代值，也
-不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，看看@exercise-ref{ex9.29}
+我们将在@secref{s9.4.1}考察 @${\mathit{Obj}}。在我们的语言中，类既不是指代值，也
+不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，
+看看@exercise-ref{ex9.29}。
 
 @nested[#:style eopl-figure]{
 
@@ -439,22 +447,22 @@ in send o3 m3()
           &\mathrel{\phantom{::=}} \fbox{@tt{self-exp}}
           }
 
-@eopl-caption["fig-9.7"]{简单面向对象语言中新增的生成式}
+@eopl-caption["fig-9.7"]{简单面向对象语言中的新增生成式}
 }
 
-我们新增了四种表达式。@tt{new}表达式创建指定类的对象，然后调用@tt{initialize}方
-法初始化对象的字段。@tt{rands}求值后，传给@tt{initialize}方法。这个方法调用的返
-回值直接抛弃，新对象则作为@tt{new}表达式的值返回。
+我们新增了四种表达式。@tt{new} 表达式创建指定类的对象，然后调用 @tt{initialize}
+方法初始化对象的字段。@tt{rands} 求值后，传给 @tt{initialize} 方法。这个方法调用
+的返回值直接抛弃，新对象则作为 @tt{new} 表达式的值返回。
 
-@tt{self}表达式返回当前方法操作的对象。
+@tt{self} 表达式返回当前方法操作的对象。
 
-@tt{send}表达式包含一值为对象的表达式，一个方法名，0或多个操作数。它从对象的类中
-取出指定的方法，然后求操作数的值，将实参传给该方法。就像在IMPLICIT-REFS中那样，
-它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引用绑定起来，并在这个
-词法绑定的作用域内求方法主体的值。
+@tt{send} 表达式包含一值为对象的表达式，一个方法名，0 或多个操作数。它从对象的类
+中找出指定的方法，然后求操作数的值，将实参传给该方法。就像在 IMPLICIT-REFS 中那
+样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引用绑定起来，并在
+这个词法绑定作用域内求方法主体的值。
 
-@tt{super-call}表达式包含一个方法名，0或多个参数。它从表达式持有类的超类开始，找
-出指定的方法，然后以当前对象为@tt{self}，求出方法主体的值。
+@tt{super-call} 表达式包含一个方法名，0 或多个参数。它从表达式持有类的超类开始，
+找出指定的方法，然后以当前对象为 @tt{self}，求出方法主体的值。
 
 @section[#:style section-title-style-numbered #:tag "s9.4"]{解释器}
 
