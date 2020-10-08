@@ -2232,7 +2232,7 @@ module mybool-tables
         &\mathrel{\phantom{::=}} \fbox{@tt{proc-iface (param-name param-iface result-iface)}}
             }}
 
-虽然这套接口看起来像是普通的过程类型，它还是有两点不同。首先，它描述了模块值到模
+虽然这套接口看起来像是普通的过程类型，它还是有两处区别。首先，它描述了模块值到模
 块值的函数，而非表达值到表达值的函数。其次，不像过程类型，它要给函数的输入命名。
 这是必须的，因为输出的接口可能依赖输入的值，就像 @tt{to-int-maker} 的类型那样：
 
