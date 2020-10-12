@@ -464,11 +464,12 @@ IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将
 
 @section[#:style section-title-style-numbered #:tag "s9.4"]{解释器}
 
-求程序的值时，所有类声明都用@tt{initialize-class-env!}处理，随后求表达式的值。过
-程@tt{initialize-class-env!}创建一个全局@emph{类环境} (@emph{class environment})，
-将类名映射到类的方法。因为这个环境是全局的，我们用一个Scheme变量表示它。在
-@secref{s9.4.3}我们再详细讨论类环境。
+我们求程序的值时，首先用 @tt{initialize-class-env!} 处理所有类声明，然后求表达式
+的值。过程 @tt{initialize-class-env!} 创建一个全局@emph{类环境} (@emph{class
+environment})，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme
+变量表示它。在@secref{s9.4.3}我们再详细讨论类环境。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -478,29 +479,31 @@ IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将
       (a-program (class-decls body)
         (initialize-class-env! class-decls)
         (value-of body (init-env))))))
-]
+]}
 
-像之前那样，语言中的各种表达式在过程@tt{value-of}里都有对应的从句，也包括四种新
-的生成式。
+像之前那样，语言中的各种表达式——包括四种新生成式——在过程 @tt{value-of} 里都有对
+应的语句。
 
 我们依次考虑新增的每种表达式。
 
-通常，表达式需要求值，是因为它是操作某个对象的方法的一部分。在环境中，这个对象绑
-定到伪变量@tt{%self}。我们称之为@emph{伪变量} (@emph{pseudo-variable})，因为它虽
+求表达式的值通常是因为它是操作某个对象的方法的一部分。在当前环境中，这个对象绑定
+到伪变量 @tt{%self}。我们称之为@emph{伪变量} (@emph{pseudo-variable}) 是因为它虽
 然像普通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，
-当前方法持有类的超类名字绑定到伪变量@tt{%super}。
+当前方法持有类的超类名字绑定到伪变量 @tt{%super}。
 
-求@tt{self}表达式的值时，返回的是@tt{%self}的值。这句话在@tt{value-of}中写作
+求 @tt{self} 表达式的值时，返回的是 @tt{%self} 的值。这句话在 @tt{value-of} 中写作
 
+@nested[#:style small]{
 @codeblock[#:indent 7]{
 (self-exp ()
   (apply-env env '%self))
-}
+}}
 
-求@tt{send}表达式的值时，需要求操作数和对象表达式的值。我们从对象中找出它的类名，
-然后用@tt{find-method}找出方法。@tt{find-method}取一类名，一方法名，返回一方法。
-接着，我们用当前对象和方法参数调用这个方法。
+求 @tt{send} 表达式的值时，操作数和对象表达式都需要求值。我们从对象中找出它的类
+名，然后用 @tt{find-method} 找出方法。@tt{find-method} 取一个类名和一个方法名，
+返回一个方法。接着，我们用当前对象和方法的参数调用这个方法。
 
+@nested[#:style small]{
 @codeblock[#:indent 7]{
 (method-call-exp (obj-exp method-name rands)
   (let ((args (values-of-exps rands env))
@@ -511,11 +514,12 @@ IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将
         method-name)
       obj
       args)))
-}
+}}
 
 超类调用与普通方法调用类似，不同之处是，要在表达式持有类的超类中查找方法。
-@tt{value-of}中的语句是
+它在 @tt{value-of} 中的对应语句是：
 
+@nested[#:style small]{
 @codeblock[#:indent 7]{
 (super-call-exp (method-name rands)
   (let ((args (values-of-exps rands env))
@@ -524,12 +528,13 @@ IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将
       (find-method (apply-env env '%super) method-name)
       obj
       args)))
-}
+}}
 
-我们的最后一项工作是创建对象。求@tt{new}表达式的值时，需要求操作数的值，并根据类
-名创建一个新对象。然后，调用对象的初始化函数，但要忽略这个函数的值。最后，返回该
-对象。
+我们的最后一项工作是创建对象。求 @tt{new} 表达式的值时，我们需要求操作数的值，并
+根据类名创建一个新对象。然后我们调用对象的初始化函数，但是忽略这个函数的值。最后，
+返回该对象。
 
+@nested[#:style small]{
 @codeblock[#:indent 7]{
 (new-object-exp (class-name rands)
   (let ((args (values-of-exps rands env))
@@ -539,10 +544,10 @@ IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将
       obj
       args)
     obj))
-}
+}}
 
-接下来，我们决定如何表示对象、方法和类。我们通过一个示例解释这种表示，如@figure-ref{fig-9.8} 所
-示。
+接下来，我们确定如何表示对象、方法和类。我们通过一个示例解释这种表示，
+如@figure-ref{fig-9.8} 所示。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -581,7 +586,7 @@ in send o3 m1(7,8)
 }|
 }
 
-@eopl-caption["fig-9.8"]{OOP实现的示例程序}
+@eopl-caption["fig-9.8"]{OOP 实现的示例程序}
 }
 
 @nested[#:style eopl-figure]{
@@ -597,31 +602,35 @@ in send o3 m1(7,8)
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.1"]{对象}
 
-我们用包含类名和字段引用的数据类型表示对象。
+我们用包含类名和字段引用列表的数据类型表示对象。
 
+@nested[#:style small]{
 @racketblock[
 (define-datatype object object?
   (an-object
     (class-name identifier?)
     (fields (list-of reference?))))
-]
+]}
 
-在列表中，我们把@exact-elem{“}最老@exact-elem{”}类的字段排在前面。这样，在@figure-ref{fig-9.8}中，类@tt{c1}对象的字段排列为@tt{(x y)}；类@tt{c2}对象的字段排列为@tt{(x y
-y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列为@tt{(x y y x z)}。
-@figure-ref{fig-9.8} 中对象@tt{o3}的表示如@figure-ref{fig-9.9} 所示。当然，我们想让类@tt{c3}中的方法使用@tt{c3}
-中声明的字段@tt{x}，而不是@tt{c1}中声明的。我们在建立方法主体的求值环境时处理这
+在列表中，我们把@exact-elem{“}最年长@exact-elem{”}类的字段排在前面。这样，
+在@figure-ref{fig-9.8} 中，类 @tt{c1} 对象的字段排列为 @tt{(x y)}；类 @tt{c2} 对
+象的字段排列为 @tt{(x y y)}，其中，第二个 @tt{y} 是 @tt{c2} 中的；类 @tt{c3} 对
+象的字段排列为 @tt{(x y y x z)}。@figure-ref{fig-9.8} 中对象 @tt{o3} 的表示
+如@figure-ref{fig-9.9} 所示。当然，我们想让类 @tt{c3} 中的方法使用 @tt{c3} 中声
+明的字段 @tt{x}，而不是 @tt{c1} 中声明的。我们在建立方法主体的求值环境时处理这一
 点。
 
-这种方式有一条有用的性质：对@tt{c3}的任何子类，列表中同样位置具有同样的字段，因
-为随后添加的任何字段都会出现在这些字段的右边。在@tt{c3}任一子类定义的某个方法中，
-@tt{x}在什么位置呢？我们知道，在所有这些方法中，如果@tt{x}没有重新定义，@tt{x}的
-位置一定是3。那么，当声明字段变量时，对应值的位置保持不变。与@secref{s3.6}处理变
-量时类似，这条性质使我们能静态确定字段引用。
+这种策略有一条有益的性质：对 @tt{c3} 的任何子类，列表中的相同位置具有相同字段，
+因为后添加的任何字段都会出现在这些字段的右边。在 @tt{c3} 任一子类定义的某个方法
+中，@tt{x} 在什么位置呢？我们知道，如果没有重定义，@tt{x} 在所有这些方法中的位置
+一定是 3。那么，当声明字段变量时，对应值的位置保持不变。这条性质使我们能静态地确
+定字段引用，就像在@secref{s3.6}中处理变量那样。
 
-创建新方法很容易。我们只需用新引用列表创建一个@tt{an-object}，其长度与对象字段数
-目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用一个非法值初始化
-每个位置，以便得知程序对未初始化位置索值。
+创建新对象很容易。我们只需创建一个 @tt{an-object}，它有一个新引用列表，列表长度
+与对象的字段数目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用非
+法值初始化每个位置，以便识别程序对未初始化位置的解引用。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@${\mathit{ClassName} = \mathit{Sym}}}
 
@@ -634,22 +643,23 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
         (lambda (field-name)
           (newref (list 'uninitialized-field field-name)))
         (class->field-names (lookup-class class-name))))))
-]
+]}
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.2"]{方法}
 
-接下来我们处理方法。方法就像过程，但是它们不存储环境。相反，它们记录引用字段的名
-字。当调用方法时，它在如下环境中执行其主体
+接下来我们处理方法。方法就像过程，但是它们不保存环境。相反，它们记录所引用的字段
+名。方法调用在如下环境中执行其主体：
 
 @itemlist[
 
- @item{方法的形参绑定到新引用，引用初始化为实参的值。这与IMPLICIT-REFS中的
- @tt{apply-procedure}行为类似。}
+ @item{方法的形参绑定到新引用，引用初始化为实参的值。这与 IMPLICIT-REFS 中的
+ @tt{apply-procedure} 行为类似。}
 
- @item{伪变量@tt{%self}和@tt{%super}分别绑定到当前对象和方法的超类。}
+ @item{伪变量 @tt{%self} 和 @tt{%super} 分别绑定到当前对象和方法的超类。}
 
- @item{可见的字段名绑定到当前对象的字段。要实现这点，我们定义
+ @item{可见字段名绑定到当前对象的字段。要实现这点，我们定义
 
+@nested[#:style small]{
 @racketblock[
 (define-datatype method method?
   (a-method
@@ -669,38 +679,38 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
               self super-name
               (extend-env* field-names (object->fields self)
                 (empty-env)))))))))
-]
+]}
  }
 
 ]
 
-这里，我们用@exercise-ref{ex2.10} 中的@tt{extend-env*}，扩展环境时，把变量列表绑定到指代值的列
-表。我们还给环境接口新增过程@tt{extend-env-with-self-and-super}，分别将
-@tt{%self}和@tt{%super}绑定到对象和类名。
+这里，我们使用@exercise-ref{ex2.10} 中的 @tt{extend-env*}。它在扩展环境时，把变
+量列表绑定到指代值的列表。我们还给环境接口新增过程
+@tt{extend-env-with-self-and-super}，分别将 @tt{%self} 和 @tt{%super} 绑定到对象
+和类名。
 
-要确保各方法看到正确的字段，我们构建@tt{field-names}列表时要小心。各方法只应见到
-最后一个声明的同名字段，其他同名字段应被遮蔽。所以，我们构建@tt{field-names}列表
-时，将把最右边之外的出现的每个名字替换为新名。对@figure-ref{fig-9.8} 中的程序，得出的
-@tt{field-names}如下
+要确保各方法看到正确的字段，我们在构建 @tt{field-names} 列表时需要小心。各方法只
+应见到最后一个声明的同名字段，其他同名字段应被遮蔽。所以，我们构建
+@tt{field-names} 列表时，将把最右边之外的出现的每个名字替换为新名。
+@figure-ref{fig-9.8} 中的程序对应的 @tt{field-names} 如下
 
 @nested{
-
 @elemtag["field-renaming"]{}@tabular[#:sep @hspace[4]
          (list (list @bold{类} @bold{定义的字段} @bold{字段}      @bold{@tt{field-names}})
                (list @tt{c1}   @tt{x, y}         @tt{(x y)}       @tt{(x@${\phantom{xxx}}y)})
                (list @tt{c2}   @tt{y}            @tt{(x y y)}     @tt{(x@${\phantom{xxx}}y%1 y)})
                (list @tt{c3}   @tt{x, z}         @tt{(x y y x z)} @tt{(x%1@${\phantom{x}}y%1 y x z)}))]
 
-由于方法主体对@tt{x%1}和@tt{y%1}一无所知，所以对各字段变量，它们只能见到最右边的。
+由于方法主体对无从得知 @tt{x%1} 和 @tt{y%1}，所以它们只能见到各字段变量在最右边
+的声明，正合期望。}
 
-}
-
-@figure-ref{fig-9.10} 展示了求值@figure-ref{fig-9.8} 中方法主体内的@tt{send o3 m1(7,8)}时创建的环境。这张图表明，
-引用列表可能比变量列表长：变量列表只是@tt{(x y%1 y)}，因为从@tt{c2}的方法@tt{m1}
-中只能见到这些字段变量，但@tt{(object->fields self)}的值是对象中所有字段的列表。
-不过，由于三个可见字段变量的值是列表中的头三个元素，而且我们把第一个@tt{y}重命名
-为@tt{y%1}（该方法对词一无所知），方法@tt{m1}将把变量@tt{y}与@tt{c2}中声明的
-@tt{y}关联起来，正符期望。
+@figure-ref{fig-9.10} 展示了@figure-ref{fig-9.8} 中 @tt{send o3 m1(7,8)} 内的方
+法主体求值时创建的环境。这张图表明，引用列表可能比变量列表长：变量列表只是
+@tt{(x y%1 y)}，因为 @tt{c2} 的方法 @tt{m1} 只能见到这些字段变量，但
+@tt{(object->fields self)} 的值是对象中所有字段的列表。不过，由于三个可见字段变
+量的值是列表中的头三个元素，而且我们把第一个 @tt{y} 重命名为 @tt{y%1}（该方法对
+此一无所知），方法 @tt{m1} 将把变量 @tt{y} 与 @tt{c2} 中声明的 @tt{y} 关联起来，
+正合期望。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -713,9 +723,9 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 @eopl-caption["fig-9.10"]{方法调用时的环境}
 }
 
-当@tt{self}的持有类和所属类相同时，变量列表的长度通常与字段位置列表的长度相同。
-如果持有类位于类链的上端，那么位置可能多于字段变量，与字段变量对应的值将位于列表
-开头，其余值则不可见。
+当 @tt{self} 的持有类和所属类相同时，变量列表的长度通常与字段位置列表相同。如果
+持有类位于类链的上端，那么位置数可能多于字段变量，但对应于字段变量值位于列表开头，
+其余值则不可见。
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.3"]{类和类环境}
 
@@ -724,9 +734,10 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
 关联起来。
 
 类环境是全局的：在我们的语言中，类声明聚集于程序开头，且对整个程序生效。所以，我
-们用名为@tt{the-class-env}的全局变量表示类环境，它包含一个(类名, 类)列表的列表，
-但我们用过程@tt{add-to-class-env!}和@tt{lookup-class}隐藏这一表示。
+们用名为 @tt{the-class-env} 的全局变量表示类环境，它包含列表 @tt{(类名, 类)} 的
+列表，但我们用过程 @tt{add-to-class-env!} 和 @tt{lookup-class} 隐藏这一表示。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@${\mathit{ClassEnv} = \mathit{Listof(List(ClassName, Class))}}}
 
@@ -747,30 +758,32 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
     (let ((maybe-pair (assq name the-class-env)))
       (if maybe-pair (cadr maybe-pair)
         (report-unknown-class name)))))
-]
+]}
 
 对每个类，我们记录三样东西：超类的名字，字段变量的列表，以及将方法名映射到方法的
 环境。
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 (define-datatype class class?
   (a-class
     (super-name (maybe identifier?))
     (field-names (list-of identifier?))
     (method-env method-environment?)))
-]
+]}
 
-这里，我们用谓词@tt{(maybe identifier?)}，判断值是否为符号或@tt{#f}。后一种情况
-对是必须的，因为类@tt{object}没有超类。@tt{filed-names}是类的方法能见到的字段，
-@tt{method-env}是一环境，给出了类中每个方法名的定义。
+这里，我们用谓词 @tt{(maybe identifier?)} 判断值是否为符号或 @tt{#f}。后一种情况
+对是必须的，因为类 @tt{object} 没有超类。@tt{filed-names} 是类的方法能见到的字段，
+@tt{method-env} 是一环境，给出了类中每个方法名的定义。
 
 }
 
-我们初始化类环境时，为类@tt{object}添加一个绑定。对每个声明，我们向类环境添加新
-的绑定，将类名绑定到一个@tt{class}，它包含超类名，类中方法的@tt{field-names}，以
-及类中方法的环境。
+我们初始化类环境时，为类 @tt{object} 添加一个绑定。对每个声明，我们向类环境添加
+一个新绑定，将类名绑定到一个 @tt{class}，它包含超类名、类中方法的
+@tt{field-names} 以及类中方法的环境。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@elemtag["initialize-class-env!"]{@bold{@tt{initialize-class-env!}}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-class-env!
@@ -796,12 +809,13 @@ y)}，其中，第二个@tt{y}是@tt{c2}中的；类@tt{c3}对象的字段排列
                 (class->method-env (lookup-class s-name))
                 (method-decls->method-env
                   m-decls s-name f-names)))))))))
-]
+]}
 
-过程@tt{append-field-names}用来给当前类创建@tt{field-names}。它@elem[#:style
-question]{扩展}超类字段和新类声明的字段，只是将超类中被新字段遮蔽的字段替换为新
-名字，就像@pageref{field-renaming}的例子那样。
+过程 @tt{append-field-names} 用来给当前类创建 @tt{field-names}。它将新类声明的字
+段添加到超类字段之后，同时将超类中被新字段遮蔽的字段替换为新名字，就像
+@pageref{field-renaming}的示例那样。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{append-field-names}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(FieldName)} \times \mathit{Listof(FieldName)} \to \mathit{Listof(FieldName)}}}
 (define append-field-names
@@ -815,15 +829,16 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
             (car super-fields))
           (append-field-names
             (cdr super-fields) new-fields))))))
-]
+]}
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.4"]{方法环境}
 
-剩下的只有@tt{find-method}和@tt{merge-method-envs}。
+剩下的只有 @tt{find-method} 和 @tt{merge-method-envs} 了。
 
-像之前处理类那样，我们用(方法名, 方法)列表的列表表示方法环境，用@tt{find-method}
-查找方法。
+像处理类那样，我们用列表 @tt{(方法名, 方法)} 的列表表示方法环境，用
+@tt{find-method} 查找方法。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@${\mathit{MethodEnv} = \mathit{Listof(List(MethodName, Method))}}}
 
@@ -834,12 +849,13 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
       (let ((maybe-pair (assq name m-env)))
         (if (pair? maybe-pair) (cadr maybe-pair)
           (report-method-not-found name))))))
-]
+]}
 
-用这条信息，我们可以写出@tt{method-decls->method-env}。它取一个类的方法声明，创
-建一个方法环境，记录每个方法的绑定变量，主体，持有类的超类名，以及持有类的
+用这一信息，我们可以写出 @tt{method-decls->method-env}。它取一个类的方法声明，创
+建一个方法环境，记录每个方法的绑定变量、主体、持有类的超类名，以及持有类的
 @tt{field-names}。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{method-decls->method-env}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(MethodDecl)} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \to \mathit{MethodEnv}}}
 (define method-decls->method-env
@@ -851,22 +867,21 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
             (list method-name
               (a-method vars body super-name field-names)))))
       m-decls)))
-]
+]}
 
-最后，我们写出@tt{merge-method-envs}。由于新类中的方法覆盖了旧类的同名方法，我们
-可以直接扩展环境，将新方法添加到前面。
+最后，我们写出 @tt{merge-method-envs}。由于新类中的方法覆盖了旧类的同名方法，我
+们可以直接扩展环境，将新方法添加到前面。
 
 @nested{
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{merge-method-envs}} : @${\mathit{MethodEnv} \times \mathit{MethodEnv} \to \mathit{MethodEnv}}}
 (define merge-method-envs
   (lambda (super-m-env new-m-env)
     (append new-m-env super-m-env)))
-]
+]}
 
-还有一些方式构建的方法环境在查询方法时更高效（@exercise-ref{ex9.18}）。
-
-}
+构建的方法环境还有一些方式，它们在方法查询时更高效（@exercise-ref{ex9.18}）。}
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -922,12 +937,12 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
 
 @itemlist[#:style 'ordered
 
- @item{队列类，包含方法@tt{empty?}、@tt{enqueue}和@tt{dequeue}。}
+ @item{队列类，包含方法 @tt{empty?}、@tt{enqueue} 和 @tt{dequeue}。}
 
  @item{扩展队列类，添加计数器，记录当前队列已进行的操作数。}
 
- @item{扩展队列类，添加计数器，记录本类所有队列已进行的操作总数。提示：可在初始
- 化时传递共享计数器。}
+ @item{扩展队列类，添加计数器，记录本类所有队列已进行的操作总数。提示：你可以在
+ 对象初始化时传递共享计数器。}
 
 ]
 
@@ -935,22 +950,23 @@ question]{扩展}超类字段和新类声明的字段，只是将超类中被新
 
 @exercise[#:level 1 #:tag "ex9.2"]{
 
-继承也可以很危险，因为子类可以任意覆盖一个方法，改变其行为。定义继承自
-@tt{oddeven}的类@tt{bogus-oddeven}，覆盖方法@tt{even}，从而导致@tt{let o1 = new
-bogus-oddeven() in send o1 odd (13)}给出错误的答案。
+继承可能很危险，因为子类可以覆盖任意方法，改变其行为。定义继承自 @tt{oddeven} 的
+类@tt{bogus-oddeven}，覆盖方法 @tt{even}，从而导致 @tt{let o1 = new
+bogus-oddeven() in send o1 odd (13)} 给出错误的答案。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.3"]{
 
-在@figure-ref{fig-9.11} 中，哪里是共享的方法环境？哪里是共享的@tt{field-names}列表？
+在@figure-ref{fig-9.11} 中，哪里是共享的方法环境？哪里是共享的 @tt{field-names}
+列表？
 
 }
 
 @exercise[#:level 1 #:tag "ex9.4"]{
 
-修改对象的表示，让@${\mathit{Obj}}包含对象所属的类，而非其名字。跟文中的方式相比，
-这有什么优势和劣势？
+修改对象的表示，让 @${\mathit{Obj}} 包含对象所属的类，而非其名字。跟文中的方式相
+比，这种表示有何优劣？
 
 }
 
@@ -963,30 +979,30 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 1 #:tag "ex9.6"]{
 
-给我们的语言添加表达式@tt{instanceof @${exp} @${class\mbox{-}name}}。当且仅当表
-达式@${exp}的值为对象，且是@${class\mbox{-}name}或其子类的实例时，这种表达式的值
-为真。
+给我们的语言添加表达式 @tt{instanceof @${exp} @${class\mbox{-}name}}。当且仅当表
+达式 @${exp} 的值为对象，且为 @${class\mbox{-}name} 或其子类的实例时，这一表达式
+的值为真。
 
 }
 
 @exercise[#:level 1 #:tag "ex9.7"]{
 
-在我们的语言中，方法环境包含持有类@emph{以及}超类声明的字段变量的绑定。限制它，
-只包含持有类的字段变量绑定。
+在我们的语言中，方法环境包含持有类@emph{和}超类声明的字段变量的绑定。将其限制为
+持有类的字段变量绑定。
 
 }
 
 @exercise[#:level 1 #:tag "ex9.8"]{
 
-给我们的语言添加一个新表达式，
+给我们的语言添加新表达式：
 
 @centered{@tt{fieldref @${obj} @${field\mbox{-}name}}}
 
-取出指定对象指定字段的内容。再添加
+取出指定对象指定字段的内容。再添加：
 
 @centered{@tt{fieldset @${obj} @${field\mbox{-}name} = @${exp}}}
 
-将指定字段设置为@${exp}的值。
+将指定字段设置为 @${exp} 的值。
 
 }
 
@@ -1000,32 +1016,34 @@ bogus-oddeven() in send o1 odd (13)}给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.10"]{
 
-有些面向对象编程语言支持指明类的方法调用和字段引用。在指明类的方法调用中，可以写
-@tt{named-send c1 o m1()}。只要@tt{o}是@tt{c1}或其子类的实例，这会对@tt{o}调用
-@tt{c1}的方法@tt{m1}，即使@tt{o}所属类覆盖了@tt{m1}。这是一种静态方法分发。指明
-类的字段引用为字段引用提供类似工具。给本节的语言添加指明类的方法调用，字段引用和
-字段设置。
+有些面向对象编程语言支持指定类的方法调用和字段引用。在指定类的方法调用中，可以写
+@tt{named-send c1 o m1()}。只要 @tt{o} 是 @tt{c1} 或其子类的实例，即使 @tt{o} 所
+属类覆盖了 @tt{m1}，这会对 @tt{o} 调用 @tt{c1} 的方法 @tt{m1}。这是一种静态方法
+分发。指定类的字段引用为字段引用提供了类似组件。给本节的语言添加指定类的方法调用、
+字段引用和字段赋值。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.11"]{
 
-允许CLASSES指定每个方法是@emph{私有的} (@emph{private})，只能在持有类内访问；
+允许 CLASSES 指定每个方法是@emph{私有的} (@emph{private})，只能在持有类内访问；
 或@emph{受保护的} (@emph{protected})，只能在持有类及其后代中访问；或@emph{公有的}
-(@emph{public})，各处都能访问。许多面向对象编程语言包含了某种形式的这一特性。
+(@emph{public})，在所有位置都能访问。许多面向对象编程语言都包含了这种特性的某一
+版本。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.12"]{
 
-像@exercise-ref{ex9.11} 那样，允许CLASSES指定每个字段是私有的，受保护的，还是公有的。
+像@exercise-ref{ex9.11} 那样，允许 CLASSES 指定每个字段是私有的、受保护的、或
+公有的。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.13"]{
 
-为了防止@exercise-ref{ex9.2} 那样的恶意子类，许多面向对象编程语言都能指定无法覆盖的@${final}方
-法。给CLASSES添加这样的组件，那么就能写
+为了防止@exercise-ref{ex9.2} 那样的恶意子类，许多面向对象编程语言都能指定无法覆
+盖的 @${final} 方法。给 CLASSES 添加这样的组件，那么我们就能写：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1042,15 +1060,15 @@ class oddeven extends object
 
 @exercise[#:level 2 #:tag "ex9.14"]{
 
-另一种防止恶意子类的方法是使用某种形式的@emph{静态分发}。修改CLASSES，通过
-@tt{self}调用的总是持有类的方法，而不是目标对象所属类的方法。
+另一种防止恶意子类的方法是使用某种形式的@emph{静态分发}。修改 CLASSES，使通过
+@tt{self} 调用的总是持有类的方法，而不是目标对象所属类的方法。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.15"]{
 
-很多面向对象编程语言提供@emph{静态} (@emph{static})或者@emph{类} (@emph{class})
-变量。静态变量与类的某些状态相关联；类的所有实例共享这一状态。例如，可以写：
+很多面向对象编程语言提供@emph{静态} (@emph{static}) 或者@emph{类} (@emph{class})
+变量。静态变量与类的某些状态相关联；类的所有实例共享这一状态。例如，我们可以写：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1070,11 +1088,11 @@ in list(send o1 get-serial-number(),
 }|
 }
 
-类@tt{c1}的每个新对象具有连续的序列号。
+类 @tt{c1} 的每个新对象具有连续的序列号。
 
-给我们的语言添加静态变量。由于静态变量可以在方法主体中出现，@tt{apply-method}必
-须在它创建的环境中添加额外的绑定。求静态变量（上例中的@tt{l}）初始化表达式的值时，
-应使用什么环境？
+给我们的语言添加静态变量。由于静态变量可以在方法主体中出现，@tt{apply-method} 必
+须在它构建的环境中添加额外的绑定。求静态变量（上例中的 @tt{l}）初始化表达式的值
+时，应使用什么环境？
 
 }
 
@@ -1082,82 +1100,84 @@ in list(send o1 get-serial-number(),
 
 面向对象编程语言常允许@emph{重载} (@emph{overloading})方法。这一特性允许类有多个
 同名方法，只要它们有不同的@emph{签名} (@emph{signature})。方法签名通常是方法名加
-上参数类型。由于CLASSES中没有类型，我们可以仅依靠方法名和参数数量重载方法。例如，
-类可能有两个@tt{initialize}方法，一个没有参数，用它来初始化时，需要给字段默认值；
-另一个有一个参数，用它来初始化时，需要给字段特定值。扩展我们的解释器，允许通过方
-法的参数数量重载方法。
+上参数类型。由于 CLASSES 中没有类型，我们只能依靠方法名和参数个数重载方法。例如，
+某个类可能有两个 @tt{initialize} 方法，一个没有参数，用它来初始化时，需要给字段
+默认值；另一个有一个参数，用它来初始化时，需要给字段特定值。扩展我们的解释器，允
+许通过方法的参数个数重载方法。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.17"]{
 
-显而易见，我们语言中的类定义是全局的。给CALSSES添加局部类，可写成@tt{letclass
+显而易见，我们语言中的类定义是全局的。给 CALSSES 添加局部类，可写成 @tt{letclass
 @${c} = ... in @${e}}。提示：考虑给解释器添加一个类环境参数。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.18"]{
 
-@tt{merge-method-envs} 产生的方法环境可能很长。再写出一版 @tt{merge- method-envs}，
-保证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，在@figure-ref{fig-9.8} 中，
-在 @tt{c1}、@tt{c2}、@tt{c3}，以及 @tt{c3} 任意后代的方法环境中，方法 @tt{m2} 应
-出现在同样的位置。
+@tt{merge-method-envs} 产生的方法环境可能很长。再写出一版 @tt{merge-
+method-envs}，保证每个方法名只出现一次，而且总是出现在与最先声明相同的位置。例如，
+在@figure-ref{fig-9.8} 中，在 @tt{c1}、@tt{c2}、@tt{c3}，以及 @tt{c3} 任意后代的
+方法环境中，方法 @tt{m2} 应出现在同样的位置。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.19"]{
 
-为CLASSES实现词法寻址。首先，为本节语言写出类似@secref{s3.7}的词法地址计算器。然
-后修改环境的实现，去掉其中的名字。接着修改@tt{value-of}和@tt{apply-env}，不再取
-符号，而是像@secref{s3.7.2}那样取一词法地址。
+为 CLASSES 实现词法寻址。首先，为本节语言写出类似@secref{s3.7}的词法地址计算器。
+然后修改环境的实现，去掉其中的名字。接着修改 @tt{value-of} 和 @tt{apply-env}，不
+再取符号，而是像@secref{s3.7.2}那样取一词法地址。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.20"]{
 
-方法调用也能够用类似@exercise-ref{ex9.19} 中的方式优化吗？讨论为什么能，或为什么不能。
+方法调用也能够用类似@exercise-ref{ex9.19} 那样的方式优化吗？讨论为什么能，或为什
+么不能。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.21"]{
 
-如果类中有很多方法，从头线性搜索方法列表会很耗时。将其改为更快的实现。你的实现能
-改进多少？解释你的结果，不论更好还是更坏。
+如果类中有很多方法，从头线性搜索方法列表会很耗时。将其修改为更快的实现。你的实现
+能改进多少？不论优劣，解释你的结果。
 
 }
 
 @exercise[#:level 2 #:tag "ex9.22"]{
 
-在@exercise-ref{ex9.16} 中，我们扩展解释器，给语言添加方法重载。另一种支持重载的方法不需修改解
-释器，而是用语法预处理器。写一个预处理器，将每个方法@${m}重命名为@$["m:@n"]的形
-式，其中@${n}是方法声明中参数的数量。同样地，它还必须根据操作数的数量，改变每个
-方法调用的名字。我们假定程序员在方法名中不使用@$[":@"]，但解释器接受使用@$[":@"]
-的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧的例子，名为@emph{名称混淆}
-(@emph{name mangling})。
+在@exercise-ref{ex9.16} 中，我们扩展解释器，给语言添加了重载。另一种支持重载的方
+式不需修改解释器，而是用语法预处理器。写一个预处理器，将每个方法 @${m} 重命名为
+@$["m:@n"] 的形式，其中，@${n} 是方法声明中参数的数量。同理，它还必须根据操作数
+的数量，改变每个方法调用的名字。我们假定程序员在方法名中不使用 @$[":@"]，但解释
+器接受使用 @$[":@"] 的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技
+巧的例子，名为@emph{名称混淆} (@emph{name mangling})。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.23"]{
 
-我们以词法绑定的方式看待超类调用。但我们还可以做得更好：我们可以@emph{静态}确定
-@tt{super}调用。由于超类调用指向类的父类的方法，而父类与其方法在执行之前已知，我
-们可以在进行词法寻址和其他分析的同时确定超类调用究竟指的是那个方法。写一个翻译器，
-将每个超类调用替换为一个抽象语法树节点，节点中包含实际要调用的方法。
+我们以词法绑定的方式看待超类调用。但我们还可以做得更好：我们可以@emph{静态地}确
+定 @tt{super} 调用。由于超类调用指向类的父类的方法，且父类与其方法在执行之前已知，
+我们可以在进行词法寻址和其他分析的同时确定超类调用究竟指的是哪个方法。写一个翻译
+器，将每个超类调用替换为一个抽象语法树节点，节点中包含实际要调用的方法。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.24"]{
 
-写一个翻译器，把@exercise-ref{ex9.10} 中指明类调用的方法名替换为数字，数字表示运行时，指定方法
-在指定类方法表中的偏移。为翻译后的代码实现一个解释器，在常数时间内访问指定类的方
-法。
+写一个翻译器，把@exercise-ref{ex9.10} 中指定类调用的方法名替换为数字，该数字表示
+运行期间，指定方法在指定类的方法表中的偏移。为翻译后的代码实现一个解释器，在常数
+时间内访问指定的方法。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.25"]{
 
-我们给@figure-ref{fig-9.5} 第一个继承例子中的类@tt{point}添加一个方法，判断两个点是否具有相同的
-横纵坐标。我们照下面这样给点类添加方法@tt{similarpoints}：
+我们给@figure-ref{fig-9.5} 第一个继承例子中的类 @tt{point} 添加一个方法，判断两
+个点是否具有相同的横纵坐标。我们照下面这样给类 @tt{point} 添加方法
+@tt{similarpoints}：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1168,13 +1188,13 @@ method similarpoints (pt)
 }|
 }
 
-这对所有类型的点都有效。因为@tt{getx}，@tt{gety}和@tt{similarpoints}都在类
-@tt{point}中定义，通过继承，它们在@tt{colorpoint}中也有定义。测试
-@tt{similarpoints}，比较点和点，点和有色点，有色点和点，以及有色点和有色点。
+这对所有类型的点都有效。因为 @tt{getx}、@tt{gety} 和 @tt{similarpoints} 都在类
+@tt{point} 中定义，通过继承，它们在 @tt{colorpoint} 中也有定义。测试
+@tt{similarpoints}，比较点和点、点和有色点、有色点和点，以及有色点和有色点。
 
-接下来考虑一个小扩展。我们给类@tt{colorpoint}添加新方法@tt{similarpoints}。我们
-希望两个点横纵坐标相同，都是有色点且颜色相同时，它返回真，否则返回假。这里是种错
-误做法。
+接下来考虑一个小扩展。我们给类 @tt{colorpoint} 添加新方法 @tt{similarpoints}。我
+们希望两个点横纵坐标相同、都是有色点且颜色相同时，它返回真；否则返回假。这里是一
+种错误做法。
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1188,18 +1208,18 @@ method similarpoints (pt)
 测试这一扩展。说明它为何不适用于任意情况。修复它，让所有测试都返回正确的值。
 
 过程依赖多个对象造成的困难称为@emph{二元方法问题} (@emph{binary method problem})。
-它表明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫
-做@emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈
-发严重。
+它表明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫做
+@emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈发
+严重。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.26"]{
 
-多继承允许一个类有多个父类，但可能带来过度的复杂性。如果两个被继承的类具有同名方
-法呢？可以禁止这种情况；也可以按照某种规则遍历方法，比如深度优先、从左到右；还可
-以要求在调用时消除这种歧义。字段的情况就更糟了。考虑下面的情形，类@tt{c4}继承自
-@tt{c2}和@tt{c3}，二者均继承自@tt{c1}：
+多继承允许一个类有多个父类，虽然有用，但可能带来过度的复杂性。如果两个被继承的类
+具有同名方法呢？可以禁止这种情况；也可以按照某种规则遍历方法，比如深度优先或从左
+到右；还可以要求在调用时消除这种歧义。字段的情况就更糟了。考虑下面的情形，类
+@tt{c4} 继承自 @tt{c2} 和 @tt{c3}，二者均继承自 @tt{c1}：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1211,21 +1231,21 @@ class c4 extends c2, c3
 }|
 }
 
-@tt{c4}的实例是有一个字段@tt{x}实例，由@tt{c2}和@tt{c3}共享呢，还是有两个@tt{x}
-字段，一个继承自@tt{c2}，一个继承自@tt{c3}？有些语言选择共享，有些不，还有一些
-（至少在某些条件下）任选。这问题的复杂性致使设计时，更偏爱类的单继承，而多继承只
-用于接口（@secref{s9.5}），以尽量避免这些困难。
+@tt{c4} 的实例中，是有一个由 @tt{c2} 和 @tt{c3} 共享的字段 @tt{x} 实例呢，还是有
+两个分别继承自 @tt{c2} 和 @tt{c3} 的字段 @tt{x} 呢？有些语言选择共享，有些不，还
+有一些（至少在某些条件下）任选。这问题的复杂性致使人们在设计时，更偏爱类的单继承，
+而多继承只用于接口（@secref{s9.5}），以尽量避免这些困难。
 
-给CLASSES添加多继承。对语法做必要扩展。指出解决方法名和字段名冲突时面临什么问题。
-描述共性问题及其解决方法。
+给 CLASSES 添加多继承。对语法做必要扩展。指出解决方法名和字段名冲突时面临什么问
+题。描述共性问题及其解决方法。
 
 }
 
 @exercise[#:level 3 #:tag "ex9.27"]{
 
 实现下面设计的无类有对象语言。对象是一组闭包，各闭包共享一个环境（亦即某种状态），
-以方法名为索引。类则由返回对象的过程替代。所以，我们不用写@tt{send o1
-m1(11,22,33)}，而是写普通的过程调用@tt{(getmethod(o1,m2) 11 22 33)}；不用写
+以方法名为索引。类则由返回对象的过程替代。所以，我们不用写 @tt{send o1
+m1(11,22,33)}，而是写普通的过程调用 @tt{(getmethod(o1,m2) 11 22 33)}；不用写
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1266,13 +1286,14 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 
 @exercise[#:level 3 #:tag "ex9.29"]{
 
-设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象叫
-做@emph{原型} (@emph{prototype})。把类@tt{object}替换为没有方法和字段的原型对象。
-这样，我们就能用@tt{let c2 = extend c1 ...}替代@tt{class c2 extends c1 ...}。把
-操作@tt{new}替换为@tt{clone}，它取一对象，仅复制其方法和字段。这种语言中的方法位
-于一个词法作用域中，所以应该能像通常那样访问词法上可见的变量以及字段变量。
-当@emph{超型} (@emph{superprototype})的字段变量与当前所在词法作用域的变量同名
-时，遮蔽关系是怎样的？
+设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象叫做
+@emph{原型} (@emph{prototype})。把类 @tt{object} 替换为没有方法和字段的原型对象。
+扩展类时，给其原型添加方法和字段，得到新的原型。这样，我们就能用 @tt{let c2 =
+extend c1 ...} 替代 @tt{class c2 extends c1 ...}。把操作 @tt{new} 替换为
+@tt{clone}，它取一对象，直接复制其方法和字段。这种语言中的方法出现于一个词法作用
+域中，所以应该能像通常那样访问词法上可见的变量以及字段变量。当@emph{超型}
+(@emph{superprototype}) 的字段变量与当前所在词法作用域的变量同名时，遮蔽关系是怎
+样的？
 
 }
 
