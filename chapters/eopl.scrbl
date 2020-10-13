@@ -8,7 +8,6 @@
 
 @table-of-contents[]
 
-@include-section["foreword-by-translator.scrbl"]
 @include-section["foreword.scrbl"]
 @include-section["preface.scrbl"]
 @include-section["acknowledgments.scrbl"]
@@ -29,5 +28,3 @@
 
 @generate-bibliography[#:sec-title "参考书目"]
 @index-section[#:title "索引"]
-
-@include-section["afterword.scrbl"]
