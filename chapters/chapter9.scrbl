@@ -1297,66 +1297,61 @@ c2 = extend c1 ...} 替代 @tt{class c2 extends c1 ...}。把操作 @tt{new} 替
 
 }
 
-@section[#:style section-title-style-numbered #:tag "s9.5"]{带类型的语言}
+@section[#:style section-title-style-numbered #:tag "s9.5"]{带有类型的语言}
 
-在@secref{types}，我们展示了如何用类型系统检查程序，保证它决不进行不当操作。通过
-检查器的程序决不会调用非过程处理实参，调用过程或其他操作符时，也不会使用错误数量
-或类型的实参。
+在@secref{types}，我们展示了如何用类型系统检查程序，保证程序执行时不会进行不当操
+作。通过检查器的程序不会调用非过程处理实参，调用过程或其他操作符时，也不会使用错
+误数量或类型的实参。
 
-本节，我们将这种技术应用于名为TYPED-OO的面向对象语言。这种语言具有上述所有安全属
-性，此外，通过我们检查器的程序决不会给没有对应方法的对象发送消息，也不会给对象发
+本节，我们将这种技术应用于名为 TYPED-OO 的面向对象语言。这种语言具有上述所有安全
+属性，此外，通过我们检查器的程序不会给没有对应方法的对象发送消息，也不会给对象发
 送实参数量或类型错误的消息。
 
 TYPED-OO 的示例程序如@figure-ref{fig-9.12} 所示。这段程序定义了一个类 @tt{tree}，
-其方法 @tt{sum} 像@figure-ref{fig-9.2} 那样求出叶子之和，方法 @tt{equal} 取另一
+其方法 @tt{sum} 像@figure-ref{fig-9.2} 那样求出树叶之和，方法 @tt{equal} 取另一
 棵树，递归向下处理树，判断二者是否相等。
 
-这种语言的主要新特性是：
+这种语言的主要新特性有：
 
 @itemlist[
 
- @item{字段和方法需要用@secref{types}那样的语法指定类型。}
+ @item{字段和方法需要用和 @secref{types} 类似的语法指定类型。}
 
- @item{在面向对象@elem[#:style question]{设置}中，引入@emph{接口}
- (@emph{interface})的概念。}
+ @item{在面向对象设值中，引入@emph{接口} (@emph{interface}) 的概念。}
 
- @item{语言中引入了@emph{子类型多态} (@emph{subtype polymorphism})的概念。}
+ @item{语言中引入了@emph{子类型多态} (@emph{subtype polymorphism}) 的概念。}
 
- @item{语言中引入了@emph{强制转换} (@emph{casting})的概念，同时包含@exercise-ref{ex9.6} 中的
- @tt{instanceof}判断。}
+ @item{语言中引入了@emph{强制转换} (@emph{casting}) 的概念，同时也
+ 包含@exercise-ref{ex9.6} 中的 @tt{instanceof} 判断。}
 
 ]
 
 我们依次考虑这些特性。
 
-TYPED-OO中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种类型@tt{void}，作为@tt{set}操作的
-类型，然后添加@exercise-ref{ex7.9} 中的列表类型；像@exercise-ref{ex7.9} 那样，我们要求调用@tt{list}时至少给
-出一个实参。我们将标识符添加到类型表达式的集合中，但在本章，用作类型的标识符与同
-名的类或接口相关联。稍后我们详细思考这种对应关系。方法需要指明结果类型和参数类型，
-其语法与@secref{types}中的@tt{letrec}类似。最后是新增的两种表达式，@tt{cast}和
+TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种类型 @tt{void}，
+作为 @tt{set} 操作的类型，然后添加@exercise-ref{ex7.9} 中的列表类型；
+像@exercise-ref{ex7.9} 那样，我们要求调用 @tt{list} 时至少给出一个实参。我们给类
+型表达式的集合添加标识符，但在本章，用作类型的标识符与同名的类或接口相关联。稍后
+我们仔细考虑这种对应关系。方法需要指明结果类型和参数类型，其语法
+与@secref{types}中的 @tt{letrec} 类似。最后是两种新增的表达式 @tt{cast} 和
 @tt{instanceof}。
 
 要理解这种语言的新特性，我们必须像@definition-ref{d7.1.1} 那样，定义语言的类型。
 
-@definition[#:title #f #:tag "d9.5.1"]{
-定义类型为@${t}的表达值@${v}具有如下属性：
+@definition[#:title #f #:tag "d9.5.1"]{定义类型为 @${t} 的表达值 @${v} 具有如下
+性质：
 
- @nested[#:style 'inset]{
  @itemlist[
 
-  @item{若@${c}为类，当且仅当值是一个对象，且是类@${c}或其后代的实例时，值类型为
-  @tt{c}。}
+  @item{若 @${c} 为类，当且仅当值是一个对象，且是类 @${c} 或其后代的实例时，其类
+  型为 @${c}。}
 
-  @item{若@${I}为接口，当且仅当值是一个对象，且所属类实现了@${I}时，值类型为
-  @${I}。当且仅当类具有@tt{implements @${I}}声明，或其祖先实现了@${I}时，类实现
-  了@${I}。}
+  @item{若 @${I} 为接口，当且仅当值是一个对象，且所属类实现了 @${I} 时，值类型为
+  @${I}。当且仅当类具有 @tt{implements @${I}} 声明，或其祖先实现了 @${I} 时，类
+  实现了 @${I}。}
 
-  @item{若@${t}为其他类型，则用@definition-ref{d7.1.1} 中的规则。}
-
- ]
- }
-
-}
+  @item{若 @${t} 为其他类型，则用@definition-ref{d7.1.1} 中的规则。}
+ ]}
 
 对象只能是一个类的实例，但可以有很多类型。
 
@@ -1365,18 +1360,18 @@ TYPED-OO中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
  @item{创建对象时的类是其类型。}
 
  @item{该类的超类以及继承关系上方的所有类是其类型。特别地，每个对象都是
- @tt{object}类型。}
+ @tt{object} 类型。}
 
  @item{对象所属类实现的任意接口均是其类型。}
 
 ]
 
-第二条性质叫做@emph{子类多态} (@emph{subclass polymorphism})。第三条性质叫做@emph{接口多态}
-(@emph{interface polymorphism})。
+第二条性质叫做@emph{子类多态} (@emph{subclass polymorphism})。第三条性质
+叫做@emph{接口多态} (@emph{interface polymorphism})。
 
-接口表示实现某些方法的所有对象集合，而不论这些对象如何产生。仅当类@${c}按照约定
-的类型实现了接口@${I}要求的所有方法时，我们的判类系统才允许@${c}声称实现了@${I}。
-虽然我们的例子中只用了一个接口，但一个类可以实现多个不同接口。
+接口表示实现某些方法的所有对象集合，而不论这些对象如何生成。仅当类 @${c} 按照约
+定的类型实现了接口 @${I} 要求的所有方法时，我们的判类系统才允许 @${c} 声称实现了
+@${I}。虽然我们的例子中只用了一个接口，但一个类可以实现多个不同接口。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -1426,7 +1421,7 @@ in list(send o1 sum(),
 }|
 }
 
-@eopl-caption["fig-9.12"]{TYPED-OO的程序示例}
+@eopl-caption["fig-9.12"]{TYPED-OO 的程序示例}
 }
 
 @nested[#:style eopl-figure]{
@@ -1463,23 +1458,25 @@ in list(send o1 sum(),
           &\mathrel{\phantom{::=}} \fbox{@tt{list-type (type1)}}
           }
 
-@eopl-caption["fig-9.13"]{TYPED-OO中的新生成式}
+@eopl-caption["fig-9.13"]{TYPED-OO 中的新生成式}
 }
 
-在@figure-ref{fig-9.2} 中，类@tt{interior-node}和@tt{leaf-node}都实现了接口@tt{tree}。类型检查器
-允许这样，因为它们都实现了@tt{tree}要求的方法。
+在@figure-ref{fig-9.2} 中，类 @tt{interior-node} 和 @tt{leaf-node} 都实现了接口
+@tt{tree}。类型检查器允许这样，因为它们都实现了 @tt{tree} 所要求的 @tt{sum} 和
+@tt{equal} 方法。
 
-当@${e}的值是一个对象，且是类@${c}或其后代的实例时，表达式@tt{instanceof @${e}
-@${c}}返回真。强制转换是@tt{instanceof}的补充。当@${e}的值是一对像，且是类@${c}
-或其后代的实例时，@tt{cast}表达式@${case @${e} @${c}}的值与@${e}的值相同。否则
-@tt{case}表达式报错。@tt{cast @${e} @${c}}的类型总是@${c}，因为它只要返回值，类
-型就一定是@${c}。
+当 @${e} 的值是一个对象，且是类 @${c} 或其后代的实例时，表达式 @tt{instanceof
+@${e} @${c}} 返回真。强制转换是 @tt{instanceof} 的补充。当 @${e} 的值是一对像，
+且是类 @${c} 或其后代的实例时，@tt{cast} 表达式 @${cast @${e} @${c}} 的值与
+@${e} 的值相同；否则 @tt{cast} 表达式报错。@tt{cast @${e} @${c}} 的类型总是
+@${c}，因为只要返回值，它的类型就一定是 @${c}。
 
 例如，我们的示例程序包含如下方法
 
 @nested{
 
 @nested[#:style 'code-inset]{
+@nested[#:style small]{
 @verbatim|{
 method bool equal(t : tree)
  if instanceof t interior-node
@@ -1489,20 +1486,22 @@ method bool equal(t : tree)
           equal(send cast t interior-node getright())
       else false
  else false
-}|
+}|}
 }
 
-表达式@tt{case t interior-node}检查@tt{t}的值是否为@tt{interior-node}（或其后代，
-如果有的话）的实例。如果是，返回@tt{t}的值；否则报错。当且仅当对应的@tt{cast}成
-功时，@tt{instanceof}表达式返回真值。因此，本例中的@tt{instanceof}确保强制转换一
-定成功。而强制转换又确保@tt{send ... getleft()}能够使用。强制转换表达式返回值的
-类型一定为类@tt{interior-node}，因此，给这个值发消息@tt{getleft}是安全的。
+表达式 @tt{cast t interior-node} 检查 @tt{t} 的值是否为 @tt{interior-node}（或其
+后代，如果有的话）的实例。如果是，则返回 @tt{t} 的值；否则报错。当且仅当对应的
+@tt{cast} 成功时，@tt{instanceof} 表达式返回真值。因此，本例中的 @tt{instanceof}
+确保强制转换一定成功。而强制转换又确保 @tt{send ... getleft()} 能够使用。强制转
+换表达式返回值的类型一定为类 @tt{interior-node}，因此，给这个值发消息
+@tt{getleft} 是安全的。
 
 }
 
-我们的实现从@secref{s9.4.1}中的解释器开始。我们给@tt{value-of}添加两条从句，求
-@tt{instanceof}和@tt{cast}表达式的值：
+我们的实现从@secref{s9.4.1}中的解释器开始。我们给 @tt{value-of} 添加两条语句，求
+@tt{instanceof} 和 @tt{cast} 表达式的值：
 
+@nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
 (cast-exp (exp c-name)
   (let ((obj (value-of exp env)))
@@ -1515,11 +1514,12 @@ method bool equal(t : tree)
     (if (is-subclass? (object->class-name obj) c-name)
       (bool-val #t)
       (bool-val #f))))
-}
+}}
 
-过程@tt{is-subclass?}顺着第一个类结构的父系而上，直到找出第二个类，或在父系为
-@tt{#f}时停止。由于接口只用作类型，这个过程忽略它们。
+过程 @tt{is-subclass?} 沿着第一个类结构的父系而上，直到找出第二个类，或在父系为
+@tt{#f} 时停止。由于接口只用作类型，这个过程忽略它们。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{is-subclass?}} : @${\mathit{ClassName} \times \mathit{ClassName} \to \mathit{Bool}}}
 (define is-subclass?
@@ -1530,13 +1530,13 @@ method bool equal(t : tree)
         (let ((s-name (class->super-name
                         (lookup-class c-name1))))
           (if s-name (is-subclass? s-name c-name2) #f))))))
-]
+]}
 
 这样，本节语言的解释器就修改完成了。
 
 @exercise[#:level 1 #:tag "ex9.30"]{
 
-创建接口@tt{summable}：
+创建接口 @tt{summable}：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1545,8 +1545,8 @@ interface summable
 }|
 }
 
-为可求和列表、可求和二叉树（如@figure-ref{fig-9.12}）和可求和广义树（每个节点包含一个可求和的子
-节点列表）定义类。
+为可求和列表、可求和二叉树（如@figure-ref{fig-9.12}）和可求和的广义树（每个节点
+包含一个可求和的子节点列表）定义类。
 
 然后为接口
 
@@ -1563,17 +1563,18 @@ interface stringable
 
 @exercise[#:level 1 #:tag "ex9.31"]{
 
-在@figure-ref{fig-9.12} 中，把@tt{tree}定义为类，然后让两个节点类继承@tt{tree}可行吗？在什么情况
-下这种方法比使用类似@tt{summable}的接口更好？在什么情况下更糟？
+在@figure-ref{fig-9.12} 中，把 @tt{tree} 定义为类，然后让两个节点类继承
+@tt{tree} 可行吗？在什么情况下这种方法比使用 @tt{summable} 之类的接口更好？在什
+么情况下更糟？
 
 }
 
 @exercise[#:level 2 #:tag "ex9.32"]{
 
-不使用@tt{instanceof}和@tt{cast}，给类@tt{tree}写一个等值判断谓词。这里需要
-用@emph{双派发} (@emph{double dispatch})替代通常方法使用的单派发。可做如下模拟：
-不用@tt{instanceof}找出实参@tt{t}的类，而是让当前的树给@tt{t}发回一条消息，这条
-消息编码当前树所属类，其参数则包含适当字段的值。
+不使用 @tt{instanceof} 和 @tt{cast}，给类 @tt{tree} 写一个等值判断谓词。这里需要
+用@emph{双派发} (@emph{double dispatch}) 替代通常方法使用的单派发。可做如下模拟：
+不用 @tt{instanceof} 找出实参 @tt{t} 的类，而是让当前的树给 @tt{t} 返回一条消息，
+这条消息编码了当前树的所属类，其参数则包含适当字段的值。
 
 }
 
