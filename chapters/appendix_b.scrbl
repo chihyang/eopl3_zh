@@ -26,7 +26,8 @@ SLLGEN是一个Scheme包，用来生成解析器和扫描器。在本附录中�
 
 @section[#:style section-title-style-numbered #:tag "B.1"]{扫描}
 
-扫描问题如图B.1所示。我们在其中展示了一小段程序，以及应如何将其分割为基本单元。
+扫描问题如@figure-ref{fig-B.1} 所示。我们在其中展示了一小段程序，以及应如何将其
+分割为基本单元。
 
 字符串流应如何分割为词条是语言规范的一部分。语言的这部分规范有时称为@emph{词法规
 范} (@emph{lexical specification})。典型的词法规范可能包括：
@@ -309,8 +310,8 @@ parser GENerator）。在实践中，这有些过于严格了，但足以应付�
 
 @subsection[#:style section-title-style-unumbered #:tag "B.3-operations"]{SLLGEN的操作}
 
-SLLGEN包含几个过程，将扫描器和语法结合起来，形成可以执行的解析器。图B.2展示了用
-SLLGEN定义语言扫描器和解析器的例子。
+SLLGEN包含几个过程，将扫描器和语法结合起来，形成可以执行的解析器。
+@figure-ref{fig-B.2} 展示了用SLLGEN定义语言扫描器和解析器的例子。
 
 过程@tt{sllgen:make-define-datatypes}负责为语法的每个生成式产生一个
 @tt{define-datatype}表达式，供@tt{cases}使用。过程
