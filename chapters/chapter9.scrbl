@@ -455,9 +455,9 @@ in send o3 m3()
 @tt{self} 表达式返回当前方法操作的对象。
 
 @tt{send} 表达式包含一值为对象的表达式，一个方法名，以及 0 或多个操作数。它从对
-象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像在
-IMPLICIT-REFS 中那样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的
-引用绑定起来，并在这个词法绑定作用域内求方法主体的值。
+象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像
+IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引
+用绑定起来，并在这个词法绑定作用域内求方法主体的值。
 
 @tt{super-call} 表达式包含一个方法名和 0 或多个参数。它从表达式持有类的超类开始，
 找出指定的方法，然后以当前对象为 @tt{self}，求出方法主体的值。
@@ -1581,8 +1581,8 @@ interface stringable
 @section[#:style section-title-style-numbered #:tag "s9.6"]{类型检查器}
 
 现在我们来看这种语言的检查器。检查器的目标是确保一些安全属性。对我们的语言来说，
-这些属性包括原有过程式语言的那部分和之后面向对象语言的那部分：通过我们类型检查器
-的程序不会
+这些属性包括原有过程式语言的那部分和之后面向对象语言增加的那部分：通过我们类型检
+查器的程序不会
 
 @itemlist[
 
@@ -1594,21 +1594,22 @@ interface stringable
 
 ]
 
-我们无意验证@tt{initialize}方法确实初始化了所有字段，所以程序仍可能引用未初始化
-的字段。同样地，由于@tt{initialize}方法的类型通常难以预测，我们的检查器未防止以
-错误数量或类型的参数直接调用@tt{initialize}方法，但通过@tt{new}间接调用
-@tt{initialize}方法一定是正确的。
+我们无意验证 @tt{initialize} 方法确实初始化了所有字段，所以程序仍可能引用未初始
+化的字段。同样地，由于 @tt{initialize} 方法的类型通常难以预测，我们的检查器未防
+止以错误数量或类型的参数显式调用 @tt{initialize} 方法，但通过 @tt{new} 间接调用
+@tt{initialize} 方法一定是正确的。
 
-检查器首先实现@tt{type-of-program}。由于所有类的所有方法都是互递归的，我们以类似
-@tt{letrec}的方式处理。对@tt{letrec}，我们首先收集过程声明的类型，建立
-@tt{tenv-for-letrec-body}（@figure-ref{fig-7.3}）。然后，我们对照每个过程主体与其声明类型。最后，
-我们在@tt{tenv-for-letrec-body}中检查@tt{letrec}的主体。
+检查器首先实现 @tt{type-of-program}。由于所有类的所有方法都是互递归的，我们的处
+理方式类似 @tt{letrec}。对 @tt{letrec}，我们首先收集过程声明的类型，生成
+@tt{tenv-for-letrec-body}（@figure-ref{fig-7.3}）。然后，我们根据声明类型检查每
+个过程主体。最后，我们在 @tt{tenv-for-letrec-body} 中检查 @tt{letrec} 的主体。
 
-这里，我们首先调用@tt{initialize-static-class-env!}，遍历类声明，将所有类型收集
-到一个静态环境中。由于这个环境是全局的，且不会改变，我们不是将其作参数传递，而是
-把它存储在一个Scheme变量中。然后，我们用@tt{check-class-decl!}检查每个类声明。最
-后，我们找出程序主体的类型。
+这里，我们首先调用 @tt{initialize-static-class-env!}，遍历类声明，将所有类型收集
+到一个静态类环境中。由于这个环境是全局的，且不会改变，我们不是将其作参数传递，而
+是把它存储在一个 Scheme 变量中。然后，我们用 @tt{check-class-decl!} 检查每个类声
+明。最后，我们找出程序主体的类型。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
 (define type-of-program
@@ -1618,12 +1619,13 @@ interface stringable
         (initialize-static-class-env! class-decls)
         (for-each check-class-decl! class-decls)
         (type-of exp1 (init-tenv))))))
-]
+]}
 
-静态类环境将每个类名映射到一个静态类，这个类包含其父类的名字，字段的名字和类型，
-以及方法的名字和类型。在我们的语言中，接口没有父类，没有字段，所以我们用只含所需
-方法名字和类型的数据结构表示它们（但是，看看@exercise-ref{ex9.36}）。
+静态类环境将每个类名映射到一个静态类，这个类包含父类的名字、字段的名字和类型，以
+及方法的名字和类型。在我们的语言中，接口既没有父类，也没有字段，所以我们用只含所
+需方法名字和类型的数据结构表示它们（但是，看看@exercise-ref{ex9.36}）。
 
+@nested[#:style small]{
 @racketblock[
 (define-datatype static-class static-class?
   (a-static-class
@@ -1634,21 +1636,21 @@ interface stringable
     (method-tenv method-tenv?))
   (an-interface
     (method-tenv method-tenv?)))
-]
+]}
 
-在思考如何建立静态环境之前，我们先思考如何扩展@tt{type-of}，检查六种面向对象表达
-式的类型：@tt{self}、@tt{instanceof}、@tt{cast}、方法调用、超类调用、以及
+在思考如何生成静态环境之前，我们先思考如何扩展 @tt{type-of}，检查六种面向对象表
+达式的类型：@tt{self}、@tt{instanceof}、@tt{cast}、方法调用、超类调用，以及
 @tt{new}。
 
-对@tt{self}表达式，我们用伪变量@tt{%self}查询其类型，该变量一定绑定到当前持有类
-的类型，就像在解释器中，它绑定到当前持有对象一样。
+对 @tt{self} 表达式，我们用伪变量 @tt{%self} 查询其类型。就像在解释器中，
+@tt{%self} 绑定到当前持有对象一样，在检查器中，该变量一定绑定到当前持有类的类型。
 
-@tt{instanceof}表达式如果返回，总是返回@tt{bool}值。若@${e}的值是一个对象，且是
-@${c}或它的某个后代的实例，则表达式@tt{cast @${e} @${c}}返回@${e}的值。因此，
-@tt{cast @${e} @${c}}如果返回值，值的类型是@${c}。所以我们总能将@tt{cast @${e}
-@${c}}的类型视为@${c}。对@tt{instanceof}和@tt{cast}表达式，解释器求出参数的值，
-并用它执行@tt{object->class-name}，所以我们也必须确保操作数类型正常，且返回值是
-一个对象。这三种情况的代码如@figure-ref{fig-9.14} 所示。
+@tt{instanceof} 表达式如果返回，一定返回 @tt{bool} 值。若 @${e} 的值是一个对象，
+且是 @${c} 或它的某个后代的实例，则表达式 @tt{cast @${e} @${c}} 返回 @${e} 的值。
+因此，@tt{cast @${e} @${c}} 如果返回值，值的类型是 @${c}。所以我们总能将
+@tt{cast @${e} @${c}} 的类型视为 @${c}。对 @tt{instanceof} 和 @tt{cast} 表达式，
+解释器求出参数的值，并用它执行 @tt{object->class-name}，所以我们也必须确保操作数
+类型正常，且返回值是一个对象。这三种情况的代码如@figure-ref{fig-9.14} 所示。
 
 接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
 用。我们抽象出一个过程来检查它们。
@@ -1671,9 +1673,10 @@ interface stringable
       (report-bad-type-to-cast obj-type exp))))
 }
 
-@eopl-caption["fig-9.14"]{面向对象表达式在 @tt{type-of} 中的对应语句，第1部分}
+@eopl-caption["fig-9.14"]{面向对象表达式在 @tt{type-of} 中的对应语句，第 1 部分}
 }
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Listof(Exp)} \times \mathit{Exp} \to \mathit{Type}}}
 (define type-of-call
@@ -1691,13 +1694,13 @@ interface stringable
         (report-rator-not-of-proc-type
           (type-to-external-form rator-type)
           exp)))))
-]
+]}
 
-这个过程等价于CHECKED中@tt{call-exp}对应的那一行（@figure-ref{fig-7.2}），但有两处明显区别。首
-先，由于我们的过程现在取多个参数，我们要确保调用时的实参数目正确，而在
-@tt{for-each}这行，我们逐一对照每个操作数的类型和过程类型中相对应的参数类型。更
-有意思的是第二点，我们把@figure-ref{fig-7.2} 中的@tt{check-equal-type!}换成了
-@tt{check-is-subtype!}。
+这个过程等价于 CHECKED 中 @tt{call-exp} 对应的那一行（@figure-ref{fig-7.2}），但
+多了两处明显区别。首先，由于我们的过程现在取多个参数，我们要确保调用时的实参数目
+正确。在 @tt{for-each} 这行，我们逐一对照每个操作数的类型和过程类型中相应参数的
+类型。更有意思的是第二点，我们把@figure-ref{fig-7.2} 中的 @tt{check-equal-type!}
+换成了 @tt{check-is-subtype!}。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -1710,54 +1713,56 @@ interface stringable
 @eopl-caption["fig-9.15"]{过程类型的子类型判定}
 }
 
-为什么必须这样？子类多态原则是说，如果类@${c_2}扩展了@${c_1}，那么类@${c_2}的对
-象可在类@${c_1}对象能够出现的任何地方使用。如果我们写出了过程@tt{proc (o :
-@${c_1}) ...}，那么该过程应该能取类型为@${c_2}的实参。
+为什么必须这样？子类多态原则是说，如果类 @${c_2} 扩展了 @${c_1}，那么类 @${c_2}
+的对象可在类 @${c_1} 对象能够出现的任何地方使用。如果我们写出了过程 @tt{proc (o
+: @${c_1}) ...}，那么该过程应该能取类型为 @${c_2} 的实参。
 
 通常，我们可以将子类多态的概念推广到@emph{子类型多态}，就像@secref{modules}中处
-理@tt{<:}那样。我们说@${t_1}是@${t_2}的子类型，当且仅当
+理 @tt{<:} 那样。我们说 @${t_1} 是 @${t_2} 的子类型，当且仅当
 
 @itemlist[
 
- @item{@${t_1}和@${t_2}是类，且@${t_1}是@${t_2}的子类，或}
+ @item{@${t_1} 和 @${t_2} 是类，且 @${t_1} 是 @${t_2} 的子类，或}
 
- @item{@${t_1}是类，@${t_2}是接口，且@${t_1}或其某个超类实现了@${t_2}，或}
+ @item{@${t_1} 是类，@${t_2} 是接口，且 @${t_1} 或其某个超类实现了 @${t_2}，或}
 
- @item{@${t_1}和@${t_2}是过程类型，且@${t_2}参数类型是@${t_1}参数类型的子类型，
- @${t_1}结果类型是@${t_2}结果类型的子类型。}
+ @item{@${t_1} 和 @${t_2} 是过程类型，且 @${t_2} 参数类型是 @${t_1} 参数类型的子
+ 类型，@${t_1} 结果类型是 @${t_2} 结果类型的子类型。}
 
 ]
 
-要理解最后一条规则，令@${t_1}为@tt{(c1 -> d1)}，@${t_2}为@tt{(c2 -> d2)}，且
-@tt{c2 < c1}，@tt{d1 < d2}。令@tt{f}为一过程，类型为@${t_1}。我们说@tt{f}类型也
-为@${t_2}。为什么？假设我们给@tt{f}传递了类型为@tt{c2}的参数。由于@tt{c2 < c1}，
-参数类型也是@tt{c1}，所以@tt{f}可以接受这个参数。然后，@tt{f}返回值类型为@tt{d1}。
-但由于@tt{d1 < d2}，这个结果类型也是@tt{d2}。所以，如果给@tt{f}一个类型为@tt{c2}
-的参数，其返回值类型为@tt{d2}。因此，@tt{f}类型为@tt{(c2 -> d2)}。我们说结果类型
-的子类型判定是@emph{协变的} (@emph{covariant})，参数类型的子类型判定是@emph{逆变
-的}(@emph{contravariant})。见@figure-ref{fig-9.15}。这与 @secref{s8.3.2}中@tt{<:-iface}的定义类
-似。
+要理解最后一条规则，令 @${t_1} 为 @tt{(c1 -> d1)}，@${t_2} 为 @tt{(c2 -> d2)}，
+且 @tt{c2 < c1}，@tt{d1 < d2}。令 @tt{f} 为一过程，类型为 @${t_1}。我们说 @tt{f}
+类型也为 @${t_2}。为什么？假设我们给 @tt{f} 传递了类型为 @tt{c2} 的参数。由于
+@tt{c2 < c1}，参数类型也是 @tt{c1}，所以 @tt{f} 可以接受这个参数。然后，@tt{f}
+返回值类型为 @tt{d1}。但由于 @tt{d1 < d2}，这个结果类型也是 @tt{d2}。所以，如果
+给 @tt{f} 一个类型为 @tt{c2} 的参数，其返回值类型为 @tt{d2}。因此，@tt{f} 类型为
+@tt{(c2 -> d2)}。我们说结果类型的子类型判定是@emph{协变的} (@emph{covariant})，
+参数类型的子类型判定是@emph{逆变的} (@emph{contravariant})。见
+@figure-ref{fig-9.15}。这与 @secref{s8.3.2}中 @tt{<:-iface} 的定义类似。
 
-这部分代码如@figure-ref{fig-9.16} 所示。代码使用@tt{every2?}，它扩展@exercise-ref{ex1.24} 中的过程@tt{every?}，
-取一个双参数谓词和两个列表，当列表长度相同且对应元素满足谓词时，返回@tt{#t}，否
-则返回@tt{#f}。
+这部分代码如@figure-ref{fig-9.16} 所示。代码使用@tt{every2?}，
+它扩展@exercise-ref{ex1.24} 中的过程 @tt{every?}，取一个双参数谓词和两个列表，当
+列表长度相同且对应元素满足谓词时，返回 @tt{#t}，否则返回 @tt{#f}。
 
-现在可以逐一考虑三种调用（@figure-ref{fig-9.17}）。对方法调用，我们首先像通常那样，找出目标对象
-和操作数的类型。我们用类似@tt{find-method}的@tt{find-method-type}找出方法的类型。
-如果目标类型不是类或接口，那么@tt{type->class-name}报错。如果没有对应方法，那么
-@tt{find-method-type}报错。然后，我们调用@tt{type-of-call}验证操作数的类型与方法
-的期望相符，并返回结果的类型。
+现在可以逐一考虑三种调用（@figure-ref{fig-9.17}）。对方法调用，我们首先像通常那
+样，找出目标对象和操作数的类型。我们用类似 @tt{find-method} 的
+@tt{find-method-type} 找出方法的类型。如果目标类型不是类或接口，那么
+@tt{type->class-name} 报错。如果没有对应方法，那么 @tt{find-method-type} 报错。
+然后，我们调用 @tt{type-of-call} 验证操作数的类型与方法的期望是否相符，并返回结
+果的类型。
 
-对@tt{new}表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报错。
-之后，用操作数的类型调用@tt{type-of-call}，检查调用@tt{initialize}是否安全。如果
-检查通过，那么执行表达式就是安全的。由于@tt{new}表达式返回指定类的新对象，结果类
-型就是对应类的类型。
+对 @tt{new} 表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报
+错。之后，用操作数的类型调用 @tt{type-of-call}，检查调用 @tt{initialize} 是否安
+全。如果检查通过，那么执行表达式就是安全的。由于 @tt{new} 表达式返回指定类的新对
+象，结果类型就是对应类的类型。
 
-TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境。
+TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环境。
 
-要构建静态类环境，@tt{initialize-static-class-env!}首先将其设置为空，然后为类
-@tt{object}添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
+要构建静态类环境，@tt{initialize-static-class-env!} 首先将其设置为空，然后为类
+@tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
+@nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-static-class-env!
@@ -1766,26 +1771,26 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
     (add-static-class-binding!
       'object (a-static-class #f '() '() '() '()))
     (for-each add-class-decl-to-static-class-env! c-decls)))
-]
+]}
 
-过程@tt{add-class-decl-to-static-class-env!}（@figure-ref{fig-9.18}）承担创建静态类的艰巨工作。
-对每个类，我们必须收集其接口、字段和方法：
+过程 @tt{add-class-decl-to-static-class-env!}（@figure-ref{fig-9.18}）承担创建静
+态类的艰巨工作。对每个类，我们必须收集其接口、字段和方法：
 
 @itemlist[
 
  @item{类实现父类实现的任何接口，以及自身声称实现的接口。}
 
  @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
- 所以，@tt{field-names}由@tt{append-field-names}计算而得，就像
- @tt{initialize-class-env!}那样（@pageref{initialize-class-env!}）。}
+ 所以，@tt{field-names} 由 @tt{append-field-names} 计算而得，就像
+ @tt{initialize-class-env!} 那样（@pageref{initialize-class-env!}）。}
 
  @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
 
- @item{类的方法包括父类的和自身的，方法带有声明类型。我们用@tt{proc-type}记录方
- 法的类型。我们把当前声明的方法放在前面，因为它们覆盖父类的方法。}
+ @item{类的方法包括父类的和自身的，方法带有声明类型。我们用 @tt{proc-type} 记录
+ 方法的类型。我们把当前声明的方法放在前面，因为它们覆盖父类的方法。}
 
  @item{我们确保当前类中声明的方法名、接口名和字段名不重复。我们还确保类中一定有
- @tt{initialize}方法。}
+ @tt{initialize} 方法。}
 
 ]
 
@@ -1836,7 +1841,7 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
         (memv name2 interface-names)))))
 ]
 
-@eopl-caption["fig-9.16"]{TYPED-OO的子类型判定}
+@eopl-caption["fig-9.16"]{TYPED-OO 的子类型判定}
 }
 
 @nested[#:style eopl-figure]{
@@ -1882,31 +1887,33 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
         (class-type class-name)))))
 }
 
-@eopl-caption["fig-9.17"]{面向对象表达式在 @tt{type-of} 中的对应语句，第2部分}
+@eopl-caption["fig-9.17"]{面向对象表达式在 @tt{type-of} 中的对应语句，第 2 部分}
 }
 
-对接口声明，我们只需处理方法名与其类型。
+对接口声明，我们只需处理方法名和类型。
 
-一旦建立了静态类环境，我们可以检查每个类声明。这由@tt{check-class-decl!}（@figure-ref{fig-9.19}）
-完成。对接口，什么都不必检查。对类声明，我们传递从静态类环境收集到的信息，检查每
-个方法。最后，我们检查类是否实现了它声称实现的每个接口。
+一旦建立了静态类环境，我们可以检查每个类声明。这由
+@tt{check-class-decl!}（@figure-ref{fig-9.19}）完成。对接口，什么都不必检查。对
+类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
+了它声称实现的每个接口。
 
 要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
-境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否是声明中结果类型
+境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
 的子类型。
 
 但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
 类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
-型。这条规则的唯一例外是@tt{initialize}，它只在当前类中调用，且随继承改变类型
-（见@figure-ref{fig-9.12}）。要这样做，它调用@tt{maybe-find-method-type}，后者返回已绑定方法的
-类型，或者@tt{#f}。见@figure-ref{fig-9.20}。
+型。这条规则的唯一例外是 @tt{initialize}，它只在当前类中调用，且随继承改变类型
+（见@figure-ref{fig-9.12}）。要这样做，它调用 @tt{maybe-find-method-type}，后者
+返回已绑定方法的类型，或者 @tt{#f}。见@figure-ref{fig-9.20}。
 
-如@figure-ref{fig-9.21}，过程@tt{check-if-implements?}取两个符号，分别为类名和接口名。它首先检
-查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查类是否提供了同名
-且类型兼容的方法。
+如@figure-ref{fig-9.21}，过程 @tt{check-if-implements?} 取两个符号，分别为类名和
+接口名。它首先检查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查
+类是否提供了同名且类型兼容的方法。
 
-为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。静态类是逆序的，这反映了建立类环
-境的顺序。三个类中的方法顺序相同，且类型相同，符合期望。
+为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。
+静态类是逆序的，这反映了生成类环境的顺序。三个类中的方法顺序相同，且类型相同，符
+合期望。
 
 这样，检查器就完成了。
 
@@ -2021,23 +2028,23 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
 @exercise[#:level 1 #:tag "ex9.33"]{
 
-扩展类型检查器，确保安全属性：@tt{instanceof}和@tt{cast}不会对不是对象的值或不是
-类的类型执行。
+扩展类型检查器，确保安全属性：@tt{instanceof} 和 @tt{cast} 不会处理非对象值或非
+类类型。
 
 }
 
 @exercise[#:level 1 #:tag "ex9.34"]{
 
-若@${e}的类型不是@${c}的后代或者祖先，则表达式@tt{cast @${e} @${c}}不会成功。
-（为什么？）扩展类型检查器，确保程序只对满足这条属性的@tt{cast}表达式求值。再对
-@tt{instanceof}检查做相应扩展。
+若 @${e} 的类型不是 @${c} 的后代或者祖先，则表达式 @tt{cast @${e} @${c}} 不会成
+功（为什么？）。扩展类型检查器，确保程序只对满足这条属性的 @tt{cast} 表达式求值。
+再对 @tt{instanceof} 的检查做相应扩展。
 
 }
 
 @exercise[#:level 1 #:tag "ex9.35"]{
 
-扩展类型检查器，使 @tt{initialize} 方法只从 @tt{new-object-exp} 内部调用，从而加
-强安全性。
+扩展类型检查器，确保 @tt{initialize} 方法只从 @tt{new-object-exp} 内部调用，从而
+加强安全性。
 
 }
 
@@ -2082,8 +2089,8 @@ TYPED-OO中表达式的检查讨论完了，我们接着来构建静态类环境
 
 @exercise[#:level 2 #:tag "ex9.37"]{
 
-我们的TYPED-OO语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方法
-的选择依赖于对象的类型，而不是所属类。考虑例子
+我们的 TYPED-OO 语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方
+法的选择依赖于对象的类型，而不是所属类。考虑例子
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -2101,13 +2108,13 @@ in list((f o), (g o))
 }|
 }
 
-调用@tt{f}和@tt{g}时，@tt{x}类型为@tt{c1}，但绑定到类@tt{c2}的对象。方法@tt{m1}
-使用动态分发，所以调用的是@tt{c2}的方法@tt{m1}，返回12。方法@tt{m2}使用静态分发，
-所以给@tt{x}发消息@tt{m2}时，调用的是与@tt{x}类型（即本例中的@tt{c1}）对应的方法，
-所以返回21。
+调用 @tt{f} 和 @tt{g} 时，@tt{x} 类型为 @tt{c1}，但绑定到类 @tt{c2} 的对象。方法
+@tt{m1} 使用动态分发，所以调用的是 @tt{c2} 的方法 @tt{m1}，返回 12。方法 @tt{m2}
+使用静态分发，所以给 @tt{x} 发消息 @tt{m2} 时，调用的是与 @tt{x} 类型（即本例中
+的 @tt{c1}）对应的方法，所以返回 21。
 
-修改 @secref{s9.5}中的解释器，处理静态分发。提示：考虑在环境中记录类型信息，那么
-解释器就能在@tt{send}中找出目标表达式的类型。
+修改@secref{s9.5}中的解释器，处理静态分发。提示：考虑在环境中记录类型信息，那么
+解释器就能在 @tt{send} 中找出目标表达式的类型。
 
 }
 
@@ -2160,14 +2167,15 @@ in list((f o), (g o))
 
 @exercise[#:level 2 #:tag "ex9.38"]{
 
-为什么类的信息必须在检查方法之前加入到静态类环境中？提示：考虑方法主体中通过
-@tt{self}调用方法时会发生什么？
+为什么类的信息必须在检查方法之前加入到静态类环境中？提示：思考一下，某个方法主体
+通过 @tt{self} 调用方法时会发生什么？
 
 }
 
 @exercise[#:level 2 #:tag "ex9.39"]{
 
-除了在@tt{new}内间接调用之外，让类型检查器防止调用@tt{initialize}。
+除了在 @tt{new} 内隐式调用 @tt{initialize} 之外，让类型检查器禁止调用
+@tt{initialize}。
 
 }
 
@@ -2180,7 +2188,7 @@ in list((f o), (g o))
 
 @exercise[#:level 2 #:tag "ex9.41"]{
 
-扩展类型检查器，像@exercise-ref{ex9.8} 中那样，处理@tt{fieldref}和@tt{fieldset}。
+扩展类型检查器，像@exercise-ref{ex9.8} 那样，处理 @tt{fieldref} 和 @tt{fieldset}。
 
 }
 
