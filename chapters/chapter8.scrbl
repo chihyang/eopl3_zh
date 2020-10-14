@@ -983,7 +983,7 @@ Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-transparent-types"]{透明类型}
 
-我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete})类型
+我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete}) 类型
 或@emph{类型缩写} (@emph{type abbreviation})。
 
 @example[#:tag "eg-8.6"]{

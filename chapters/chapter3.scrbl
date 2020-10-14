@@ -29,11 +29,11 @@
 }
 
 而我们的目标是写出程序，实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，
-由我们要实现的语言写出。这叫做@emph{源语言} (@emph{source language})或@emph{被定
-语言} (@emph{defined language})。前端接收程序文本（由源语言写成的程序），将其转
-化为抽象语法树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根据
-结构执行一些动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@emph{实现
-语言} (@emph{implementation language}) 或@emph{定义语言} (@emph{defining
+由我们要实现的语言写出。这叫做@emph{源语言} (@emph{source language}) 或@emph{被
+定语言} (@emph{defined language})。前端接收程序文本（由源语言写成的程序），将其
+转化为抽象语法树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根
+据结构执行一些动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@emph{实
+现语言} (@emph{implementation language}) 或@emph{定义语言} (@emph{defining
 language})。我们的大多数实现都遵照这种方式。
 
 另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
@@ -53,7 +53,7 @@ code})，称其解释器称为@emph{虚拟机} (@emph{virtual machine})。
 
 不论采用哪种实现策略，我们都需要一个@emph{前端} (@emph{front end})，将程序转换为
 抽象语法树。因为程序只是字符串，我们的前端要将这些字符组成有意义的单元。分组通常
-分为两个阶段：@emph{扫描} (@emph{scanning})和@emph{解析} (@emph{parsing})。
+分为两个阶段：@emph{扫描} (@emph{scanning}) 和@emph{解析} (@emph{parsing})。
 
 扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@emph{词条}
 (@emph{lexical item})、@emph{词素} (@emph{lexeme})、或者最常见的@emph{词牌}
@@ -63,8 +63,8 @@ specification})。扫描器取一字符序列，生成词牌序列。
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
 文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@emph{句法}
-(@emph{syntactic})或@emph{语法} (@emph{grammatical})结构。解析器取一词牌序列（由
-扫描器给出），生成一棵抽象语法树。
+(@emph{syntactic}) 或@emph{语法} (@emph{grammatical}) 结构。解析器取一词牌序列
+（由扫描器给出），生成一棵抽象语法树。
 
 设计前端的标准方式是使用@emph{解析器生成器} (@emph{parser generator})。解析器生
 成器是一程序，取一词法规范和语法，生成一个扫描器和解析器。
@@ -147,7 +147,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 @subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
 
 任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
-个这样的集合：@emph{表达值} (@emph{expressed values})和@emph{指代值}
+个这样的集合：@emph{表达值} (@emph{expressed values}) 和@emph{指代值}
 (@emph{denoted values})。表达值是指表达式可能的取值，指代值是指可以绑定到变量的
 值。
 
@@ -943,9 +943,9 @@ in unpack x y = cons(u,cons(3,emptylist))
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @emph{绑定变量} (@emph{bound
-variable})或@emph{形参} (@emph{formal parameter})。在过程调用 @tt{(call-exp
+variable}) 或@emph{形参} (@emph{formal parameter})。在过程调用 @tt{(call-exp
 @${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@emph{操作符} (@emph{operator})，表
-达式 @${exp_2} 是@emph{操作数} (@emph{operand})或@emph{实际参数} (@emph{actual
+达式 @${exp_2} 是@emph{操作数} (@emph{operand}) 或@emph{实际参数} (@emph{actual
 parameter})。我们用@emph{实参} (@emph{argument}) 指代实参的值。
 
 这是这种语言的两个小例子。
@@ -1237,9 +1237,9 @@ in ((f 3) 4)
 }|
 }
 
-这个小技巧叫做@elemtag["curry"]{@emph{咖哩化}} (@emph{Currying})，该过程则称
-作@emph{咖喱式} (@emph{Curried})的。写出一个咖喱式的过程，它取两个参数，返回二者
-之和。在我们的语言中，可以把 @${x+y} 写成 @tt{-(x,-(0,y))}。
+这个小技巧叫做@elemtag["curry"]{@emph{咖哩化}} (@emph{Currying})，该过程则
+称作@emph{咖喱式} (@emph{Curried}) 的。写出一个咖喱式的过程，它取两个参数，返回
+二者之和。在我们的语言中，可以把 @${x+y} 写成 @tt{-(x,-(0,y))}。
 
 }
 }
@@ -1747,8 +1747,8 @@ y z)} 求得。
 }
 }
 
-这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping})规则，这样声明的变量叫
-做@emph{词法变量} (@emph{lexical variable})。
+这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping}) 规则，这样声明的变量
+叫做@emph{词法变量} (@emph{lexical variable})。
 
 使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
 @exact-elem{”}。这样的内层声明@emph{遮蔽} (@emph{shadow}) 外层声明。例如，在上
@@ -1867,7 +1867,7 @@ depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{�
 
 这里，每个 @tt{nameless-lambda} 都声明了一个新的无名变量，每个变量引用由其词深替
 代；这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
-address})或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
+address}) 或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
 引用的词法地址。除非用来提供调试信息，计算一旦完成，变量名即可丢弃。
 
 }

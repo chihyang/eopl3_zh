@@ -18,16 +18,16 @@
 果} (@emph{effect})：它可以读取，打印，修改内存或者文件系统的状态。在现实世界中，
 我们@emph{总是}对效果很感兴趣：如果一次计算不显示答案，那对我们完全没用！
 
-产生值和产生效果有何区别？效果是@emph{全局性} (@emph{global})的，整个计算都能看
+产生值和产生效果有何区别？效果是@emph{全局性} (@emph{global}) 的，整个计算都能看
 到。效果@emph{感染}整个计算（故意用双关语）。
 
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
 是局部的，但变量赋值有可能是全局的。那是在本不相关的几部分计算之间@emph{共享}
-(@emph{share})值。如果两个过程知道内存中的同一位置，它们就能共享信息。如果把信息
-留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
+(@emph{share}) 值。如果两个过程知道内存中的同一位置，它们就能共享信息。如果把信
+息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
 
-我们把内存建模为从@emph{位置} (@emph{location})到值集合的的有限映射，称值集合
-为@emph{可存储值} (@emph{storable values})。出于历史原因，我们称之为@emph{存储器}
+我们把内存建模为从@emph{位置} (@emph{location}) 到值集合的的有限映射，称值集合为
+@emph{可存储值} (@emph{storable values})。出于历史原因，我们称之为@emph{存储器}
 (@emph{store})。通常，一种语言中的可存储值与表达值相同，但不总是这样。这个选择是
 语言设计的一部分。
 
@@ -41,7 +41,7 @@
 (@emph{R-values})。
 
 我们考虑两种带有存储器的语言设计。这些设计叫做@emph{显式引用} (@emph{explicit
-reference})和@emph{隐式引用} (@emph{implicit reference})。
+reference}) 和@emph{隐式引用} (@emph{implicit reference})。
 
 @section[#:style section-title-style-numbered #:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
 
@@ -1029,8 +1029,8 @@ in let p = proc (y) -(y,x)
 
 迄今为止，我们的语言都是以@emph{表达式为主} (@emph{expression-oriented})：我们感
 兴趣的主要是表达式这种句法类别和它们的值。扩展语言，建模简单的@emph{语句为主}
-(@emph{statement-oriented})的语言，其规范概述如下。一定要@emph{遵循语法}，分别写
-出过程来处理程序、语句和表达式。
+(@emph{statement-oriented}) 的语言，其规范概述如下。一定要@emph{遵循语法}，分别
+写出过程来处理程序、语句和表达式。
 
 @nested[#:style hangindent]{
 
@@ -1890,7 +1890,7 @@ in let f = proc (z) 11
 }
 }
 
-这里用到了名为@emph{助记法} (@emph{memoization})的通用策略。
+这里用到了名为@emph{助记法} (@emph{memoization}) 的通用策略。
 
 }
 

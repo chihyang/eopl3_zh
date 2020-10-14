@@ -191,10 +191,10 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
 质。
 
-本节介绍几种数据类型的表示策略。我们用数据类型@emph{环境} (@emph{environment})解
-释这些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语言
-的实现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关联
-起来。
+本节介绍几种数据类型的表示策略。我们用数据类型@emph{环境} (@emph{environment})
+解释这些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语
+言的实现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关
+联起来。
 
 只要能够检查两个变量是否相等，变量能够用我们喜欢的任何方式表示。我们选用 Scheme
 符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
@@ -347,7 +347,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 }
 
 @nested[#:style 'noindent]{这叫@emph{a-list}或@emph{关联列
-表}(@emph{association-list})表示法。}}
+表}(@emph{association-list}) 表示法。}}
 
 @exercise[#:level 1 #:tag "ex2.6"]{
 
@@ -412,8 +412,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   "肋排环境表示法")
 }
 
-这叫做@emph{肋排}(@emph{ribcage})表示法。环境由名为@emph{肋骨} (@emph{rib})的序
-对列表表示；每根左肋是变量列表，右肋是对应的值列表。
+这叫做@emph{肋排}(@emph{ribcage}) 表示法。环境由名为@emph{肋骨} (@emph{rib}) 的
+序对列表表示；每根左肋是变量列表，右肋是对应的值列表。
 
 用这种表示实现 @tt{extend-env*} 和其他环境接口。
 
@@ -805,7 +805,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @tt{rand} 分别是 @emph{变量表达式} (@emph{variable expression})、@emph{变量}
 (@emph{variable})、@emph{绑定变量} (@emph{bound variable})、@emph{调用表达式}
 (@emph{application expression})、@emph{操作符} (@emph{operator}) 和@emph{操作数}
-(@emph{operand})的缩写。
+(@emph{operand}) 的缩写。
 
 这些表达式声明了三种构造器：@tt{var-exp}、@tt{lambda-exp} 和 @tt{app-exp}，以及
 一个谓词 @tt{lc-exp?}。三个构造器用谓词 @tt{identifier?} 和 @tt{lc-exp?} 检查它
@@ -1146,7 +1146,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
 语法通常指定归纳式数据类型的某一具体表示，后者使用前者生成的字符串或值。这种表示
-叫做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external})表
+叫做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external}) 表
 示。
 
 例如，@definition-ref{d1.1.8} 指定集合lambda演算表达式，用的就是 lambda 演算表达
@@ -1169,10 +1169,10 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 表达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现这
 些。
 
-将内在表示形象化为@emph{抽象语法树} (@emph{abstract syntax tree})也很不错。@figure-ref{fig-2.2}
-展示了一棵抽象语法树，它代表数据类型@tt{lc-exp}表示的lambda演算表达式@tt{(lambda
-(x) (f (f x)))}。树的每个内部节点以相应的生成式名字为标识。树枝以所出现的非终止
-符名字为标识。叶子对应终止符字符串。
+将内在表示形象化为@emph{抽象语法树} (@emph{abstract syntax tree}) 也很不错。
+@figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
+lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
+字为标识。树枝以所出现的非终止符名字为标识。叶子对应终止符字符串。
 
 @nested[#:style eopl-figure]{
 @centered{
@@ -1203,8 +1203,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 种语法转换为另一种。
 
 当具体语法是个字符串集合，推导出对应的抽象语法树可能相当棘手。这一任务叫做
-@emph{解析} (@emph{parsing})，由@emph{解析器} (@emph{parser})完成。因为写解析器
-通常比较麻烦，所以最好借由工具@emph{解析器生成器} (@emph{parser generator})完成。
+@emph{解析} (@emph{parsing})，由@emph{解析器} (@emph{parser}) 完成。因为写解析器
+通常比较麻烦，所以最好借由工具@emph{解析器生成器} (@emph{parser generator}) 完成。
 解析器生成器以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需
 以某种机器能够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
 
@@ -1309,7 +1309,7 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 @exercise[#:level 2 #:tag "ex2.31"]{
 
 有时，把具体语法定义为括号包围的符号和整数序列很有用。例如，可以把集合@emph{前缀
-列表} (@emph{prefix list})定义为：
+列表} (@emph{prefix list}) 定义为：
 
 @nested[#:style 'noindent]{
 
