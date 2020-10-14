@@ -1008,9 +1008,9 @@ bogus-oddeven() in send o1 odd (13)} 给出错误的答案。
 
 @exercise[#:level 1 #:tag "ex9.9"]{
 
-添加表达式 @tt{superfieldref} @${field\mbox{-}name} 和 @tt{superfieldset}
-@${field\mbox{-}na\-me} @tt{=} @${exp}，处理 @tt{self} 中原本被遮蔽的字段。记住：
-@tt{super} 是静态的，总是指持有类的超类。
+添加 @tt{superfieldref} @${field\mbox{-}name} 和 @tt{superfieldset}
+@${field\mbox{-}name} @tt{=} @${exp} 表达式，处理 @tt{self} 中原本被遮蔽的字段。
+记住：@tt{super} 是静态的，总是指持有类的超类。
 
 }
 
@@ -1466,7 +1466,7 @@ in list(send o1 sum(),
 @tt{equal} 方法。
 
 当 @${e} 的值是一个对象，且是类 @${c} 或其后代的实例时，表达式 @tt{instanceof
-@${e} @${c}} 返回真。强制转换是 @tt{instanceof} 的补充。当 @${e} 的值是一对像，
+@${e} @${c}} 返回真。强制转换是 @tt{instanceof} 的补充。当 @${e} 的值是一对象，
 且是类 @${c} 或其后代的实例时，@tt{cast} 表达式 @${cast @${e} @${c}} 的值与
 @${e} 的值相同；否则 @tt{cast} 表达式报错。@tt{cast @${e} @${c}} 的类型总是
 @${c}，因为只要返回值，它的类型就一定是 @${c}。
