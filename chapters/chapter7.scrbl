@@ -1373,7 +1373,7 @@ in (odd 13)
            (list @${t_1 = @tt{bool}})
            (list @${t_2 = @tt{int}}))]))]
 
-问题来了。我们推导出 @${t_f = t_f \to @tt{int}}。但没有一种类型具有这种属性，因
+问题来了。我们推导出 @${t_f = t_f \to @tt{int}}。但没有一种类型具有这种性质，因
 为这个方程的右边总是比左边大：如果 @${t_f} 的语法树包含 @${k} 个节点，那么方程右
 边总是包含 @${k+2} 个节点。
 
@@ -1556,7 +1556,7 @@ in letrec
  tv_n = t_n[tv = t]
 \end{pmatrix}}
 
-该定义具有如下属性：对任意类型 @${t}，
+该定义具有如下性质：对任意类型 @${t}，
 
 @$${(t\sigma)[tv = t'] = t(\sigma[tv = t'])}
 
@@ -1598,7 +1598,7 @@ in letrec
     (cons (cons tvar ty) subst)))
 ]
 
-其余工作移至 @tt{apply-subst-to-type}，而属性 @${t(\sigma[tv = t']) =
+其余工作移至 @tt{apply-subst-to-type}，而性质 @${t(\sigma[tv = t']) =
 (t\sigma)[tv = t']} 仍然满足。这样定义 @tt{extend-subst} 还需要无存不变式吗？
 
 }

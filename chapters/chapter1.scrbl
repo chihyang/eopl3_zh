@@ -280,7 +280,7 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 
 @; }
 
-这两条规则对应上述@definition-ref{d1.1.4} 中的两条属性。规则一是说空表属于@List-of-Int-$[]；
+这两条规则对应上述@definition-ref{d1.1.4} 中的两条性质。规则一是说空表属于@List-of-Int-$[]；
 规则二是说，若 @${n} 属于 @Int-$[] 且 @${l} 属于 @List-of-Int-$[]，则@tt{(@${n}
 . @${l})} 属于 @List-of-Int-$[]。这些规则叫做@emph{语法}。
 

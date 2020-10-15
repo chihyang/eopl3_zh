@@ -309,7 +309,7 @@ behavior})。
 }
 }
 
-其中，@tt{(zero1-cont cont)} 是一续文，具有如下属性：
+其中，@tt{(zero1-cont cont)} 是一续文，具有如下性质：
 
 @nested[#:style 'code-inset]{
 @verbatim|{
