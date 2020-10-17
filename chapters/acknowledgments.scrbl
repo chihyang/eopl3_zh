@@ -8,7 +8,7 @@
 助。特别感激以下诸君的贡献，对他们我们深表谢忱。Oliver Danvy 鼓励我们思考一阶组
 合式续文传递算法，并提出了一些饶有趣味的练习。Matthias Felleisen 切中肯綮的分析
 改善了一些章节的设计。Amr Sabry 提出了许多有用的建议，在@secref{oac}的草稿中发现
-了至少一个极难察觉的问题。Benjamin Pierce 自使用本书第一版授课以来提出了一系列深
+了至少一处极难察觉的问题。Benjamin Pierce 自使用本书第一版授课以来提出了一系列深
 入见解，其中大半已为我们采用。Gary Leavens 对第二版的初稿提出了极为细致而珍贵的
 评论，包括许多详细的修改建议。Stephanie Weirich 在本书第二版@secref{types}的类型
 推导代码中发现了一个不易察觉的问题。Ryan Newton 除了阅读@secref{da}草稿之外，又
