@@ -305,7 +305,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 
 当且仅当操作数的值为0，@tt{zero?} 表达式的值为真。像@definition-ref{d1.1.5} 那样，
 可将其写成一条推理规则。我们以 @tt{bool-val} 为构造器，把布尔值转换为表达值；以
-@tt{expval->num} 为抽词器，判断表达式的值是否为整数，如果是，则返回该整数。
+@tt{expval->num} 为提取器，判断表达式的值是否为整数，如果是，则返回该整数。
 
 @nested[#:style eopl-figure]{
 令@${\rho =} @tt{[i=1,v=5,x=10]}。@linebreak[]
@@ -578,7 +578,7 @@ in let y = 2
 @elemref["sllgen"]{附录B}。——@emph{译注}} 为前端，表达式用@figure-ref{fig-3.6}
 中的数据类型表示。在我们的实现中，表达值的表示如@figure-ref{fig-3.7} 所示。数据
 类型声明了构造器 @tt{num-val} 和 @tt{bool-val}，用来将整数值和布尔值转换为表达值。
-我们还定义了抽词器，用来将表达值转为整数或布尔值。如果表达值类型不符预期，抽词器
+我们还定义了提取器，用来将表达值转为整数或布尔值。如果表达值类型不符预期，提取器
 报错。
 
 @nested[#:style eopl-figure]{
