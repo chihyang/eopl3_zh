@@ -38,8 +38,8 @@ al., 2001) 深入探讨了如何递归编程。
 al. (2006)，都对语法和解析算法进行了大篇幅的讨论。将具体语法和抽象语法分开的思想
 通常归功于 McCarthy (1962)。他强调用接口抽象语法树。
 
-我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 Brustall (1969)提出。即使过
-程没有@bold{遵循语法}，@emph{子目标归纳} (@emph{subgoal induction}) (Morris
+我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 Brustall (1969) 提出。即使
+过程没有@bold{遵循语法}，@emph{子目标归纳} (@emph{subgoal induction}) (Morris
 &Wegbreit, 1977) 仍是证明递归过程正确性的有效方法。过程的可能输入受不变式约束时，
 子目标归纳也有效。
 
@@ -133,9 +133,9 @@ Steele 的 RABBIT 编译器 (Steele, 1978) 以 CPS 变换为基础。这一编�
 @secref{cps}的 CPS 算法基于 Danvy & Nielsen (2003) 提出的一阶组合式算法。CPS 翻
 译历史悠久，包括 Sabry & Wadler (1997)，他们改进了 Sabry & Felleisen (1993)，而
 后者又是受本书初版第 8 章的 CPS 算法启发。@exercise-ref{ex6.30} 基于 Danvy &
-Filinski (1992)提出的高阶组合式 CPS 算法。CPS 之外还有 A-normal form
-（@exercise-ref{ex6.34}），由 Sabry & Felleisen (1992); Flanagan et al. (1993)
-提出。
+Filinski (1992) 提出的高阶组合式 CPS 算法。CPS 之外还有 A-normal
+form（@exercise-ref{ex6.34}），由 Sabry & Felleisen (1992); Flanagan et
+al. (1993) 提出。
 
 当前大多数关于有类型编程语言的工作都能追溯到 Milner (1978)，他在 ML 中引入了类型，
 作为保证计算机生成证明可靠性的工具。Ullman (1998) 对此做了精辟的介绍。更多讨论参
@@ -149,12 +149,12 @@ Wand (1987) 率先阐明了如何将类型推导分为方程构建和求解。�
 的 Milner (1978) 系统与@exercise-ref{ex7.28} 中的系统基本相同。Pierce (2002,
 2004) 的两卷著作对类型做了百科全书式的讨论。
 
-数据抽象思想是 1970 年代的一大创举，而且相关著作汗牛充栋。这里我们仅仅提及
-Parnas (1972)，他强调了以接口作为信息隐藏边界的重要性。数据类型的实现是满足该类
-型定义的任意值和操作的集合。Goguen et al. (1977) 证明，任意数据类型都能以树的集
-合实现，树中记录了值如何构建，且从一个树的集合到该数据类型另一实现的集合具有唯一
-映射。相对地，任意数据类型都能以过程表示法实现，且从该数据类型的任何其他实现到过
-程表示法都有唯一映射 (Giarratana et al., 1976; Wand, 1979; Kamin, 1980)。
+广为论述的数据抽象思想是 1970 年代的一大创举。这里我们仅仅提及 Parnas (1972)，他
+强调了以接口作为信息隐藏边界的重要性。数据类型的实现是满足该类型定义的任意值和操
+作的集合。Goguen et al. (1977) 证明，任意数据类型都能以树的集合实现，树中记录了
+值如何构建，且从一个树的集合到该数据类型另一实现的集合具有唯一映射。相对地，任意
+数据类型都能以过程表示法实现，且从该数据类型的任何其他实现到过程表示法都有唯一映
+射 (Giarratana et al., 1976; Wand, 1979; Kamin, 1980)。
 
 用类型强制数据抽象始见于 Reynolds (1975)，类型应用于 CLU (Liskov et al., 1977)。
 这发展为 Standard ML (Milner et al., 1989) （另见 Paulson, 1996; Ullman, 1998）
