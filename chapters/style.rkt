@@ -189,6 +189,8 @@
   (set! origin-page-number (+ origin-page-number 1))
   (margin-note* (elem #:style margin-page-number (number->string origin-page-number))))
 
+(define pg margin-page)
+
 ;;; set page number to the specified value, used when the translation crosses
 ;;; some pages of the original
 (define (set-margin-page page)
