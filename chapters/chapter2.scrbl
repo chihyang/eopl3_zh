@@ -39,12 +39,12 @@
 (@emph{representation-independent})，因为这些代码不依赖数据类型值的表示。
 
 那么所有关于数据表示的信息必然在实现代码之中。实现最重要的部分就是表示数据的规范。
-我们用符号@${\lceil v \rceil}指代@exact-elem{“}数据 @${v} 的表示@exact-elem{”}。
+我们用符号 @${\lceil v \rceil} 指代@exact-elem{“}数据 @${v} 的表示@exact-elem{”}。
 
 要说得更明白些，来看一个简单例子：自然数类型。待表示的数据是自然数。接口由四个过
-程组成：@tt{zero}，@tt{is-zero?}，@tt{successor} 和 @tt{predecessor}。当然，不是
+程组成：@tt{zero}、@tt{is-zero?}、@tt{successor} 和 @tt{predecessor}。当然，不是
 随便几个过程都可以作为这一接口的实现。当且仅当一组过程满足如下四个方程时，可以作
-为@tt{zero}，@tt{is-zero?}，@tt{successor} 和 @tt{predecessor}的实现：
+为 @tt{zero}、@tt{is-zero?}、@tt{successor} 和 @tt{predecessor} 的实现：
 
  @nested[#:style 'inset]{
   @elemtag["nat"]{@tt{(zero)} = @${\lceil 0 \rceil}}
@@ -57,9 +57,9 @@
   @tt{(predecessor @${\lceil n + 1 \rceil})} = @${\lceil n \rceil \quad (n \geq 0)}}
 
 这一定义没有指明自然数应当如何表示，它只要求这些过程都产生指定的行为。即，过程
-@tt{zero}必须返回@${0}的表示；给定数字@${n}的表示，过程 @tt{successor} 必须返回
-数字 @${n + 1} 的表示，等等。这个定义没对 @tt{(predecessor (zero))} 做出说明，所
-以按这个定义，任何行为都是可以接受的。
+@tt{zero} 必须返回 @${0} 的表示；给定数字 @${n} 的表示，过程 @tt{successor} 必须
+返回数字 @${n + 1} 的表示，等等。这个定义没对 @tt{(predecessor (zero))} 做出说明，
+所以按这个定义，任何行为都是可以接受的。
 
 现在可以写出处理自然数的客户程序，而且不论用哪种表示方式，都保证能得出正确的结果。
 例如，不论怎样实现自然数，
@@ -75,7 +75,7 @@
 ]
 }
 
-都满足@tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
+都满足 @tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
 y\rceil}}。}
 
 大多数接口都包含：若干@emph{构造器} (@emph{constructor})，用来产生数据类型的元素；
@@ -87,8 +87,8 @@ y\rceil}}。}
 @itemlist[#:style 'ordered
 
  @item{@emph{一元表示法} (@emph{Unary representation})：在一元表示法中，自然数
- @${n}由@${n}个@tt{#t}组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1}表示为
- @tt{(#t)}，@${2}表示为@tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
+ @${n} 由 @${n} 个 @tt{#t} 组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1} 表
+ 示为 @tt{(#t)}，@${2} 表示为 @tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
 
  @nested[#:style 'inset]{@${\lceil 0 \rceil = @tt{()}}
 
@@ -102,9 +102,9 @@ y\rceil}}。}
  (define successor (lambda (n) (cons #t n)))
  (define predecessor (lambda (n) (cdr n)))]}}
 
- @item{@emph{Scheme数字表示法} (@emph{Scheme number representation})：在这种表示
- 中，只需用Scheme内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil}
- 为Scheme整数 @tt{n}，则所需的四个过程可以定义为：
+ @item{@emph{Scheme 数字表示法} (@emph{Scheme number representation})：在这种表
+ 示中，只需用 Scheme 内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n
+ \rceil} 为 Scheme 整数 @tt{n}，则所需的四个过程可以定义为：
 
 @nested[#:style small]{
  @racketblock[(define zero (lambda () 0))
@@ -115,15 +115,15 @@ y\rceil}}。}
  }
 
  @item{@emph{大数表示法} (@emph{Bignum representation})：在大数表示法中，数值以
- @${N}进制表示，@${N}是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时不
- 称数位，而称@emph{大位} (@emph{bigits})）组成的列表表示数值，这就很容易表示远超
- 机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可用
- 归纳法定义为：
+ @${N} 进制表示，@${N} 是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时
+ 不称数位，而称@emph{大位} (@emph{bigits})）组成的列表表示数值，这就很容易表示远
+ 超机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可
+ 用归纳法定义为：
 
  @m{\lceil n \rceil = @env["cases"]{@tt{()} & n = 0 \\ @tt{(@m{r} . @m{\lceil q
                                     \rceil})} & n = qN + r, 0 \leqslant r < N}}
 
- 所以，如果 @${N = 16}，那么@${\lceil 33 \rceil = @tt{(1 2)}}，@${\lceil 258
+ 所以，如果 @${N = 16}，那么 @${\lceil 33 \rceil = @tt{(1 2)}}，@${\lceil 258
  \rceil = @tt{(2 0 1)}}，因为：
 
  @$${258 = 2 \times 16^0 + 0 \times 16^1 + 1 \times 16^2}}
@@ -174,9 +174,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
    @item{实现这种整数表示法：写出@pageref{nat}定义的 @tt{zero}、@tt{is-zero?}、
    @tt{successor} 和 @tt{predecessor}，此外还要能表示负数。这种方式下，整数的任
-   何合法表示都应该能作为你过程的参数。例如，你的过程@tt{successor}可以接受无限
-   多种 @${1} 的合法表示，且都应给出一个 @${2}的合法表示。对 @${1} 的不同合法表
-   示，可以给出不同的 @${2} 的合法表示。}
+   何合法表示都应该能作为你过程的参数。例如，你的过程 @tt{successor} 可以接受无
+   限多种 @${1} 的合法表示，且都应给出一个 @${2}的合法表示。对 @${1} 的不同合法
+   表示，可以给出不同的 @${2} 的合法表示。}
 
    @item{写出过程 @tt{diff-tree-plus}，用这种表示做加法。你的过程应针对不同的差
    分树进行优化，并在常数时间内得出结果（即与输入大小无关）。注意，不可使用递归。}
@@ -234,7 +234,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
              (empty-env))))))]
 
  定义了一个环境 @${e}，使 @${e(@tt{d}) = 6}，@${e(@tt{x}) = 7}，@${e(@tt{y}) =
- 8}，且对任何其他变量，@${e}未定义。本例中，@tt{y}先绑定到@${14}，随后绑定到
+ 8}，且对任何其他变量，@${e}未定义。本例中，@tt{y}先绑定到 @${14}，随后绑定到
  @${8}。这当然只是生成该环境的众多方法之一。}
 
 如同前一个例子，可以将接口中的过程分为构造器和观测器。本例中，@tt{empty-env}和
@@ -242,9 +242,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.4"]{
 
- 考虑数据类型@emph{堆栈} (@emph{stack})，其接口包含过程 @tt{empty-stack}，
- @tt{push}，@tt{pop}, @tt{top}和@tt{empty-stack?}。按照示例中的方式写出这些操作
- 的定义。哪些操作是构造器？哪些是观测器？
+ 考虑数据类型@emph{堆栈} (@emph{stack})，其接口包含过程 @tt{empty-stack}、
+ @tt{push}、@tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操
+ 作的定义。哪些操作是构造器？哪些是观测器？
 
 }
 
@@ -357,27 +357,27 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.7"]{
 
-重写@figure-ref{fig-2.1} 中的@tt{apply-env}，给出更详细的错误信息。
+重写@figure-ref{fig-2.1} 中的 @tt{apply-env}，给出更详细的错误信息。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.8"]{
 
-给环境接口添加观测器@tt{empty-env?}，用a-list表示法实现它。
+给环境接口添加观测器 @tt{empty-env?}，用 a-list 表示法实现它。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.9"]{
 
-给环境接口添加观测器@tt{has-binding?}，它取一环境@${env}，一个变量@${s}，判断
-@${s}在@${env}中是否有绑定值。用a-list表示法实现它。
+给环境接口添加观测器 @tt{has-binding?}，它取一环境 @${env}，一个变量 @${s}，判断
+@${s} 在 @${env} 中是否有绑定值。用 a-list 表示法实现它。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.10"]{
 
-给环境接口添加构造器@tt{extend-env*}，用a-list表示法实现它。这个构造器取一变量列
-表和一长度相等的值列表，以及一环境，其定义为：
+给环境接口添加构造器 @tt{extend-env*}，用 a-list 表示法实现它。这个构造器取一变
+量列表和一长度相等的值列表，以及一环境，其定义为：
 
  @envalign*{
    & @tt{(extend-env* (@m{var_1} @m{\dots} @m{var_k}) (@m{val_1} @m{\dots} @m{var_k}) @m{\lceil f \rceil})} = \lceil g \rceil, \\
@@ -391,9 +391,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.11"]{
 
-前一题中的@tt{extend-env*}实现比较拙劣的话，运行时间与@${k}成正比。有一种表示可
-使@tt{extend-env*}的运行时间为常数：用空列表表示空环境，用下面的数据结构表示非空
-环境：
+前一题中的 @tt{extend-env*} 实现比较拙劣的话，运行时间与 @${k} 成正比。有一种表
+示可使 @tt{extend-env*} 的运行时间为常数：用空列表表示空环境，用下面的数据结构表
+示非空环境：
 
 @centered{
 @(image "../images/rib-cage-one"
@@ -423,11 +423,11 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @subsection[#:style section-title-style-numbered #:tag "s2.2.3"]{过程表示法}
 
-环境接口有一条重要性质：它只有@tt{apply-env}一个观测器。这样就能用取一变量，返回
-绑定值的Scheme过程表示环境。
+环境接口有一条重要性质：它只有 @tt{apply-env} 一个观测器。这样就能用取一变量，返
+回绑定值的 Scheme 过程表示环境。
 
-要这样表示，定义@tt{empty-env}和@tt{extend-env}的返回值为过程，调用二者的返回值
-就如同调用上一节的@tt{apply-env}一样。由此得出下面的实现。
+要这样表示，定义 @tt{empty-env} 和 @tt{extend-env} 的返回值为过程，调用二者的返
+回值就如同调用上一节的 @tt{apply-env} 一样。由此得出下面的实现。
 
 @nested[#:style small]{
 @racketblock[
@@ -455,31 +455,31 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ]
 }
 
-@tt{empty-env}创建的空环境收到任何变量都会报错，表明给定的变量不在其中。过程
-@tt{extend-env}返回的过程代表扩展而得的环境。这个过程收到变量@tt{search-var}后，
-判断该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的环境
-中查找它。
+@tt{empty-env} 创建的空环境收到任何变量都会报错，表明给定的变量不在其中。过程
+@tt{extend-env} 返回的过程代表扩展而得的环境。这个过程收到变量 @tt{search-var}
+后，判断该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的
+环境中查找它。
 
-这种表示法中，数据由@tt{apply-env}@emph{执行的动作}表示，我们称之为@emph{过程表
-示法} (@emph{procedural representation})。
+这种表示法中，数据由 @tt{apply-env} @emph{执行的动作}表示，我们称之为@emph{过程
+表示法} (@emph{procedural representation})。
 
 数据类型只有一个观测器的情形并非想象中那般少见。比如，数据是一组函数，就能用函数
 调用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
 
 @itemlist[#:style 'ordered
 
- @item{找出客户代码中求取指定类型值的lambda表达式。为每个这样的lambda表达式写一
- 个构造器过程。构造器过程的参数用作lambda表达式中的自由变量。在客户代码中，用构
- 造器调用替换对应的lambda表达式。}
+ @item{找出客户代码中求取指定类型值的 lambda 表达式。为每个这样的 lambda 表达式
+ 写一个构造器过程。构造器过程的参数用作 lambda 表达式中的自由变量。在客户代码中，
+ 用构造器调用替换对应的 lambda 表达式。}
 
- @item{像定义@tt{apply-env}那样定义一个@tt{apply-} 过程。找出客户代码中所有使用
- 指定类型值的地方，包括构造器过程的主体。所有使用指定类型值的地方都改用
+ @item{像定义 @tt{apply-env} 那样定义一个 @tt{apply-} 过程。找出客户代码中所有使
+ 用指定类型值的地方，包括构造器过程的主体。所有使用指定类型值的地方都改用
  @tt{apply-} 过程。}
 
 ]
 
-一旦完成这些步骤，接口就包含所有的构造器过程和@tt{apply-} 过程，客户代码则与表示
-无关：它不再依赖表示，我们将能随意换用另一套接口实现，正如 @secref{s2.2.2}所述。
+一旦完成这些步骤，接口就包含所有的构造器过程和 @tt{apply-} 过程，客户代码则与表
+示无关：它不再依赖表示，我们将能随意换用另一套接口实现，正如 @secref{s2.2.2}所述。
 
 如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
 方实现所需接口，就像上一节那样。这一操作叫做@emph{消函}
@@ -508,8 +508,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @section[#:style section-title-style-numbered #:tag "s2.3"]{递推数据类型的接口}
 
-@secref{isd}大部分都在处理递推数据类型。例如，@definition-ref{d1.1.8} 给出了lambda演算表达式的
-语法：
+@secref{isd}大部分都在处理递推数据类型。例如，@definition-ref{d1.1.8} 给出了
+lambda 演算表达式的语法：
 
 @envalign*{\mathit{Lc\mbox{-}Exp}
            &::= \mathit{Identifier} \\
@@ -520,8 +520,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @tt{occurs-free?} 的定义不大容易读懂。比如，很难搞明白 @tt{(car (cadr exp))} 指
 代 @tt{lambda} 表达式中的变量声明，或者 @tt{(caddr exp)} 指代表达式的主体。
 
-要改善这种情况，可以给lambda演算表达式添加一套接口。我们的接口有几个构造器，以及
-两种观测器：谓词和提取器。
+要改善这种情况，可以给 lambda 演算表达式添加一套接口。我们的接口有几个构造器，以
+及两种观测器：谓词和提取器。
 
 构造器有：
 
@@ -555,7 +555,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 }|
 }
 
-每个提取器对应lambda演算表达式中的一部分。现在可以写出一版只依赖接口的
+每个提取器对应 lambda 演算表达式中的一部分。现在可以写出一版只依赖接口的
 @tt{occurs-free?}。
 
 @nested[#:style small]{
@@ -575,7 +575,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ]
 }
 
-只要使用上述构造器，怎样表示lambda演算表达式都可以。
+只要使用上述构造器，怎样表示 lambda 演算表达式都可以。
 
 我们可以写出设计递推数据类型接口的一般步骤：
 
@@ -595,19 +595,19 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.15"]{
 
-上述语法指定了lambda演算表达式的表示方式，实现其接口。
+上述语法指定了 lambda 演算表达式的表示方式，实现其接口。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.16"]{
 
-修改实现，换用另一种表示，去掉@tt{lambda}表达式绑定变量周围的括号。
+修改实现，换用另一种表示，去掉 @tt{lambda} 表达式绑定变量周围的括号。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.17"]{
 
-再发明至少两种方式来表示数据类型lambda演算表达式，实现它们。
+再发明至少两种方式来表示数据类型 lambda 演算表达式，实现它们。
 
 }
 
@@ -676,9 +676,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @m{\mathit{Listof@tt{(@m{\mathit{Int}})}}} @m{\mathit{Listof@tt{(@m{\mathit{Int}})}}})}}
 
 第一个整数列表是当前元素之前的序列，反向排列。第二个列表是当前元素之后的序列。例
-如，@tt{(6 (5 4 3 2 1) (7 8 9))} 表示列表@tt{(1 2 3 4 5 6 7 8 9)}，当前元素为6。
+如，@tt{(6 (5 4 3 2 1) (7 8 9))} 表示列表 @tt{(1 2 3 4 5 6 7 8 9)}，当前元素为6。
 
-用这种表示实现过程@tt{number->sequence}，它取一数字，生成只包含该数字的序列。接
+用这种表示实现过程 @tt{number->sequence}，它取一数字，生成只包含该数字的序列。接
 着实现 @tt{current-element}、@tt{move-to-left}、@tt{move-to-right}、
 @tt{insert-to-left}、@tt{insert-to-right}、@tt{at-left-end?} 和
 @tt{at-right-end?}。
@@ -785,7 +785,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用 Scheme 自动设
 计和实现接口的工具。这个工具产生的接口与前一节的虽不完全相同，却很类似。
 
-仍考虑前一节讨论的数据类型 lambda 演算表达式。lambda演算表达式的接口可以这样写：
+仍考虑前一节讨论的数据类型 lambda 演算表达式。lambda 演算表达式的接口可以这样写：
 
 @nested[#:style small]{
 @racketblock[
@@ -837,8 +837,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 ]
 }
 
-要理解它，假设@tt{exp}是由@tt{app-exp}生成的lambda演算表达式。根据@tt{exp}的取值，
-分支@tt{app-exp}将被选中，@tt{rator}和@tt{rand}则绑定到两个子表达式，接着，表达式
+要理解它，假设 @tt{exp} 是由 @tt{app-exp} 生成的 lambda 演算表达式。根据
+@tt{exp} 的取值，分支 @tt{app-exp} 将被选中，@tt{rator} 和 @tt{rand} 则绑定到两
+个子表达式，接着，表达式
 
 @nested{
 @nested[#:style small]{
@@ -874,16 +875,16 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   @#,elem{@${\{@tt["("]variant\mbox{-}name \quad \{@tt["("]filed\mbox{-}name \quad predicate@tt[")"]\}^{*} @tt[")"]\}^{+}}})
 ]
 
-这新定义了一种数据类型，名为@${type\mbox{-}name}，它有一些@emph{变体}
+这新定义了一种数据类型，名为 @${type\mbox{-}name}，它有一些@emph{变体}
 (@emph{variants})。每个变体有一变体名，以及 0 或多个字段，每个字段各有其字段名和
 相应的谓词。不论是否属于不同的类型，变体都不能重名。类型也不能重名，且类型名不能
-用作变体名。每个字段的谓词必须是一个Scheme谓词。
+用作变体名。每个字段的谓词必须是一个 Scheme 谓词。
 
 每个变体都有一个构造器过程，用于创建该变体的值。这些过程的名字与对应的变体相同。
-如果一个变体有@${n}个字段，那么它的构造器取@${n}个参数，用对应的谓词检查每个参数
-值，并返回变体值，值的第@${i}个字段为第@${i}个参数值。
+如果一个变体有 @${n} 个字段，那么它的构造器取 @${n} 个参数，用对应的谓词检查每个
+参数值，并返回变体值，值的第 @${i} 个字段为第 @${i} 个参数值。
 
-@${type\mbox{-}predicate\mbox{-}name}绑定到一个谓词。这个谓词判断其参数值是否是
+@${type\mbox{-}predicate\mbox{-}name} 绑定到一个谓词。这个谓词判断其参数值是否是
 相应的类型。
 
 只有一种变体的记录也可以定义为一种数据类型。为了区分只有一种变体的数据类型，我们
@@ -897,7 +898,7 @@ an-@${type\mbox{-}name} 命名构造器；否则，以
 @envalign*{\mathit{S\mbox{-}list} &::= {\normalfont{@tt{(@m{\{\mathit{S\mbox{-}exp}\}^{*}})}}} \\
            \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
 
-s-list中的数据可以用数据类型@tt{s-list}表示为：
+s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @nested[#:style small]{
 @racketblock[
@@ -915,8 +916,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 ]
 }
 
-数据类型@tt{s-list}用@tt{(empty-s-list)}和@tt{non-empty-s-list}代替@tt{()}和
-@tt{cons}来表示列表。如果我们还想用Scheme列表，可以写成：
+数据类型 @tt{s-list} 用 @tt{(empty-s-list)} 和 @tt{non-empty-s-list} 代替
+@tt{()} 和 @tt{cons} 来表示列表。如果我们还想用 Scheme 列表，可以写成：
 
 @nested[#:style 'noindent]{
 
@@ -936,14 +937,14 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 ]
 }
 
-这里@tt{(list-of @${pred})}生成一个谓词，检查其参数值是否是一个列表，且列表的每
-个元素都满足@${pred}。
+这里 @tt{(list-of @${pred})} 生成一个谓词，检查其参数值是否是一个列表，且列表的
+每个元素都满足 @${pred}。
 
 }
 
-一般的@tt{cases}的语法为：
-@nested[#:style 'noindent]{
+一般的 @tt{cases} 语法为：
 
+@nested[#:style 'noindent]{
 @racketblock[
 (cases @#,elem{@${type\mbox{-}name}} @#,elem{@${expression}}
   @#,elem{@${\{@tt["("]variant\mbox{-}name \phantom{x} @tt["("]\{filed\mbox{-}name\}^{*}@tt[")"] \phantom{x} consequent@tt[")"]\}^{*}}}
@@ -952,11 +953,11 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 该形式指定类型，一个待求值和检查的表达式，以及一些从句。每个从句以指定类型的某一
 变体名及相应字段名为标识。@tt{else} 从句可有可无。首先求 @${expression} 的值，得
-到 @${type\mbox{-}name} 的某个值 @${v}。如果 @${v}是某个@${variant\mbox{-}name}
-的变体，那就选中对应的从句。各@${type\mbox{-}name} 绑定到 @${v} 中对应的字段值。
-然后在这些绑定的作用域内求取并返回 @${consequent} 的值。如果 @${v} 不属于任何变
-体，且有 @tt{else} 从句，则求取并返回 @${default} 的值。如果没有 @tt{else} 从句，
-必须为指定数据类型的@emph{每个}变体指定从句。
+到 @${type\mbox{-}name} 的某个值 @${v}。如果 @${v} 是某个
+@${variant\mbox{-}name} 的变体，那就选中对应的从句。各 @${type\mbox{-}name} 绑定
+到 @${v} 中对应的字段值。然后在这些绑定的作用域内求取并返回 @${consequent} 的值。
+如果 @${v} 不属于任何变体，且有 @tt{else} 从句，则求取并返回 @${default} 的值。
+如果没有 @tt{else} 从句，必须为指定数据类型的@emph{每个}变体指定从句。
 
 }
 
@@ -993,34 +994,35 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 
 @tt{define-datatype} 形式是@emph{特定领域语言} (@emph{domain-specific language})
 的例子。特定领域语言是一种小巧的语言，用来描述小而明确的任务中的单一任务。本例中
-的任务是定义一种递推数据类型。这种语言可能像@tt{define-datatype} 一样，存在于通
+的任务是定义一种递推数据类型。这种语言可能像 @tt{define-datatype} 一样，存在于通
 用语言中；也可能是一门单独的语言，别有一套工具。一般来说，创造这类语言首先要找出
 任务的不同变体，然后设计语言，描述这些变体。这种策略通常非常有效。
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
-用@tt{define-datatype}实现@secref{s2.2.2}中的环境数据类型。然后实现@exercise-ref{ex2.9} 中的
-@tt{has-binding?}。
+用 @tt{define-datatype} 实现@secref{s2.2.2}中的环境数据类型。然后
+实现@exercise-ref{ex2.9} 中的 @tt{has-binding?}。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.22"]{
 
-用@tt{define-datatype}实现@exercise-ref{ex2.4} 中的堆栈数据类型。
+用 @tt{define-datatype} 实现@exercise-ref{ex2.4} 中的堆栈数据类型。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
-@tt{lc-exp}的定义忽略了@definition-ref{d1.1.8} 中的条件：@exact-elem{“}@${\mathit{Identifier}}
-是除 @tt{lambda} 之外的任何符号。@exact-elem{”}修改 @tt{identifier?} 的定义，补
-充这一条件。提示：任何谓词都能在 @tt{define-datatype} 中使用，你定义的也能。
+@tt{lc-exp} 的定义忽略了@definition-ref{d1.1.8} 中的条件：
+@exact-elem{“}@${\mathit{Identifier}} 是除 @tt{lambda} 之外的任何符号。
+@exact-elem{”}修改 @tt{identifier?} 的定义，补充这一条件。提示：任何谓词都能在
+@tt{define-datatype} 中使用，你定义的也能。
 
 }
 
 @exercise[#:level 1 #:tag "ex2.24"]{
 
-这是用@tt{define-datatype}表示的二叉树：
+这是用 @tt{define-datatype} 表示的二叉树：
 
 @racketblock[
 (define-datatype bintree bintree?
@@ -1138,8 +1140,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
                                           &::= @tt{(leaf-node @m{\mathit{Int}})}
 }
 
-用@tt{define-datatype}写出等价定义，用得到的接口写出一个过程，它取一棵树，生成形
-状相同的另一棵树，但把每片叶子的值改为从当前叶子节点到树根之间红色节点的数目。
+用 @tt{define-datatype} 写出等价定义，用得到的接口写出一个过程，它取一棵树，生成
+形状相同的另一棵树，但把每片叶子的值改为从当前叶子节点到树根之间红色节点的数目。
 
 }
 
@@ -1149,8 +1151,8 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
 叫做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external}) 表
 示。
 
-例如，@definition-ref{d1.1.8} 指定集合lambda演算表达式，用的就是 lambda 演算表达
-式的具体语法。我们可以用其他具体语法表示lambda演算表达式。例如，可以用
+例如，@definition-ref{d1.1.8} 指定集合 lambda 演算表达式，用的就是 lambda 演算表
+达式的具体语法。我们可以用其他具体语法表示 lambda 演算表达式。例如，可以用
 
 @nested{
 
@@ -1158,16 +1160,16 @@ s-list中的数据可以用数据类型@tt{s-list}表示为：
                          &::= @tt{proc @m{\mathit{Identifier}} @tt{=>} @m{\mathit{Lc\mbox{-}exp}}} \\
                          &::= @tt{@m{\mathit{Lc\mbox{-}exp}} (@m{\mathit{Lc\mbox{-}exp}})}}
 
-把lambda演算表达式定义为另一个字符串集合。
+把 lambda 演算表达式定义为另一个字符串集合。
 
 }
 
 为了处理这样的数据，需要将其转换为@emph{内在} (@emph{internal}) 表示。
 @tt{define-datatype} 形式提供了一种简洁的方式来定义这样的内在表示。我们称之为
 @emph{抽象语法} (@emph{abstrat syntax})。在抽象语法中，不需要存储括号之类的终止
-符，因为它们不传达信息。另一方面，我们要确保数据结构足以区分它所表示的lambda演算
-表达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现这
-些。
+符，因为它们不传达信息。另一方面，我们要确保数据结构足以区分它所表示的 lambda 演
+算表达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现
+这些。
 
 将内在表示形象化为@emph{抽象语法树} (@emph{abstract syntax tree}) 也很不错。
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
@@ -1185,8 +1187,8 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 }
 
 要为某种具体语法设计抽象语法，需要给其中的每个生成式，以及生成式中出现的每个非终
-止符命名。很容易将抽象语法写成@tt{define-datatype}声明。我们为每个非终止符添加一
-个@tt{define-datatype}，为每个生成式添加一个变体。
+止符命名。很容易将抽象语法写成 @tt{define-datatype} 声明。我们为每个非终止符添加
+一个 @tt{define-datatype}，为每个生成式添加一个变体。
 
 @figure-ref{fig-2.2} 中挑出的内容可以精确表示如下：
 
@@ -1210,9 +1212,9 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，
 和@pageref{define-datatype} @tt{define-datatype} 的语法类似，
-@elemref["lambda-2"]{本节开头}的lambda演算表达式指定了一个列表集合。这样，Scheme
+@elemref["lambda-2"]{本节开头}的 lambda 演算表达式指定了一个列表集合。这样，Scheme
 过程 @tt{read} 会自动把字符串解析为列表和符号。然后，把这些列表结构解析为抽象语
-法树就容易多了，就像@tt{parse-expression}这样。
+法树就容易多了，就像 @tt{parse-expression} 这样。
 
 @nested[#:style small]{
 @racketblock[
@@ -1234,7 +1236,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 }
 
 通常，很容易把抽象语法树重新转换为列表-符号表示。我们这样做了，Scheme 的打印过程
-就会将其显示为列表形式的具体语法。这由@tt{unparse-lc-exp}完成：
+就会将其显示为列表形式的具体语法。这由 @tt{unparse-lc-exp} 完成：
 
 @nested[#:style small]{
 @racketblock[
@@ -1257,7 +1259,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @exercise[#:level 1 #:tag "ex2.27"]{
 
-画出下面lambda演算表达式的抽象语法树：
+画出下面 lambda 演算表达式的抽象语法树：
 
 @racketblock[
 ((lambda (a) (a b)) c)
@@ -1291,18 +1293,19 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
                                   &::= \normalfont{@tt{(@m{\mathit{Lc\mbox{-}Exp}} @m{\{\mathit{Lc\mbox{-}Exp}\}^{*}})}} \\[-3pt]
                                   &\mathrel{\phantom{::=}} \fbox{@tt{app-exp (rator rands)}}}
 
-那么字段@tt{bound-vars}的谓词可写作@tt{(list-of identifier?)}，@tt{rands}的谓词
-可写作@tt{(list-of lc-exp?)}。以这种方式写出该语法的@tt{define-datatype}和解析器。
+那么字段 @tt{bound-vars} 的谓词可写作 @tt{(list-of identifier?)}，@tt{rands} 的
+谓词可写作 @tt{(list-of lc-exp?)}。以这种方式写出该语法的 @tt{define-datatype}
+和解析器。
 
 }
 }
 
 @exercise[#:level 2 #:tag "ex2.30"]{
 
-上面定义的过程@tt{parse-expression}很不可靠：它检查不到某些可能的语法错误，例如
-@tt{(a b c)}，并且因其他表达式终止时给不出恰当的错误信息，如@tt{(lambda)}。修改
-一下，使之更健壮，可接受任何s-exp，并且对不表示 lambda 演算表达式的 s-exp 给出恰
-当的错误信息。
+上面定义的过程 @tt{parse-expression} 很不可靠：它检查不到某些可能的语法错误，例
+如 @tt{(a b c)}，并且因其他表达式终止时给不出恰当的错误信息，如 @tt{(lambda)}。
+修改一下，使之更健壮，可接受任何s-exp，并且对不表示 lambda 演算表达式的 s-exp 给
+出恰当的错误信息。
 
 }
 
@@ -1317,7 +1320,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
            \mathit{Prefix\mbox{-}exp}  &::= \mathit{Int} \\
                                        &::= @tt{- @m{\mathit{Prefix\mbox{-}exp}} @m{\mathit{Prefix\mbox{-}exp}}}}
 
-那么@tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
+那么 @tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
 Łukasiewicz，称之为@emph{波兰前缀表示法} (@emph{Polish prefix notation})。写一个
 解析器，将前缀列表表示法转换为抽象语法：
 
@@ -1344,8 +1347,8 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
    (const-exp 7))))
 ]
 
-提示：想想如何写一个过程，取一列表，产生一个@tt{prefix-exp}和列表剩余元素组成的
-列表。
+提示：想想如何写一个过程，取一列表，产生一个 @tt{prefix-exp} 和列表剩余元素组成
+的列表。
 
 }
 
