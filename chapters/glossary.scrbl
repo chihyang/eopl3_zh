@@ -1,16 +1,12 @@
 #lang scribble/book
 @(require "style.rkt"
-          latex-utils/scribble/utils
-          scribble-math
-          scribble-math/asymptote
-          scriblib/footnote
-          scribble-math/dollar)
+          scribble/core)
 
 @title[#:style part-title-style-unnumbered #:tag "glo"]{译名表}
 
 下表列出本书专有名词及其翻译，并对有疑义者略加说明。
 
-@tabular[#:sep @hspace[1]
+@tabular[#:cell-properties '((left baseline))
 (list
 @list["Abstraction boundary" "抽象边界"]
 @list["Binary semaphore" "二元信号量"]
@@ -22,7 +18,10 @@
 @list["Call by value" "按值调用"]
 @list["Class" "类"]
 @list["Clause" "从句，指某个表达式的子表达式"]
-@list["Construct" "结构，表示用语言书写表达式的某种特定语法"]
+@list["Construct"
+      @compound-paragraph[
+       (make-style #f '())
+       (list @para{结构，表示用语言书写表达式的某种特定语法})]]
 @list["Contact" "合约"]
 @list["Continuation" "续文"]
 @list["Continuation-passing style" "续文传递风格，简称 CPS"]
@@ -41,7 +40,10 @@
 @list["Explicit reference" "显式引用"]
 @list["Expanded type" "展开类型"]
 @list["Flowchart program" "流程图程序"]
-@list["Form" "形式，在本书中，这一术语和 construct 意思相近"]
+@list["Form"
+      @compound-paragraph[
+       (make-style #f '())
+       (list @para{形式，在本书中，这一术语和 construct 意思相近})]]
 @list["Formal parameter" "形参"]
 @list["Frozen" "冻结"]
 @list["Ill typed" "异常类型"]
@@ -82,7 +84,12 @@
 @list["Specification" "规范"]
 @list["Specifying" "定义"]
 @list["Store" "存储器"]
-@list["Substitution" "代换，代换式（组），视上下文，这一术语有时表示类型推导的动作，有时表示动作的结果；表示结果时，有时为单数，有时为复数"]
+@list["Substitution"
+      @compound-paragraph[
+       (make-style #f '())
+       (list
+        @para{代换，代换式（组），视上下文，这一术语有时表示类型推导的动作，有时
+              表示动作的结果；表示结果时，有时为单数，有时为复数})]]
 @list["Subtyping" "子类型判定"]
 @list["Tail call" "尾调用"]
 @list["Tail form" "尾式"]
