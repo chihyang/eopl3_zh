@@ -6,7 +6,7 @@
 
 下表列出本书专有名词及其翻译，并对有疑义者略加说明。
 
-@tabular[#:cell-properties '((left baseline))
+@tabular[#:cell-properties '((baseline baseline))
 (list
 @list["Abstraction boundary" "抽象边界"]
 @list["Binary semaphore" "二元信号量"]
@@ -65,7 +65,10 @@
 @list["Mutex, mutex exclusion" "互斥锁"]
 @list["Occurrence check" "验存"]
 @list["Object" "对象"]
-@list["Object-oriented programming" "面向对象编程"]
+@list[@compound-paragraph[
+       (make-style #f '())
+       (list @para{Object-oriented programming})]
+      "面向对象编程"]
 @list["Pair" "序对"]
 @list["Polymorphic" "多态"]
 @list["Pool" "池，特指线程池"]
@@ -107,6 +110,6 @@
 @list["Unification" "合一"]
 @list["Value restriction" "值约束"]
 @list["Well typed" "正常类型"]
-@list[@tt{car} "首项，或不译"]
-@list[@tt{cdr} "余项，或不译"]
+@list["car" "首项，或不译"]
+@list["cdr" "余项，或不译"]
 )]
