@@ -204,6 +204,9 @@
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
+(define (term #:tag [tag #f] original . translation)
+  (elem (when tag (elemtag tag)) (emph translation) " (" (emph original) ")"))
+
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
                      origin-page-number))
