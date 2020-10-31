@@ -15,7 +15,7 @@
 @title[#:style part-title-style-numbered #:tag "sllgen-parsing-system"]{SLLGEN解析系统}
 
 程序只是字符串。要处理程序，需要将这些字符归类为有意义的单元。这种归类通常分为两
-个阶段：@term["scanning"]{扫描} 和@term["parsing"]{解析}。
+个阶段：@term[#:full #f "scanning"]{扫描} 和@term[#:full #f "parsing"]{解析}。
 
 扫描过程将字符序列分为单词，标点等等。这些单元叫做@term[#f]{词条}、@term[#f]{词
 素}，或者最常见的@term[#f]{词牌}。解析过程将词牌序列组织成有层次的语法结构，如表
