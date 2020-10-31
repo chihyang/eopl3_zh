@@ -13,9 +13,9 @@
 @title[#:style part-title-style-numbered #:tag "cpi"]{传递续文的解释器}
 
 在@secref{expr}，我们用环境的概念探讨绑定行为，建立每部分程序执行的数据上下文。
-这里，我们将用类似方式探讨每部分程序执行的@emph{控制上下文} (@emph{control
-context})。我们将介绍@emph{续文} (@emph{continuation}) 的概念，用来抽象控制上下
-文。我们将要编写的解释器会取一续文参数，从而彰显控制上下文。
+这里，我们将用类似方式探讨每部分程序执行的@term["control context"]{控制上下文}。
+我们将介绍@term["continuation"]{续文} 的概念，用来抽象控制上下文。我们将要编写的
+解释器会取一续文参数，从而彰显控制上下文。
 
 考虑下面的Scheme阶乘函数定义。
 
@@ -83,21 +83,20 @@ context})。我们将介绍@emph{续文} (@emph{continuation}) 的概念，用�
 这里，@tt{fact-iter-acc} 总是在同样的控制上下文内调用：在本例中，是没有任何上下
 文。当 @tt{fact-iter-acc} 调用自身时，它在 @tt{fact-iter-acc} 执行的
 @exact-elem{“}尾端@exact-elem{”}，除了把返回值作为 @tt{fact-iter-acc} 调用的结
-果，不需再做任何保证。我们称之为@emph{尾调用} (@emph{tail call})。这样，上述推导
-中的每一步都形如 @tt{(fact-iter-acc @${n} @${a})}。
+果，不需再做任何保证。我们称之为@term["tail call"]{尾调用}。这样，上述推导中的每
+一步都形如 @tt{(fact-iter-acc @${n} @${a})}。
 
 当 @tt{fact} 这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到
 调用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现
-出@emph{递归性控制行为} (@emph{recursive control behavior})。
+出@term["recursive control behavior"]{递归性控制行为}。
 
 与之相对，@tt{fact-iter-acc} 调用自身时，不需记录额外的控制信息。递归调用发生在
 表达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对
 应返回的递归调用数目）增加时，系统不需要不断增长的内存存放控制上下文。只需使用有
-限内存存放控制信息的过程呈现出@emph{迭代性控制行为} (@emph{iterative control
-behavior})。
+限内存存放控制信息的过程呈现出@term["iterative control behavior"]{迭代性控制行为}。
 
 为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程 @tt{fact}
-在@emph{操作数位置} (@emph{operand position}) 调用。我们需要保存这个调用的上下文，
+在@term["operand position"]{操作数位置} 调用。我们需要保存这个调用的上下文，
 因为我们需要记住，过程调用执行完毕之后，仍需求出操作数的值，并执行外层调用，在本
 例中，是完成待做的乘法。这给出一条重要原则：
 
@@ -105,15 +104,15 @@ behavior})。
  @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}}
 }
 
-本章，我们学习如何跟踪和操作控制上下文。我们的核心工具是名为@emph{续文}
-(@emph{continuation}) 的数据类型。就像环境是数据上下文的抽象表示，续文是控制上下
-文的抽象表示。我们将探索续文，编写直接传递续文参数的解释器，就像之前直接传递环境
-参数的解释器。一旦处理了简单情况，我们就能明白如何给语言添加组件，以更加复杂的方
-式处理控制上下文，譬如异常和线程。
+本章，我们学习如何跟踪和操作控制上下文。我们的核心工具是
+名为@term["continuation"]{续文} 的数据类型。就像环境是数据上下文的抽象表示，续文
+是控制上下文的抽象表示。我们将探索续文，编写直接传递续文参数的解释器，就像之前直
+接传递环境参数的解释器。一旦处理了简单情况，我们就能明白如何给语言添加组件，以更
+加复杂的方式处理控制上下文，譬如异常和线程。
 
 在@secref{cps}，我们展示如何用转换解释器的技术转换所有程序。我们说以这种方式转换
-而得的程序具有@emph{续文传递风格} (@emph{continuation-passing style})。
-@secref{cps}还展示了续文的其他一些重要应用。
+而得的程序具有@term["continuation-passing style"]{续文传递风格}。@secref{cps}还
+展示了续文的其他一些重要应用。
 
 @section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
@@ -888,9 +887,9 @@ behavior})。
 @exercise[#:level 1 #:tag "ex5.15"]{
 
 我们的续文数据类型只有一个常量 @tt{end-cont}，所有其他续文构造器都有一个续文参数。
-用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构（名为@emph{帧}
-(@emph{frame}) 或@emph{活跃记录} (@emph{activation record})），余项为
-已保存续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
+用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构
+（名为@term["frame"]{帧} 或@term["activation record"]{活跃记录}），余项为已保存
+续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
 
 }
 
@@ -898,9 +897,9 @@ behavior})。
 
 扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给 @tt{result-of} 传递
 一个续文参数，确保 @tt{result-of} 不在扩大控制上下文的位置调用。因为语句不返回值，
-需要区分普通续文和语句续文；后者通常叫@emph{命令续文} (@emph{command
-continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一命令续文并使用
-它。用数据结构和无参数过程两种方式实现命令续文。
+需要区分普通续文和语句续文；后者通常叫@term["command continuation"]{命令续文}。
+续文接口应包含过程 @tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和
+无参数过程两种方式实现命令续文。
 
 }
 
@@ -956,12 +955,12 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 赋值。因此，体系结构为这种最常见的情形做了优化。而且，由于大多数语言在堆栈中存储
 环境信息，所有过程调用生成的控制上下文都不能忘了移除这一信息。
 
-在这种语言中，一种解决方案是使用@emph{跳跃} (@emph{trampolining}) 技术。为了避免
-产生无限长的调用链，我们把调用链打断，让解释器中的某个过程返回一个无参数过程。调
-用这个过程在将继续进行计算。整个计算由一个名叫@emph{跳床} (@emph{trampoline}) 的
-过程驱动，它从一个过程调用弹射到另一个。例如，我们可以在 @tt{apply-procedure/k}
-的主体周围插入一个 @tt{(lambda () ...)}，因为在我们的语言中，只要不执行过程调用，
-表达式的运行时间就是有限的。
+在这种语言中，一种解决方案是使用@term["trampolining"]{跳跃} 技术。为了避免产生无
+限长的调用链，我们把调用链打断，让解释器中的某个过程返回一个无参数过程。调用这个
+过程在将继续进行计算。整个计算由一个名叫@term["trampoline"]{跳床} 的过程驱动，它
+从一个过程调用弹射到另一个。例如，我们可以在 @tt{apply-procedure/k}的主体周围插
+入一个 @tt{(lambda () ...)}，因为在我们的语言中，只要不执行过程调用，表达式的运
+行时间就是有限的。
 
 得出的代码如@figure-ref{fig-5.7} 所示，它也展示了解释器中所有的尾调用。因为我们
 修改了 @tt{apply-procedure/k}，不再让它返回一个 @${\mathit{ExpVal}}，而是返回一
@@ -976,11 +975,11 @@ continuation})。续文接口应包含过程 @tt{apply-command-cont}，它取一
 @tt{apply-procedure/k} 的任何结果都可能成为 @tt{value-of/k} 的结果。而我们修改了
 @tt{apply-procedure/k}，它的返回值与之前不同。
 
-我们引入@emph{弹球} (@${\mathit{Bounce}})，作为 @tt{value-of/k}的可能结果（我们
-叫它弹球，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归
-调用自身和 @tt{apply-cont}，这些是它里面所有的尾递归。所以能成为 @tt{value-of/k}
-结果的值只能是 @tt{apply-cont} 的结果。而且，@tt{apply-procedure/k} 在尾部递归调
-用@tt{value-of/k}，所以不论 @${\mathit{Bounce}} 是什么，它是 @tt{value-of/k}、
+我们引入@term[@${\mathit{Bounce}}]{弹球}，作为 @tt{value-of/k}的可能结果（我们叫
+它弹球，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归调
+用自身和 @tt{apply-cont}，这些是它里面所有的尾递归。所以能成为 @tt{value-of/k}结
+果的值只能是 @tt{apply-cont} 的结果。而且，@tt{apply-procedure/k} 在尾部递归调用
+@tt{value-of/k}，所以不论 @${\mathit{Bounce}} 是什么，它是 @tt{value-of/k}、
 @tt{apply-cont}和 @tt{apply-procedure/k} 结果的集合。
 
 过程 @tt{value-of/k} 和 @tt{apply-cont} 只是在尾部调用其他过程。真正把值放入
@@ -1424,7 +1423,7 @@ odd:  if (x=0) then return(0)
 ]
 
 翻译完的解释器如@figure-ref{fig-5.11}-@countref{fig-5.14} 所示。这个过程
-叫做@emph{寄存} (@emph{registerization})。很容易用支持跳转的指令式语言翻译它。
+叫做@term["registerization"]{寄存}。很容易用支持跳转的指令式语言翻译它。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1650,7 +1649,7 @@ odd:  if (x=0) then return(0)
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
 个续文，当前状态只会压入或弹出一个环境，而且环境与续文同时压入或弹出。由此我们得
-出结论，动态绑定具有@emph{动态期限} (@emph{dynamic extent})：即，形参的绑定保留
+出结论，动态绑定具有@term["dynamic extent"]{动态期限}：即，形参的绑定保留
 到过程返回为止。词法绑定则与之不同，绑定包裹在闭包内时可以无限期地保留。
 
 }
@@ -1687,7 +1686,7 @@ odd:  if (x=0) then return(0)
 @section[#:style section-title-style-numbered #:tag "s5.4"]{异常}
 
 迄今为止，我们只用续文管理语言中的普通控制流。但是续文还能让我们修改控制上下文。让
-我们来给我们的语言添加@emph{异常处理} (@emph{exception handling})。我们给语言新
+我们来给我们的语言添加@term["exception handling"]{异常处理}。我们给语言新
 增两个生成式：
 
 @nested[#:style small]{
@@ -1704,8 +1703,8 @@ odd:  if (x=0) then return(0)
 
 @tt{raise} 表达式求出参数的值，以该值抛出一个异常。这个值会传给最接近的异常处理
 器，并绑定到这个处理器的变量。然后，处理器主体将被求值。处理器主体可以返回一个值，
-这个值称为对应 @tt{try} 表达式的值；或者，它可以抛出另一个异常，将异常@emph{传播}
-(@emph{propagate}) 出去；这时，该异常会传给第二接近的异常处理器。
+这个值称为对应 @tt{try} 表达式的值；或者，它可以抛出另一个异常，
+将异常@term["propagate"]{传播} 出去；这时，该异常会传给第二接近的异常处理器。
 
 这里是一个例子（暂时假设我们给语言添加了字符串）。
 
@@ -2124,24 +2123,22 @@ in ...
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
 
 许多编程任务中，可能需要一次进行多项计算。当这些计算作为同一进程的一部分，运行在
-同一地址空间，通常称它们为@emph{线程} (@emph{thread})。本节，我们将看到如何修改
-解释器，模拟多线程程序的执行。
+同一地址空间，通常称它们为@term["thread"]{线程}。本节，我们将看到如何修改解释器，
+模拟多线程程序的执行。
 
 我们的多线程解释器不是做单线程计算，而且维护多个线程。就像本章之前展示的那样，每
 个线程包含一项正在进行的计算。线程使用@secref{state}中的赋值，通过共享内存通信。
 
-在我们的系统中，整个计算包含一个线程@emph{池} (@emph{pool})。每个线程@emph{在运
-行} (@emph{running})、@@emph{可运行} (@emph{runnable}) 或者@emph{受阻塞}
-(@emph{blocked})。在我们的系统中，一次只能有一个线程在运行。在多 CPU 系统中，可
-以有若干线程同时运行。可运行的线程记录在名为@emph{就绪队列} (@emph{ready queue})
-的队列中。还有些线程因为种种原因未能就绪，我们说这些线程@emph{受阻塞}。本节稍后
-介绍受阻塞线程。
+在我们的系统中，整个计算包含一个线程@term["pool"]{池}。每个
+线程@term["running"]{在运行}、@@term["runnable"]{可运行} 或者@term["blocked"]{受
+阻塞}。在我们的系统中，一次只能有一个线程在运行。在多 CPU 系统中，可以有若干线程
+同时运行。可运行的线程记录在名为@term["ready queue"]{就绪队列}的队列中。还有些线
+程因为种种原因未能就绪，我们说这些线程@emph{受阻塞}。本节稍后介绍受阻塞线程。
 
-线程调度由@emph{调度器} (@emph{scheduler}) 执行，它将就绪队列保存为自身状态的一
-部分。此外，它保存一个计时器，当一个线程完成若干步（即线程的@emph{时间片}
-(@emph{time slice}) 或@emph{量子} (@emph{quantum})）时，它中断线程，将其放入就绪
-队列中，并从就绪队列中选出一个新的线程来运行。这叫做@emph{抢占式调度}
-(@emph{pre-emptive scheduling})。
+线程调度由@term["scheduler"]{调度器} 执行，它将就绪队列保存为自身状态的一部分。
+此外，它保存一个计时器，当一个线程完成若干步（即线程的@term["time slice"]{时间片}
+或@term["quantum"]{量子}）时，它中断线程，将其放入就绪队列中，并从就绪队列中选出
+一个新的线程来运行。这叫做@term["pre-emptive scheduling"]{抢占式调度}。
 
 我们的新语言基于 IMPLICIT-REFS，名叫 THREADS。在 THREADS 中，新线程由名为
 @tt{spawn} 的结构创建。@tt{spawn} 取一参数，该参数的值应为一个过程。新创建的线程
@@ -2492,11 +2489,11 @@ in let mut = mutex()
 避免@figure-ref{fig-5.17} 中的程序空转。恰恰相反，它应该能够进入休眠状态，并在生
 产者向共享缓存插入值时唤醒。
 
-有许多方式设计这类同步组件。一种简单的方式是使用@emph{互斥锁}（@emph{mutex
-exclusion}，简称 @emph{mutex}）或@emph{二元信号量} (@emph{binary semaphore})。
+有许多方式设计这类同步组件。一种简单的方式是使用@term['("mutex exclusion"
+"mutex")]{互斥锁} 或@term["binary semaphore"]{二元信号量}。
 
-互斥锁可能@emph{打开} (@emph{open}) 或@emph{关闭} (@emph{closed})。它还包含一个
-等待互斥锁打开的线程队列。互斥锁有三种操作：
+互斥锁可能@term["open"]{打开} 或@term["closed"]{关闭}。它还包含一个等待互斥锁打
+开的线程队列。互斥锁有三种操作：
 
 @itemlist[
 
@@ -2539,10 +2536,10 @@ exclusion}，简称 @emph{mutex}）或@emph{二元信号量} (@emph{binary semap
 ]
 
 这些属性保证在一对连续的 @tt{wait} 和 @tt{signal} 之间，只有一个线程可以执行。这
-部分程序叫做@emph{关键区域} (@emph{critical region})。在关键区域内，两个线程不可
-能同时执行。例如，@figure-ref{fig-5.21} 展示了我们之前的例子，只是在关键行周围插
-入了一把互斥锁。在这个程序中，一次只有一个线程可以执行 @tt{set x = -(x,-1)}；所
-以计数器一定能够到达终值 3。
+部分程序叫做@term["critical region"]{关键区域}。在关键区域内，两个线程不可能同时
+执行。例如，@figure-ref{fig-5.21} 展示了我们之前的例子，只是在关键行周围插入了一
+把互斥锁。在这个程序中，一次只有一个线程可以执行 @tt{set x = -(x,-1)}；所以计数
+器一定能够到达终值 3。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -2730,11 +2727,11 @@ in let mut = mutex()
 
 @exercise[#:level 3 #:tag "ex5.53"]{
 
-修改线程的表示，添加@emph{线程描述符} (@emph{thread identifier})。每个新线程都有
-一个新的线程描述符。当子线程创建时，传给它的不是本节中的任意值 28，而是它的线程
-描述符。子线程的描述符也作为 @tt{spawn} 表达式的值返回给父线程。给解释器添加辅助
-组件，跟踪线程描述符的创建。验证就绪队列中一个线程描述符至多出现一次。子线程如何
-获知父线程的描述符？原程序的线程描述符应如何处理？
+修改线程的表示，添加@term["thread identifier"]{线程描述符}。每个新线程都有一个新
+的线程描述符。当子线程创建时，传给它的不是本节中的任意值 28，而是它的线程描述符。
+子线程的描述符也作为 @tt{spawn} 表达式的值返回给父线程。给解释器添加辅助组件，跟
+踪线程描述符的创建。验证就绪队列中一个线程描述符至多出现一次。子线程如何获知父线
+程的描述符？原程序的线程描述符应如何处理？
 
 }
 

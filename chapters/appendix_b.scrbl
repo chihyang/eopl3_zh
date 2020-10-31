@@ -15,11 +15,11 @@
 @title[#:style part-title-style-numbered #:tag "sllgen-parsing-system"]{SLLGEN解析系统}
 
 程序只是字符串。要处理程序，需要将这些字符归类为有意义的单元。这种归类通常分为两
-个阶段：@emph{扫描} (@emph{scanning}) 和@emph{解析} (@emph{parsing})。
+个阶段：@term["scanning"]{扫描} 和@term["parsing"]{解析}。
 
-扫描过程将字符序列分为单词，标点等等。这些单元叫做@emph{词条} (@emph{lexical
-items})、@emph{词素} (@emph{lexeme})，或者最常见的@emph{词牌} (@emph{token})。解
-析过程将词牌序列组织成有层次的语法结构，如表达式、语句和块。这就像用从句组织句子。
+扫描过程将字符序列分为单词，标点等等。这些单元叫做@term["lexical items"]{词条}、
+@term["lexeme"]{词素}，或者最常见的@term["token"]{词牌}。解析过程将词牌序列组织
+成有层次的语法结构，如表达式、语句和块。这就像用从句组织句子。
 
 SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录中，我们首先介绍扫描和
 解析的基础，然后考虑如何用 SLLGEN 实现这些功能。
@@ -29,8 +29,8 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 扫描问题如@figure-ref{fig-B.1} 所示。我们在其中展示了一小段程序，以及应如何将其
 分割为基本单元。
 
-字符流应如何分割为词条是语言规范的一部分。语言的这部分规范有时称为@emph{词法规范}
-(@emph{lexical specification})。典型的词法规范可能包括：
+字符流应如何分割为词条是语言规范的一部分。语言的这部分规范有时称为@term["lexical
+specification"]{词法规范}。典型的词法规范可能包括：
 
 @itemlist[
 
@@ -54,8 +54,8 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 能是一个过程，在调用时，由输入产生@exact-elem{“}下一个@exact-elem{”}词牌。
 
 可以从头写出一个扫描器，但那又麻烦，又易错。更好的方式是写出指定语言的词法规范。
-这一任务最常用的语言是@emph{正则表达式} (@emph{regular expressions})。正则表达式
-语言定义如下：
+这一任务最常用的语言是@term["regular expressions"]{正则表达式}。正则表达式语言定
+义如下：
 
 @$${\mathit{R} ::= \mathit{Character} \mid \mathit{RR} \mid \mathit{R} \cup \mathit{R} \mid \neg\mathit{Character}}
 
@@ -68,15 +68,15 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
  @item{匹配 @${\neg c} 的字符串只含一个 @${c} 之外的字符。}
 
  @item{匹配 @${\mathit{RS}} 的字符串由匹配 @${\mathit{R}} 和匹配 @${\mathit{S}}
- 的字符串相接而得。这叫做@emph{串联} (@emph{concatenation})。}
+ 的字符串相接而得。这叫做@term["concatenation"]{串联}。}
 
  @item{匹配 @${\mathit{R} \cup \mathit{S}} 的字符串匹配 @${\mathit{R}} 或
- @${\mathit{S}}。这有时写作 @${\mathit{R} \mid \mathit{S}}，叫做@emph{并联}
- (@emph{alternation})。}
+ @${\mathit{S}}。这有时写作 @${\mathit{R} \mid \mathit{S}}，
+ 叫做@term["alternation"]{并联}。}
 
  @item{匹配 @${\mathit{R}^{*}} 的字符串由 @${n} (@${n \geq 0}) 个匹配
- @${\mathit{R}} 的字符串串联而得。这叫做 @${\mathit{R}} 的@emph{克莱尼闭包}
- (@emph{Kleene closure})。}
+ @${\mathit{R}} 的字符串串联而得。这叫做 @${\mathit{R}} 的@term["Kleene
+ closure"]{克莱尼闭包}。}
 
 ]
 
@@ -120,14 +120,14 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 
 @itemlist[
 
- @item{一个@emph{类别} (@emph{class})，描述词牌的种类。类别的集合是词法规范的一
- 部分。SLLGEN 使用 Scheme 符号区分这些类别；其他语法分析器可能使用其他数据结构。}
+ @item{一个@term["class"]{类别}，描述词牌的种类。类别的集合是词法规范的一部分。
+ SLLGEN 使用 Scheme 符号区分这些类别；其他语法分析器可能使用其他数据结构。}
 
  @item{一段数据，描述特定词牌。这段数据的性质也是词法规范的一部分。在我们的系统
  中，数据如下：标识符的数据是由词牌字符串产生的 Scheme 符号；数字的数据是由数字
  字面值描述的数值；字符串字面值的数据就是字符串。字符串数据用作关键字和标点。在
  没有符号的实现语言中，可以改用字符串（标识符的名字），或者以标识符为索引的哈希
- 表（@emph{符号表} (@emph{symbol table})）条目。}
+ 表（@term["symbol table"]{符号表}）条目。}
 
  @item{一段数据，描述该词牌在输入中的位置。解析器用这一信息帮助程序员定位语法错
  误。}
@@ -139,8 +139,8 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 @section[#:style section-title-style-numbered #:tag "B.2"]{解析}
 
 解析过程将词牌序列组织成有层次的语法结构，如表达式，语句和块。这就像用从句组织句
-子。语言的语法结构通常由 BNF 定义，也叫做@emph{上下文无关语法}
-(@emph{context-free grammar})（@secref{s1.1.2}）。
+子。语言的语法结构通常由 BNF 定义，也叫做@term["context-free grammar"]{上下文无
+关语法}（@secref{s1.1.2}）。
 
 解析器输入为词牌序列，输出为一棵抽象语法树（@secref{s2.5}）。SLLGEN 生成的抽象语
 法树可用 @tt{define-datatype} 描述。对给定的语法，每个非终止符都对应一个数据类型。
@@ -237,11 +237,11 @@ SLLGEN 中的扫描器定义是满足如下语法语法的列表：
 列表中的每一项都定义了一个正则表达式，定义包含名字、一系列正则表达式，以及匹配成
 功时的动作。名字是一个 Scheme 符号，表示词牌的类别。
 
-由于扫描器中的顶层@emph{正则表达式} (@emph{regexp}) 几乎总是串联而得，定义的第二
-部分是一系列正则表达式。正则表达式可以是一个字符串；可以是预先定义的四个测试器之
-一：@tt{letter}（匹配任何字母），@tt{digit}（匹配任何数字），@tt{whitespace}（匹
-配任何 Scheme 空白字符），以及 @tt{any}（匹配任意字符）；可以是一个去反字符；也
-可以是组合而得的正则表达式，采用 Scheme 式的语法，以 @tt{or} 表示并联，以
+由于扫描器中的顶层@term["regexp"]{正则表达式} 几乎总是串联而得，定义的第二部分是
+一系列正则表达式。正则表达式可以是一个字符串；可以是预先定义的四个测试器之一：
+@tt{letter}（匹配任何字母），@tt{digit}（匹配任何数字），@tt{whitespace}（匹配任
+何 Scheme 空白字符），以及 @tt{any}（匹配任意字符）；可以是一个去反字符；也可以
+是组合而得的正则表达式，采用 Scheme 式的语法，以 @tt{or} 表示并联，以
 @tt{concat} 表示串联，以 @tt{arbno} 表示克莱尼星号。
 
 扫描器工作时，把字符收集到一个缓存中。当扫描器断定找出了定义中所有正则表达式的最

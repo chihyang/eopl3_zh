@@ -25,25 +25,25 @@
 
  @item{我们需要一种方式强制抽象边界。在@secref{da}，我们介绍了抽象数据类型的思想。
  在类型的实现中，我们可以对值做任意操作，但在实现之外，类型的值只能通过类型接口
- 中的过程创建和操作。我们把这叫做@emph{抽象边界} (@emph{abstraction boundary})。
- 如果程序遵守这一界限，我们可以改变数据类型的实现。但是，如果某些代码打破了抽象，
- 依赖实现细节，我们就无法任意修改实现而不破坏其他代码。}
+ 中的过程创建和操作。我们把这叫做@term["abstraction boundary"]{抽象边界}。如果程
+ 序遵守这一界限，我们可以改变数据类型的实现。但是，如果某些代码打破了抽象，依赖
+ 实现细节，我们就无法任意修改实现而不破坏其他代码。}
 
  @item{最后，我们需要一种方式，将这些部分灵活组合，让同一部分可复用于不同地方。}
 
 ]
 
-本章，我们介绍@emph{模块} (@emph{module})，以满足这些需求。具体来说，我们展示了
-如何用类型系统创建和强制抽象边界。
+本章，我们介绍@term["module"]{模块}，以满足这些需求。具体来说，我们展示了如何用
+类型系统创建和强制抽象边界。
 
-我们的模块语言中，程序包含一系列@emph{模块定义} (@emph{module definition})，后跟
-一个待求值的表达式。每个模块定义把一个名字绑定到一个@emph{模块}。创建的模块可能
-是@emph{简单模块} (@emph{simple module})，类似环境，是一组绑定；也可能是@emph{模
-块过程} (@emph{module procedure})，取一模块，生成另一模块。
+我们的模块语言中，程序包含一系列@term["module definition"]{模块定义}，后跟一个待
+求值的表达式。每个模块定义把一个名字绑定到一个@emph{模块}。创建的模块可能
+是@term["simple module"]{简单模块}，类似环境，是一组绑定；也可能是@term["module
+procedure"]{模块过程}，取一模块，生成另一模块。
 
-每个模块都有一套@emph{接口} (@emph{interface})。作为一组绑定的模块具有@emph{简单
-接口} (@emph{simple interface})，接口列出模块提供的绑定及其类型。模块过程的接口
-指定模块的参数接口和返回模块的接口，就像过程的类型指定参数和结果的类型。
+每个模块都有一套@term["interface"]{接口}。作为一组绑定的模块具有@term["simple
+interface"]{简单接口}，接口列出模块提供的绑定及其类型。模块过程的接口指定模块的
+参数接口和返回模块的接口，就像过程的类型指定参数和结果的类型。
 
 这些接口就像类型一样，决定了模块组合的方式。因为求出示例程序的值非常直接，因此我
 们关注其类型。如前所见，理解这种语言的定界和绑定规则是程序分析和求值的关键。
@@ -117,21 +117,21 @@ in -(-(from m1 take a,
 义之后。由于 @tt{from m1 take x} 未在接口中声明，所以它的作用域不包含模块定义之
 后。
 
-为了同@emph{简单变量} (@emph{simple variable}) 区别，我们称这些新变量为@emph{受
-限变量} (@emph{qualified})。在一般的语言中，受限变量可能写作 @tt{m1.a}、
+为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量
+为@term["qualified"]{受限变量}。在一般的语言中，受限变量可能写作 @tt{m1.a}、
 @tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，@tt{m1.a} 通常另有
 含义。
 
-我们说接口@emph{提出} (@emph{offer})（或称@emph{公布} (@emph{advertise})，
-或称@emph{承诺} (@emph{promise})）三个整型值，主体@emph{提供}（@emph{supply} 或
-@emph{provide}）（或称@emph{输出} (@emph{export})）这些值。当模块主体提供的值类
-型与接口命名变量时公布的类型相符时，主体@emph{满足} (@emph{satisfy}) 其接口。
+我们说接口@term["offer"]{提出}（或称@term["advertise"]{公布}，
+或称@term["promise"]{承诺}）三个整型值，主体@term['("supply" "provide")]{提
+供}（或称@term["export"]{输出}）这些值。当模块主体提供的值类型与接口命名变量时公
+布的类型相符时，主体@term["satisfy"]{满足} 其接口。
 
 在主体中，定义具有 @tt{let*} 那样的作用域，所以 @tt{x}、@tt{b} 和 @tt{c} 的定义
 在 @tt{a} 的作用域内。一些作用域如@figure-ref{fig-8.2} 所示。
 
-本例中，以 @tt{let a = 10} 开头的表达式是@emph{程序主体} (@emph{program body})。
-它的值即程序的值。
+本例中，以 @tt{let a = 10} 开头的表达式是@term["program body"]{程序主体}。它的值
+即程序的值。
 
 每个模块都在模块主体和程序其余部分之间建立了抽象边界。模块主体中的表达式在抽象边
 界@emph{之内}，其他部分在抽象边界@emph{之外}。模块主体也可以提供不在接口中的名字
@@ -280,8 +280,8 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
             &\mathrel{\phantom{::=}} \fbox{@tt{a-module-definition (m-name expected-iface m-body)}}}}
 
 简单模块的接口包含任意数量的声明。每个声明指定程序中一个变量的类型。
-我们称之为@emph{值声明} (@emph{value declaration})，因为要声明的变量表示一个值。
-在后面几节中，我们介绍其他类别的接口和声明。
+我们称之为@term["value declaration"]{值声明}，因为要声明的变量表示一个值。在后面
+几节中，我们介绍其他类别的接口和声明。
 
 @nested[#:style small]{
 @envalign*{
@@ -885,15 +885,15 @@ body
 
 中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
 @tt{is-zero}。如同@secref{s2.1}，这套接口可能与算术操作的实现相关。这里的声明
-@tt{t} 为@emph{模糊类型} (@emph{opaque typs})，意为，模块之外的代码不知道这种类
-型的值如何表示。所有的外部代码都知道可以用 @tt{from m1 take zero} 和 @tt{from m1
-take succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 take t} 的
-表现就像 @tt{int} 和 @tt{bool} 之类的原生类型一样。
+@tt{t} 为@term["opaque typs"]{模糊类型}，意为，模块之外的代码不知道这种类型的值
+如何表示。所有的外部代码都知道可以用 @tt{from m1 take zero} 和 @tt{from m1 take
+succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 take t} 的表现
+就像 @tt{int} 和 @tt{bool} 之类的原生类型一样。
 
 }
 
-我们将介绍两种类型声明：@emph{透明} (@emph{transparent}) 类型和@emph{模糊}
-(@emph{opaque}) 类型。好的模块系统中，二者缺一不可。
+我们将介绍两种类型声明：@term["transparent"]{透明} 类型和@term["opaque"]{模糊}
+类型。好的模块系统中，二者缺一不可。
 
 @subsection[#:style section-title-style-numbered #:tag "s8.2.1"]{例子}
 
@@ -983,8 +983,8 @@ Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-transparent-types"]{透明类型}
 
-我们首先讨论透明类型声明。有时这些又称作@emph{具体} (@emph{concrete}) 类型
-或@emph{类型缩写} (@emph{type abbreviation})。
+我们首先讨论透明类型声明。有时这些又称作@term["concrete"]{具体} 类型
+或@term["type abbreviation"]{类型缩写}。
 
 @example[#:tag "eg-8.6"]{
 程序
@@ -1039,7 +1039,7 @@ take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我�
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
 模块还可以用 @tt{opaque-type} 声明输出@emph{模糊}类型。模糊类型有时又
-称作@emph{抽象类型} (@emph{abstract type})。
+称作@term["abstract type"]{抽象类型}。
 
 @example[#:tag "eg-8.7"]{我们把@example-ref{eg-8.6} 程序中的透明类型替换为模糊
 类型。得出的程序是
@@ -1432,9 +1432,8 @@ t}）。
 @nested[#:style small]{
 @$${\mathit{Type} ::= @tt{int}\ |\ @tt{bool}\ |\ @tt{from @${m} take @${t}}\ |\ @tt{(@${\mathit{Type}} -> @${\mathit{Type}})}}}
 
-其中，@${t} 为 @${m} 中的模糊类型声明。我们称这种形式的类型为@emph{展开类型}
-(@emph{expanded type})。
-}
+其中，@${t} 为 @${m} 中的模糊类型声明。我们称这种形式的类型为@term["expanded
+type"]{展开类型}。}
 
 接下来我们扩展类型环境，处理新类型。我们的类型环境将每个有名类型或受限类型绑定到
 一个展开类型。新的类型环境定义为
@@ -1859,11 +1858,10 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
 
 OPAQUE-TYPES 中的程序有固定的依赖关系。模块 @tt{m4} 可能依赖 @tt{m3} 和 @tt{m2}，
-@tt{m2} 依赖 @tt{m1}。有时，我们说依赖关系是@emph{硬编码} (@emph{hard-coded}) 的。
-通常，这种硬编码的依赖关系会导致糟糕的程序设计，因为这使模块难以复用。本节，我们
-给系统添加名为@emph{模块过程} (@emph{module procedure})（有时又称@emph{参数化模
-块} (@emph{parameterized module})）的组件，以便复用模块。我们称这种新语言为
-PROC-MODULES。
+@tt{m2} 依赖 @tt{m1}。有时，我们说依赖关系是@term["hard-coded"]{硬编码} 的。通常，
+这种硬编码的依赖关系会导致糟糕的程序设计，因为这使模块难以复用。本节，我们给系统
+添加名为@term["module procedure"]{模块过程}（有时又称@term["parameterized
+module"]{参数化模块}）的组件，以便复用模块。我们称这种新语言为PROC-MODULES。
 
 @subsection[#:style section-title-style-numbered #:tag "s8.3.1"]{例子}
 
@@ -2436,8 +2434,8 @@ module mybool-tables
 传给 @${m_0}，@${m_0} 产生的任何模块都满足 @${i^{\prime}_{2}}。
 
 为满足第一个要求，我们要求 @${i_2 <: i_1}。这保证了满足 @${i_2} 的任何模块都能作
-为参数传给 @${m_0}。注意逆序：我们说参数类型的 @emph{子类型判定}
-(@emph{subtyping}) 是@emph{逆变的} (@emph{contravariant})。
+为参数传给 @${m_0}。注意逆序：我们说参数类型的@term["subtyping"]{子类型判定}
+是@term["contravariant"]{逆变的}。
 
 结果的类型呢？我们可以要求 @${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行
 不通。@${i^{\prime}_{1}} 中，可能出现模块变量 @${m_1}，@${i^{\prime}_{2}} 中，可

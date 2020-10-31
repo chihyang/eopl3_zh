@@ -80,9 +80,9 @@
 }
 
 这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? :
-@#,elem{@${\mathit{N} \to \mathit{Bool}}}] 是一条注释，称为该函数的@emph{合约}
-(@emph{contact})。它表示 @racket[in-S?] 应为一过程，取一自然数，产生一布尔值。这
-样的注释对阅读和编写代码很有帮助。
+@#,elem{@${\mathit{N} \to \mathit{Bool}}}] 是一条注释，称为该函数
+的@term["contract"]{合约}。它表示 @racket[in-S?] 应为一过程，取一自然数，产生一
+布尔值。这样的注释对阅读和编写代码很有帮助。
 
 要判断是否 @${n \in S}，先判断是否 @${n = 0}。如果是，那么答案为真。否则，判断是
 否 @${n - 3 \in S}。欲知此，首先判断是否 @${(n - 3) \geqslant 0}。如果是，那么可
@@ -116,13 +116,12 @@
 @; @infer[${(n + 3) \in S}]{$@{n \in S}}
 @$${\infer{(n + 3) \in S}{n \in S}}
 
-这只是前一定义的简便表示。每个条目称为一条@emph{推理规则} (@emph{rule of
-inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“}若-则
-@exact-elem{”}。线上部分称作@emph{假设} (@emph{hypothesis}) 或者@emph{前件}
-(@emph{antecedent})；线下部分称作@emph{结论} (@emph{conclusion}) 或者@emph{后件}
-(@emph{consequent})。罗列两个或更多假设时，它们以隐含的@exact-elem{“}与
-@exact-elem{”}连接（见@definition-ref{d1.1.5}）。没有假设的规则称作@emph{公理}
-(@emph{axiom})。写公理时通常不加水平线，如：
+这只是前一定义的简便表示。每个条目称为一条@term["rule of inference"]{推理规则}，
+或称@term["rule"]{规则}；水平线读作@exact-elem{“}若-则@exact-elem{”}。线上部分
+称作@term["hypothesis"]{假设}或者@term["antecedent"]{前件}；线下部分
+称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或更多假设
+时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
+没有假设的规则称作@term["axiom"]{公理}。写公理时通常不加水平线，如：
 
 @$${0 \in S}
 
@@ -130,9 +129,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 @exact-elem{“}@${n \in S}@exact-elem{”}。这一解释自然使 @${S} 成为闭合于该规则
 的最小集合。
 
-这些定义意思相同。我们把版本一称作@emph{自顶向下} (@emph{top-down}) 的定义，版本
-二称作@emph{自底向上} (@emph{bottom-up}) 的定义，版本三称作@emph{推理规则}
-(@emph{rules-of-inference}) 定义。
+这些定义意思相同。我们把版本一称作@term["top-down"]{自顶向下} 的定义，版本二
+称作@term["bottom-up"]{自底向上} 的定义，版本三称作@term[#f]{推理规则}定义。
 
 再来看几个运用这些的例子。
 
@@ -207,8 +205,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 14)} 都是 @List-of-Int-$[] 的元素。
 
 还可以结合各条规则来证明 @${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}，
-以见出整个推理过程。下面的树状图叫做@elemtag["deriv-tree"]{@emph{推导}}
-(@emph{derivation}) 或@emph{推理树} (@emph{deduction tree})。
+以见出整个推理过程。下面的树状图叫做@term[#:tag "deriv-tree" "derivation"]{推导}
+或@term["deduction tree"]{推理树}。
 
 @$${\infer{\hphantom{\texttt{xx}}@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]\hphantom{\texttt{xx}}}
           {@tt{-7} \in \mathit{Int} \hphantom{\texttt{x}} &
@@ -267,8 +265,8 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 @subsection[#:style section-title-style-numbered #:tag "s1.1.2"]{语法定义法}
 
 前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为了方便，我们展
-示如何用@emph{语法} (@emph{grammar}) 定义集合。语法通常用来指定字符串的集合，但
-也能用来定义值的集合。
+示如何用@term["grammar"]{语法} 定义集合。语法通常用来指定字符串的集合，但也能用
+来定义值的集合。
 
 例如，集合 @List-of-Int-$[] 可用语法定义为：
 
@@ -287,23 +285,22 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 这两条规则对应上述@definition-ref{d1.1.4} 中的两条性质。规则一是说空表属于
 @List-of-Int-$[]；规则二是说，若 @${n} 属于 @Int-$[] 且 @${l} 属于
 @List-of-Int-$[]，则 @tt{(@${n} . @${l})} 属于 @List-of-Int-$[]。这些规则
-叫做@emph{语法}。
+叫做@term[#f]{语法}。
 
 来看看该定义的各个部分，其中有：
 
 @itemlist[
 
   @item{@bold{非终结符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
-        可能会定义数个集合。这些集合有时称为@emph{句法类别} (@emph{syntactic
-        category})。
+        可能会定义数个集合。这些集合有时称为@term["syntactic category"]{句法类别}。
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
         @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
         expression@exact-elem{”}。
 
-        另一常见做法，名叫@emph{巴科斯-诺尔范式} (@emph{Backus-Naur Form}) 或
-        @emph{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
+        另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺尔范式} 或
+        @term[#f]{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
 
   @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是
         @exact-elem{“}@tt{.}@exact-elem{”}、
@@ -311,10 +308,10 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
         @exact-elem{“}@tt{)}@exact-elem{”}。这些常用打字机字体写出，如
         @tt{lambda}。}
 
-  @item{@bold{生成式}。规则叫做@emph{生成式} (@emph{production})。每个生成式的左
-        边是一个非终结符，右边包含终结符和非终结符。左右两边通常用符号 @${::=}分
-        隔，读作@emph{是}或@emph{可以是}。式子右边用其他句法类别和@emph{终结符}
-        （如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
+  @item{@bold{生成式}。规则叫做@term["production"]{生成式}。每个生成式的左边是一
+        个非终结符，右边包含终结符和非终结符。左右两边通常用符号 @${::=}分隔，读
+        作@term[#f]{是}或@term[#f]{可以是}。式子右边用其他句法类别和@term[#f]{终
+        结符}（如左括号、右括号和句点）指定一种方法，用以构建当前句法类别的元素。}
 
 ]
 
@@ -331,24 +328,24 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 }}
 
 给同一句法类别编写一组规则时，也可以只写一次 @${::=} 和左边内容，随后的各个右边
-内容用特殊符号@exact-elem{“}@${\mid}@exact-elem{”}（竖线，读作@emph{或}）分隔。
-用@exact-elem{“}@${\mid}@exact-elem{”}，@List-of-Int-$[] 的语法可写成：
+内容用特殊符号@exact-elem{“}@${\mid}@exact-elem{”}（竖线，读作@term[#f]{或}）
+分隔。用@exact-elem{“}@${\mid}@exact-elem{”}，@List-of-Int-$[] 的语法可写成：
 
 
 @$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@Int-$[] . @List-of-Int-$[])}}
 
-另一种简写是@elemtag["kleene-star"]{@emph{克莱尼星号}} (@emph{Kleene Star})，写
-作 @${\{...\}^*}。当它出现在右边时，表示一个序列，由任意多个花括号之间的内容组成。
+另一种简写是@term[#:tag "kleene-star" "Kleene Star"]{克莱尼星号}，写作
+@${\{...\}^*}。当它出现在右边时，表示一个序列，由任意多个花括号之间的内容组成。
 用克莱尼星号，@List-of-Int-$[] 的定义可以简写为
 
 @$${@List-of-Int-$[] ::= @tt{(@${\{\mathit{Int}\}^*})}}
 
 这也包含没有任何内容的情况。如果内容出现 0 次，得到的是空字符串。
 
-星号的变体是@emph{克莱尼加号} (@emph{Kleene Plus}) @${\{...\}^+}，表示一个或多个
-内容的序列。把上例中的 @${^*} 换成 @${^+}，定义的句法类别是非空整数列表。
+星号的变体是@term["Kleene Plus"]{克莱尼加号} @${\{...\}^+}，表示一个或多个内容的
+序列。把上例中的 @${^*} 换成 @${^+}，定义的句法类别是非空整数列表。
 
-星号的另一变体是@emph{分隔表} (@emph{separated list}) 表示法。例如，
+星号的另一变体是@term["separated list"]{分隔表} 表示法。例如，
 @${\mathit{Int}^{*(c)}} 表示一个序列，包含任意数量的非终结符 @Int-$[] 元素，以非
 空字符序列 @${c} 分隔。这也包含没有元素的情况。如果有 0 个元素，得到的是空字符串。
 例如，@${\mathit{Int}^{*(,)}} 包含字符串
@@ -377,11 +374,11 @@ inference})，或称@emph{规则} (@emph{rule})；水平线读作@exact-elem{“
 
 这些简写不是必需的，总能够不用它们重写语法。
 
-对由语法定义的集合，可以用@index["句法推导"]{@emph{句法推导}} (@emph{syntactic
-derivation}) 证明给定值是其元素。这样的推导从集合对应的非终结符开始，在由箭头
-@${\Rightarrow} 指示的每一步中，如果非终结符对应的句法类别未做定义，则将其代换为
-该类别的已知元素，否则代换为对应规则右边的内容。例如，前述证明
-@exact-elem{“}@tt{(14 . ())} 是整数列表@exact-elem{”}，可以用句法推导化为
+对由语法定义的集合，可以用@index["句法推导"]{@emph{句法推导}} 证明给定值是其元素。
+这样的推导从集合对应的非终结符开始，在由箭头@${\Rightarrow} 指示的每一步中，如果
+非终结符对应的句法类别未做定义，则将其代换为该类别的已知元素，否则代换为对应规则
+右边的内容。例如，前述证明@exact-elem{“}@tt{(14 . ())} 是整数列表
+@exact-elem{”}，可以用句法推导化为
 
 @nested[#:style small]{
 @envalign*{
@@ -454,8 +451,8 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
   (biz 4 5))}}
  }
 
- @item{@emph{lambda 演算} (@emph{lambda calculus}) 是一种简单语言，常用于研究编
- 程语言理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
+ @item{@term["lambda calculus"]{lambda 演算} 是一种简单语言，常用于研究编程语言
+ 理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
 
  @definition[#:title "lambda 演算" #:tag "d1.1.8"]{
  @nested[#:style normalfont]{
@@ -468,8 +465,8 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
  }
 
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
- 达式的@emph{绑定变量} (@emph{bound variable})，因为它绑定（或称捕获）主体内出现
- 的任何同名变量。出现在主体内的同名变量都指代这一个。
+ 达式的@term["bound variable"]{绑定变量}，因为它绑定（或称捕获）主体内出现的任何
+ 同名变量。出现在主体内的同名变量都指代这一个。
 
  要明白这怎么用，考虑用算术操作符扩展的 lambda 演算。在这种语言里，
 
@@ -488,9 +485,9 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
 
 ]
 
-这些语法叫做@emph{上下文无关} (@emph{context-free}) 语法，因为一条规则定义的句法
-类别可以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索
-树}。其节点或者为空，或者包含一个整数和两棵子树
+这些语法叫做@term["context-free"]{上下文无关} 语法，因为一条规则定义的句法类别可
+以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索树}。
+其节点或者为空，或者包含一个整数和两棵子树
 
 @$${\mathit{Binary\mbox{-}search\mbox{-}tree} ::= @tt{()} \mid
     @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-}tree}})}}
@@ -500,8 +497,8 @@ derivation}) 证明给定值是其元素。这样的推导从集合对应的非�
 
 因为这条额外限制，从 @${\mathit{Binary\mbox{-}search\mbox{-}tree}} 得出的句法推
 导并不都是正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成
-式用在哪种上下文。这种限制叫做@emph{上下文敏感限制} (@emph{context-sensitive
-constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants})。
+式用在哪种上下文。这种限制叫做@term["context-sensitive constraints"]{上下文敏感
+限制}，或称@term[#:tag "invariant" "invariants"]{不变式}。
 
 定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
 前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
@@ -553,8 +550,8 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
  }
 @; @}
 
-证明的关键是树 @${t} 的子结构总是比 @${t} 自身小。这种证明模式叫做@emph{结构化归
-纳法} (@emph{structural induction})。
+证明的关键是树 @${t} 的子结构总是比 @${t} 自身小。这种证明模式
+叫做@term["structural induction"]{结构化归纳法}。
 
 @nested[#:style tip]{
  @centered{@bold{结构化归纳证明}}
@@ -602,14 +599,14 @@ constraints})，或称@elemtag["invariant"]{@emph{不变式}} (@emph{invariants}
 
 我们来写出自己的过程 @tt{list-length}，做同样的事。
 
-先来写出过程的@emph{合约}。合约指定了过程可取参数和可能返回值的集合。合约也可以
-包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，这
-是一条注释，我们用打字机字体示之，以便阅读。
+先来写出过程的@term[#f]{合约}。合约指定了过程可取参数和可能返回值的集合。合约也
+可以包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，
+这是一条注释，我们用打字机字体示之，以便阅读。
 
 @nested[#:style small]{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
-@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@emph{的长度}}}
+@#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@tt{的长度}}}
 (define list-length
   (lambda (lst)
     ...))
@@ -872,9 +869,9 @@ C} 相同。
 @subsection[#:style section-title-style-numbered #:tag "s1.2.4"]{@tt{occurs-free?}}
 
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
-表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。如果一个变
-量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变量@emph{自
-由出现} (@emph{occurs free}) 于表达式 @${exp} 中。例如，
+表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
+如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
+量@term["occurs free"]{自由出现} 于表达式 @${exp} 中。例如，
 
 @(define occurs-free?-eval
   (parameterize ([sandbox-output 'string]
@@ -921,9 +918,9 @@ C} 相同。
 
  @item{若表达式 @${e} 形如 @tt{(@${e_1} @${e_2})}，则当且仅当 @${x} 自由出现于
  @${e_1} 或 @${e_2} 时，@${x} 自由出现于 @${e}。这里的@exact-elem{“}或
- @exact-elem{”}表示@emph{涵盖或} (@emph{inclusive or})，意为它包含 @${x} 同时自
- 由出现于 @${e_1} 和 @${e_2} 的情况。我们通常用@exact-elem{“}或@exact-elem{”}
- 表示这种意思。}
+ @exact-elem{”}表示@term["inclusive or"]{涵盖或}，意为它包含 @${x} 同时自由出现
+ 于 @${e_1} 和 @${e_2} 的情况。我们通常用@exact-elem{“}或@exact-elem{”}表示这
+ 种意思。}
 
 ]
 
@@ -1080,7 +1077,7 @@ C} 相同。
 
 因为我们严格依照 @${\mathit{S\mbox{-}list}} 和 @${\mathit{S\mbox{-}exp}} 的定义，
 这个递归一定会终止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称
-之为@emph{互递归} (@emph{mutually recursive})。
+之为@term["mutually recursive"]{互递归}。
 
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
@@ -1094,9 +1091,9 @@ C} 相同。
 
 @exercise[#:level 1 #:tag "ex1.12"]{
 
- 用 @tt{subst-in-s-exp} 的定义替换 @tt{subst} 中的调用，从而排除这次调用，然后
- 简化得到的过程。结果中的 @tt{subst} 应当不需要 @tt{subst-in-s-exp}。这种技巧叫
- 做@emph{内联} (@emph{inlining})，用于优化编译器。
+ 用 @tt{subst-in-s-exp} 的定义替换 @tt{subst} 中的调用，从而排除这次调用，然后简
+ 化得到的过程。结果中的 @tt{subst} 应当不需要 @tt{subst-in-s-exp}。这种技巧
+ 叫做@term["inlining"]{内联}，用于优化编译器。
 
 }
 
@@ -1129,14 +1126,14 @@ C} 相同。
 
 @section[#:style section-title-style-numbered #:tag "s1.3"]{辅助过程和上下文参数}
 
-窍门@emph{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这一过
-程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0 @${v_0}) (1
-@${v_1}) (2 @${v_2}) ...)}。
+窍门@term[#f]{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这
+一过程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0
+@${v_0}) (1 @${v_1}) (2 @${v_2}) ...)}。
 
 我们用过的那种直拆法不凑效，因为没有明显的方法能从 @tt{(number-elements (cdr
 lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}）。
 
-要解决这个问题，我们@emph{放宽} (@emph{generalize}) 问题。我们写一个过程
+要解决这个问题，我们@term["generalize"]{放宽} 问题。我们写一个过程
 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用递归处理列表，
 这个过程很容易写。
 
@@ -1179,12 +1176,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  是初始值。}}
 
 其次，@tt{number-elements-from} 的两个参数各有作用。第一个参数是我们要处理的列表，
-随每一次递归调用而减小。而第二个参数，则是对我们当前任务@emph{上下文}
-(@emph{context}) 的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
+随每一次递归调用而减小。而第二个参数，则是对我们当前任务@term["context"]{上下文}
+的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
 @tt{number-elements-from} 处理原列表的每个子列表。第二个参数告知我们子列表在原列
 表中的位置。随递归调用，它不减反增，因为我们每次经过原列表的一个元素。有时我们称
-之为@emph{上下文参数} (@emph{context argument})，或者@emph{继承属性}
-(@emph{inherited attribute})。
+之为@term["context argument"]{上下文参数}，或者@term["inherited attribute"]{继承
+属性}。
 
 另一个例子是向量求和。
 
@@ -1266,10 +1263,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 每道习题都假定 @tt{s} 是一个符号，@tt{n} 是一个非负整数，@tt{lst} 是一个列表，
 @tt{loi} 是一个整数列表，@tt{los} 是一个符号列表，@tt{slist} 是一个 s-list，
 @tt{x} 是任意 Scheme 值；类似地，@tt{s1} 是一个符号，@tt{los2} 是一个符号列表，
-@tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@emph{谓词}
-(@emph{predicate})，即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除
-非某个具体问题另有限制，不要对数据作其他假设。在这些习题中，不需要检查输入是否符
-合描述；对每个过程，都假定输入值是指定集合的成员。
+@tt{x1} 是一个 Scheme 值，等等。还假定 @tt{pred} 是一个@term["predicate"]{谓词}，
+即一个过程，取任意 Scheme 值，返回 @tt{#t} 或者 @tt{#f}。除非某个具体问题另有限
+制，不要对数据作其他假设。在这些习题中，不需要检查输入是否符合描述；对每个过程，
+都假定输入值是指定集合的成员。
 
 定义，测试和调试每个过程。你的定义应当有本章这种合约和用法注释。可以随便定义辅助
 过程，但是你定义的每个辅助过程都应该有其说明，如同@secref{s1.3}那样。

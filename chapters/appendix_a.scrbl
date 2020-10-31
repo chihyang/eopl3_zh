@@ -30,22 +30,21 @@ al., 2001) 深入探讨了如何递归编程。
 
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 Plotkin (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
-@exact-elem{”}式归纳效仿另一种技术，名为@emph{余归纳} (@emph{coinduction})（参
-见 Gordon, 1995; Jacobs & Rutten, 1997），Felleisen et al. (2001) 也使用了这种技
-术。
+@exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}（参见
+Gordon, 1995; Jacobs & Rutten, 1997），Felleisen et al. (2001) 也使用了这种技术。
 
 上下文无关语法是语言学和计算机科学的标准工具。大多数编译器书籍，比如 Aho et
 al. (2006)，都对语法和解析算法进行了大篇幅的讨论。将具体语法和抽象语法分开的思想
 通常归功于 McCarthy (1962)。他强调用接口抽象语法树。
 
 我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 Brustall (1969) 提出。即使
-过程没有@bold{遵循语法}，@emph{子目标归纳} (@emph{subgoal induction}) (Morris
+过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳} (Morris
 &Wegbreit, 1977) 仍是证明递归过程正确性的有效方法。过程的可能输入受不变式约束时，
 子目标归纳也有效。
 
-@emph{泛化} (@emph{generalization}) 是源自数学的标准技术，常用来证明某个特定陈述
-是某个更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法 (Knuth,
-1968) 中的@emph{继承属性} (@emph{inherited attributes}) 启发。
+@term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
+更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法 (Knuth, 1968)
+中的@emph{继承属性} 启发。
 
 我们的构造器 @tt{define-datatype} 和 @tt{cases} 是受 ML 的 @tt{datatype} 和模式
 匹配工具启发，详见 Milner et al. (1989) 及其修订版 Milner et al. (1997)。
@@ -70,11 +69,11 @@ Dybvig (2003) 简短介绍了 Scheme，加入了许多富有洞见的例子。
 拟解码机器 (Turing, 1936)。经典的冯诺依曼机 (von Neumann, 1945) 同样是硬件实现的
 解释器，用来解释机器语言程序。
 
-对解释器的现代应用可追溯到 McCarthy (1960)，他提出了@emph{自循环解释器}
-(@emph{metacircular interpreter})（用被定语言本身写就的解释器），用来解释 Lisp
-的能力。当然，这样的解释器带来一大难题：如果被定语言由自身定义，我们要理解语言的
-定义，就要先理解这种语言。确实，即使解释器不是自循环的，也会面临同样的问题。读者
-理解被定义的事物之前，仍需理解书写定义用的语言。
+对解释器的现代应用可追溯到 McCarthy (1960)，他提出了@term["metacircular
+interpreter"]{自循环解释器}（用被定语言本身写就的解释器），用来解释 Lisp的能力。
+当然，这样的解释器带来一大难题：如果被定语言由自身定义，我们要理解语言的定义，就
+要先理解这种语言。确实，即使解释器不是自循环的，也会面临同样的问题。读者理解被定
+义的事物之前，仍需理解书写定义用的语言。
 
 这些年来，大量技术用来解决这一难题。我们把解释器视为方程定义的转写 (Goguen et
 al., 1977) 或者 Plotkin (1975, 1981) 式的大步操作语义。这依赖相当直观的数学。
@@ -99,8 +98,8 @@ EXPLICIT-REFS 的设计基于 ML (Milner et al., 1989) 的存储器模型，而�
 Fortran (Backus et al., 1957) 是第一种使用按指调用的语言，Algol 60 (Naur et al.,
 1963) 是第一种使用按名调用的语言。Friedman & Wise (1976) 较早介绍了全面使用懒求
 值的威力。Haskell (Hudak et al., 1990) 是第一种使用按需调用的实际语言。为了建模
-按名调用，Ingerman (1961) 发明了@emph{值箱} (@emph{thunk})。我们用它们和效果建模
-按需调用。这与@emph{助记法} (@emph{memoization}) (Michie, 1968) 类似。
+按名调用，Ingerman (1961) 发明了@term["thunk"]{值箱}。我们用它们和效果建模按需调
+用。这与@term["memoization"]{助记法} (Michie, 1968) 类似。
 
 @emph{Monads} 由 Moggi (1991) 提出，因 Wadler (1992) 流行。它提供了编程语言效果
 的通用模型。在函数式语言 Haskell (Peyton Jones, 2001) 中，monads 提供了非函数式
@@ -120,7 +119,7 @@ Plotkin (1975) 给出了相当清晰的 CPS 变换，发现了它的理论性质
 Scheme 的 @tt{call-with-current-continuation}，始见于 Clinger et al. (1985b)。
 
 Wand (1980a) 展示了如何用续文建模轻量级进程或线程。续文用途广泛，远超本书讨论范
-围，如@emph{协程} (@emph{coroutine}) (Haynes et al., 1986)。
+围，如@term["coroutine"]{协程} (Haynes et al., 1986)。
 
 我们对线程的讨论模拟了 POSIX 线程 （例如，参见 Lewis & Berg,
 1998）。@exercise-ref{ex5.56} 基于 Erlang 的消息传递并发模型 (Armstrong, 2007)。
@@ -175,7 +174,7 @@ Springer & Friedman (1989) 给出了更多用 Scheme 进行面向对象编程的
 Ruby （参见 Thomas et al., 2005）、Python （van Rossum & Drake, 2006）和
 Perl（Wall et al., 2000; Dominus, 2005）是具有对象和过程的无类型语言，大致类似我
 们的 CLASSES。C# 是一种带类型的语言，相较 Java 添加了很多特性，最著名的是与过程
-类似的@emph{委托} (@emph{delegates})，它还允许程序员指定某些调用应该是尾调用。
+类似的@term["delegates"]{委托}，它还允许程序员指定某些调用应该是尾调用。
 
 Abadi & Cardelli (1996) 定义了一种简单的对象演算，为面向对象系统中的类型研究奠定
 了基础。Flatt et al. (1998) 形式化了 Java 的一个子集。另一有用的子集是

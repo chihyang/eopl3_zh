@@ -16,8 +16,9 @@
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
 叫做@emph{迭代性控制行为}。
 
-我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格叫做@emph{续
-文传递风格} (@emph{continuation-passing style}) 或 @deftech{CPS}，且不限于解释器。
+我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格
+叫做@term["continuation-passing style"]{续文传递风格} 或 @deftech{CPS}，且不限于
+解释器。
 
 本章，我们介绍一种系统性的方法，将任一过程转换为具有迭代性控制行为的等效过程。实
 现这一点需要将过程转换为续文传递风格。
@@ -151,8 +152,8 @@
 }
 
 我们还可以更进一步，将程序中所有调用续文构造器的地方替换为其定义。因为定义在行内
-展开，这一转换叫做@emph{内联} (@emph{inlining})。我们还要内联 @tt{apply-cont} 的
-调用，不再写 @tt{(apply-cont cont val)}，而是直接写 @tt{(cont val)}。
+展开，这一转换叫做@term["inlining"]{内联}。我们还要内联 @tt{apply-cont} 的调用，
+不再写 @tt{(apply-cont cont val)}，而是直接写 @tt{(cont val)}。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -614,7 +615,7 @@ val1 val2)} 的值传给当前续文。
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择 LETREC 作为
 输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。其语法如@figure-ref{fig-6.3}
 所示，我们称之为 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些
-叫做@emph{输入表达式} (@emph{input expression})。
+叫做@term["input expression"]{输入表达式}。
 
 要定义 CPS 变换算法的可能输出，我们要找出 CPI-IN 的子集，在这个集合中，过程调用
 不产生任何控制上下文。
@@ -648,9 +649,8 @@ val1 val2)} 的值传给当前续文。
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
 ]}
 
-中， 过程调用都不在操作数位置。我们说这些调用在@emph{尾端} (@emph{tail
-position})，因为它们的值就是整个调用的结果。我们称之为@emph{尾调用} (@emph{tail
-call})。
+中， 过程调用都不在操作数位置。我们说这些调用在@term["tail position"]{尾端}，因
+为它们的值就是整个调用的结果。我们称之为@term["tail call"]{尾调用}。
 
 }
 
@@ -689,8 +689,8 @@ call})。
  @para[#:style tip-content]{若 @${exp_1} 的值作为 @${exp_2} 的值返回，则
  @${exp_1} 和@${exp_2} 应在同样的续文中执行。} }
 
-若所有过程调用和所有包含过程调用的子表达式都在尾端，我们称一个表达式为@emph{尾式}
-(@emph{tail form})。这个条件表明所有过程调用都不会产生控制上下文。
+若所有过程调用和所有包含过程调用的子表达式都在尾端，我们称一个表达式
+为@term["tail form"]{尾式}。这个条件表明所有过程调用都不会产生控制上下文。
 
 因此，在 Scheme 中，
 
@@ -1843,9 +1843,9 @@ in |@${T}
 @exercise[#:level 2 #:tag "ex6.34"]{
 
 我们把程序转换为 CPS 时，不仅将程序中的控制上下文变为显式的，而且还确定了操作的
-执行顺序，以及所有中间结果的名字。后者叫做@emph{序列化}
-(@emph{sequentialization})。如果我们不关心能否获得迭代性控制行为，我们序列化程序
-时可将其转换为@emph{A-normal form}，或称@emph{ANF}。这里是一个 ANF 程序的例子。
+执行顺序，以及所有中间结果的名字。后者叫做@term["sequentialization"]{序列化}。如
+果我们不关心能否获得迭代性控制行为，我们序列化程序时可将其转换为
+@term[#f]{A-normal form}，或称@term[#f]{ANF}。这里是一个 ANF 程序的例子。
 
 @racketblock[
 (define fib/anf

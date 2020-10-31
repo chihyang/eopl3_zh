@@ -13,8 +13,7 @@
 @title[#:style part-title-style-numbered #:tag "expr"]{表达式}
 
 本章研究变量绑定及其作用域。我们用一系列小型语言解释这些概念。我们为这些语言写
-出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为@emph{环境}
-(@emph{environment}) 的上下文参数，以记录待求值的表达式中各个变量的
+出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为@term["environment"]{环境} 的上下文参数，以记录待求值的表达式中各个变量的
 含义。
 
 @section[#:style section-title-style-numbered #:tag "s3.1"]{规范和实现策略}
@@ -30,44 +29,41 @@
 }
 
 而我们的目标是写出程序，实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，
-由我们要实现的语言写出。这叫做@emph{源语言} (@emph{source language}) 或@emph{被
-定语言} (@emph{defined language})。前端接收程序文本（由源语言写成的程序），将其
-转化为抽象语法树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根
-据结构执行一些动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@emph{实
-现语言} (@emph{implementation language}) 或@emph{定义语言} (@emph{defining
-language})。我们的大多数实现都遵照这种方式。
+由我们要实现的语言写出。这叫做@term["source language"]{源语言} 或@term["defined
+language"]{被定语言}。前端接收程序文本（由源语言写成的程序），将其转化为抽象语法
+树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根据结构执行一些
+动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@term["implementation
+language"]{实现语言} 或@term["defining language"]{定义语言}。我们的大多数实现都
+遵照这种方式。
 
 另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
-抽象语法树翻译为另一种语言（称为@emph{目标语言} (@emph{target language})）写成的
+抽象语法树翻译为另一种语言（称为@term["target language"]{目标语言}）写成的
 程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
 可能翻译成更底层的语言执行。
 
 通常，目标语言是一种机器语言，由硬件解释。但目标语言也可能是一种特定用途的语言，
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
-同的硬件平台上执行。出于历史原因，常称这样的目标语言为@emph{字节码} (@emph{byte
-code})，称其解释器称为@emph{虚拟机} (@emph{virtual machine})。
+同的硬件平台上执行。出于历史原因，常称这样的目标语言为@term["byte
+code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 
-编译器常常分为两部分：@emph{分析器} (@emph{analyzer})，尝试推断关于程序的有效信
-息；@emph{翻译器} (@emph{translator})，执行翻译，可能用到来自分析器的信息。这些
+编译器常常分为两部分：@term["analyzer"]{分析器}，尝试推断关于程序的有效信
+息；@term["translator"]{翻译器}，执行翻译，可能用到来自分析器的信息。这些
 阶段既能用推理规则指定，也能用专写规范的语言指定。然后是实现。
 @secref{cps}和@secref{types}探讨了一些简单的分析器和翻译器。
 
-不论采用哪种实现策略，我们都需要一个@emph{前端} (@emph{front end})，将程序转换为
+不论采用哪种实现策略，我们都需要一个@term["front end"]{前端}，将程序转换为
 抽象语法树。因为程序只是字符串，我们的前端要将这些字符组成有意义的单元。分组通常
-分为两个阶段：@emph{扫描} (@emph{scanning}) 和@emph{解析} (@emph{parsing})。
+分为两个阶段：@term["scanning"]{扫描} 和@term["parsing"]{解析}。
 
-扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@emph{词条}
-(@emph{lexical item})、@emph{词素} (@emph{lexeme})、或者最常见的@emph{词牌}
-(@emph{token})。把程序分为词牌的方式叫做语言的@emph{词法规范} (@emph{lexical
-specification})。扫描器取一字符序列，生成词牌序列。
+扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@term["lexical item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词牌}。把程序分为词牌的方式叫做语言的@term["lexical
+specification"]{词法规范}。扫描器取一字符序列，生成词牌序列。
 
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
-文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@emph{句法}
-(@emph{syntactic}) 或@emph{语法} (@emph{grammatical}) 结构。解析器取一词牌序列
+文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@term["syntactic"]{句法} 或@term["grammatical"]{语法} 结构。解析器取一词牌序列
 （由扫描器给出），生成一棵抽象语法树。
 
-设计前端的标准方式是使用@emph{解析器生成器} (@emph{parser generator})。解析器生
+设计前端的标准方式是使用@term["parser generator"]{解析器生成器}。解析器生
 成器是一程序，取一词法规范和语法，生成一个扫描器和解析器。
 
 @nested[#:style eopl-figure]{
@@ -148,8 +144,7 @@ specification})。扫描器取一字符序列，生成词牌序列。
 @subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
 
 任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
-个这样的集合：@emph{表达值} (@emph{expressed values}) 和@emph{指代值}
-(@emph{denoted values})。表达值是指表达式可能的取值，指代值是指可以绑定到变量的
+个这样的集合：@term["expressed values"]{表达值} 和@term["denoted values"]{指代值}。表达值是指表达式可能的取值，指代值是指可以绑定到变量的
 值。
 
 本章的语言中，表达值和指代值总是相同。它们是：
@@ -947,11 +942,11 @@ in unpack x y = cons(u,cons(3,emptylist))
         \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
-在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @emph{绑定变量} (@emph{bound
-variable}) 或@emph{形参} (@emph{formal parameter})。在过程调用 @tt{(call-exp
-@${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@emph{操作符} (@emph{operator})，表
-达式 @${exp_2} 是@emph{操作数} (@emph{operand}) 或@emph{实际参数} (@emph{actual
-parameter})。我们用@emph{实参} (@emph{argument}) 指代实参的值。
+在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @term["bound
+variable"]{绑定变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp
+@${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表
+达式 @${exp_2} 是@term["operand"]{操作数} 或@term["actual
+parameter"]{实际参数}。我们用@term["argument"]{实参} 指代实参的值。
 
 这是这种语言的两个小例子。
 
@@ -1044,7 +1039,7 @@ in let f = proc (z) -(z,x)
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
 
 我们用一个例子展示定义的各部分是如何配合的。由于我们还没有写出过程的实现，这个计
-算过程用@emph{规范}表示。令 @${\rho} 为任一环境。
+算过程用@term[#f]{规范}表示。令 @${\rho} 为任一环境。
 
 @nested[#:style small]{
 @verbatim|{
@@ -1185,9 +1180,8 @@ in let f = proc (z) -(z,x)
 ]
 }
 
-这些数据结构常称为@emph{闭包} (@emph{closure})，因为它们自给自足，包含过程调用所
-需要的一切。有时，我们说过程@emph{闭合于}（@emph{closed over} 或@emph{closed in}）
-创建时的环境。
+这些数据结构常称为@term["closure"]{闭包}，因为它们自给自足，包含过程调用所需要的
+一切。有时，我们说过程@term['("closed over" "closed in")]{闭合于} 创建时的环境。
 
 显然，这些实现都满足过程接口的定义。
 
@@ -1244,8 +1238,8 @@ in ((f 3) 4)
 }|
 }
 
-这个小技巧叫做@elemtag["curry"]{@emph{咖哩化}} (@emph{Currying})，该过程则
-称作@emph{咖喱式} (@emph{Curried}) 的。写出一个咖喱式的过程，它取两个参数，返回
+这个小技巧叫做@term[#:tag "curry" "Currying"]{咖哩化}，该过程则
+称作@term["Curried"]{咖喱式} 的。写出一个咖喱式的过程，它取两个参数，返回
 二者之和。在我们的语言中，可以把 @${x+y} 写成 @tt{-(x,-(0,y))}。
 
 }
@@ -1335,9 +1329,8 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 2 #:tag "ex3.28"]{
 
-设计过程的另一种方法是@emph{动态绑定} (@emph{dynamic binding})（或称@emph{动态定
-界} (@emph{dynamic scoping})）：求值过程主体的环境由调用处的环境扩展而得。例如，
-在
+设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
+scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
 @nested[#:style 'code-inset]{
 @verbatim|{
@@ -1659,8 +1652,8 @@ in let fact = proc (n)
 
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
-在大多数编程语言中，变量只能以两种方式出现：@emph{引用} (@emph{reference})
-或@emph{声明} (@emph{declaration})。变量引用就是使用变量。例如，在 Scheme 表达式
+在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
+或@term["declaration"]{声明}。变量引用就是使用变量。例如，在 Scheme 表达式
 
 @nested{
 @nested[#:style small]{
@@ -1685,7 +1678,7 @@ in let fact = proc (n)
 
 }
 
-我们说变量引用由对应的声明@emph{绑定} (@emph{bound})，且@emph{绑定}到它的值。
+我们说变量引用由对应的声明@term["bound"]{绑定}，且@emph{绑定}到它的值。
 在@secref{s1.2.4}，我们已经见过用声明绑定变量的例子。
 
 @nested[#:style eopl-figure]{
@@ -1703,14 +1696,14 @@ in let fact = proc (n)
 同的目的。例如，我们反复把 @tt{lst} 用作绑定变量，它的作用域每次都限制在对应的
 @tt{lambda} 表达式主体内。
 
-每种编程语言都有一些规则来判断各个变量引用指代哪一声明。这些规则通常叫做@emph{定
-界} (@emph{scoping}) 规则。声明在程序中生效的部分叫做声明的@emph{作用域}
-(@emph{scope})。
+每种编程语言都有一些规则来判断各个变量引用指代哪一声明。这些规则通常
+叫做@term["scoping"]{定界} 规则。声明在程序中生效的部分叫做声明
+的@term["scope"]{作用域}。
 
 我们可以不加执行地判断程序中的各个变量引用对应于哪个声明。这样的性质不必执行程序
-就能计算出来，名为@emph{静态} (@emph{static}) 性质。
+就能计算出来，名为@term["static"]{静态} 性质。
 
-要找出某个变量引用对应于哪一声明，我们@emph{向外} (@emph{outward}) 查找，直到找
+要找出某个变量引用对应于哪一声明，我们@term["outward"]{向外} 查找，直到找
 出变量的声明。这里是一个简单的 Scheme 示例。
 
 @nested[#:style 'code-inset]{
@@ -1754,16 +1747,16 @@ in let fact = proc (n)
 }
 }
 
-这样的定界规则叫做@emph{词法定界} (@emph{lexical scoping}) 规则，这样声明的变量
-叫做@emph{词法变量} (@emph{lexical variable})。
+这样的定界规则叫做@term["lexical scoping"]{词法定界} 规则，这样声明的变量
+叫做@term["lexical variable"]{词法变量}。
 
 使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
-@exact-elem{”}。这样的内层声明@emph{遮蔽} (@emph{shadow}) 外层声明。例如，在上
+@exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} 外层声明。例如，在上
 例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
 
-词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@emph{等深线}
-(@emph{contour diagram}) 解释这点。@figure-ref{fig-3.13} 展示了上例的等深线。每
-个作用域用一个框圈起来，箭头连接声明与其作用域。
+词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@term["contour
+diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等深线。每个作用域
+用一个框圈起来，箭头连接声明与其作用域。
 
 @figure-ref{fig-3.14} 展示了一个更复杂的程序和它的等深线。其中的第 5 行、第 7 行
 和第 8 行，表达式 @tt{(+ x y z)} 出现了三次。第 5 行在 @tt{x2} 和 @tt{z2} 的作用
@@ -1789,7 +1782,7 @@ in let fact = proc (n)
 @eopl-caption["fig-3.14"]{较复杂的等深线}
 }
 
-变量与值的对应关系叫做@emph{绑定} (@emph{binding})。我们可以通过规范来理解如何创
+变量与值的对应关系叫做@term["binding"]{绑定}。我们可以通过规范来理解如何创
 建绑定。
 
 由 @tt{proc} 声明的变量在过程调用时绑定。
@@ -1823,11 +1816,11 @@ in let fact = proc (n)
 }|
 }
 
-绑定的@emph{期限} (@emph{extent}) 指绑定保持的时长。在我们的语言中，就像在
-Scheme 中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite}) 的，意思是变量
+绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
+Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
 闭包之中。在半无限的语言中，垃圾回收器收集不能再访问的绑定。这只能在运行时判定，
-因此我们说这是一条@emph{动态} (@emph{dynamic}) 性质。
+因此我们说这是一条@term["dynamic"]{动态} 性质。
 
 很可惜的是，@exact-elem{“}动态@exact-elem{”}有时表示@exact-elem{“}在表达式求
 值期间@exact-elem{”}，有时又表示@exact-elem{“}无法事先计算@exact-elem{”}。如
@@ -1839,8 +1832,8 @@ Scheme 中一样，所有的绑定都是@emph{半无限} (@emph{semi-infinite}) 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
-能会跨越多条等深线。跨越的等深线数目叫做变量引用的@emph{词深} (@emph{lexical
-depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{“}从0开始的
+能会跨越多条等深线。跨越的等深线数目叫做变量引用的@term["lexical
+depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{“}从0开始的
 索引@exact-elem{”}，所以不计最后跨过的等深线。例如，在 Scheme 表达式
 
 @nested{
@@ -1873,8 +1866,8 @@ depth})（或@emph{静深} (@emph{static depth})）。由于惯用@exact-elem{�
 }
 
 这里，每个 @tt{nameless-lambda} 都声明了一个新的无名变量，每个变量引用由其词深替
-代；这个数字准确标示了要使用的声明。这些数字叫做@emph{词法地址} (@emph{lexical
-address}) 或@emph{德布鲁金索引} (@emph{de Bruijn index})。编译器例行计算每个变量
+代；这个数字准确标示了要使用的声明。这些数字叫做@term["lexical
+address"]{词法地址} 或@term["de Bruijn index"]{德布鲁金索引}。编译器例行计算每个变量
 引用的词法地址。除非用来提供调试信息，计算一旦完成，变量名即可丢弃。
 
 }
@@ -2048,11 +2041,9 @@ in proc (y)
 或 @tt{nameless-proc-exp}）的程序。我们的解释器将拒绝任何含有原先具名结构
 （@tt{var-exp}、@tt{let-exp} 或 @tt{proc-exp}）的程序，因为它们理应被替换。
 
-要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@emph{上下文}
-(@emph{context}) 信息，所以它和@secref{s1.3}的继承属性类似。
+要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@term["context"]{上下文} 信息，所以它和@secref{s1.3}的继承属性类似。
 
-所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@emph{静态环境}
-(@emph{static environment})。静态环境是一个变量列表，表示当前表达式所在的作用域。
+所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@term["static environment"]{静态环境}。静态环境是一个变量列表，表示当前表达式所在的作用域。
 最内部作用域声明的变量成为列表的第一个元素。
 
 例如，翻译上例中的最后一行时，静态环境为：

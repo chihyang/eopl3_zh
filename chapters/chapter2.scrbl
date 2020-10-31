@@ -19,24 +19,24 @@
 这些实体的表示通常很复杂，所以如能避免，我们不愿关心其细节。我们可能想改变数据的
 表示。最高效的表示往往难以实现，所以我们可能希望先简单实现，只在确知系统的整体性
 能与之攸关时，才改用更高效的表示。不管出于什么原因，如果我们决定改变某些数据的表
-示方式，我们得能定位程序中所有依赖表示方式的部分。这就需要借助@emph{数据抽象}
-(@emph{data abstraction}) 技术。
+示方式，我们得能定位程序中所有依赖表示方式的部分。这就需要
+借助@term["data abstraction"]{数据抽象} 技术。
 
-数据抽象将数据类型分为两部分：@emph{接口} (@emph{interface}) 和@emph{实现}
-(@emph{implementation})。@emph{接口}告诉我们某类型表示什么数据，能对数据做什么操
-作，以及可由这些操作得出的性质。@emph{实现}给出数据的具体表示，以及处理数据表示
-的代码。
+数据抽象将数据类型分为两部分：@term["interface"]{接口} 和@term["implementation"]{实现}。
+@term[#f]{接口}告诉我们某类型表示什么数据，能对数据做什么操作，以及可由这些操作得出
+的性质。@term[#f]{实现}给出数据的具体表示，以及处理数据表示的代码。
 
-这样抽象出的数据类型称为@emph{抽象数据类型} (@emph{abstract data type})。程序的
-其余部分——数据类型的@emph{客户} (@emph{client}) ——只能通过接口中指定的操作处理新
-数据。这样一来，如果我们希望改变数据的表示，只需改变数据处理接口的实现。
+这样抽象出的数据类型称为@term["abstract data type"]{抽象数据类型}。程序的其余部
+分——数据类型的@term["client"]{客户} ——只能通过接口中指定的操作处理新数据。这样一
+来，如果我们希望改变数据的表示，只需改变数据处理接口的实现。
 
 这一想法并不陌生：我们写程序处理文件时，多数时候只关心能否调用过程来打开，关闭，
 读取文件或对文件做其他操作。同样地，大多数时候，我们不关心整数在机器中究竟怎样表
 示，只关心能否可靠地执行算术操作。
 
-当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码与@emph{表示无关}
-(@emph{representation-independent})，因为这些代码不依赖数据类型值的表示。
+当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码
+与@term["representation-independent"]{表示无关}，因为这些代码不依赖数据类型值的
+表示。
 
 那么所有关于数据表示的信息必然在实现代码之中。实现最重要的部分就是表示数据的规范。
 我们用符号 @${\lceil v \rceil} 指代@exact-elem{“}数据 @${v} 的表示@exact-elem{”}。
@@ -78,17 +78,17 @@
 都满足 @tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
 y\rceil}}。}
 
-大多数接口都包含：若干@emph{构造器} (@emph{constructor})，用来产生数据类型的元素；
-若干@emph{观测器} (@emph{observer})，用来从数据类型的值中提取信息。这里有三个构
-造器，@tt{zero}、@tt{successor} 和 @tt{predecessor}；一个观测器，@tt{is-zero?}。
+大多数接口都包含：若干@term["constructor"]{构造器}，用来产生数据类型的元素；
+若干@term["observer"]{观测器}，用来从数据类型的值中提取信息。这里有三个构造器，
+@tt{zero}、@tt{successor} 和 @tt{predecessor}；一个观测器，@tt{is-zero?}。
 
 可以用多种方式表示这套接口，我们考虑其中三种。
 
 @itemlist[#:style 'ordered
 
- @item{@emph{一元表示法} (@emph{Unary representation})：在一元表示法中，自然数
- @${n} 由 @${n} 个 @tt{#t} 组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1} 表
- 示为 @tt{(#t)}，@${2} 表示为 @tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
+ @item{@term["Unary representation"]{一元表示法}：在一元表示法中，自然数@${n} 由
+ @${n} 个 @tt{#t} 组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1} 表示为
+ @tt{(#t)}，@${2} 表示为 @tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
 
  @nested[#:style 'inset]{@${\lceil 0 \rceil = @tt{()}}
 
@@ -102,9 +102,9 @@ y\rceil}}。}
  (define successor (lambda (n) (cons #t n)))
  (define predecessor (lambda (n) (cdr n)))]}}
 
- @item{@emph{Scheme 数字表示法} (@emph{Scheme number representation})：在这种表
- 示中，只需用 Scheme 内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n
- \rceil} 为 Scheme 整数 @tt{n}，则所需的四个过程可以定义为：
+ @item{@term["Scheme number representation"]{Scheme 数字表示法}：在这种表示中，
+ 只需用 Scheme 内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil} 为
+ Scheme 整数 @tt{n}，则所需的四个过程可以定义为：
 
 @nested[#:style small]{
  @racketblock[(define zero (lambda () 0))
@@ -114,11 +114,11 @@ y\rceil}}。}
 
  }
 
- @item{@emph{大数表示法} (@emph{Bignum representation})：在大数表示法中，数值以
- @${N} 进制表示，@${N} 是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时
- 不称数位，而称@emph{大位} (@emph{bigits})）组成的列表表示数值，这就很容易表示远
- 超机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可
- 用归纳法定义为：
+ @item{@term["Bignum representation"]{大数表示法}：在大数表示法中，数值以 @${N}
+ 进制表示，@${N} 是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时不称数
+ 位，而称@term["bigits"]{大位}）组成的列表表示数值，这就很容易表示远超机器字长的
+ 整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可用归纳法定义
+ 为：
 
  @m{\lceil n \rceil = @env["cases"]{@tt{()} & n = 0 \\ @tt{(@m{r} . @m{\lceil q
                                     \rceil})} & n = qN + r, 0 \leqslant r < N}}
@@ -133,8 +133,7 @@ y\rceil}}。}
 这些实现都没有强制数据抽象：无法防止客户程序查验表示用的是列表还是 Scheme 整数。
 与之相对，有些语言直接支持数据抽象：它们允许程序员创建新的接口，确保只能通过接口
 提供的过程处理新数据。如果类型的表示隐藏起来，不会因任何操作而暴露（包括打印），
-那就说该类型是@emph{模糊} (@emph{opaque}) 的，否则称之为@emph{透明}
-(@emph{transparent}) 的。
+那就说该类型是@term["opaque"]{模糊} 的，否则称之为@term["transparent"]{透明} 的。
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
 程序的作者小心行事，只使用接口中定义的过程。
@@ -191,10 +190,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
 质。
 
-本节介绍几种数据类型的表示策略。我们用数据类型@emph{环境} (@emph{environment})
-解释这些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语
-言的实现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关
-联起来。
+本节介绍几种数据类型的表示策略。我们用数据类型@term["environment"]{环境} 解释这
+些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语言的实
+现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关联起来。
 
 只要能够检查两个变量是否相等，变量能够用我们喜欢的任何方式表示。我们选用 Scheme
 符号表示变量，但在没有符号数据类型的语言中，变量也可以用字符串，哈希表引用，甚至
@@ -206,8 +204,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 有限函数是指有序数对组成的有限集合，我们采用这一含义，就得表示形如
 @m{\{(var_1,\allowbreak val_1),\allowbreak ...,\allowbreak (var_n, val_n)\}}的所
 有集合。其中，@${var_i} 是某一变量，@${val_i} 是任意 Scheme 值。有时称环境
-@${env} 中变量 @${var} 的值 @${val} 为其在 @${env} 中的@emph{绑定}
-(@emph{binding})。
+@${env} 中变量 @${var} 的值 @${val} 为其在 @${env} 中的@term["binding"]{绑定}。
 
 这一数据类型的接口有三个过程，定义如下：
 
@@ -242,9 +239,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.4"]{
 
- 考虑数据类型@emph{堆栈} (@emph{stack})，其接口包含过程 @tt{empty-stack}、
- @tt{push}、@tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操
- 作的定义。哪些操作是构造器？哪些是观测器？
+ 考虑数据类型@term["stack"]{堆栈}，其接口包含过程 @tt{empty-stack}、@tt{push}、
+ @tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操作的定义。哪
+ 些操作是构造器？哪些是观测器？
 
 }
 
@@ -277,7 +274,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 境，那就报错；如果它表示 @tt{extend-env} 生成的环境，那就判断要查找的变量是否与
 环境中绑定的某一变量相同，如果是，则返回保存的值，否则在保存的环境中查找变量。
 
-这是一种常见的代码模式。我们叫它@emph{解释器秘方} (@emph{interpreter recipe})：
+这是一种常见的代码模式。我们叫它@term["interpreter recipe"]{解释器秘方}：
 
 @nested[#:style tip]{
  @centered{@bold{解释器秘方}}
@@ -346,8 +343,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   "关联列表表示法")
 }
 
-@nested[#:style 'noindent]{这叫@emph{a-list}或@emph{关联列
-表}(@emph{association-list}) 表示法。}}
+@nested[#:style 'noindent]{这叫 @term[#f]{a-list} 或@term["association-list"]{关
+联列表} 表示法。}}
 
 @exercise[#:level 1 #:tag "ex2.6"]{
 
@@ -412,8 +409,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   "肋排环境表示法")
 }
 
-这叫做@emph{肋排}(@emph{ribcage}) 表示法。环境由名为@emph{肋骨} (@emph{rib}) 的
-序对列表表示；每根左肋是变量列表，右肋是对应的值列表。
+这叫做@term["ribcage"]{肋排} 表示法。环境由名为@term["rib"]{肋骨} 的序对列表表示；
+每根左肋是变量列表，右肋是对应的值列表。
 
 用这种表示实现 @tt{extend-env*} 和其他环境接口。
 
@@ -460,8 +457,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 后，判断该变量是否与环境中绑定的相同。如果相同，就返回保存的值；否则，就在保存的
 环境中查找它。
 
-这种表示法中，数据由 @tt{apply-env} @emph{执行的动作}表示，我们称之为@emph{过程
-表示法} (@emph{procedural representation})。
+这种表示法中，数据由 @tt{apply-env} @term[#f]{执行的动作}表示，我们称之
+为@term["procedural representation"]{过程表示法}。
 
 数据类型只有一个观测器的情形并非想象中那般少见。比如，数据是一组函数，就能用函数
 调用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
@@ -482,9 +479,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 示无关：它不再依赖表示，我们将能随意换用另一套接口实现，正如 @secref{s2.2.2}所述。
 
 如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
-方实现所需接口，就像上一节那样。这一操作叫做@emph{消函}
-(@emph{defunctionalization})。环境的数据结构表示中，各种变体都是消函的简单例子。
-过程表示法和消函表示法的关系将是本书反复出现的主题。
+方实现所需接口，就像上一节那样。这一操作叫做@term["defunctionalization"]{消函}。
+环境的数据结构表示中，各种变体都是消函的简单例子。过程表示法和消函表示法的关系将
+是本书反复出现的主题。
 
 @exercise[#:level 1 #:tag "ex2.12"]{
 
@@ -802,10 +799,9 @@ lambda 演算表达式的语法：
 }
 
 这里的名字 @tt{var-exp}、@tt{var}、@tt{bound-var}、@tt{app-exp}、@tt{rator} 和
-@tt{rand} 分别是 @emph{变量表达式} (@emph{variable expression})、@emph{变量}
-(@emph{variable})、@emph{绑定变量} (@emph{bound variable})、@emph{调用表达式}
-(@emph{application expression})、@emph{操作符} (@emph{operator}) 和@emph{操作数}
-(@emph{operand}) 的缩写。
+@tt{rand} 分别是 @term["variable expression"]{变量表达式}、@term["variable"]{变
+量}、@term["bound variable"]{绑定变量}、@term["application expression"]{调用表达
+式}、@term["operator"]{操作符} 和@term["operand"]{操作数} 的缩写。
 
 这些表达式声明了三种构造器：@tt{var-exp}、@tt{lambda-exp} 和 @tt{app-exp}，以及
 一个谓词 @tt{lc-exp?}。三个构造器用谓词 @tt{identifier?} 和 @tt{lc-exp?} 检查它
@@ -875,10 +871,10 @@ lambda 演算表达式的语法：
   @#,elem{@${\{@tt["("]variant\mbox{-}name \quad \{@tt["("]filed\mbox{-}name \quad predicate@tt[")"]\}^{*} @tt[")"]\}^{+}}})
 ]
 
-这新定义了一种数据类型，名为 @${type\mbox{-}name}，它有一些@emph{变体}
-(@emph{variants})。每个变体有一变体名，以及 0 或多个字段，每个字段各有其字段名和
-相应的谓词。不论是否属于不同的类型，变体都不能重名。类型也不能重名，且类型名不能
-用作变体名。每个字段的谓词必须是一个 Scheme 谓词。
+这新定义了一种数据类型，名为 @${type\mbox{-}name}，它有一些@term["variants"]{变
+体}。每个变体有一变体名，以及 0 或多个字段，每个字段各有其字段名和相应的谓词。不
+论是否属于不同的类型，变体都不能重名。类型也不能重名，且类型名不能用作变体名。每
+个字段的谓词必须是一个 Scheme 谓词。
 
 每个变体都有一个构造器过程，用于创建该变体的值。这些过程的名字与对应的变体相同。
 如果一个变体有 @${n} 个字段，那么它的构造器取 @${n} 个参数，用对应的谓词检查每个
@@ -992,11 +988,11 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 但这种方式并不是唯一的。根据使用场景，可能得用专门的表示方式，它们利用数据的特殊
 性质，更紧凑或者更高效。要获得这些优势，代价是不得不动手实现接口中的过程。
 
-@tt{define-datatype} 形式是@emph{特定领域语言} (@emph{domain-specific language})
-的例子。特定领域语言是一种小巧的语言，用来描述小而明确的任务中的单一任务。本例中
-的任务是定义一种递推数据类型。这种语言可能像 @tt{define-datatype} 一样，存在于通
-用语言中；也可能是一门单独的语言，别有一套工具。一般来说，创造这类语言首先要找出
-任务的不同变体，然后设计语言，描述这些变体。这种策略通常非常有效。
+@tt{define-datatype} 形式是@term["domain-specific language"]{特定领域语言} 的例
+子。特定领域语言是一种小巧的语言，用来描述小而明确的任务中的单一任务。本例中的任
+务是定义一种递推数据类型。这种语言可能像 @tt{define-datatype} 一样，存在于通用语
+言中；也可能是一门单独的语言，别有一套工具。一般来说，创造这类语言首先要找出任务
+的不同变体，然后设计语言，描述这些变体。这种策略通常非常有效。
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
@@ -1148,8 +1144,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
 语法通常指定归纳式数据类型的某一具体表示，后者使用前者生成的字符串或值。这种表示
-叫做@emph{具体语法} (@emph{concrete syntax})，或@emph{外在} (@emph{external}) 表
-示。
+叫做@term["concrete syntax"]{具体语法}，或@term["external"]{外在} 表示。
 
 例如，@definition-ref{d1.1.8} 指定集合 lambda 演算表达式，用的就是 lambda 演算表
 达式的具体语法。我们可以用其他具体语法表示 lambda 演算表达式。例如，可以用
@@ -1164,14 +1159,13 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 }
 
-为了处理这样的数据，需要将其转换为@emph{内在} (@emph{internal}) 表示。
-@tt{define-datatype} 形式提供了一种简洁的方式来定义这样的内在表示。我们称之为
-@emph{抽象语法} (@emph{abstrat syntax})。在抽象语法中，不需要存储括号之类的终止
-符，因为它们不传达信息。另一方面，我们要确保数据结构足以区分它所表示的 lambda 演
-算表达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现
-这些。
+为了处理这样的数据，需要将其转换为@term["internal"]{内在} 表示。
+@tt{define-datatype} 形式提供了一种简洁的方式来定义这样的内在表示。我们称之
+为@term["abstract syntax"]{抽象语法}。在抽象语法中，不需要存储括号之类的终止符，
+因为它们不传达信息。另一方面，我们要确保数据结构足以区分它所表示的 lambda 演算表
+达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现这些。
 
-将内在表示形象化为@emph{抽象语法树} (@emph{abstract syntax tree}) 也很不错。
+将内在表示形象化为@term["abstract syntax tree"]{抽象语法树} 也很不错。
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
 字为标识。树枝以所出现的非终止符名字为标识。叶子对应终止符字符串。
@@ -1204,11 +1198,11 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 具体语法主要供人使用，抽象语法主要供计算机使用，既已区分二者，现在来看看如何将一
 种语法转换为另一种。
 
-当具体语法是个字符串集合，推导出对应的抽象语法树可能相当棘手。这一任务叫做
-@emph{解析} (@emph{parsing})，由@emph{解析器} (@emph{parser}) 完成。因为写解析器
-通常比较麻烦，所以最好借由工具@emph{解析器生成器} (@emph{parser generator}) 完成。
-解析器生成器以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需
-以某种机器能够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
+当具体语法是个字符串集合，推导出对应的抽象语法树可能相当棘手。这一任务
+叫做@term["parsing"]{解析}，由@term["parser"]{解析器} 完成。因为写解析器通常比较
+麻烦，所以最好借由工具@term["parser generator"]{解析器生成器} 完成。解析器生成器
+以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需以某种机器能
+够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
 
 如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，
 和@pageref{define-datatype} @tt{define-datatype} 的语法类似，
@@ -1311,8 +1305,8 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @exercise[#:level 2 #:tag "ex2.31"]{
 
-有时，把具体语法定义为括号包围的符号和整数序列很有用。例如，可以把集合@emph{前缀
-列表} (@emph{prefix list}) 定义为：
+有时，把具体语法定义为括号包围的符号和整数序列很有用。例如，可以把
+集合@term["prefix list"]{前缀列表} 定义为：
 
 @nested[#:style 'noindent]{
 
@@ -1321,7 +1315,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
                                        &::= @tt{- @m{\mathit{Prefix\mbox{-}exp}} @m{\mathit{Prefix\mbox{-}exp}}}}
 
 那么 @tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
-Łukasiewicz，称之为@emph{波兰前缀表示法} (@emph{Polish prefix notation})。写一个
+Łukasiewicz，称之为@term["Polish prefix notation"]{波兰前缀表示法}。写一个
 解析器，将前缀列表表示法转换为抽象语法：
 
 @racketblock[
