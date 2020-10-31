@@ -871,7 +871,7 @@ C} 相同。
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
 表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
-量@term["occurs free"]{自由出现} 于表达式 @${exp} 中。例如，
+量@term["occur free"]{自由出现} 于表达式 @${exp} 中。例如，
 
 @(define occurs-free?-eval
   (parameterize ([sandbox-output 'string]

@@ -12,9 +12,10 @@
 
 @title[#:style part-title-style-numbered #:tag "expr"]{表达式}
 
-本章研究变量绑定及其作用域。我们用一系列小型语言解释这些概念。我们为这些语言写
-出规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一名为@term["environment"]{环境} 的上下文参数，以记录待求值的表达式中各个变量的
-含义。
+本章研究变量绑定及其作用域。我们用一系列小型语言解释这些概念。我们为这些语言写出
+规范，遵照@secref{isd}的解释器秘方实现其解释器。我们的规范和解释器取一
+名为@term["environment"]{环境} 的上下文参数，以记录待求值的表达式中各个变量的含
+义。
 
 @section[#:style section-title-style-numbered #:tag "s3.1"]{规范和实现策略}
 
@@ -55,13 +56,16 @@ code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 抽象语法树。因为程序只是字符串，我们的前端要将这些字符组成有意义的单元。分组通常
 分为两个阶段：@term["scanning"]{扫描} 和@term["parsing"]{解析}。
 
-扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@term["lexical item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词牌}。把程序分为词牌的方式叫做语言的@term["lexical
-specification"]{词法规范}。扫描器取一字符序列，生成词牌序列。
+扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@term["lexical
+item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词牌}。把程序分
+为词牌的方式叫做语言的@term["lexical specification"]{词法规范}。扫描器取一字符序
+列，生成词牌序列。
 
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
-文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@term["syntactic"]{句法} 或@term["grammatical"]{语法} 结构。解析器取一词牌序列
-（由扫描器给出），生成一棵抽象语法树。
+文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@term["syntactic"]{句法}
+或@term["grammatical"]{语法} 结构。解析器取一词牌序列（由扫描器给出），生成一棵
+抽象语法树。
 
 设计前端的标准方式是使用@term["parser generator"]{解析器生成器}。解析器生
 成器是一程序，取一词法规范和语法，生成一个扫描器和解析器。
@@ -144,8 +148,8 @@ specification"]{词法规范}。扫描器取一字符序列，生成词牌序列
 @subsection[#:style section-title-style-numbered #:tag "s3.2.2"]{定义值}
 
 任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
-个这样的集合：@term["expressed values"]{表达值} 和@term["denoted values"]{指代值}。表达值是指表达式可能的取值，指代值是指可以绑定到变量的
-值。
+个这样的集合：@term["expressed values"]{表达值} 和@term["denoted values"]{指代值}。
+表达值是指表达式可能的取值，指代值是指可以绑定到变量的值。
 
 本章的语言中，表达值和指代值总是相同。它们是：
 
@@ -2043,8 +2047,9 @@ in proc (y)
 
 要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@term["context"]{上下文} 信息，所以它和@secref{s1.3}的继承属性类似。
 
-所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@term["static environment"]{静态环境}。静态环境是一个变量列表，表示当前表达式所在的作用域。
-最内部作用域声明的变量成为列表的第一个元素。
+所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@term["static
+environment"]{静态环境}。静态环境是一个变量列表，表示当前表达式所在的作用域。最
+内部作用域声明的变量成为列表的第一个元素。
 
 例如，翻译上例中的最后一行时，静态环境为：
 

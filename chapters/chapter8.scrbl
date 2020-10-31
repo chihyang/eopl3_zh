@@ -117,15 +117,15 @@ in -(-(from m1 take a,
 义之后。由于 @tt{from m1 take x} 未在接口中声明，所以它的作用域不包含模块定义之
 后。
 
-为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量
-为@term["qualified"]{受限变量}。在一般的语言中，受限变量可能写作 @tt{m1.a}、
-@tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，@tt{m1.a} 通常另有
-含义。
+为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量为
+@term["qualified variables"]{受限变量}。在一般的语言中，受限变量可能写作
+@tt{m1.a}、@tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，
+@tt{m1.a} 通常另有含义。
 
 我们说接口@term["offer"]{提出}（或称@term["advertise"]{公布}，
 或称@term["promise"]{承诺}）三个整型值，主体@term['("supply" "provide")]{提
 供}（或称@term["export"]{输出}）这些值。当模块主体提供的值类型与接口命名变量时公
-布的类型相符时，主体@term["satisfy"]{满足} 其接口。
+布的类型相符时，主体@term[#f]{满足}其接口。
 
 在主体中，定义具有 @tt{let*} 那样的作用域，所以 @tt{x}、@tt{b} 和 @tt{c} 的定义
 在 @tt{a} 的作用域内。一些作用域如@figure-ref{fig-8.2} 所示。
