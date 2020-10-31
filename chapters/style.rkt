@@ -228,6 +228,11 @@
         [else
          (error 'term "Expect original content or #f, given ~a" original)]))
 
+(define (wrappable-cell . content)
+  (compound-paragraph
+   (make-style #f '())
+   (list (para content))))
+
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
                      origin-page-number))
