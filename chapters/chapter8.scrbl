@@ -885,7 +885,7 @@ body
 
 中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
 @tt{is-zero}。如同@secref{s2.1}，这套接口可能与算术操作的实现相关。这里的声明
-@tt{t} 为@term["opaque typs"]{模糊类型}，意为，模块之外的代码不知道这种类型的值
+@tt{t} 为@term["opaque type"]{模糊类型}，意为，模块之外的代码不知道这种类型的值
 如何表示。所有的外部代码都知道可以用 @tt{from m1 take zero} 和 @tt{from m1 take
 succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 take t} 的表现
 就像 @tt{int} 和 @tt{bool} 之类的原生类型一样。
