@@ -207,24 +207,36 @@
 ;;; term: content | #f x content -> content
 ;;; Note that if you don't want original, use #f instead. Missing it causes
 ;;; unexpected expansion
-(define (term #:tag [tag #f] original . translation)
+(define (term #:tag [tag #f] #:full [full #t] original . translation)
+  ;; (unless (equal? original #f)
+  ;;   (displayln (format "@elem{~a} @elem{~a}"
+  ;;                      (if (list? original)
+  ;;                          (add-between (map (lambda (e)
+  ;;                                              (string-replace (content->string e) "\n" " "))
+  ;;                                            original)
+  ;;                                       ", ")
+  ;;                          (string-replace (content->string original) "\n" " "))
+  ;;                      (string-replace (content->string translation) "\n" ""))))
   (cond [(equal? original #f)
          (elem (when tag (elemtag tag)) (emph translation))]
         [(list? original)
          (elem (when tag (elemtag tag))
                (emph translation)
-               (cond [(null? original) (void)]
-                     [(null? (cdr original))
-                      (list " (" (emph original) ")")]
-                     [else
-                      (list " ("
-                            (emph (car original))
-                            (map (lambda (ele)
-                                   (elem ", " (emph ele)))
-                                 (cdr original))
-                            ")")]))]
+               (when full
+                 (cond [(null? original) (void)]
+                       [(null? (cdr original))
+                        (list " (" (emph original) ")")]
+                       [else
+                        (list " ("
+                              (emph (car original))
+                              (map (lambda (ele)
+                                     (elem ", " (emph ele)))
+                                   (cdr original))
+                              ")")])))]
         [(content? original)
-         (elem (when tag (elemtag tag)) (emph translation) " (" (emph original) ")")]
+         (elem (when tag (elemtag tag))
+               (emph translation)
+               (when full (elem " (" (emph original) ")")))]
         [else
          (error 'term "Expect original content or #f, given ~a" original)]))
 
