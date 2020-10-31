@@ -297,7 +297,8 @@ proc (f)
 }
 
 如果我们可以赋予表达式一个类型，我们说该表达式是@term["well-typed"]{正常类型} 的，
-否则说它是@term["ill-typed"]{异常类型} 或@term["has no type"]{无类型} 的。
+否则说它是@term["ill-typed"]{异常类型} 或@term[#:full #f "has no type"]{无类型}
+的。
 
 我们的分析基于以下原则：如果我们能预测表达式中所有子表达式的值类型，就能预测表达
 式的值类型。
