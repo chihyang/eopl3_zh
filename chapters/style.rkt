@@ -204,8 +204,29 @@
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
+;;; term: content | #f x content -> content
+;;; Note that if you don't want original, use #f instead. Missing it causes
+;;; unexpected expansion
 (define (term #:tag [tag #f] original . translation)
-  (elem (when tag (elemtag tag)) (emph translation) " (" (emph original) ")"))
+  (cond [(equal? original #f)
+         (elem (when tag (elemtag tag)) (emph translation))]
+        [(list? original)
+         (elem (when tag (elemtag tag))
+               (emph translation)
+               (cond [(null? original) (void)]
+                     [(null? (cdr original))
+                      (list " (" (emph original) ")")]
+                     [else
+                      (list " ("
+                            (emph (car original))
+                            (map (lambda (ele)
+                                   (elem ", " (emph ele)))
+                                 (cdr original))
+                            ")")]))]
+        [(content? original)
+         (elem (when tag (elemtag tag)) (emph translation) " (" (emph original) ")")]
+        [else
+         (error 'term "Expect original content or #f, given ~a" original)]))
 
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
