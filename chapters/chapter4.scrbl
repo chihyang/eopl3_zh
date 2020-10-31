@@ -1025,9 +1025,9 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 2 #:tag "ex4.22"]{
 
-迄今为止，我们的语言都是以@term["expression-oriented"]{表达式为主}：我们感兴趣的
+迄今为止，我们的语言都是@term["expression-oriented"]{面向表达式}的：我们感兴趣的
 主要是表达式这种句法类别和它们的值。扩展语言，建模简单
-的@term["statement-oriented"]{语句为主} 的语言，其规范概述如下。一定要@emph{遵循
+的@term["statement-oriented"]{面向语句} 的语言，其规范概述如下。一定要@emph{遵循
 语法}，分别写出过程来处理程序、语句和表达式。
 
 @nested[#:style hangindent]{
