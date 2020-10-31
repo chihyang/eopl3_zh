@@ -22,7 +22,7 @@
 
 @list[@elem{Activation record} @elem{活跃记录}]
 
-@list[@elem{Actual parameter} @elem{实际参数}]
+@list[@elem{Actual parameter} @elem{实际参数，简称实参}]
 
 @list[@elem{Advertise} @elem{公布}]
 
@@ -58,6 +58,10 @@
 
 @list[@elem{Blocked} @elem{受阻塞}]
 
+@list[@elem{Body} @wrappable-cell{主体@hspace[1]@emph{一般指某种语法结构
+（@tt{let}定义、过程定义、类方法定义，甚至整个程序）之中，变量声明包裹起来的、执
+行期望动作的部分}}]
+
 @list[@elem{Bottom-up} @elem{自底向上}]
 
 @list[@elem{Bounce} @elem{弹球}]
@@ -84,21 +88,16 @@
 
 @list[@elem{Class environment} @elem{类环境}]
 
-@list[@elem{Class} @elem{类}]
-
-@list[@elem{Class} @elem{类别}]
+@list[@elem{Class} @wrappable-cell{类，或类别@hspace[1]@emph{在@secref{oac}，
+class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，class 指词牌的种类。}}]
 
 @list[@elem{Client} @elem{客户}]
 
 @list[@elem{Closed over, closed in} @elem{闭合于}]
 
-@list[@elem{Closed} @elem{关闭}]
-
 @list[@elem{Closure} @elem{闭包}]
 
 @list[@elem{Coinduction} @elem{余归纳}]
-
-@list[@elem{Command continuation} @elem{命令续文}]
 
 @list[@elem{Concatenation} @elem{串联}]
 
@@ -152,15 +151,15 @@
 
 @list[@elem{Defunctionalization} @elem{消函}]
 
-@list[@elem{Delegates} @elem{委托}]
+@list[@elem{Delegate} @elem{委托}]
 
-@list[@elem{Denoted values} @elem{指代值}]
+@list[@elem{Denoted value} @elem{指代值}]
 
 @list[@elem{Derivation} @elem{推导}]
 
 @list[@elem{Descendant} @elem{后代}]
 
-@list[@elem{Domain equations} @elem{定义域方程}]
+@list[@elem{Domain equation} @elem{定义域方程}]
 
 @list[@elem{Domain-specific language} @elem{特定领域语言}]
 
@@ -192,9 +191,9 @@
 
 @list[@elem{Export} @elem{输出}]
 
-@list[@elem{Expressed values} @elem{表达值}]
+@list[@elem{Expressed value} @elem{表达值}]
 
-@list[@elem{Expression-oriented} @elem{表达式为主}]
+@list[@elem{Expression-oriented} @elem{面向表达式}]
 
 @list[@elem{Extend} @elem{扩展}]
 
@@ -211,7 +210,7 @@
 @list[@elem{Form} @wrappable-cell{形式@hspace[1]@emph{在本书中，这一术语和
       construct 含意相近}}]
 
-@list[@elem{Formal parameter} @elem{形参}]
+@list[@elem{Formal parameter} @elem{形式参数，简称形参}]
 
 @list[@elem{Frame} @elem{帧}]
 
@@ -230,8 +229,6 @@
 @list[@elem{Grammatical} @elem{语法}]
 
 @list[@elem{Hard-coded} @elem{硬编码}]
-
-@list[@elem{Has no type} @elem{无类型}]
 
 @list[@elem{Host class} @elem{持有类}]
 
@@ -271,7 +268,7 @@
 
 @list[@elem{Interpreter recipe} @elem{解释器秘方}]
 
-@list[@elem{Invariants} @elem{不变式}]
+@list[@elem{Invariant} @elem{不变式}]
 
 @list[@elem{Iterative control behavior} @elem{迭代性控制行为}]
 
@@ -281,7 +278,7 @@
 
 @list[@elem{Kleene closure} @elem{克莱尼闭包}]
 
-@list[@elem{L-values} @elem{左值}]
+@list[@elem{L-value} @elem{左值}]
 
 @list[@elem{Lambda calculus} @elem{Lambda 演算}]
 
@@ -293,8 +290,6 @@
 
 @list[@elem{Lexical depth} @elem{词深}]
 
-@list[@elem{Lexical items} @elem{词条}]
-
 @list[@elem{Lexical item} @elem{词条}]
 
 @list[@elem{Lexical scoping} @elem{词法定界}]
@@ -303,9 +298,7 @@
 
 @list[@elem{Lexical variable} @elem{词法变量}]
 
-@list[@elem{Location} @elem{位置}]
-
-@list[@elem{Member function} @elem{成员函数}]
+@list[@elem{Location} @wrappable-cell{位置@hspace[1]@emph{特指存储器中的位置}}]
 
 @list[@elem{Member} @elem{成员}]
 
@@ -315,11 +308,7 @@
 
 @list[@elem{Metacircular interpreter} @elem{自循环解释器}]
 
-@list[@elem{Method body} @elem{方法主体}]
-
 @list[@elem{Method name} @elem{方法名}]
-
-@list[@elem{Method parameters} @elem{方法参数}]
 
 @list[@elem{Method var} @elem{方法变量}]
 
@@ -349,11 +338,11 @@
 
 @list[@elem{Occurrence check} @elem{验存}]
 
-@list[@elem{Occurs free} @elem{自由出现}]
+@list[@elem{Occur free} @elem{自由出现}]
 
 @list[@elem{Offer} @elem{提出}]
 
-@list[@elem{Opaque typs} @elem{模糊类型}]
+@list[@elem{Opaque type} @elem{模糊类型}]
 
 @list[@elem{Operand position} @elem{操作数位置}]
 
@@ -369,8 +358,6 @@
 
 @list[@elem{Parent} @elem{父类}]
 
-@list[@elem{Parser generator} @elem{解析器生成器}]
-
 @list[@elem{Parser} @elem{解析器}]
 
 @list[@elem{Parsing} @elem{解析}]
@@ -379,7 +366,7 @@
 
 @list[@elem{Polymorphic} @elem{多态}]
 
-@list[@elem{Pool} @elem{池}]
+@list[@elem{Pool} @wrappable-cell{池@hspace[1]@emph{特指线程池}}]
 
 @list[@elem{Pre-emptive scheduling} @elem{抢占式调度}]
 
@@ -392,8 +379,6 @@
 @list[@elem{Procedural} @emph{过程}]
 
 @list[@elem{Production} @elem{生成式}]
-
-@list[@elem{Program body} @elem{程序主体}]
 
 @list[@elem{Promise} @elem{承诺}]
 
@@ -411,7 +396,7 @@
 
 @list[@elem{Quantum} @wrappable-cell{量子@hspace[1]@emph{即时间片}}]
 
-@list[@elem{R-values} @elem{右值}]
+@list[@elem{R-value} @elem{右值}]
 
 @list[@elem{Ready queue} @elem{就绪队列}]
 
@@ -419,11 +404,9 @@
 
 @list[@elem{Reference} @elem{引用}]
 
-@list[@elem{Regexp} @elem{正则表达式}]
+@list[@wrappable-cell{Regexp, regular expression} @elem{正则表达式}]
 
 @list[@elem{Registerization} @elem{寄存}]
-
-@list[@elem{Regular expressions} @elem{正则表达式}]
 
 @list[@elem{Representation-independent} @elem{表示无关}]
 
@@ -431,17 +414,13 @@
 
 @list[@elem{Rib} @elem{肋骨}]
 
-@list[@elem{Rule of inference} @elem{推理规则}]
-
-@list[@elem{Rule} @elem{规则}]
+@list[@elem{Rule (of inference)} @elem{(推理)规则}]
 
 @list[@elem{Runnable} @elem{可运行}]
 
 @list[@elem{Running} @elem{在运行}]
 
 @list[@elem{Safe} @elem{安全}]
-
-@list[@elem{Satisfy} @elem{满足}]
 
 @list[@elem{Scanning} @elem{扫描}]
 
@@ -477,7 +456,7 @@
 
 @list[@elem{Stack} @elem{堆栈}]
 
-@list[@elem{Statement-oriented} @elem{语句为主}]
+@list[@elem{Statement-oriented} @elem{面向语句}]
 
 @list[@elem{State} @elem{状态}]
 
@@ -489,11 +468,11 @@
 
 @list[@elem{Static} @elem{静态}]
 
-@list[@elem{Storable values} @elem{可存储值}]
+@list[@elem{Storable value} @elem{可存储值}]
 
 @list[@elem{Store-passing interpreter} @elem{传递存储器的解释器}]
 
-@list[@elem{Store-passing specifications} @elem{存储器传递规范}]
+@list[@elem{Store-passing specification} @elem{存储器传递规范}]
 
 @list[@elem{Store} @elem{存储器}]
 
@@ -511,7 +490,6 @@
 @list[@elem{Substitution} @wrappable-cell{代换，代换式（组）@hspace[1]@emph{视上
       下文，这一术语有时表示类型推导的动作，有时表示动作的结果；表示结果时，有时
       为单数，有时为复数}}]
-
 
 @list[@elem{Subtype polymorphism} @elem{子类型多态}]
 
@@ -589,7 +567,7 @@
 
 @list[@elem{Variable} @elem{变量}]
 
-@list[@elem{Variants} @elem{变体}]
+@list[@elem{Variant} @elem{变体}]
 
 @list[@elem{Virtual machine} @elem{虚拟机}]
 
