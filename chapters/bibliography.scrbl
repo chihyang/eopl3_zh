@@ -101,7 +101,7 @@ CPS Transformation. @a-title{Mathematical Structures in Computer Science}, @bold
 
 @bib{
 Danvy, Olivier, & Nielsen, Lasse R. 2003. A First-order One-pass CPS
-Transformation. @a-title{Theoretical Computer Science}, 308(1-3), 239–257.
+Transformation. @a-title{Theoretical Computer Science}, @bold{308}(1-3), 239–257.
 }
 
 @bib{
@@ -331,7 +331,7 @@ of: Popplewell (ed.), @a-title{Information Processing 62}. Amsterdam: North-Holl
 }
 
 @bib{
-Michie, Donald. 1968. “Memo” Functions and Machine Learning. @a-title{Nature}, 218(1–3),
+Michie, Donald. 1968. “Memo” Functions and Machine Learning. @a-title{Nature}, @bold{218}(1–3),
 218–219.
 }
 
