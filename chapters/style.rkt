@@ -239,6 +239,9 @@
    (make-style #f '())
    (list (para content))))
 
+(define (glossary-note . content)
+  (elem "（" (emph content) "）"))
+
 (define (bib . content)
   (nested #:style bib-para content))
 
