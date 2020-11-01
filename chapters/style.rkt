@@ -101,6 +101,9 @@
 (define margin-page-number
   (make-style "MarginPage" (list (make-tex-addition "../style/margin-page.tex"))))
 
+(define bib-para
+  (make-style "BibPara" (list (make-tex-addition "../style/bib-para.tex"))))
+
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
 
@@ -208,15 +211,6 @@
 ;;; Note that if you don't want original, use #f instead. Missing it causes
 ;;; unexpected expansion
 (define (term #:tag [tag #f] #:full [full #t] original . translation)
-  ;; (unless (equal? original #f)
-  ;;   (displayln (format "@elem{~a} @elem{~a}"
-  ;;                      (if (list? original)
-  ;;                          (add-between (map (lambda (e)
-  ;;                                              (string-replace (content->string e) "\n" " "))
-  ;;                                            original)
-  ;;                                       ", ")
-  ;;                          (string-replace (content->string original) "\n" " "))
-  ;;                      (string-replace (content->string translation) "\n" ""))))
   (cond [(equal? original #f)
          (elem (when tag (elemtag tag)) (emph translation))]
         [(list? original)
@@ -244,6 +238,12 @@
   (compound-paragraph
    (make-style #f '())
    (list (para content))))
+
+(define (bib . content)
+  (nested #:style bib-para content))
+
+(define (a-title . content)
+  (emph content))
 
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
