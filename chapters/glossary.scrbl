@@ -376,7 +376,7 @@
 
 @list[@elem{Private} @elem{私有的}]
 
-@list[@elem{Procedural} @emph{过程}]
+@list[@elem{Procedural} @elem{过程}]
 
 @list[@elem{Production} @elem{生成式}]
 
