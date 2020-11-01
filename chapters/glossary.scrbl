@@ -22,7 +22,8 @@
 
 @list[@elem{Activation record} @elem{活跃记录}]
 
-@list[@elem{Actual parameter} @elem{实际参数，简称实参}]
+@list[@elem{Actual parameter} @wrappable-cell{实际参数，简称实参
+@glossary-note{同 argument}}]
 
 @list[@elem{Advertise} @elem{公布}]
 
@@ -38,7 +39,8 @@
 
 @list[@elem{Apply} @elem{应用}]
 
-@list[@elem{Argument} @elem{实参}]
+@list[@elem{Argument} @wrappable-cell{实参@glossary-note{文中有时也用这一术语泛
+指参数}}]
 
 @list[@elem{Association-list} @elem{关联列表}]
 
@@ -64,7 +66,7 @@
 
 @list[@elem{Bottom-up} @elem{自底向上}]
 
-@list[@elem{Bounce} @elem{弹球}]
+@list[@elem{Bounce} @wrappable-cell{弹球@glossary-note{参见 trampoline}}]
 
 @list[@elem{Bound variable} @elem{绑定变量}]
 
@@ -115,7 +117,10 @@
 
 @list[@elem{Continuation-passing style} @elem{续文传递风格}]
 
-@list[@elem{Continuation} @elem{续文}]
+@list[@elem{Continuation} @wrappable-cell{续文@glossary-note{这一术语或译作
+@exact-elem{“继续”}，或译作@exact-elem{“续延”}，或译作@exact-elem{“（计算）
+续体”}；这里译作@exact-elem{“续文”}，是将程序类比为文章，那么作为程序中任意位
+置后续内容的抽象，@exact-elem{continuation}即为@exact-elem{“续文”}}}]
 
 @list[@elem{Contour diagram} @elem{等深线}]
 
@@ -179,7 +184,9 @@
 
 @list[@elem{Eager} @elem{即时}]
 
-@list[@elem{Effect} @elem{效果}]
+@list[@elem{Effect} @wrappable-cell{效果@glossary-note{effect 常常与 side 连用，
+通译为@exact-elem{“副作用”}；在本书中，effect 从不与 side 连用，或许是暗示：
+作为程序效果的 effect，不仅仅是一种@exact-elem{“副产品”}}}]
 
 @list[@elem{Environment} @elem{环境}]
 
@@ -200,6 +207,9 @@
 @list[@elem{Extent} @elem{期限}]
 
 @list[@elem{External} @elem{外在}]
+
+@list[@elem{Extractor} @wrappable-cell{提取器@glossary-note{提取数据结构中某一部
+分内容的过程统称}}]
 
 @list[@elem{Field} @elem{字段}]
 
@@ -330,6 +340,9 @@
 
 @list[@elem{Name mangling} @elem{名称混淆}]
 
+@list[@wrappable-cell{Natural parameter passing} @wrappable-cell{自然式传参
+@glossary-note{相对于以 @exact-elem{“call by”} 开头的几种参数传递机制}}]
+
 @list[@wrappable-cell{Object-oriented programming} @elem{面向对象编程}]
 
 @list[@elem{Object} @elem{对象}]
@@ -376,7 +389,9 @@
 
 @list[@elem{Private} @elem{私有的}]
 
-@list[@elem{Procedural} @elem{过程}]
+@list[@elem{Procedural} @wrappable-cell{过程@glossary-note{文中使用 procedure 表
+示编程语言中的函数；使用 function 时，一般表示数学中的函数，这里将前者译作
+@exact-elem{“}过程@exact-elem{”}，以示区别}}]
 
 @list[@elem{Production} @elem{生成式}]
 
@@ -414,7 +429,7 @@
 
 @list[@elem{Rib} @elem{肋骨}]
 
-@list[@elem{Rule (of inference)} @elem{(推理)规则}]
+@list[@elem{Rule (of inference)} @elem{（推理）规则}]
 
 @list[@elem{Runnable} @elem{可运行}]
 
@@ -531,7 +546,10 @@
 
 @list[@elem{Top-down} @elem{自顶向下}]
 
-@list[@elem{Trampoline} @elem{跳床}]
+@list[@elem{Trampoline} @wrappable-cell{跳床@glossary-note{读者或许对 Microsoft
+Windows XP 系统自带的@exact-elem{“三维弹球”}游戏仍有印象，文中的 trampoline 和
+bounce 可以视为这一游戏的类比——或者说，这一游戏生动说明了 trampoline 和 bounce
+的作用}}]
 
 @list[@elem{Trampolining} @elem{跳跃}]
 
