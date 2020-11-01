@@ -26,5 +26,6 @@
 @include-section["appendix_a.scrbl"]
 @include-section["appendix_b.scrbl"]
 
-@generate-bibliography[#:sec-title "参考书目"]
+@include-section["bibliography.scrbl"]
+
 @index-section[#:title "索引"]

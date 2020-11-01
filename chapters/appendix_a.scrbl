@@ -22,11 +22,10 @@
 这里的一些阅读材料教会，影响，或者启发了我们创作本书。希望你能像我们一样，至少喜
 欢其中的一部分。
 
-不熟悉递归编程和符号计算的读者可以看看 @emph{The Little Schemer}
-@~cite["the-little-schemer"]，或 @emph{The Little MLer}
-@~cite["the-little-mler"]，或者有考据癖，看看 @emph{The Little LISPer}
-(Friedman, 1974)。作为计算第一课，@emph{How to Design Programs} (Felleisen et
-al., 2001) 深入探讨了如何递归编程。
+不熟悉递归编程和符号计算的读者可以看看 @emph{The Little Schemer} (Friedman &
+Felleisen, 1996)，或 @emph{The Little MLer} (Felleisen & Friedman, 1996)，或者有
+考据癖，看看 @emph{The Little LISPer} (Friedman, 1974)。作为计算第一课，
+@emph{How to Design Programs} (Felleisen et al., 2001) 深入探讨了如何递归编程。
 
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 Plotkin (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
