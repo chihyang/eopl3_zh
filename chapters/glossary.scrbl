@@ -7,7 +7,7 @@
 
 下表列出本书专有名词及其翻译，并对有疑义者略加说明。
 
-@tabular[#:cell-properties '((baseline baseline))
+@tabular[#:cell-properties '((baseline baseline)) #:style small
 (list
 
 @list[@wrappable-cell{} @wrappable-cell{}]
@@ -58,7 +58,7 @@
 
 @list[@elem{Blocked} @elem{受阻塞}]
 
-@list[@elem{Body} @wrappable-cell{主体@hspace[1]@emph{一般指某种语法结构
+@list[@elem{Body} @wrappable-cell{主体@glossary-note{一般指某种语法结构
 （@tt{let}定义、过程定义、类方法定义，甚至整个程序）之中，变量声明包裹起来的、执
 行期望动作的部分}}]
 
@@ -88,8 +88,8 @@
 
 @list[@elem{Class environment} @elem{类环境}]
 
-@list[@elem{Class} @wrappable-cell{类，或类别@hspace[1]@emph{在@secref{oac}，
-class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，class 指词牌的种类。}}]
+@list[@elem{Class} @wrappable-cell{类，或类别@glossary-note{在@secref{oac}，class 特指
+面向对象语言中的类；在@elemref["sllgen"]{附录 B}，class 指词牌的种类。}}]
 
 @list[@elem{Client} @elem{客户}]
 
@@ -207,8 +207,8 @@ class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，clas
 
 @list[@elem{For effect} @elem{求效果}]
 
-@list[@elem{Form} @wrappable-cell{形式@hspace[1]@emph{在本书中，这一术语和
-      construct 含意相近}}]
+@list[@elem{Form} @wrappable-cell{形式@glossary-note{在本书中，这一术语和 construct 含
+      意相近}}]
 
 @list[@elem{Formal parameter} @elem{形式参数，简称形参}]
 
@@ -298,7 +298,7 @@ class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，clas
 
 @list[@elem{Lexical variable} @elem{词法变量}]
 
-@list[@elem{Location} @wrappable-cell{位置@hspace[1]@emph{特指存储器中的位置}}]
+@list[@elem{Location} @wrappable-cell{位置@glossary-note{特指存储器中的位置}}]
 
 @list[@elem{Member} @elem{成员}]
 
@@ -366,7 +366,7 @@ class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，clas
 
 @list[@elem{Polymorphic} @elem{多态}]
 
-@list[@elem{Pool} @wrappable-cell{池@hspace[1]@emph{特指线程池}}]
+@list[@elem{Pool} @wrappable-cell{池@glossary-note{特指线程池}}]
 
 @list[@elem{Pre-emptive scheduling} @elem{抢占式调度}]
 
@@ -394,7 +394,7 @@ class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，clas
 
 @list[@elem{Qualified} @elem{受限变量}]
 
-@list[@elem{Quantum} @wrappable-cell{量子@hspace[1]@emph{即时间片}}]
+@list[@elem{Quantum} @wrappable-cell{量子@glossary-note{即时间片}}]
 
 @list[@elem{R-value} @elem{右值}]
 
@@ -487,9 +487,9 @@ class 特指面向对象语言中的类；在@elemref["sllgen"]{附录 B}，clas
 @list[@elem{Subroutine} @elem{子程序}]
 
 
-@list[@elem{Substitution} @wrappable-cell{代换，代换式（组）@hspace[1]@emph{视上
-      下文，这一术语有时表示类型推导的动作，有时表示动作的结果；表示结果时，有时
-      为单数，有时为复数}}]
+@list[@elem{Substitution} @wrappable-cell{代换，代换式（组）@glossary-note{视上下文，这
+      一术语有时表示类型推导的动作，有时表示动作的结果；表示结果时，有时为单数，
+      有时为复数}}]
 
 @list[@elem{Subtype polymorphism} @elem{子类型多态}]
 
