@@ -1137,7 +1137,7 @@
 器 @tt{x} 的值时，它是第二个计算的跟踪日志。
 
 而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为
-@emph{goto}（名为@emph{流程图程序}）的跟踪日志。
+@emph{goto}（名为@term["flowchart program"]{流程图程序}）的跟踪日志。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -1204,10 +1204,10 @@ odd:  if (x=0) then return(0)
 @eopl-caption["fig-5.8"]{跟踪日志相同的三个程序}
 }
 
-能这样，只是因为原代码中 @tt{even} 和 @tt{odd} 的调用不扩大控制上下文：它们是尾
-调用。我们不能这样转换 @tt{fact}，因为 @tt{fact} 的跟踪日志无限增长：不像这里，
-@exact-elem{“}程序计数器@exact-elem{”}出现在跟踪日志的最外层，而是在控制上下文
-中。
+能如此，只是因为原代码中 @tt{even} 和 @tt{odd} 的调用不扩大控制上下文：它们是尾
+调用。我们不能这样转换 @tt{fact}，因为 @tt{fact} 的跟踪日志无限增长：
+@exact-elem{“}程序计数器@exact-elem{”}不是像这里一样出现在跟踪日志的最外层，而
+是出现在控制上下文中。
 
 任何不需要控制上下文的程序都可以这样转换。这给了我们一条重要原理：
 
