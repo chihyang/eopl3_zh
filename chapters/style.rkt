@@ -26,6 +26,7 @@
 ;;; options
 (define racket-block-offset 6)
 (define origin-page-number 0)
+(define dump-glossary-translations #f)
 
 ;;; for title format
 (define book-title-style (make-style #f (list 'toc 'no-index book-prefix-and-style)))
@@ -223,6 +224,15 @@
 ;;; Note that if you don't want original, use #f instead. Missing it causes
 ;;; unexpected expansion
 (define (term #:tag [tag #f] #:full [full #t] original . translation)
+  (when dump-glossary-translations
+    (displayln (format "@elem{~a} @elem{~a}"
+                       (if (list? original)
+                           (add-between (map (lambda (e)
+                                               (string-replace (content->string e) "\n" " "))
+                                             original)
+                                        ", ")
+                           (string-replace (content->string original) "\n" " "))
+                       (string-replace (content->string translation) "\n" ""))))
   (cond [(equal? original #f)
          (elem (when tag (elemtag tag)) (emph translation))]
         [(list? original)
