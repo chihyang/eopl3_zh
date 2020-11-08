@@ -224,7 +224,7 @@
 ;;; Note that if you don't want original, use #f instead. Missing it causes
 ;;; unexpected expansion
 (define (term #:tag [tag #f] #:full [full #t] original . translation)
-  (when dump-glossary-translations
+  (when (and dump-glossary-translations (not (equal? original #f)))
     (displayln (format "@elem{~a} @elem{~a}"
                        (if (list? original)
                            (add-between (map (lambda (e)
