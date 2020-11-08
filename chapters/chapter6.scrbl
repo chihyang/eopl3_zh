@@ -17,8 +17,8 @@
 叫做@emph{迭代性控制行为}。
 
 我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格
-叫做@term["continuation-passing style"]{续文传递风格} 或 @deftech{CPS}，且不限于
-解释器。
+叫做@term["continuation-passing style"]{续文传递风格} 或 @term[#f]{CPS}，且不限
+于解释器。
 
 本章，我们介绍一种系统性的方法，将任一过程转换为具有迭代性控制行为的等效过程。实
 现这一点需要将过程转换为续文传递风格。

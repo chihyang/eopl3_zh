@@ -524,7 +524,7 @@
 
 @list[@elem{Syntactic category} @elem{句法类别}]
 
-@list[@elem{Syntactic} @elem{句法}]
+@list[@elem{Syntactic derivation} @elem{句法推导}]
 
 @list[@elem{Tail call} @elem{尾调用}]
 
