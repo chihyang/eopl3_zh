@@ -15,6 +15,15 @@
    (hash "scribble-load-replace.tex"
          "../style/style-load-prefix.tex")))
 
+;;; common utility
+(define (remove-leading-newlines c)
+  (cond [(null? c) c]
+        [(and (string? (car c))
+              (string=? (car c) "\n"))
+         (remove-leading-newlines (cdr c))]
+        [else c]))
+
+;;; options
 (define racket-block-offset 6)
 (define origin-page-number 0)
 
@@ -25,6 +34,7 @@
 (define section-title-style-numbered '(numbered no-index))
 (define section-title-style-unumbered '(unnumbered no-index))
 
+;;; styles
 (define question
   (make-style "Squestion" (list (make-tex-addition "../style/question.tex")
                                 (make-css-addition "../style/question.css"))))
@@ -128,6 +138,7 @@
 (define (exercise-ref tag)
   (elem #:style eopl-exercise-ref (countref tag)))
 
+;;; for example
 (define (example #:tag [tag ""] . c)
   (nested #:style eopl-example
           (elemtag tag "") c))
@@ -135,6 +146,7 @@
 (define (example-ref tag)
   (elem #:style eopl-example-ref (countref tag)))
 
+;;; for figure
 (define (eopl-caption tag . c)
   (nested #:style
           (make-style "caption" (list 'multicommand))
@@ -144,13 +156,7 @@
 (define (figure-ref tag)
   (elem #:style eopl-figure-ref (countref tag)))
 
-(define (remove-leading-newlines c)
-  (cond [(null? c) c]
-        [(and (string? (car c))
-              (string=? (car c) "\n"))
-         (remove-leading-newlines (cdr c))]
-        [else c]))
-
+;;; for definition
 (define (definition #:title [title #f] #:tag [tag ""] . c)
   (nested #:style eopl-definition
           (elemtag tag "")
@@ -163,6 +169,7 @@
 (define (definition-ref tag)
   (elem #:style eopl-definition-ref (countref tag)))
 
+;;; for theorem
 (define (theorem #:title [title #f] #:tag [tag ""] . c)
   (nested #:style eopl-theorem
           (elemtag tag "")
@@ -178,6 +185,7 @@
 (define (exact-elem . c)
   (make-element (make-style #f '(exact-chars)) c))
 
+;;; for interface
 (define (big-bracket #:title [title #f] . c)
   (nested
    (exact-elem "\\begin{cornerbox}")
@@ -187,6 +195,7 @@
    c
    (exact-elem "\n\\end{cornerbox}")))
 
+;;; for margin page
 ;;; margin-page, every call to this increments the internal counter
 (define (margin-page)
   (set! origin-page-number (+ origin-page-number 1))
@@ -199,14 +208,17 @@
 (define (set-margin-page page)
   (set! origin-page-number page))
 
+;;; front matter, as in latex
 (define frontmatter
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "frontmatter" '(exact-chars)) '())))
 
+;;; main matter, as in latex
 (define mainmatter
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
+;;; for glossary table
 ;;; term: content | #f x content -> content
 ;;; Note that if you don't want original, use #f instead. Missing it causes
 ;;; unexpected expansion
@@ -242,10 +254,11 @@
 (define (glossary-note . content)
   (elem "（" (emph content) "）"))
 
+;;; for bibliography
 (define (bib . content)
   (nested #:style bib-para content))
 
-(define (a-title . content)
+(define (bib-title . content)
   (emph content))
 
 (provide (except-out (all-defined-out)
