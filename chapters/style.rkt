@@ -219,6 +219,17 @@
   (make-paragraph (make-style 'pretitle '())
                   (make-element (make-style "mainmatter" '(exact-chars)) '())))
 
+;;; special format for index
+(define index-prefix
+  (make-paragraph (make-style 'pretitle '())
+                  (make-element (make-style "twocolumn" '(exact-chars)) '())))
+
+(define print-index
+  (make-element (make-style "printindex" '(exact-chars)) '()))
+
+(define index-suffix
+  (make-element (make-style "onecolumn" '(exact-chars)) '()))
+
 ;;; for glossary table
 ;;; term: content | #f x content -> content
 ;;; Note that if you don't want original, use #f instead. Missing it causes

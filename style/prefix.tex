@@ -82,6 +82,25 @@ ItalicFont=Courier
   hyperindex=false
 }
 \makeindex
+% index decorator taking 3 arguments:
+% parameter 1 is prefix
+% parameter 2 is suffix
+% parameter 3 is page number of index
+\usepackage{ifthen}
+\usepackage{xifthen}
+\newcommand*\idxdecorator[3]{#1\hyperpage{#3}\ifthenelse{\isempty{#2}}{#2}{~(#2)}}
+% redefine theindex environment to control the style of index chapter in upper
+% layer
+\makeatletter
+\renewenvironment{theindex}
+{\parindent\z@
+  \parskip\z@ \@plus .3\p@\relax
+  \columnseprule \z@
+  \columnsep 35\p@
+  \let\item\@idxitem}
+{}
+\makeatother
+
 % make phantomsection robust
 \MakeRobust\phantomsection
 
