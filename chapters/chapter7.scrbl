@@ -516,7 +516,7 @@ in |@${e_{letrec\mbox{-}body}}
 ]}
 
 现在，我们可以将规则转换为程序，就像处理@secref{expr}中的解释器那样。结果
-如@figure-ref{fig-7.1}-@countref{fig-7.3} 所示。
+如@figure-ref{fig-7.1}--@countref{fig-7.3} 所示。
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -1781,7 +1781,7 @@ in letrec
 像@exercise-ref{ex4.12} 那样，我们在实现时新定义一种包含两个值的数据类型，用作返
 回值。
 
-@tt{type-of} 的定义如@figure-ref{fig-7.6}-@countref{fig-7.8} 所示。对每个表达式，
+@tt{type-of} 的定义如@figure-ref{fig-7.6}--@countref{fig-7.8} 所示。对每个表达式，
 我们递归处理子表达式，一路传递代换式组参数中现有的解。然后，我们根据规范，为当前
 表达式建立方程，调用 @tt{unifier}，在代换式组中记录这些。
 
@@ -1793,7 +1793,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 要比较两种类型的外在表示，我们统一未知类型的名字，遍历每个外在表示，给类型变量重
 新编号，使之从 @tt{ty1} 开始。然后，我们就能用 @tt{equal?} 比较重新编号的类型
-（@figure-ref{fig-7.10}-@countref{fig-7.11}）。
+（@figure-ref{fig-7.10}--@countref{fig-7.11}）。
 
 要逐个命名所有未知变量，我们用 @tt{canonical-subst} 生成代换式组。我们用
 @tt{table}做累加器，即可直接递归。@tt{table} 的长度告诉我们已找出多少个不同的未

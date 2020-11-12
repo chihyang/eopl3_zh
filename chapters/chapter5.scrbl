@@ -860,7 +860,7 @@
 
 @exercise[#:level 1 #:tag "ex5.12"]{
 
-给@figure-ref{fig-5.4}-@countref{fig-5.6} 的解释器添加辅助过程，生成类似
+给@figure-ref{fig-5.4}--@countref{fig-5.6} 的解释器添加辅助过程，生成类似
 @pageref{cps-computation} 计算的输出。
 
 }
@@ -1423,7 +1423,7 @@ odd:  if (x=0) then return(0)
 
 ]
 
-翻译完的解释器如@figure-ref{fig-5.11}-@countref{fig-5.14} 所示。这个过程
+翻译完的解释器如@figure-ref{fig-5.11}--@countref{fig-5.14} 所示。这个过程
 叫做@term["registerization"]{寄存}。很容易用支持跳转的指令式语言翻译它。
 
 @nested[#:style eopl-figure]{

@@ -1514,10 +1514,10 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 ]}
 
 现在，我们可以写出 CPS 翻译器的剩余部分
-（@figure-ref{fig-6.10}-@countref{fig-6.12}）。它@emph{跟随语法}。当表达式总是简
-单的，如常量、变量和过程，我们直接用 @tt{make-send-to-cont} 生成代码。否则，我们
-调用辅助过程，每个辅助过程都调用 @tt{cps-of-exps} 求子表达式的值，用适当的生成器
-构造 CPS 输出的最内部。一个例外是 @tt{cps-of-letrec-exp}，它没有紧邻的子表达式，
+（@figure-ref{fig-6.10}--@countref{fig-6.12}）。它@emph{跟随语法}。当表达式总是
+简单的，如常量、变量和过程，我们直接用 @tt{make-send-to-cont} 生成代码。否则，我
+们调用辅助过程，每个辅助过程都调用 @tt{cps-of-exps} 求子表达式的值，用适当的生成
+器构造 CPS 输出的最内部。一个例外是 @tt{cps-of-letrec-exp}，它没有紧邻的子表达式，
 所以它直接生成 CPS 输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，它取一生
 成器，该生成器直接返回一个简单表达式。
 
