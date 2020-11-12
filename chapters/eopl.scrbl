@@ -27,5 +27,5 @@
 @include-section["appendix_b.scrbl"]
 
 @include-section["bibliography.scrbl"]
+@include-section["index.scrbl"]
 
-@index-section[#:title "索引"]
