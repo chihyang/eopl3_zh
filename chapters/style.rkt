@@ -288,6 +288,11 @@
 (define (bib-title . content)
   (emph content))
 
+(define (bib-author #:key [key #f] #:index [index #f] . content)
+  (elem (eopl-index (list key)
+                    (list (if index (string-append* (add-between (string-split index) " ")) content)))
+        content))
+
 ;;; for indexing
 (define (exer-ref-range . tags)
   (elem #:style eopl-exer-ref-range
