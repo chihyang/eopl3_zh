@@ -4,85 +4,85 @@
 @title[#:style part-title-style-unnumbered #:tag "bib"]{参考书目}
 
 @bib{
-Abadi, Martín, & Cardelli, Luca. 1996. @bib-title{A Theory of Objects}. Berlin, Heidelberg,
+@bib-author{Abadi, Martín}, & @bib-author{Cardelli, Luca}. 1996. @bib-title{A Theory of Objects}. Berlin, Heidelberg,
 and New York: Springer-Verlag.
 }
 
 @bib{
-Abelson, Harold, & Sussman, Gerald Jay. 1985. @bib-title{The Structure and Interpretation
+@bib-author{Abelson, Harold}, & @bib-author{Sussman, Gerald Jay}. 1985. @bib-title{The Structure and Interpretation
 of Computer Programs}. Cambridge, MA: MIT Press.
 }
 
 @bib{
-Abelson, Harold, & Sussman, Gerald Jay. 1996. @bib-title{Structure and Interpretation of
+@bib-author{Abelson, Harold}, & @bib-author{Sussman, Gerald Jay}. 1996. @bib-title{Structure and Interpretation of
 Computer Programs}. Second edition. Cambridge, MA: McGraw Hill.
 }
 
 @bib{
-Aho, Alfred V., Lam, Monica S., Sethi, Ravi, & Ullman, Jeffrey
-D. 2006. @bib-title{Compilers: Principles, Techniques, and Tools}. Second edition. Boston:
+@bib-author[#:index "Aho, Alfred"]{Aho, Alfred V.}, @bib-author[#:index "Lam, Monica"]{Lam, Monica S.}, @bib-author{Sethi, Ravi}, & @bib-author[#:index "Ullman, Jeffrey"]{Ullman, Jeffrey
+D.} 2006. @bib-title{Compilers: Principles, Techniques, and Tools}. Second edition. Boston:
 Addison-Wesley Longman.
 }
 
 @bib{
-Appel, Andrew W., & Jim, Trevor. 1989. @bib-title{Continuation-Passing, Closure-Passing
+@bib-author[#:index "Appel, Andrew"]{Appel, Andrew W.}, & @bib-author{Jim, Trevor}. 1989. @bib-title{Continuation-Passing, Closure-Passing
 Style}. Pages 293–302 of: Proceedings ACM Symposium on Principles of Programming
 Languages.
 }
 
 @bib{
-Arnold, Ken, & Gosling, James. 1998. @bib-title{The Java Programming Language}. Second
+@bib-author{Arnold, Ken}, & @bib-author{Gosling, James}. 1998. @bib-title{The Java Programming Language}. Second
 edition. The Java Series. Reading, MA: Addison-Wesley.
 }
 
 @bib{
-Armstrong, Joe. 2007. @bib-title{Programming Erlang: Software for a Concurrent World}. The
+@bib-author{Armstrong, Joe}. 2007. @bib-title{Programming Erlang: Software for a Concurrent World}. The
 Pragmatic Programmers Publishers.
 }
 
 @bib{
-Backus, John W., @emph{et al}. 1957. @bib-title{The Fortran Automatic Coding System}. Pages 188–198
+@bib-author[#:index "Backus, John"]{Backus, John W.}, @emph{et al}. 1957. @bib-title{The Fortran Automatic Coding System}. Pages 188–198
 of: Western Joint Computer Conference.
 }
 
 @bib{
-Barendregt, Henk P. 1981. @bib-title{The Lambda Calculus: Its Syntax and
+@bib-author[#:index "Barendregt, Henk"]{Barendregt, Henk P.} 1981. @bib-title{The Lambda Calculus: Its Syntax and
 Semantics}. Amsterdam: North-Holland.
 }
 
 @bib{
-Barendregt, Henk P. 1991. @bib-title{The Lambda Calculus}. Revised edition. Studies in Logic
+@bib-author[#:index "Barendregt, Henk"]{Barendregt, Henk P.} 1991. @bib-title{The Lambda Calculus}. Revised edition. Studies in Logic
 and the Foundations of Mathematics, no. 103. Amsterdam: North-Holland.
 }
 
 @bib{
-Bergin, Thomas J., & Gibson, Richard G. (eds.). 1996. @bib-title{History of Programming
+@bib-author[#:index "Bergin, Thomas"]{Bergin, Thomas J.}, & @bib-author[#:index "Gibson, Richard"]{Gibson, Richard G.} (eds.). 1996. @bib-title{History of Programming
 Languages}. New York: Addison-Wesley.
 }
 
 @bib{
-Birtwistle, Graham M., Dahl, Ole-Johan, & Myhrhaug, Bjorn. 1973. @bib-title{Simula Begin}.
+@bib-author[#:index "Birtwistle, Graham"]{Birtwistle, Graham M.}, @bib-author{Dahl, Ole-Johan}, & @bib-author{Myhrhaug, Bjorn}. 1973. @bib-title{Simula Begin}.
 Philadelphia: Auerbach.
 }
 
 @bib{
-Burstall, Rod M. 1969. @bib-title{Proving Properties of Programs by Structural
+@bib-author[#:index "Burstall, Rod"]{Burstall, Rod M.} 1969. @bib-title{Proving Properties of Programs by Structural
 Induction}. Computer Journal, @bold{12}(1), 41–48.
 }
 
 @bib{
-Church, Alonzo. 1941. @bib-title{The Calculi of Lambda Conversion}. Princeton, NJ: Princeton
+@bib-author{Church, Alonzo}. 1941. @bib-title{The Calculi of Lambda Conversion}. Princeton, NJ: Princeton
 University Press. Reprinted 1963 by University Microfilms, Ann Arbor, MI.
 }
 
 @bib{
-Clinger, William D., @emph{et al}. 1985a. The Revised Revised Report on Scheme or The
+@bib-author[#:index "Clinger, William"]{Clinger, William D.}, @emph{et al}. 1985a. The Revised Revised Report on Scheme or The
 Uncommon Lisp. Technical Memo AIM-848. Massachusetts Institute of Technology,
 Artificial Intelligence Laboratory.
 }
 
 @bib{
-Clinger, William D., Friedman, Daniel P., & Wand, Mitchell. 1985b. A Scheme for
+@bib-author[#:index "Clinger, William"]{Clinger, William D.}, @bib-author[#:index "Friedman, Daniel"]{Friedman, Daniel P.}, & @bib-author{Wand, Mitchell}. 1985b. A Scheme for
 a Higher-Level Semantic Algebra. Pages 237–250 of: Reynolds, John, & Nivat,
 Maurice (eds.), @bib-title{Algebraic Methods in Semantics: Proceedings of the US-French
 Seminar on the Application of Algebra to Language Definition and Compilation
@@ -90,99 +90,99 @@ Seminar on the Application of Algebra to Language Definition and Compilation
 }
 
 @bib{
-Clinger, William D., Rees, Jonathan, @emph{et al}. 1991. The Revised@superscript{4} Report on the
+@bib-author[#:index "Clinger, William"]{Clinger, William D.}, @bib-author{Rees, Jonathan}, @emph{et al}. 1991. The Revised@superscript{4} Report on the
 Algorithmic Language Scheme. @bib-title{ACM Lisp Pointers}, @bold{4}(3), 1–55.
 }
 
 @bib{
-Danvy, Olivier, & Filinski, Andrzej. 1992. Representing Control: A Study of the
+@bib-author{Danvy, Olivier}, & @bib-author{Filinski, Andrzej}. 1992. Representing Control: A Study of the
 CPS Transformation. @bib-title{Mathematical Structures in Computer Science}, @bold{2}(4), 361–391.
 }
 
 @bib{
-Danvy, Olivier, & Nielsen, Lasse R. 2003. A First-order One-pass CPS
+@bib-author{Danvy, Olivier}, & @bib-author[#:index "Nielsen, Lasse"]{Nielsen, Lasse R.} 2003. A First-order One-pass CPS
 Transformation. @bib-title{Theoretical Computer Science}, @bold{308}(1-3), 239–257.
 }
 
 @bib{
-de Bruijn, N. G. 1972. Lambda Calculus Notation with Nameless Dummies: A Tool
+@bib-author[#:key "Bruijn, N. G." #:index "de Bruijn, N. G."]{de Bruijn, N. G.} 1972. Lambda Calculus Notation with Nameless Dummies: A Tool
 for Automatic FormulaManipulation, with Application to the Church-Rosser
 Theorem. @bib-title{Indagationes Mathematicae}, @bold{34}, 381–392.
 }
 
 @bib{
-Dominus, Mark Jason. 2005. @bib-title{Higher-Order Perl: Transforming Programs with
+@bib-author{Dominus, Mark Jason}. 2005. @bib-title{Higher-Order Perl: Transforming Programs with
 Programs}. San Francisco: Morgan Kaufmann Publishers.
 }
 
 @bib{
-Dybvig, R. Kent. 2003. @bib-title{The Scheme Programming Language}. Third
+@bib-author{Dybvig, R. Kent}. 2003. @bib-title{The Scheme Programming Language}. Third
 edition. Cambridge, MA: MIT Press.
 }
 
 @bib{
-Felleisen, Matthias, & Friedman, Daniel P. 1996. @bib-title{The Little MLer}. Cambridge, MA:
+@bib-author{Felleisen, Matthias}, & @bib-author[#:index "Friedman, Daniel"]{Friedman, Daniel P.} 1996. @bib-title{The Little MLer}. Cambridge, MA:
 MIT Press.
 }
 
 @bib{
-Felleisen, Matthias, Findler, Robert Bruce, Flatt, Matthew, & Krishnamurthi,
-Shriram. 2001. @bib-title{How to Design Programs}. Cambridge, MA: MIT Press.
+@bib-author{Felleisen, Matthias}, @bib-author[#:index "Findler, Robert"]{Findler, Robert Bruce}, @bib-author{Flatt, Matthew}, & @bib-author{Krishnamurthi,
+Shriram}. 2001. @bib-title{How to Design Programs}. Cambridge, MA: MIT Press.
 }
 
 @bib{
-Fischer, Michael J. 1972. Lambda-Calculus Schemata. Pages 104–109 of:
+@bib-author[#:index "Fischer, Michael"]{Fischer, Michael J.} 1972. Lambda-Calculus Schemata. Pages 104–109 of:
 @bib-title{Proceedings ACM Conference on Proving Assertions about Programs}. Republished in
 Lisp and Symbolic Computation, @bold{6}(3/4), 259–288.
 }
 
 @bib{
-Flanagan, Cormac, Sabry, Amr, Duba, Bruce F., & Felleisen, Matthias. 1993. The
+@bib-author{Flanagan, Cormac}, @bib-author{Sabry, Amr}, @bib-author[#:index "Duba, Bruce"]{Duba, Bruce F.}, & @bib-author{Felleisen, Matthias}. 1993. The
 Essence of Compiling with Continuations. Pages 237–247 of: @bib-title{Proceedings ACM
 SIGPLAN 1993 Conf. on Programming Language Design and Implementation, PLDI’93,
 Albuquerque, NM, USA, 23–25 June 1993}, vol. @bold{28}(6). New York: ACM Press.
 }
 
 @bib{
-Flatt, Matthew, Krishnamurthi, Shriram, & Felleisen, Matthias. 1998. Classes and
+@bib-author{Flatt, Matthew}, @bib-author{Krishnamurthi, Shriram}, & @bib-author{Felleisen, Matthias}. 1998. Classes and
 Mixins. Pages 171–183 of: @bib-title{Proceedings ACMSymposium on Principles of Programming
 Languages}.
 }
 
 @bib{
-Friedman, Daniel P. 1974. @bib-title{The Little LISPer}. Palo Alto, CA: Science Research
+@bib-author[#:index "Friedman, Daniel"]{Friedman, Daniel P.} 1974. @bib-title{The Little LISPer}. Palo Alto, CA: Science Research
 Associates.
 }
 
 @bib{
-Friedman, Daniel P., & Felleisen, Matthias. 1996. @bib-title{The Little Schemer}. Fourth
+@bib-author[#:index "Friedman, Daniel"]{Friedman, Daniel P.}, & @bib-author{Felleisen, Matthias}. 1996. @bib-title{The Little Schemer}. Fourth
 edition. Cambridge, MA: MIT Press.
 }
 
 @bib{
-Friedman, Daniel P., &Wise, David S. 1976. Cons should not Evaluate its
+@bib-author[#:index "Friedman, Daniel"]{Friedman, Daniel P.}, & @bib-author[#:index "Wise, David"]{Wise, David S.} 1976. Cons should not Evaluate its
 Arguments. Pages 257–284 of: Michaelson, S., & Milner, R. (eds.), @bib-title{Automata,
 Languages and Programming}. Edinburgh: Edinburgh University Press.
 }
 
 @bib{
-Gamma, Erich, Helm, Richard, Johnson, Ralph, & Vlissides, John. 1995. @bib-title{Design
+@bib-author{Gamma, Erich}, @bib-author{Helm, Richard}, @bib-author{Johnson, Ralph}, & @bib-author{Vlissides, John}. 1995. @bib-title{Design
 Patterns: Bookents of Reusable Object-Oriented Software}. Reading, MA: Addison
 Wesley.
 }
 
 @bib{
-Giarratana, V., Gimona, F., & Montanari, U. 1976. Observability Concepts in
+@bib-author{Giarratana, V.}, @bib-author{Gimona, F.}, & @bib-author[#:index "Montanari, Ugo"]{Montanari, U.} 1976. Observability Concepts in
 Abstract Data Type Specifications. Pages 576–587 of: Mazurkiewicz, A. (ed.),
 @bib-title{Mathematical Foundations of Computer Science 1976}. Lecture Notes in Computer
 Science, vol. 45. Berlin, Heidelberg, New York: Springer-Verlag.
 }
 
 @bib{
-Goguen, Joseph A., Thatcher, James W., Wagner, Eric G., & Wright, Jesse B. 1977.
-Initial Algebra Semantics and Continuous Algebras. @bib-title{Journal of the ACM}, @bold{24},
-68–95.
-}
+@bib-author[#:index "Goguen, Joseph"]{Goguen, Joseph A.}, @bib-author[#:index "Thatcher, James"]{Thatcher, James W.},
+@bib-author[#:index "Wagner, Eric"]{Wagner, Eric G.}, & @bib-author[#:index
+"Wright, Jesse"]{Wright, Jesse B.} 1977.  Initial Algebra Semantics and
+Continuous Algebras. @bib-title{Journal of the ACM}, @bold{24}, 68–95.  }
 
 @bib{
 Goldberg, Adele, & Robson, David. 1983. @bib-title{Smalltalk-80: The Language and Its
