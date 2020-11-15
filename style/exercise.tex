@@ -1,6 +1,7 @@
 \newcounter{EoplExercise}[chapter]
 \renewcommand\theEoplExercise{\thechapter.\arabic{EoplExercise}}
 \newcommand\EoplExerciseName{练习}
+\newcommand\EoplExerciseIndexPrefix{ex.}
 \newenvironment{EoplExercise}{%
   \setlength{\parskip}{1em}
   \setlength{\parindent}{0pt}
@@ -8,3 +9,14 @@
   {\small\emph{\EoplExerciseName}\nobreak\hspace{1ex}}\theEoplExercise\nobreak\hspace{1ex}\begin{small}}{
   \end{small}}
 \newcommand{\EoplExerciseRef}[1]{\EoplExerciseName~{#1}}
+% for exercise reference in index
+\usepackage{cleveref}
+\crefname{EoplExercise}{ex.}{ex.}
+\Crefname{EoplExercise}{Ex.}{Ex.}
+\crefmultiformat{EoplExercise}%
+{\edef\crefstripprefixinfo{#1}ex.~#2#1#3}%
+{--#2\crefstripprefix{\crefstripprefixinfo}{#1}#3}%
+{, #2\crefstripprefix{\crefstripprefixinfo}{#1}#3}%
+{ 和~#2\crefstripprefix{\crefstripprefixinfo}{#1}#3}
+% parameter of this macro is one or a list of labels
+\newcommand{\EoplExerRefRange}[1]{\cref{#1}}

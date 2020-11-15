@@ -115,6 +115,12 @@
 (define bib-para
   (make-style "BibPara" (list (make-tex-addition "../style/bib-para.tex"))))
 
+(define eopl-plain-label
+  (make-style "PlainLabel" (list (make-tex-addition "../style/plain-label.tex"))))
+
+(define eopl-exer-ref-range
+  (make-style "EoplExerRefRange" (list (make-tex-addition "../style/exercise.tex"))))
+
 ;;; for exercise
 (define exercise-level-mark "{\\star}")
 
@@ -282,6 +288,42 @@
 (define (bib-title . content)
   (emph content))
 
+;;; for indexing
+(define (exer-ref-range . tags)
+  (elem #:style eopl-exer-ref-range
+        (add-between (map (lambda (t) (countref #:style eopl-plain-label t))
+                          tags)
+                     ",")))
+
+(define (eopl-index #:prefix [prefix #f]
+                    #:suffix [suffix #f]
+                    #:range-mark [range-mark #f]
+                    #:decorator [decorator #f]
+                    keys . content)
+  (elem
+   (exact-elem "\\index{")
+   (make-key-and-content-list keys content)
+   (exact-elem "|"
+               (cond [(eq? range-mark 'start) "("]
+                     [(eq? range-mark 'end) ")"]
+                     [else ""])
+               (cond [(eq? decorator #f) "idxdecorator{"]
+                     [(eq? decorator 'see) "see"]
+                     [(eq? decorator 'seealso) "seealso"]
+                     [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
+   (unless (equal? prefix #f) prefix)
+   (exact-elem "}{")
+   (unless (equal? suffix #f) suffix)
+   (exact-elem "}}")))
+
+;;; content is a string or a list of string
+(define (make-key-and-content-list keys contents)
+  (add-between (map (lambda (k c)
+                      (if (equal? k #f) c (list k "@" c)))
+                    keys contents)
+               "!"))
+
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
-                     origin-page-number))
+                     origin-page-number
+                     make-key-and-content-list))
