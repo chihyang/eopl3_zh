@@ -52,8 +52,8 @@
                           (make-css-addition "../style/tip.css"))))
 
 (define tip-content
-  (make-style "TipContent" (list (make-tex-addition "../style/tip-content.tex")
-                                 (make-css-addition "../style/tip-content.css"))))
+  (make-style "TipContent" (list (make-tex-addition "../style/tip.tex")
+                                 (make-css-addition "../style/tip.css"))))
 
 (define eopl-figure
   (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
@@ -92,7 +92,7 @@
   (make-style "EoplDefinition" (list (make-tex-addition "../style/definition.tex"))))
 
 (define eopl-definition-title
-  (make-style "EoplDefinitionTitle" (list (make-tex-addition "../style/definition-title.tex"))))
+  (make-style "EoplDefinitionTitle" (list (make-tex-addition "../style/definition.tex"))))
 
 (define eopl-definition-ref
   (make-style "EoplDefinitionRef" (list (make-tex-addition "../style/definition.tex"))))
