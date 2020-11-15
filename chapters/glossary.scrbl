@@ -1,13 +1,14 @@
 #lang scribble/book
 @(require "style.rkt"
           scribble/core
+          scribble/latex-properties
           scribble-math)
 
 @title[#:style part-title-style-unnumbered #:tag "glo"]{译名表}
 
 下表列出本书专有名词及其翻译，并对有疑义者略加说明。
 
-@tabular[#:cell-properties '((baseline baseline)) #:style small
+@tabular[#:row-properties (list (make-table-row-skip "1pt")) #:cell-properties '((baseline) (baseline)) #:style small
 (list
 
 @list[@wrappable-cell{} @wrappable-cell{}]
