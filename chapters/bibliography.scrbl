@@ -173,7 +173,8 @@ Wesley.
 }
 
 @bib{
-@bib-author{Giarratana, V.}, @bib-author{Gimona, F.}, & @bib-author{Montanari, U.} 1976. Observability Concepts in
+@bib-author{Giarratana, V.}, @bib-author{Gimona, F.}, &
+@bib-author[#:key "Montanari, Ugo" #:index "Montanari, Ugo"]{Montanari, U.} 1976. Observability Concepts in
 Abstract Data Type Specifications. Pages 576–587 of: Mazurkiewicz, A. (ed.),
 @bib-title{Mathematical Foundations of Computer Science 1976}. Lecture Notes in Computer
 Science, vol. 45. Berlin, Heidelberg, New York: Springer-Verlag.
