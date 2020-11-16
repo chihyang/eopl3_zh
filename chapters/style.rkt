@@ -288,10 +288,70 @@
 (define (bib-title . content)
   (emph content))
 
+;;; a smart function for marking and indexing authors in bibliography
+;;; it does the following things:
+;;; 1. split first and last name from the content string, which are separated by
+;;;    ",", the "," will also be regarded as part of the first name
+;;; 2. check the last name, if:
+;;;    (1). if the first name starts with a all-lower-case word, the first part
+;;;    will be removed from the index key; otherwise the whole first name will
+;;;    be used as the first name in the index key.
+;;;    (2). if the last name has the form "([[:alpha:]]+ )+([A-Z]\.)", the first
+;;;    part will be extracted as the last name in the index; otherwise the whole
+;;;    last name will be used as the last name in the index;
+;;; 3. optionally, if you have special needs, you can specify key or index by
+;;;    hand, in this case key or index will not be inferred from content
+(define (extract-name-part tokens)
+  (define (extract-first-and-last tokens first-name)
+    (cond [(null? tokens)
+           (cons first-name '())]
+          [(regexp-match-positions #rx"[^,]$" (car tokens))
+           (extract-first-and-last (cdr tokens)
+                                   (cons (car tokens) first-name))]
+          [(regexp-match-positions #rx",$" (car tokens))
+           (cond [(regexp-match-positions #rx"^[JS]r\\.,$" (cadr tokens))
+                  (cons (cons (cadr tokens) (cons (car tokens) first-name))
+                        (cddr tokens))]
+                 [else
+                  (cons (cons (car tokens) first-name)
+                        (cdr tokens))])]
+          [else
+           (extract-first-and-last (cdr tokens)
+                                   (cons (car tokens) first-name))]))
+  (when (or (null? tokens) (null? (cdr tokens)))
+    (error 'bib-author "Invalid name strings ~a, expect a string with at least two words"
+           (string-append* (add-between tokens " "))))
+  (let* ((result (extract-first-and-last tokens '()))
+         (first (reverse (car result)))
+         (last (cdr result)))
+    (cons first last)))
+
+(define (construct-author-key first last)
+  (let* ((f-part (if (regexp-match-positions #px"[[:lower:]]$" (car first))
+                     (cdr first)
+                     first))
+         (l-string (string-append* (add-between last " ")))
+         (l-part (cond [(regexp-match-positions #px"^([[:alpha:]]+ )+[A-Z]\\.$" l-string)
+                        (list (car last))]
+                       [else last])))
+    (string-append* (add-between (append f-part l-part) " "))))
+
+(define (construct-author-index first last)
+  (let* ((l-string (string-append* (add-between last " ")))
+         (l-part (cond [(regexp-match-positions #px"^([[:alpha:]]+ )+[A-Z]\\.$" l-string)
+                        (list (car last))]
+                       [else last])))
+    (string-append* (add-between (append first l-part) " "))))
+
 (define (bib-author #:key [key #f] #:index [index #f] . content)
-  (elem (eopl-index (list key)
-                    (list (if index (string-append* (add-between (string-split index) " ")) content)))
-        content))
+  (let* ((purged-name (if (and key index) #f (extract-name-part (string-split (content->string content)))))
+         (first (if (and key index) #f (car purged-name)))
+         (last (if (and key index) #f (cdr purged-name)))
+         (key (if key key (construct-author-key first last)))
+         (index (if index index (construct-author-index first last))))
+    (elem (eopl-index (list (if (string=? key index) #f key))
+                      (list (if index index content)))
+          content)))
 
 ;;; for indexing
 (define (exer-ref-range . tags)
@@ -309,12 +369,12 @@
    (exact-elem "\\index{")
    (make-key-and-content-list keys content)
    (exact-elem "|"
-               (cond [(eq? range-mark 'start) "("]
-                     [(eq? range-mark 'end) ")"]
+               (cond [(equal? range-mark 'start) "("]
+                     [(equal? range-mark 'end) ")"]
                      [else ""])
-               (cond [(eq? decorator #f) "idxdecorator{"]
-                     [(eq? decorator 'see) "see"]
-                     [(eq? decorator 'seealso) "seealso"]
+               (cond [(equal? decorator #f) "idxdecorator{"]
+                     [(equal? decorator 'see) "see"]
+                     [(equal? decorator 'seealso) "seealso"]
                      [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
    (unless (equal? prefix #f) prefix)
    (exact-elem "}{")
