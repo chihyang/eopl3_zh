@@ -348,10 +348,29 @@
          (first (if (and key index) #f (car purged-name)))
          (last (if (and key index) #f (cdr purged-name)))
          (key (if key key (construct-author-key first last)))
-         (index (if index index (construct-author-index first last))))
-    (elem (eopl-index (list (if (string=? key index) #f key))
-                      (list (if index index content)))
-          content)))
+         (index (if index index (construct-author-index first last)))
+         (author-index (eopl-index (list (if (string=? key index) #f key))
+                                   (list (if index index content)))))
+    (traverse-element
+     (lambda (get set)
+       (set (string->symbol (if first
+                                (regexp-replace #rx"([^,]+),.*$"
+                                                (string-append* (add-between first " "))
+                                                "\\1")
+                                ;; this assumes the specified key is two words
+                                ;; separated by comma
+                                (regexp-replace #rx"([^,]+),.*$" index "\\1")))
+            author-index)
+       (elem author-index content)))))
+
+(define (author-ref . author)
+  (let ((author (content->string author)))
+    (traverse-element
+     (lambda (get set)
+       (lambda (get set)
+         (elem (get (string->symbol (regexp-replace #px"[[:space:]]+" author " "))
+                    (format "(Unknown author ~a)" author))
+               author))))))
 
 ;;; for indexing
 (define (exer-ref-range . tags)
