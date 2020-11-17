@@ -543,7 +543,7 @@ Higher-Order and Symbolic Computation @bold{13}(1–2) 135–152 (2000).
 }
 
 @bib{
-@bib-author{Sussman, Gerald J.}, & @bib-author{Steele, Guy L.} 1975. SCHEME: An Interpreter for Extended
+@bib-author{Sussman, Gerald Jay}, & @bib-author{Steele, Guy L.} 1975. SCHEME: An Interpreter for Extended
 Lambda Calculus. Artificial Intelligence Memo 349. Massachusetts Institute of
 Technology, Cambridge, MA. Reprinted, with a foreword, in Higher-Order and
 Symbolic Computation @bold{11}(4) 405-439 (1998).
