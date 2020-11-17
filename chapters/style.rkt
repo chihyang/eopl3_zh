@@ -47,19 +47,11 @@
   (make-style "Sunderline" (list (make-tex-addition "../style/underline.tex")
                                  (make-css-addition "../style/underline.css"))))
 
-(define tip
-  (make-style "Tip" (list (make-tex-addition "../style/tip.tex")
-                          (make-css-addition "../style/tip.css"))))
+(define small
+  (make-style "Small" (list (make-tex-addition "../style/small.tex"))))
 
-(define tip-content
-  (make-style "TipContent" (list (make-tex-addition "../style/tip.tex")
-                                 (make-css-addition "../style/tip.css"))))
-
-(define eopl-figure
-  (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
-
-(define eopl-subfigure
-  (make-style "EoplSubfigure" (list (make-tex-addition "../style/subfigure.tex"))))
+(define htt
+  (make-style "Shtt" (list (make-tex-addition "../style/htt.tex"))))
 
 (define two-columns
   (make-style "TwoColumns" (list (make-tex-addition "../style/two-columns.tex"))))
@@ -73,6 +65,23 @@
 (define normalfont
   (make-style "NormalFont" (list (make-tex-addition "../style/normalfont.tex"))))
 
+(define tip
+  (make-style "Tip" (list (make-tex-addition "../style/tip.tex")
+                          (make-css-addition "../style/tip.css"))))
+
+(define tip-content
+  (make-style "TipContent" (list (make-tex-addition "../style/tip.tex")
+                                 (make-css-addition "../style/tip.css"))))
+
+(define eopl-figure
+  (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
+
+(define eopl-subfigure
+  (make-style "EoplSubfigure" (list (make-tex-addition "../style/figure.tex"))))
+
+(define eopl-figure-ref
+  (make-style "EoplFigureRef" (list (make-tex-addition "../style/figure.tex"))))
+
 (define eopl-example
   (make-style "EoplExample" (list (make-tex-addition "../style/example.tex"))))
 
@@ -84,9 +93,6 @@
 
 (define eopl-exercise-ref
   (make-style "EoplExerciseRef" (list (make-tex-addition "../style/exercise.tex"))))
-
-(define eopl-figure-ref
-  (make-style "EoplFigureRef" (list (make-tex-addition "../style/figure.tex"))))
 
 (define eopl-definition
   (make-style "EoplDefinition" (list (make-tex-addition "../style/definition.tex"))))
@@ -102,12 +108,6 @@
 
 (define eopl-theorem-ref
   (make-style "EoplTheoremRef" (list (make-tex-addition "../style/theorem.tex"))))
-
-(define small
-  (make-style "Small" (list (make-tex-addition "../style/small.tex"))))
-
-(define htt
-  (make-style "Shtt" (list (make-tex-addition "../style/htt.tex"))))
 
 (define margin-page-number
   (make-style "MarginPage" (list (make-tex-addition "../style/margin-page.tex"))))
@@ -292,7 +292,7 @@
 ;;; it does the following things:
 ;;; 1. split first and last name from the content string, which are separated by
 ;;;    ",", the "," will also be regarded as part of the first name
-;;; 2. check the last name, if:
+;;; 2. check name:
 ;;;    (1). if the first name starts with a all-lower-case word, the first part
 ;;;    will be removed from the index key; otherwise the whole first name will
 ;;;    be used as the first name in the index key.
