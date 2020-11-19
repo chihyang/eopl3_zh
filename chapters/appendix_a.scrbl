@@ -66,7 +66,7 @@ Scheme 由 @author-ref{Sussman} & @author-ref{Steele} (1975) 发明。其开发�
 在 @author-ref{Steele} & @author-ref{Sussman} (1978); @author-ref{Clinger} et
 al. (1985a); @author-ref{Rees} et al. (1986); @author-ref{Clinger} et
 al. (1991); @author-ref{Kelsey} et al. (1998)。Scheme 标准由 IEEE standard
-(IEEE, 1991) 和@emph{@${\textit{Revised}^6} Report on the Algorithmic Language
+(IEEE, 1991) 和 @emph{@${\textit{Revised}^6} Report on the Algorithmic Language
 Scheme} (@author-ref{Sperber} et al., 2007) 制定。
 
 @author-ref{Dybvig} (2003) 简短介绍了 Scheme，加入了许多富有洞见的例子。
@@ -205,9 +205,9 @@ C# 是一种带类型的语言，相较 Java 添加了很多特性，最著名�
 
 @author-ref{Abadi} & @author-ref{Cardelli} (1996) 定义了一种简单的对象演算，为面
 向对象系统中的类型研究奠定了基础。@author-ref{Flatt} et al. (1998) 形式化了 Java
-的一个子集。另一有用的子集是@emph{Featherweight Java} (Igarashi et al., 1999)。
+的一个子集。另一有用的子集是 @emph{Featherweight Java} (Igarashi et al., 1999)。
 
-@author-ref{Gamma} et al. (1995) 编写了一本引人注目的手册，专论编写面向对象程序
+@author-ref{Gamma} et al. (1995) 编写了一本备受关注的手册，专论编写面向对象程序
 的有效组织原则。
 
 ACM 于 1978 年 (@author-ref{Wexelblatt}, 1978)、1996 年 (@author-ref{Bergin} &
