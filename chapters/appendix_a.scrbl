@@ -30,7 +30,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 何递归编程。
 
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
-纳大致效仿 Plotkin (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
+纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
 @exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}（参见
 @author-ref{Gordon}, 1995; @author-ref{Jacobs} & @author-ref{Rutten}, 1997），
 @author-ref{Felleisen} et al. (2001) 也使用了这种技术。
@@ -40,11 +40,10 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 和抽象语法分开的思想通常归功于 @author-ref{McCarthy} (1962)。他强调用接口抽象语
 法树。
 
-我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由
-@eopl-index['(#f) '("Curry, Haskell")]Brustall (1969) 提出。即使过程没有@bold{遵
-循语法}，@term["subgoal induction"]{子目标归纳} (@author-ref{Morris} &
-@author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效方法。过程的可能输入受
-不变式约束时，子目标归纳也有效。
+我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 @author-ref{Burstall}
+(1969) 提出。即使过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳}
+(@author-ref{Morris} & @author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效
+方法。过程的可能输入受不变式约束时，子目标归纳也有效。
 
 @term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
 更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法
