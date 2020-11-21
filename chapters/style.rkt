@@ -426,10 +426,12 @@
   (add-between (map (lambda (e)
                       (match e
                         [(struct eopl-index-entry (v k))
-                         (if (equal? k #f) (clean-up-index-string v) (list k "@" v))]
+                         (if (equal? k #f)
+                             (if (string? v) (clean-up-index-string v) v)
+                             (list k "@" v))]
                         [(? string?)
                          (list (clean-up-index-string e))]
-                        [else (list (clean-up-index-string (content->string e)))]))
+                        [else (list e)]))
                     entries)
                "!"))
 
