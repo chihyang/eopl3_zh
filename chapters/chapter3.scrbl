@@ -40,7 +40,7 @@
 另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
 抽象语法树翻译为另一种语言（称为@term["target language"]{目标语言}）写成的
 程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
-可能翻译成更底层的语言执行。@eopl-index[#:range-mark 'end "Abstract syntax tree"]
+可能翻译成更底层的语言执行。
 
 通常，目标语言是一种机器语言，由硬件解释。但目标语言也可能是一种特定用途的语言，
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
@@ -65,7 +65,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
 文之主、谓、宾。——@emph{译注}}）句子。我们称之为语言的@term["syntactic"]{句法}
 或@term["grammatical"]{语法} 结构。解析器取一词牌序列（由扫描器给出），生成一棵
-抽象语法树。
+抽象语法树。@eopl-index[#:range-mark 'end "Abstract syntax tree"]
 
 设计前端的标准方式是使用@term["parser generator"]{解析器生成器}。解析器生
 成器是一程序，取一词法规范和语法，生成一个扫描器和解析器。

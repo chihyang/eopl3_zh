@@ -533,6 +533,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 返回该对象。
 
 @nested[#:style small]{
+@eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
 @codeblock[#:indent 7]{
 (new-object-exp (class-name rands)
   (let ((args (values-of-exps rands env))
@@ -624,6 +625,7 @@ in send o3 m1(7,8)
 一定是 3。这样，在声明字段变量时，变量对应值的位置保持不变。这条性质使我们能静态
 地确定字段引用，就像在@secref{s3.6}中处理变量那样。
 
+@eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
 创建新对象很容易。我们只需创建一个 @tt{an-object}，它有一个新引用列表，列表长度
 与对象的字段数目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用非
 法值初始化每个位置，以便识别程序对未初始化位置的解引用。
@@ -1749,6 +1751,7 @@ interface stringable
 然后，我们调用 @tt{type-of-call} 验证操作数的类型与方法的期望是否相符，并返回结
 果的类型。
 
+@eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
 对 @tt{new} 表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报
 错。之后，用操作数的类型调用 @tt{type-of-call}，检查调用 @tt{initialize} 是否安
 全。如果检查通过，那么执行表达式就是安全的。由于 @tt{new} 表达式返回指定类的新对

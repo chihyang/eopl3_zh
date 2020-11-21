@@ -121,7 +121,7 @@
 称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
 线下部分称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或
 更多假设时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
-没有假设的规则称作@eopl-index["axiom"]@term["axiom"]{公理}。写公理时通常不加水平
+没有假设的规则称作@eopl-index{Axiom}@term["axiom"]{公理}。写公理时通常不加水平
 线，如：
 
 @$${0 \in S}
