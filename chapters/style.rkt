@@ -430,7 +430,10 @@
                              (if (string? v) (clean-up-index-string v) v)
                              (list k "@" v))]
                         [(? string?)
-                         (list (clean-up-index-string e))]
+                         (let ((cstr (clean-up-index-string e)))
+                           (if (string-contains? cstr " ")
+                               (list (string-replace cstr " " "") "@" cstr)
+                               (list cstr)))]
                         [else (list e)]))
                     entries)
                "!"))
