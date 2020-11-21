@@ -49,6 +49,8 @@
 
 @list[@elem{Backus-Naur Form} @elem{巴科斯-诺尔范式}]
 
+@list[@elem{@${\beta}-reduction} @elem{@${\beta}-推导}]
+
 @list[@elem{Bigits} @elem{大位}]
 
 @list[@elem{Bignum representation} @elem{大数表示法}]
@@ -593,8 +595,6 @@ bounce 可以视为这一游戏的类比——或者说，这一游戏生动说�
 @list[@elem{Virtual machine} @elem{虚拟机}]
 
 @list[@elem{Well-typed} @elem{正常类型}]
-
-@list[@elem{@${\beta}-reduction} @elem{@${\beta}-推导}]
 
 @list[@elem{car} @elem{首项，或不译}]
 
