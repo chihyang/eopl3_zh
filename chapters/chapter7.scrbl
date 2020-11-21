@@ -2114,6 +2114,7 @@ in letrec
 
 @exercise[#:level 3 #:tag "ex7.29"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex7.29"] "Algorithm W"]
 前一道练习指出的类型推导算法会多次分析@${e_1}，每次对应 @${e_2} 中出现的一个
 @${e_1}。实现 Milner 的 W 算法，只需分析 @${e_1} 一次。
 

@@ -29,18 +29,18 @@
 
 }
 
-而我们的目标是写出程序，实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，
-由我们要实现的语言写出。这叫做@term["source language"]{源语言} 或@term["defined
-language"]{被定语言}。前端接收程序文本（由源语言写成的程序），将其转化为抽象语法
-树，然后将语法树传给解释器。解释器是一程序，它查看一段数据结构，根据结构执行一些
-动作。当然，解释器自身也由某种语言写成。我们把那种语言叫做@term["implementation
-language"]{实现语言} 或@term["defining language"]{定义语言}。我们的大多数实现都
-遵照这种方式。
+@eopl-index[#:range-mark 'start "Abstract syntax tree"]而我们的目标是写出程序，
+实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，由我们要实现的语言写出。
+这叫做@term["source language"]{源语言} 或@term["defined language"]{被定语言}。前
+端接收程序文本（由源语言写成的程序），将其转化为抽象语法树，然后将语法树传给解释
+器。解释器是一程序，它查看一段数据结构，根据结构执行一些动作。当然，解释器自身也
+由某种语言写成。我们把那种语言叫做@term["implementation language"]{实现语言}
+或@term["defining language"]{定义语言}。我们的大多数实现都遵照这种方式。
 
 另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
 抽象语法树翻译为另一种语言（称为@term["target language"]{目标语言}）写成的
 程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
-可能翻译成更底层的语言执行。
+可能翻译成更底层的语言执行。@eopl-index[#:range-mark 'end "Abstract syntax tree"]
 
 通常，目标语言是一种机器语言，由硬件解释。但目标语言也可能是一种特定用途的语言，
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
@@ -946,11 +946,12 @@ in unpack x y = cons(u,cons(3,emptylist))
         \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
-在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @term["bound
-variable"]{绑定变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp
-@${exp_1} @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表
-达式 @${exp_2} 是@term["operand"]{操作数} 或@term["actual
-parameter"]{实际参数}。我们用@term["argument"]{实参} 指代实参的值。
+在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @term["bound variable"]{绑定
+变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
+@${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
+是@term["operand"]{操作数} 或@eopl-index{Actual parameter}@term["actual
+parameter"]{实际参数}。我们用@eopl-index{Argument}@term["argument"]{实参} 指代实
+参的值。
 
 这是这种语言的两个小例子。
 

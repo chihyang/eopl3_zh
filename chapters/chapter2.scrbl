@@ -26,6 +26,7 @@
 @term[#f]{接口}告诉我们某类型表示什么数据，能对数据做什么操作，以及可由这些操作得出
 的性质。@term[#f]{实现}给出数据的具体表示，以及处理数据表示的代码。
 
+@eopl-index{Abstract data types (ADTs)}
 这样抽象出的数据类型称为@term["abstract data type"]{抽象数据类型}。程序的其余部
 分——数据类型的@term["client"]{客户} ——只能通过接口中指定的操作处理新数据。这样一
 来，如果我们希望改变数据的表示，只需改变数据处理接口的实现。
@@ -130,10 +131,11 @@ y\rceil}}。}
 
 ]
 
-这些实现都没有强制数据抽象：无法防止客户程序查验表示用的是列表还是 Scheme 整数。
-与之相对，有些语言直接支持数据抽象：它们允许程序员创建新的接口，确保只能通过接口
-提供的过程处理新数据。如果类型的表示隐藏起来，不会因任何操作而暴露（包括打印），
-那就说该类型是@term["opaque"]{模糊} 的，否则称之为@term["transparent"]{透明} 的。
+@eopl-index{Abstract type}这些实现都没有强制数据抽象：无法防止客户程序查验表示用
+的是列表还是 Scheme 整数。与之相对，有些语言直接支持数据抽象：它们允许程序员创建
+新的接口，确保只能通过接口提供的过程处理新数据。如果类型的表示隐藏起来，不会因任
+何操作而暴露（包括打印），那就说该类型是@term["opaque"]{模糊} 的，否则称之为
+@term["transparent"]{透明} 的。
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
 程序的作者小心行事，只使用接口中定义的过程。
@@ -215,6 +217,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
             &\phantom{x} &其中，&\ g(var_1) = @env["cases"]{v & 若\ var_1 = var \\
                                                           f(var_1) & 否则}
  }
+ @eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
  }
 
 过程 @tt{empty-env} 不带参数，必须返回空环境的表示；@tt{apply-env} 用环境对变量
@@ -299,6 +302,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 (define empty-env
   (lambda () (list 'empty-env)))
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
 @#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
 (define extend-env
   (lambda (var val env)
@@ -334,6 +338,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.5"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex2.5" "ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
 只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
 境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
@@ -445,6 +450,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
         saved-val
         (apply-env saved-env search-var)))))
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
 @#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
 (define apply-env
   (lambda (env search-var)
@@ -460,8 +466,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 这种表示法中，数据由 @tt{apply-env} @term[#f]{执行的动作}表示，我们称之
 为@term["procedural representation"]{过程表示法}。
 
-数据类型只有一个观测器的情形并非想象中那般少见。比如，数据是一组函数，就能用函数
-调用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
+@eopl-index{Action under application}
+数据类型只有一个观测器的情形并非想象中那般少见。比如，当数据是一组函数，就能用调
+用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
 
 @itemlist[#:style 'ordered
 
@@ -475,6 +482,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 ]
 
+@eopl-index[@eopl-index-entry[@elem{@tt{apply-} procedures} "apply"]]
 一旦完成这些步骤，接口就包含所有的构造器过程和 @tt{apply-} 过程，客户代码则与表
 示无关：它不再依赖表示，我们将能随意换用另一套接口实现，正如 @secref{s2.2.2}所述。
 
@@ -883,9 +891,10 @@ lambda 演算表达式的语法：
 @${type\mbox{-}predicate\mbox{-}name} 绑定到一个谓词。这个谓词判断其参数值是否是
 相应的类型。
 
-只有一种变体的记录也可以定义为一种数据类型。为了区分只有一种变体的数据类型，我们
-遵循一种命名惯例：当只有一个变体时，我们以 a-@${type\mbox{-}name} 或
-an-@${type\mbox{-}name} 命名构造器；否则，以
+记录可以用只有一种变体的数据类型定义。为了区分只有一种变体的数据类型，我们遵循一
+种命名惯例：当只有一个变体时，我们以 @tt{a-@${type\mbox{-}name}}
+@eopl-index[@eopl-index-entry[@tt{a(n)-@${type\mbox{-}name}} "antypename"]] 或
+@tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 
 由 @tt{define-datatype} 生成的数据结构可以互递归。例如，@secref{s1.1}中的 s-list
@@ -1143,8 +1152,9 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
-语法通常指定归纳式数据类型的某一具体表示，后者使用前者生成的字符串或值。这种表示
-叫做@term["concrete syntax"]{具体语法}，或@term["external"]{外在} 表示。
+@eopl-index[#:range-mark 'start "Abstract syntax"]语法通常指定归纳式数据类型的某
+一具体表示，后者使用前者生成的字符串或值。这种表示叫做@term["concrete
+syntax"]{具体语法}，或@term["external"]{外在} 表示。
 
 例如，@definition-ref{d1.1.8} 指定集合 lambda 演算表达式，用的就是 lambda 演算表
 达式的具体语法。我们可以用其他具体语法表示 lambda 演算表达式。例如，可以用
@@ -1165,6 +1175,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 因为它们不传达信息。另一方面，我们要确保数据结构足以区分它所表示的 lambda 演算表
 达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现这些。
 
+@eopl-index[#:range-mark 'start "Abstract syntax tree"]
 将内在表示形象化为@term["abstract syntax tree"]{抽象语法树} 也很不错。
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
@@ -1250,6 +1261,9 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
           (unparse-lc-exp rand))))))
 ]
 }
+
+@eopl-index[#:range-mark 'end "Abstract syntax"]
+@eopl-index[#:range-mark 'end "Abstract syntax tree"]
 
 @exercise[#:level 1 #:tag "ex2.27"]{
 

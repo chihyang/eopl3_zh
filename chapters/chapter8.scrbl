@@ -25,9 +25,10 @@
 
  @item{我们需要一种方式强制抽象边界。在@secref{da}，我们介绍了抽象数据类型的思想。
  在类型的实现中，我们可以对值做任意操作，但在实现之外，类型的值只能通过类型接口
- 中的过程创建和操作。我们把这叫做@term["abstraction boundary"]{抽象边界}。如果程
- 序遵守这一界限，我们可以改变数据类型的实现。但是，如果某些代码打破了抽象，依赖
- 实现细节，我们就无法任意修改实现而不破坏其他代码。}
+ 中的过程创建和操作。我们把这叫做@eopl-index["Abstraction
+ boundary"]@term["abstraction boundary"]{抽象边界}。如果程序遵守这一界限，我们可
+ 以改变数据类型的实现。但是，如果某些代码打破了抽象，依赖实现细节，我们就无法任
+ 意修改实现而不破坏其他代码。}
 
  @item{最后，我们需要一种方式，将这些部分灵活组合，让同一部分可复用于不同地方。}
 
@@ -133,11 +134,11 @@ in -(-(from m1 take a,
 本例中，以 @tt{let a = 10} 开头的表达式是@term["program body"]{程序主体}。它的值
 即程序的值。
 
-每个模块都在模块主体和程序其余部分之间建立了抽象边界。模块主体中的表达式在抽象边
-界@emph{之内}，其他部分在抽象边界@emph{之外}。模块主体也可以提供不在接口中的名字
-绑定，但那些绑定在程序主体和其他模块中不可见，正如@figure-ref{fig-8.1} 所示。在
-我们的例子中，程序主体不在 @tt{from m1 take x} 的作用域内。如果我们写 @tt{-(from
-m1 take a, from m1 take x)}，程序就会类型异常。
+@eopl-index{Abstraction boundary}每个模块都在模块主体和程序其余部分之间建立了抽
+象边界。模块主体中的表达式在抽象边界@emph{之内}，其他部分在抽象边界@emph{之外}。
+模块主体也可以提供不在接口中的名字绑定，但那些绑定在程序主体和其他模块中不可见，
+正如@figure-ref{fig-8.1} 所示。在我们的例子中，程序主体不在 @tt{from m1 take x}
+的作用域内。如果我们写 @tt{-(from m1 take a, from m1 take x)}，程序就会类型异常。
 
 @example[#:tag "eg-8.2"]{
 程序
@@ -864,8 +865,8 @@ module m
 
 @section[#:style section-title-style-numbered #:tag "s8.2"]{声明类型的模块}
 
-至今为止，我们的接口只声明了普通变量及其类型。在下面这种模块语言 OPAQUE-TYPES 中，
-我们还允许接口声明类型。例如，在定义
+@eopl-index{Abstract type}至今为止，我们的接口只声明了普通变量及其类型。在下面这
+种模块语言 OPAQUE-TYPES 中，我们还允许接口声明类型。例如，在定义
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -1038,6 +1039,7 @@ take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我�
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
+@eopl-index[#:range-mark 'start "Abstract type"]
 模块还可以用 @tt{opaque-type} 声明输出@emph{模糊}类型。模糊类型有时又
 称作@term["abstract type"]{抽象类型}。
 
@@ -1072,9 +1074,9 @@ module m1
 定到这种模糊类型，而受限类型 @tt{from m1 take t} 在程序的剩余部分中绑定到同一模
 糊类型。程序的剩余部分都知道 @tt{from m1 take z} 绑定到一个值，其类型为 @tt{from
 m1 take t}；@tt{from m1 take s} 和 @tt{from m1 take is-z?} 绑定到过程，用来处理
-这种类型的值。这就是抽象边界。类型检查器保障表达式的类型为 @tt{from m1 take t}
-时，求值是安全的，所以表达式的值只能通过这些操作符生成，
-如@pageref{suitable-env}所述。
+这种类型的值。@eopl-index{Abstraction boundary}这就是抽象边界。类型检查器确保表
+达式的类型为 @tt{from m1 take t}时，求值是安全的，所以表达式的值只能通过这些操作
+符生成，如@pageref{suitable-env}所述。
 
 与之对应，定义 @tt{type t = int} 在模块主体内部将 @tt{t} 作为 @tt{int} 的名字，
 但是，由于程序的剩余部分从模块接口获得绑定，所以对此一无所知。
@@ -1292,6 +1294,8 @@ in let false = from mybool take false
 
 }
 }
+
+@eopl-index[#:range-mark 'end "Abstract type"]
 
 @exercise[#:level 1 #:tag "ex8.12"]{
 

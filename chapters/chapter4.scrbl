@@ -22,9 +22,9 @@
 果@emph{感染}整个计算（故意用双关语）。
 
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
-是局部的，但变量赋值有可能是全局的。那是在本不相关的几部分计算之
-间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能共享信息。
-如果把信息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
+是局部的，但@eopl-index["Assignment"]变量赋值有可能是全局的。那是在本不相关的几
+部分计算之间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能
+共享信息。如果把信息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
 
 我们把内存建模为从@term["location"]{位置} 到值集合的的有限映射，称值集合
 为@term["storable values"]{可存储值}。出于历史原因，我们称之为@term["store"]{存
@@ -60,7 +60,8 @@
 
 @itemlist[
 
- @item{@tt{newref}，分配新的位置，返回其引用。}
+ @item{@tt{newref}，分配新的位置，返回其引用。
+ @eopl-index["Allocation" (eopl-index-entry "in store" "store")]}
 
  @item{@tt{deref}，@term["deference"]{解引用} ：返回引用指向位置处的内容。}
 
@@ -294,6 +295,7 @@ end
 
 @subsection[#:style section-title-style-numbered #:tag "s4.2.2"]{定义显式引用操作}
 
+@eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
 在 EXPLICIT-REFS 中，我们必须定义三个操作：@tt{newref}、@tt{deref} 和
 @tt{setref}。它们的语法为：
 
@@ -351,6 +353,7 @@ end
 @exercise[#:level 1 #:tag "ex4.7"]{
 
 修改上面的规则，让 @tt{setref-exp} 返回位置的原内容。
+@eopl-index[#:range-mark 'end "Allocation" (eopl-index-entry "in store" "store")]
 
 }
 
@@ -678,7 +681,7 @@ newref: 分配位置 2
 这样，由于这些操作存在于语言内部，程序员不需要担心何时执行它们。
 
 在这种设计中，每个变量都表示一个引用。指代值是包含表达值的位置的引用。引用不再是
-表达值，只能作为变量绑定。
+表达值，只能作为变量绑定。@eopl-index["Allocation" (eopl-index-entry "in store" "store")]
 
 @nested{
 @envalign*{
@@ -995,6 +998,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.21"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.21"] "Assignment"]
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
@@ -1391,6 +1395,7 @@ newref: 分配位置 7
 
 @exercise[#:level 2 #:tag "ex4.29"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.29" "ex4.30"] "Array"]
 给语言添加数组。添加新操作符 @tt{newarray}、@tt{arrayref} 和 @tt{arrayset}，用它
 们来创建、解引用和更新数组。这需要：
 
@@ -1420,6 +1425,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 @exercise[#:level 2 #:tag "ex4.30"]{
 
+@eopl-index[#:range-mark 'end "Array"]
 给@exercise-ref{ex4.29} 的语言添加过程 @tt{arraylength}，返回数组的长度。你的过
 程运行时间应为常数。@tt{arrayref} 和 @tt{arrayset} 一定要查验索引，确保索引值在
 数组长度之内。
@@ -1602,10 +1608,10 @@ in let p = proc (x) proc(y)
 }
 }
 
-它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象
-叫做@term["variable aliasing"]{变量别名}。这里的 @tt{x} 和 @tt{y} 是同一个位置的
-别名（名字）。通常，我们在给一个变量赋值时并不想改变另一个变量的值，所以别名会导
-致程序难以理解。
+它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫做
+@eopl-index{Aliases}@term["variable aliasing"]{变量别名}。这里的 @tt{x} 和
+@tt{y} 是同一个位置的别名（名字）。通常，我们在给一个变量赋值时并不想改变另一个
+变量的值，所以别名会导致程序难以理解。
 
 }
 
@@ -1746,6 +1752,7 @@ in let swap = proc (x) proc (y)
 
 @exercise[#:level 1 #:tag "ex4.36"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.36"] "Array"]
 大多数语言支持数组，在按指调用中，数组引用通常以类似变量引用的方式处理。如果操作
 数是数组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调
 用对换过程的常见情形是交换数组元素，传递数组引用就能用上对换过程。给按指调用语言

@@ -72,7 +72,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
  @item{匹配 @${\mathit{R} \cup \mathit{S}} 的字符串匹配 @${\mathit{R}} 或
  @${\mathit{S}}。这有时写作 @${\mathit{R} \mid \mathit{S}}，
- 叫做@term["alternation"]{并联}。}
+ 叫做@term["alternation"]{并联}。@eopl-index{Alternation}}
 
  @item{匹配 @${\mathit{R}^{*}} 的字符串由 @${n} (@${n \geq 0}) 个匹配
  @${\mathit{R}} 的字符串串联而得。这叫做 @${\mathit{R}} 的@term["Kleene
@@ -142,11 +142,12 @@ specification"]{词法规范}。典型的词法规范可能包括：
 子。语言的语法结构通常由 BNF 定义，也叫做@term["context-free grammar"]{上下文无
 关语法}（@secref{s1.1.2}）。
 
-解析器输入为词牌序列，输出为一棵抽象语法树（@secref{s2.5}）。SLLGEN 生成的抽象语
-法树可用 @tt{define-datatype} 描述。对给定的语法，每个非终止符都对应一个数据类型。
-以每个非终止符为左边内容的生成式都对应一个变体。式子右边出现的每个非终止符、标识
-符和数字都对应变体中的一个字段。@secref{s2.5}有一个简单示例。当语法中有多个非终
-止符时，可以考虑@exercise-ref{ex4.22} 中的语法。
+@eopl-index["Abstract syntax tree"]解析器输入为词牌序列，输出为一棵抽象语法树
+（@secref{s2.5}）。SLLGEN 生成的抽象语法树可用 @tt{define-datatype} 描述。对给定
+的语法，每个非终止符都对应一个数据类型。以每个非终止符为左边内容的生成式都对应一
+个变体。式子右边出现的每个非终止符、标识符和数字都对应变体中的一个字段。
+@secref{s2.5}有一个简单示例。当语法中有多个非终止符时，可以考虑
+@exercise-ref{ex4.22} 中的语法。
 
 @nested[#:style small]{
 @envalign*{

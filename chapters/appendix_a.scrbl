@@ -36,9 +36,9 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @author-ref{Felleisen} et al. (2001) 也使用了这种技术。
 
 上下文无关语法是语言学和计算机科学的标准工具。大多数编译器书籍，比如
-@author-ref{Aho} et al. (2006)，都对语法和解析算法进行了大篇幅的讨论。将具体语法
-和抽象语法分开的思想通常归功于 @author-ref{McCarthy} (1962)。他强调用接口抽象语
-法树。
+@author-ref{Aho} et al. (2006)，都对语法和解析算法进行了大篇幅的讨论。
+@eopl-index{Abstract syntax}将具体语法和抽象语法分开的思想通常归功于
+@author-ref{McCarthy} (1962)。他强调用接口抽象语法树。
 
 我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 @author-ref{Burstall}
 (1969) 提出。即使过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳}
@@ -124,7 +124,8 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 
 @author-ref{Plotkin} (1975) 给出了相当清晰的 CPS 变换，发现了它的理论性质。
 @author-ref{Fischer} (1972) 提出了非常类似的变换。@author-ref{Wand} (1980b) 率先
-探讨了续文和累加器之间的联系，像@secref{s6.1}结尾的例子 @tt{fact} 那样。
+探讨了续文和@eopl-index{Accumulator}累加器之间的联系，像@secref{s6.1}结尾的例子
+@tt{fact} 那样。
 
 在程序中直接使用续文的思想源自于 @author-ref{Landin} (1965a) （另见
 @author-ref{Landin} 1965b），在 Lisp 和早期版本的 Scheme (@author-ref{Steele} &
@@ -149,7 +150,8 @@ al., 1986) 和 Standard ML of New Jersey 编译器 (@author-ref{Appel} &
 @author-ref{Wadler} (1997)，他们改进了 @author-ref{Sabry} &
 @author-ref{Felleisen} (1993)，而后者又是受本书初版第 8 章的 CPS 算法启发。
 @exercise-ref{ex6.30} 基于 @author-ref{Danvy} & @author-ref{Filinski} (1992) 提
-出的高阶组合式 CPS 算法。CPS 之外还有 A-normal form（@exercise-ref{ex6.34}），由
+出的高阶组合式 CPS 算法。CPS 之外还有@eopl-index[@eopl-index-entry["A-normal
+form" "Anormal form"]] A-normal form（@exercise-ref{ex6.34}），由
 @author-ref{Sabry} & @author-ref{Felleisen} (1992); @author-ref{Flanagan} et
 al. (1993) 提出。
 
@@ -168,13 +170,14 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 的系统基本相同。@author-ref{Pierce} (2002, 2004) 的两卷著作对类型做了百科全书式
 的讨论。
 
-广为论述的数据抽象思想是 1970 年代的一大创举。这里我们仅仅提及
-@author-ref{Parnas} (1972)，他强调了以接口作为信息隐藏边界的重要性。数据类型的实
-现是满足该类型定义的任意值和操作的集合。@author-ref{Goguen} et al. (1977) 证明，
-任意数据类型都能以树的集合实现，树中记录了值如何构建，且从一个树的集合到该数据类
-型另一实现的集合具有唯一映射。相对地，任意数据类型都能以过程表示法实现，且从该数
-据类型的任何其他实现到过程表示法都有唯一映射 (@author-ref{Giarratana} et al.,
-1976; @author-ref{Wand}, 1979; @author-ref{Kamin}, 1980)。
+@eopl-index{Abstract data types (ADTs)}广为论述的数据抽象思想是 1970 年代的一大
+创举。@eopl-index{Abstraction boundary}这里我们仅仅提及@author-ref{Parnas}
+(1972)，他强调了以接口作为信息隐藏边界的重要性。数据类型的实现是满足该类型定义的
+任意值和操作的集合。@author-ref{Goguen} et al. (1977) 证明，任意数据类型都能以树
+的集合实现，树中记录了值如何构建，且从一个树的集合到该数据类型另一实现的集合具有
+唯一映射。相对地，任意数据类型都能以过程表示法实现，且从该数据类型的任何其他实现
+到过程表示法都有唯一映射 (@author-ref{Giarratana} et al., 1976;
+@author-ref{Wand}, 1979; @author-ref{Kamin}, 1980)。
 
 用类型强制数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
 (@author-ref{Liskov} et al., 1977)。这发展为 Standard ML (@author-ref{Milner} et

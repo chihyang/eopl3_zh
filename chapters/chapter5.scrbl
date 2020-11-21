@@ -886,6 +886,7 @@
 
 @exercise[#:level 1 #:tag "ex5.15"]{
 
+@eopl-index[#:suffix @elem{ex. @countref{ex5.15}} "Activation record"]
 我们的续文数据类型只有一个常量 @tt{end-cont}，所有其他续文构造器都有一个续文参数。
 用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构
 （名为@term["frame"]{帧} 或@term["activation record"]{活跃记录}），余项为已保存
@@ -2701,6 +2702,7 @@ in let mut = mutex()
 
 @exercise[#:level 1 #:tag "ex5.49"]{
 
+@eopl-index[#:suffix @elem{"ex."@countref{ex5.49}} "Activation record"]
 为 THREADS 完成@exercise-ref{ex5.15}（用堆栈上的帧表示续文）。
 
 }

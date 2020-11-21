@@ -118,10 +118,11 @@
 
 这只是前一定义的简便表示。每个条目称为一条@term["rule of inference"]{推理规则}，
 或称@term["rule"]{规则}；水平线读作@exact-elem{“}若-则@exact-elem{”}。线上部分
-称作@term["hypothesis"]{假设}或者@term["antecedent"]{前件}；线下部分
-称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或更多假设
-时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
-没有假设的规则称作@term["axiom"]{公理}。写公理时通常不加水平线，如：
+称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
+线下部分称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或
+更多假设时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
+没有假设的规则称作@eopl-index["axiom"]@term["axiom"]{公理}。写公理时通常不加水平
+线，如：
 
 @$${0 \in S}
 
@@ -1126,6 +1127,7 @@ C} 相同。
 
 @section[#:style section-title-style-numbered #:tag "s1.3"]{辅助过程和上下文参数}
 
+@eopl-index[#:range-mark 'start "Auxiliary procedures"]
 窍门@term[#f]{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这
 一过程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0
 @${v_0}) (1 @${v_1}) (2 @${v_2}) ...)}。
@@ -1252,6 +1254,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 程做什么给出独立的定义，尽可以如此。
 
 @exercise[#:level 2 #:tag "ex1.14"]{
+
+ @eopl-index[#:range-mark 'end "Auxiliary procedures"]
  若 @m{0 \leq n < length(v)}，证明 @tt{partial-vector-sum} 的正确性。
 
 }
