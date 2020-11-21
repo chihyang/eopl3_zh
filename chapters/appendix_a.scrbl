@@ -159,9 +159,9 @@ al. (1993) 提出。
 (1996)，另见 @author-ref{Paulson} (1996); @author-ref{Smith} (2006)。
 
 人们多次发现了类型推导。标准参考书是 @author-ref{Hindley} (1969)，但
-@author-ref{Hindley} 提到，@eopl-index['(#f) '("Curry, Haskell")]Curry 在 1950
-年代已经知道了这些结论。@author-ref{Morris} (1968) 也提出了类型推导，但在
-@author-ref{Milner} 1978 年的论文发表之前，类型推导从未广泛应用。
+@author-ref{Hindley} 提到，@eopl-index{Curry, Haskell}Curry 在 1950 年代已经知道
+了这些结论。@author-ref{Morris} (1968) 也提出了类型推导，但在@author-ref{Milner}
+1978 年的论文发表之前，类型推导从未广泛应用。
 
 @author-ref{Wand} (1987) 率先阐明了如何将类型推导分为方程构建和求解。名为
 Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.28} 中

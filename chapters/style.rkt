@@ -23,6 +23,14 @@
          (remove-leading-newlines (cdr c))]
         [else c]))
 
+;;; given a content, return a normalized string with first char upcased
+(define (normalize-content c)
+  (let ((str (clean-up-index-string (content->string c))))
+    (if (non-empty-string? str)
+        (string-append (string (char-upcase (string-ref str 0)))
+                       (substring str 1))
+        str)))
+
 ;;; options
 (define racket-block-offset 6)
 (define origin-page-number 0)
@@ -245,11 +253,11 @@
     (displayln (format "@elem{~a} @elem{~a}"
                        (if (list? original)
                            (add-between (map (lambda (e)
-                                               (string-replace (content->string e) "\n" " "))
+                                               (clean-up-index-string (content->string e)))
                                              original)
                                         ", ")
-                           (string-replace (content->string original) "\n" " "))
-                       (string-replace (content->string translation) "\n" ""))))
+                           (clean-up-index-string (content->string original)))
+                       (clean-up-index-string (content->string translation)))))
   (cond [(equal? original #f)
          (elem (when tag (elemtag tag)) (emph translation))]
         [(list? original)
@@ -349,8 +357,8 @@
          (last (if (and key index) #f (cdr purged-name)))
          (key (if key key (construct-author-key first last)))
          (index (if index index (construct-author-index first last)))
-         (author-index (eopl-index (list (if (string=? key index) #f key))
-                                   (list (if index index content)))))
+         (author-index (eopl-index (eopl-index-entry (if index index content)
+                                                     (if (string=? key index) #f key)))))
     (traverse-element
      (lambda (get set)
        (set (string->symbol (if first
@@ -379,35 +387,53 @@
                           tags)
                      ",")))
 
+(define-struct eopl-index-entry (value key))
+
 (define (eopl-index #:prefix [prefix #f]
                     #:suffix [suffix #f]
                     #:range-mark [range-mark #f]
                     #:decorator [decorator #f]
-                    keys . content)
+                    . entries)
   (elem
    (exact-elem "\\index{")
-   (make-key-and-content-list keys content)
+   (make-entry-list (if (list? entries) entries (list entries)))
    (exact-elem "|"
                (cond [(equal? range-mark 'start) "("]
                      [(equal? range-mark 'end) ")"]
                      [else ""])
                (cond [(equal? decorator #f) "idxdecorator{"]
-                     [(equal? decorator 'see) "see"]
-                     [(equal? decorator 'seealso) "seealso"]
+                     [(equal? decorator 'see)
+                      (case (length entries)
+                        [(1) "see{"]
+                        [(2) "seeSublevel{"]
+                        [(3) "seeSubSublevel{"]
+                        [else "seeSubSublevel{"])]
+                     [(equal? decorator 'seealso)
+                      (case (length entries)
+                        [(1) "seealso{"]
+                        [(2) "seealsoSublevel{"]
+                        [(3) "seealsoSubSublevel{"]
+                        [else "seealsoSubSublevel{"])]
                      [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
    (unless (equal? prefix #f) prefix)
-   (exact-elem "}{")
+   (when (equal? decorator #f)
+     (exact-elem "}{"))
    (unless (equal? suffix #f) suffix)
    (exact-elem "}}")))
 
-;;; content is a string or a list of string
-(define (make-key-and-content-list keys contents)
-  (add-between (map (lambda (k c)
-                      (if (equal? k #f) c (list k "@" c)))
-                    keys contents)
+;;; content is a list of eopl index entry item
+(define (make-entry-list entries)
+  (add-between (map (lambda (e)
+                      (match e
+                        [(struct eopl-index-entry (v k))
+                         (if (equal? k #f) (clean-up-index-string v) (list k "@" v))]
+                        [(? string?)
+                         (list (clean-up-index-string e))]
+                        [else (list (clean-up-index-string (content->string e)))]))
+                    entries)
                "!"))
 
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
                      origin-page-number
-                     make-key-and-content-list))
+                     make-entry-list))

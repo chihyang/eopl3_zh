@@ -68,7 +68,8 @@ ItalicFont=Courier
 \usepackage[perpage]{footmisc}
 
 \usepackage{makeidx}
-\usepackage{hyperref}
+
+\usepackage[hyperindex=false]{hyperref}
 \hypersetup{
   pdfauthor={Daniel P. Friedman, Mitchell Wand},
   pdftitle={Essentials Of Programming Languages},
@@ -78,17 +79,48 @@ ItalicFont=Courier
   colorlinks=true,
   urlcolor=blue,
   linkcolor=blue,
-  citecolor=red,
-  hyperindex=false
+  citecolor=red
 }
+
 \makeindex
-% index decorator taking 3 arguments:
+% change separator between page numbers and delimiter between an entry and the
+% first page number, the expected behavior is:
+% 1. between an entry and a page number, a comma is inserted
+% 2. between an entry and a "see" or "seealso", a dot is inserted
+% 3. between a page number and a "see" or "seealso", a dot is inserted
+% 4. a "see" or "seealso" is always put at the end of an entry page list
+\begin{filecontents}{\jobname.mst}
+delim_0 " "
+delim_1 " "
+delim_2 " "
+delim_n " "
+\end{filecontents}
+% general decorator for index page number, taking 3 arguments:
 % parameter 1 is prefix
 % parameter 2 is suffix
 % parameter 3 is page number of index
+%
+% WARNING: to generate correct index, option "-r" must be specified for
+% makeindex
 \usepackage{ifthen}
 \usepackage{xifthen}
-\newcommand*\idxdecorator[3]{#1\hyperpage{#3}\ifthenelse{\isempty{#2}}{#2}{~(#2)}}
+\newcommand*\idxdecorator[3]{#1\unskip, \hyperpage{#3}\ifthenelse{\isempty{#2}}{#2}{~(#2)}}
+% redefine see and see also
+\renewcommand*{\seename}{\small{参见}}
+\renewcommand*{\alsoname}{\small{另见}}
+
+% see(also) command for level 0
+\renewcommand*{\see}[2]{\unskip. \emph {\seename } #1}
+\renewcommand*{\seealso}[2]{\unskip. \emph {\alsoname } #1}
+
+% see(also) command for level 1
+\newcommand*{\seeSublevel}[2]{ (\emph {\seename } #1)}
+\newcommand*{\seealsoSublevel}[2]{ ( \emph {\alsoname } #1)}
+
+% see(also) command for level 2
+\newcommand*{\seeSubSublevel}[2]{ (\emph {\seename } #1)}
+\newcommand*{\seealsoSubSublevel}[2]{ ( \emph {\alsoname } #1)}
+
 % redefine theindex environment to control the style of index chapter in upper
 % layer
 \makeatletter
@@ -99,6 +131,9 @@ ItalicFont=Courier
   \columnsep 35\p@
   \let\item\@idxitem}
 {}
+\renewcommand\@idxitem{\par\hangindent 4ex}
+\renewcommand\subitem{\@idxitem \hspace*{10\p@}}
+\renewcommand\subsubitem{\@idxitem \hspace*{20\p@}}
 \makeatother
 
 % make phantomsection robust
