@@ -104,7 +104,7 @@ delim_n " "
 % makeindex
 \usepackage{ifthen}
 \usepackage{xifthen}
-\newcommand*\idxdecorator[3]{#1\unskip, \hyperpage{#3}\ifthenelse{\isempty{#2}}{#2}{~(#2)}}
+\newcommand*\idxdecorator[3]{#1\unskip, \hyperpage{#3}\ifthenelse{\isempty{#2}}{#2}{ (#2)}}
 % redefine see and see also
 \renewcommand*{\seename}{\small{参见}}
 \renewcommand*{\alsoname}{\small{另见}}
