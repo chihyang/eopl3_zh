@@ -1842,7 +1842,7 @@ in |@${T}
 
 @exercise[#:level 2 #:tag "ex6.34"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form" "Anormal form"]]
+@eopl-index[#:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
 我们把程序转换为 CPS 时，不仅将程序中的控制上下文变为显式的，而且还确定了操作的
 执行顺序，以及所有中间结果的名字。后者叫做@term["sequentialization"]{序列化}。如
 果我们不关心能否获得迭代性控制行为，我们序列化程序时可将其转换为

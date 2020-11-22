@@ -151,7 +151,7 @@ al., 1986) 和 Standard ML of New Jersey 编译器 (@author-ref{Appel} &
 @author-ref{Felleisen} (1993)，而后者又是受本书初版第 8 章的 CPS 算法启发。
 @exercise-ref{ex6.30} 基于 @author-ref{Danvy} & @author-ref{Filinski} (1992) 提
 出的高阶组合式 CPS 算法。CPS 之外还有@eopl-index[@eopl-index-entry["A-normal
-form" "Anormal form"]] A-normal form（@exercise-ref{ex6.34}），由
+form (ANF)" "Anormalform"]] A-normal form（@exercise-ref{ex6.34}），由
 @author-ref{Sabry} & @author-ref{Felleisen} (1992); @author-ref{Flanagan} et
 al. (1993) 提出。
 
