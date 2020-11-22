@@ -853,6 +853,7 @@
 
 @exercise[#:level 2 #:tag "ex5.11"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.11"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 给传递续文的解释器添加@exercise-ref{ex4.4} 中的 @tt{begin} 表达式。确保调用
 @tt{value-of} 和 @tt{value-of-rands} 时不需要生成控制上下文。
 
@@ -1647,6 +1648,7 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.30"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
@@ -2491,6 +2493,7 @@ in let mut = mutex()
 避免@figure-ref{fig-5.17} 中的程序空转。恰恰相反，它应该能够进入休眠状态，并在生
 产者向共享缓存插入值时唤醒。
 
+@eopl-index[#:range-mark 'start "Binary semaphore"]
 有许多方式设计这类同步组件。一种简单的方式是使用@term['("mutex exclusion"
 "mutex")]{互斥锁} 或@term["binary semaphore"]{二元信号量}。
 
@@ -2668,9 +2671,11 @@ in let mut = mutex()
             (th)))))))
 ]
 
+@eopl-index["Binary semaphore"]
 @eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}}
 
 }
+@eopl-index[#:range-mark 'end "Binary semaphore"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 

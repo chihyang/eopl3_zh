@@ -46,6 +46,7 @@
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
 同的硬件平台上执行。出于历史原因，常称这样的目标语言为@term["byte
 code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
+@eopl-index["Byte code"]
 
 编译器常常分为两部分：@term["analyzer"]{分析器}，尝试推断关于程序的有效信
 息；@term["translator"]{翻译器}，执行翻译，可能用到来自分析器的信息。这些
@@ -449,6 +450,8 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.7"]{定义 @tt{let}}
 
+@eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{let} "let")]
+@eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{let} "let")]
 接下来我们处理用 @tt{let} 表达式创建新变量绑定的问题。我们给这门解释性语言添加语
 法，以关键字 @tt{let} 起始，然后是一个声明，关键字 @tt{in}，及其主体。例如，
 
@@ -575,6 +578,8 @@ in let y = 2
 
 @eopl-caption["fig-3.5"]{@tt{let} 一例}
 }
+@eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{let} "let")]
+@eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{let} "let")]
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现 LET 规范}
 
@@ -847,6 +852,8 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 2 #:tag "ex3.14"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.14"]
+            (eopl-index-entry @elem{Boolean expressions (@${\mathit{Bool\mbox{-}exp}})} "Booleanexpressions")]
 前一题的另一做法是给语言添加新的非终止符 @${\mathit{Bool\mbox{-}exp}}，作为布尔
 值表达式。修改条件表达式的生成式：
 
@@ -938,6 +945,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
 我们还需要语法来创建和调用过程。对应的生成式为：
 
 @envalign*{
@@ -946,6 +954,8 @@ in unpack x y = cons(u,cons(3,emptylist))
         \mathit{Expression} &::= @tt{letrec(@m{\mathit{Expression}} @m{\mathit{Expression}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rand)}}}
 
+@eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index["Bound variable"]
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @term["bound variable"]{绑定
 变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
 @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
@@ -1375,6 +1385,8 @@ in let p = proc (z) a
 
 @section[#:style section-title-style-numbered #:tag "s3.4"]{LETREC：支持递归过程的语言}
 
+@eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{letrec} "letrec")]
 现在我们来定义支持递归的新语言 LETREC。因为我们的语言只有单参数过程，所以我们降
 低难度，只让 @tt{letrec} 表达式声明一个单参数过程，例如：
 
@@ -1555,6 +1567,8 @@ in (double 6)
 @eopl-caption["fig-3.12"]{向环境添加 @tt{extend-env-rec}}
 }
 
+@eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{letrec} "letrec")]
 @exercise[#:level 1 #:tag "ex3.30"]{
 
 @tt{apply-env} 倒数第二行调用 @tt{proc-val} 的目的是什么？
@@ -1655,6 +1669,7 @@ in let fact = proc (n)
 
 @section[#:style section-title-style-numbered #:tag "s3.5"]{定界和变量绑定}
 
+@eopl-index[#:range-mark 'start "Binding" (eopl-index-entry "of variables" "variables")]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1790,6 +1805,8 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 变量与值的对应关系叫做@term["binding"]{绑定}。我们可以通过规范来理解如何创
 建绑定。
 
+@eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 由 @tt{proc} 声明的变量在过程调用时绑定。
 
 @nested[#:style 'code-inset]{
@@ -1799,6 +1816,8 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 }|
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{let} "let")]
+@eopl-index["Body" (eopl-index-entry @tt{let} "let")]
 @tt{let} 声明的变量绑定到声明右边的值。
 
 @nested[#:style 'code-inset]{
@@ -1808,6 +1827,8 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 }|
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index["Body" (eopl-index-entry @tt{letrec} "letrec")]
 @tt{letrec} 声明的变量也要绑定到声明右边的值。
 
 @nested[#:style 'code-inset]{
@@ -1821,6 +1842,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 }|
 }
 
+@eopl-index["Binding" "extent of"]
 绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
 Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
@@ -1833,9 +1855,11 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 这叫做@emph{动态}期限，而它是一条@emph{静态}性质。因为这种期限是一条静态性质，所
 以我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现
 类似。
+@eopl-index[#:range-mark 'end "Binding" (eopl-index-entry "of variables" "variables")]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
+@eopl-index[#:range-mark 'start (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
 能会跨越多条等深线。跨越的等深线数目叫做变量引用的@term["lexical
 depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{“}从0开始的
@@ -1980,6 +2004,7 @@ in proc (x) -(x,1)
 }
 
 每个变量又一次出现在词深预测的环境位置。
+@eopl-index[#:range-mark 'end (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 
 @section[#:style section-title-style-numbered #:tag "s3.7"]{实现词法地址}
 

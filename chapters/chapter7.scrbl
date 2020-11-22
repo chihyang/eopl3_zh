@@ -162,7 +162,8 @@ in (f 1)
 
   @item{当且仅当表达值是一个 @tt{num-val}，其类型为 @tt{int}。}
 
-  @item{当且仅当表达值是一个 @tt{bool-val}，其类型为 @tt{bool}。}
+  @item{当且仅当表达值是一个 @tt{bool-val}，其类型为 @tt{bool}。
+  @eopl-index[(eopl-index-entry @elem{@tt{bool} type} "booltype")]}
 
   @item{当且仅当表达值是一个 @tt{proc-val}，且给定类型为 @${t_1} 的参数时，发生
   如下之一：
@@ -913,6 +914,7 @@ in (odd 13)
 我们的目标是找出变量的值，使所有方程成立。我们可以把这样的解表示为一组方程，方程
 的左边都是变量。我们称这组方程为一组@term["substitution"]{代换式}，称代换式方程
 左边的变量@term["bound"]{绑定} 于代换式。
+@eopl-index["Binding" (eopl-index-entry "of type variables" "typevariables")]
 
 我们可以按部就班地求解这些方程。这一过程叫做@term["unification"]{合一}。
 
@@ -1507,6 +1509,7 @@ in letrec
 代换式组是一个方程列表，方程两边分别为类型变量和类型。该列表也可视为类型变量到类
 型的函数。当且仅当类型变量出现于代换式组中某个方程的左侧时，我们说该变量@emph{绑
 定}于代换式。
+@eopl-index["Binding" (eopl-index-entry "of type variables" "typevariables")]
 
 我们用序对 @tt{(类型变量 . 类型)} 的列表表示代换式组。代换式组的必要观测器是
 @tt{apply-subst-to-type}。它遍历类型 @${t}，把每个类型变量替换为代换式组

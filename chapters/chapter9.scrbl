@@ -60,8 +60,10 @@
 三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
 @tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，
 若干@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），
-以及@term["method body"]{方法主体}。方法名对应于 @tt{c1} 实例能够响应的@emph{消
-息}种类。有时，我们称之为@exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
+以及@term["method body"]{方法主体}。
+@eopl-index["Body" (eopl-index-entry "of method" "method")]
+方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
+@exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
@@ -399,6 +401,7 @@ in send o3 m3()
 过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过程、
 多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
 列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
+@eopl-index[(eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的值。
 
 我们新增对象和列表表达值，于是有
@@ -486,6 +489,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 求表达式的值通常是因为它是操作某个对象的方法的一部分。在当前环境中，这个对象绑定
 到伪变量 @tt{%self}。我们称之为@term["pseudo-variable"]{伪变量} 是因为它虽然像普
+@eopl-index["Binding" (eopl-index-entry "of pseudo-variables" "pseudo-variables")]
 通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，当前
 方法持有类的超类名字绑定到伪变量 @tt{%super}。
 
@@ -1124,6 +1128,8 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 
 @exercise[#:level 2 #:tag "ex9.19"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.19" "ex9.20"]
+            (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 为 CLASSES 实现词法寻址。首先，为本节语言写出类似@secref{s3.7}的词法地址计算器。
 然后修改环境的实现，去掉其中的名字。接着修改 @tt{value-of} 和 @tt{apply-env}，不
 再取符号，而是像@secref{s3.7.2}那样取一词法地址。
@@ -1134,6 +1140,8 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 
 方法调用也能够用类似@exercise-ref{ex9.19} 那样的方式优化吗？讨论为什么能，或为什
 么不能。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.19" "ex9.20"]
+            (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 
 }
 
@@ -1206,6 +1214,7 @@ method similarpoints (pt)
 
 测试这一扩展。说明它为何不适用于任意情况。修复它，让所有测试都返回正确的值。
 
+@eopl-index[#:suffix @exer-ref-range["ex9.25"] "Binary method problem"]
 过程依赖多个对象造成的困难称为@term["binary method problem"]{二元方法问题}。它表
 明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫做
 @emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈发

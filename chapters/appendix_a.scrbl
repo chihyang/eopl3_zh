@@ -29,6 +29,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @emph{How to Design Programs} (@author-ref{Felleisen} et al., 2001) 深入探讨了如
 何递归编程。
 
+@eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
 @exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}（参见
@@ -61,6 +62,7 @@ Lambda 演算由邱奇发明 (@author-ref{Church}, 1941)，用于研究数理逻
 @figure-ref{fig-3.13} 那样的等深线用来解释词法作用域，首先由
 @author-ref{Johnston} (1971) 提出。无名解释器和翻译器基于德布鲁金索引
 (@author-ref{de Bruijn}, 1972)。
+@eopl-index[(eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 
 Scheme 由 @author-ref{Sussman} & @author-ref{Steele} (1975) 发明。其开发过程记录
 在 @author-ref{Steele} & @author-ref{Sussman} (1978); @author-ref{Clinger} et

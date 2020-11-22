@@ -2151,6 +2151,7 @@ newrefk(33, proc (loc1)
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.36"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 给 CPS-IN 添加 @tt{begin} 表达式（@exercise-ref{ex4.4}）。CPS-OUT 应该不需要修改。
 
 }

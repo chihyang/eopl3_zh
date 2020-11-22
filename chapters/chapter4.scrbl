@@ -21,6 +21,7 @@
 产生值和产生效果有何区别？效果是@term["global"]{全局性} 的，整个计算都能看到。效
 果@emph{感染}整个计算（故意用双关语）。
 
+@eopl-index["Binding" (eopl-index-entry "of variables" "variables")]
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
 是局部的，但@eopl-index["Assignment"]变量赋值有可能是全局的。那是在本不相关的几
 部分计算之间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能
@@ -104,8 +105,9 @@ in letrec even(dummy)
 }
 
 这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式
-（@exercise-ref{ex4.4}）。@tt{begin} 表达式按顺序求每个子表达式的值，并返回最后
-一个表达式的值。
+（@exercise-ref{ex4.4}）@eopl-index[(eopl-index-entry @elem{@tt{begin}
+expression} "beginexpression")]。@tt{begin} 表达式按顺序求每个子表达式的值，并返
+回最后一个表达式的值。
 
 }
 
@@ -276,6 +278,7 @@ end
 
 @exercise[#:level 2 #:tag "ex4.4"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.4"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 写出 @tt{begin} 表达式的规范。
 
 @nested{
@@ -489,6 +492,7 @@ end
 
 @exercise[#:level 1 #:tag "ex4.10"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.10"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 实现@exercise-ref{ex4.4} 中定义的 @tt{begin} 表达式。
 
 }
@@ -764,6 +768,8 @@ in let a = (g 11)
 }
 
 我们还要重写过程调用和 @tt{let} 规则，体现出对存储器的修改。对过程调用，规则变成：
+@eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 
 @nested{
 @nested[#:style 'code-inset]{
@@ -777,6 +783,8 @@ in let a = (g 11)
 
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{let} "let")]
+@eopl-index["Body" (eopl-index-entry @tt{let} "let")]
 @tt{(let-exp @${var} @${exp_1} @${body})} 的规则类似。我们首先求右边 @${exp_1}
 的值，然后将该值放入一个新位置，将变量 @${var} 绑定到这个位置，在得到的环境中求
 @tt{let} 主体的值，作为整个表达式的值。
@@ -817,6 +825,8 @@ in let a = (g 11)
 
 在初始环境中，我们直接分配新位置。
 
+@eopl-index["Binding" (eopl-index-entry @tt{let} "let")]
+@eopl-index["Body" (eopl-index-entry @tt{let} "let")]
 对 @tt{let}，我们修改 @tt{value-of} 中相应的行，分配包含值的新位置，并把变量绑定
 到指向该位置的引用。
 
@@ -829,6 +839,8 @@ in let a = (g 11)
 }
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 对过程调用，我们同样修改 @tt{apply-procedure}，调用 @tt{newref}。
 
 @nested[#:style small]{
@@ -843,6 +855,8 @@ in let a = (g 11)
 ]
 }
 
+@eopl-index["Binding" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index["Body" (eopl-index-entry @tt{letrec} "letrec")]
 最后，要处理 @tt{letrec}，我们替换 @tt{apply-env} 中的 @tt{extend-env-rec} 从句，
 令其返回一个引用，指向包含适当闭包的位置。由于我们使用多声明的
 @tt{letrec}（@exercise-ref{ex3.32}），@tt{extend-env-rec} 取一个过程名列表，一个
@@ -999,6 +1013,7 @@ in begin
 @exercise[#:level 2 #:tag "ex4.21"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex4.21"] "Assignment"]
+@eopl-index[#:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
@@ -1902,6 +1917,7 @@ in let f = proc (z) 11
 把过程调用替换为过程的主体，把过程主体内对每个形参的引用替换为对应的操作数，就能
 建模过程调用。这种求值策略是 lambda 演算的基础，在 lambda 演算中，它叫做
 @term[@elem{@${\beta}-reduction}]{@${\beta}-推导}。
+@eopl-index[(eopl-index-entry @elem{@${\beta}-reduction} "betareduction")]
 
 不幸的是，按名调用和按需调用使求值顺序难以确定，而这对理解有效果的程序至关重要。
 但没有效果时，这不成问题。所以懒求值盛行于函数式编程语言（没有计算效果的那些），

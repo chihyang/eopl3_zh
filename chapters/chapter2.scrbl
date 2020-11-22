@@ -115,11 +115,12 @@ y\rceil}}。}
 
  }
 
- @item{@term["Bignum representation"]{大数表示法}：在大数表示法中，数值以 @${N}
- 进制表示，@${N} 是某个大整数。该方法以 @${0} 到 @${N-1} 之间的数字（有时不称数
- 位，而称@term["bigits"]{大位}）组成的列表表示数值，这就很容易表示远超机器字长的
- 整数。这里，为了便于使用，我们把最低位放在列表最前端。这种表示法可用归纳法定义
- 为：
+ @item{@term["Bignum representation"]{大数表示法}：
+ @eopl-index["Bignumrepresentation of natural numbers"]
+ 在大数表示法中，数值以 @${N} 进制表示，@${N} 是某个大整数。该方法以 @${0} 到
+ @${N-1} 之间的数字（有时不称数位，而称@term["bigits"]{大位}）组成的列表表示数值，
+ 这就很容易表示远超机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前
+ 端。这种表示法可用归纳法定义为：
 
  @m{\lceil n \rceil = @env["cases"]{@tt{()} & n = 0 \\ @tt{(@m{r} . @m{\lceil q
                                     \rceil})} & n = qN + r, 0 \leqslant r < N}}
@@ -207,6 +208,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @m{\{(var_1,\allowbreak val_1),\allowbreak ...,\allowbreak (var_n, val_n)\}}的所
 有集合。其中，@${var_i} 是某一变量，@${val_i} 是任意 Scheme 值。有时称环境
 @${env} 中变量 @${var} 的值 @${val} 为其在 @${env} 中的@term["binding"]{绑定}。
+@eopl-index["Binding" (eopl-index-entry "in environment" "environment")]
+
 
 这一数据类型的接口有三个过程，定义如下：
 
@@ -674,6 +677,7 @@ lambda 演算表达式的语法：
 
 @exercise[#:level 1 #:tag "ex2.18"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
 我们常用列表表示值的序列。在这种表示法中，很容易从序列中的一个元素移动到下一个，
 但是不借助上下文参数，很难从一个元素移动到上一个。实现非空双向整数序列，语法为：
 
@@ -749,6 +753,7 @@ lambda 演算表达式的语法：
 
 @exercise[#:level 1 #:tag "ex2.19"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex2.19" "ex2.20"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
 空二叉树和用整数标记内部节点的二叉树可以用语法表示为：
 
 @mp{\mathit{BinTree} ::= @tt{()} \mid @tt{(@m{\mathit{Int}} @m{\mathit{BinTree}}
@@ -1027,6 +1032,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.24"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.24" "ex2.25"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
 这是用 @tt{define-datatype} 表示的二叉树：
 
 @racketblock[
@@ -1132,6 +1138,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 最后一次调用 @tt{max-interior} 也可能返回 @tt{foo}，因为节点 @tt{foo} 和
 @tt{baz} 的叶子之和都为 5。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.24" "ex2.25"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
 
 }
 

@@ -130,6 +130,7 @@
 @exact-elem{“}@${n \in S}@exact-elem{”}。这一解释自然使 @${S} 成为闭合于该规则
 的最小集合。
 
+@eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
 这些定义意思相同。我们把版本一称作@term["top-down"]{自顶向下} 的定义，版本二
 称作@term["bottom-up"]{自底向上} 的定义，版本三称作@term[#f]{推理规则}定义。
 
@@ -300,8 +301,10 @@
         @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
         expression@exact-elem{”}。
 
-        另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺尔范式} 或
-        @term[#f]{BNF}，是在词周围加尖括号，如 @${\langle}expression@${\rangle}。}
+        @eopl-index[(eopl-index-entry "Backus-Naur Form (BNF)"
+        "BackusNaurForm")]另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺
+        尔范式} 或@term[#f]{BNF}，是在词周围加尖括号，如
+        @${\langle}expression@${\rangle}。}
 
   @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是
         @exact-elem{“}@tt{.}@exact-elem{”}、
@@ -431,6 +434,7 @@
 
  @item{使用三元素列表表示内部节点，则以数值为叶子，以符号标示内部节点的二叉树可
  用语法表示为：
+ @eopl-index[(eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
 
  @definition[#:title "二叉树" #:tag "d1.1.7"]{
  @nested[#:style normalfont]{
@@ -465,6 +469,8 @@
  其中，identifier 是除 @elem[#:style normalfont]{@tt{lambda}} 之外的任何符号。
  }
 
+ @eopl-index["Binding" "lambda"]
+ @eopl-index["Bound variable"]
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
  达式的@term["bound variable"]{绑定变量}，因为它绑定（或称捕获）主体内出现的任何
  同名变量。出现在主体内的同名变量都指代这一个。
@@ -489,9 +495,10 @@
 这些语法叫做@term["context-free"]{上下文无关} 语法，因为一条规则定义的句法类别可
 以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索树}。
 其节点或者为空，或者包含一个整数和两棵子树
+@eopl-index[(eopl-index-entry @elem{Binary search tree (@${\mathit{Binary\mbox{-}search\mbox{-}tree}})} "Binarysearchtree")]
 
 @$${\mathit{Binary\mbox{-}search\mbox{-}tree} ::= @tt{()} \mid
-    @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-}tree}})}}
+    @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-} \\-tree}})}}
 
 这如实反映了每个节点的结构，但是忽略了二叉搜索树的一个要点：所有左子树的键值都小
 于（或等于）当前节点，所有右子树的键值都大于当前节点。
@@ -512,6 +519,7 @@
 程序。这里给出一个此类证明的例子，写程序留作下节的主题。
 
 @theorem[#:tag "t1.1.1"]{
+ @eopl-index[(eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
  令 t 为二叉树，形如@definition-ref{d1.1.7}，则 t 包含奇数个节点。
 }
 
@@ -869,6 +877,7 @@ C} 相同。
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.4"]{@tt{occurs-free?}}
 
+@eopl-index[#:range-mark 'start "Binding" "lambda"]
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
 表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
@@ -961,6 +970,7 @@ C} 相同。
 这一过程略显晦涩。比如，很难弄明白 @tt{(car (cadr exp))} 指代 @tt{lambda} 表达式
 中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在
 @secref{s2.5}，我们展示如何显著改善这种情况。
+@eopl-index[#:range-mark 'end "Binding" "lambda"]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.5"]{@tt{subst}}
 
@@ -1700,6 +1710,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 1 #:tag "ex1.31"]{
+ @eopl-index[#:suffix @exer-ref-range["ex1.31" "ex1.33"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
  写出如下过程，对二叉树（@definition-ref{d1.1.7}）做运算：@tt{leaf} 和 @tt{interior-node}
  生成二叉树，@tt{leaf?} 检查二叉树是否是一片叶子，@tt{lson}、@tt{rson}和
  @tt{contents-of} 取出一个节点的各部分。@tt{contents-of} 应对叶子和内部节点都适
@@ -1771,7 +1782,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
                  (path n (bst-lson bst))))
           (else
            '())))))))
+
 @exercise[#:level 3 #:tag "ex1.34"]{
+
+ @eopl-index[#:suffix @exer-ref-range["ex1.34"] (eopl-index-entry @elem{Binary search tree (@${\mathit{Binary\mbox{-}search\mbox{-}tree}})} "Binarysearchtree")]
  写出过程 @tt{path}，它取一个整数 @tt{n} 和一棵含有整数 @tt{n} 的二叉搜索树
  （@pageref{bst}）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的列表，表示如何
  找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
@@ -1786,6 +1800,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 3 #:tag "ex1.35"]{
+ @eopl-index[#:suffix @exer-ref-range["ex1.35"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
 

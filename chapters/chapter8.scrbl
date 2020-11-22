@@ -109,9 +109,11 @@ in -(-(from m1 take a,
 }
 }
 
+@eopl-index["Body" (eopl-index-entry "of module" "module")]
 这个程序从名为 @tt{m1} 的模块定义开始。像任何模块一样，它有@emph{接口}和@tt{主体}。
 主体@emph{实现}接口。接口@emph{声明}变量 @tt{a}、@tt{b} 和 @tt{c}。主体@emph{定
-义}了 @tt{a}、@tt{x}、@tt{b} 和 @tt{c}。
+义}了 @tt{a}、@tt{x}、@tt{b} 和 @tt{c} 的绑定。
+@eopl-index["Binding" (eopl-index-entry "in module" "module")]
 
 当我们求程序的值时，也会求出 @tt{m1} 主体中表达式的值。变量 @tt{from m1 take a}、
 @tt{from m1 take b} 和 @tt{from m1 take c} 绑定到适当的值，它们的作用域为模块定
@@ -131,6 +133,7 @@ in -(-(from m1 take a,
 在主体中，定义具有 @tt{let*} 那样的作用域，所以 @tt{x}、@tt{b} 和 @tt{c} 的定义
 在 @tt{a} 的作用域内。一些作用域如@figure-ref{fig-8.2} 所示。
 
+@eopl-index["Body" (eopl-index-entry "of module program" "moduleprogram")]
 本例中，以 @tt{let a = 10} 开头的表达式是@term["program body"]{程序主体}。它的值
 即程序的值。
 
@@ -412,6 +415,7 @@ in -(z, -(from m1 take a, from m2 take a))
 过程 @tt{add-module-defns-to-env} 遍历模块定义，求每个模块定义主体的值，并将得到
 的模块加入当前环境中，如@figure-ref{fig-8.3} 所示。
 
+@eopl-index["Body" (eopl-index-entry "of module" "module")]
 最后，要求模块主体的值，我们在适当的环境内求每个表达式的值，得到 @tt{let*} 式定
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
@@ -2285,6 +2289,7 @@ module mybool-tables
         iface))))
 ]}
 
+@eopl-index["Body" (eopl-index-entry "of module" "module")]
 我们需要新的模块主体来创建模块过程，引用模块过程的绑定变量，以及调用模块过程。
 
 @nested[#:style small]{
