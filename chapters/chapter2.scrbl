@@ -898,7 +898,7 @@ lambda 演算表达式的语法：
 
 记录可以用只有一种变体的数据类型定义。为了区分只有一种变体的数据类型，我们遵循一
 种命名惯例：当只有一个变体时，我们以 @tt{a-@${type\mbox{-}name}}
-@eopl-index[@eopl-index-entry[@tt{a(n)-@${type\mbox{-}name}} "antypename"]] 或
+@eopl-index[@eopl-index-entry[@tt{a(n)-@${\mathit{type\mbox{-}name}}} "antypename"]] 或
 @tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 
