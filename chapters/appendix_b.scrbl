@@ -68,7 +68,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
  @item{匹配 @${\neg c} 的字符串只含一个 @${c} 之外的字符。}
 
  @item{匹配 @${\mathit{RS}} 的字符串由匹配 @${\mathit{R}} 和匹配 @${\mathit{S}}
- 的字符串相接而得。这叫做@term["concatenation"]{串联}。}
+ 的字符串相接而得。这叫做@term["concatenation"]{串联}。@eopl-index["Concatenation"]}
 
  @item{匹配 @${\mathit{R} \cup \mathit{S}} 的字符串匹配 @${\mathit{R}} 或
  @${\mathit{S}}。这有时写作 @${\mathit{R} \mid \mathit{S}}，
@@ -141,6 +141,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 解析过程将词牌序列组织成有层次的语法结构，如表达式，语句和块。这就像用从句组织句
 子。语言的语法结构通常由 BNF 定义，也叫做@term["context-free grammar"]{上下文无
 关语法}（@secref{s1.1.2}）。
+@eopl-index["Context-free grammar"]
 
 @eopl-index["Abstract syntax tree"]解析器输入为词牌序列，输出为一棵抽象语法树
 （@secref{s2.5}）。SLLGEN 生成的抽象语法树可用 @tt{define-datatype} 描述。对给定

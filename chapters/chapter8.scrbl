@@ -897,6 +897,7 @@ succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 ta
 
 }
 
+@eopl-index["Concrete types"]
 我们将介绍两种类型声明：@term["transparent"]{透明} 类型和@term["opaque"]{模糊}
 类型。好的模块系统中，二者缺一不可。
 
@@ -988,6 +989,7 @@ Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-transparent-types"]{透明类型}
 
+@eopl-index[#:range-mark 'start "Concrete types"]
 我们首先讨论透明类型声明。有时这些又称作@term["concrete"]{具体} 类型
 或@term["type abbreviation"]{类型缩写}。
 
@@ -1040,6 +1042,8 @@ take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我�
 
 当然，我们可以给类型起任意名字，也可以声明多个类型。类型声明可以出现在接口中任意
 位置，只要每个声明都先于使用。
+
+@eopl-index[#:range-mark 'end "Concrete types"]
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 

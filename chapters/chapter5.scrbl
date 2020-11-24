@@ -113,6 +113,7 @@
 在@secref{cps}，我们展示如何用转换解释器的技术转换所有程序。我们说以这种方式转换
 而得的程序具有@term["continuation-passing style"]{续文传递风格}。@secref{cps}还
 展示了续文的其他一些重要应用。
+@eopl-index["Continuation-passing style"]
 
 @section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
@@ -380,6 +381,7 @@
 @tt{let} 表达式主体的值成为 @tt{let} 表达式的值，所以求 @tt{let} 表达式主体时的
 续文与求整个 @tt{let} 表达式的相同。这是@bold{尾调用不扩大续文}原则的又一例子。
 
+@eopl-index["Conditionals"]
 下面我们处理 @tt{if} 表达式。在 @tt{if} 表达式中，我们首先求条件的值，但条件的结
 果不是整个表达式的值。我们要新生成一个续文，查看条件表达式的结果是否为真，然后求
 真值表达式或假值表达式的值。所以在 @tt{value-of/k} 中我们写：
@@ -897,11 +899,13 @@
 
 @exercise[#:level 2 #:tag "ex5.16"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
 扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给 @tt{result-of} 传递
 一个续文参数，确保 @tt{result-of} 不在扩大控制上下文的位置调用。因为语句不返回值，
 需要区分普通续文和语句续文；后者通常叫@term["command continuation"]{命令续文}。
 续文接口应包含过程 @tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和
 无参数过程两种方式实现命令续文。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
 
 }
 
@@ -2076,6 +2080,8 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 2 #:tag "ex5.42"]{
 
+@eopl-index[#:range-mark 'start  #:suffix @exer-ref-range["ex5.42" "ex5.44"]
+            (eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
 前一道练习只在抛出异常时捕获续文。添加形式 @tt{letcc @${\mathit{Identifier}} in
 @${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
 
@@ -2121,7 +2127,8 @@ in ...
 给语言添加 @tt{call-with-current-continuation}。然后写一个翻译器，用只有
 @tt{call-with-current-continuation} 的语言翻译具有 @tt{letcc} 和 @tt{throw} 的语
 言。
-
+@eopl-index[#:range-mark 'end  #:suffix @exer-ref-range["ex5.42" "ex5.44"]
+            (eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}

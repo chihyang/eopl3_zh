@@ -37,6 +37,7 @@
 由某种语言写成。我们把那种语言叫做@term["implementation language"]{实现语言}
 或@term["defining language"]{定义语言}。我们的大多数实现都遵照这种方式。
 
+@eopl-index["Compiler"]
 另一种常见的组织方式如@figure-ref{fig-3.1-b} 所示。其中，编译器替代了解释器，将
 抽象语法树翻译为另一种语言（称为@term["target language"]{目标语言}）写成的
 程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
@@ -302,6 +303,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.6"]{定义条件}
 
+@eopl-index["Conditionals"]
 接下来是这门语言的布尔值接口。这门语言有一个布尔值构造器 @tt{zero?}，一个布尔值
 观测器 @tt{if} 表达式。
 
@@ -418,6 +420,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 }|
 }
 
+@eopl-index["Conditionals"]
 @figure-ref{fig-3.4} 展示了用这些规则进行简单运算的过程。
 
 @nested[#:style eopl-figure]{
@@ -834,6 +837,7 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 1 #:tag "ex3.12"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.12"] (eopl-index-entry @elem{@tt{cond} expression} "condexpression")]
 向该语言添加 @tt{cond} 表达式。语法为：
 
 @$${\mathit{Expression} ::= @tt{cond @${\{}@${\mathit{Expression}} @tt{ ==> } @${\mathit{Expression}}@${\}^{*}} end}}
@@ -1195,6 +1199,7 @@ in let f = proc (z) -(z,x)
 ]
 }
 
+@eopl-index["Closures"]
 这些数据结构常称为@term["closure"]{闭包}，因为它们自给自足，包含过程调用所需要的
 一切。有时，我们说过程@term['("closed over" "closed in")]{闭合于} 创建时的环境。
 
@@ -1611,6 +1616,7 @@ in (odd 13)
 
 @exercise[#:level 1 #:tag "ex3.35"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
 目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包，
 但每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为 1 的向量，再将其放入
 一个显式循环结构中，像这样：
@@ -1642,6 +1648,7 @@ in (odd 13)
 @exercise[#:level 2 #:tag "ex3.36"]{
 
 扩展这种实现，处理@exercise-ref{ex3.32} 中的语言。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
 
 }
 
@@ -2379,6 +2386,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 @exercise[#:level 1 #:tag "ex3.38"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.38"] (eopl-index-entry @elem{@tt{cond} expression} "condexpression")]
 扩展词法地址翻译器和解释器，处理@exercise-ref{ex3.12} 中的 @tt{cond}。
 
 }

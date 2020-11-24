@@ -382,6 +382,7 @@ proc (f)
 
 @section[#:style section-title-style-numbered #:tag "s7.3"]{CHECKED：带有类型检查的语言}
 
+@eopl-index[#:range-mark 'start "CHECKED"]
 除了要求程序员写出所有绑定变量的类型之外，我们的新语言和 LETREC 相同。对由
 @tt{letrec} 绑定的变量，我们还要求程序员指定过程结果的类型。
 
@@ -563,7 +564,8 @@ in |@${e_{letrec\mbox{-}body}}
 \smallskip}
 ]
 
-@eopl-caption["fig-7.1"]{CHECKED 的 @tt{type-of}}
+@eopl-caption["fig-7.1"]{CHECKED 的 @tt{type-of}
+                         @eopl-index["CHECKED"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -593,7 +595,8 @@ in |@${e_{letrec\mbox{-}body}}
           rator-type rator)))))
 ]
 
-@eopl-caption["fig-7.2"]{CHECKED 的 @tt{type-of}，续}
+@eopl-caption["fig-7.2"]{CHECKED 的 @tt{type-of}，续
+              @eopl-index["CHECKED"]}
 
 }
 
@@ -619,9 +622,11 @@ in |@${e_{letrec\mbox{-}body}}
       (type-of letrec-body tenv-for-letrec-body)))))))
 ]
 
-@eopl-caption["fig-7.3"]{CHECKED 的 @tt{type-of}，续}
+@eopl-caption["fig-7.3"]{CHECKED 的 @tt{type-of}，续
+              @eopl-index["CHECKED"]}
 }
 
+@eopl-index[#:range-mark 'end "CHECKED"]
 @exercise[#:level 2 #:tag "ex7.5"]{
 
 扩展检查器，处理多声明 @tt{let}、多参数过程、以及多声明 @tt{letrec}。你需要添加
@@ -638,6 +643,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 1 #:tag "ex7.7"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex7.7"] "Conditionals"]
 修改检查 @tt{if-exp} 的代码，若条件不是布尔值，则不检查其他表达式。给出一个表达
 式，使新旧两个版本的检查器表现出不同的行为。
 

@@ -28,6 +28,7 @@
 
 @eopl-index{Abstract data types (ADTs)}
 这样抽象出的数据类型称为@term["abstract data type"]{抽象数据类型}。程序的其余部
+@eopl-index["Client of ADT"]
 分——数据类型的@term["client"]{客户} ——只能通过接口中指定的操作处理新数据。这样一
 来，如果我们希望改变数据的表示，只需改变数据处理接口的实现。
 
@@ -35,6 +36,7 @@
 读取文件或对文件做其他操作。同样地，大多数时候，我们不关心整数在机器中究竟怎样表
 示，只关心能否可靠地执行算术操作。
 
+@eopl-index["Client of ADT"]
 当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码
 与@term["representation-independent"]{表示无关}，因为这些代码不依赖数据类型值的
 表示。
@@ -79,6 +81,7 @@
 都满足 @tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
 y\rceil}}。}
 
+@eopl-index["Constructor"]
 大多数接口都包含：若干@term["constructor"]{构造器}，用来产生数据类型的元素；
 若干@term["observer"]{观测器}，用来从数据类型的值中提取信息。这里有三个构造器，
 @tt{zero}、@tt{successor} 和 @tt{predecessor}；一个观测器，@tt{is-zero?}。
@@ -137,6 +140,7 @@ y\rceil}}。}
 新的接口，确保只能通过接口提供的过程处理新数据。如果类型的表示隐藏起来，不会因任
 何操作而暴露（包括打印），那就说该类型是@term["opaque"]{模糊} 的，否则称之为
 @term["transparent"]{透明} 的。
+@eopl-index["Concrete types"]
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
 程序的作者小心行事，只使用接口中定义的过程。
@@ -585,6 +589,7 @@ lambda 演算表达式的语法：
 
 只要使用上述构造器，怎样表示 lambda 演算表达式都可以。
 
+@eopl-index["Constructor"]
 我们可以写出设计递推数据类型接口的一般步骤：
 
 @nested[#:style tip]{
@@ -821,6 +826,7 @@ lambda 演算表达式的语法：
 们的参数，确保参数合法。所以，如果生成 lc-exp 时只用这些构造器，可以确保表达式及
 其所有子表达式合法。如此一来，处理 lambda 表达式时就能跳过许多检查。
 
+@eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 我们用形式 @tt{cases} 代替谓词和提取器，判断数据类型的实例属于哪种变体，并提取出
 它的组件。为解释这一形式，我们用数据类型 @tt{lc-exp} 重写
 @tt{occurs-free?}（@pageref{occurs-free?}）：
@@ -952,6 +958,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 }
 
+@eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 一般的 @tt{cases} 语法为：
 
 @nested[#:style 'noindent]{
@@ -1121,6 +1128,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 2 #:tag "ex2.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.25"] (eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 用 @tt{cases} 写出 @tt{max-interior}，它取至少有一个内部节点的整数二叉树（像前一
 道练习那样），返回叶子之和最大的内部节点对应的标签。
 
@@ -1139,6 +1147,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 最后一次调用 @tt{max-interior} 也可能返回 @tt{foo}，因为节点 @tt{foo} 和
 @tt{baz} 的叶子之和都为 5。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.24" "ex2.25"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.25"] (eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 
 }
 
@@ -1159,9 +1168,10 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
-@eopl-index[#:range-mark 'start "Abstract syntax"]语法通常指定归纳式数据类型的某
-一具体表示，后者使用前者生成的字符串或值。这种表示叫做@term["concrete
-syntax"]{具体语法}，或@term["external"]{外在} 表示。
+@eopl-index[#:range-mark 'start "Abstract syntax"]
+@eopl-index[#:range-mark 'start "Concrete syntax"]
+语法通常指定归纳式数据类型的某一具体表示，后者使用前者生成的字符串或值。这种表示
+叫做@term["concrete syntax"]{具体语法}，或@term["external"]{外在} 表示。
 
 例如，@definition-ref{d1.1.8} 指定集合 lambda 演算表达式，用的就是 lambda 演算表
 达式的具体语法。我们可以用其他具体语法表示 lambda 演算表达式。例如，可以用
@@ -1222,6 +1232,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需以某种机器能
 够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
 
+@eopl-index[#:range-mark 'end "Concrete syntax"]
 如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，
 和@pageref{define-datatype} @tt{define-datatype} 的语法类似，
 @elemref["lambda-2"]{本节开头}的 lambda 演算表达式指定了一个列表集合。这样，Scheme

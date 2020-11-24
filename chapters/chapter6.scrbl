@@ -16,6 +16,7 @@
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
 叫做@emph{迭代性控制行为}。
 
+@eopl-index["Continuation-passing style"]
 我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格
 叫做@term["continuation-passing style"]{续文传递风格} 或 @term[#f]{CPS}，且不限
 于解释器。
@@ -25,6 +26,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s6.1"]{写出续文传递风格的程序}
 
+@eopl-index[#:range-mark 'start "Continuation-passing style" "examples of"]
 除了写解释器，CPS 还有别的作用。我们考虑“老熟人”阶乘程序：
 
 @nested[#:style small]{
@@ -420,7 +422,8 @@ val1 val2)} 的值传给当前续文。
 从这些例子中浮现出一种模式。
 
 @nested[#:style tip]{
- @centered{@elemtag["cps-recipe"]{@bold{CPS 秘方}}}
+ @centered{@elemtag["cps-recipe"]{@bold{CPS 秘方}}
+           @eopl-index["Continuation-passing style" "transformation to"]}
 
  @nested[#:style tip-content]{
  要将程序转换为续文传递风格：
@@ -439,6 +442,7 @@ val1 val2)} 的值传给当前续文。
 ]}}
 
 这些规则虽不正式，但足以解释这种模式。
+@eopl-index[#:range-mark 'end "Continuation-passing style" "examples of"]
 
 @exercise[#:level 1 #:tag "ex6.1"]{
 
@@ -1091,6 +1095,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @section[#:style section-title-style-numbered #:tag "s6.3"]{转换为续文传递风格}
 
+@eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]
 本节，我们开发算法，将任意程序从 CPS-IN 转换为 CPS-OUT。
 
 就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}。也像传递续文的解释器一样，
@@ -1565,7 +1570,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
             (car simples)))))))
 ]
 
-@eopl-caption["fig-6.10"]{@tt{cps-of-exp}，第1部分}
+@eopl-caption["fig-6.10"]{@tt{cps-of-exp}，第1部分
+                          @eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -1633,8 +1639,11 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
               (simple-exp->exp (car new-args)))))))))
 ]
 
-@eopl-caption["fig-6.12"]{@tt{cps-of-exp}，第3部分}
+@eopl-caption["fig-6.12"]{@tt{cps-of-exp}，第3部分
+                          @eopl-index[#:range-mark 'end "Continuation-passing style" "transformation to"]}
 }
+
+@eopl-index[#:range-mark 'end "Continuation-passing style" "transformation to"]
 
 @exercise[#:level 1 #:tag "ex6.20"]{
 
@@ -1686,6 +1695,7 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.23"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.23"] "Conditionals"]
 观察可知，@tt{if} 的规则导致续文 @${K} 复制两次，所以在嵌套的 @tt{if} 中，转换后
 的代码尺寸呈指数增长。运行一个例子，验证这一观察。然后，修改转换，把 @${K} 绑定
 到新的变量，从而避免这种增长。

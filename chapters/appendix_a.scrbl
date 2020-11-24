@@ -32,24 +32,30 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
-@exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}（参见
-@author-ref{Gordon}, 1995; @author-ref{Jacobs} & @author-ref{Rutten}, 1997），
-@author-ref{Felleisen} et al. (2001) 也使用了这种技术。
+@exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}
+@eopl-index["Coinduction"]
+（参见@author-ref{Gordon}, 1995; @author-ref{Jacobs} & @author-ref{Rutten},
+1997），@author-ref{Felleisen} et al. (2001) 也使用了这种技术。
 
+@eopl-index{Context-free grammar}
 上下文无关语法是语言学和计算机科学的标准工具。大多数编译器书籍，比如
 @author-ref{Aho} et al. (2006)，都对语法和解析算法进行了大篇幅的讨论。
-@eopl-index{Abstract syntax}将具体语法和抽象语法分开的思想通常归功于
-@author-ref{McCarthy} (1962)。他强调用接口抽象语法树。
+@eopl-index{Abstract syntax}
+@eopl-index{Concrete syntax}
+将具体语法和抽象语法分开的思想通常归功于@author-ref{McCarthy} (1962)。他强调用接
+口抽象语法树。
 
 我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 @author-ref{Burstall}
 (1969) 提出。即使过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳}
 (@author-ref{Morris} & @author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效
 方法。过程的可能输入受不变式约束时，子目标归纳也有效。
+@eopl-index["Context-sensitive constraint"]
 
 @term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
 更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法
 (@author-ref{Knuth}, 1968)中的@emph{继承属性} 启发。
 
+@eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 我们的构造器 @tt{define-datatype} 和 @tt{cases} 是受 ML 的 @tt{datatype} 和模式
 匹配工具启发，详见 @author-ref{Milner} et al. (1989) 及其修订版
 @author-ref{Milner} et al. (1997)。
@@ -106,9 +112,12 @@ Scheme 的存储器来解释存储器的概念，但它们只用了一个全局�
 术语@exact-elem{“}左值@exact-elem{”}和@exact-elem{“}右值@exact-elem{”}，以及
 内存的环境-存储器模型源自 @author-ref{Strachey} (1967)。
 
+@eopl-index[(eopl-index-entry "Call-by-reference" "Callbyreference")]
 Fortran (@author-ref{Backus} et al., 1957) 是第一种使用按指调用的语言，Algol 60
 (@author-ref{Naur} et al., 1963) 是第一种使用按名调用的语言。
+@eopl-index[(eopl-index-entry "Call-by-name" "Callbyname")]
 @author-ref{Friedman} & @author-ref{Wise} (1976) 较早介绍了全面使用懒求值的威力。
+@eopl-index[(eopl-index-entry "Call-by-need" "Callbyneed")]
 Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实际语言。为了建
 模按名调用，@author-ref{Ingerman} (1961) 发明了@term["thunk"]{值箱}。我们用它们
 和效果建模按需调用。这与@term["memoization"]{助记法} (@author-ref{Michie}, 1968) 类似。
@@ -117,6 +126,7 @@ Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实�
 流行。它提供了编程语言效果的通用模型。在函数式语言 Haskell (@author-ref{Peyton
 Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 
+@eopl-index["Continuation-passing style" "transformation to"]
 续文由多人独立发现，@author-ref{Reynolds} (1993) 介绍了这一迷人历史。
 @author-ref{Strachey} & @author-ref{Wadsworth} (1974) 或许是其中影响最大的。
 @author-ref{Reynolds} (1972) 将一个自循环解释器做了 CPS 变换，并展示了这样做如何
@@ -133,6 +143,7 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 @author-ref{Landin} 1965b），在 Lisp 和早期版本的 Scheme (@author-ref{Steele} &
 @author-ref{Sussman}, 1978) 中广泛使用。我们的 @tt{letcc} 基于 Scheme 的
 @tt{call-with-current-continuation}，始见于 @author-ref{Clinger} et al. (1985b)。
+@eopl-index[(eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
 
 @author-ref{Wand} (1980a) 展示了如何用续文建模轻量级进程或线程。续文用途广泛，远
 超本书讨论范围，如@term["coroutine"]{协程} (@author-ref{Haynes} et al., 1986)。
@@ -156,6 +167,7 @@ al., 1986) 和 Standard ML of New Jersey 编译器 (@author-ref{Appel} &
 form (ANF)" "Anormalform"]] A-normal form（@exercise-ref{ex6.34}），由
 @author-ref{Sabry} & @author-ref{Felleisen} (1992); @author-ref{Flanagan} et
 al. (1993) 提出。
+@eopl-index["Continuation-passing style" "transformation to"]
 
 当前大多数关于有类型编程语言的工作都能追溯到 @author-ref{Milner} (1978)，他在 ML
 中引入了类型，作为保证计算机生成证明可靠性的工具。@author-ref{Ullman} (1998) 对

@@ -119,6 +119,8 @@
 这只是前一定义的简便表示。每个条目称为一条@term["rule of inference"]{推理规则}，
 或称@term["rule"]{规则}；水平线读作@exact-elem{“}若-则@exact-elem{”}。线上部分
 称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
+@eopl-index["Conclusion"]
+@eopl-index["consequent"]
 线下部分称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或
 更多假设时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
 没有假设的规则称作@eopl-index{Axiom}@term["axiom"]{公理}。写公理时通常不加水平
@@ -492,6 +494,7 @@
 
 ]
 
+@eopl-index["Context-free grammar"]
 这些语法叫做@term["context-free"]{上下文无关} 语法，因为一条规则定义的句法类别可
 以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索树}。
 其节点或者为空，或者包含一个整数和两棵子树
@@ -507,11 +510,13 @@
 导并不都是正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成
 式用在哪种上下文。这种限制叫做@term["context-sensitive constraints"]{上下文敏感
 限制}，或称@term[#:tag "invariant" "invariants"]{不变式}。
+@eopl-index[#:range-mark 'start "Context-sensitive constraint"]
 
 定义编程语言的语法也会产生上下文敏感限制。例如，在许多编程语言中变量必须在使用之
 前声明。对变量使用的这一限制就对其上下文敏感。虽然可以用形式化方法定义上下文敏感
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
 后再用其他方法添加上下文敏感限制。@secref{types}展示了这种技巧的一个例子。
+@eopl-index[#:range-mark 'end "Context-sensitive constraint"]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
 
@@ -1187,6 +1192,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @para[#:style tip-content]{定义辅助过程时，总是指明它对所有参数值做什么，而不只
  是初始值。}}
 
+@eopl-index[#:range-mark 'start "Context argument"]
 其次，@tt{number-elements-from} 的两个参数各有作用。第一个参数是我们要处理的列表，
 随每一次递归调用而减小。而第二个参数，则是对我们当前任务@term["context"]{上下文}
 的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
@@ -1194,6 +1200,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 表中的位置。随递归调用，它不减反增，因为我们每次经过原列表的一个元素。有时我们称
 之为@term["context argument"]{上下文参数}，或者@term["inherited attribute"]{继承
 属性}。
+@eopl-index[#:range-mark 'end "Context argument"]
 
 另一个例子是向量求和。
 

@@ -709,6 +709,7 @@ newref: 分配位置 2
 这里的 @${\mathit{Identifier}} 不是表达式的一部分，所以无法解引用。在这种设计中，
 我们说变量是@term["mutable"]{可变的}，意为可以修改。
 
+@eopl-index[(eopl-index-entry "Call-by-value" "Callbyvalue")]
 这种设计叫做@term["call-by-value"]{按值调用}，或@term["implicit reference"]{隐式
 引用}。大多数编程语言，包括 Scheme，都采纳这一设计的某种变体。
 
@@ -986,6 +987,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.19"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.19"] "Closures"]
 修改声明多过程的 @tt{letrec} 实现，让每个闭包只生成一次，并且只分配一个位置。本
 题类似@exercise-ref{ex3.35}。
 
@@ -1457,7 +1459,8 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
  @item{自然传参，指代值与实参的表达值相同（@pageref{pass-by-value}）。}
 
  @item{按值调用，指代值是一个引用，指向一个位置，该位置包含实参的表达值
- （@secref{s4.3}）。这是最常用的传参方式。}
+ （@secref{s4.3}）。这是最常用的传参方式。
+ @eopl-index[(eopl-index-entry "Call-by-value" "Callbyvalue")]}
 
 ]
 
@@ -1465,6 +1468,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 @subsection[#:style section-title-style-numbered #:tag "s4.5.1"]{按指调用}
 
+@eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-reference" "Callbyreference")]
 考虑下面的表达式：
 
 @nested{
@@ -1710,6 +1714,8 @@ newref: 分配位置 5
 @eopl-caption["fig-4.15"]{CALL-BY-REFERENCE 的简单求值，续}
 }
 
+@eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-reference" "Callbyreference")]
+
 @exercise[#:level 1 #:tag "ex4.31"]{
 
 写出 CALL-BY-REFERENCE 的推理规则规范。
@@ -1784,11 +1790,13 @@ in let swap = proc (x) proc (y)
 
 @exercise[#:level 2 #:tag "ex4.37"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.37"] (eopl-index-entry "Call-by-value-result" "Callbyvalueresult")]
 @term["call-by-value-result"]{按值和结果调用} 是按指调用的一种变体。在按值和结果
 调用中，实参必需是变量。传递参数时，形参绑定到新的引用，初值为实参的值，就像按值
 调用一样。然后过程主体照常执行。但过程主体返回时，新引用处的值复制到实参指代的引
 用中。因为这样可以改进内存分配，所以可能比按指调用更高效。实现按值和结果调用，写
 出一个过程，使之在按指调用与按值和结果调用中产生不同的答案。
+@eopl-index[#:range-mark 'end  #:suffix @exer-ref-range["ex4.37"] (eopl-index-entry "Call-by-value-result" "Callbyvalueresult")]
 
 }
 
@@ -1866,6 +1874,7 @@ in let f = proc (z) 11
 求 @tt{var-exp} 的值时，我们首先找到变量绑定的位置。如果该位置是一个表达值，那么
 返回这个值，作为 @tt{var-exp} 的值。如果它包含一个值箱，那么我们求取并返回值箱的
 值。这叫做@term["call by name"]{按名调用}。
+@eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-name" "Callbyname")]
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -1893,6 +1902,7 @@ in let f = proc (z) 11
 
 或者，一旦发现值箱的值，我们可以把表达值放到同一个位置，这样就不需要再次求值箱的
 值。这种方式叫做@term["call by need"]{按需调用}。
+@eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-need" "Callbyneed")]
 
 @nested{
 @nested[#:style small]{
@@ -1922,6 +1932,8 @@ in let f = proc (z) 11
 不幸的是，按名调用和按需调用使求值顺序难以确定，而这对理解有效果的程序至关重要。
 但没有效果时，这不成问题。所以懒求值盛行于函数式编程语言（没有计算效果的那些），
 在别处却杳无踪影。
+@eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-name" "Callbyname")]
+@eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-need" "Callbyneed")]
 
 @exercise[#:level 1 #:tag "ex4.38"]{
 
