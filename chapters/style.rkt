@@ -432,7 +432,7 @@
                         [(? string?)
                          (let ((cstr (clean-up-index-string e)))
                            (if (string-contains? cstr " ")
-                               (list (string-replace cstr " " "") "@" cstr)
+                               (list (regexp-replace* #px"[[:space:]-]" cstr "") "@" cstr)
                                (list cstr)))]
                         [else (list e)]))
                     entries)
