@@ -11,6 +11,7 @@
 
 @title[#:style part-title-style-numbered #:tag "da"]{数据抽象}
 
+@eopl-index["Data abstraction"]
 @section[#:style section-title-style-numbered #:tag "s2.1"]{用接口定义数据}
 
 每当我们想以某种方式表示一些量时，我们就新定义了一种数据类型：它的取值是其表示，
@@ -257,6 +258,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @subsection[#:style section-title-style-numbered #:tag "s2.2.2"]{数据结构表示法}
 
+@eopl-index[#:range-mark 'start "Data structure representation" @eopl-index-entry["of environments" "environments"]]
 观察可知，每个环境都能从空环境开始，@${n} 次调用 @tt{extend-env} 得到，其中 @${n
 \geqslant 0}。例如，
 
@@ -342,10 +344,12 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @eopl-caption["fig-2.1"]{环境的数据结构表示}
 }
+@eopl-index[#:range-mark 'end "Data structure representation" @eopl-index-entry["of environments" "environments"]]
 
 @exercise[#:level 1 #:tag "ex2.5"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex2.5" "ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
 只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
 境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
@@ -425,6 +429,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 每根左肋是变量列表，右肋是对应的值列表。
 
 用这种表示实现 @tt{extend-env*} 和其他环境接口。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
 
 }
 

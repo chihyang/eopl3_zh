@@ -73,6 +73,7 @@
 上下文。
 
 @eopl-index["Continuations" "data structure representation of"]
+@eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 我们可以用数据结构实现这些续文：
 
 @nested[#:style small]{
@@ -491,6 +492,7 @@ val1 val2)} 的值传给当前续文。
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -515,7 +517,9 @@ val1 val2)} 的值传给当前续文。
 
  @item{@tt{subst}（@elemref["subst"]{1.2.5 节}）
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"]
+             "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
 
 ]
 
@@ -1845,11 +1849,15 @@ in |@${T}
 @exercise[#:level 3 #:tag "ex6.31"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.31"] "Continuations" "data structure representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.31"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.31"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 写一个翻译器，它取 @tt{cps-of-program} 的输出，生成一个等价程序，其中所有的续文
 都用@secref{cpi}中的数据结构表示。用列表表示那些用 @tt{define-datatype} 生成的数
 据结构。由于我们的语言不支持符号，你可以在首项位置使用整数标签，以此区分数据类型
 的变体。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.31"] "Continuations" "data structure representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.31"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.31"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 
 }
 

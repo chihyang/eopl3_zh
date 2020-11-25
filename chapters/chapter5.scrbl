@@ -416,6 +416,7 @@
 如@figure-ref{fig-5.3} 所示。
 @eopl-index["Continuations" "data structure representation of"]
 @eopl-index["Continuations" "procedural representation of"]
+@eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -501,7 +502,8 @@
 ]
 
 @eopl-caption["fig-5.3"]{用数据结构表示续文
-                         @eopl-index["Continuations" "data structure representation of"]}
+                         @eopl-index["Continuations" "data structure representation of"]
+                         @eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
 }
 
 下面这个简单算例展示了各部分如何配合。像 @secref{s3.3}那样，我们用
@@ -811,6 +813,7 @@
 @exercise[#:level 1 #:tag "ex5.2"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex5.2"] "Continuations" "data structure representation of"]
+@eopl-index[#:suffix @exer-ref-range["ex5.2"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 用数据结构表示法实现续文数据类型。
 
 }
@@ -1106,6 +1109,7 @@
 
 @exercise[#:level 1 #:tag "ex5.18"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.18" "ex5.20"] "Data structure representation" @eopl-index-entry["of trampolining" "trampolining"]]
 @figure-ref{fig-5.7} 中的跳床系统使用过程表示 @${\mathit{Bounce}}。改用数据结构
 表示法。
 
@@ -1125,6 +1129,7 @@
 在@exercise-ref{ex5.18} 中，@tt{trampoline} 返回 @${\mathit{FinalAnswer}} 之前的
 最后一颗弹球形如 @tt{(apply-cont (end-cont) @${val})}，其中，@${val} 是
 @${\mathit{ExpVal}}。利用这一点优化@exercise-ref{ex5.19} 中弹球的表示。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.18" "ex5.20"] "Data structure representation" @eopl-index-entry["of trampolining" "trampolining"]]
 
 }
 
@@ -1277,7 +1282,8 @@ odd:  if (x=0) then return(0)
 ]
 
 @eopl-caption["fig-5.9"]{用数据结构实现的续文（第1部分）
-                         @eopl-index["Continuations" "data structure representation of"]}
+                         @eopl-index["Continuations" "data structure representation of"]
+                         @eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
 
 }
 
@@ -1364,7 +1370,8 @@ odd:  if (x=0) then return(0)
 ]
 
 @eopl-caption["fig-5.10"]{用数据结构实现的续文（第2部分）
-                          @eopl-index["Continuations" "data structure representation of"]}
+                          @eopl-index["Continuations" "data structure representation of"]
+                          @eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
 
 }
 
@@ -2729,6 +2736,7 @@ in let mut = mutex()
 
 @exercise[#:level 1 #:tag "ex5.48"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.48"] "Data structure representation" @eopl-index-entry["of threads" "threads"]]
 我们用过程表示线程。将其改为数据结构表示法。
 
 }

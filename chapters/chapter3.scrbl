@@ -1139,6 +1139,7 @@ in let f = proc (z) -(z,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.2"]{表示过程}
 
+@eopl-index[#:range-mark 'start "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 根据@secref{s2.2.3}中介绍的方法，我们可以按照过程表示法，用过程在
 @tt{apply-procedure} 中的动作表示它们。欲如此，我们将 @tt{procedure} 的值定义为
 实现语言的过程，它取一实参，返回下面规范要求的值：
@@ -1235,6 +1236,7 @@ in let f = proc (z) -(z,x)
 }
 
 记住：一定要给语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
+@eopl-index[#:range-mark 'end "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 
 }
 
@@ -1337,6 +1339,7 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 2 #:tag "ex3.26"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.26"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 我们用数据结构表示过程时，在闭包中记录了整个环境。但是显然，我们只需要自由变量的
 绑定。修改过程的表示，只保留自由变量。
 
@@ -1351,6 +1354,7 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 2 #:tag "ex3.28"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
@@ -2421,6 +2425,7 @@ htt]{nameless-letrec-var-exp}。
 
 @exercise[#:level 3 #:tag "ex3.42"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26} 中的瘦身过程表示法。要如此，
 你不能在 @tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静
 态环境中，它指明了各个变量在瘦身表示中的位置。
