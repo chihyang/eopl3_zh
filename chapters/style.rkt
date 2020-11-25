@@ -236,7 +236,9 @@
 ;;; special format for index
 (define index-prefix
   (make-paragraph (make-style 'pretitle '())
-                  (make-element (make-style "twocolumn" '(exact-chars)) '())))
+                  (elem
+                   (exact-elem "\\setlength{\\columnsep}{35pt}")
+                   (exact-elem "\\twocolumn"))))
 
 (define print-index
   (make-element (make-style "printindex" '(exact-chars)) '()))

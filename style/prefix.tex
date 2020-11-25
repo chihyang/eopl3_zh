@@ -130,9 +130,8 @@ delim_n " "
   % enlarge space between word to prevent overfull, see
   % https://tex.stackexchange.com/a/63056
   \setlength{\spaceskip}{.33333em plus .33333em minus .11111em}
-  \columnseprule \z@
-  \columnsep 35\p@
-  \let\item\@idxitem}
+  \let\item\@idxitem
+  \small}
 {}
 \renewcommand\@idxitem{\par\hangindent 4ex}
 \renewcommand\subitem{\@idxitem \hspace*{10\p@}}
