@@ -72,6 +72,7 @@
 在这一版内，@tt{fact/k} 和 @tt{apply-cont} 中的所有调用都在末尾，因此不产生控制
 上下文。
 
+@eopl-index["Continuations" "data structure representation of"]
 我们可以用数据结构实现这些续文：
 
 @nested[#:style small]{
@@ -98,6 +99,7 @@
 
 但是，本章我们主要关心，用过程表示法（如@figure-ref{fig-5.2}）时会发生什么。回忆
 一下，在过程表示法中，续文用它在 @tt{apply-cont} 中的动作表示。过程表示为：
+@eopl-index["Continuations" "procedural representation of"]
 
 @nested[#:style small]{
 @racketblock[
@@ -312,6 +314,7 @@
 }}
 
 在过程表示法中，我们有：
+@eopl-index["Continuations" "procedural representation of"]
 
 @nested[#:style small]{
 @racketblock[
@@ -423,7 +426,8 @@ val1 val2)} 的值传给当前续文。
 
 @nested[#:style tip]{
  @centered{@elemtag["cps-recipe"]{@bold{CPS 秘方}}
-           @eopl-index["Continuation-passing style" "transformation to"]}
+           @eopl-index["Continuation-passing style" "transformation to"]
+           @eopl-index["CPS Recipe"]}
 
  @nested[#:style tip-content]{
  要将程序转换为续文传递风格：
@@ -485,6 +489,8 @@ val1 val2)} 的值传给当前续文。
 
 @exercise[#:level 2 #:tag "ex6.4"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -507,7 +513,9 @@ val1 val2)} 的值传给当前续文。
 
  @item{@tt{occurs-free?}（@elemref["occurs-free-1?"]{1.2.4 节}）}
 
- @item{@tt{subst}（@elemref["subst"]{1.2.5 节}）}
+ @item{@tt{subst}（@elemref["subst"]{1.2.5 节}）
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]}
 
 ]
 
@@ -621,14 +629,17 @@ val1 val2)} 的值传给当前续文。
 所示，我们称之为 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些
 叫做@term["input expression"]{输入表达式}。
 
+@eopl-index["CPS-IN"]
 要定义 CPS 变换算法的可能输出，我们要找出 CPI-IN 的子集，在这个集合中，过程调用
 不产生任何控制上下文。
+@eopl-index["Control context"]
 
 回忆@secref{cpi}中的原则：
 
 @nested{
 @nested[#:style tip]{
- @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}}
+ @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}
+           @eopl-index["Control context"]}
 }
 
 那么，在
@@ -682,7 +693,8 @@ val1 val2)} 的值传给当前续文。
             \mathit{InpExp} &::= @tt{(@m{\mathit{InpExp}} @m{\{\mathit{InpExp}\}^{*}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}
 
-@eopl-caption["fig-6.3"]{CPS-IN的语法}
+@eopl-caption["fig-6.3"]{CPS-IN的语法
+                         @eopl-index["CPS-IN"]}
 }
 
 再回忆一下原则@bold{尾调用不扩大续文}：
@@ -752,6 +764,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 记为 @${O}。}
 }
 
+@eopl-index["CPS-OUT"]
 我们根据这种区别设计 CPS 转换算法的目标语言 CPS-OUT。这种语言的语法
 如@figure-ref{fig-6.5} 所示。这套语法定义了 CPS-IN 的子集，但略有不同。生成式的
 名字总以 @tt{cps-} 开头，这样它们不会与 CPS-IN 中生成式的名字混淆。
@@ -820,7 +833,8 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
              \mathit{TfExp} &::= @tt{(@m{\mathit{SimpleExp}} @m{\{\mathit{SimpleExp}\}^{*}})} \\[-3pt]
           &\mathrel{\phantom{::=}} \fbox{@tt{call-exp (rator rands)}}}}
 
-@eopl-caption["fig-6.5"]{CPS-OUT 的语法}
+@eopl-caption["fig-6.5"]{CPS-OUT 的语法
+                         @eopl-index["CPS-OUT"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -1830,10 +1844,12 @@ in |@${T}
 
 @exercise[#:level 3 #:tag "ex6.31"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.31"] "Continuations" "data structure representation of"]
 写一个翻译器，它取 @tt{cps-of-program} 的输出，生成一个等价程序，其中所有的续文
 都用@secref{cpi}中的数据结构表示。用列表表示那些用 @tt{define-datatype} 生成的数
 据结构。由于我们的语言不支持符号，你可以在首项位置使用整数标签，以此区分数据类型
 的变体。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.31"] "Continuations" "data structure representation of"]
 
 }
 

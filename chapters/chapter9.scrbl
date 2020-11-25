@@ -1770,10 +1770,15 @@ interface stringable
 @tt{(c2 -> d2)}。我们说结果类型的子类型判定是@term["covariant"]{协变的}，参数类
 型的子类型判定是@term["contravariant"]{逆变的}。见@figure-ref{fig-9.15}。这与
 @secref{s8.3.2}中 @tt{<:-iface} 的定义类似。
+@eopl-index[#:range-mark 'start "Contravariant subtyping"]
+@eopl-index[#:range-mark 'start "Covariant subtyping"]
+
 
 这部分代码如@figure-ref{fig-9.16} 所示。代码使用@tt{every2?}，
 它扩展@exercise-ref{ex1.24} 中的过程 @tt{every?}，取一个双参数谓词和两个列表，当
 列表长度相同且对应元素满足谓词时，返回 @tt{#t}，否则返回 @tt{#f}。
+@eopl-index[#:range-mark 'end "Contravariant subtyping"]
+@eopl-index[#:range-mark 'end "Covariant subtyping"]
 
 现在可以逐一考虑三种调用（@figure-ref{fig-9.17}）。对方法调用，我们首先像通常那
 样，找出目标对象和操作数的类型。我们用类似 @tt{find-method} 的
@@ -1873,7 +1878,9 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
         (memv name2 interface-names)))))
 ]
 
-@eopl-caption["fig-9.16"]{TYPED-OO 的子类型判定}
+@eopl-caption["fig-9.16"]{TYPED-OO 的子类型判定
+                          @eopl-index["Contravariant subtyping"]
+                          @eopl-index["Covariant subtyping"]}
 }
 
 @nested[#:style eopl-figure]{

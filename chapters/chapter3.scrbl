@@ -1247,6 +1247,7 @@ in let f = proc (z) -(z,x)
 
 @exercise[#:level 1 #:tag "ex3.20"]{
 
+@eopl-index[#:range-mark 'start #:suffix @elem{ex. @countref["ex3.20"], @countref["ex3.23"]} "Currying"]
 在PROC中，过程只能有一个参数，但是可以用返回其他过程的过程来模拟多参数过程。例如，
 可以写出这样的代码：
 
@@ -1301,6 +1302,7 @@ in let times4 = proc (x) ((makemult makemult) x)
 
 用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖
 喱化}（@exercise-ref{ex3.20}）定义双参数过程 @tt{times}。
+@eopl-index[#:range-mark 'end "Currying"]
 
 }
 
@@ -1781,6 +1783,7 @@ in let fact = proc (n)
 @exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} 外层声明。例如，在上
 例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
 
+@eopl-index["Contour diagrams"]
 词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@term["contour
 diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等深线。每个作用域
 用一个框圈起来，箭头连接声明与其作用域。

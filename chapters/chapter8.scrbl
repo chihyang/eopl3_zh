@@ -1353,6 +1353,7 @@ module mybool
 
 @exercise[#:level 2 #:tag "ex8.15"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.15"] "Currying"]
 写一个模块，实现抽象表。你实现的表应类似环境，但不是把符号绑定到 Scheme 值，而是
 把整数值绑定到整数值。接口提供一个值，表示空表；两个过程 @tt{add-to-table} 和
 @tt{lookup-in-table} 类似 @tt{extend-env} 和 @tt{apply-env}。由于我们的语言只有
@@ -1385,6 +1386,7 @@ in let add-binding = from tables take add-to-table
 
 这个程序类型应为 @tt{int}。表 @tt{table1} 把 4 绑定到 400，把 3 绑定到 300，所以
 程序的值应为 100。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.15"] "Currying"]
 
 }
 
@@ -2449,6 +2451,7 @@ module mybool-tables
 为满足第一个要求，我们要求 @${i_2 <: i_1}。这保证了满足 @${i_2} 的任何模块都能作
 为参数传给 @${m_0}。注意逆序：我们说参数类型的@term["subtyping"]{子类型判定}
 是@term["contravariant"]{逆变的}。
+@eopl-index["Contravariant subtyping"]
 
 结果的类型呢？我们可以要求 @${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行
 不通。@${i^{\prime}_{1}} 中，可能出现模块变量 @${m_1}，@${i^{\prime}_{2}} 中，可

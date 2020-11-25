@@ -81,6 +81,7 @@
 
 这里根据定义，我们用Scheme编写了一个递归过程。符号 @racket[in-S? :
 @#,elem{@${\mathit{N} \to \mathit{Bool}}}] 是一条注释，称为该函数
+@eopl-index["Contract"]
 的@term["contract"]{合约}。它表示 @racket[in-S?] 应为一过程，取一自然数，产生一
 布尔值。这样的注释对阅读和编写代码很有帮助。
 
@@ -120,7 +121,7 @@
 或称@term["rule"]{规则}；水平线读作@exact-elem{“}若-则@exact-elem{”}。线上部分
 称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
 @eopl-index["Conclusion"]
-@eopl-index["consequent"]
+@eopl-index["Consequent"]
 线下部分称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或
 更多假设时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
 没有假设的规则称作@eopl-index{Axiom}@term["axiom"]{公理}。写公理时通常不加水平
@@ -613,6 +614,7 @@
 
 我们来写出自己的过程 @tt{list-length}，做同样的事。
 
+@eopl-index["Contract"]
 先来写出过程的@term[#f]{合约}。合约指定了过程可取参数和可能返回值的集合。合约也
 可以包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，
 这是一条注释，我们用打字机字体示之，以便阅读。

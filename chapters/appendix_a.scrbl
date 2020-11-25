@@ -65,6 +65,7 @@ Lambda 演算由邱奇发明 (@author-ref{Church}, 1941)，用于研究数理逻
 @author-ref{Peyton Jones} (1987) 或 @author-ref{Stoy} (1977)。
 @author-ref{Barendregt} (1981, 1991) 提供了百科全书式的参考。
 
+@eopl-index["Contour diagrams"]
 @figure-ref{fig-3.13} 那样的等深线用来解释词法作用域，首先由
 @author-ref{Johnston} (1971) 提出。无名解释器和翻译器基于德布鲁金索引
 (@author-ref{de Bruijn}, 1972)。
@@ -127,6 +128,7 @@ Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实�
 Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 
 @eopl-index["Continuation-passing style" "transformation to"]
+@eopl-index["Continuations"]
 续文由多人独立发现，@author-ref{Reynolds} (1993) 介绍了这一迷人历史。
 @author-ref{Strachey} & @author-ref{Wadsworth} (1974) 或许是其中影响最大的。
 @author-ref{Reynolds} (1972) 将一个自循环解释器做了 CPS 变换，并展示了这样做如何

@@ -12,6 +12,7 @@
 
 @title[#:style part-title-style-numbered #:tag "cpi"]{传递续文的解释器}
 
+@eopl-index[#:range-mark 'start "Control context"]
 在@secref{expr}，我们用环境的概念探讨绑定行为，建立每部分程序执行的数据上下文。
 这里，我们将用类似方式探讨每部分程序执行的@term["control context"]{控制上下文}。
 我们将介绍@term["continuation"]{续文} 的概念，用来抽象控制上下文。我们将要编写的
@@ -114,9 +115,11 @@
 而得的程序具有@term["continuation-passing style"]{续文传递风格}。@secref{cps}还
 展示了续文的其他一些重要应用。
 @eopl-index["Continuation-passing style"]
+@eopl-index[#:range-mark 'end "Control context"]
 
 @section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
+@eopl-index[#:range-mark 'start "Continuations"]
 在我们的新解释器中，@tt{value-of} 等主要过程将取第三个参数。这一参数——@emph{续
 文}——用来抽象每个表达式求值时的控制上下文。
 
@@ -257,6 +260,7 @@
 @tt{letrec} 的行为也不复杂：它不调用 @tt{value-of}，而是创建一个新环境，然后在新
 环境中求主体的值，主体的值就是整个表达式的值。这表明主体和整个表达式在同样的控制
 上下文中执行。因此，主体的值应返回给整个表达式的续文。所以我们写：
+@eopl-index["Control context"]
 
 @nested[#:style small]{
 @codeblock[#:indent racket-block-offset]{
@@ -410,6 +414,8 @@
 现在，我们有了四个续文构造器。我们可以用过程表示法或者数据结构表示法实现它们。过
 程表示法如@figure-ref{fig-5.2} 所示，数据结构表示法使用 @tt{define-datatype}，
 如@figure-ref{fig-5.3} 所示。
+@eopl-index["Continuations" "data structure representation of"]
+@eopl-index["Continuations" "procedural representation of"]
 
 @nested[#:style eopl-figure]{
 @racketblock[
@@ -452,7 +458,8 @@
     (cont v)))
 ]
 
-@eopl-caption["fig-5.2"]{用过程表示续文}
+@eopl-caption["fig-5.2"]{用过程表示续文
+                         @eopl-index["Continuations" "procedural representation of"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -493,7 +500,8 @@
           (value-of/k exp3 saved-env saved-cont))))))
 ]
 
-@eopl-caption["fig-5.3"]{用数据结构表示续文}
+@eopl-caption["fig-5.3"]{用数据结构表示续文
+                         @eopl-index["Continuations" "data structure representation of"]}
 }
 
 下面这个简单算例展示了各部分如何配合。像 @secref{s3.3}那样，我们用
@@ -738,7 +746,8 @@
           (rator-cont rand env cont))))))
 ]
 
-@eopl-caption["fig-5.4"]{传递续文的解释器（第1部分）}
+@eopl-caption["fig-5.4"]{传递续文的解释器（第1部分）
+                         @eopl-index["Continuations"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -790,15 +799,18 @@
 
 所以，过程调用时，过程主体在过程调用所在的续文中求值。操作数的求值需要控制上下文，
 进入过程主体则不需要。
+@eopl-index[#:range-mark 'end "Continuations"]
 
 @exercise[#:level 1 #:tag "ex5.1"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.1"] "Continuations" "procedural representation of"]
 用过程表示法实现续文数据类型。
 
 }
 
 @exercise[#:level 1 #:tag "ex5.2"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.2"] "Continuations" "data structure representation of"]
 用数据结构表示法实现续文数据类型。
 
 }
@@ -900,12 +912,14 @@
 @exercise[#:level 2 #:tag "ex5.16"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Continuations" "command continuations"]
 扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给 @tt{result-of} 传递
 一个续文参数，确保 @tt{result-of} 不在扩大控制上下文的位置调用。因为语句不返回值，
 需要区分普通续文和语句续文；后者通常叫@term["command continuation"]{命令续文}。
 续文接口应包含过程 @tt{apply-command-cont}，它取一命令续文并使用它。用数据结构和
 无参数过程两种方式实现命令续文。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Continuations" "command continuations"]
 
 }
 
@@ -1210,6 +1224,7 @@ odd:  if (x=0) then return(0)
 @eopl-caption["fig-5.8"]{跟踪日志相同的三个程序}
 }
 
+@eopl-index["Control context"]
 能如此，只是因为原代码中 @tt{even} 和 @tt{odd} 的调用不扩大控制上下文：它们是尾
 调用。我们不能这样转换 @tt{fact}，因为 @tt{fact} 的跟踪日志无限增长：
 @exact-elem{“}程序计数器@exact-elem{”}不是像这里一样出现在跟踪日志的最外层，而
@@ -1261,7 +1276,8 @@ odd:  if (x=0) then return(0)
     (saved-cont continuation?)))
 ]
 
-@eopl-caption["fig-5.9"]{用数据结构实现的续文（第1部分）}
+@eopl-caption["fig-5.9"]{用数据结构实现的续文（第1部分）
+                         @eopl-index["Continuations" "data structure representation of"]}
 
 }
 
@@ -1347,7 +1363,8 @@ odd:  if (x=0) then return(0)
           (apply-procedure/k proc val saved-cont))))))
 ]
 
-@eopl-caption["fig-5.10"]{用数据结构实现的续文（第2部分）}
+@eopl-caption["fig-5.10"]{用数据结构实现的续文（第2部分）
+                          @eopl-index["Continuations" "data structure representation of"]}
 
 }
 
@@ -2071,10 +2088,12 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 3 #:tag "ex5.41"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.41"] "Continuations" "procedural representation of"]
 我们展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}中的
 步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler} 和
 @tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程，表示 @tt{apply-cont}
 中续文的动作；一个无参数过程，表示 @tt{apply-handler} 中续文的动作。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.41"] "Continuations" "procedural representation of"]
 
 }
 
@@ -2547,11 +2566,13 @@ in let mut = mutex()
 
 ]
 
+@eopl-index[#:range-mark 'start "Critical region"]
 这些属性保证在一对连续的 @tt{wait} 和 @tt{signal} 之间，只有一个线程可以执行。这
 部分程序叫做@term["critical region"]{关键区域}。在关键区域内，两个线程不可能同时
 执行。例如，@figure-ref{fig-5.21} 展示了我们之前的例子，只是在关键行周围插入了一
 把互斥锁。在这个程序中，一次只有一个线程可以执行 @tt{set x = -(x,-1)}；所以计数
 器一定能够到达终值 3。
+@eopl-index[#:range-mark 'end "Critical region"]
 
 @nested[#:style eopl-figure]{
 @nested[#:style 'code-inset]{
