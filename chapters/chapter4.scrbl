@@ -64,7 +64,8 @@
  @item{@tt{newref}，分配新的位置，返回其引用。
  @eopl-index["Allocation" (eopl-index-entry "in store" "store")]}
 
- @item{@tt{deref}，@term["deference"]{解引用} ：返回引用指向位置处的内容。}
+ @item{@tt{deref}，@term["deference"]{解引用} ：返回引用指向位置处的内容。
+ @eopl-index["Dereferencing"]}
 
  @item{@tt{setref}，改变引用指向位置处的内容。}
 
@@ -321,6 +322,7 @@ end
 这条规则是说：@tt{newref-exp} 求出操作数的值，得到一个存储器，然后分配一个新位置
 @${l}，将参数值 @${val} 放到这一位置，以此来扩展那个存储器。然后它返回新位置
 @${l} 的引用。这意味着 @${l} 不在 @${\sigma_1} 的定义域内。
+@eopl-index["Dereferencing"]
 
 @$${
 \infer{@tt{(value-of (deref-exp @${exp}) @${\rho} @${\sigma_0}) =
@@ -544,7 +546,8 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
        (num-val 23)))))
 }
 
-@eopl-caption["fig-4.3"]{@tt{value-of} 的显式引用操作语句}
+@eopl-caption["fig-4.3"]{@tt{value-of} 的显式引用操作语句
+                         @eopl-index["Dereferencing"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -1020,6 +1023,7 @@ in begin
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
 组件，完成这一操作。生成式为：
+@eopl-index["Dynamic assignment"]
 
 @envalign*{
         \mathit{Expression} &::= @tt{setdynamic @m{\mathit{Identifier}} = @m{\mathit{Expression}} during @m{\mathit{Expression}}} \\[-3pt]
@@ -1136,6 +1140,7 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.24"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.24"] (eopl-index-entry @elem{@tt{do-while} statement} "dowhilestatement")]
 @tt{do-while} 语句类似 @tt{while}，但是条件判断在其主体@emph{之后}执行。
 给@exercise-ref{ex4.22}中的语言添加 @tt{do-while} 语句。
 

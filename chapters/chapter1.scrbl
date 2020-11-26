@@ -163,6 +163,7 @@
  }
 
 
+@eopl-index["Dot notation"]
 这里，我们用中缀@exact-elem{“}@tt{.}@exact-elem{”}代表 Scheme 中 @tt{cons} 操
 作的结果。式子 @tt{(@${n} . @${l})} 代表 Scheme 序对的首项为 @${n}，余项为 @${l}。
 
@@ -212,6 +213,8 @@
 还可以结合各条规则来证明 @${@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]}，
 以见出整个推理过程。下面的树状图叫做@term[#:tag "deriv-tree" "derivation"]{推导}
 或@term["deduction tree"]{推理树}。
+@eopl-index["Deduction"]
+@eopl-index["Derivation tree"]
 
 @$${\infer{\hphantom{\texttt{xx}}@tt{(-7 . (3 . (14 . ())))} \in @List-of-Int-$[]\hphantom{\texttt{xx}}}
           {@tt{-7} \in \mathit{Int} \hphantom{\texttt{x}} &
@@ -381,6 +384,7 @@
 
 这些简写不是必需的，总能够不用它们重写语法。
 
+@eopl-index["Derivation, syntactic"]
 对由语法定义的集合，可以用@term["syntactic derivation"]{句法推导} 证明给定值是其
 元素。这样的推导从集合对应的非终结符开始，在由箭头@${\Rightarrow} 指示的每一步中，
 如果非终结符对应的句法类别未做定义，则将其代换为该类别的已知元素，否则代换为对应

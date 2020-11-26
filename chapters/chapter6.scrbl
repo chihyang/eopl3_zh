@@ -1208,6 +1208,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 但是在规范中，我们仍然使用具体语法，因为具体语法通常更容易读懂。
 
+@eopl-index["Declaration" "of procedures"]
 过程呢？我们转换@figure-ref{fig-6.7} 中那样的 @tt{(lambda (x) ...)} 过程时，为其
 新增一个参数 @tt{k}，然后转换主体，并将主体的值传给续文 @tt{k}。我们
 在@figure-ref{fig-6.7} 中正是这样做的。所以
@@ -2076,6 +2077,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 
  @item{我们给 CPS-IN 添加语法：
  @eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
+ @eopl-index[#:range-mark 'start "Dereferencing"]
 
  @nested[#:style small]{
  @envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
@@ -2182,6 +2184,7 @@ newrefk(33, proc (loc1)
 ]
 
 @eopl-index[#:range-mark 'end "Allocation" (eopl-index-entry "in store" "store")]
+@eopl-index[#:range-mark 'end "Dereferencing"]
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 

@@ -52,7 +52,9 @@
 @section[#:style section-title-style-numbered #:tag "s9.1"]{面向对象编程}
 
 本章，我们研究一种简单的面向对象语言，名为 CLASSES。CLASSES 程序包含一些类声明，
-然后是一个可能用到那些类的表达式。@eopl-index["Classes" "declaration of"]
+然后是一个可能用到那些类的表达式。
+@eopl-index["Classes" "declaration of"]
+@eopl-index["Declaration" "of classes"]
 
 @figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于 @tt{object} 的
 类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。字段
@@ -187,6 +189,7 @@ in send o1 odd(13)}|
 
 术语@emph{继承}源于宗谱的类比。我们常常引申这一类比，说类的@term["ancestor"]{祖
 先}@eopl-index{Ancestor class}（从类的父类到根类 @tt{object}）
+@eopl-index["Descendant class"]
 和@term["descendant"]{后代}。如果 @${c_2} 是@${c_1} 的后代，我们有时说 @${c_2}
 是@${c_1} 的@term["subclass"]{子类}，写作@${c_2 < c_1}。
 @eopl-index["Classes" "subclass"]
@@ -303,6 +306,7 @@ in list(send o1 m1(), send o2 m1(), send o2 m2())
 希望 @tt{send o2 m1()} 返回 22，因为 @tt{o2} 是 @tt{c2} 的实例。那么 @tt{send o2
 m2()} 呢？方法 @tt{m2} 直接调用方法 @tt{m1}，但它调用的是哪个 @tt{m1}？}
 
+@eopl-index["Dynamic dispatch"]
 动态分发告诉我们，应查看绑定到 @tt{self} 的对象属于哪个类。@tt{self} 的值是
 @tt{o2}，属于类 @tt{c2}。因此，调用 @tt{send self m1()} 应返回 22。
 
@@ -405,8 +409,10 @@ in send o3 m3()
 我们的语言 CLASSES 由 IMPLICIT-REFS 扩展而得，新增生成式如@figure-ref{fig-9.7}
 所示。
 @eopl-index["Classes" "declaration of"]
+@eopl-index["Declaration" "of classes"]
 程序中首先是一些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超
 类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec} 中的
+@eopl-index["Declaration" "of method"]
 过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过程、
 多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
 列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
@@ -1599,6 +1605,7 @@ interface stringable
 
 @exercise[#:level 2 #:tag "ex9.32"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex9.32"] "Double dispatch"]
 不使用 @tt{instanceof} 和 @tt{cast}，给类 @tt{tree} 写一个等值判断谓词。这里需要
 用@term["double dispatch"]{双派发} 替代通常方法使用的单派发。可做如下模拟：不用
 @tt{instanceof} 找出实参 @tt{t} 的类，而是让当前的树给 @tt{t} 返回一条消息，这条
@@ -1933,11 +1940,13 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 @eopl-index[#:range-mark 'start "Class environment"]
 @eopl-index["Classes" "declaration of"]
+@eopl-index["Declaration" "of classes"]
 一旦建立了静态类环境，我们可以检查每个类声明。这由
 @tt{check-class-decl!}（@figure-ref{fig-9.19}）完成。对接口，什么都不必检查。对
 类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
 了它声称实现的每个接口。
 
+@eopl-index["Declaration" "of method"]
 要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
 境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
 的子类型。
@@ -2033,7 +2042,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 @eopl-caption["fig-9.19"]{@tt{check-class-decl!}
                           @eopl-index[#:range-mark 'end "Class environment"]
-                          @eopl-index["Classes" "declaration of"]}
+                          @eopl-index["Classes" "declaration of"]
+                          @eopl-index["Declaration" "of classes"]}
 }
 
 @nested[#:style eopl-figure]{
@@ -2066,7 +2076,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                   #t)))))))))
 ]
 
-@eopl-caption["fig-9.20"]{@tt{check-method-decl!}}
+@eopl-caption["fig-9.20"]{@tt{check-method-decl!}
+                          @eopl-index["Declaration" "of method"]}
 }
 
 @exercise[#:level 1 #:tag "ex9.33"]{

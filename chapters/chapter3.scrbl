@@ -30,6 +30,8 @@
 }
 
 @eopl-index[#:range-mark 'start "Abstract syntax tree"]而我们的目标是写出程序，
+@eopl-index["Defined language"]
+@eopl-index["Defining language"]
 实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，由我们要实现的语言写出。
 这叫做@term["source language"]{源语言} 或@term["defined language"]{被定语言}。前
 端接收程序文本（由源语言写成的程序），将其转化为抽象语法树，然后将语法树传给解释
@@ -151,6 +153,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
 个这样的集合：@term["expressed values"]{表达值} 和@term["denoted values"]{指代值}。
+@eopl-index["Denoted values"]
 表达值是指表达式可能的取值，指代值是指可以绑定到变量的值。
 
 本章的语言中，表达值和指代值总是相同。它们是：
@@ -226,6 +229,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.4"]{定义表达式的行为}
 
+@eopl-index[#:range-mark 'start "Difference expressions"]
 我们语言中的六种表达式各对应一个左边为 @${\mathit{Expression}} 的生成式。表达式
 接口包含七个过程，六个是构造器，一个是观测器。我们用 @${\mathit{ExpVal}} 表示表
 达值的集合。
@@ -276,6 +280,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 \rceil} 表示 @tt{(num-val @${n})}，用 @${\lfloor val \rfloor} 表示
 @tt{(expval->num @${val})}。我们还运用了一点事实：@${\lfloor \lceil n \rceil
 \rfloor = n}。
+@eopl-index[#:range-mark 'end "Difference expressions"]
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
@@ -759,6 +764,8 @@ in let y = 2
 
 @exercise[#:level 1 #:tag "ex3.4"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.4" "ex3.5"] "Deduction"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.4" "ex3.5"] "Derivation tree"]
 把@figure-ref{fig-3.4} 中的推导写成@pageref{deriv-tree}那样的推理树。
 
 }
@@ -766,6 +773,8 @@ in let y = 2
 @exercise[#:level 1 #:tag "ex3.5"]{
 
 把@figure-ref{fig-3.5} 中的推导写成@pageref{deriv-tree}那样的推理树。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.4" "ex3.5"] "Deduction"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.4" "ex3.5"] "Derivation tree"]
 
 }
 
@@ -950,6 +959,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 }
 
 @eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'start "Declaration" "of procedures"]
 我们还需要语法来创建和调用过程。对应的生成式为：
 
 @envalign*{
@@ -1053,6 +1063,7 @@ in let f = proc (z) -(z,x)
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
 = (value-of |@${body} [|@${var=val}]|@${\rho})
 }|
+@eopl-index[#:range-mark 'end "Declaration" "of procedures"]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
@@ -1242,6 +1253,7 @@ in let f = proc (z) -(z,x)
 
 @exercise[#:level 1 #:tag "ex3.19"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.19"] "Declaration" "of procedures"]
 在很多语言中，过程创建和命名必须同时进行。修改本节的语言，用 @tt{letproc} 替换
 @tt{proc}，以支持此性质。
 
@@ -1355,6 +1367,7 @@ in let maketimes4 = proc (f)
 @exercise[#:level 2 #:tag "ex3.28"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28" "ex3.29"] "Dynamic binding (dynamic scope)"]
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
@@ -1391,6 +1404,7 @@ in let p = proc (z) a
 }
 
 返回 5，因为调用处 @tt{a} 的值为 5。如果 @tt{f} 的形参为 @tt{a} 呢？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28" "ex3.29"] "Dynamic binding (dynamic scope)"]
 
 }
 
@@ -1660,6 +1674,7 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.37"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 使用动态绑定（@exercise-ref{ex3.28}），不需要任何特殊机制，靠 @tt{let} 就能创建
 递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
 还鲜为人知。要验证动态绑定实现的递归，试试程序：
@@ -1677,12 +1692,14 @@ in let fact = proc (n)
 
 试试词法绑定，再试试动态绑定。用动态绑定的被定语言写出@secref{s3.4}中的互递归过
 程 @tt{even} 和 @tt{odd}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 
 }
 
 @section[#:style section-title-style-numbered #:tag "s3.5"]{定界和变量绑定}
 
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry "of variables" "variables")]
+@eopl-index[#:range-mark 'start "Declaration" "of procedures"]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1857,6 +1874,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 }
 
 @eopl-index["Binding" "extent of"]
+@eopl-index[#:range-mark 'start "Dynamic properties of programs"]
 绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
 Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
@@ -1870,6 +1888,8 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 以我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现
 类似。
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry "of variables" "variables")]
+@eopl-index[#:range-mark 'end "Declaration" "of procedures"]
+@eopl-index[#:range-mark 'end "Dynamic properties of programs"]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
@@ -2434,6 +2454,7 @@ htt]{nameless-letrec-var-exp}。
 
 @exercise[#:level 3 #:tag "ex3.43"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
 翻译器不止能记录变量的名字。例如，考虑程序
 
 @nested[#:style 'code-inset]{
@@ -2455,5 +2476,6 @@ in let f = proc (y) -(y,x)
 
 在前一个例子中，@tt{f} 的唯一用途是作为一个已知过程。因此，由表达式 @tt{proc (y)
 -(y,x)} 产生的过程从未使用。修改翻译器，避免产生这样的过程。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
 
 }

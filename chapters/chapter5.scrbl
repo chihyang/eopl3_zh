@@ -533,6 +533,7 @@
 }|
 }
 
+@eopl-index["Difference expressions"]
 差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像 @tt{if}
 那样开始，先求第一个实参：
 
@@ -968,11 +969,13 @@
 
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
 
+@eopl-index["Defunctionalization"]
 有人可能想用普通的过程式语言转译解释器，使用数据结构表示续文，从而避免高阶函数。
 但是，用大多数过程式语言做这种翻译都很困难：@elemtag["imper-reason"]{它们}不只在
 必要时才扩大控制上下文，而且在每个函数调用处扩大控制上下文（即堆栈！）。在我们的
 系统中，由于过程调用在计算结束之前不返回，在那之前，系统的堆栈将一直增高。
 
+@eopl-index[#:range-mark 'start "Defunctionalization"]
 @elemtag["imperative-lang"]{这种行为不无道理}：在这种语言中，几乎所有的过程调用
 都出现在赋值语句的右边，所以几乎所有过程调用都要扩大控制上下文，以便记录待完成的
 赋值。因此，体系结构为这种最常见的情形做了优化。而且，由于大多数语言在堆栈中存储
@@ -1099,6 +1102,7 @@
 
 @eopl-caption["fig-5.7"]{用过程表示跳床}
 }
+@eopl-index[#:range-mark 'end "Defunctionalization"]
 
 @exercise[#:level 1 #:tag "ex5.17"]{
 
@@ -1142,6 +1146,7 @@
 
 @exercise[#:level 3 #:tag "ex5.22"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.22"] "Defunctionalization"]
 有人可能想用普通的过程式语言转译@secref{expr}中传递环境的解释器。同样是因
 为@elemref["imper-reason"]{上述}原因，除了最简单的情况，这种转换都会失败。跳跃技
 术在这种情况下也有效吗？
@@ -1677,6 +1682,8 @@ odd:  if (x=0) then return(0)
 @exercise[#:level 2 #:tag "ex5.30"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
+@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
@@ -1701,6 +1708,7 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.33"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.33" "ex5.34"] "Defunctionalization"]
 把本节的解释器翻译为指令式语言。做两次，一次使用宿主语言中的无参数过程调用，一次
 使用 @tt{goto}。计算量增加时，这二者性能如何？
 

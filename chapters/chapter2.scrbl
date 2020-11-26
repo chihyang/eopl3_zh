@@ -167,6 +167,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
  @nested{@$${\mathit{Diff\mbox{-}tree} ::= @tt{(one)} \mid @tt{(diff
  @${\mathit{Diff\mbox{-}tree}} @${\mathit{Diff\mbox{-}tree}})}}
+ @eopl-index[(eopl-index-entry @elem{Diff-trees (@${\mathit{Diff\mbox{-}tree}})} "Difftrees")]
 
  列表 @tt{(one)} 表示 1。如果 @${t_1} 表示 @${n_1}，@${t_2} 表示 @${n_2}，那么
  @tt{(diff @${n_1} @${n_2})} 表示 @${n_1 - n_2}。
@@ -500,6 +501,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 如果用于实现的语言不支持高阶过程，那就得再做一些步骤，用数据结构表示法和解释器秘
 方实现所需接口，就像上一节那样。这一操作叫做@term["defunctionalization"]{消函}。
+@eopl-index["Defunctionalization"]
 环境的数据结构表示中，各种变体都是消函的简单例子。过程表示法和消函表示法的关系将
 是本书反复出现的主题。
 
@@ -805,6 +807,7 @@ lambda 演算表达式的语法：
 对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用 Scheme 自动设
 计和实现接口的工具。这个工具产生的接口与前一节的虽不完全相同，却很类似。
 
+@eopl-index[#:range-mark 'start (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
 仍考虑前一节讨论的数据类型 lambda 演算表达式。lambda 演算表达式的接口可以这样写：
 
 @nested[#:style small]{
@@ -1014,11 +1017,14 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 但这种方式并不是唯一的。根据使用场景，可能得用专门的表示方式，它们利用数据的特殊
 性质，更紧凑或者更高效。要获得这些优势，代价是不得不动手实现接口中的过程。
 
+@eopl-index[#:range-mark 'start "Domain-specific languages"]
 @tt{define-datatype} 形式是@term["domain-specific language"]{特定领域语言} 的例
 子。特定领域语言是一种小巧的语言，用来描述小而明确的任务中的单一任务。本例中的任
 务是定义一种递推数据类型。这种语言可能像 @tt{define-datatype} 一样，存在于通用语
 言中；也可能是一门单独的语言，别有一套工具。一般来说，创造这类语言首先要找出任务
 的不同变体，然后设计语言，描述这些变体。这种策略通常非常有效。
+@eopl-index[#:range-mark 'end (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
+@eopl-index[#:range-mark 'end "Domain-specific languages"]
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
@@ -1236,6 +1242,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 麻烦，所以最好借由工具@term["parser generator"]{解析器生成器} 完成。解析器生成器
 以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需以某种机器能
 够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
+@eopl-index["Domain-specific languages"]
 
 @eopl-index[#:range-mark 'end "Concrete syntax"]
 如果具体语法以列表集合的形式给出，解析过程就会大大简化。比如，
