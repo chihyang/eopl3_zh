@@ -1548,10 +1548,8 @@ in (double 6)
 
 = (-
     (apply-procedure
-      (value-of
-        <<double>>
-        [x=|@${\lceil}6|@${\rceil}](extend-env-rec
-                      double x <<if zero?(x) ...>> |@${\rho_0}))
+      (procedure x <<if zero?(x) ...>>
+        (extend-env-rec double x <<if zero?(x) ...>> |@${\rho_0}))
       |@${\lceil}5|@${\rceil})
     -2)
 
