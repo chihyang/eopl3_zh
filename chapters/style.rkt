@@ -81,10 +81,10 @@
   (make-style "TipContent" (list (make-tex-addition "../style/tip.tex")
                                  (make-css-addition "../style/tip.css"))))
 
-(define eopl-figure
+(define eopl-style-figure
   (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
 
-(define eopl-subfigure
+(define eopl-style-subfigure
   (make-style "EoplSubfigure" (list (make-tex-addition "../style/figure.tex"))))
 
 (define eopl-figure-ref
@@ -162,6 +162,19 @@
   (elem #:style eopl-example-ref (countref tag)))
 
 ;;; for figure
+(define (eopl-figure #:position [position #f] . c)
+  (nested #:style eopl-style-figure
+          (when position
+            (make-floating-recommend position))
+          c))
+
+(define (eopl-subfigure . c)
+  (nested #:style eopl-style-subfigure
+          c))
+
+(define (make-floating-recommend recommends)
+  (exact-elem "[" recommends "]"))
+
 (define (eopl-caption tag . c)
   (nested #:style
           (make-style "caption" (list 'multicommand))

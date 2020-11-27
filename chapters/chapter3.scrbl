@@ -74,9 +74,9 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 设计前端的标准方式是使用@term["parser generator"]{解析器生成器}。解析器生
 成器是一程序，取一词法规范和语法，生成一个扫描器和解析器。
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 
- @nested[#:style eopl-subfigure]{
+ @eopl-subfigure{
  @centered{
  @(image "../images/exe-via-interpreter"
    #:suffixes (list ".pdf" ".svg")
@@ -86,7 +86,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
  @eopl-caption["fig-3.1-a"]{由解释器执行}
  }
 
- @nested[#:style eopl-subfigure]{
+ @eopl-subfigure{
  @centered{
  @(image "../images/exe-via-compiler"
    #:suffixes (list ".pdf" ".svg")
@@ -128,7 +128,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
       #(struct:const-exp 11))))]
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 
 @linebreak[]
 @envalign*{\mathit{Program} &::= \mathit{Expression} \\[-3pt]
@@ -316,7 +316,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 可将其写成一条推理规则。我们以 @tt{bool-val} 为构造器，把布尔值转换为表达值；以
 @tt{expval->num} 为提取器，判断表达式的值是否为整数，如果是，则返回该整数。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 令 @${\rho =} @tt{[i=1,v=5,x=10]}。@linebreak[]
 
 @nested[#:style two-columns]{
@@ -428,7 +428,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 @eopl-index["Conditionals"]
 @figure-ref{fig-3.4} 展示了用这些规则进行简单运算的过程。
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 令 @${\rho =} @tt{[x=@${\lceil}33@${\rceil},y=@${\lceil}22@${\rceil}]}。@linebreak[]
 
 @verbatim|{
@@ -537,7 +537,7 @@ in let y = 2
 @figure-ref{fig-3.5} 展示了一个例子，其中 @${\rho_0} 表示任意环境。
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 (value-of
@@ -598,7 +598,7 @@ in let y = 2
 我们还定义了提取器，用来将表达值转为整数或布尔值。如果表达值类型不符预期，提取器
 报错。
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define-datatype program program?
   (a-program
@@ -644,7 +644,7 @@ in let y = 2
        (empty-env))))))
 ]
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define-datatype expval expval?
   (num-val
@@ -684,7 +684,7 @@ in let y = 2
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{run}} : @${\mathit{String} \to \mathit{ExpVal}}}
 (define run
@@ -726,7 +726,7 @@ in let y = 2
 @eopl-caption["fig-3.8"]{LET 语言的解释器}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -781,7 +781,7 @@ in let y = 2
 @exercise[#:level 1 #:tag "ex3.6"]{
 
 扩展语言，添加新操作符 @tt{minus}，它取一参数 @${n}，返回 @${-n}。例如，
-@tt{minus(-(minus(5),9))} 的值应为14。
+@tt{minus(- (minus(5), 9))} 的值应为14。
 
 }
 
@@ -1491,7 +1491,7 @@ in (double 6)
 如@figure-ref{fig-3.12}，在抽象语法表示中，我们为 @tt{extend-env-rec} 新增一种变
 体。@tt{apply-env} 倒数第二行的 @tt{env} 对应上述 @${\rho_1}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @verbatim|{
 
 (value-of <<letrec double(x) = if zero?(x)
@@ -1531,7 +1531,7 @@ in (double 6)
 @eopl-caption["fig-3.10"]{@tt{extend-env-rec} 计算过程}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @verbatim|{
 
 = (-
@@ -1559,7 +1559,7 @@ in (double 6)
 @eopl-caption["fig-3.11"]{@tt{extend-env-rec} 计算过程，续}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define-datatype environment environment?
   (empty-env)
@@ -1592,6 +1592,7 @@ in (double 6)
 
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{letrec} "letrec")]
 @eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{letrec} "letrec")]
+
 @exercise[#:level 1 #:tag "ex3.30"]{
 
 @tt{apply-env} 倒数第二行调用 @tt{proc-val} 的目的是什么？
@@ -1729,7 +1730,7 @@ in let fact = proc (n)
 我们说变量引用由对应的声明@term["bound"]{绑定}，且@emph{绑定}到它的值。
 在@secref{s1.2.4}，我们已经见过用声明绑定变量的例子。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/simple-contour"
   #:suffixes (list ".pdf" ".svg")
@@ -1820,7 +1821,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @tt{y1} 的作用域内。所以，第8行的 @tt{x} 指代 @tt{x3}，@tt{y} 指代 @tt{y1}，
 @tt{z} 指代@tt{z2}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/complicated-contour"
   #:suffixes (list ".pdf" ".svg")
@@ -2122,7 +2123,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 
@@ -2208,7 +2209,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Exp} \times \mathit{Senv} \to \mathit{Nameless\mbox{-}exp}}}
@@ -2286,7 +2287,27 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 我们可以用指代值列表实现无名环境，这样 @tt{apply-nameless-env} 只需调用
 @tt{list-ref}。这种实现如@figure-ref{fig-3.17} 所示。
 
-@nested[#:style eopl-figure]{
+@pageref{s3.7-eg}例子中最后一行的无名环境如下
+
+@centered{
+@(image "../images/nameless-env"
+  #:suffixes (list ".pdf" ".svg")
+  "无名环境")
+}
+
+由于更改了环境接口，我们需要查看代码中所有依赖这套接口的地方。我们的解释器中使用
+环境的只有两处：过程和 @tt{value-of}。
+
+修改过程规范时，只需把旧规范中的变量名移除：
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
+= (value-of |@${body} (extend-nameless-env |@${val} |@${\rho}))
+}|
+}
+
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{nameless-environment?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
@@ -2310,26 +2331,6 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 
 @eopl-caption["fig-3.17"]{无名环境}
-}
-
-@pageref{s3.7-eg}例子中最后一行的无名环境如下
-
-@centered{
-@(image "../images/nameless-env"
-  #:suffixes (list ".pdf" ".svg")
-  "无名环境")
-}
-
-由于更改了环境接口，我们需要查看代码中所有依赖这套接口的地方。我们的解释器中使用
-环境的只有两处：过程和 @tt{value-of}。
-
-修改过程规范时，只需把旧规范中的变量名移除：
-
-@nested[#:style 'code-inset]{
-@verbatim|{
-(apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
-= (value-of |@${body} (extend-nameless-env |@${val} |@${\rho}))
-}|
 }
 
 这一规范的实现可定义为：
@@ -2362,7 +2363,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 做相同，只是没有变量。@tt{nameless-proc} 生成一个 @tt{proc}，随后可供
 @tt{apply-procedure} 调用。
 
-@nested[#:style eopl-figure]{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{value-of}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{ExpVal}}}

@@ -520,7 +520,7 @@ in |@${e_{letrec\mbox{-}body}}
 现在，我们可以将规则转换为程序，就像处理@secref{expr}中的解释器那样。结果
 如@figure-ref{fig-7.1}--@countref{fig-7.3} 所示。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{Tenv} = \mathit{Var} \to \mathit{Type}}}
 
@@ -568,7 +568,7 @@ in |@${e_{letrec\mbox{-}body}}
                          @eopl-index["CHECKED"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\fbox{\infer{@tt{(type-of (let-exp @${var} @${e_1} @${body}) @${tenv}) = @${t_2}}}{@tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}} & @tt{(type-of @${e_1} @${tenv}) = @${t_1}}}}}}
 (let-exp (var exp1 body)
@@ -600,7 +600,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -1686,7 +1686,7 @@ in letrec
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{unifier}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Subst} \times \mathit{Exp} \to \mathit{Subst}}}
 (define unifier
@@ -1719,7 +1719,7 @@ in letrec
 @eopl-caption["fig-7.4"]{合一器}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{no-occurrence?}} : @${\mathit{Tvar} \times \mathit{Type} \to \mathit{Bool}}}
 (define no-occurrence?
@@ -1809,7 +1809,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 知类型，我们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。
 这和我们在@figure-ref{fig-4.1} 中使用的 @tt{length} 类似。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{Answer} = \mathit{Type} \to \mathit{Subst}}}
 
@@ -1850,7 +1850,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.6"]{INFERRED 的 @tt{type-of}，第 1 部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}@tt{(diff-exp @${e_1} @${e_2})} &: @${t_{e_1}} = @tt{int} \\ &\mathrel{\phantom{:}} @${t_{e_2}} = @tt{int} \\ &\mathrel{\phantom{:}} @${t_{@tt{(diff-exp @${e_1} @${e_2})}}} = @tt{int}\end{alignedat}\end{math}}}}
 (diff-exp (exp1 exp2)
@@ -1891,7 +1891,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.7"]{INFERRED 的 @tt{type-of}，第 2 部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\fbox{@tt{(proc-exp @${var} @${body})} : @${t_{@tt{(proc-exp @${var} @${body})}}} = @tt{(@${tvar} @${\to} @${t_{body}})}}}}
 (proc-exp (var otype body)
@@ -1923,7 +1923,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @eopl-caption["fig-7.8"]{INFERRED 的 @tt{type-of}，第 3 部分}}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}&@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}} : \\ &\phantom{xx}t_{p} = t_{var} \to t_{e_{proc\mbox{-}body}} \\ &\phantom{xx}t_{e_{letrec\mbox{-}body}} = t_{@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}}}\end{alignedat}\end{math}}}}
 @#,exact-elem{\smallskip
@@ -1954,7 +1954,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.9"]{INFERRED 的 @tt{type-of}，第 4 部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{TvarTypeSym} = @emph{含有数字的符号}}}
 
@@ -1990,7 +1990,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{tvar-type-sym?}} : @${\mathit{Sym} \to \mathit{Bool}}}
 (define tvar-type-sym?

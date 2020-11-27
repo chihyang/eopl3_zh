@@ -67,7 +67,7 @@
 方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class c1 extends object
@@ -112,7 +112,7 @@ in begin
 @tt{countup}，将两个字段的值改为 5 和 -5，然后再次调用 @tt{getstate}，返回@tt{(5
 -5)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))} 成为整段程序的返回值。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class interior-node extends object
@@ -200,7 +200,7 @@ in send o1 odd(13)}|
 例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
 择这种设计，其他面向对象语言可能有不同的可见性规则。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @nested[#:style small]{
 @verbatim|{
@@ -245,7 +245,7 @@ in begin
 @tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
 @tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 |@elemtag["field-shadowing"]{}class c1 extends object
@@ -338,7 +338,7 @@ method initialize (initx, inity, initcolor)
 子类，但不一定是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为
 @${m} 可能在目标对象的某个祖先中声明。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class point extends object
@@ -382,7 +382,7 @@ in send o1 get-color()}|
 本例中，@tt{c1} 的方法 @tt{m1} 调用 @tt{o3} 的方法 @tt{m2}。这是普通方法调用，所
 以使用动态分发，找出的是 @tt{c3} 的方法 @tt{m2}，返回 33。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class c1 extends object
@@ -436,7 +436,7 @@ in send o3 m3()
 不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，
 看看@exercise-ref{ex9.29}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @envalign*{
            \mathit{Program} &::= \{\mathit{ClassDecl}\}^{*} \phantom{x} \mathit{Expression} \\[-3pt]
@@ -568,7 +568,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 接下来，我们确定如何表示对象、方法和类。我们通过一个示例解释这种表示，
 如@figure-ref{fig-9.8} 所示。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class c1 extends object
@@ -608,7 +608,7 @@ in send o3 m1(7,8)
 @eopl-caption["fig-9.8"]{OOP 实现的示例程序}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/simple-object"
   #:suffixes (list ".pdf" ".svg")
@@ -732,7 +732,7 @@ in send o3 m1(7,8)
 此一无所知），方法 @tt{m1} 将把变量 @tt{y} 与 @tt{c2} 中声明的 @tt{y} 关联起来，
 正合期望。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/env-for-method"
   #:suffixes (list ".pdf" ".svg")
@@ -908,7 +908,7 @@ in send o3 m1(7,8)
 
 构建方法环境还有其他一些方式，它们在方法查询时更高效（@exercise-ref{ex9.18}）。}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 ((c3
    #(struct:a-class c2 (x%2 y%1 y x z)
@@ -1406,7 +1406,7 @@ TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
 定的类型实现了接口 @${I} 要求的所有方法时，我们的判类系统才允许 @${c} 声称实现了
 @${I}。虽然我们的例子中只用了一个接口，但一个类可以实现多个不同接口。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 interface tree
@@ -1457,7 +1457,7 @@ in list(send o1 sum(),
 @eopl-caption["fig-9.12"]{TYPED-OO 的程序示例}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @envalign*{
          \mathit{ClassDecl} &::= @tt{class @m{\mathit{Identifier}} extends @m{\mathit{Identifier}}} \\
           &\mathrel{\phantom{::=}} \phantom{x}\{@tt{implements @m{\mathit{Identifier}}}\}^{*} \\
@@ -1692,7 +1692,7 @@ interface stringable
 接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
 用。我们抽象出一个过程来检查它们。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @codeblock[#:indent racket-block-offset]{
 (self-exp ()
   (apply-tenv tenv '%self))
@@ -1739,7 +1739,7 @@ interface stringable
 类型。更有意思的是第二点，我们把@figure-ref{fig-7.2} 中的 @tt{check-equal-type!}
 换成了 @tt{check-is-subtype!}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/subtyping-proc-type"
   #:scale 1.5
@@ -1838,7 +1838,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 ]
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{check-is-subtype!}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
 (define check-is-subtype!
@@ -1890,7 +1890,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Covariant subtyping"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @codeblock[#:indent racket-block-offset]{
 (method-call-exp (obj-exp method-name rands)
   (let ((arg-types (types-of-exps rands tenv))
@@ -1967,7 +1967,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 这样，检查器就完成了。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{add-class-decl-to-static-class-env!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
 (define add-class-decl-to-static-class-env!
@@ -2016,7 +2016,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @eopl-caption["fig-9.18"]{@tt{add-class-decl-to-static-class-env!}}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{check-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
 (define check-class-decl!
@@ -2046,7 +2046,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Declaration" "of classes"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{check-method-decl!}} : @linebreak[] @${\phantom{x}\mathit{MethodDecl} \times \mathit{ClassName} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \times \mathit{Listof(Type)} \\ \phantom{xxxx}\to \mathit{Unspecified}}}
 (define check-method-decl!
@@ -2108,7 +2108,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{check-if-implements!}} : @${\mathit{ClassName} \times \mathit{InterfaceName} \to \mathit{Bool}}}
 (define check-if-implements!
@@ -2172,7 +2172,7 @@ in list((f o), (g o))
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 ((leaf-node
    #(struct:a-static-class

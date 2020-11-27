@@ -127,7 +127,7 @@
 @tt{value-of-program} 的结果叫做 @${\mathit{FinalAnswer}}，以强调这个表达值是程
 序的最终值。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{FinalAnswer}} = @${\mathit{ExpVal}}}
 
@@ -418,7 +418,7 @@
 @eopl-index["Continuations" "procedural representation of"]
 @eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{Cont}} = @${\mathit{ExpVal}} -> @${\mathit{FinalAnswer}}}
 
@@ -463,7 +463,7 @@
                          @eopl-index["Continuations" "procedural representation of"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define-datatype continuation continuation?
   (end-cont)
@@ -709,7 +709,7 @@
 传递续文的解释器展示完毕。完整的解释器如@figure-ref{fig-5.4} 和
 @countref{fig-5.5} 所示。续文的完整规范如@figure-ref{fig-5.6} 所示。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
 (define value-of-program
@@ -753,7 +753,7 @@
                          @eopl-index["Continuations"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{FinalAnswer} \to \mathit{FinalAnswer}}}
 (define apply-procedure/k
@@ -927,7 +927,7 @@
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 (apply-cont (end-cont) |@${val})
@@ -1057,7 +1057,7 @@
 在计算中的不同位置返回这样的快照。在 @secref{s5.5}，我们将看到如何用这一思想模拟
 多线程程序中的原子操作。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{Bounce}} = @${\mathit{ExpVal} \cup (() \to \mathit{Bounce})}}
 
@@ -1169,7 +1169,7 @@
 而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为
 @emph{goto}（名为@term["flowchart program"]{流程图程序}）的跟踪日志。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 letrec
@@ -1254,7 +1254,7 @@ odd:  if (x=0) then return(0)
 我们首先从@figure-ref{fig-5.4} 和 @countref{fig-5.5} 中的解释器开始，用数据结构
 表示续文。续文的数据结构表示如@figure-ref{fig-5.9} 和 @countref{fig-5.10} 所示。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define-datatype continuation continuation?
   (end-cont)
@@ -1336,7 +1336,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{Bounce}}}
 (define apply-cont
@@ -1461,7 +1461,7 @@ odd:  if (x=0) then return(0)
 翻译完的解释器如@figure-ref{fig-5.11}--@countref{fig-5.14} 所示。这个过程
 叫做@term["registerization"]{寄存}。很容易用支持跳转的指令式语言翻译它。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define exp 'uninitialized)
 (define env 'uninitialized)
@@ -1510,7 +1510,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -1542,7 +1542,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
 @#,elem{@bold{用法} : 读取寄存器}
@@ -1580,7 +1580,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -1877,7 +1877,7 @@ let find-member-number =
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{apply-handler}} : @${\mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
 (define apply-handler
@@ -2197,7 +2197,7 @@ in ...
 究竟如何穿插取决于调度器；在本例中，在被调度器打断之前，每个线程打印出列表中的两
 个元素，
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 test: two-non-cooperating-threads
@@ -2245,7 +2245,7 @@ in
 thread. 实则205是生产者所在线程打印。}就像前一个例子那样，在被打断之前，消费者线
 程和生产者线程各自循环大约两次。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let buffer = 0
@@ -2348,7 +2348,7 @@ in let producer = proc (n)
 }
 
 @; TODO: format for interface in figure 5.18
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @nested{
 @bold{调度器的内部状态}
@@ -2382,7 +2382,7 @@ in let producer = proc (n)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{initialize-scheduler!}} : @${\mathit{Int} \to \mathit{Unspecified}}}
 (define initialize-scheduler!
@@ -2435,7 +2435,7 @@ in let producer = proc (n)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = 0
@@ -2589,7 +2589,7 @@ in let mut = mutex()
 器一定能够到达终值 3。
 @eopl-index[#:range-mark 'end "Critical region"]
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = 0
@@ -2672,7 +2672,7 @@ in let mut = mutex()
 现在，我们可以写出 @tt{wait-for-mutex} 和 @tt{signal-mutex}。这些过程取两个参数：
 一个互斥锁，一个线程，其工作方式如上所述（@figure-ref{fig-5.22}）。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{wait-for-mutex}} : @${\mathit{Mutex} \times \mathit{Thread} \to \mathit{FinalAnswer}}}
 @#,elem{@bold{用法} : @tt{等待互斥锁开启，然后关闭它}}

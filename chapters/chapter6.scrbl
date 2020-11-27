@@ -119,7 +119,7 @@
 ]
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define n 'uninitialized)
 (define cont 'uninitialized)
@@ -160,7 +160,7 @@
 展开，这一转换叫做@term["inlining"]{内联}。我们还要内联 @tt{apply-cont} 的调用，
 不再写 @tt{(apply-cont cont val)}，而是直接写 @tt{(cont val)}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define n 'uninitialized)
 (define cont 'uninitialized)
@@ -673,7 +673,7 @@ val1 val2)} 的值传给当前续文。
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @linebreak[]
 @envalign*{\mathit{Program} &::= \mathit{InpExp} \\[-3pt]
@@ -751,7 +751,7 @@ CPS-IN 中的尾端如@figure-ref{fig-6.4} 所示。尾端每个子表达式的�
 达式的值。在传递续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达
 式在原表达式的续文中求值，如@pageref{tail-call-explain}所述。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 zero?(|@${O})
@@ -810,7 +810,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @linebreak[]
 @nested[#:style small]{
@@ -841,7 +841,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
                          @eopl-index["CPS-OUT"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{value-of/k}} : @${\mathit{TfExp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
@@ -1122,7 +1122,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 像之前那样，我们首先给出例子，然后提出规范，最后写出程序。@figure-ref{fig-6.7}
 展示了与前一节类似的 Scheme 例子，只是更加详细。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 (lambda (x)
@@ -1447,7 +1447,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 我们可以用 @tt{cps-of-exps} 生成求和表达式和过程调用的尾式。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-exps}} : @${\mathit{Listof(InpExp)} \times \mathit{(Listof(InpExp) \to TfExp)} \to \mathit{TfExp}}}
@@ -1497,7 +1497,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
           (cps-sum-exp simples))))))
 ]}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-simple-exp}} : @${\mathit{InpExp} \to \mathit{SimpleExp}}}
@@ -1547,7 +1547,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 在下面的练习中，用 CPS-OUT 的语法和解释器运行输出表达式，确保它们是尾式。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-exp}} : @${\mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
@@ -1593,7 +1593,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
                           @eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-diff-exp}} : @${\mathit{InpExp} \times \mathit{InpExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
@@ -1644,7 +1644,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @eopl-caption["fig-6.11"]{@tt{cps-of-exp}，第2部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-program}} : @${\mathit{InpExp} \to \mathit{TfExp}}}

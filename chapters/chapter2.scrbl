@@ -303,7 +303,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
    ]}}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@${\mathit{Env} = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
@@ -1209,7 +1209,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
 字为标识。树枝以所出现的非终止符名字为标识。叶子对应终止符字符串。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/ast"
   #:suffixes (list ".pdf" ".svg")

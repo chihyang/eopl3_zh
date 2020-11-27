@@ -70,7 +70,7 @@ interface"]{简单接口}，接口列出模块提供的绑定及其类型。模�
 和实现，但爱丽丝只能看到他人模块的接口。她的所做所为不会影响其他模块的实现，其他
 模块的实现也不会影响她的（如@figure-ref{fig-8.1} 所示）。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/alice-view"
   #:suffixes (list ".pdf" ".svg")
@@ -163,7 +163,7 @@ module m1
 类型异常。即使程序的其他部分不使用那些值，模块主体也要将接口中的名字与适当类型的
 值关联起来。} }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/module-contour"
   #:suffixes (list ".pdf" ".svg")
@@ -420,7 +420,7 @@ in -(z, -(from m1 take a, from m2 take a))
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -448,7 +448,7 @@ in -(z, -(from m1 take a, from m2 take a))
 @eopl-caption["fig-8.3"]{SIMPLE-MODULES 的解释器，第 1 部分}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
 (define value-of-module-body
@@ -512,7 +512,7 @@ in -(z, -(from m1 take a, from m2 take a))
           (lookup-variable-name-in-decls var-name decls))))))
 ]}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
 (define type-of-program
@@ -614,7 +614,7 @@ z : int]} 公布的所有值。
 @${decls_2} 中的所有声明，在 @${decls_1} 中都有与之匹配的声明，就能保证这一点，
 就像上面的例子那样。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define interface-of
@@ -652,7 +652,7 @@ z : int]} 公布的所有值。
 
 这样，简单模块系统就完成了。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{<:-iface}} : @${\mathit{Iface} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-iface
@@ -1020,7 +1020,7 @@ module m1
 类型为 @tt{(int -> bool)}。
 }}
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @centered{
 @(image "../images/module-type"
   #:suffixes (list ".pdf" ".svg")
@@ -1529,7 +1529,7 @@ type"]{展开类型}。}
 过程 @tt{expand-iface}（@figure-ref{fig-8.10}）调用 @tt{expand-decls}。我们提取
 出这些过程，为@secref{s8.3}做准备。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{defns-to-decls}} : @${\mathit{Listof(Defn)} \times \mathit{Tenv} \to \mathit{Decl}}}
 (define defns-to-decls
@@ -1630,7 +1630,7 @@ module m1
 最后，我们修改 @tt{<:-decls}，处理两种新声明。我们必须处理声明集合内部的作用域关
 系。例如，如果我们比较
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define expand-iface
@@ -1754,7 +1754,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 ]
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{<:-decls}} : @${\mathit{Listof(Decl)} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-decls
@@ -1833,7 +1833,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{<:-decl}} : @${\mathit{Decl} \times \mathit{Decl} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-decl
@@ -2341,7 +2341,7 @@ module mybool-tables
 我们只要求 @${i_2 <: i_1}。这就够了，因为 @${i_2 <: i_1} 意味着满足接口 @${i_2}
 的任意模块都满足接口 @${i_1}，也就能作为模块过程的参数。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
 (define value-of-module-body
@@ -2369,7 +2369,7 @@ module mybool-tables
 @eopl-caption["fig-8.13"]{@tt{value-of-module-body}}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @$${\begin{array}{l}
      \small{\textrm{IFACE-M-VAR}} \\
      @tt{(@${\rhd} @${m} @${tenv})} = tenv@tt{(@${m})}
@@ -2460,7 +2460,7 @@ module mybool-tables
 得出条件 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
 i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define interface-of
@@ -2507,7 +2507,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
 足坚果接口的。怎么混合不要紧，好吃就行！
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{<:-iface}} : @${\mathit{Iface} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-iface

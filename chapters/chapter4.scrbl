@@ -412,7 +412,7 @@ end
 子如@figure-ref{fig-4.4} 和 @countref{fig-4.5} 所示。此外，这一跟踪日志还表明，
 差值表达式的参数按从左到右的顺序求值。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{empty-store}} : @${() \to \mathit{Sto}}}
 (define empty-store
@@ -452,7 +452,7 @@ end
 @eopl-caption["fig-4.1"]{拙劣的存储器模型}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{setref!}} : @${\mathit{Ref} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
 @#,emph{@bold{用法} : 除了把位置 @tt{ref} 的值设为 @tt{val}，@tt{the-store} 与原状态相同。}
@@ -524,7 +524,7 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @codeblock[#:indent racket-block-offset]{
 (newref-exp
  (exp1)
@@ -550,7 +550,7 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
                          @eopl-index["Dereferencing"]}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 > (run "
@@ -599,7 +599,7 @@ newref: 分配位置 0
 @eopl-caption["fig-4.4"]{EXPLICIT-REFS的求值跟踪日志}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 进入 let zz
@@ -644,7 +644,7 @@ newref: 分配位置 2
 @eopl-caption["fig-4.5"]{EXPLICIT-REFS的求值跟踪日志，续}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define-datatype answer answer?
   (an-answer
@@ -719,7 +719,7 @@ newref: 分配位置 2
 @figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能
 像@secref{s4.2}中的例子那样做链式引用。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = 0
@@ -886,7 +886,7 @@ in let a = (g 11)
 @figure-ref{fig-4.8} 用@elemref["trace-instrument"]{前面}介绍的辅助组件，展示了
 IMPLICIT-REFS 求值的简单例子。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 > (run "
@@ -1206,7 +1206,7 @@ in let p = proc (y) -(y,x)
 用@elemref["trace-instrument"]{前述}辅助组件得到的示例跟踪日志
 如@figure-ref{fig-4.11} 所示。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 (define-datatype mutpair mutpair?
   (a-pair
@@ -1252,7 +1252,7 @@ in let p = proc (y) -(y,x)
 @eopl-caption["fig-4.9"]{可变序对的拙劣实现}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @codeblock[#:indent racket-block-offset]{
 (newpair-exp (exp1 exp2)
   (let ((val1 (value-of exp1 env))
@@ -1296,7 +1296,7 @@ in let p = proc (y) -(y,x)
 一个位置，那么右侧是下一个位置。所以我们还可以用左侧的引用表示序对。
 代码如@figure-ref{fig-4.13} 所示，不需再做其他修改。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 > (run "let glo = pair(11,22)
@@ -1343,7 +1343,7 @@ newref: 分配位置 6
 @eopl-caption["fig-4.11"]{MUTABLE-PAIRS求值的跟踪日志}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 ;; 为 loc 分配单元
@@ -1371,7 +1371,7 @@ newref: 分配位置 7
 的长度信息，指针本身无法指明一片内存区域（见@exercise-ref{ex4.30}）。缺乏长度信
 息是经典安全问题的一大来源，比如写数组越界。
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @racketblock[
 @#,elem{@bold{@tt{mutpair?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 (define mutpair?
@@ -1639,7 +1639,7 @@ in let p = proc (x) proc(y)
 
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 > (run "
@@ -1690,7 +1690,7 @@ newref: 分配位置 5
 @eopl-caption["fig-4.14"]{CALL-BY-REFERENCE 的简单求值}
 }
 
-@nested[#:style eopl-figure]{
+@eopl-figure{
 @verbatim|{
 
 进入 proc y 主体，环境 =
