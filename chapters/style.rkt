@@ -64,9 +64,6 @@
 (define two-columns
   (make-style "TwoColumns" (list (make-tex-addition "../style/two-columns.tex"))))
 
-(define samepage
-  (make-style "Samepage" (list (make-tex-addition "../style/samepage.tex"))))
-
 (define hangindent
   (make-style "Hangindent" (list (make-tex-addition "../style/hangindent.tex"))))
 
@@ -128,6 +125,22 @@
 
 (define eopl-exer-ref-range
   (make-style "EoplExerRefRange" (list (make-tex-addition "../style/exercise.tex"))))
+
+;;; for code
+(define eopl-samepage
+  (make-style "Samepage" (list (make-tex-addition "../style/samepage.tex"))))
+
+(define eopl-code-inset
+  (make-style "EoplCodeInset" (list (make-tex-addition "../style/code-inset.tex"))))
+
+;; make sure the code title does not become orphan
+(define (samepage . c)
+  (nested #:style eopl-samepage c))
+
+;; used for code in a paragraph
+(define (eopl-code . content)
+  (nested #:style eopl-code-inset
+          content))
 
 ;;; for exercise
 (define exercise-level-mark "{\\star}")

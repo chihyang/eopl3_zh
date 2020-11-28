@@ -857,8 +857,8 @@ C} 相同。
 @tt{cons} 结合二者，通过表达式 @tt{(cons (car los) (remove-first s (cdr los)))}
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
-@nested[#:style small]{
-@nested[#:style samepage]{
+@samepage{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -870,8 +870,7 @@ C} 相同。
 @#,exact-elem{\begin{mdframed}[style=codediff]}
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
-]}
-}
+]}}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 

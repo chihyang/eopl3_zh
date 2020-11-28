@@ -1713,8 +1713,8 @@ interface stringable
 接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
 用。我们抽象出一个过程来检查它们。
 
-@nested[#:style small]{
-@nested[#:style samepage]{
+@samepage{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Listof(Exp)} \times \mathit{Exp} \to \mathit{Type}}}
 (define type-of-call
@@ -1904,8 +1904,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 要构建静态类环境，@tt{initialize-static-class-env!} 首先将其设置为空，然后为类
 @tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
-@nested[#:style small]{
-@nested[#:style samepage]{
+@samepage{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-static-class-env!
