@@ -1179,6 +1179,16 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
+@eopl-figure[#:position "!t"]{
+@centered{
+@(image "../images/ast"
+  #:suffixes (list ".pdf" ".svg")
+  (tt "(lambda (x) (f (f x)))") "的抽象语法树")
+}
+
+@eopl-caption["fig-2.2"]{@tt{(lambda (x) (f (f x)))} 的抽象语法树}
+}
+
 @eopl-index[#:range-mark 'start "Abstract syntax"]
 @eopl-index[#:range-mark 'start "Concrete syntax"]
 语法通常指定归纳式数据类型的某一具体表示，后者使用前者生成的字符串或值。这种表示
@@ -1208,16 +1218,6 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
 字为标识。树枝以所出现的非终止符名字为标识。叶子对应终止符字符串。
-
-@eopl-figure[#:position "!ht"]{
-@centered{
-@(image "../images/ast"
-  #:suffixes (list ".pdf" ".svg")
-  (tt "(lambda (x) (f (f x)))") "的抽象语法树")
-}
-
-@eopl-caption["fig-2.2"]{@tt{(lambda (x) (f (f x)))} 的抽象语法树}
-}
 
 要为某种具体语法设计抽象语法，需要给其中的每个生成式，以及生成式中出现的每个非终
 止符命名。很容易将抽象语法写成 @tt{define-datatype} 声明。我们为每个非终止符添加
