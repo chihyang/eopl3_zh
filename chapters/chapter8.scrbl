@@ -614,7 +614,7 @@ z : int]} 公布的所有值。
 @${decls_2} 中的所有声明，在 @${decls_1} 中都有与之匹配的声明，就能保证这一点，
 就像上面的例子那样。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define interface-of
