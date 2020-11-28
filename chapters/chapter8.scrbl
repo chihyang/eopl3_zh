@@ -70,17 +70,6 @@ interface"]{简单接口}，接口列出模块提供的绑定及其类型。模�
 和实现，但爱丽丝只能看到他人模块的接口。她的所做所为不会影响其他模块的实现，其他
 模块的实现也不会影响她的（如@figure-ref{fig-8.1} 所示）。
 
-@eopl-figure{
-@centered{
-@(image "../images/alice-view"
-  #:suffixes (list ".pdf" ".svg")
-  #:width 'textwidth
-  "项目中，爱丽丝所见的三个模块")
-}
-
-@eopl-caption["fig-8.1"]{项目中，爱丽丝所见的三个模块}
-}
-
 这里是 SIMPLE-MODULES 的简短例子。
 
 @example[#:tag "eg-8.1"]{
@@ -107,6 +96,17 @@ in -(-(from m1 take a,
 
 类型为 @tt{int}，值为 @${((33-1)-10)=22}。
 }
+}
+
+@eopl-figure[#:position "!t"]{
+@centered{
+@(image "../images/alice-view"
+  #:suffixes (list ".pdf" ".svg")
+  #:scale 0.95
+  "项目中，爱丽丝所见的三个模块")
+}
+
+@eopl-caption["fig-8.1"]{项目中，爱丽丝所见的三个模块}
 }
 
 @eopl-index["Body" (eopl-index-entry "of module" "module")]
@@ -163,7 +163,7 @@ module m1
 类型异常。即使程序的其他部分不使用那些值，模块主体也要将接口中的名字与适当类型的
 值关联起来。} }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @centered{
 @(image "../images/module-contour"
   #:suffixes (list ".pdf" ".svg")
@@ -420,7 +420,7 @@ in -(z, -(from m1 take a, from m2 take a))
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -448,7 +448,7 @@ in -(z, -(from m1 take a, from m2 take a))
 @eopl-caption["fig-8.3"]{SIMPLE-MODULES 的解释器，第 1 部分}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
 (define value-of-module-body
@@ -512,7 +512,7 @@ in -(z, -(from m1 take a, from m2 take a))
           (lookup-variable-name-in-decls var-name decls))))))
 ]}
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
 (define type-of-program
@@ -614,7 +614,7 @@ z : int]} 公布的所有值。
 @${decls_2} 中的所有声明，在 @${decls_1} 中都有与之匹配的声明，就能保证这一点，
 就像上面的例子那样。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define interface-of
@@ -652,7 +652,7 @@ z : int]} 公布的所有值。
 
 这样，简单模块系统就完成了。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{<:-iface}} : @${\mathit{Iface} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-iface
@@ -1020,7 +1020,7 @@ module m1
 类型为 @tt{(int -> bool)}。
 }}
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @centered{
 @(image "../images/module-type"
   #:suffixes (list ".pdf" ".svg")
@@ -1833,7 +1833,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{<:-decl}} : @${\mathit{Decl} \times \mathit{Decl} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-decl
@@ -2341,7 +2341,7 @@ module mybool-tables
 我们只要求 @${i_2 <: i_1}。这就够了，因为 @${i_2 <: i_1} 意味着满足接口 @${i_2}
 的任意模块都满足接口 @${i_1}，也就能作为模块过程的参数。
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
 (define value-of-module-body
@@ -2460,7 +2460,7 @@ module mybool-tables
 得出条件 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
 i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define interface-of
@@ -2507,7 +2507,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
 足坚果接口的。怎么混合不要紧，好吃就行！
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{<:-iface}} : @${\mathit{Iface} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Bool}}}
 (define <:-iface

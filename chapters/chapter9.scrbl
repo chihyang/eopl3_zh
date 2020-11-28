@@ -67,7 +67,7 @@
 方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class c1 extends object
@@ -112,7 +112,7 @@ in begin
 @tt{countup}，将两个字段的值改为 5 和 -5，然后再次调用 @tt{getstate}，返回@tt{(5
 -5)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))} 成为整段程序的返回值。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class interior-node extends object
@@ -200,7 +200,7 @@ in send o1 odd(13)}|
 例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
 择这种设计，其他面向对象语言可能有不同的可见性规则。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @nested[#:style small]{
 @verbatim|{
@@ -245,7 +245,7 @@ in begin
 @tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
 @tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 |@elemtag["field-shadowing"]{}class c1 extends object
@@ -338,7 +338,7 @@ method initialize (initx, inity, initcolor)
 子类，但不一定是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为
 @${m} 可能在目标对象的某个祖先中声明。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class point extends object
@@ -382,7 +382,7 @@ in send o1 get-color()}|
 本例中，@tt{c1} 的方法 @tt{m1} 调用 @tt{o3} 的方法 @tt{m2}。这是普通方法调用，所
 以使用动态分发，找出的是 @tt{c3} 的方法 @tt{m2}，返回 33。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 class c1 extends object
@@ -436,7 +436,7 @@ in send o3 m3()
 不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，
 看看@exercise-ref{ex9.29}。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @envalign*{
            \mathit{Program} &::= \{\mathit{ClassDecl}\}^{*} \phantom{x} \mathit{Expression} \\[-3pt]
@@ -732,7 +732,7 @@ in send o3 m1(7,8)
 此一无所知），方法 @tt{m1} 将把变量 @tt{y} 与 @tt{c2} 中声明的 @tt{y} 关联起来，
 正合期望。
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @centered{
 @(image "../images/env-for-method"
   #:suffixes (list ".pdf" ".svg")
@@ -1689,10 +1689,7 @@ interface stringable
 类型正常，且返回值是一个对象。这三种情况的代码如@figure-ref{fig-9.14} 所示。
 @eopl-index[#:range-mark 'end "Class environment"]
 
-接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
-用。我们抽象出一个过程来检查它们。
-
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @codeblock[#:indent racket-block-offset]{
 (self-exp ()
   (apply-tenv tenv '%self))
@@ -1712,6 +1709,9 @@ interface stringable
 
 @eopl-caption["fig-9.14"]{面向对象表达式在 @tt{type-of} 中的对应语句，第 1 部分}
 }
+
+接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
+用。我们抽象出一个过程来检查它们。
 
 @nested[#:style small]{
 @racketblock[
@@ -1739,17 +1739,6 @@ interface stringable
 类型。更有意思的是第二点，我们把@figure-ref{fig-7.2} 中的 @tt{check-equal-type!}
 换成了 @tt{check-is-subtype!}。
 
-@eopl-figure{
-@centered{
-@(image "../images/subtyping-proc-type"
-  #:scale 1.5
-  #:suffixes (list ".pdf" ".svg")
-  "过程类型的子类型判定")
-}
-
-@eopl-caption["fig-9.15"]{过程类型的子类型判定}
-}
-
 为什么必须这样？子类多态原则是说，如果类 @${c_2} 扩展了 @${c_1}，那么类 @${c_2}
 的对象可在类 @${c_1} 对象能够出现的任何地方使用。如果我们写出了过程 @tt{proc (o
 : @${c_1}) ...}，那么该过程应该能取类型为 @${c_2} 的实参。
@@ -1768,6 +1757,17 @@ interface stringable
 
 ]
 
+@eopl-figure[#:position "!th"]{
+@centered{
+@(image "../images/subtyping-proc-type"
+  #:scale 1.5
+  #:suffixes (list ".pdf" ".svg")
+  "过程类型的子类型判定")
+}
+
+@eopl-caption["fig-9.15"]{过程类型的子类型判定}
+}
+
 要理解最后一条规则，令 @${t_1} 为 @tt{(c1 -> d1)}，@${t_2} 为 @tt{(c2 -> d2)}，
 且 @tt{c2 < c1}，@tt{d1 < d2}。令 @tt{f} 为一过程，类型为 @${t_1}。我们说 @tt{f}
 类型也为 @${t_2}。为什么？假设我们给 @tt{f} 传递了类型为 @tt{c2} 的参数。由于
@@ -1780,63 +1780,11 @@ interface stringable
 @eopl-index[#:range-mark 'start "Contravariant subtyping"]
 @eopl-index[#:range-mark 'start "Covariant subtyping"]
 
-
 这部分代码如@figure-ref{fig-9.16} 所示。代码使用@tt{every2?}，
 它扩展@exercise-ref{ex1.24} 中的过程 @tt{every?}，取一个双参数谓词和两个列表，当
 列表长度相同且对应元素满足谓词时，返回 @tt{#t}，否则返回 @tt{#f}。
 @eopl-index[#:range-mark 'end "Contravariant subtyping"]
 @eopl-index[#:range-mark 'end "Covariant subtyping"]
-
-现在可以逐一考虑三种调用（@figure-ref{fig-9.17}）。对方法调用，我们首先像通常那
-样，找出目标对象和操作数的类型。我们用类似 @tt{find-method} 的
-@tt{find-method-type} 找出方法的类型。如果目标类型不是类或接口，那么
-@tt{type->class-name} 报错。如果没有对应方法，那么 @tt{find-method-type} 报错。
-然后，我们调用 @tt{type-of-call} 验证操作数的类型与方法的期望是否相符，并返回结
-果的类型。
-
-@eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
-对 @tt{new} 表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报
-错。之后，用操作数的类型调用 @tt{type-of-call}，检查调用 @tt{initialize} 是否安
-全。如果检查通过，那么执行表达式就是安全的。由于 @tt{new} 表达式返回指定类的新对
-象，结果类型就是对应类的类型。
-
-TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环境。
-
-@eopl-index["Class environment"]
-要构建静态类环境，@tt{initialize-static-class-env!} 首先将其设置为空，然后为类
-@tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
-
-@nested[#:style small]{
-@racketblock[
-@#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
-(define initialize-static-class-env!
-  (lambda (c-decls)
-    (empty-the-static-class-env!)
-    (add-static-class-binding!
-      'object (a-static-class #f '() '() '() '()))
-    (for-each add-class-decl-to-static-class-env! c-decls)))
-]}
-
-过程 @tt{add-class-decl-to-static-class-env!}（@figure-ref{fig-9.18}）承担创建静
-态类的艰巨工作。对每个类，我们必须收集其接口、字段和方法：
-
-@itemlist[
-
- @item{类实现父类实现的任何接口，以及自身声称实现的接口。}
-
- @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
- 所以，@tt{field-names} 由 @tt{append-field-names} 计算而得，就像
- @tt{initialize-class-env!} 那样（@pageref{initialize-class-env!}）。}
-
- @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
-
- @item{类的方法包括父类的和自身的，方法带有声明类型。我们用 @tt{proc-type} 记录
- 方法的类型。我们把当前声明的方法放在前面，因为它们覆盖父类的方法。}
-
- @item{我们确保当前类中声明的方法名、接口名和字段名不重复。我们还确保类中一定有
- @tt{initialize} 方法。}
-
-]
 
 @eopl-figure{
 @racketblock[
@@ -1890,6 +1838,13 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Covariant subtyping"]}
 }
 
+现在可以逐一考虑三种调用（@figure-ref{fig-9.17}）。对方法调用，我们首先像通常那
+样，找出目标对象和操作数的类型。我们用类似 @tt{find-method} 的
+@tt{find-method-type} 找出方法的类型。如果目标类型不是类或接口，那么
+@tt{type->class-name} 报错。如果没有对应方法，那么 @tt{find-method-type} 报错。
+然后，我们调用 @tt{type-of-call} 验证操作数的类型与方法的期望是否相符，并返回结
+果的类型。
+
 @eopl-figure{
 @codeblock[#:indent racket-block-offset]{
 (method-call-exp (obj-exp method-name rands)
@@ -1936,36 +1891,28 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @eopl-caption["fig-9.17"]{面向对象表达式在 @tt{type-of} 中的对应语句，第 2 部分}
 }
 
-对接口声明，我们只需处理方法名和类型。
+@eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
+对 @tt{new} 表达式，我们首先取出类名对应的类信息。如果没有类与名字相关联，那就报
+错。之后，用操作数的类型调用 @tt{type-of-call}，检查调用 @tt{initialize} 是否安
+全。如果检查通过，那么执行表达式就是安全的。由于 @tt{new} 表达式返回指定类的新对
+象，结果类型就是对应类的类型。
 
-@eopl-index[#:range-mark 'start "Class environment"]
-@eopl-index["Classes" "declaration of"]
-@eopl-index["Declaration" "of classes"]
-一旦建立了静态类环境，我们可以检查每个类声明。这由
-@tt{check-class-decl!}（@figure-ref{fig-9.19}）完成。对接口，什么都不必检查。对
-类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
-了它声称实现的每个接口。
+TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环境。
 
-@eopl-index["Declaration" "of method"]
-要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
-境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
-的子类型。
+@eopl-index["Class environment"]
+要构建静态类环境，@tt{initialize-static-class-env!} 首先将其设置为空，然后为类
+@tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
-但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
-类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
-型。这条规则的唯一例外是 @tt{initialize}，它只在当前类中调用，且随继承改变类型
-（见@figure-ref{fig-9.12}）。要这样做，它调用 @tt{maybe-find-method-type}，后者
-返回已绑定方法的类型，或者 @tt{#f}。见@figure-ref{fig-9.20}。
-
-如@figure-ref{fig-9.21}，过程 @tt{check-if-implements?} 取两个符号，分别为类名和
-接口名。它首先检查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查
-类是否提供了同名且类型兼容的方法。
-
-为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。
-静态类是逆序的，这反映了生成类环境的顺序。三个类中的方法顺序相同，且类型相同，符
-合期望。
-
-这样，检查器就完成了。
+@nested[#:style small]{
+@racketblock[
+@#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
+(define initialize-static-class-env!
+  (lambda (c-decls)
+    (empty-the-static-class-env!)
+    (add-static-class-binding!
+      'object (a-static-class #f '() '() '() '()))
+    (for-each add-class-decl-to-static-class-env! c-decls)))
+]}
 
 @eopl-figure{
 @racketblock[
@@ -2016,7 +1963,38 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @eopl-caption["fig-9.18"]{@tt{add-class-decl-to-static-class-env!}}
 }
 
-@eopl-figure{
+过程 @tt{add-class-decl-to-static-class-env!}（@figure-ref{fig-9.18}）承担创建静
+态类的艰巨工作。对每个类，我们必须收集其接口、字段和方法：
+
+@itemlist[
+
+ @item{类实现父类实现的任何接口，以及自身声称实现的接口。}
+
+ @item{类具有父类的所有字段，以及自身的字段，但是父类字段被当前声明的字段遮蔽。
+ 所以，@tt{field-names} 由 @tt{append-field-names} 计算而得，就像
+ @tt{initialize-class-env!} 那样（@pageref{initialize-class-env!}）。}
+
+ @item{类字段的类型包括父类字段的类型，以及自身声明字段的类型。}
+
+ @item{类的方法包括父类的和自身的，方法带有声明类型。我们用 @tt{proc-type} 记录
+ 方法的类型。我们把当前声明的方法放在前面，因为它们覆盖父类的方法。}
+
+ @item{我们确保当前类中声明的方法名、接口名和字段名不重复。我们还确保类中一定有
+ @tt{initialize} 方法。}
+
+]
+
+对接口声明，我们只需处理方法名和类型。
+
+@eopl-index[#:range-mark 'start "Class environment"]
+@eopl-index["Classes" "declaration of"]
+@eopl-index["Declaration" "of classes"]
+一旦建立了静态类环境，我们可以检查每个类声明。这由
+@tt{check-class-decl!}（@figure-ref{fig-9.19}）完成。对接口，什么都不必检查。对
+类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
+了它声称实现的每个接口。
+
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{check-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
 (define check-class-decl!
@@ -2046,7 +2024,28 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Declaration" "of classes"]}
 }
 
-@eopl-figure{
+@eopl-index["Declaration" "of method"]
+要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
+境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
+的子类型。
+
+但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
+类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
+型。这条规则的唯一例外是 @tt{initialize}，它只在当前类中调用，且随继承改变类型
+（见@figure-ref{fig-9.12}）。要这样做，它调用 @tt{maybe-find-method-type}，后者
+返回已绑定方法的类型，或者 @tt{#f}。见@figure-ref{fig-9.20}。
+
+如@figure-ref{fig-9.21}，过程 @tt{check-if-implements?} 取两个符号，分别为类名和
+接口名。它首先检查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查
+类是否提供了同名且类型兼容的方法。
+
+为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。
+静态类是逆序的，这反映了生成类环境的顺序。三个类中的方法顺序相同，且类型相同，符
+合期望。
+
+这样，检查器就完成了。
+
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{check-method-decl!}} : @linebreak[] @${\phantom{x}\mathit{MethodDecl} \times \mathit{ClassName} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \times \mathit{Listof(Type)} \\ \phantom{xxxx}\to \mathit{Unspecified}}}
 (define check-method-decl!
@@ -2080,35 +2079,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Declaration" "of method"]}
 }
 
-@exercise[#:level 1 #:tag "ex9.33"]{
-
-扩展类型检查器，确保安全性质：@tt{instanceof} 和 @tt{cast} 不会处理非对象值或非
-类类型。
-
-}
-
-@exercise[#:level 1 #:tag "ex9.34"]{
-
-若 @${e} 的类型不是 @${c} 的后代或者祖先，则表达式 @tt{cast @${e} @${c}} 不会成
-功（为什么？）。扩展类型检查器，确保程序只对满足这条性质的 @tt{cast} 表达式求值。
-再对 @tt{instanceof} 的检查做相应扩展。
-
-}
-
-@exercise[#:level 1 #:tag "ex9.35"]{
-
-扩展类型检查器，确保 @tt{initialize} 方法只从 @tt{new-object-exp} 内部调用，从而
-加强安全性。
-
-}
-
-@exercise[#:level 1 #:tag "ex9.36"]{
-
-扩展语言，允许接口继承自其他接口。接口应要求实现父类要求实现的所有方法。
-
-}
-
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{check-if-implements!}} : @${\mathit{ClassName} \times \mathit{InterfaceName} \to \mathit{Bool}}}
 (define check-if-implements!
@@ -2139,37 +2110,6 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 ]
 
 @eopl-caption["fig-9.21"]{@tt{check-if-implements!}}
-}
-
-@exercise[#:level 2 #:tag "ex9.37"]{
-
-我们的 TYPED-OO 语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方
-法的选择依赖于对象的类型，而不是所属类。考虑例子
-
-@nested[#:style 'code-inset]{
-@verbatim|{
-class c1 extends object
- method int initialize () 1
- method int m1 () 11
- staticmethod int m2 () 21
-class c2 extends c1
- method void m1 () 12
- staticmethod int m2 () 22
-let f = proc (x : c1) send x m1()
-    g = proc (x : c1) send x m2()
-    o = new c2()
-in list((f o), (g o))
-}|
-}
-
-调用 @tt{f} 和 @tt{g} 时，@tt{x} 类型为 @tt{c1}，但绑定到类 @tt{c2} 的对象。方法
-@tt{m1} 使用动态分发，所以调用的是 @tt{c2} 的方法 @tt{m1}，返回 12。方法 @tt{m2}
-使用静态分发，所以给 @tt{x} 发送消息 @tt{m2} 时，调用的是与 @tt{x} 类型（即本例
-中的 @tt{c1}）对应的方法，所以返回 21。
-
-修改@secref{s9.5}中的解释器，处理静态分发。提示：考虑在环境中记录类型信息，那么
-解释器就能在 @tt{send} 中找出目标表达式的类型。
-
 }
 
 @eopl-figure{
@@ -2218,6 +2158,65 @@ in list((f o), (g o))
 
 @eopl-caption["fig-9.22"]{为示例程序生成的静态类环境
                           @eopl-index["Class environment"]}
+}
+
+@exercise[#:level 1 #:tag "ex9.33"]{
+
+扩展类型检查器，确保安全性质：@tt{instanceof} 和 @tt{cast} 不会处理非对象值或非
+类类型。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.34"]{
+
+若 @${e} 的类型不是 @${c} 的后代或者祖先，则表达式 @tt{cast @${e} @${c}} 不会成
+功（为什么？）。扩展类型检查器，确保程序只对满足这条性质的 @tt{cast} 表达式求值。
+再对 @tt{instanceof} 的检查做相应扩展。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.35"]{
+
+扩展类型检查器，确保 @tt{initialize} 方法只从 @tt{new-object-exp} 内部调用，从而
+加强安全性。
+
+}
+
+@exercise[#:level 1 #:tag "ex9.36"]{
+
+扩展语言，允许接口继承自其他接口。接口应要求实现父类要求实现的所有方法。
+
+}
+
+@exercise[#:level 2 #:tag "ex9.37"]{
+
+我们的 TYPED-OO 语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方
+法的选择依赖于对象的类型，而不是所属类。考虑例子
+
+@nested[#:style 'code-inset]{
+@verbatim|{
+class c1 extends object
+ method int initialize () 1
+ method int m1 () 11
+ staticmethod int m2 () 21
+class c2 extends c1
+ method void m1 () 12
+ staticmethod int m2 () 22
+let f = proc (x : c1) send x m1()
+    g = proc (x : c1) send x m2()
+    o = new c2()
+in list((f o), (g o))
+}|
+}
+
+调用 @tt{f} 和 @tt{g} 时，@tt{x} 类型为 @tt{c1}，但绑定到类 @tt{c2} 的对象。方法
+@tt{m1} 使用动态分发，所以调用的是 @tt{c2} 的方法 @tt{m1}，返回 12。方法 @tt{m2}
+使用静态分发，所以给 @tt{x} 发送消息 @tt{m2} 时，调用的是与 @tt{x} 类型（即本例
+中的 @tt{c1}）对应的方法，所以返回 21。
+
+修改@secref{s9.5}中的解释器，处理静态分发。提示：考虑在环境中记录类型信息，那么
+解释器就能在 @tt{send} 中找出目标表达式的类型。
+
 }
 
 @exercise[#:level 2 #:tag "ex9.38"]{

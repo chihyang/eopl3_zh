@@ -8,6 +8,7 @@
           scribble/core
           scribble/example
           scriblib/footnote
+          scribble/latex-properties
           racket/sandbox)
 
 @title[#:style part-title-style-numbered #:tag "cpi"]{传递续文的解释器}
@@ -1254,7 +1255,7 @@ odd:  if (x=0) then return(0)
 我们首先从@figure-ref{fig-5.4} 和 @countref{fig-5.5} 中的解释器开始，用数据结构
 表示续文。续文的数据结构表示如@figure-ref{fig-5.9} 和 @countref{fig-5.10} 所示。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define-datatype continuation continuation?
   (end-cont)
@@ -1510,7 +1511,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -1542,7 +1543,7 @@ odd:  if (x=0) then return(0)
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{()} \to \mathit{FinalAnswer}}}
 @#,elem{@bold{用法} : 读取寄存器}
@@ -1877,7 +1878,7 @@ let find-member-number =
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{apply-handler}} : @${\mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
 (define apply-handler
@@ -2197,7 +2198,7 @@ in ...
 究竟如何穿插取决于调度器；在本例中，在被调度器打断之前，每个线程打印出列表中的两
 个元素，
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 test: two-non-cooperating-threads
@@ -2348,22 +2349,18 @@ in let producer = proc (n)
 }
 
 @; TODO: format for interface in figure 5.18
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
-@nested{
-@bold{调度器的内部状态}
-
-@tabular[#:sep @hspace[1]
+@big-bracket[#:title "调度器的内部状态"]{
+@tabular[#:row-properties (list (make-table-row-skip "2pt")) #:sep @hspace[1]
 (list (list @tt{the-ready-queue} "就绪队列")
       (list @tt{the-final-answer} "主线程结束时的值")
       (list @tt{the-max-time-slice} "每个线程运行的步数")
       (list @tt{the-time-remaining} "当前运行线程剩余的步数"))]
 }
 
-@nested{
-@bold{调度器的内部状态}
-
-@tabular[#:sep @hspace[1]
+@big-bracket[#:title "调度器的接口"]{
+@tabular[#:row-properties (list (make-table-row-skip "2pt")) #:sep @hspace[1]
 (list (list @tt{@bold{initialize-scheduler!}} @${: \mathit{Int} \to \mathit{Unspecified}})
       (list "" "初始化调度器状态")
       (list @tt{@bold{place-on-ready-queue!}} @${: \mathit{Thread} \to \mathit{Unspecified}})
@@ -2714,10 +2711,10 @@ in let mut = mutex()
             (th)))))))
 ]
 
-@eopl-index["Binary semaphore"]
-@eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}}
-
+@eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}
+                          @eopl-index["Binary semaphore"]}
 }
+
 @eopl-index[#:range-mark 'end "Binary semaphore"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{

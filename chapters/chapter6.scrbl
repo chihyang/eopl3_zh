@@ -119,7 +119,7 @@
 ]
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define n 'uninitialized)
 (define cont 'uninitialized)
@@ -673,7 +673,7 @@ val1 val2)} 的值传给当前续文。
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @linebreak[]
 @envalign*{\mathit{Program} &::= \mathit{InpExp} \\[-3pt]
@@ -751,7 +751,7 @@ CPS-IN 中的尾端如@figure-ref{fig-6.4} 所示。尾端每个子表达式的�
 达式的值。在传递续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达
 式在原表达式的续文中求值，如@pageref{tail-call-explain}所述。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 zero?(|@${O})
@@ -1122,7 +1122,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 像之前那样，我们首先给出例子，然后提出规范，最后写出程序。@figure-ref{fig-6.7}
 展示了与前一节类似的 Scheme 例子，只是更加详细。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 (lambda (x)
@@ -1447,7 +1447,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 我们可以用 @tt{cps-of-exps} 生成求和表达式和过程调用的尾式。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-exps}} : @${\mathit{Listof(InpExp)} \times \mathit{(Listof(InpExp) \to TfExp)} \to \mathit{TfExp}}}
@@ -1497,7 +1497,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
           (cps-sum-exp simples))))))
 ]}
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{cps-of-simple-exp}} : @${\mathit{InpExp} \to \mathit{SimpleExp}}}

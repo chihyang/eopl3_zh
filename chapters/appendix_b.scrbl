@@ -344,7 +344,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 生成一个读入-求值-打印循环，以指定字符串为标准输出中的提示符，从标准输入读入字符，
 解析它们，然后以指定过程处理抽象语法树，将结果打印出来。例如：
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 (define scanner-spec-1 ...)
 

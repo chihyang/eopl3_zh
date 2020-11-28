@@ -568,7 +568,7 @@ in |@${e_{letrec\mbox{-}body}}
                          @eopl-index["CHECKED"]}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@${\fbox{\infer{@tt{(type-of (let-exp @${var} @${e_1} @${body}) @${tenv}) = @${t_2}}}{@tt{(type-of @${body} [@${var}=@${t_1}]@${tenv}) = @${t_2}} & @tt{(type-of @${e_1} @${tenv}) = @${t_1}}}}}}
 (let-exp (var exp1 body)
@@ -600,7 +600,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,exact-elem{\smallskip
 \begin{comment}}
@@ -1686,7 +1686,7 @@ in letrec
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{unifier}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Subst} \times \mathit{Exp} \to \mathit{Subst}}}
 (define unifier
@@ -1891,7 +1891,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.7"]{INFERRED 的 @tt{type-of}，第 2 部分}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@${\fbox{@tt{(proc-exp @${var} @${body})} : @${t_{@tt{(proc-exp @${var} @${body})}}} = @tt{(@${tvar} @${\to} @${t_{body}})}}}}
 (proc-exp (var otype body)
@@ -1923,7 +1923,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @eopl-caption["fig-7.8"]{INFERRED 的 @tt{type-of}，第 3 部分}}
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@${\fbox{\begin{math}\begin{alignedat}{-1}&@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}} : \\ &\phantom{xx}t_{p} = t_{var} \to t_{e_{proc\mbox{-}body}} \\ &\phantom{xx}t_{e_{letrec\mbox{-}body}} = t_{@tt{letrec @${t_{proc\mbox{-}result}} @${p} (@${var} : @${t_{var}}) = @${e_{proc\mbox{-}body}} in @${e_{letrec\mbox{-}body}}}}\end{alignedat}\end{math}}}}
 @#,exact-elem{\smallskip
@@ -1954,7 +1954,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.9"]{INFERRED 的 @tt{type-of}，第 4 部分}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@${\mathit{TvarTypeSym} = @emph{含有数字的符号}}}
 
@@ -1990,7 +1990,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{tvar-type-sym?}} : @${\mathit{Sym} \to \mathit{Bool}}}
 (define tvar-type-sym?

@@ -452,7 +452,7 @@ end
 @eopl-caption["fig-4.1"]{拙劣的存储器模型}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{setref!}} : @${\mathit{Ref} \times \mathit{ExpVal} \to \mathit{Unspecified}}}
 @#,emph{@bold{用法} : 除了把位置 @tt{ref} 的值设为 @tt{val}，@tt{the-store} 与原状态相同。}
@@ -524,7 +524,7 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
 
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @codeblock[#:indent racket-block-offset]{
 (newref-exp
  (exp1)
@@ -644,7 +644,7 @@ newref: 分配位置 2
 @eopl-caption["fig-4.5"]{EXPLICIT-REFS的求值跟踪日志，续}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 (define-datatype answer answer?
   (an-answer
@@ -719,7 +719,7 @@ newref: 分配位置 2
 @figure-ref{fig-4.7} 是这种设计的两个示例程序。因为引用不再是表达值，我们不能
 像@secref{s4.2}中的例子那样做链式引用。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @nested[#:style 'code-inset]{
 @verbatim|{
 let x = 0
@@ -1252,7 +1252,7 @@ in let p = proc (y) -(y,x)
 @eopl-caption["fig-4.9"]{可变序对的拙劣实现}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @codeblock[#:indent racket-block-offset]{
 (newpair-exp (exp1 exp2)
   (let ((val1 (value-of exp1 env))
@@ -1371,7 +1371,7 @@ newref: 分配位置 7
 的长度信息，指针本身无法指明一片内存区域（见@exercise-ref{ex4.30}）。缺乏长度信
 息是经典安全问题的一大来源，比如写数组越界。
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{mutpair?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 (define mutpair?
@@ -1690,7 +1690,7 @@ newref: 分配位置 5
 @eopl-caption["fig-4.14"]{CALL-BY-REFERENCE 的简单求值}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @verbatim|{
 
 进入 proc y 主体，环境 =
