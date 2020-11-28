@@ -858,6 +858,7 @@ C} 相同。
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
 @nested[#:style small]{
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -869,7 +870,7 @@ C} 相同。
 @#,exact-elem{\begin{mdframed}[style=codediff]}
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
-]
+]}
 }
 
 @exercise[#:level 1 #:tag "ex1.8"]{

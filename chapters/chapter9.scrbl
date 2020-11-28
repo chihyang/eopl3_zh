@@ -1714,6 +1714,7 @@ interface stringable
 用。我们抽象出一个过程来检查它们。
 
 @nested[#:style small]{
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{type-of-call}} : @${\mathit{Type} \times \mathit{Listof(Type)} \times \mathit{Listof(Exp)} \times \mathit{Exp} \to \mathit{Type}}}
 (define type-of-call
@@ -1731,7 +1732,7 @@ interface stringable
         (report-rator-not-of-proc-type
           (type-to-external-form rator-type)
           exp)))))
-]}
+]}}
 
 这个过程等价于 CHECKED 中 @tt{call-exp} 对应的那一行（@figure-ref{fig-7.2}），但
 多了两处明显区别。首先，由于我们的过程现在取多个参数，我们要确保调用时的实参数目
@@ -1904,6 +1905,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
 @nested[#:style small]{
+@nested[#:style samepage]{
 @racketblock[
 @#,elem{@bold{@tt{initialize-static-class-env!}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-static-class-env!
@@ -1912,7 +1914,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
     (add-static-class-binding!
       'object (a-static-class #f '() '() '() '()))
     (for-each add-class-decl-to-static-class-env! c-decls)))
-]}
+]}}
 
 @eopl-figure{
 @racketblock[
