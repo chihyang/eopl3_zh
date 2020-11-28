@@ -66,7 +66,7 @@
 可以用该定义编写一个函数，判断一个自然数 @${n} 是否属于 @${S}。
 
 @; codeblock with contracts and usage
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
@@ -361,25 +361,23 @@
 例如，@${\mathit{Int}^{*(,)}} 包含字符串
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 8
 14, 12
 7, 3, 14, 16
 }|
-}}
+}
 
 @${\mathit{Int}^{*(;)}} 包含字符串
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 8
 14; 12
 7; 3; 14; 16
 }|
-}}
+}
 }
 
 这些简写不是必需的，总能够不用它们重写语法。
@@ -429,11 +427,12 @@
  @elemtag["s-list"]{s-list} 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。
  这里是一些 s-list。
 
- @nested[#:style small]{
- @verbatim[#:indent 2]{
+ @eopl-code{
+ @verbatim|{
  (a b c)
  (an (((s-list)) (with () lots) ((of) nesting)))
- }}
+ }|
+ }
 
  有时也使用更宽松的 s-list 定义，既允许整数，也允许符号。
 
@@ -452,16 +451,17 @@
 
  这是此类树的几个例子：
 
- @nested[#:style small]{
- @verbatim[#:indent 2]{
+ @eopl-code{
+ @verbatim|{
  1
  2
  (foo 1 2)
  (bar 1 (foo 1 2))
  (baz
   (bar 1 (foo 1 2))
-  (biz 4 5))}}
- }
+  (biz 4 5))
+ }|
+ }}
 
  @item{@term["lambda calculus"]{lambda 演算} 是一种简单语言，常用于研究编程语言
  理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
@@ -484,11 +484,11 @@
 
  要明白这怎么用，考虑用算术操作符扩展的 lambda 演算。在这种语言里，
 
- @nested[#:style small]{@codeblock{(lambda (x) (+ x 5))}}
+ @eopl-code{@codeblock{(lambda (x) (+ x 5))}}
 
  是一表达式，@tt{x} 是其绑定变量。这式子表示一个过程，把它的参数加5。因此，在
 
- @nested[#:style small]{@codeblock{((lambda (x) (+ x 5)) (- x 7))}}
+ @eopl-code{@codeblock{((lambda (x) (+ x 5)) (- x 7))}}
 
  中，最后一个出现的 @tt{x} 不是指 @tt{lambda} 表达式中绑定的 @tt{x}。
  @secref{s1.2.4}中介绍了 @tt{occurs-free?}，到时我们再讨论这个问题。
@@ -613,8 +613,9 @@
 
 标准的 Scheme 程序 @tt{length} 求出列表中的元素个数。
 
+@eopl-code{
 @examples[#:label #f (length '(a b c))
-                     (length '((x) ()))]
+                     (length '((x) ()))]}
 
 我们来写出自己的过程 @tt{list-length}，做同样的事。
 
@@ -623,7 +624,7 @@
 可以包含过程的期望用法或行为。这有助于我们在编写时及以后追踪我们的意图。在代码中，
 这是一条注释，我们用打字机字体示之，以便阅读。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l}@tt{的长度}}}
@@ -640,7 +641,7 @@
 
 因此，考虑列表的每种情况。若列表为空，则长度为0。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -656,7 +657,7 @@
 
 若列表非空，则其长度比其余项长度多1。这就给出了完整定义。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{list-length}} : @${\mathit{List} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(list-length @${l}) = @${l} 的长度}}
@@ -672,8 +673,7 @@
 
 通过 @tt{list-length} 的定义，我们可以看到它的运算过程。
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
   (list-length '(a (b c) d))
 = (+ 1 (list-length '((b c) d)))
@@ -683,14 +683,14 @@
 = 3
 }|
 }
-}
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.2"]{@tt{nth-element}}
 
 标准的 Scheme 过程 @tt{list-ref} 取一列表 @tt{lst} 和从 0 开始计数的索引 @tt{n}，
 返回 @tt{lst} 的第 @tt{n} 个元素。
 
-@examples[#:label #f (list-ref '(a b c) 1)]
+@eopl-code{
+@examples[#:label #f (list-ref '(a b c) 1)]}
 
 我们来写出自己的过程 @tt{nth-element}，做同样的事。
 
@@ -709,7 +709,7 @@
 
 这就得出定义
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int} \to \mathit{SchemeVal}}}
 @#,elem{@bold{用法} : @tt{(nth-element @${lst} @${n}) = @${lst} 的第 @${n} 个元素}}
@@ -744,8 +744,7 @@ C} 相同。
 来看看 @tt{nth-element} 如何算出答案：
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
   (nth-element '(a b c d e) 3)
 = (nth-element   '(b c d e) 2)
@@ -753,7 +752,7 @@ C} 相同。
 = (nth-element       '(d e) 0)
 = d
 }|
-}}
+}
 
 这里，@tt{nth-element} 递归处理越来越短的列表和越来越小的数字。
 }
@@ -793,12 +792,13 @@ C} 相同。
               (cons (car los)
                     (remove-first s (cdr los)))))))))
 
+@eopl-code{
 @examples[#:eval remove-first-eval
           #:label #f
           (remove-first 'a '(a b c))
           (remove-first 'b '(e f g))
           (remove-first 'a4 '(c1 a4 c1 a4))
-          (remove-first 'x '())]
+          (remove-first 'x '())]}
 
 写出此过程之前，我们先要定义符号列表集合
 @${\mathit{List\mbox{-}of\mbox{-}Symbol}} ，以便给出问题的完整描述。不像上一节介
@@ -812,7 +812,7 @@ C} 相同。
 
 如果列表为空，不需要移除 @${s}，则答案为空列表。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
@@ -832,7 +832,7 @@ C} 相同。
 是 @${los} 的第一个元素，那么把它删除之后的结果是 @tt{(@${s_1} @${...}
 @${s_{n-1}})}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
@@ -910,6 +910,7 @@ C} 相同。
                (or (occurs-free? var (car exp))
                    (occurs-free? var (cadr exp)))))))))
 
+@eopl-code{
 @examples[#:eval occurs-free?-eval
           #:label #f
           (occurs-free? 'x 'x)
@@ -917,7 +918,7 @@ C} 相同。
           (occurs-free? 'x '(lambda (x) (x y)))
           (occurs-free? 'x '(lambda (y) (x y)))
           (occurs-free? 'x '((lambda (x) x) (x y)))
-          (occurs-free? 'x '(lambda (y) (lambda (z) (x (y z)))))]
+          (occurs-free? 'x '(lambda (y) (lambda (z) (x (y z)))))]}
 
 我们可以遵照 lambda 演算表达式的语法解决此问题：
 
@@ -959,7 +960,7 @@ C} 相同。
 的 @tt{if}，而是用 @tt{cond}。在 Scheme 中，若 @${exp_1} 或 @${exp_2} 返回真值，
 则 @tt{(or @${exp_1} @${exp_2})} 返回真值。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["occurs-free-1?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{若符号 @${var} 自由出现于 @${exp}，返回 #t，否则返回 #f}}
@@ -1006,9 +1007,10 @@ C} 相同。
             (if (eqv? sexp old) new sexp)
             (subst new old sexp))))))
 
+@eopl-code{
 @examples[#:eval subst-eval
           #:label #f
-          (subst 'a 'b '((b c) (b () d)))]
+          (subst 'a 'b '((b c) (b () d)))]}
 
 因为 @tt{subst} 定义于 s-list 上，它的结构应当反映 s-list 的定义（@definition-ref{d1.1.6}）：
 
@@ -1030,23 +1032,26 @@ C} 相同。
 @${S\mbox{-}exp}。因此，我们需要两个过程，一个处理 @${S\mbox{-}list}，另一个处理
 @${S\mbox{-}exp}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
   (lambda (new old slist)
     ...))
+]}
 
+@samepage{
+@eopl-code{
+@racketblock[
 @#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
   (lambda (new old sexp)
     ...))
-]
-}
+]}}
 
 我们首先处理 @tt{subst}。如果列表为空，不需要替换 @tt{old}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{subst}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
@@ -1064,7 +1069,7 @@ C} 相同。
 子问题。因为 @tt{slist} 的余项是 @${S\mbox{-}list} 的元素，我们递归调用
 @tt{subst} 处理它。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["subst"]{@bold{@tt{subst}}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}list} \to \mathit{S\mbox{-}list}}}
 (define subst
@@ -1084,7 +1089,7 @@ C} 相同。
 @tt{new}；否则，答案还是 @tt{sexp}。如果 @tt{sexp} 是一个 s-list，那么我们递归调
 用 @tt{subst} 找出答案。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
@@ -1160,7 +1165,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用递归处理列表，
 这个过程很容易写。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{number-elements-from}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \times \mathit{Int} \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 @#,elem{@${\begin{alignedat}{-1}@bold{用法} : &@tt{(number-elements-from '(@${v_0} @${v_1} @${v_2} ...) n)} \\ &\hphantom{x}= @tt{((@${n} @${v_0}) (@${n + 1} @${v_1}) (@${n + 2} @${v_2}) ...)}\end{alignedat}}}
@@ -1178,7 +1183,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 一旦我们定义了 @tt{number-elements-from}，很容易写出所需的过程。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["n-e"]{@bold{@tt{number-elements}}} : @m{\mathit{Listof}(\mathit{SchemeVal}) \to \mathit{Listof}(\mathit{List}(\mathit{Int}, \mathit{SchemeVal}))}}
 (define number-elements
@@ -1213,7 +1218,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 要求列表中各项的和，我们可以遵循语法，递归处理列表的余项。那么我们的过程看起来像
 是：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{\mathit{Listof}(\mathit{Int}) \to \mathit{Int}}}
 (define list-sum
@@ -1240,7 +1245,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{partial-vector-sum}} : @${\mathit{Vectorof}(\mathit{Int}) \times \mathit{Int} \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{若 @${0 \leq n < length(v)}，则 @mp{@tt{(partial-vector-sum @m{v} @m{n}) = @m{\sum_{i=0}^{i=n} v_i}}}}}
@@ -1260,7 +1265,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 现在，要解决原问题就简单多了。因为向量长度为0时无法使用过程
 @tt{partial-vector-sum}，所以得另行处理这种情况。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{vector-sum}} : @m{\mathit{Vectorof}(\mathit{Int}) \to \mathit{Int}}}
 @#,elem{@bold{用法} : @tt{(vector-sum @m{v}) = @m{\sum\limits_{i=0}^{i=length(v)-1} v_i}}}
@@ -1315,11 +1320,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @exercise[#:level 1 #:tag "ex1.15"]{
  @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
- @examples[#:eval duple-eval
+@eopl-code{
+@examples[#:eval duple-eval
            #:label #f
            (duple 2 3)
            (duple 4 '(ha ha))
-           (duple 0 '(blah))]
+           (duple 0 '(blah))]}
 }
 
 @(define invert-eval
@@ -1341,9 +1347,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{lst} 是由二元列表（长度为2的列表）组成的列表，@tt{(invert lst)} 返回一列表，
  把每个二元列表反转。
 
- @examples[#:eval invert-eval
+@eopl-code{
+@examples[#:eval invert-eval
            #:label #f
- (invert '((a 1) (a 2) (1 b) (2 b)))]
+ (invert '((a 1) (a 2) (1 b) (2 b)))]}
 }
 
 @(define down-eval
@@ -1361,11 +1368,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @exercise[#:level 1 #:tag "ex1.17"]{
  @tt{(down lst)} 给 @tt{lst} 的每个顶层元素加上一对括号。
 
- @examples[#:eval down-eval
+@eopl-code{
+@examples[#:eval down-eval
           #:label #f
  (down '(1 2 3))
  (down '((a) (fine) (idea)))
- (down '(a (more (complicated)) object))]
+ (down '(a (more (complicated)) object))]}
 
 }
 
@@ -1391,11 +1399,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
  为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
 
- @examples[#:eval swapper-eval
+@eopl-code{
+@examples[#:eval swapper-eval
            #:label #f
  (swapper 'a 'd '(a b c d))
  (swapper 'a 'd '(a d () c d))
- (swapper 'x 'y '((x) y (z (x))))]
+ (swapper 'x 'y '((x) y (z (x))))]}
 
 }
 
@@ -1417,10 +1426,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(list-set lst n x)} 返回一列表，除第 @tt{n} 个元素 （从零开始计数）为
  @tt{x} 外，与 @tt{lst} 相同。
 
- @examples[#:eval list-set-eval
+@eopl-code{
+@examples[#:eval list-set-eval
            #:label #f
  (list-set '(a b c d) 2 '(1 2))
- (list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)]
+ (list-ref (list-set '(a b c d) 3 '(1 5 10)) 3)]}
 
 }
 
@@ -1443,11 +1453,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @exercise[#:level 1 #:tag "ex1.20"]{
  @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
 
- @examples[#:eval count-occurrences-eval
+@eopl-code{
+@examples[#:eval count-occurrences-eval
            #:label #f
  (count-occurrences 'x '((f x) y (((x z) x))))
  (count-occurrences 'x '((f x) y (((x z) () x))))
- (count-occurrences 'w '((f x) y (((x z) x))))]
+ (count-occurrences 'w '((f x) y (((x z) x))))]}
 
 }
 
@@ -1474,9 +1485,10 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{sos1} 和 @tt{sos2} 是两个没有重复元素的符号列表，@tt{(product sos1 sos2)}返
  回二元列表的列表，代表 @tt{sos1} 和 @tt{sos2} 的笛卡尔积。二元列表排列顺序不限。
 
- @examples[#:eval product-eval
+@eopl-code{
+@examples[#:eval product-eval
            #:label #f
- (product '(a b c) '(x y))]
+ (product '(a b c) '(x y))]}
 
 }
 
@@ -1498,10 +1510,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(filter-in pred lst)} 返回的列表，由 @tt{lst} 中满足谓词 @tt{pred} 的元素组
  成。
 
- @examples[#:eval filter-in-eval
+@eopl-code{
+@examples[#:eval filter-in-eval
            #:label #f
  (filter-in number? '(a 2 (1 3) b 7))
- (filter-in symbol?  '(a (b c) 17 foo))]
+ (filter-in symbol?  '(a (b c) 17 foo))]}
 
 }
 
@@ -1525,11 +1538,12 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(list-index pred lst)} 返回 @tt{lst} 中第一个满足谓词 @tt{pred} 的元素位置，
      从零开始计数。如果 @tt{lst} 中没有元素满足谓词，@tt{list-index} 返回 @tt{#f}。
 
- @examples[#:eval list-index-eval
+@eopl-code{
+@examples[#:eval list-index-eval
           #:label #f
  (list-index number? '(a 2 (1 3) b 7))
  (list-index symbol?  '(a (b c) 17 foo))
- (list-index symbol?  '(1 2 (a b) 3))]
+ (list-index symbol?  '(1 2 (a b) 3))]}
 
 }
 
@@ -1550,10 +1564,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  若 @tt{lst} 中的任何元素不满足 @tt{pred}，@tt{(every? pred lst)} 返回 @tt{#f}，
  否则返回 @tt{#t}。
 
- @examples[#:eval every?-eval
+@eopl-code{
+@examples[#:eval every?-eval
            #:label #f
  (every? number? '(a b c 3 e))
- (every? number? '(1 2 3 4 5))]
+ (every? number? '(1 2 3 4 5))]}
 
 }
 
@@ -1573,10 +1588,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @exercise[#:level 2 #:tag "ex1.25"]{
  若 @tt{lst} 中的任何元素满足 @tt{pred}，@tt{(exists? pred lst)} 返回 @tt{#t}，否则返回 @tt{#f}。
 
- @examples[#:eval exists?-eval
+@eopl-code{
+@examples[#:eval exists?-eval
            #:label #f
  (exists? number? '(a b c 3 e))
- (exists? number? '(a b c d e))]
+ (exists? number? '(a b c d e))]}
 
 }
 
@@ -1600,10 +1616,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  则照原样放入结果中。@tt{(up (down lst))} 的结果与 @tt{lst} 相同，但 @tt{(down
  (up lst))} 不一定是 @tt{lst}（参见@exercise-ref{ex1.17}）。
 
- @examples[#:eval up-eval
+@eopl-code{
+@examples[#:eval up-eval
            #:label #f
  (up '((1 2) (3 4)))
- (up '((x (y)) z))]
+ (up '((x (y)) z))]}
 
 }
 
@@ -1626,12 +1643,13 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直观上，
  @tt{flatten} 移除参数内的所有内层括号。
 
- @examples[#:eval flatten-eval
+@eopl-code{
+@examples[#:eval flatten-eval
            #:label #f
  (flatten '(a b c))
  (flatten '((a) () (b ()) () (c)))
  (flatten '((a b) c (((d)) e)))
- (flatten '(a b (() (c))))]
+ (flatten '(a b (() (c))))]}
 
 }
 
@@ -1666,19 +1684,21 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
  回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
 
- @examples[#:eval merge-eval
+@eopl-code{
+@examples[#:eval merge-eval
            #:label #f
  (merge '(1 4) '(1 2 8))
- (merge '(35 62 81 90 91) '(3 83 85 90))]
+ (merge '(35 62 81 90 91) '(3 83 85 90))]}
 
 }
 
 @exercise[#:level 2 #:tag "ex1.29"]{
  @tt{(sort loi)} 返回一列表，将 @tt{loi} 中的元素按照升序排列。
 
- @examples[#:eval merge-eval
+@eopl-code{
+@examples[#:eval merge-eval
            #:label #f
- (sort '(8 2 5 2 3))]
+ (sort '(8 2 5 2 3))]}
 
 }
 
@@ -1715,10 +1735,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  @tt{(sort/predicate pred loi)} 返回一列表，将 @tt{loi} 的元素按照谓词指定的顺序
  排列。
 
- @examples[#:eval sort/predicate-eval
+@eopl-code{
+@examples[#:eval sort/predicate-eval
            #:label #f
  (sort/predicate < '(8 2 5 2 3))
- (sort/predicate > '(8 2 5 2 3))]
+ (sort/predicate > '(8 2 5 2 3))]}
 
 }
 
@@ -1742,6 +1763,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
 
+ @eopl-code{
  @codeblock{
  (mark-leaves-with-red-depth
   (interior-node 'red
@@ -1753,15 +1775,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
     (interior-node 'quux
      (leaf 117)
      (leaf 14)))))
- }
+ }}
 
  使用@exercise-ref{ex1.31} 中定义的过程，应返回二叉树
 
+ @eopl-code{
  @codeblock{
  (red
   (bar 1 1)
   (red 2 (quux 2 2)))
- }
+ }}
 
 }
 
@@ -1803,12 +1826,13 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  （@pageref{bst}）@tt{bst}，返回由 @tt{left} 和 @tt{right} 组成的列表，表示如何
  找到包含 @tt{n} 的节点。如果在树根处发现 @tt{n}，它返回空列表。
 
- @examples[#:eval path-eval
+@eopl-code{
+@examples[#:eval path-eval
            #:label #f
  (path 17 '(14 (7 () (12 () ()))
                (26 (20 (17 () ())
                        ())
-                   (31 () ()))))]
+                   (31 () ()))))]}
 
 }
 
@@ -1817,6 +1841,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  写出过程 @tt{number-leaves}，它取一棵二叉树，生成与原树形状相同的二叉树，但叶子
  的内容从 0 开始计的整数。例如，
 
+ @eopl-code{
  @codeblock{
  (number-leaves
   (interior-node 'foo
@@ -1828,28 +1853,30 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
     (interior-node 'quux
      (leaf 117)
      (leaf 14)))))
- }
+ }}
 
  应返回
 
+ @eopl-code{
  @codeblock{
  (foo
   (bar 0 1)
   (baz
    2
    (quux 3 4)))
- }
+ }}
 
 }
 
 @exercise[#:level 3 #:tag "ex1.36"]{
  写出过程 @tt{g}，则@pageref{n-e}的 @tt{number-elements} 可以定义为：
 
+ @eopl-code{
  @codeblock{
  (define number-elements
    (lambda (lst)
      (if (null? lst) '()
          (g (list 0 (car lst))
             (number-elements (cdr lst))))))
- }
+ }}
 }
