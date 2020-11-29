@@ -32,7 +32,7 @@
         str)))
 
 ;;; options
-(define racket-block-offset 6)
+(define racket-block-offset 4)
 (define origin-page-number 0)
 (define dump-glossary-translations #f)
 
@@ -133,6 +133,12 @@
 (define eopl-code-inset
   (make-style "EoplCodeInset" (list (make-tex-addition "../style/code-inset.tex"))))
 
+(define eopl-equation-inset
+  (make-style "EoplEquationInset" (list (make-tex-addition "../style/code-inset.tex"))))
+
+(define eopl-computation-inset
+  (make-style "EoplComputationInset" (list (make-tex-addition "../style/code-inset.tex"))))
+
 ;; make sure the code title does not become orphan
 (define (samepage . c)
   (nested #:style eopl-samepage c))
@@ -140,6 +146,16 @@
 ;; used for code in a paragraph
 (define (eopl-code . content)
   (nested #:style eopl-code-inset
+          content))
+
+;; used for code equation example, left margin is 0pt
+(define (eopl-computation . content)
+  (nested #:style eopl-computation-inset
+          content))
+
+;; used for code equation in a paragraph
+(define (eopl-equation . content)
+  (nested #:style eopl-equation-inset
           content))
 
 ;;; for exercise
