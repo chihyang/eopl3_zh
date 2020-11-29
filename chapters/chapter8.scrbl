@@ -2332,15 +2332,6 @@ module mybool-tables
 如@figure-ref{fig-8.14} 所示。为了能在一页纸内写下规则，我们用 @tt{(@${\rhd}
 @${body} @${tenv}) = @${i}} 代替 @tt{(interface-of @${body} @${tenv}) = @${i}}。
 
-正如预想的那样，模块变量的类型从类型环境中取得。就像 CHECKED 中的过程那样，
-@tt{module-proc} 的类型根据参数类型和主体类型得到。
-
-模块过程的调用很像 CHECKED 中的过程调用，但有两个重要区别。
-
-首先，操作数的类型（规则 IFACE-M-APP 中的 @${i_2}）不必与参数类型 (@${i_1}) 相同。
-我们只要求 @${i_2 <: i_1}。这就够了，因为 @${i_2 <: i_1} 意味着满足接口 @${i_2}
-的任意模块都满足接口 @${i_1}，也就能作为模块过程的参数。
-
 @eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
@@ -2369,7 +2360,7 @@ module mybool-tables
 @eopl-caption["fig-8.13"]{@tt{value-of-module-body}}
 }
 
-@eopl-figure{
+@eopl-figure[#:position "!htb"]{
 @$${\begin{array}{l}
      \small{\textrm{IFACE-M-VAR}} \\
      @tt{(@${\rhd} @${m} @${tenv})} = tenv@tt{(@${m})}
@@ -2392,6 +2383,15 @@ module mybool-tables
 
 @eopl-caption["fig-8.14"]{新模块主体的判类规则}
 }
+
+正如预想的那样，模块变量的类型从类型环境中取得。就像 CHECKED 中的过程那样，
+@tt{module-proc} 的类型根据参数类型和主体类型得到。
+
+模块过程的调用很像 CHECKED 中的过程调用，但有两个重要区别。
+
+首先，操作数的类型（规则 IFACE-M-APP 中的 @${i_2}）不必与参数类型 (@${i_1}) 相同。
+我们只要求 @${i_2 <: i_1}。这就够了，因为 @${i_2 <: i_1} 意味着满足接口 @${i_2}
+的任意模块都满足接口 @${i_1}，也就能作为模块过程的参数。
 
 其次，在结果类型 @${t^{\prime}_{1}} 中，我们把 @${m} 代换为操作数 @${m_2}。考虑
 @pageref{module-proc-eg}的例子。其中，我们用 @tt{ints1} 和 @tt{ints2} 调用模块过
