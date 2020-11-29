@@ -12,7 +12,8 @@
 - State "DOING"      from "TODO"       [2019-07-16 二 22:36] \\
   - [X] 当前已使用latex完成此格式
   - [ ] 需要提供scribble语法，完成此种格式转换
-** TODO 处理索引。
+** DOING 处理索引。
+- State "DOING"      from "TODO"       [2020-11-30 一 01:16]
 ** DONE 处理Latex子章节书签跳转问题。
 - State "DONE"       from "TODO"       [2019-07-16 二 23:07] \\
   - [X] 已解决，见[[https://stackoverflow.com/questions/782187/latex-table-of-contents-links-to-wrong-section][此]]链接，以及[[https://www.tug.org/applications/hyperref/manual.html#x1-460005.27][此]]链接，需要更新scribble生成的无序号子章节宏，为子
