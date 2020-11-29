@@ -1261,7 +1261,7 @@ in let f = proc (z) -(z,x)
 
 @exercise[#:level 1 #:tag "ex3.20"]{
 
-@eopl-index[#:range-mark 'start #:suffix @elem{ex. @countref["ex3.20"], @countref["ex3.23"]} "Currying"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.20"] "Currying"]
 在PROC中，过程只能有一个参数，但是可以用返回其他过程的过程来模拟多参数过程。例如，
 可以写出这样的代码：
 
@@ -1276,6 +1276,8 @@ in ((f 3) 4)
 这个小技巧叫做@term[#:tag "curry" "Currying"]{咖哩化}，该过程则
 称作@term["Curried"]{咖喱式} 的。写出一个咖喱式的过程，它取两个参数，返回
 二者之和。在我们的语言中，可以把 @${x+y} 写成 @tt{-(x,-(0,y))}。
+
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.20"] "Currying"]
 
 }
 }
@@ -1300,6 +1302,7 @@ in ((f 3) 4)
 
 @exercise[#:level 2 #:tag "ex3.23"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.23"] "Currying"]
 下面的PROC程序值是什么？
 
 @eopl-code{
@@ -1316,7 +1319,7 @@ in let times4 = proc (x) ((makemult makemult) x)
 
 用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖
 喱化}（@exercise-ref{ex3.20}）定义双参数过程 @tt{times}。
-@eopl-index[#:range-mark 'end "Currying"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.23"] "Currying"]
 
 }
 

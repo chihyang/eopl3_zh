@@ -513,7 +513,7 @@ val1 val2)} 的值传给当前续文。
  @item{@tt{subst}（@elemref["subst"]{1.2.5 节}）
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
- @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"]
              "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
 
 ]
