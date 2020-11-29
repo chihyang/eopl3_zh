@@ -141,19 +141,16 @@ in let a = (g 11)
 这里，过程 @tt{g} 保留了一个私有变量，用来存储 @tt{g} 被调用的次数。因此，第一次
 调用 @tt{g} 返回 1，第二次返回 2，整个程序的值为 -1。
 
-下图是 @tt{g} 绑定时所在的环境。
+下图是 @tt{g} 绑定时所在的环境。可以认为，这是在 @tt{g} 的不同调用之间共享信息。
+Scheme 过程 @tt{gensym} 用这种技术创建唯一符号。
 
-@nested{
+@eopl-figure*[#:position "!ht"]{
 @centered{
 @(image "../images/g-bound"
   #:scale 0.95
   #:suffixes (list ".pdf" ".svg")
   "g绑定时的环境")
 }
-
-可以认为，这是在 @tt{g} 的不同调用之间共享信息。Scheme 过程 @tt{gensym} 用这种技
-术创建唯一符号。
-
 }
 
 @exercise[#:level 1 #:tag "ex4.1"]{
