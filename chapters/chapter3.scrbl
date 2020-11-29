@@ -117,7 +117,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 这里是本门语言写成的一个简单表达式，及其抽象语法表示。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (scan&parse "-(55, -(x,11))")
 #(struct:a-program
@@ -170,12 +170,12 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 要使用这个定义，我们要有表达值数据类型的接口。我们有这几个接口：
 
-@nested[#:style 'inset]{
+@eopl-code{
 @verbatim|{
-|@bold{@tt{num-val}}       |@${: \mathit{Int} \to \mathit{ExpVal}}
-|@bold{@tt{bool-val}}      |@${: \mathit{Bool} \to \mathit{ExpVal}}
-|@bold{@tt{expval->num}}   |@${: \mathit{ExpVal} \to \mathit{Int}}
-|@bold{@tt{expval->bool}}  |@${: \mathit{ExpVal} \to \mathit{Bool}}
+|@bold{@tt{num-val}} |@${: \mathit{Int} \to \mathit{ExpVal}}
+|@bold{@tt{bool-val}} |@${: \mathit{Bool} \to \mathit{ExpVal}}
+|@bold{@tt{expval->num}} |@${: \mathit{ExpVal} \to \mathit{Int}}
+|@bold{@tt{expval->bool}} |@${: \mathit{ExpVal} \to \mathit{Bool}}
 }|
 }
 
@@ -209,7 +209,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @nested{
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (extend-env 'x 3
   (extend-env 'y 7
@@ -218,7 +218,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 缩写为
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 [x=3]
  [y=7]
@@ -234,20 +234,20 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 接口包含七个过程，六个是构造器，一个是观测器。我们用 @${\mathit{ExpVal}} 表示表
 达值的集合。
 
-@nested[#:style 'inset]{
+@eopl-code{
 @verbatim|{
 构造器：
 
-|@bold{@tt{const-exp}}  |@${: \mathit{Int} \to \mathit{Exp}}
-|@bold{@tt{zero?-exp}}  |@${: \mathit{Exp} \to \mathit{Exp}}
-|@bold{@tt{if-exp}}     |@${: \mathit{Exp} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
-|@bold{@tt{diff-exp}}   |@${: \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
-|@bold{@tt{var-exp}}    |@${: \mathit{Var} \to \mathit{Exp}}
-|@bold{@tt{let-exp}}    |@${: \mathit{Var} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
+|@bold{@tt{const-exp}}: |@${\mathit{Int} \to \mathit{Exp}}
+|@bold{@tt{zero?-exp}}: |@${\mathit{Exp} \to \mathit{Exp}}
+|@bold{@tt{if-exp}}: |@${\mathit{Exp} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
+|@bold{@tt{diff-exp}}: |@${\mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
+|@bold{@tt{var-exp}}: |@${\mathit{Var} \to \mathit{Exp}}
+|@bold{@tt{let-exp}}: |@${\mathit{Var} \times \mathit{Exp} \times \mathit{Exp} \to \mathit{Exp}}
 
 观测器：
 
-|@bold{@tt{value-of}}   |@${: \mathit{Exp} \times \mathit{Env} \to \mathit{ExpVal}}
+|@bold{@tt{value-of}}: |@${\mathit{Exp} \times \mathit{Env} \to \mathit{ExpVal}}
 }|
 }
 
@@ -255,8 +255,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 实现之前，我们先写出这些过程的行为规范。依照解释器秘方，我们希望 @tt{value-of}
 查看表达式，判断其类别，然后返回恰当的值。
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-equation{
 @verbatim|{
 (value-of (const-exp |@${n}) |@${\rho}) = (num-val |@${n})
 
@@ -268,7 +267,6 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
       (expval->num (value-of |@${exp_1} |@${\rho}))
       (expval->num (value-of |@${exp_2} |@${\rho}))))
 }|}
-}
 
 任何环境中，常量表达式的值都是这个常量。变量引用的值从某一环境中查询而得。差值表
 达式的值为第一个操作数在某一环境中的值减去第二个操作数在同一环境中的值。当然，准
@@ -301,10 +299,12 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 由变量的值。所以程序的值就是在适当的初始环境中求出的该表达式的值。我们把初始环境
 设为 @tt{[i=1,v=5,x=10]}。
 
+@eopl-equation{
 @racketblock[
 (value-of-program @#,elem{@${exp}})
 = (value-of @#,elem{@${exp}} [@#,elem{@tt{i=}@${\lceil \tt{1} \rceil},@tt{v=}@${\lceil \tt{5} \rceil},@tt{x=}@${\lceil \tt{10} \rceil}}])
 ]
+}
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.6"]{定义条件}
 
@@ -416,7 +416,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @tt{if-exp} 的方程式规范是：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of (if-exp |@${exp_1} |@${exp_2} |@${exp_3}) |@${\rho})
 = (if (expval->bool (value-of |@${exp_1} |@${\rho}))
@@ -465,13 +465,11 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @nested{
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let x = 5
 in -(x, 3)
 }|}
-}
 
 像 @tt{lambda} 变量绑定一样（见@secref{s1.2.4}），@tt{let} 变量绑定于主体之中。
 
@@ -481,8 +479,7 @@ in -(x, 3)
 
 @nested{
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let z = 5
 in let x = 3
@@ -490,7 +487,6 @@ in let x = 3
       in let x = 4
          in -(z, -(x,y)) % 这里 x = 4
 }|}
-}
 
 在本例中，第一个差值表达式中使用的 @tt{x} 指代外层声明，另一个差值表达式中使用的
 @tt{x} 指代内层声明，所以整个表达式的值是3。}
@@ -499,15 +495,14 @@ in let x = 3
 
 @nested{
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let x = 7
 in let y = 2
    in let y = let x = -(x,1)
               in -(x,y)
       in -(-(x,8), y)
-}|}
+}|
 }
 
 这里第三行声明的 @tt{x} 绑定到 6，所以 @tt{y} 的值是 4，整个表达式的值是
@@ -527,7 +522,7 @@ in let y = 2
 
 @nested{
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of (let-exp |@${var} |@${exp_1} |@${body}) |@${\rho})
 = (value-of |@${body} [var=(value-of |@${exp_1} |@${\rho})]|@${\rho})
@@ -630,6 +625,7 @@ in let y = 2
 只要满足@secref{s2.2}中的定义，任意一种环境实现都可使用。过程 @tt{init-env} 创建
 指定的初始环境，供 @tt{value-of-program} 使用。
 
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{init-env}} : @${() \to \mathit{Env}}}
 @#,elem{@bold{用法} : @tt{(init-env)} = @tt{[i=@${\lceil}1@${\rceil},v=@${\lceil}5@${\rceil},x=@${\lceil}10@${\rceil}]}}
@@ -643,6 +639,7 @@ in let y = 2
        'x (num-val 10)
        (empty-env))))))
 ]
+}
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -806,7 +803,7 @@ in let y = 2
 
 @nested{
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 4
 in cons(x,
@@ -826,12 +823,11 @@ in cons(x,
 向该语言添加操作 @tt{list}。该操作取任意数量的参数，返回一表达值，包含由参数值组
 成的列表。例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 4
 in list(x, -(x,1), -(x,3))
 }|
-
 }
 
 应返回一表达值，表示列表 @tt{(4 3 1)}。
@@ -893,7 +889,7 @@ in list(x, -(x,1), -(x,3))
 像 Scheme 中的 @tt{let} 那样，声明右边在当前环境中求值，每个新变量绑定到对应声明
 右边的值，然后求主体的值。例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 30
 in let x = -(x,1)
@@ -909,7 +905,7 @@ in let x = -(x,1)
 
 扩展语言，添加表达式 @tt{let*}，像 Scheme 的 @tt{let*} 那样。则：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 30
 in let* x = -(x,1) y = -(x,2)
@@ -929,7 +925,7 @@ in let* x = -(x,1) y = -(x,2)
 则：如果 @tt{lst} 恰好是三元素的列表，@tt{unpack x y z = lst in ...} 将 @tt{x}、
 @tt{y} 和 @tt{z} 绑定到 @tt{lst} 的各元素；否则报错。例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let u = 7
 in unpack x y = cons(u,cons(3,emptylist))
@@ -979,15 +975,14 @@ parameter"]{实际参数}。我们用@eopl-index{Argument}@term["argument"]{实�
 
 这是这种语言的两个小例子。
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let f = proc (x) -(x,11)
 in (f (f 77))
 
 (proc (f) (f (f 77))
  proc (x) -(x,11))
-}|}
+}|
 }
 
 第一个程序创建过程 @tt{f}，将实参减11，然后用 77 两次调用 @tt{f}，得到的答案为55。
@@ -1003,15 +998,14 @@ in (f (f 77))
 词法作用域规则告诉我们，调用一个过程时，过程的形参绑定到调用时的实参，然后在该环
 境内求值过程的主体。过程中出现的自由变量也应该遵守词法绑定规则。考虑表达式：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let x = 200
 in let f = proc (z) -(z,x)
    in let x = 100
       in let g = proc (z) -(z,x)
          in -((f 1), (g 1))
-}|}
+}|
 }
 
 这里我们两次求值表达式 @tt{proc (z) -(z,x)}。第一次求值时，@tt{x} 绑定到 200，所
@@ -1024,7 +1018,7 @@ in let f = proc (z) -(z,x)
 
 @nested{
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of (proc-exp |@${var} |@${body}) |@${\rho})
 = (proc-val (procedure |@${var} |@${body} |@${\rho}))
@@ -1039,7 +1033,7 @@ in let f = proc (z) -(z,x)
 
 @nested{
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of (call-exp |@${rator} |@${rand}) |@${\rho})
 = (let ((proc (expval->proc (value-of |@${rator} |@${\rho})))
@@ -1058,7 +1052,7 @@ in let f = proc (z) -(z,x)
 用过程时，过程主体的求值环境将其形参绑定到调用时的实参；而且，任何其他变量的值必
 须和过程创建时相同。因此，这些过程应满足条件
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
 = (value-of |@${body} [|@${var=val}]|@${\rho})
@@ -1156,7 +1150,7 @@ in let f = proc (z) -(z,x)
 实现语言的过程，它取一实参，返回下面规范要求的值：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
 = (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
@@ -1165,13 +1159,18 @@ in let f = proc (z) -(z,x)
 
 因此，完整的实现是：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 (define proc?
   (lambda (val)
     (procedure? val)))
+]
+}
 
+@samepage{
+@eopl-code{
+@racketblock[
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
 (define procedure
   (lambda (var body env)
@@ -1184,6 +1183,7 @@ in let f = proc (z) -(z,x)
     (proc1 val)))
 ]
 }
+}
 
 这里定义的函数 @tt{proc?} 不完全准确，因为不是每个 Scheme 过程都能作为我们语言中
 的过程。我们需要它，只是为了定义数据类型 @tt{expval}。
@@ -1192,7 +1192,7 @@ in let f = proc (z) -(z,x)
 
 另一种方式是用@secref{s2.2.2}那样的数据结构表示法。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{proc?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
@@ -1220,7 +1220,7 @@ in let f = proc (z) -(z,x)
 不论哪种实现，我们都要给数据类型 @tt{expval} 添加变体：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype exp-val exp-val?
   (num-val
@@ -1234,7 +1234,7 @@ in let f = proc (z) -(z,x)
 
 同时给 @tt{value-of} 添加两条新语句：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent 7]{
 (proc-exp (var body)
   (proc-val (procedure var body env)))
@@ -1266,7 +1266,7 @@ in let f = proc (z) -(z,x)
 可以写出这样的代码：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let f = proc (x) proc (y) ...
 in ((f 3) 4)
@@ -1302,7 +1302,7 @@ in ((f 3) 4)
 
 下面的PROC程序值是什么？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let makemult = proc (maker)
                 proc (x)
@@ -1330,7 +1330,7 @@ in let times4 = proc (x) ((makemult makemult) x)
 
 提炼上述练习中的技巧，用它在 PROC 中定义任意递归过程。考虑下面的代码：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let makerec = proc (f)
                let d = proc (x)
@@ -1371,7 +1371,7 @@ in let maketimes4 = proc (f)
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let a = 3
 in let p = proc (x) -(x,a)
@@ -1393,7 +1393,7 @@ in let p = proc (x) -(x,a)
 
 例如，在动态绑定中，过程 @tt{proc (z) a} 返回调用者环境中的变量 @tt{a}。那么程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let a = 3
 in let p = proc (z) a
@@ -1415,13 +1415,12 @@ in let p = proc (z) a
 现在我们来定义支持递归的新语言 LETREC。因为我们的语言只有单参数过程，所以我们降
 低难度，只让 @tt{letrec} 表达式声明一个单参数过程，例如：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 letrec double (x)
         = if zero?(x) then 0 else -((double -(x,1)), -2)
 in (double 6)
-}|}
+}|
 }
 
 递归声明的左边是递归过程的名字和绑定变量，@tt{=} 右边是过程主体，其生成式为：
@@ -1435,7 +1434,7 @@ in (double 6)
 @tt{letrec} 表达式的值是其主体的值，在符合期望行为的环境中求出：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of
   (letrec-exp |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${letrec\mbox{-}body})
@@ -1463,7 +1462,7 @@ in (double 6)
  @${proc\mbox{-}body}，环境为绑定 @${proc\mbox{-}name} 时所在的环境。而我们已经
  有这个环境了：就是 @${\rho_1}！所以：
 
- @nested[#:style 'code-inset]{
+ @eopl-equation{
  @verbatim|{
  (apply-env |@${\rho_1} |@${proc\mbox{-}name})
  = (proc-val (procedure |@${bound\mbox{-}var} |@${proc\mbox{-}name} |@${\rho_1}))
@@ -1473,7 +1472,7 @@ in (double 6)
 
  @item{如果 @${var} 与 @${proc\mbox{-}name} 不同，那么：
 
- @nested[#:style 'code-inset]{
+ @eopl-equation{
  @verbatim|{
  (apply-env |@${\rho_1} |@${var}) = (apply-env |@${\rho} |@${var})
  }|
@@ -1609,7 +1608,7 @@ in (double 6)
 
 扩展上面的语言，允许声明任意数量的单参数互递归过程，例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
   even(x) = if zero?(x) then 1 else (odd -(x,1))
@@ -1649,6 +1648,7 @@ in (odd 13)
 
 这里是创建这种数据结构的代码：
 
+@eopl-code{
 @racketblock[
 (define extend-env-rec
   (lambda (p-names b-vars bodies saved-env)
@@ -1658,6 +1658,7 @@ in (odd 13)
           (proc-val (procedure b-var body new-env)))
         new-env))))
 ]
+}
 
 修改环境数据类型和 @tt{apply-env} 的定义，完成这种表示的实现。确保
 @tt{apply-env} 总是返回表达值。
@@ -1678,7 +1679,7 @@ in (odd 13)
 递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
 还鲜为人知。要验证动态绑定实现的递归，试试程序：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 let fact = proc (n) add1(n)
 in let fact = proc (n)
@@ -1705,19 +1706,19 @@ in let fact = proc (n)
 或@term["declaration"]{声明}。变量引用就是使用变量。例如，在 Scheme 表达式
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock{(f x y)}
 }
 
 中出现的变量 @tt{f}、@tt{x} 和 @tt{y} 均为引用。但在
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock{(lambda (x) (+ x 3))}
 }
 
 或
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock{(let ((x (+ y 7))) (+ x 3))}
 }
 
@@ -1730,7 +1731,7 @@ in let fact = proc (n)
 我们说变量引用由对应的声明@term["bound"]{绑定}，且@emph{绑定}到它的值。
 在@secref{s1.2.4}，我们已经见过用声明绑定变量的例子。
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @centered{
 @(image "../images/simple-contour"
   #:suffixes (list ".pdf" ".svg")
@@ -1755,8 +1756,7 @@ in let fact = proc (n)
 要找出某个变量引用对应于哪一声明，我们@term["outward"]{向外} 查找，直到找
 出变量的声明。这里是一个简单的 Scheme 示例。
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (let ((x 3)              |@emph{称之为 @tt{x1}}
       (y 4))
@@ -1764,13 +1764,12 @@ in let fact = proc (n)
              (+ y 5)))
        (* x y))          |@emph{这个 @tt{x} 指代 @tt{x2}}
      x))                 |@emph{这个 @tt{x} 指代 @tt{x1}}
-}|}
+}|
 }
 
 在这个例子中，内层的 @tt{x} 绑定到 9，所以表达式的值为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (let ((x 3)
       (y 4))
@@ -1793,7 +1792,6 @@ in let fact = proc (n)
 
 = 39
 }|
-}
 }
 
 这样的定界规则叫做@term["lexical scoping"]{词法定界} 规则，这样声明的变量
@@ -1839,7 +1837,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 由 @tt{proc} 声明的变量在过程调用时绑定。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
 = (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
@@ -1850,7 +1848,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @eopl-index["Body" (eopl-index-entry @tt{let} "let")]
 @tt{let} 声明的变量绑定到声明右边的值。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of (let-exp |@${var} |@${val} |@${body}) |@${\rho})
 = (value-of |@${body} (extend-env |@${var} |@${val} |@${\rho}))
@@ -1861,7 +1859,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @eopl-index["Body" (eopl-index-entry @tt{letrec} "letrec")]
 @tt{letrec} 声明的变量也要绑定到声明右边的值。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of
   (letrec-exp |@${proc\mbox{-}name} |@${bound\mbox{-}var} |@${proc\mbox{-}body} |@${letrec\mbox{-}body})
@@ -1899,7 +1897,7 @@ depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{
 索引@exact-elem{”}，所以不计最后跨过的等深线。例如，在 Scheme 表达式
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (lambda (x)
   ((lambda (a)
@@ -1916,15 +1914,13 @@ depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{
 因此，我们可以完全消除变量名，写成这样
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (nameless-lambda
   ((nameless-lambda
      (#1 #0))
    #0))
 }|
-}
 }
 
 这里，每个 @tt{nameless-lambda} 都声明了一个新的无名变量，每个变量引用由其词深替
@@ -1939,14 +1935,12 @@ address"]{词法地址} 或@term["de Bruijn index"]{德布鲁金索引}。编译
 考虑我们语言中的表达式
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let x = |@${exp_1}
 in let y = |@${exp_2}
    in -(x,y)
 }|
-}
 }
 
 在差值表达式中，@tt{y} 和 @tt{x} 的词深分别为0和1。
@@ -1956,8 +1950,7 @@ in let y = |@${exp_2}
 @${val_2}，那么这个表达式的值为
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-equation{
 @verbatim|{
 (value-of
   <<let x = |@${exp_1}
@@ -1974,7 +1967,6 @@ in let y = |@${exp_2}
   <<-(x,y)>>
   [y=|@${val_2}][x=|@${val_1}]|@${\rho})
 }|
-}
 }
 
 所以，求差值表达式的值时，@tt{y} 深度为 0，@tt{x} 深度为 1，正如词深预测的那样。
@@ -1998,13 +1990,11 @@ in let y = |@${exp_2}
 过程的主体也是这样。考虑
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 let a = 5
 in proc (x) -(x,1)
 }|
-}
 }
 
 在过程的主体中，@tt{x} 的词深是 0，@tt{a} 的词深是 1。
@@ -2013,7 +2003,7 @@ in proc (x) -(x,1)
 
 这个表达式的值为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of
   <<let a = 5 in proc (x) -(x,a)>>
@@ -2026,7 +2016,7 @@ in proc (x) -(x,1)
 
 这个过程的主体只能通过 @tt{apply-procedure} 求值：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure
   (procedure x <<-(x,a)>> [a=|@${\lceil}5|@${\rceil}]|@${\rho})
@@ -2047,8 +2037,7 @@ in proc (x) -(x,1)
 例如，程序
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 |@elemtag["s3.7-eg"]{}let x = 37
 in proc (y)
@@ -2056,11 +2045,10 @@ in proc (y)
     in -(x,y)
 }|
 }
-}
 
 将翻译为
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 #(struct:a-program
    #(struct:nameless-let-exp
@@ -2262,7 +2250,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 我们的顶层过程是 @tt{run}：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{run}} : @${\mathit{String} \to \mathit{ExpVal}}}
 (define run
@@ -2275,12 +2263,12 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 我们不用全功能的环境，而是用无名环境，其接口如下：
 
-@nested[#:style 'inset]{
+@eopl-code{
 @verbatim|{
-|@bold{@tt{nameless-environment?}}   |@${: \mathit{SchemeVal} \to \mathit{Bool}}
-|@bold{@tt{empty-nameless-env}}      |@${: \mathit{()} \to \mathit{Nameless\mbox{-}env}}
-|@bold{@tt{extend-nameless-env}}     |@${: \mathit{ExpVal} \times \mathit{Nameless\mbox{-}env} \to \mathit{Nameless\mbox{-}env}}
-|@bold{@tt{apply-nameless-env}}      |@${: \mathit{Nameless\mbox{-}env} \times \mathit{Lexaddr} \to \mathit{DenVal}}
+|@bold{@tt{nameless-environment?}}: |@${\mathit{SchemeVal} \to \mathit{Bool}}
+|@bold{@tt{empty-nameless-env}}: |@${\mathit{()} \to \mathit{Nameless\mbox{-}env}}
+|@bold{@tt{extend-nameless-env}}: |@${\mathit{ExpVal} \times \mathit{Nameless\mbox{-}env} \to \mathit{Nameless\mbox{-}env}}
+|@bold{@tt{apply-nameless-env}}: |@${\mathit{Nameless\mbox{-}env} \times \mathit{Lexaddr} \to \mathit{DenVal}}
 }|
 }
 
@@ -2300,14 +2288,14 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 修改过程规范时，只需把旧规范中的变量名移除：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val})
 = (value-of |@${body} (extend-nameless-env |@${val} |@${\rho}))
 }|
 }
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 
 @racketblock[
 @#,elem{@bold{@tt{nameless-environment?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
@@ -2335,7 +2323,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 这一规范的实现可定义为：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{Proc}}}
 (define-datatype proc proc?
@@ -2399,7 +2387,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 最后是新的 @tt{value-of-program}：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Nameless\mbox{-}program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -2456,7 +2444,7 @@ htt]{nameless-letrec-var-exp}。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
 翻译器不止能记录变量的名字。例如，考虑程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 3
 in let f = proc (y) -(y,x)

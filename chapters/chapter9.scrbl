@@ -68,7 +68,7 @@
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  field i
@@ -113,7 +113,7 @@ in begin
 -5)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))} 成为整段程序的返回值。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class interior-node extends object
  field left
@@ -152,8 +152,7 @@ dispatch"]{动态分发}。在这段程序中，我们的树有两种节点，@t
 @tt{self} 总是绑定于方法调用时的对象。例如，在
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 class oddeven extends object
  method initialize () 1
@@ -163,7 +162,7 @@ class oddeven extends object
   if zero?(n) then 0 else send self even(-(n,1))
 let o1 = new oddeven()
 in send o1 odd(13)}|
-}}
+}
 
 中，方法 @tt{even} 和 @tt{odd} 递归调用彼此，因为它们执行时，@tt{self} 绑定到包
 含二者的对象。这就像@exercise-ref{ex3.37} 中，用动态绑定实现递归。}
@@ -201,8 +200,7 @@ in send o1 odd(13)}|
 择这种设计，其他面向对象语言可能有不同的可见性规则。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 class point extends object
  field x
@@ -233,7 +231,7 @@ in begin
          send cp get-color())     % |@emph{返回} 87
    end
 }|
-}}
+}
 
 @eopl-caption["fig-9.3"]{继承的经典例子：@tt{colorpoint}}
 }
@@ -246,7 +244,7 @@ in begin
 @tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 |@elemtag["field-shadowing"]{}class c1 extends object
  field x
@@ -288,8 +286,7 @@ in begin
 微妙。考虑下面的例子：
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  method initialize () 1
@@ -300,7 +297,7 @@ class c2 extends c1
 let o1 = new c1() o2 = new c2()
 in list(send o1 m1(), send o2 m1(), send o2 m2())
 }|
-}}
+}
 
 我们希望 @tt{send o1 m1()} 返回 11，因为 @tt{o1} 是 @tt{c1} 的实例。同样地，我们
 希望 @tt{send o2 m1()} 返回 22，因为 @tt{o2} 是 @tt{c2} 的实例。那么 @tt{send o2
@@ -322,8 +319,7 @@ m2()} 呢？方法 @tt{m2} 直接调用方法 @tt{m1}，但它调用的是哪个
 为@emph{超类调用}，形如 @tt{super initialize()}。那么 @tt{colorpoint} 中的
 @tt{initialize} 方法写作：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 method initialize (initx, inity, initcolor)
  begin
@@ -331,7 +327,7 @@ method initialize (initx, inity, initcolor)
   set color = initcolor
  end
 }|
-}}
+}
 
 方法 @${m} 主体中的超类调用 @tt{super @${n}(...)} 使用的是 @${m} 持有类父类的方
 法 @${n}。这不一定是 @tt{self} 所指类的父类。@tt{self} 所指类总是 @${m} 持有类的
@@ -339,7 +335,7 @@ method initialize (initx, inity, initcolor)
 @${m} 可能在目标对象的某个祖先中声明。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class point extends object
  field x
@@ -383,7 +379,7 @@ in send o1 get-color()}|
 以使用动态分发，找出的是 @tt{c3} 的方法 @tt{m2}，返回 33。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  method initialize () 1
@@ -486,7 +482,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 环境}，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme变量表示
 它。在@secref{s9.4.3}我们再详细讨论类环境。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -511,8 +507,8 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 求 @tt{self} 表达式的值时，返回的是 @tt{%self} 的值。这句话在 @tt{value-of} 中写作
 
-@nested[#:style small]{
-@codeblock[#:indent 7]{
+@eopl-code{
+@codeblock[#:indent racket-block-offset]{
 (self-exp ()
   (apply-env env '%self))
 }}
@@ -521,8 +517,8 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 名，然后用 @tt{find-method} 找出方法。@tt{find-method} 取一个类名和一个方法名，
 返回一个方法。接着，我们用当前对象和方法的参数调用这个方法。
 
-@nested[#:style small]{
-@codeblock[#:indent 7]{
+@eopl-code{
+@codeblock[#:indent racket-block-offset]{
 (method-call-exp (obj-exp method-name rands)
   (let ((args (values-of-exps rands env))
         (obj (value-of obj-exp env)))
@@ -537,8 +533,8 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 超类调用与普通方法调用类似，不同之处是，要在表达式持有类的超类中查找方法。
 它在 @tt{value-of} 中的对应语句是：
 
-@nested[#:style small]{
-@codeblock[#:indent 7]{
+@eopl-code{
+@codeblock[#:indent racket-block-offset]{
 (super-call-exp (method-name rands)
   (let ((args (values-of-exps rands env))
         (obj (apply-env env '%self)))
@@ -554,7 +550,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 @nested[#:style small]{
 @eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
-@codeblock[#:indent 7]{
+@codeblock[#:indent racket-block-offset]{
 (new-object-exp (class-name rands)
   (let ((args (values-of-exps rands env))
         (obj (new-object class-name)))
@@ -569,7 +565,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 如@figure-ref{fig-9.8} 所示。
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  field x
@@ -623,7 +619,7 @@ in send o3 m1(7,8)
 
 我们用包含类名和字段引用列表的数据类型表示对象。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype object object?
   (an-object
@@ -650,7 +646,7 @@ in send o3 m1(7,8)
 与对象的字段数目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用非
 法值初始化每个位置，以便识别程序对未初始化位置的解引用。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${\mathit{ClassName} = \mathit{Sym}}}
 
@@ -679,7 +675,7 @@ in send o3 m1(7,8)
 
  @item{可见字段名绑定到当前对象的字段。要实现这点，我们定义
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype method method?
   (a-method
@@ -760,7 +756,7 @@ in send o3 m1(7,8)
 们用名为 @tt{the-class-env} 的全局变量表示类环境，它包含列表 @tt{(类名,类)} 的列
 表，但我们用过程 @tt{add-to-class-env!} 和 @tt{lookup-class} 隐藏这一表示。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${\mathit{ClassEnv} = \mathit{Listof(List(ClassName, Class))}}}
 
@@ -787,7 +783,7 @@ in send o3 m1(7,8)
 环境。
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype class class?
   (a-class
@@ -806,7 +802,7 @@ in send o3 m1(7,8)
 一个新绑定，将类名绑定到一个 @tt{class}，它包含超类名、类中方法的
 @tt{field-names} 以及类中方法的环境。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["initialize-class-env!"]{@bold{@tt{initialize-class-env!}}} : @${\mathit{Listof(ClassDecl)} \to \mathit{Unspecified}}}
 (define initialize-class-env!
@@ -838,7 +834,7 @@ in send o3 m1(7,8)
 段添加到超类字段之后，同时将超类中被新字段遮蔽的字段替换为新名字，
 就像@pageref{field-renaming}的示例那样。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{append-field-names}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(FieldName)} \times \mathit{Listof(FieldName)} \to \mathit{Listof(FieldName)}}}
 (define append-field-names
@@ -863,7 +859,7 @@ in send o3 m1(7,8)
 像处理类那样，我们用列表 @tt{(方法名,方法)} 的列表表示方法环境，用
 @tt{find-method} 查找方法。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${\mathit{MethodEnv} = \mathit{Listof(List(MethodName, Method))}}}
 
@@ -880,7 +876,7 @@ in send o3 m1(7,8)
 建一个方法环境，记录每个方法的绑定变量、主体、持有类的超类名，以及持有类的
 @tt{field-names}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{method-decls->method-env}} : @linebreak[]@${\phantom{xx}}@${\mathit{Listof(MethodDecl)} \times \mathit{ClassName} \times \mathit{Listof(FieldName)} \to \mathit{MethodEnv}}}
 (define method-decls->method-env
@@ -898,7 +894,7 @@ in send o3 m1(7,8)
 们可以直接扩展环境，将新方法添加到前面。
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{merge-method-envs}} : @${\mathit{MethodEnv} \times \mathit{MethodEnv} \to \mathit{MethodEnv}}}
 (define merge-method-envs
@@ -1071,7 +1067,7 @@ bogus-oddeven() in send o1 odd (13)} 给出错误的答案。
 为了防止@exercise-ref{ex9.2} 那样的恶意子类，许多面向对象编程语言都能指定无法覆
 盖的 @emph{final} 方法。给 CLASSES 添加这样的组件，那么我们就能写：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class oddeven extends object
  method initialize () 1
@@ -1097,7 +1093,7 @@ class oddeven extends object
 很多面向对象编程语言都提供@emph{静态}变量或者@emph{类}变量。静态变量与类的某些状
 态相关联；类的所有实例共享这一状态。例如，我们可以写：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  static next-serial-number = 1
@@ -1211,7 +1207,7 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 个点是否具有相同的横纵坐标。我们照下面这样给类 @tt{point} 添加方法
 @tt{similarpoints}：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 method similarpoints (pt)
  if equal?(send pt getx(), x)
@@ -1228,7 +1224,7 @@ method similarpoints (pt)
 们希望两个点横纵坐标相同、都是有色点且颜色相同时，它返回真；否则返回假。这里是一
 种错误做法。
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 method similarpoints (pt)
  if super similarpoints(pt)
@@ -1254,7 +1250,7 @@ method similarpoints (pt)
 左到右；还可以要求在调用时消除这种歧义。字段的情况就更糟了。考虑下面的情形，类
 @tt{c4} 继承自 @tt{c2} 和 @tt{c3}，二者均继承自 @tt{c1}：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  field x
@@ -1280,7 +1276,7 @@ class c4 extends c2, c3
 环境以方法名为索引。类则由返回对象的过程替代。所以，我们不用写 @tt{send o1
 m1(11,22,33)}，而是写普通的过程调用 @tt{(getmethod(o1,m2) 11 22 33)}；不用写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class oddeven extends object
  method initialize () 1
@@ -1295,7 +1291,7 @@ in send o1 odd(13)
 
 而是写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let make-oddeven
  = proc ()
@@ -1407,7 +1403,7 @@ TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
 @${I}。虽然我们的例子中只用了一个接口，但一个类可以实现多个不同接口。
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 interface tree
  method int sum ()
@@ -1509,8 +1505,7 @@ in list(send o1 sum(),
 
 @nested{
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 method bool equal(t : tree)
  if instanceof t interior-node
@@ -1520,7 +1515,7 @@ method bool equal(t : tree)
           equal(send cast t interior-node getright())
       else false
  else false
-}|}
+}|
 }
 
 表达式 @tt{cast t interior-node} 检查 @tt{t} 的值是否为 @tt{interior-node}（或其
@@ -1535,7 +1530,7 @@ method bool equal(t : tree)
 我们的实现从@secref{s9.4.1}中的解释器开始。我们给 @tt{value-of} 添加两条语句，求
 @tt{instanceof} 和 @tt{cast} 表达式的值：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (cast-exp (exp c-name)
   (let ((obj (value-of exp env)))
@@ -1553,7 +1548,7 @@ method bool equal(t : tree)
 过程 @tt{is-subclass?} 沿着第一个类结构的父系而上，直到找出第二个类，或在父系为
 @tt{#f} 时停止。由于接口只用作类型，这个过程忽略它们。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{is-subclass?}} : @${\mathit{ClassName} \times \mathit{ClassName} \to \mathit{Bool}}}
 (define is-subclass?
@@ -1572,7 +1567,7 @@ method bool equal(t : tree)
 
 创建接口 @tt{summable}：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 interface summable
  method int sum ()
@@ -1584,7 +1579,7 @@ interface summable
 
 然后为接口
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 interface stringable
  method string to-string ()
@@ -1645,7 +1640,7 @@ interface stringable
 是把它存储在一个 Scheme 变量中。然后，我们用 @tt{check-class-decl!} 检查每个类声
 明。最后，我们找出程序主体的类型。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
 (define type-of-program
@@ -1661,7 +1656,7 @@ interface stringable
 及方法的名字和类型。在我们的语言中，接口既没有父类，也没有字段，所以我们用只含所
 需方法名字和类型的数据结构表示它们（但是，看看@exercise-ref{ex9.36}）。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype static-class static-class?
   (a-static-class
@@ -2195,7 +2190,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 我们的 TYPED-OO 语言使用动态分发。另一种方式是@emph{静态分发}。在静态分发中，方
 法的选择依赖于对象的类型，而不是所属类。考虑例子
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 class c1 extends object
  method int initialize () 1

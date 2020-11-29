@@ -104,14 +104,13 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
 我们例子中的规范可用正则表达式写作
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 |@${whitespace = (space \cup newline)(space \cup newline)^{*}}
 |@${comment = @tt{%}(\neg newline)^{*}}
 |@${identifier = letter(letter \cup digit)^{*}}
 }|
-}}
+}
 
 扫描器用正则表达式获取词牌时，规则总是取@emph{最长}匹配。所以 @tt{xyz} 扫描为一
 个标识符，而非三个。
@@ -162,7 +161,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 这个语法产生的树由如下数据类型描述：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype statement statement?
   (compound-statement
@@ -187,11 +186,11 @@ specification"]{词法规范}。典型的词法规范可能包括：
 字在用 SLLGEN 写语法时指定。字段名是自动生成的；这里，我们给字段起了一些便于记忆
 的名字。例如，输入
 
-@nested[#:style small]{@verbatim|{{x := foo; while x do x := (x - bar)}}|}
+@eopl-code{@verbatim|{{x := foo; while x do x := (x - bar)}}|}
 
 产生输出
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 #(struct:compound-statement
    #(struct:assign-statement x #(struct:var-exp foo))
@@ -211,7 +210,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
 在 SLLGEN 中，扫描器用正则表达式定义。我们的例子用 SLLGEN，要写成下面这样：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define scanner-spec-a
   '((white-sp (whitespace) skip)
@@ -274,7 +273,7 @@ SLLGEN 中的扫描器定义是满足如下语法的列表：
 
 SLLGEN 还包含一种定义语法的语言。上面的简单语法用 SLLGEN 写作
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define grammar-a1
   '((statement
@@ -370,8 +369,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 @eopl-caption["fig-B.2"]{使用 SLLGEN}
 }
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (define read-eval-print
     (sllgen:make-rep-loop "--> " eval-program
@@ -385,7 +383,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 3
 --> +(add1(2),-(6,4))
 5
-}|}
+}|
 }
 
 控制流程从这一循环返回 Scheme 读入-求值-打印循环的方式由系统决定。
@@ -401,7 +399,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 
 在 SLLGEN 中可写作
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define grammar-a2
   '((statement
@@ -417,7 +415,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 @tt{arbno} 在抽象语法树中对应单个字段。该字段包含一个@emph{列表}，由 @tt{arbno}
 内的非终止符数据组成。我们的例子生成如下数据类型：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype statement statement?
   (compound-statement
@@ -427,8 +425,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 
 简单交互为：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (define scan&parse2
     (sllgen:make-string-parser scanner-spec-a grammar-a2))
@@ -438,13 +435,13 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
   ((assign-statement x (var-exp foo))
    (assign-statement y (var-exp bar))
    (assign-statement z (var-exp uu))))
-}|}
+}|
 }
 
 我们可以把非终止符序列放入 @tt{arbno} 中。这时，节点中会有多个字段，每个对应一个
 非终止符；每个字段包含一个语法树列表。例如：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define grammar-a3
   '((expression (identifier) var-exp)
@@ -458,7 +455,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 
 生成数据类型
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype expression expression?
   (var-exp (var-exp4 symbol?))
@@ -471,15 +468,14 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 这里是运用该语法的例子：
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (scan&parse3 "let x = y u = v in z")
 (let-exp
   (x u)
   ((var-exp y) (var-exp v))
   (var-exp z))
-}|}
+}|
 }
 
 定义 @tt{(arbno identifier "=" expression)} 生成两个列表：标识符列表和表达式列表。
@@ -490,7 +486,7 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 对某些语言的语法，在列表中只用分隔符，而不用结束符会更方便。这十分常见，因此
 SLLGEN 内置这种操作。我们可以写
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define grammar-a4
   '((statement
@@ -501,7 +497,7 @@ SLLGEN 内置这种操作。我们可以写
 
 它生成数据类型
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype statement statement?
   (compound-statement
@@ -512,8 +508,7 @@ SLLGEN 内置这种操作。我们可以写
 这是简单交互的例子：
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (define scan&parse4
     (sllgen:make-string-parser scanner-spec-a grammar-a4))
@@ -527,7 +522,7 @@ SLLGEN 内置这种操作。我们可以写
 > (scan&parse4 "{x:= y; u := v ; z := t ;}")
 Error in parsing: at line 1
 Nonterminal <seplist3> can’t begin with string "}"
-}|}
+}|
 }
 
 在本例中，输入字符串结尾有一个分号，与语法不符，所以报错。
@@ -543,7 +538,7 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 举个例子，考虑与 @tt{grammar-a4} 类似的 @tt{compound-statement}，但它支持多赋值：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define grammar-a5
   '((statement
@@ -559,17 +554,16 @@ Nonterminal <seplist3> can’t begin with string "}"
      (expression (identifier) var-exp)))
 ]}
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (define scan&parse5
     (sllgen:make-string-parser scanner-spec-a grammar-a5))
 }|
-}}
+}
 
 它为 @tt{statement} 生成如下数据类型：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype statement statement?
   (compound-statement
@@ -579,8 +573,7 @@ Nonterminal <seplist3> can’t begin with string "}"
 
 一般的交互如下：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 > (scan&parse5 "{x,y := u,v ; z := 4; t1, t2 := 5, 6}")
 (compound-statement
@@ -588,7 +581,7 @@ Nonterminal <seplist3> can’t begin with string "}"
   (((var-exp u) (var-exp v))
     ((lit-exp 4))
     ((lit-exp 5) (lit-exp 6))))
-}|}
+}|
 }
 
 这里，@tt{compound-statement} 有两个字段：标识符列表的列表，对应的表达式列表的列

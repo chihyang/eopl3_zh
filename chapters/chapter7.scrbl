@@ -61,8 +61,7 @@
 
 这里是一些示例程序，以及它们应被分析拒绝或接受：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 if 3 then 88 else 99      |@smaller{拒绝：条件非布尔值}
 proc (x) (3 x)            |@smaller{拒绝：rator非过程值}
@@ -88,7 +87,7 @@ in proc (x) (f x)
 letrec f(x) = (f -(x,-1)) |@smaller{接受，不终止，但是安全}
 in (f 1)
 }|
-}}
+}
 
 虽然最后一个例子求值不终止，但根据上述定义，求值仍是安全的，所以我们的分析可以接
 受它。之所以接受它，是因为我们的分析器不够好，不足以判定这个程序不会终止。
@@ -388,8 +387,7 @@ proc (f)
 
 这里是一些 CHECKED 程序例子。
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 proc (x : int) -(x,1)
 
@@ -401,7 +399,7 @@ in double
 
 proc (f : (bool -> int)) proc (n : int) (f zero?(n))
 }|
-}}
+}
 
 @tt{double} 结果的类型为 @tt{int}，但 @tt{double} 本身的类型为 @tt{(int -> int)}，
 因为它是一个过程，取一整数，返回一整数。
@@ -478,7 +476,7 @@ in |@${e_{letrec\mbox{-}body}}
 型，若二者不等则报错。@tt{check-equal-type!} 的第三个参数是一表达式，指明类型不
 等的位置。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{check-equal-type!}} : @${\mathit{Type} \times \mathit{Type} \times \mathit{Exp} \to \mathit{Unspecified}}}
 (define check-equal-type!
@@ -502,7 +500,7 @@ in |@${e_{letrec\mbox{-}body}}
 过程 @tt{report-unequal-types} 用 @tt{type-to-external-form}，将类型转换为易读的
 列表。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{type-to-external-form}} : @${\mathit{Type} \to \mathit{List}}}
 (define type-to-external-form
@@ -769,7 +767,7 @@ in |@${e_{letrec\mbox{-}body}}
 成为可选项。我们用标记 @tt{?} 替代缺失的类型表达式。因此，典型的程序看起来像是：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
  ? foo (x : ?) = if zero?(x)
@@ -785,7 +783,7 @@ in foo
 
 由于类型表达式是可选的，我们可以用类型替代某些 @tt{?}，例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
  ? even (x : int) = if zero?(x) then 1 else (odd -(x,1))
@@ -905,7 +903,7 @@ in (odd 13)
 只要满足如下方程，@${t_f}、@${t_x}、@${t_0}、@${t_1}、@${t_2}、@${t_3} 和
 @${t_4} 的解可以是任意值：
 
-@nested[#:style 'inset]{
+@eopl-code{
 @verbatim|{
 |@${t_0 = t_f \to t_1}
 |@${t_1 = t_x \to t_2}
@@ -1426,7 +1424,7 @@ in (odd 13)
 
 下面的表达式有何问题？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
  ? even(odd : ?) =
@@ -1494,7 +1492,7 @@ in letrec
 @${t_0} @${tv} @${t_1})} 将 @${t_0} 中出现的每个@${tv} 代换为 @${t_1}，返回代换
 后的表达式。有时，这写作 @tt{@${t_0}[@${tv=t_1}]}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-one-subst}} : @${\mathit{Type} \times \mathit{Tvar} \times \mathit{Type} \to \mathit{Type}}}
 (define apply-one-subst
@@ -1526,7 +1524,7 @@ in letrec
 个序对的首项，@tt{assoc} 返回对应的（类型变量，类型）序对，否则返回 @tt{#f}。我
 们将它写出来：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-subst-to-type}} : @${\mathit{Type} \times \mathit{Subst} \to \mathit{Type}}}
 (define apply-subst-to-type
@@ -1571,7 +1569,7 @@ in letrec
 @tt{extend-subst} 的实现依照上式。它把 @${\sigma_0} 所有绑定中的 @${t_0} 代换为
 @${tv_0}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{empty-subst}} : @${\mathit{()} \to \mathit{Subst}}}
 (define empty-subst (lambda () '()))
@@ -1600,11 +1598,13 @@ in letrec
 在我们的实现中，当 @${\sigma} 很大时，@tt{extend-subst} 要做大量工作。实现另一种
 表示，则 @tt{extend-subst} 变成：
 
+@eopl-code{
 @racketblock[
 (define extend-subst
   (lambda (subst tvar ty)
     (cons (cons tvar ty) subst)))
 ]
+}
 
 其余工作移至 @tt{apply-subst-to-type}，而性质 @${t(\sigma[tv = t']) =
 (t\sigma)[tv = t']} 仍然满足。这样定义 @tt{extend-subst} 还需要无存不变式吗？
@@ -1742,7 +1742,7 @@ in letrec
 我们用 @tt{otype->type} 为每个 @tt{?} 定义一个新类型变量，把可选类型转换为未知类
 型。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{otype->type}} : @${\mathit{OptionalType} \to \mathit{Type}}}
 (define otype->type
@@ -1761,7 +1761,7 @@ in letrec
 
 把类型转换为外在表示时，我们用包含序号的符号表示类型变量。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{type-to-external-form}} : @${\mathit{Type} \to \mathit{List}}}
 (define type-to-external-form
@@ -2070,7 +2070,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @tt{pair} 或 @tt{cons} 那样，适用于多种类型。例如，即使执行是安全的，我们的推导
 器也会拒绝程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let f = proc (x : ?) x
 in if (f zero?(0))
@@ -2084,7 +2084,7 @@ in if (f zero?(0))
 
 更实际的例子是这样的程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
  ? map (f : ?) =
@@ -2133,7 +2133,7 @@ in letrec
 
 多态和副作用之间的相互作用很微妙。考虑以下文开头的一段程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let p = newref(proc (x : ?) x)
 in ...

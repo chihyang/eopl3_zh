@@ -21,7 +21,7 @@
 
 考虑下面的Scheme阶乘函数定义。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -31,8 +31,7 @@
 
 我们可以用推导建模 @tt{fact} 的计算过程：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
   (fact 4)
 = (* 4 (fact 3))
@@ -46,14 +45,13 @@
 = 24
 }|
 }
-}
 
 这是阶乘的自然递归定义。每次调用 @tt{fact} 都保证返回值与调用处的 @tt{n} 相乘。
 这样，随着计算进行，@tt{fact} 在越来越大的@emph{控制上下文} 中调用。比较这一行为
 与下列过程。
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact-iter
   (lambda (n)
@@ -67,8 +65,7 @@
 
 用这个定义，我们计算：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
   (|@elemtag["fact-iter"]{}fact-iter 4)
 = (fact-iter-acc 4 1)
@@ -78,7 +75,6 @@
 = (fact-iter-acc 0 24)
 = 24
 }|
-}
 }
 }
 
@@ -191,7 +187,7 @@
 定的计算。@tt{apply-cont} 的合约为：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${\mathit{FinalAnswer}} = @${\mathit{ExpVal}}}
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
@@ -208,7 +204,7 @@
 @tt{(end-cont)}，其定义为：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (end-cont) |@${val})
 = (begin
@@ -225,7 +221,7 @@
 
 我们把 @tt{value-of-program} 重写为：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{FinalAnswer}}}
 (define value-of-program
@@ -240,7 +236,7 @@
 @tt{value-of} 的前几行只是算出一个值，然后返回，不会再次调用 @tt{value-of}。在传
 递续文的解释器中，这些行调用 @tt{apply-cont}，把对应的值传给续文：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of/k}} : @${\mathit{Exp} \times \mathit{Env} \times \mathit{Cont} \to \mathit{ExpVal}}}
 (define value-of/k
@@ -263,7 +259,7 @@
 上下文中执行。因此，主体的值应返回给整个表达式的续文。所以我们写：
 @eopl-index["Control context"]
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (value-of/k letrec-body
@@ -283,7 +279,7 @@
 写成这样是不对的：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (letrec-exp (p-name p-var p-body letrec-body)
   (apply-cont cont
@@ -306,7 +302,7 @@
 那么，在 @tt{value-of/k} 中，我们写：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (value-of/k exp1 env
@@ -316,7 +312,7 @@
 
 其中，@tt{(zero1-cont cont)} 是一续文，具有如下性质：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (zero1-cont |@${cont}) |@${val})
 = (apply-cont |@${cont}
@@ -330,7 +326,7 @@
 就像 @tt{letrec}，我们不能把 @tt{value-of/k} 写成：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (zero?-exp (exp1)
   (let ((val (value-of/k exp1 env (end-cont))))
@@ -352,7 +348,7 @@
 适当的扩展环境内求主体的值。原来的 @tt{let} 代码为：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
@@ -364,7 +360,7 @@
 在传递续文的解释器中，我们在完成剩余计算的上下文中求 @${exp_1} 的值。所以，在
 @tt{value-of/k} 中我们写：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (value-of/k exp1 env
@@ -374,7 +370,7 @@
 
 然后我们给续文的接口添加规范：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (let-exp-cont |@${var} |@${body} |@${env} |@${cont}) |@${val})
 = (value-of/k |@${body} (extend-env |@${var} |@${val} |@${env}) |@${cont})
@@ -392,7 +388,7 @@
 真值表达式或假值表达式的值。所以在 @tt{value-of/k} 中我们写：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (if-exp (exp1 exp2 exp3)
   (value-of/k exp1 env
@@ -402,7 +398,7 @@
 
 其中，@tt{if-test-cont} 是另一个续文构造器，满足如下规范：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (if-test-cont |@${exp_2} |@${exp_3} |@${env} |@${cont}) |@${val})
 = (if (expval->bool |@${val})
@@ -514,7 +510,7 @@
 @tt{value-of/k} 的定义和 @tt{apply-cont} 的规范对照阅读。这个例子是预测性的，因
 为我们让 @tt{letrec} 引入了过程，但还不知道如何调用它。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of/k <<letrec p(x) = x in if b then 3 else 4>>
   |@${\rho_0} |@${cont_0})
@@ -538,7 +534,7 @@
 差值表达式给我们的解释器带来了新困难，因为它得求两个操作数的值。我们还像 @tt{if}
 那样开始，先求第一个实参：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (diff-exp (exp1 exp2)
   (value-of/k exp1 env
@@ -549,7 +545,7 @@
 当 @tt{(diff1-cont exp2 env cont)} 收到一个值，它应求 @tt{exp2} 的值，求值时的上
 下文应保存 @tt{exp1} 的值。我们将其定义为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (diff1-cont |@${exp_2} |@${env} |@${cont}) |@${val1})
 = (value-of/k |@${exp_2} |@${env}
@@ -560,7 +556,7 @@
 当 @tt{(diff2-cont val1 cont)} 收到一个值，我们得到了两个操作数的值，所以，我们
 可以把二者的差继续传给等待中的 @tt{cont}。定义为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (diff2-cont |@${val1} |@${cont}) |@${val2})
 = (let ((num1 (expval->num |@${val1}))
@@ -573,8 +569,7 @@
 让我们看看该系统的例子。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-computation{
 @verbatim|{
 |@elemtag["cps-computation"]{}(value-of/k
   <<-(-(44,11),3)>>
@@ -634,7 +629,6 @@
   (num-val 30))
 }|
 }
-}
 
 @tt{apply-cont} 打印出消息@exact-elem{“}计算结束@exact-elem{”}，返回计算的最终
 结果 @tt{(num-val 30)}。
@@ -643,7 +637,7 @@
 
 我们的语言中最后要处理的是过程调用。在传递环境的解释器中，我们写：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (let ((proc1 (expval->proc (value-of rator env)))
@@ -659,7 +653,7 @@
 我们选择先求操作符的值，所以在 @tt{value-of/k} 中我们写：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (call-exp (rator rand)
   (value-of/k rator
@@ -669,31 +663,27 @@
 
 就像 @tt{diff-exp}，@tt{rator-cont} 在适当的环境中求操作数的值：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
 = (value-of/k |@${rand} |@${env}
     (rand-cont |@${val1} |@${cont}))
 }|
 }
-}
 
 当 @tt{rand-cont} 收到一个值，它就可以调用过程了：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
 = (let ((proc1 (expval->proc |@${val1})))
     (apply-procedure/k proc1 |@${val2} |@${cont}))
 }|
 }
-}
 
 最后，我们还要修改 @tt{apply-procedure}，以符合续文传递风格：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure/k}} : @${\mathit{Proc} \times \mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
 (define apply-procedure/k
@@ -777,8 +767,7 @@
 但过程调用本身不会增大控制上下文。考虑 @tt{(@${exp_1} @${exp_2})} 的求值，其中
 @${exp_1} 的值是一个过程 @${proc_1}，@${exp_2} 的值是某个表达值 @${val_2}。
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-computation{
 @verbatim|{
 (value-of/k <<(|@${exp_1} |@${exp_2})>> |@${\rho_1} |@${cont_1})
 = |@smaller{@emph{求操作符的值}}
@@ -798,7 +787,6 @@
 = |@smaller{@emph{调用过程}}
 (apply-procedure/k |@${proc_1} |@${val_2} |@${cont_1})
 }|
-}
 }
 
 所以，过程调用时，过程主体在过程调用所在的续文中求值。操作数的求值需要控制上下文，
@@ -929,7 +917,7 @@
 }
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (end-cont) |@${val})
 = (begin
@@ -1013,7 +1001,7 @@
 @${\mathit{Bounce}} 中的是 @tt{apply-procedure/k}。这些是什么样的值呢？我们来看
 代码。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define apply-procedure/k
   (lambda (proc1 val cont)
@@ -1171,7 +1159,7 @@
 @emph{goto}（名为@term["flowchart program"]{流程图程序}）的跟踪日志。
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec
  even(x) = if zero?(x)
@@ -1186,7 +1174,7 @@ in (odd 13)
 
 @${\rule{\linewidth}{1pt}}
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 0
 in letrec
@@ -1205,7 +1193,7 @@ in letrec
 
 @${\rule{\linewidth}{0.5pt}}
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
       x = 13;
       goto odd;
@@ -1220,7 +1208,7 @@ odd:  if (x=0) then return(0)
 
 @${\rule{\linewidth}{0.5pt}}
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
   (odd 13)
 = (even 12)
@@ -1296,7 +1284,7 @@ odd:  if (x=0) then return(0)
 我们的第一个任务是列出需要通过共享寄存器通信的过程。这些过程及其形参为：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent 0]{
 (value-of/k exp env cont)
 (apply-cont cont val)
@@ -1310,7 +1298,7 @@ odd:  if (x=0) then return(0)
 换掉上述过程的调用。所以，这段代码
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define value-of/k
   (lambda (exp env cont)
@@ -1322,7 +1310,7 @@ odd:  if (x=0) then return(0)
 
 可以替换为：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define value-of/k
   (lambda ()
@@ -1392,7 +1380,7 @@ odd:  if (x=0) then return(0)
  @item{我们必须确保 @tt{cases} 表达式中的字段不与寄存器重名。否则字段会遮蔽寄存
  器，寄存器就无法访问了。例如，在 @tt{value-of-program} 中，如果我们写：
 
- @nested[#:style small]{
+ @eopl-code{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp)
@@ -1403,7 +1391,7 @@ odd:  if (x=0) then return(0)
  那么 @tt{exp} 绑定到局部变量，我们无法给全局寄存器 @tt{exp} 赋值。解决方法是重
  命名局部变量，避免冲突：
 
- @nested[#:style small]{
+ @eopl-code{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp1)
@@ -1413,7 +1401,7 @@ odd:  if (x=0) then return(0)
 
  然后，可以写：
 
- @nested[#:style small]{
+ @eopl-code{
  @codeblock[#:indent 5]{
  (cases program pgn
    (a-program (exp1)
@@ -1432,7 +1420,7 @@ odd:  if (x=0) then return(0)
  (car x)) (f (cdr x)))} 中的第一个调用，其中，@tt{x} 是 @tt{f} 的形参。不做过多
  考虑的话，这个调用可以转换为：
 
- @nested[#:style small]{
+ @eopl-code{
  @racketblock[
  (begin
    (set! x (car x))
@@ -1445,7 +1433,7 @@ odd:  if (x=0) then return(0)
  法是调整赋值顺序，把正确的值放入寄存器中，或者使用临时变量。大多情况下，要避免
  这种问题，可以先给续文变量赋值：
 
- @nested[#:style small]{
+ @eopl-code{
  @racketblock[
  (begin
    (set! cont (arg1-cont x cont))
@@ -1652,11 +1640,13 @@ odd:  if (x=0) then return(0)
 用跳床转换这个解释器，用 @tt{(set! pc apply-procedure/k)} 替换
 @tt{apply-procedure/k} 的调用，并使用下面这样的驱动器：
 
+@eopl-code{
 @racketblock[
 (define trampoline
   (lambda (pc)
     (if pc (trampoline (pc)) val)))
 ]
+}
 
 }
 
@@ -1750,8 +1740,7 @@ odd:  if (x=0) then return(0)
 这里是一个例子（暂时假设我们给语言添加了字符串）。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let list-index =
      proc (str)
@@ -1763,7 +1752,6 @@ let list-index =
               else -((inner cdr(lst)), -1)
 }|
 }
-}
 
 过程 @tt{list-index} 是个咖喱式过程，它取一个字符串，一个字符串列表，返回字符串
 在列表中的位置。如果找不到期望的列表元素，@tt{inner} 抛出一个异常，跳过所有待做
@@ -1774,8 +1762,7 @@ let list-index =
 这个异常处理器可以利用调用处的信息对异常做适当处理。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let find-member-number =
      proc (member-name)
@@ -1783,7 +1770,6 @@ let find-member-number =
             catch (exn)
              raise("CantFindMemberNumber")
 }|
-}
 }
 
 过程 @tt{find-member-number} 取一字符串，用 @tt{list-index} 找出字符串在列表
@@ -1797,8 +1783,7 @@ let find-member-number =
 一个默认值。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let find-member-number =
      proc (member-name)
@@ -1806,7 +1791,6 @@ let find-member-number =
            catch (exn)
             the-default-member-number
 }|
-}
 }
 
 在这些程序中，我们忽略了异常的值。在其他情况下，@tt{raise} 传出的值可能包含一部
@@ -1818,7 +1802,7 @@ let find-member-number =
 文的数据结构表示中，我们添加两个构造器：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (try-cont
   (var identifier?)
@@ -1832,7 +1816,7 @@ let find-member-number =
 
 在 @tt{value-of/k} 中，我们给 @tt{try} 添加下面的从句：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (try-exp (exp1 var handler-exp)
   (value-of/k exp1 env
@@ -1845,7 +1829,7 @@ let find-member-number =
 求 @tt{try} 表达式主体的值时会发生什么呢？如果主体正常返回，那么这个值应该传给
 @tt{try} 表达式的续文，也就是此处的 @tt{cont}：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (try-cont |@${var} |@${handler\mbox{-}exp} |@${env} |@${cont}) |@${val})
 = (apply-cont |@${cont} |@${val})
@@ -1854,7 +1838,7 @@ let find-member-number =
 
 如果一个异常抛出了呢？首先，我们当然得求出 @tt{raise} 参数的值。
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (raise-exp (exp1)
   (value-of/k exp1 env
@@ -1866,7 +1850,7 @@ let find-member-number =
 即最上层的 @tt{try-cont} 续文。所以，我们把续文规范写成：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (raise1-cont |@${cont}) |@${val})
 = (apply-handler |@${val} |@${cont})
@@ -1878,7 +1862,7 @@ let find-member-number =
 
 }
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{apply-handler}} : @${\mathit{ExpVal} \times \mathit{Cont} \to \mathit{FinalAnswer}}}
 (define apply-handler
@@ -1904,8 +1888,7 @@ let find-member-number =
 要明白怎样将这些结合到一起，我们考虑用被定语言实现的 @tt{index}。令 @${exp_0} 指
 代表达式：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let index
      = proc (n)
@@ -1921,14 +1904,12 @@ let index
 in ((index 5) list(2, 3))
 }|
 }
-}
 
 我们从任意环境 @${\rho_0} 和续文 @${cont_0} 开始求 @${exp_0} 的值，只展示计算的
 关键部分，并插入注释。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-computation{
 @verbatim|{
 (value-of/k
   <<let index = ... in ((index 5) list(2, 3))>>
@@ -2055,7 +2036,6 @@ in ((index 5) list(2, 3))
 }|
 }
 }
-}
 
 如果列表包含期望值，那么我们不需调用 @tt{apply-handler}，而是调用
 @tt{apply-cont}，并执行续文中所有待完成的 @tt{diff}。
@@ -2120,7 +2100,7 @@ in ((index 5) list(2, 3))
 前一道练习只在抛出异常时捕获续文。添加形式 @tt{letcc @${\mathit{Identifier}} in
 @${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (value-of/k (letcc |@${var} |@${body}) |@${\rho} |@${cont})
 = (value-of/k |@${body} (extend-env |@${var} |@${cont} |@${\rho}) |@${cont})
@@ -2149,7 +2129,7 @@ in ((index 5) list(2, 3))
 文@tt{cont}。@tt{call-with-current-continuation} 可用 @tt{letcc} 和 @tt{throw}
 定义如下：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let call-with-current-continuation
       = proc (p)
@@ -2199,7 +2179,7 @@ in ...
 个元素，
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 test: two-non-cooperating-threads
 
@@ -2247,7 +2227,7 @@ thread. 实则205是生产者所在线程打印。}就像前一个例子那样�
 程和生产者线程各自循环大约两次。
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let buffer = 0
 in let producer = proc (n)
@@ -2325,7 +2305,7 @@ in let producer = proc (n)
 @tt{value-of/k} 新增从句：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (spawn-exp (exp)
   (value-of/k exp env
@@ -2335,7 +2315,7 @@ in let producer = proc (n)
 
 给 @tt{apply-cont} 新增从句：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (spawn-cont (saved-cont)
   (let ((proc1 (expval->proc val)))
@@ -2433,7 +2413,7 @@ in let producer = proc (n)
 }
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 0
 in let mut = mutex()
@@ -2472,7 +2452,7 @@ in let mut = mutex()
 
 由此我们得出两种新续文，其行为由 @tt{apply-cont} 中的以下几行实现：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (end-main-thread-cont ()
   (set-final-answer! val)
@@ -2485,7 +2465,7 @@ in let mut = mutex()
 
 我们从 @tt{value-of-program} 入手整个系统：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Int} \times \mathit{Program} \to \mathit{FinalAnswer}}}
 (define value-of-program
@@ -2505,7 +2485,7 @@ in let mut = mutex()
 中止当前计算。在实现时，我们先把一个线程放入就绪队列，它用调用
 @tt{run-next-thread} 时恢复的计时器再次调用 @tt{apply-cont}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-cont}} : @${\mathit{Cont} \times \mathit{ExpVal} \to \mathit{FinalAnswer}}}
 (define apply-cont
@@ -2587,7 +2567,7 @@ in let mut = mutex()
 @eopl-index[#:range-mark 'end "Critical region"]
 
 @eopl-figure{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 0
 in let mut = mutex()
@@ -2613,7 +2593,7 @@ in let mut = mutex()
 我们用两个引用模拟互斥锁：一个指向其状态（开启或关闭），一个指向等待这把锁的线程
 列表。我们还把互斥锁作为一种表达值。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype mutex mutex?
   (a-mutex
@@ -2625,7 +2605,7 @@ in let mut = mutex()
 我们给 @tt{value-of/k} 添加适当的行：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (mutex-exp ()
   (apply-cont cont (mutex-val (new-mutex))))
@@ -2634,7 +2614,7 @@ in let mut = mutex()
 
 其中：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{new-mutex}} : @${\mathit{()} \to \mathit{Mutex}}}
 (define new-mutex
@@ -2650,7 +2630,7 @@ in let mut = mutex()
 @tt{signal-mutex}。@tt{wait} 和 @tt{signal} 都求出它们唯一参数的值，所以，在
 @tt{apply-cont} 中我们写：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (wait-cont
   (saved-cont)

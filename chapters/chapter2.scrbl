@@ -69,7 +69,7 @@
 例如，不论怎样实现自然数，
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (@#,elem{@elemtag["plus"]{}}define plus
   (lambda (x y)
@@ -101,7 +101,7 @@ y\rceil}}。}
 
  要满足该表示的定义，数据处理过程可以写成：
 
-@nested[#:style small]{
+@eopl-code{
  @racketblock[(define zero (lambda () '()))
  (define is-zero? (lambda (n) (null? n)))
  (define successor (lambda (n) (cons #t n)))
@@ -111,7 +111,7 @@ y\rceil}}。}
  只需用 Scheme 内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil} 为
  Scheme 整数 @tt{n}，则所需的四个过程可以定义为：
 
-@nested[#:style small]{
+@eopl-code{
  @racketblock[(define zero (lambda () 0))
  (define is-zero? (lambda (n) (zero? n)))
  (define successor (lambda (n) (+ n 1)))
@@ -234,6 +234,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 的值设为 @${val}，此外与 @${env} 相同。例如，表达式
 
  @nested{
+ @eopl-code{
  @racketinput[
    (define e
      (extend-env 'd 6
@@ -241,6 +242,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
          (extend-env 'x 7
            (extend-env 'y 14
              (empty-env))))))]
+ }
 
  定义了一个环境 @${e}，使 @${e(@tt{d}) = 6}，@${e(@tt{x}) = 7}，@${e(@tt{y}) =
  8}，且对任何其他变量，@${e}未定义。本例中，@tt{y}先绑定到 @${14}，随后绑定到
@@ -264,7 +266,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 \geqslant 0}。例如，
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (extend-env @#,elem{@${var_n}} @#,elem{@${val_n}}
    ...
@@ -444,7 +446,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 要这样表示，定义 @tt{empty-env} 和 @tt{extend-env} 的返回值为过程，调用二者的返
 回值就如同调用上一节的 @tt{apply-env} 一样。由此得出下面的实现。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${\mathit{Env} = \mathit{Var} \to \mathit{SchemeVal}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
@@ -546,9 +548,9 @@ lambda 演算表达式的语法：
 
 @nested[#:style 'inset]{
 @verbatim|{
-|@bold{@tt{var-exp}}     |@${: \mathit{Var} \to \mathit{Lc\mbox{-}Exp}}
-|@bold{@tt{lambda-exp}}  |@${: \mathit{Var} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
-|@bold{@tt{app-exp}}     |@${: \mathit{Lc\mbox{-}Exp} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{var-exp}}: |@${\mathit{Var} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{lambda-exp}}: |@${\mathit{Var} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp}}: |@${\mathit{Lc\mbox{-}Exp} \times \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
 }|
 }
 
@@ -556,9 +558,9 @@ lambda 演算表达式的语法：
 
 @nested[#:style 'inset]{
 @verbatim|{
-|@bold{@tt{var-exp?}}     |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
-|@bold{@tt{lambda-exp?}}  |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
-|@bold{@tt{app-exp?}}     |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+|@bold{@tt{var-exp?}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+|@bold{@tt{lambda-exp?}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
+|@bold{@tt{app-exp?}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Bool}}
 }|
 }
 
@@ -566,18 +568,18 @@ lambda 演算表达式的语法：
 
 @nested[#:style 'inset]{
 @verbatim|{
-|@bold{@tt{var-exp->exp}}           |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
-|@bold{@tt{lambda-exp->bound-var}}  |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
-|@bold{@tt{lambda-exp->body}}       |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
-|@bold{@tt{app-exp->rator}}         |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
-|@bold{@tt{app-exp->rand}}          |@${: \mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{var-exp->exp}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
+|@bold{@tt{lambda-exp->bound-var}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
+|@bold{@tt{lambda-exp->body}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp->rator}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
+|@bold{@tt{app-exp->rand}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
 }|
 }
 
 每个提取器对应 lambda 演算表达式中的一部分。现在可以写出一版只依赖接口的
 @tt{occurs-free?}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@elemtag["occurs-free?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 (lambda (search-var exp)
@@ -706,6 +708,7 @@ lambda 演算表达式的语法：
 
 例如：
 
+@eopl-code{
 @examples[#:eval bidirection-eval
           #:label #f
           (number->sequence 7)
@@ -714,6 +717,7 @@ lambda 演算表达式的语法：
           (move-to-right '(6 (5 4 3 2 1) (7 8 9)))
           (insert-to-left 13 '(6 (5 4 3 2 1) (7 8 9)))
           (insert-to-right 13 '(6 (5 4 3 2 1) (7 8 9)))]
+}
 
 如果参数在序列最右端，过程@tt{move-to-right}应失败。如果参数在序列最左端，过程
 @tt{move-to-left}应失败。
@@ -776,6 +780,7 @@ lambda 演算表达式的语法：
 @tt{move-to-right-son}、@tt{at-leaf?}、@tt{insert-to-left} 和
 @tt{insert-to-right}。例如：
 
+@eopl-code{
 @examples[#:eval bintree-eval
           #:label #f
           (number->bintree 13)
@@ -787,6 +792,7 @@ lambda 演算表达式的语法：
           (current-element (move-to-left-son t1))
           (at-leaf? (move-to-right-son (move-to-left-son t1)))
           (insert-to-left 15 t1)]
+}
 
 }
 
@@ -810,7 +816,7 @@ lambda 演算表达式的语法：
 @eopl-index[#:range-mark 'start (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
 仍考虑前一节讨论的数据类型 lambda 演算表达式。lambda 演算表达式的接口可以这样写：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (@#,elem{@elemtag["lc-exp"]{}}define-datatype lc-exp lc-exp?
   (var-exp
@@ -839,7 +845,7 @@ lambda 演算表达式的语法：
 它的组件。为解释这一形式，我们用数据类型 @tt{lc-exp} 重写
 @tt{occurs-free?}（@pageref{occurs-free?}）：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@${@bold{@tt{occurs-free?}} : \mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 (define occurs-free?
@@ -865,7 +871,7 @@ lambda 演算表达式的语法：
 个子表达式，接着，表达式
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (or
   (occurs-free? search-var rator)
@@ -875,7 +881,7 @@ lambda 演算表达式的语法：
 
 将会求值，就像我们写：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (if (app-exp? exp)
   (let ((rator (app-exp->rator exp))
@@ -893,10 +899,12 @@ lambda 演算表达式的语法：
 
 一般的 @tt{define-datatype} 声明形如：
 
+@nested[#:style 'noindent]{
 @racketblock[
 (@#,elem{@elemtag["define-datatype"]{}}define-datatype @#,elem{@${type\mbox{-}name}} @#,elem{@${type\mbox{-}predicate\mbox{-}name}}
   @#,elem{@${\{@tt["("]variant\mbox{-}name \quad \{@tt["("]filed\mbox{-}name \quad predicate@tt[")"]\}^{*} @tt[")"]\}^{+}}})
 ]
+}
 
 这新定义了一种数据类型，名为 @${type\mbox{-}name}，它有一些@term["variants"]{变
 体}。每个变体有一变体名，以及 0 或多个字段，每个字段各有其字段名和相应的谓词。不
@@ -924,7 +932,7 @@ lambda 演算表达式的语法：
 
 s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype s-list s-list?
   (empty-s-list)
@@ -943,9 +951,8 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 数据类型 @tt{s-list} 用 @tt{(empty-s-list)} 和 @tt{non-empty-s-list} 代替
 @tt{()} 和 @tt{cons} 来表示列表。如果我们还想用 Scheme 列表，可以写成：
 
-@nested[#:style 'noindent]{
-
-@nested[#:style small]{
+@nested{
+@eopl-code{
 @racketblock[
 (define-datatype s-list s-list?
   (an-s-list
@@ -991,7 +998,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @nested{
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (app-exp (exp1 exp2)
   (or
@@ -1002,7 +1009,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 代替
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (app-exp (rator rand)
   (or
@@ -1053,6 +1060,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.24" "ex2.25"] (eopl-index-entry @elem{Binary tree (@${\mathit{Bintree}})} "Binarytree")]
 这是用 @tt{define-datatype} 表示的二叉树：
 
+@eopl-code{
 @racketblock[
 (define-datatype bintree bintree?
   (leaf-node
@@ -1062,16 +1070,19 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
    (left bintree?)
    (right bintree?)))
 ]
+}
 
 实现操作二叉树的过程 @tt{bintree-to-list}，则 @tt{(bintree-to-list
 (interior-node 'a (leaf-node 3) (leaf-node 4)))} 应返回列表：
 
+@eopl-code{
 @racketblock[
 (interior-node
   a
   (leaf-node 3)
   (leaf-node 4))
 ]
+}
 
 }
 
@@ -1143,6 +1154,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 用 @tt{cases} 写出 @tt{max-interior}，它取至少有一个内部节点的整数二叉树（像前一
 道练习那样），返回叶子之和最大的内部节点对应的标签。
 
+@eopl-code{
 @examples[#:eval max-interior-eval
           #:label #f
           (define tree-1
@@ -1154,6 +1166,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
           (max-interior tree-2)
           (max-interior tree-3)
 ]
+}
 
 最后一次调用 @tt{max-interior} 也可能返回 @tt{foo}，因为节点 @tt{foo} 和
 @tt{baz} 的叶子之和都为 5。
@@ -1251,7 +1264,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 过程 @tt{read} 会自动把字符串解析为列表和符号。然后，把这些列表结构解析为抽象语
 法树就容易多了，就像 @tt{parse-expression} 这样。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{parse-expression}} : @${\mathit{SchemeVal} \to \mathit{LcExp}}}
 (define parse-expression
@@ -1273,7 +1286,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 通常，很容易把抽象语法树重新转换为列表-符号表示。我们这样做了，Scheme 的打印过程
 就会将其显示为列表形式的具体语法。这由 @tt{unparse-lc-exp} 完成：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{unparse-lc-exp}} : @${\mathit{LcExp} \to \mathit{SchemeVal}}}
 (define unparse-lc-exp
@@ -1299,6 +1312,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 画出下面 lambda 演算表达式的抽象语法树：
 
+@eopl-code{
 @racketblock[
 ((lambda (a) (a b)) c)
 
@@ -1308,6 +1322,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
        (x y))
      x)))
 ]
+}
 }
 
 @exercise[#:level 1 #:tag "ex2.28"]{
@@ -1362,6 +1377,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 Łukasiewicz，称之为@term["Polish prefix notation"]{波兰前缀表示法}。写一个
 解析器，将前缀列表表示法转换为抽象语法：
 
+@eopl-code{
 @racketblock[
 (define-datatype prefix-exp prefix-exp?
   (const-exp
@@ -1370,9 +1386,11 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
    (operand1 prefix-exp?)
    (operand2 prefix-exp?)))
 ]
+}
 
 使上例与这几个构造器生成相同抽象语法树：
 
+@eopl-code{
 @racketblock[
 (diff-exp
  (diff-exp
@@ -1384,6 +1402,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
    (const-exp 12)
    (const-exp 7))))
 ]
+}
 
 提示：想想如何写一个过程，取一列表，产生一个 @tt{prefix-exp} 和列表剩余元素组成
 的列表。

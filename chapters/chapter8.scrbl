@@ -74,8 +74,7 @@ interface"]{简单接口}，接口列出模块提供的绑定及其类型。模�
 
 @example[#:tag "eg-8.1"]{
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -91,7 +90,7 @@ let a = 10
 in -(-(from m1 take a,
        from m1 take b),
      a)
-}|}
+}|
 }
 
 类型为 @tt{int}，值为 @${((33-1)-10)=22}。
@@ -147,8 +146,7 @@ in -(-(from m1 take a,
 程序
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -157,7 +155,7 @@ module m1
   [u = 33]
 
 44
-}|}
+}|
 }
 
 类型异常。即使程序的其他部分不使用那些值，模块主体也要将接口中的名字与适当类型的
@@ -178,8 +176,7 @@ module m1
 模块主体必须提供接口中声明的所有绑定。例如，
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -189,7 +186,7 @@ module m1
   [u = 33]
 
 44
-}|}
+}|
 }
 
 类型异常，因为 @tt{m1} 的主体没有提供接口中公布的所有值。} }
@@ -198,8 +195,7 @@ module m1
 为了让实现简单一点，我们的语言要求模块主体按照接口声明的顺序给出各值。因此
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -210,7 +206,7 @@ module m1
    u = 44]
 
 from m1 take u
-}|}
+}|
 }
 
 类型异常。可以避免如此（@exercise-ref{ex8.8}、@countref{ex8.17}）。
@@ -221,8 +217,7 @@ from m1 take u
 在我们的语言中，模块具有 @tt{let*} 式的作用域（@exercise-ref{ex3.17}）。例如，
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -237,13 +232,12 @@ module m2
   [v = -(from m1 take u,11)]
 
 -(from m1 take u, from m2 take v)
-}|}
+}|
 }
 
 类型为 @tt{int}。但如果我们交换定义的顺序，得
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m2
  interface
@@ -258,7 +252,7 @@ module m1
   [u = 44]
 
 -(from m1 take u, from m2 take v)
-}|}
+}|
 }
 
 它类型异常，因为 @tt{m2} 主体中使用 @tt{from m1 take u} 的地方不在后者的作用域
@@ -319,7 +313,7 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
 求模块主体的值会得到一个@emph{模块}。在我们的简单模块语言中，模块是一个环境，包
 含模块输出的所有绑定。我们用数据类型 @tt{typed-module} 表示这些。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype typed-module typed-module?
   (simple-module
@@ -328,7 +322,7 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
 
 我们用一种新的绑定在环境中绑定模块名：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype environment environment?
   (empty-env)
@@ -344,8 +338,7 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
 
 @nested{
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -365,12 +358,12 @@ module m2
    b = 77]
 let z = 99
 in -(z, -(from m1 take a, from m2 take a))
-}|}
+}|
 }
 
 那么声明 @${z} 之后的环境是
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 #(struct:extend-env
    z #(struct:num-val 99)
@@ -400,7 +393,7 @@ in -(z, -(from m1 take a, from m2 take a))
 我们用 @tt{lookup-qualified-var-in-env} 求受限变量 @tt{from @${m} take @${var}}
 引用的值。它在当前环境中查找模块 @${m}，然后在得到的环境中查找 @${var}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{lookup-qualified-var-in-env!}} : @${\mathit{Sym} \times \mathit{Sym} \times \mathit{Env} \to \mathit{ExpVal}}}
 (define lookup-qualified-var-in-env
@@ -420,7 +413,7 @@ in -(z, -(from m1 take a, from m2 take a))
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{ExpVal}}}
 (define value-of-program
@@ -487,7 +480,7 @@ in -(z, -(from m1 take a, from m2 take a))
 息。因为我们现在有了模块名，我们要在类型环境中绑定模块名。每个模块名绑定到模块的
 接口，作为其类型。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype type-environment type-environment?
   (empty-tenv)
@@ -501,7 +494,7 @@ in -(z, -(from m1 take a, from m2 take a))
 要找出受限变量 @tt{from @${m} take @${var}} 的类型，我们首先在类型环境中找出
 @${m}，然后在得到的接口中查找 @${var} 的类型。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{lookup-qualified-var-in-tenv}} : @${\mathit{Sym} \times \mathit{Sym} \times \mathit{Tenv} \to \mathit{Type}}}
 (define lookup-qualified-var-in-tenv
@@ -512,7 +505,7 @@ in -(z, -(from m1 take a, from m2 take a))
           (lookup-variable-name-in-decls var-name decls))))))
 ]}
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{type-of-program}} : @${\mathit{Program} \to \mathit{Type}}}
 (define type-of-program
@@ -556,27 +549,25 @@ in -(z, -(from m1 take a, from m2 take a))
 一个例子的主体，
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [a = 33
  x = -(a,1)
  b = -(a,x)
  c = -(x,b)]
 }|
-}}
+}
 
 可得
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [a : int
  x : int
  b : int
  c : int]
 }|
-}}
+}
 }
 
 一旦我们建立了一套接口来描述模块主体输出的所有绑定，我们就能将其与模块公布的接口
@@ -590,13 +581,12 @@ in -(z, -(from m1 take a, from m2 take a))
 为：若 @${i_1 @tt{<:} i_2}，则满足接口 @${i_1} 的任何模块也满足接口 @${i_2}。例如
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [u : int         [u : int
  v : int    <:    z : int]
  z : int]
-}|}
+}|
 }
 
 因为满足接口 @tt{[u : int v : bool z : int]} 的任何模块都提供了接口 @tt{[u : int
@@ -715,7 +705,7 @@ z : int]} 公布的所有值。
 
 允许在模块主体中使用 @tt{let} 和 @tt{letrec} 声明。例如，可以写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module even-odd
  interface
@@ -736,7 +726,7 @@ module even-odd
 
 允许在模块主体中定义局部模块。例如，可以写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -757,7 +747,7 @@ module m1
 
 扩展前一题的解答，允许模块将其他模块作为输出的一部分。例如，可以写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -789,7 +779,7 @@ from m1 take n take v
 前声明的所有模块的作用域中，而是在自身 @tt{depends-on} 语句中列出模块的作用域中。
 例如，考虑程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m1 ...
 module m2 ...
@@ -817,7 +807,7 @@ module m5
 
 这样，如果我们的语言有打印表达式，程序
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m1
  interface [] body [x = print(1)]
@@ -843,7 +833,7 @@ import m3, m1
 修改检查器，用 INFERRED 作为语言的表达式。这道练习中，你需要修改 @tt{<:-decls}，
 不能用 @tt{equal?} 比较类型。例如，在
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m
  interface [f : (int -> int)]
@@ -855,7 +845,7 @@ module m
 但是，我们应拒绝模块
 
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module m
  interface [f : (int -> bool)]
@@ -873,8 +863,7 @@ module m
 种模块语言 OPAQUE-TYPES 中，我们还允许接口声明类型。例如，在定义
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -886,7 +875,7 @@ module m1
 body
  ...
 }|
-}}
+}
 
 中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
 @tt{is-zero}。如同@secref{s2.1}，这套接口可能与算术操作的实现相关。这里的声明
@@ -907,19 +896,17 @@ succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 ta
 坐标。她使用的语言具有@exercise-ref{ex7.8} 那样的类型，所以她的模块
 @tt{Alices-points} 接口具有如下声明：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 initial-point : (int -> pairof int * int)
 increment-x : (pairof int * int -> pairof int * int)
 }|
-}}
+}
 
 鲍伯和查理对此直发牢骚。他们不想一遍又一遍地写 @tt{pairof int * int}。因此，爱丽
 丝用透明类型声明重写她的接口。这样，她可以写
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module Alices-points
  interface
@@ -929,20 +916,19 @@ module Alices-points
    get-x : (point -> int)
    ...]
 }|
-}}
+}
 
 这减轻了她的工作，因为她写得更少；这也减轻了她合作者的工作，因为他们在实现中可以
 写这样的定义：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [transparent point = from Alices-points take point
  foo = proc (p1 : point)
         proc (p2 : point) ...
  ...]
 }|
-}}
+}
 
 对某些项目中，这很不错。不过，爱丽丝的项目正好要表示固定形状金属导轨上的点，所以
 横纵坐标不是相互独立的。@note{不妨将金属导轨视为有长度无宽度的圆形轨迹，以圆心为
@@ -951,14 +937,13 @@ module Alices-points
 横坐标的改变。但是鲍伯不知道这点，所以他的过程写作
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 increment-y = proc (p : point)
                unpair x y = p
                in newpair(x, -(y,-1))
 }|
-}}
+}
 
 由于鲍伯的代码修改纵坐标时不随之修改横坐标，爱丽丝的代码就没法正常工作了。
 
@@ -970,15 +955,14 @@ increment-y = proc (p : point)
 
 爱丽丝可以把 @tt{point} 声明为@emph{模糊}数据类型来解决她的问题。她把接口重写为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 opaque point
 initial-point : (int -> point)
 increment-x : (point -> point)
 get-x : (point -> int)
 }|
-}}
+}
 
 现在鲍伯用过程 @tt{initial-point} 创建新的点，而且他可以用 @tt{from
 Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点，但
@@ -997,8 +981,7 @@ Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点
 程序
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -1015,7 +998,7 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? -(x,0))
 }|
-}}
+}
 
 类型为 @tt{(int -> bool)}。
 }}
@@ -1055,8 +1038,7 @@ take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我�
 类型。得出的程序是
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -1073,7 +1055,7 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? -(x,0))
 }|
-}}
+}
 }
 }
 
@@ -1095,8 +1077,7 @@ m1 take t}；@tt{from m1 take s} 和 @tt{from m1 take is-z?} 绑定到过程，�
 我们改变程序，删掉算术操作，得
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -1113,7 +1094,7 @@ module m1
  proc (x : from m1 take t)
   (from m1 take is-z? x)
 }|
-}}
+}
 
 现在，我们的程序类型正常，类型为 @tt{(from m1 take t -> bool)}。
 }
@@ -1126,8 +1107,7 @@ module m1
 如果程序使用了模块定义
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module colors
  interface
@@ -1141,7 +1121,7 @@ module colors
    green = 1
    is-red? = proc (c : color) zero?(c)]
 }|
-}}
+}
 
 程序没法知道 @tt{from colors take color} 实际为 @tt{int}，也不知道 @tt{from
 colors take green} 实际为 1（也许有一个例外：返回颜色作为最终答案，然后打印出
@@ -1151,8 +1131,7 @@ colors take green} 实际为 1（也许有一个例外：返回颜色作为最�
 程序
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module ints1
  interface
@@ -1172,7 +1151,7 @@ let z = from ints1 take zero
 in let s = from ints1 take succ
    in (s (s z))
 }|
-}}
+}
 
 类型为 @tt{from ints1 take t}，值为 10。但我们只能通过 @tt{ints1} 输出的过程处理
 这个值。这个模块用表达值 @${5*k} 表示整数 @${k}。用@secref{s2.1}的表示法，写作
@@ -1182,7 +1161,7 @@ in let s = from ints1 take succ
 在这个模块中，@${\lceil k \rceil = -3 * k}。
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module ints2
  interface
@@ -1214,8 +1193,7 @@ in let s = from ints2 take succ
 将它们结合起来，写出过程 @tt{to-int}，把模块中的值转回 @tt{int} 类型。
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module ints1 |@emph{...同前...}
 
@@ -1229,7 +1207,7 @@ in letrec int to-int (x : from ints1 take t) =
               else -((to-int (p x)), -1)
 in (to-int (s (s z)))
 }|
-}}
+}
 
 类型为 @tt{int}，值为 2。
 
@@ -1240,8 +1218,7 @@ in (to-int (s (s z)))
 这里用到的技术与 @tt{ints2} 中算术操作的实现相同。
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module ints2 |@emph{...同前...}
 
@@ -1255,7 +1232,7 @@ in letrec int to-int (x : from ints2 take t) =
               else -((to-int (p x)), -1)
 in (to-int (s (s z)))
 }|
-}}
+}
 
 类型同样为 @tt{int}，值为 2。
 
@@ -1269,8 +1246,7 @@ in (to-int (s (s z)))
 但是像@example-ref{eg-8.8} 那样，程序的剩余部分对此一无所知。
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module mybool
  interface
@@ -1296,7 +1272,7 @@ in let false = from mybool take false
    in let and = from mybool take and
       in ((and true) false)
 }|
-}}
+}
 
 类型为 @tt{from mybool take t}，值为 13。
 
@@ -1322,7 +1298,7 @@ in let false = from mybool take false
 
 下面是 @tt{mybool}（@example-ref{eg-8.13}）的另一种定义：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module mybool
  interface
@@ -1360,7 +1336,7 @@ module mybool
 单参数过程，我们用咖喱化（@exercise-ref{ex3.20}）实现等效的多参数过程。你可以用
 查询任何值都返回 0 的表模拟空表。这是该模块的一个例子：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module tables
  interface
@@ -1421,7 +1397,7 @@ t}）。
 
 解释器不需要查看类型和声明，所以解释器的唯一改动是忽略类型定义。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{defns-to-env}} : @${\mathit{Listof(Defn)} \times \mathit{Env} \to \mathit{Env}}}
 (define defns-to-env
@@ -1453,7 +1429,7 @@ type"]{展开类型}。}
 一个展开类型。新的类型环境定义为
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype type-environment type-environment?
   (empty-tenv)
@@ -1474,7 +1450,7 @@ type"]{展开类型}。}
 开前者。根据不变式@exact-elem{“}结果类型已展开@exact-elem{”}，它在类型环境中查
 询有名类型和受限类型，对@tt{proc} 类型，它递归处理参数和结果类型。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{expand-type}} : @${\mathit{Type} \times \mathit{Tenv} \to \mathit{ExpandedType}}}
 (define expand-type
@@ -1508,12 +1484,12 @@ type"]{展开类型}。}
 在检查器中，我们把形如
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[(extend-tenv sym ty tenv)]}
 
 的调用替换为
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[(extend-tenv var (expand-type ty tenv) tenv)]}
 
 }
@@ -1580,8 +1556,7 @@ type"]{展开类型}。}
 
 要明白这意味着什么，考虑模块定义
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module m1
  interface
@@ -1594,12 +1569,11 @@ module m1
  body
   [...]
 }|
-}}
+}
 
 要满足不变式，类型环境中的 @tt{m1} 应绑定到包含如下声明的接口
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [transparent t = from m1 take t
  transparent u = int
@@ -1607,19 +1581,18 @@ module m1
  f : (from m1 take t -> int)
  ...]
 }|
-}}
+}
 
 只要我们这样做，不论何时我们从类型环境中查询类型时，得到的都是期望的展开类型。
 
 在 A 处，紧随声明 @tt{f} 之后，类型环境应绑定到
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @tabular[#:sep @hspace[1]
          (list (list @tt{t}  @elem{绑定到} @tt{from m1 take t})
                (list @tt{u}  @elem{绑定到} @tt{int})
                (list @tt{uu} @elem{绑定到} @tt{(from m1 take t -> int)}))]
-}}
+}
 
 我们把类似上面 A 处的类型环境称为@emph{内部}类型环境。它作为参数传给
 @tt{expand-decls}。
@@ -1678,14 +1651,13 @@ module m1
 }
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [transparent t = int
 x : bool                <:    [y : int]
 y : t]
 }|
-}}
+}
 
 处理声明 @tt{y} 时，我们需要知道 @tt{t} 指代 @tt{int} 类型。所以，当我们递归向下
 处理声明列表时，我们需要随之扩展类型环境，就像在 @tt{expand-decls} 中生成
@@ -1696,14 +1668,13 @@ y : t]
 
 在展开过程中，我们总是用 @tt{decls1}。欲知其原因，考虑比较
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [transparent t = int           [opaque t
 transparent u = (t -> t)  <:    transparent u = (t -> int)
 f : (t -> u)]                   f : (t -> (int -> int))]
 }|
-}}
+}
 
 这一比较应该通过，因为当模块主体提供左侧的绑定时，也是右侧接口的正确实现。
 
@@ -1730,12 +1701,11 @@ f : (t -> u)]                   f : (t -> (int -> int))]
  过程 @tt{defns-to-decls} 将定义 @tt{type t = int} 转换为透明类型声明，所以
  @tt{add-module-defns-to-tenv} 中的条件
 
- @nested[#:style 'code-inset]{
- @nested[#:style small]{
+ @eopl-code{
  @verbatim|{
  actual-iface <: expected-iface
  }|
- }}
+ }
 
  需要检查
 
@@ -1802,7 +1772,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 型，所以，在上面的例子
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 [transparent t = int x : bool y : t] <: [y : int]
 }|
@@ -1888,8 +1858,7 @@ module"]{参数化模块}）的组件，以便复用模块。我们称这种新�
 
 爱丽丝写出新的模块 @tt{Alices-point-builder}，开头为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module Alices-point-builder
  interface
@@ -1902,7 +1871,7 @@ module Alices-point-builder
        initial-point : (int -> point)
        ...])
 }|
-}}
+}
 
 这套接口说的是，@tt{Alices-point-builder} 是一模块过程。它期望的参数是一个模块，
 该模块输出两个类型，@tt{db-type} 和 @tt{node-type}，一个过程，@tt{insert-node}，
@@ -1912,8 +1881,7 @@ module Alices-point-builder
 
 爱丽丝的新模块主体开头为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 body
  module-proc (m : [opaque db-type
@@ -1925,26 +1893,24 @@ body
    initial-point = ... from m take insert-node ...
    ...]
 }|
-}}
+}
 
 就像一般的过程表达式形如
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 proc (|@${var} : |@${t}) |@${e}
 }|
-}}
+}
 
 模块过程形如
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module-proc (|@${m} : [...]) [...]
 }|
-}}
+}
 
 }
 
@@ -1955,8 +1921,7 @@ module-proc (|@${m} : [...]) [...]
 现在，爱丽丝把她的模块重写为
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module Alices-points
  interface
@@ -1966,12 +1931,11 @@ module Alices-points
  body
   (Alices-point-builder Bobs-db-module)
 }|
-}}
+}
 
 查理的模块写成
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module Charlies-points
  interface
@@ -1981,7 +1945,7 @@ module Charlies-points
  body
   (Alices-point-builder Dianas-db-module)
 }|
-}}
+}
 
 }
 
@@ -1994,15 +1958,14 @@ module Charlies-points
 我们用基本相同的代码写 @tt{to-int}。在@example-ref{eg-8.11} 中它是
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 letrec int to-int (x : from ints1 take t)
             = if (z? x)
               then 0
               else -((to-int (p x)), -1)
 }|
-}}
+}
 
 在@example-ref{eg-8.12} 中，@tt{x} 的类型是 @tt{from ints2 take t}。所以我们重写
 为参数化的模块，参数模块产生所需的整数。}
@@ -2010,8 +1973,7 @@ letrec int to-int (x : from ints1 take t)
 @example[#:tag "eg-8.14"]{声明
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module to-int-maker
  interface
@@ -2036,7 +1998,7 @@ module to-int-maker
                         else -((to-int (p x)), -1)
        in to-int]
 }|
-}}
+}
 
 定义了一个模块过程。这套接口说的是，该模块取模块 @tt{ints}，生成另一模块；
 @tt{ints} 实现算术操作的接口，生成的模块输出过程 @tt{to-int}，将 @tt{ints} 中的
@@ -2049,8 +2011,7 @@ module to-int-maker
 @example[#:tag "eg-8.15"]{
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module to-int-maker |@emph{...同前...}
 
@@ -2067,7 +2028,7 @@ let two1 = (from ints1 take succ
 in (from ints1-to-int take to-int
     two1)
 }|
-}}
+}
 
 类型为 @tt{int}，值为 2。因为我们首先定义了模块 @tt{to-int-maker} 和 @tt{ints1}。
 然后我们用 @tt{ints1} 调用 @tt{to-int-maker}，得到模块 @tt{ints1-to-int}，它输出
@@ -2081,8 +2042,7 @@ in (from ints1-to-int take to-int
 @example[#:tag "eg-8.16"]{
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 module to-int-maker |@emph{...同前...}
 
@@ -2110,7 +2070,7 @@ in let two1 = (s1 (s1 z1))
 in let two2 = (s2 (s2 z2))
 in -((to-ints1 two1), (to-ints2 two2))
 }|
-}}
+}
 
 类型为 @tt{int}，值为 0。如果我们将 @tt{(to-ints2 two2)} 替换为 @tt{(to-ints2
 two1)}，则程序类型异常，因为 @tt{to-ints2} 期望的参数类型是 @tt{int2} 表示的算术
@@ -2124,7 +2084,7 @@ two1)}，则程序类型异常，因为 @tt{to-ints2} 期望的参数类型是 @
 @example-ref{eg-8.16} 中，创建 @tt{two1} 和 @tt{two2} 的代码重复，因此可以抽象出
 来。完成模块定义
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module from-int-maker
  interface
@@ -2148,7 +2108,7 @@ module from-int-maker
 
 完成模块定义
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module sum-prod-maker
  interface
@@ -2185,7 +2145,7 @@ module sum-prod-maker
 
 完成模块定义
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module equality-maker
  interface
@@ -2211,7 +2171,7 @@ body
 写出模块 @tt{table-of}，它与@exercise-ref{ex8.15} 中的 @tt{table} 模块类似，只是
 将表的内容参数化，这样就能用
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 module mybool-tables
  interface
@@ -2249,8 +2209,7 @@ module mybool-tables
 这是必须的，因为输出的接口可能依赖输入的值，就像 @tt{to-int-maker} 的类型那样：
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 ((ints : [opaque t
           zero : t
@@ -2259,32 +2218,32 @@ module mybool-tables
           is-zero : (t -> bool)])
   => [to-int : (from ints take t -> int)])
 }|
-}}
+}
 
 @tt{to-int-maker} 取一模块 @tt{ints}，生成一模块，其类型不仅依赖 @tt{ints} 中的
 固定类型，也依赖 @tt{ints} 本身。@elemtag["module-proc-eg"]{当我们}
 像@example-ref{eg-8.16} 那样用 @tt{ints1} 调用 @tt{to-int-maker} 时，得到的模块
 接口是
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [to-int : (from ints1 take t -> int)]
-}|}}
+}|
+}
 
 而当我们用 @tt{ints2} 调用时，得到的是另一个接口
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [to-int : (from ints2 take t -> int)]
 }|
-}}}
+}
+}
 
 我们扩展 @tt{expand-iface} 来处理这些新接口，并按已展开处理。这样行得通是因为参
 数接口和结果接口在需要时自会展开。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
 (define expand-iface
@@ -2312,7 +2271,7 @@ module mybool-tables
 
 首先，类似过程，我们新增一种模块。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype typed-module typed-module?
   (simple-module
@@ -2398,8 +2357,7 @@ module mybool-tables
 程 @tt{to-int-maker}，其接口为
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 ((ints : [opaque t
           zero : t
@@ -2408,25 +2366,23 @@ module mybool-tables
           is-zero : (t -> bool)])
   => [to-int : (from ints take t -> int)])
 }|
-}}
+}
 
 当我们用 @tt{ints1} 调用 @tt{to-int-maker}，代换而得的接口为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [to-int : (from ints1 take t -> int)]
 }|
-}}
+}
 
 当我们用 @tt{ints2} 调用 @tt{to-int-maker}，代换而得的接口为
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 [to-int : (from ints2 take t -> int)]
 }|
-}}
+}
 
 正合期望。
 
@@ -2559,17 +2515,15 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 
 扩展语言的模块主体，将模块调用的生成式改为
 
-@envalign*{
-           \mathit{ModuleBody} &::= @tt{(@m{\mathit{ModuleBody}} @m{\mathit{ModuleBody}})} \\[-3pt]
-             &\mathrel{\phantom{::=}} \fbox{@tt{app-module-body (rator rand)}}
-            }
+@envalign*{\mathit{ModuleBody} &::= @tt{(@m{\mathit{ModuleBody}} @m{\mathit{ModuleBody}})} \\[-3pt]
+             &\mathrel{\phantom{::=}} \fbox{@tt{app-module-body (rator rand)}}}
 }
 
 @exercise[#:level 3 #:tag "ex8.27"]{
 
 在 PROC-MODULES 中，我们总要一遍又一遍写这种接口
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 [opaque t
  zero : t
@@ -2581,7 +2535,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 
 给程序添加语法，支持命名接口，这样我们就能写
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 interface int-interface = [opaque t
                            zero : t

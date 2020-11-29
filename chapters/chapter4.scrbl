@@ -82,8 +82,7 @@
 
 @nested{
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = newref (0)
 in letrec even(dummy)
@@ -103,7 +102,6 @@ in letrec even(dummy)
    in begin setref(x,13); (odd 888) end
 }|
 }
-}
 
 这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式
 （@exercise-ref{ex4.4}）@eopl-index[(eopl-index-entry @elem{@tt{begin}
@@ -122,8 +120,7 @@ expression} "beginexpression")]。@tt{begin} 表达式按顺序求每个子表�
 
 赋值的另一用途是通过私有变量创建隐藏状态。例如：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 |@elemtag["g-counter"]{}let g = let counter = newref(0)
         in proc (dummy)
@@ -135,7 +132,6 @@ in let a = (g 11)
    in let b = (g 11)
       in -(a,b)
 }|
-}
 }
 
 这里，过程 @tt{g} 保留了一个私有变量，用来存储 @tt{g} 被调用的次数。因此，第一次
@@ -157,7 +153,7 @@ Scheme 过程 @tt{gensym} 用这种技术创建唯一符号。
 
 这个程序如果写成下面这样会怎样？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let g = proc (dummy)
           let counter = newref(0)
@@ -176,8 +172,7 @@ in let a = (g 11)
 在EXPLICIT-REFS中，我们可以存储任何表达值。引用也是表达值。这意味着我们可以在一
 个位置存储引用。考虑下面的程序：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = newref(newref(0))
 in begin
@@ -185,7 +180,6 @@ in begin
     deref(deref(x))
 end
 }|
-}
 }
 
 这段程序分配了一个新位置，内容为 0。然后，它将 @tt{x} 绑定到一个位置，其内容为指
@@ -386,7 +380,7 @@ end
 在每次求值之前初始化存储器。
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{SchemeVal}}}
 (define value-of-program
@@ -717,7 +711,7 @@ newref: 分配位置 2
 像@secref{s4.2}中的例子那样做链式引用。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 0
 in letrec even(dummy)
@@ -773,7 +767,7 @@ in let a = (g 11)
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-procedure (procedure |@${var} |@${body} |@${\rho}) |@${val} |@${\sigma})
 = (value-of |@${body} [|@${var=l}]|@${\rho} [|@${l=val}]|@${\sigma})
@@ -803,13 +797,13 @@ in let a = (g 11)
 
 @nested{
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{(var-exp (var) (deref (apply-env env var)))}
 }
 
 @tt{assign-exp} 的代码也显而易见：
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (assign-exp (var exp1)
   (begin
@@ -831,7 +825,7 @@ in let a = (g 11)
 对 @tt{let}，我们修改 @tt{value-of} 中相应的行，分配包含值的新位置，并把变量绑定
 到指向该位置的引用。
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (let-exp (var exp1 body)
   (let ((val1 (value-of exp1 env)))
@@ -844,7 +838,7 @@ in let a = (g 11)
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 对过程调用，我们同样修改 @tt{apply-procedure}，调用 @tt{newref}。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
 (define apply-procedure
@@ -865,7 +859,7 @@ in let a = (g 11)
 一个变量列表。若变量存在于列表中，@tt{location} 返回变量在列表中的位置；若不存在，
 返回 @tt{#f}。
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (extend-env-rec (p-names b-vars p-bodies saved-env)
   (let ((n (location search-var p-names)))
@@ -945,7 +939,7 @@ newref: 分配位置 5
 
 既然变量是可变的，我们可以靠赋值产生递归过程。例如：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec times4(x) = if zero?(x)
                    then 0
@@ -956,7 +950,7 @@ in (times4 3)
 
 可以替换为：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let times4 = 0
 in begin
@@ -1030,7 +1024,7 @@ in begin
 重新给 @${var} 赋其原值，然后返回 @${body} 的值。变量 @${var} 必需已绑定。例如，
 在下列表达式中：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let x = 11
 in let p = proc (y) -(y,x)
@@ -1426,7 +1420,7 @@ newref: 分配位置 7
 
 由于数组中的位置是连续的，用上述第二种表示。下面程序的结果是什么？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let a = newarray(2,-99)
     p = proc (x)
@@ -1474,14 +1468,12 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 考虑下面的表达式：
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let p = proc (x) set x = 4
 in let a = 3
    in begin (p a); a end
 }|
-}
 }
 
 按值调用时，绑定到 @tt{x} 的指代值是一个引用，它包含的初始值与绑定到 @tt{a} 的引
@@ -1506,15 +1498,13 @@ in let a = 3
 量的@emph{位置}。例如，考虑：
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let p = proc (x) set x = 44
 in let g = proc (y) (f y)
    in let z = 55
       in begin (g z); z end
 }|
-}
 }
 
 调用过程 @tt{g} 时，@tt{y} 绑定到 @tt{z} 的位置，而不是那个位置的内容。类似地，
@@ -1529,8 +1519,7 @@ in let g = proc (y) (f y)
 他值。另一种例子，对换变量的值：
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let swap = proc (x) proc (y)
             let temp = x
@@ -1545,7 +1534,6 @@ in let a = 33
           -(a,b)
          end
 }|
-}
 }
 
 采用按指调用，这会对换 @tt{a} 和 @tt{b} 的值，所以它返回 11。但如果用已有的按值
@@ -1568,7 +1556,7 @@ in let a = 33
 位置。那份责任必须上移至 @tt{value-of} 中的 @tt{call-exp} ，因为它才具有做出判断
 所需的信息。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
 (define apply-procedure
@@ -1583,7 +1571,7 @@ in let a = 33
 然后我们修改 @tt{value-of} 中的 @tt{call-exp}，引入新函数 @tt{value-of-operand}
 来做必要的判断。
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (call-exp
  (rator rand)
@@ -1597,7 +1585,7 @@ in let a = 33
 用，然后传给过程 @tt{apply-procedure}；否则，它求出操作数的值，在新位置放入那个
 值，并返回指向该位置的引用。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-operand}} : @${\mathit{Exp} \times \mathit{Env} \to \mathit{Ref}}}
 (define value-of-operand
@@ -1615,8 +1603,7 @@ in let a = 33
 多个按指调用参数可以指向同一个位置，如下面的程序所示。
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let b = 3
 in let p = proc (x) proc(y)
@@ -1626,7 +1613,6 @@ in let p = proc (x) proc(y)
             end
    in ((p b) b)
 }|
-}
 }
 
 它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫做
@@ -1754,7 +1740,7 @@ newref: 分配位置 5
 这与语言 EXPLICIT-REF 不同。因为引用只能从变量获得。这就使我们能用按值调用语言写
 出类似 @tt{swap} 的程序。下面表达式的值是什么？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let a = 3
     b = 4
@@ -1812,14 +1798,12 @@ evaluation"]{懒求值}。在懒求值中，操作数的值直到过程主体需
 这可能使程序免于永不终止。例如，考虑：
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 letrec infinite-loop (x) = infinite-loop(-(x,-1))
 in let f = proc (z) 11
    in (f (infinite-loop 0))
 }|
-}
 }
 
 这里的 @tt{infinite-loop} 是一个过程，调用时永不终止。@tt{f} 是一个过程，调用时
@@ -1837,7 +1821,7 @@ in let f = proc (z) 11
 @term["thunk"]{值箱}。值箱包含一个表达式、一个环境。
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype thunk thunk?
   (a-thunk
@@ -1861,7 +1845,7 @@ in let f = proc (z) 11
 我们的位置分配策略与按指调用类似：如果操作数是变量，那么我们传递指代的引用；否则，
 我们给未求值的参数在新位置放一个值箱，传递该位置的引用。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-operand}} : @${\mathit{Exp} \times \mathit{Env} \to \mathit{Ref}}}
 (define value-of-operand
@@ -1878,7 +1862,7 @@ in let f = proc (z) 11
 值。这叫做@term["call by name"]{按名调用}。
 @eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-name" "Callbyname")]
 
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (var-exp (var)
   (let ((ref1 (apply-env env var)))
@@ -1891,7 +1875,7 @@ in let f = proc (z) 11
 
 过程 @tt{value-of-thunk} 定义如下：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{value-of-thunk}} : @${\mathit{Thunk} \to \mathit{ExpVal}}}
 (define value-of-thunk
@@ -1907,7 +1891,7 @@ in let f = proc (z) 11
 @eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-need" "Callbyneed")]
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @codeblock[#:indent racket-block-offset]{
 (var-exp (var)
   (let ((ref1 (apply-env env var)))
@@ -1942,7 +1926,7 @@ in let f = proc (z) 11
 下面的例子展示了@exercise-ref{ex3.25} 在按需调用中的变体。@exercise-ref{ex3.25}
 中的原始程序在按需调用中可行吗？如果下面的程序在按值调用中运行呢？为什么？
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let makerec = proc (f)
                let d = proc (x) (f (x x))

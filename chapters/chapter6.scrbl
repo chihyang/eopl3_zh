@@ -29,7 +29,7 @@
 @eopl-index[#:range-mark 'start "Continuation-passing style" "examples of"]
 除了写解释器，CPS 还有别的作用。我们考虑“老熟人”阶乘程序：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -40,7 +40,7 @@
 阶乘的传递续文版本是：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -56,15 +56,13 @@
 
 其中，
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (apply-cont (end-cont) |@${val}) = |@${val}
 
 (apply-cont (fact1-cont |@${n} |@${cont}) |@${val}) = |@${val}
 = (apply-cont |@${cont} (* |@${n} |@${val}))
 }|
-}
 }
 
 }
@@ -76,7 +74,7 @@
 @eopl-index["Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 我们可以用数据结构实现这些续文：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define-datatype continuation continuation?
   (end-cont)
@@ -102,7 +100,7 @@
 一下，在过程表示法中，续文用它在 @tt{apply-cont} 中的动作表示。过程表示为：
 @eopl-index["Continuations" "procedural representation of"]
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define end-cont
   (lambda ()
@@ -213,7 +211,7 @@
 
 如果我们按这种方式内联所有用到续文的地方，我们得到：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -252,8 +250,7 @@
 归纳步骤中，对某个 @${n}，设 @tt{(fact/k @${n} @${g}) = (@${g} @${n!})}，试证明
 @tt{(fact/k @${(n + 1)} @${g}) = (@${g} @${(n + 1)!})}。要证明它，我们计算：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (fact/k |@${n + 1} |@${g})
 = (fact/k |@${n} (lambda (val) (|@${g} (* |@${n + 1} val))))
@@ -262,7 +259,6 @@
 = (|@${g} (* |@${n + 1} (fact |@${n})))
 = (|@${g} (fact |@${n + 1}))
 }|
-}
 }
 
 归纳完毕。
@@ -274,7 +270,7 @@
 
 现在，我们用同样的方式转换计算斐波那契数列的 @tt{fib}。我们从下面的过程开始：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fib
   (lambda (n)
@@ -288,7 +284,7 @@
 这里我们两次递归调用 @tt{fib}，所以我们需要一个 @tt{end-cont} 和两个续文构造器，
 二者各对应一个参数，就像处理@secref{s5.1}中的差值表达式那样。
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fib
   (lambda (n)
@@ -301,8 +297,7 @@
       (fib/k (- n 1) (fib1-cont n cont)))))
 ]}
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (apply-cont (end-cont) |@${val}) = |@${val}
 
@@ -312,12 +307,12 @@
 (apply-cont (fib2-cont |@${val1} |@${cont}) |@${val2})
 = (apply-cont |@${cont} (+ |@${val1} |@${val2}))
 }|
-}}
+}
 
 在过程表示法中，我们有：
 @eopl-index["Continuations" "procedural representation of"]
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define end-cont
   (lambda ()
@@ -340,7 +335,7 @@
 
 如果我们内联所有使用这些过程的地方，可得：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fib
   (lambda (n)
@@ -373,7 +368,7 @@ val1 val2)} 的值传给当前续文。
 (@${g} (fib @${n}))}。这里有个假想的例子，推广了这一想法：
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (lambda (x)
   (cond
@@ -387,7 +382,7 @@ val1 val2)} 的值传给当前续文。
 
 变成：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (lambda (x cont)
   (cond
@@ -497,7 +492,7 @@ val1 val2)} 的值传给当前续文。
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (apply-cont (end-cont) |@${val})
 = (begin
@@ -558,7 +553,7 @@ val1 val2)} 的值传给当前续文。
 有时，我们能发现更巧妙的方式表示续文。我们重新考虑用过程表示续文的 @tt{fact}。其
 中，我们有两个续文构造器，写作：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define end-cont
   (lambda ()
@@ -579,7 +574,7 @@ val1 val2)} 的值传给当前续文。
 所以每个续文都形如 @tt{(lambda (val) (* @${k} val))}。这意味着我们可以用每个续文
 仅有的自由变量——数字 @${k}——表示它。用这种表示方式，我们有：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define end-cont
   (lambda ()
@@ -597,7 +592,7 @@ val1 val2)} 的值传给当前续文。
 如果我们在 @tt{fact/k} 的原始定义中内联这些过程，并使用性质 @tt{(* @${cont} 1) =
 @${cont}}，可得：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -648,7 +643,7 @@ val1 val2)} 的值传给当前续文。
 
 那么，在
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact
   (lambda (n)
@@ -657,7 +652,7 @@ val1 val2)} 的值传给当前续文。
 
 中，是 @tt{fact} 的调用位置@emph{作为操作数}导致了控制上下文的产生。相反，在
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (define fact-iter
   (lambda (n)
@@ -715,14 +710,14 @@ val1 val2)} 的值传给当前续文。
 因此，在 Scheme 中，
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (if (zero? x) (f y) (g z))
 ]}
 
 是尾式，
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (if b
   (if (zero? x) (f y) (g z))
@@ -731,7 +726,7 @@ val1 val2)} 的值传给当前续文。
 
 也是尾式，但
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (+
   (if (zero? x) (f y) (g z))
@@ -752,7 +747,7 @@ CPS-IN 中的尾端如@figure-ref{fig-6.4} 所示。尾端每个子表达式的�
 式在原表达式的续文中求值，如@pageref{tail-call-explain}所述。
 
 @eopl-figure[#:position "!ht"]{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 zero?(|@${O})
 -(|@${O},|@${O})
@@ -796,7 +791,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 当然，没有通用的方式判断一个过程的控制行为是否是迭代式的。考虑
 
 @nested{
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (lambda (n)
   (if (strange-predicate? n)
@@ -924,7 +919,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{removeall}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   removeall(n,s) =
@@ -943,7 +938,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{occurs-in?}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   occurs-in?(n,s) =
@@ -962,7 +957,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{remfirst}。它使用前面例子中的 @tt{occurs-in?}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   remfirst(n,s) =
@@ -986,7 +981,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{depth}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   depth(s) =
@@ -1004,7 +999,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{depth-with-let}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   depth(s) =
@@ -1023,7 +1018,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
  @item{@tt{map}。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   map(f, l) = if null?(l)
@@ -1040,7 +1035,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  是符号，而是数字。@tt{fnlrgtn} 取一 n-list，一个数字 @tt{n}，返回列表中（从左向
  右数）第一个大于 @tt{n} 的数字。一旦找到结果，就不再检查列表中剩余元素。例如，
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  (fnlrgtn list(1,list(3,list(2),7,list(9)))
   6)
@@ -1053,7 +1048,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
  @item{@tt{every}。这个过程取一谓词，一个列表，当且仅当谓词对列表中所有元素都为
  真时，返回真。
 
- @nested[#:style 'code-inset]{
+ @eopl-code{
  @verbatim|{
  letrec
   every(pred, l) =
@@ -1124,6 +1119,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @eopl-figure[#:position "!ht"]{
 
+@eopl-code{
 @racketblock[
 (lambda (x)
   (cond
@@ -1135,9 +1131,11 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
     ((= x 5) (+ 22 (f x) 33 (g y)))
     (else (h (f x) (- 44 y) (g y)))))
 ]
+}
 
 变换为
 
+@eopl-code{
 @racketblock[
 (lambda (x k)
   (cond
@@ -1153,6 +1151,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
                    (g y (lambda (v2)
                           (h v1 (- 44 y) v2 k)))))))))
 ]
+}
 
 @eopl-caption["fig-6.7"]{CPS 变换示例（Scheme）}
 }
@@ -1160,7 +1159,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 第一种情况是常量。常量直接传给续文，就像上面 @tt{(zero? x)} 这一行。
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp |@${n} |@${K}) = (|@${K} |@${n})
 }|
@@ -1172,7 +1171,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 同样，变量直接传给续文。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp |@${var} |@${K}) = (|@${K} |@${var})
 }|
@@ -1182,7 +1181,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 语法，就像：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp (const-exp |@${n}) |@${K})
 = (make-send-to-cont |@${K} (cps-const-exp |@${n}))
@@ -1194,7 +1193,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 其中：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{make-send-to-cont}} : @${\mathit{SimpleExp} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define make-send-to-cont
@@ -1214,26 +1213,24 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 在@figure-ref{fig-6.7} 中正是这样做的。所以
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 proc (|@${var_1}, ..., |@${var_n}) |@${exp}
 }|
-}}
+}
 
 变成：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 }|
-}}
+}
 
 就像图中那样。但是，这还没完。我们的目标是生成代码，求 @tt{proc} 表达式的值，并
 将结果传给续文 @${K}。所以 @tt{proc} 表达式的完整规范为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<proc (|@${var_1}, ..., |@${var_n}) |@${exp}>> |@${K})
 = (|@${K} <<proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)>>)
@@ -1265,7 +1262,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 么，整个表达式都是简单的，我们可以将它的值接传给续文。设 @${simp} 为一简单表达式，
 那么有：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<+(|@${simp_1}, ..., |@${simp_n})>> |@${K})
 = (|@${K} <<+(|@${simp_1}, ..., |@${simp_n})>>)
@@ -1275,7 +1272,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 如果操作数不是简单的呢？那么求值续文需要给其值命名，然后继续求和，就像上面
 @tt{(= x 3)} 这行。其中的第二个是首个复杂操作数。那么我们的 CPS 转换器应具有性质：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<+(|@${simp_1}, |@${exp_2}, |@${simp_3}, ..., |@${simp_n})>> |@${K})
 = (cps-of-exp |@${exp_2}
@@ -1286,27 +1283,25 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 如果 @${exp_2} 只是一个过程调用，那么输出和图中相同。但 @${exp_2} 可能更复杂，所
 以我们递归调用 @tt{cps-of-exp} 处理 @${exp_2} 和更大的续文：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, |@${simp_3}, ..., |@${simp_n}))
 }|
-}}
+}
 
 而求和表达式中，还有另一种复杂操作数，就像 @tt{(= x 5)} 这种。所以，不是直接使用
 续文
 
 @nested{
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }|
-}}
+}
 
 我们还要递归处理更大的参数。我们可以把这条规则总结为：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<+(|@${simp_1}, |@${exp_2}, |@${exp_3}, ..., |@${exp_n})>> |@${K})
 = (cps-of-exp |@${exp_2}
@@ -1323,8 +1318,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 例如，查看 @tt{(= x 5)} 这一行，并使用 CPS-IN 的语法，我们有：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (cps-of-exp <<+((f x), 33, (g y))>> |@${K})
 = (cps-of-exp <<(f x)>>
@@ -1346,12 +1340,12 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
      proc (v2)
       (|@${K} <<+(v1, 33, v2)>>)))
 }|
-}}
+}
 
 过程调用与之类似。如果操作符和操作数都是简单的，那么我们添加续文参数，直接调用过
 程，就像 @tt{(= x 2)} 这行。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<(|@${simp_0} |@${simp_1} ... |@${simp_n})>> |@${K})
 = (|@${simp_0} |@${simp_1} ... |@${simp_n} |@${K})
@@ -1360,7 +1354,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 另一方面，如果某个操作数是复杂的，那么我们必须先求它的值，像 @tt{(= x 4)} 这行。
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<(|@${simp_0} |@${simp_1} |@${exp_2} |@${exp_3} ... |@${exp_n})>> |@${K})
 = (cps-of-exp |@${exp_2}
@@ -1374,8 +1368,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 写成 CPS-IN 的例子 @tt{(= x 5)} 可用这些规则处理如下：
 
-@nested[#:style small]{
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (cps-of-exp <<(h (f x) -(44,y) (g y))>> |@${K})
 = (cps-of-exp <<(f x)>>
@@ -1400,14 +1393,14 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
      proc (v2)
       (h v1 -(44,y) v2 |@${K})))
 }|
-}}
+}
 
 求和表达式和过程调用的规范遵循同样的模式：找出第一个复杂操作数，递归处理那个操作
 数和修改过的操作数列表。这对任何求值操作数的表达式都有效。如果 @tt{complex-exp}
 是某个需要求值操作数的 CPS-IN 表达式，那么我们有：
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp (complex-exp |@${simp_0} |@${simp_1} |@${exp_2} |@${exp_3} ... |@${exp_n}) |@${K})
 = (cps-of-exp |@${exp_2}
@@ -1485,7 +1478,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @eopl-caption["fig-6.8"]{@tt{cps-of-exps}}
 }
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{cps-of-sum-exp}} : @${\mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-sum-exp
@@ -1525,7 +1518,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @eopl-caption["fig-6.9"]{@tt{cps-of-simple-exp}}
 }
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{cps-of-call-exp}} : @${\mathit{InpExp} \times \mathit{Listof(InpExp)} \times \mathit{SimpleExp} \to \mathit{TfExp}}}
 (define cps-of-call-exp
@@ -1682,7 +1675,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 有时，当我们生成 @tt{(@${K} @${simp})}，@${K} 已经是一个 @tt{proc-exp}。所以，不
 是生成：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (proc (|@${var_1}) ... |@${simp})
 }|
@@ -1690,7 +1683,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 而应生成：
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let |@${var_1} = |@${simp}
 in ...
@@ -1699,7 +1692,7 @@ in ...
 
 那么，CPS 代码具有性质：形如
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 (proc (|@${var}) |@${exp_1}
  |@${simp})
@@ -1738,7 +1731,7 @@ in ...
 由 @tt{cps-of-exps} 引入的续文变量在续文中只会只会出现一次。修改
 @tt{make-send-to-cont}，不是生成@exercise-ref{ex6.22} 中的
 
-@nested[#:style 'code-inset]{
+@eopl-code{
 @verbatim|{
 let |@${var_1} = |@${simp_1}
 in |@${T}
@@ -1755,7 +1748,7 @@ in |@${T}
 按当前方式，@tt{cps-of-let-exp} 生成一个无用的 @tt{let} 表达式（为什么？）。修改
 这个过程，直接把 @tt{let} 变量作为续文变量。那么，若 @${exp_1} 是复杂的，
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<let |@${var_1} = |@${exp_1} in |@${exp_2}>> |@${K})
 = (cps-of-exp |@${exp_1} <<proc (|@${var_1}) (cps-of-exp |@${exp_2} |@${K})>>)
@@ -1775,6 +1768,7 @@ in |@${T}
 
 考虑 @tt{cps-of-exps} 的变体。
 
+@eopl-code{
 @racketblock[
 (define cps-of-exps
   (lambda (exps builder)
@@ -1796,6 +1790,7 @@ in |@${T}
                     (cps-of-simple-exp (var-exp var))
                     acc))))))))))
 ]
+}
 
 为什么 @tt{cps-of-exp} 的这种变体比@figure-ref{fig-6.8} 中的更高效？
 
@@ -1805,7 +1800,7 @@ in |@${T}
 
 调用 @tt{cps-of-exps} 处理长度为 1 的表达式列表可以简化如下：
 
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exps (list |@${exp}) |@${builder})
 = (cps-of-exp/ctx |@${exp} (lambda (simp) (|@${builder} (list simp))))
@@ -1814,6 +1809,7 @@ in |@${T}
 
 其中，
 
+@eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{cps-of-exp/ctx}} : @${\mathit{InpExp} \times \mathit{(SimpleExp → TfExp)} \to \mathit{TfExp}}}
 (define cps-of-exp/ctx
@@ -1825,11 +1821,13 @@ in |@${T}
           (cps-proc-exp (list var)
             (context (cps-var-exp var))))))))
 ]
+}
 
 这样，由于列表的参数数量已经确定，我们可以简化出现 @tt{(cps-of-exps (list ...))}
 的地方。那么，诸如 @tt{cps-of-diff-exp} 可以用 @tt{cps-of-exp/ctx} 定义，而不需
 要 @tt{cps-of-exps}。
 
+@eopl-code{
 @racketblock[
 (define cps-of-diff-exp
   (lambda (exp1 exp2 k-exp)
@@ -1840,6 +1838,7 @@ in |@${T}
             (make-send-to-cont k-exp
               (cps-diff-exp simp1 simp2))))))))
 ]
+}
 
 对 @tt{cps-of-call-exp} 中用到的 @tt{cps-of-exps}，我们可以用
 @tt{cps-of-exp/ctx} 处理 @tt{rator}，但仍需使用 @tt{cps-of-exps} 处理 @tt{rands}。
@@ -1883,6 +1882,7 @@ in |@${T}
 果我们不关心能否获得迭代性控制行为，我们序列化程序时可将其转换为
 @term[#f]{A-normal form}，或称@term[#f]{ANF}。这里是一个 ANF 程序的例子。
 
+@eopl-code{
 @racketblock[
 (define fib/anf
   (lambda (n)
@@ -1892,6 +1892,7 @@ in |@${T}
         (let ((val2 (fib/anf (- n 2))))
           (+ val1 val2))))))
 ]
+}
 
 CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序用 @tt{let} 表达式命名所
 有中间结果，从而序列化计算。
@@ -1924,21 +1925,19 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 我们首先考虑打印。打印当然是一种效果：
 
 @nested{
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (f print(3) print(4))
 }|
-}}
+}
 
 和
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (f 1 1)
 }|
-}}
+}
 
 即使返回同样的答案，也具有不同效果。效果还取决于参数的求值顺序。迄今为止，我们的
 语言总是按从左向右的顺序求参数的值，但其他语言可能不是这样。
@@ -1969,18 +1968,17 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
  成为整个 @tt{printk}表达式的值，所以 @${exp} 本身在尾端，可以是一个 @tt{tfexp}。
  那么，这部分代码可以写作：
 
- @nested[#:style 'code-inset]{
- @nested[#:style small]{
+ @eopl-code{
  @verbatim|{
  proc (v1)
   printk(-(v1,1));
    (f v1 |@${K})
  }|
- }}
+ }
 
  要实现它，我们给 CPS-OUT 的解释器添加：
 
- @nested[#:style small]{
+ @eopl-code{
  @racketblock[
  (printk-exp (simple body)
    (begin
@@ -1993,7 +1991,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
  @item{我们给 @tt{cps-of-exp} 添加一行代码，把 @tt{print} 表达式翻译为
  @tt{printk} 表达式。我们为 @tt{print} 选择任意返回值 38。所以，我们的翻译应为：
 
- @nested[#:style 'code-inset]{
+ @eopl-equation{
  @verbatim|{
  (cps-of-exp <<print(|@${simp_1})>> |@${K}) = printk(|@${simp_1}) ; (|@${K} 38)
  }|
@@ -2002,7 +2000,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
  然后，由于 @tt{print} 的参数可能是复杂的，我们用 @tt{cps-of-exps} 处理。这样，
  我们给 @tt{cps-of-exp} 新增这几行代码：
 
- @nested[#:style small]{
+ @eopl-code{
  @racketblock[
  (print-exp (rator)
    (cps-of-exps (list rator)
@@ -2017,8 +2015,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 
 来看一个更复杂的例子。
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 (cps-of-exp <<(f print((g x)) print(4))>> |@${K})
 = (cps-of-exp <<print((g x))>>
@@ -2060,7 +2057,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
     in printk(4);
        let v3 = 38
        in (f v1 v3 |@${k}))
-}|}
+}|
 }
 
 这里，我们调用 @tt{g}，调用所在的续文把结果命名为 @tt{v2}。续文打印出 @tt{v2} 的
@@ -2105,8 +2102,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 
  在这门语言中，我们写：
 
-@nested[#:style 'code-inset]{
-@nested[#:style small]{
+@eopl-code{
 @verbatim|{
 newrefk(33, proc (loc1)
              newrefk(44, proc (loc2)
@@ -2114,7 +2110,7 @@ newrefk(33, proc (loc1)
                           derefk(loc1, proc (val)
                                         -(val,1))))
 }|
-}}
+}
 
  这个程序新分配一个位置，值为 33，把 @tt{loc1} 绑定到那个位置。然后，它新分配一
  个位置，值为 44，把 @tt{loc2} 绑定到那个位置。然后，它把位置 @tt{loc1} 的内容设
@@ -2123,7 +2119,7 @@ newrefk(33, proc (loc1)
 
  要得到这种行为，我们给 CPS-OUT 的解释器添加这几行代码：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (cps-newrefk-exp (simple1 simple2)
   (let ((val1 (value-of-simple-exp simple1 env))
@@ -2157,7 +2153,7 @@ newrefk(33, proc (loc1)
 
  @item{最后，我们给 @tt{cps-of-exp} 添加这几行代码来做翻译：
 
-@nested[#:style small]{
+@eopl-code{
 @racketblock[
 (newref-exp (exp1)
   (cps-of-exps (list exp1)
@@ -2222,7 +2218,7 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 现在，我们可以写出转换这两个表达式的规则。
 
 @nested{
-@nested[#:style 'code-inset]{
+@eopl-equation{
 @verbatim|{
 (cps-of-exp <<letcc |@${var} in |@${body}>> |@${K})
 = let |@${var} = |@${K}
