@@ -1699,6 +1699,7 @@ in let fact = proc (n)
 @section[#:style section-title-style-numbered #:tag "s3.5"]{定界和变量绑定}
 
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry "of variables" "variables")]
+@eopl-index[#:range-mark 'start "Declaration" "of variables"]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1884,6 +1885,7 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 以我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现
 类似。
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry "of variables" "variables")]
+@eopl-index[#:range-mark 'end "Declaration" "of variables"]
 @eopl-index[#:range-mark 'end "Dynamic properties of programs"]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
