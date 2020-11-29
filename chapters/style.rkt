@@ -81,6 +81,9 @@
 (define eopl-style-figure
   (make-style "EoplFigure" (list (make-tex-addition "../style/figure.tex"))))
 
+(define eopl-style-figure*
+  (make-style "EoplFigure*" (list (make-tex-addition "../style/figure.tex"))))
+
 (define eopl-style-subfigure
   (make-style "EoplSubfigure" (list (make-tex-addition "../style/figure.tex"))))
 
@@ -199,6 +202,13 @@
 
 (define (eopl-subfigure . c)
   (nested #:style eopl-style-subfigure
+          c))
+
+;; for unnumbered figure
+(define (eopl-figure* #:position [position #f] . c)
+  (nested #:style eopl-style-figure*
+          (when position
+            (make-floating-recommend position))
           c))
 
 (define (make-floating-recommend recommends)
