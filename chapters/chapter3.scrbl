@@ -2189,27 +2189,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 过程 @tt{translation-of-program} 在适当的初始静态环境中执行 @tt{translation-of}。
 
-@nested[#:style small]{
-@racketblock[
-@#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
-(define translation-of-program
-  (lambda (pgm)
-    (cases program pgm
-      (a-program (exp1)
-        (a-program
-          (translation-of exp1 (init-senv)))))))
-
-@#,elem{@bold{@tt{translation-of}} : @${\mathit{()} \to \mathit{Senv}}}
-(define init-senv
-  (lambda ()
-    (extend-senv 'i
-      (extend-senv 'v
-        (extend-senv 'x
-          (empty-senv))))))
-]
-}
-
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Exp} \times \mathit{Senv} \to \mathit{Nameless\mbox{-}exp}}}
@@ -2251,6 +2231,26 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 
 @eopl-caption["fig-3.16"]{词法地址翻译器}
+}
+
+@eopl-code{
+@racketblock[
+@#,elem{@bold{@tt{translation-of}} : @${\mathit{Program} \to \mathit{Nameless\mbox{-}exp}}}
+(define translation-of-program
+  (lambda (pgm)
+    (cases program pgm
+      (a-program (exp1)
+        (a-program
+          (translation-of exp1 (init-senv)))))))
+
+@#,elem{@bold{@tt{translation-of}} : @${\mathit{()} \to \mathit{Senv}}}
+(define init-senv
+  (lambda ()
+    (extend-senv 'i
+      (extend-senv 'v
+        (extend-senv 'x
+          (empty-senv))))))
+]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.7.2"]{无名解释器}
