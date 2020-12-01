@@ -120,7 +120,7 @@ y\rceil}}。}
  }
 
  @item{@term["Bignum representation"]{大数表示法}：
- @eopl-index["Bignumrepresentation of natural numbers"]
+ @eopl-index["Bignum representation of natural numbers"]
  在大数表示法中，数值以 @${N} 进制表示，@${N} 是某个大整数。该方法以 @${0} 到
  @${N-1} 之间的数字（有时不称数位，而称@term["bigits"]{大位}）组成的列表表示数值，
  这就很容易表示远超机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前
@@ -351,8 +351,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.5"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex2.5" "ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5"] "Association list (a-list)"]
 只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
 境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
@@ -363,7 +363,10 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 }
 
 @nested[#:style 'noindent]{这叫 @term[#f]{a-list} 或@term["association-list"]{关
-联列表} 表示法。}}
+联列表} 表示法。}
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5"] "Association list (a-list)"]
+
+}
 
 @exercise[#:level 1 #:tag "ex2.6"]{
 
@@ -379,6 +382,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.8"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
 给环境接口添加观测器 @tt{empty-env?}，用 a-list 表示法实现它。
 
 }
@@ -403,6 +407,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
     f(var) & 否则
     }
  }
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
+
 }
 
 @exercise[#:level 2 #:tag "ex2.11"]{
@@ -481,9 +487,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 这种表示法中，数据由 @tt{apply-env} @term[#f]{执行的动作}表示，我们称之
 为@term["procedural representation"]{过程表示法}。
 
-@eopl-index{Action under application}
 数据类型只有一个观测器的情形并非想象中那般少见。比如，当数据是一组函数，就能用调
 用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
+@eopl-index{Action under application}
 
 @itemlist[#:style 'ordered
 
@@ -691,7 +697,7 @@ lambda 演算表达式的语法：
 
 @exercise[#:level 1 #:tag "ex2.18"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
 我们常用列表表示值的序列。在这种表示法中，很容易从序列中的一个元素移动到下一个，
 但是不借助上下文参数，很难从一个元素移动到上一个。实现非空双向整数序列，语法为：
 
@@ -721,6 +727,7 @@ lambda 演算表达式的语法：
 
 如果参数在序列最右端，过程@tt{move-to-right}应失败。如果参数在序列最左端，过程
 @tt{move-to-left}应失败。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
 
 }
 
@@ -920,7 +927,7 @@ lambda 演算表达式的语法：
 
 记录可以用只有一种变体的数据类型定义。为了区分只有一种变体的数据类型，我们遵循一
 种命名惯例：当只有一个变体时，我们以 @tt{a-@${type\mbox{-}name}}
-@eopl-index[@eopl-index-entry[@tt{a(n)-@${\mathit{type\mbox{-}name}}} "antypename"]] 或
+@eopl-index[@eopl-index-entry[@elem{@tt{a(n)-@${\mathit{type\mbox{-}name}}} constructor} "antypename"]] 或
 @tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 

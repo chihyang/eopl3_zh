@@ -1615,8 +1615,8 @@ in let p = proc (x) proc(y)
 }|
 }
 
-它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫做
-@eopl-index{Aliases}@term["variable aliasing"]{变量别名}。这里的 @tt{x} 和
+它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫
+做@eopl-index{Aliases}@term["variable aliasing"]{变量别名}。这里的 @tt{x} 和
 @tt{y} 是同一个位置的别名（名字）。通常，我们在给一个变量赋值时并不想改变另一个
 变量的值，所以别名会导致程序难以理解。
 

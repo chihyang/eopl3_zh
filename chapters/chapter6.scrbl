@@ -1707,10 +1707,11 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.23"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex6.23"] "Conditionals"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.23"] "Conditionals"]
 观察可知，@tt{if} 的规则导致续文 @${K} 复制两次，所以在嵌套的 @tt{if} 中，转换后
 的代码尺寸呈指数增长。运行一个例子，验证这一观察。然后，修改转换，把 @${K} 绑定
 到新的变量，从而避免这种增长。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.23"] "Conditionals"]
 
 }
 

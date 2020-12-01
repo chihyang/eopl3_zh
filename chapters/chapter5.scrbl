@@ -860,9 +860,10 @@
 
 @exercise[#:level 2 #:tag "ex5.11"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex5.11"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.11"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 给传递续文的解释器添加@exercise-ref{ex4.4} 中的 @tt{begin} 表达式。确保调用
 @tt{value-of} 和 @tt{value-of-rands} 时不需要生成控制上下文。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.11"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 
 }
 
@@ -1672,15 +1673,18 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.30"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
-@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
-@eopl-index[#:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
 个续文，当前状态只会压入或弹出一个环境，而且环境与续文同时压入或弹出。由此我们得
 出结论，动态绑定具有@term["dynamic extent"]{动态期限}：即，形参的绑定保留
 到过程返回为止。词法绑定则与之不同，绑定包裹在闭包内时可以无限期地保留。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
 
 }
 

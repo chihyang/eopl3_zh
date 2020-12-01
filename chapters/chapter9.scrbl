@@ -1203,6 +1203,7 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 
 @exercise[#:level 3 #:tag "ex9.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.25"] "Binary method problem"]
 我们给@figure-ref{fig-9.5} 第一个继承例子中的类 @tt{point} 添加一个方法，判断两
 个点是否具有相同的横纵坐标。我们照下面这样给类 @tt{point} 添加方法
 @tt{similarpoints}：
@@ -1235,11 +1236,12 @@ method similarpoints (pt)
 
 测试这一扩展。说明它为何不适用于任意情况。修复它，让所有测试都返回正确的值。
 
-@eopl-index[#:suffix @exer-ref-range["ex9.25"] "Binary method problem"]
+
 过程依赖多个对象造成的困难称为@term["binary method problem"]{二元方法问题}。它表
 明，本章探讨的以类为中心的面向对象编程模型在处理多个对象时有其不足。这叫做
 @emph{二元}方法问题，因为两个对象就能引起这一问题，但当对象数目增加时，它会愈发
 严重。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.25"] "Binary method problem"]
 
 }
 

@@ -966,12 +966,12 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 @eopl-index["Bound variable"]
-在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是 @term["bound variable"]{绑定
+在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是@term["bound variable"]{绑定
 变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
 @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
 是@term["operand"]{操作数} 或@eopl-index{Actual parameter}@term["actual
 parameter"]{实际参数}。我们用@eopl-index{Argument}@term["argument"]{实参} 指代实
-参的值。
+际参数的值。
 
 这是这种语言的两个小例子。
 
@@ -1369,7 +1369,7 @@ in let maketimes4 = proc (f)
 
 @exercise[#:level 2 #:tag "ex3.28"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28" "ex3.29"] "Dynamic binding (dynamic scope)"]
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
@@ -1385,6 +1385,7 @@ in let p = proc (x) -(x,a)
 
 中，过程主体内的 @tt{a} 绑定到 5，而不是 3。修改语言，使用动态绑定。做两次，一次
 用过程表示法表示过程，一次用数据结构表示法。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 
 }
 
@@ -2435,10 +2436,11 @@ htt]{nameless-letrec-var-exp}。
 
 @exercise[#:level 3 #:tag "ex3.42"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26} 中的瘦身过程表示法。要如此，
 你不能在 @tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静
 态环境中，它指明了各个变量在瘦身表示中的位置。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 
 }
 
