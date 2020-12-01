@@ -83,6 +83,9 @@ ItalicFont=Courier
 }
 
 \makeindex
+% add group letter to the ToC and navigation bookmarks
+\newcommand{\SIndexheading}[1]{\subsection*{#1}\phantomsection\addcontentsline{toc}{section}{#1}}
+
 % change separator between page numbers and delimiter between an entry and the
 % first page number, the expected behavior is:
 % 1. between an entry and a page number, a comma is inserted
@@ -94,7 +97,11 @@ delim_0 " "
 delim_1 " "
 delim_2 " "
 delim_n " "
+heading_prefix "\\SIndexheading{"
+heading_suffix "}"
+headings_flag 1
 \end{filecontents}
+
 % general decorator for index page number, taking 3 arguments:
 % parameter 1 is prefix
 % parameter 2 is suffix
