@@ -127,7 +127,8 @@
 \renewcommand{\proofname}{证明}
 \renewcommand{\contentsname}{目录}
 
-\setlength{\abovedisplayskip}{1.5em plus 0.5em minus 0.5em}
+\setlength{\abovedisplayskip}{1ex plus 0.2ex minus 0.2ex}
+\setlength{\belowdisplayskip}{1ex plus 0.2ex minus 0.2ex}
 \renewenvironment{SCodeFlow}{\SCodePreSkip\begin{list}{}{\topsep=0pt\partopsep=0pt%
 \listparindent=0pt\itemindent=0pt\labelwidth=0pt\leftmargin=0pt\rightmargin=2em%
 \itemsep=0pt\parsep=0pt}\item}{\end{list}}
@@ -138,3 +139,4 @@
 \renewcommand{\Stttextbar}{|}
 
 \renewcommand{\preDoc}{\frontmatter}
+\RestoreTextEnvironmentLeading{SCodeFlow}

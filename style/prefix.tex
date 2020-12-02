@@ -19,6 +19,7 @@ ItalicFont=Courier
 }
 \xeCJKsetup{CJKmath=true, PlainEquation=true, PunctStyle=mine}
 \normalspacedchars{/\\-"}
+\usepackage{zhlineskip}         % for larger line spacing
 
 \usepackage{emptypage}
 
@@ -41,6 +42,7 @@ ItalicFont=Courier
 } % before-code
 [
 ] % after-code
+\titlespacing*{\subsection}{0pt}{1.5ex}{1ex}
 
 % customize header format
 \usepackage{fancyhdr}
@@ -144,6 +146,7 @@ headings_flag 1
 \renewcommand\subitem{\@idxitem \hspace*{10\p@}}
 \renewcommand\subsubitem{\@idxitem \hspace*{20\p@}}
 \makeatother
+\RestoreTextEnvironmentLeading{theindex}
 
 % make phantomsection robust
 \MakeRobust\phantomsection
