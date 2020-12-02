@@ -1168,7 +1168,6 @@ in let f = proc (z) -(z,x)
 ]
 }
 
-@samepage{
 @eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{procedure}} : @${\mathit{Var} \times \mathit{Exp} \times \mathit{Env} \to \mathit{Proc}}}
@@ -1176,13 +1175,16 @@ in let f = proc (z) -(z,x)
   (lambda (var body env)
     (lambda (val)
       (value-of body (extend-env var val env)))))
+]
+}
 
+@eopl-code{
+@racketblock[
 @#,elem{@bold{@tt{apply-procedure}} : @${\mathit{Proc} \times \mathit{ExpVal} \to \mathit{ExpVal}}}
 (define apply-procedure
   (lambda (proc1 val)
     (proc1 val)))
 ]
-}
 }
 
 这里定义的函数 @tt{proc?} 不完全准确，因为不是每个 Scheme 过程都能作为我们语言中

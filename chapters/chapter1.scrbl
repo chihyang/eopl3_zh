@@ -857,7 +857,6 @@ C} 相同。
 @tt{cons} 结合二者，通过表达式 @tt{(cons (car los) (remove-first s (cdr los)))}
 求得整个答案。由此，@tt{remove-first} 的完整定义为
 
-@samepage{
 @eopl-code{
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
@@ -870,7 +869,7 @@ C} 相同。
 @#,exact-elem{\begin{mdframed}[style=codediff]}
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
-]}}
+]}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 
@@ -1038,16 +1037,12 @@ C} 相同。
 (define subst
   (lambda (new old slist)
     ...))
-]}
 
-@samepage{
-@eopl-code{
-@racketblock[
 @#,elem{@bold{@tt{subst-in-s-exp}} : @m{\mathit{Sym} \times \mathit{Sym} \times \mathit{S\mbox{-}exp} \to \mathit{S\mbox{-}exp}}}
 (define subst-in-s-exp
   (lambda (new old sexp)
     ...))
-]}}
+]}
 
 我们首先处理 @tt{subst}。如果列表为空，不需要替换 @tt{old}。
 
