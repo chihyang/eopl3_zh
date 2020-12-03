@@ -1446,6 +1446,7 @@ type"]{展开类型}。}
 
 }
 
+@eopl-index[#:range-mark 'start "Expanded type"]
 接着我们写出函数 @tt{expand-type}，它取一个类型和一个类型环境，用后者中的绑定展
 开前者。根据不变式@exact-elem{“}结果类型已展开@exact-elem{”}，它在类型环境中查
 询有名类型和受限类型，对@tt{proc} 类型，它递归处理参数和结果类型。
@@ -1647,7 +1648,8 @@ module m1
                 m-name (cdr decls) internal-tenv))))))))
 ]
 
-@eopl-caption["fig-8.10"]{OPAQUE-TYPES 的检查器，第 2 部分}
+@eopl-caption["fig-8.10"]{OPAQUE-TYPES 的检查器，第 2 部分
+                          @eopl-index[#:range-mark 'end "Expanded type"]}
 }
 
 @nested{

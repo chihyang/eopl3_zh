@@ -543,10 +543,12 @@ val1 val2)} 的值传给当前续文。
 
 @exercise[#:level 3 #:tag "ex6.8"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.8"] "Exception handling"]
 写出@secref{s5.4}解释器的过程表示和内联过程表示。这极富挑战性，因为我们实际上有
 两个观测器，@tt{apply-cont} 和 @tt{apply-handler}。提示：考虑修改
 @pageref{cps-recipe}的秘方，给每个过程添加两个参数，一个表示 @tt{apply-cont} 中
 续文的行为，一个表示 @tt{apply-handler} 中续文的行为。@linebreak[]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.8"] "Exception handling"]
 
 }
 
@@ -623,6 +625,7 @@ val1 val2)} 的值传给当前续文。
 
 @section[#:style section-title-style-numbered #:tag "s6.2"]{尾式}
 
+@eopl-index[#:range-mark 'start "Expressions" "tail form"]
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择 LETREC 作为
 输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。其语法如@figure-ref{fig-6.3}
 所示，我们称之为 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些
@@ -768,6 +771,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 如@figure-ref{fig-6.5} 所示。这套语法定义了 CPS-IN 的子集，但略有不同。生成式的
 名字总以 @tt{cps-} 开头，这样它们不会与 CPS-IN 中生成式的名字混淆。
 
+@eopl-index["Expressions" "simple"]
 新的语法有两个非终止符，@${\mathit{SimpleExp}} 和 @${\mathit{TfExp}}。这种设计中，
 @${\mathit{SimpleExp}} 表达式不包含任何过程调用，@${\mathit{TfExp}} 表达式一定是
 尾式。
@@ -802,6 +806,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 只有 @tt{strange-predicate?} 对所有足够大的 @tt{n} 都返回假时，这个过程才是迭代
 式的。但即使能查看 @tt{strange-predicate?} 的代码，也可能无法判断这一条件的真假。
 因此，我们最多只能寄希望于程序中的过程调用不产生控制上下文，而不论其是否执行。
+@eopl-index[#:range-mark 'end "Expressions" "tail form"]
 
 }
 
@@ -1914,10 +1919,12 @@ CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序
 
 @section[#:style section-title-style-numbered #:tag "s6.4"]{建模计算效果}
 
+@eopl-index[#:range-mark 'start "Effects, computational"]
 CPS 的另一重要应用是提供模型，将计算效果变为显式的。计算效果——像是打印或给变量赋
 值——很难用@secref{expr}使用的方程推理建模。通过 CPS 变换，我们可以将这些效果变为
 显式的，就像我们在@secref{cpi}中处理非局部控制流一样。
 
+@eopl-index["Expressions" "simple"]
 用 CPS 建模效果时，我们的基本原则是简单表达式不应有任何效果。简单表达式不应含有
 过程调用也是基于这一原则，因为过程调用可能不终止（这当然是一种效果！）。
 
@@ -2076,6 +2083,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
  @item{我们给 CPS-IN 添加语法：
  @eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
  @eopl-index[#:range-mark 'start "Dereferencing"]
+ @eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
 
  @nested[#:style small]{
  @envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
@@ -2182,6 +2190,7 @@ newrefk(33, proc (loc1)
 
 @eopl-index[#:range-mark 'end "Allocation" (eopl-index-entry "in store" "store")]
 @eopl-index[#:range-mark 'end "Dereferencing"]
+@eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 
@@ -2205,6 +2214,7 @@ newrefk(33, proc (loc1)
 
 }
 
+@eopl-index[#:range-mark 'start "Exception handling"]
 最后是非局部控制流。我们来考虑@exercise-ref{ex5.42} 中的 @tt{letcc}。@tt{letcc}
 表达式 @tt{letcc @${var} in @${body}} 将当前续文绑定到变量 @${var}。@${body} 为
 该绑定的作用域。续文的唯一操作是 @tt{throw}。我们用语法 @tt{throw @${Expression}
@@ -2235,7 +2245,8 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 
 }
 
-这个例子中，我们不需要给给 CPS-OUT 添加语法，因为我们正是在操作控制结构。
+这个例子中，我们不需要给给 CPS-OUT 添加语法，因为我们操作的正是控制结构。
+@eopl-index[#:range-mark 'end "Exception handling"]
 
 @exercise[#:level 1 #:tag "ex6.39"]{
 
@@ -2248,5 +2259,6 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 在 CPS 翻译器中添加和实现@secref{s5.4}中的 @tt{try/catch} 和 @tt{throw}。CPS-OUT
 应该不需要添加任何东西，而 @tt{cps-of-exp} 改取两个续文：一个成功续文，一个错误
 续文。
+@eopl-index[#:range-mark 'end "Effects, computational"]
 
 }

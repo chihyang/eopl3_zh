@@ -154,6 +154,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 任何编程语言的规范之中，最重要的一部分就是语言能处理的值的集合。每种语言至少有两
 个这样的集合：@term["expressed values"]{表达值} 和@term["denoted values"]{指代值}。
 @eopl-index["Denoted values"]
+@eopl-index["Expressed values"]
 表达值是指表达式可能的取值，指代值是指可以绑定到变量的值。
 
 本章的语言中，表达值和指代值总是相同。它们是：
@@ -184,6 +185,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.3"]{环境}
 
+@eopl-index[#:range-mark 'start "Environments"]
 若要求取表达式的值，我们得知道每个变量的值。我们靠环境记录这些值，就像@secref{s2.2}那样。
 
 环境是一函数，定义域为变量的有限集合，值域为指代值。我们用一些缩写表示环境。
@@ -224,12 +226,13 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
  [y=7]
   [u=5]@#,elem{@${\rho}}]
 }
-
+@eopl-index[#:range-mark 'end "Environments"]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.4"]{定义表达式的行为}
 
 @eopl-index[#:range-mark 'start "Difference expressions"]
+@eopl-index[#:range-mark 'start "Expressions" "LET"]
 我们语言中的六种表达式各对应一个左边为 @${\mathit{Expression}} 的生成式。表达式
 接口包含七个过程，六个是构造器，一个是观测器。我们用 @${\mathit{ExpVal}} 表示表
 达值的集合。
@@ -279,6 +282,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 @tt{(expval->num @${val})}。我们还运用了一点事实：@${\lfloor \lceil n \rceil
 \rfloor = n}。
 @eopl-index[#:range-mark 'end "Difference expressions"]
+@eopl-index[#:range-mark 'end "Expressions" "LET"]
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
@@ -414,6 +418,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 该是一棵树，就像@pageref{deriv-tree}那种。很不幸的是，这样的树极为晦涩。因此，我
 们经常把规则转为方程，然后就能用相等代换展示计算过程。
 
+@eopl-index["Equational specification"]
 @tt{if-exp} 的方程式规范是：
 
 @eopl-equation{
@@ -428,7 +433,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 @eopl-index["Conditionals"]
 @figure-ref{fig-3.4} 展示了用这些规则进行简单运算的过程。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 令 @${\rho =} @tt{[x=@${\lceil}33@${\rceil},y=@${\lceil}22@${\rceil}]}。@linebreak[]
 
 @verbatim|{
@@ -460,6 +465,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{let} "let")]
+@eopl-index[#:range-mark 'start "Expressions" "LET"]
 接下来我们处理用 @tt{let} 表达式创建新变量绑定的问题。我们给这门解释性语言添加语
 法，以关键字 @tt{let} 起始，然后是一个声明，关键字 @tt{in}，及其主体。例如，
 
@@ -583,6 +589,7 @@ in let y = 2
 }
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{let} "let")]
+@eopl-index[#:range-mark 'end "Expressions" "LET"]
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现 LET 规范}
 
@@ -593,7 +600,7 @@ in let y = 2
 我们还定义了提取器，用来将表达值转为整数或布尔值。如果表达值类型不符预期，提取器
 报错。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 (define-datatype program program?
   (a-program
@@ -641,7 +648,7 @@ in let y = 2
 ]
 }
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 (define-datatype expval expval?
   (num-val
@@ -854,8 +861,10 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 1 #:tag "ex3.13"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.13"] "Expressed values"]
 修改语言，把整数作为唯一的表达值。修改 @tt{if}，以 0 为假，以所有其他值为真。相
 应地修改谓词。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.13"] "Expressed values"]
 
 }
 
@@ -1451,6 +1460,7 @@ in (double 6)
 }|
 }
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{extend-env-rec}} "extendenvrec"]]
 这里，我们给环境接口新增一个过程 @tt{extend-env-rec}。但我们仍然得回答这个问题：
 @tt{(extend-env-rec @${proc\mbox{-}name} @${bound\mbox{-}var}
 @${proc\mbox{-}body} @${\rho})} 的期望行为是什么？
@@ -1495,8 +1505,9 @@ in (double 6)
 
 如@figure-ref{fig-3.12}，在抽象语法表示中，我们为 @tt{extend-env-rec} 新增一种变
 体。@tt{apply-env} 倒数第二行的 @tt{env} 对应上述 @${\rho_1}。
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{extend-env-rec}} "extendenvrec"]]
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure{
 @verbatim|{
 
 (value-of <<letrec double(x) = if zero?(x)
@@ -1634,6 +1645,7 @@ in (odd 13)
 
 @exercise[#:level 3 #:tag "ex3.34"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.34"] "Environments" "procedural representation of"]
 用@secref{s2.2.3}中环境的过程表示法实现 @tt{extend-env-rec}。
 
 }
@@ -1641,6 +1653,7 @@ in (odd 13)
 @exercise[#:level 1 #:tag "ex3.35"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{extend-env-rec}} "extendenvrec"]]
 目前为止，我们看到的表示法都很低效，因为每次查找过程时，它们都要新创建一个闭包，
 但每次的闭包都相同。我们可以只创建一次闭包，把值放入长度为 1 的向量，再将其放入
 一个显式循环结构中，像这样：
@@ -1668,6 +1681,7 @@ in (odd 13)
 
 修改环境数据类型和 @tt{apply-env} 的定义，完成这种表示的实现。确保
 @tt{apply-env} 总是返回表达值。
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{extend-env-rec}} "extendenvrec"]]
 
 }
 
@@ -1878,6 +1892,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 
 @eopl-index["Binding" "extent of"]
 @eopl-index[#:range-mark 'start "Dynamic properties of programs"]
+@eopl-index["Extent of variable binding"]
 绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
 Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
@@ -2100,6 +2115,7 @@ in proc (y)
 
 要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@term["context"]{上下文} 信息，所以它和@secref{s1.3}的继承属性类似。
 
+@eopl-index[#:range-mark 'start "Environments" "static"]
 所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@term["static
 environment"]{静态环境}。静态环境是一个变量列表，表示当前表达式所在的作用域。最
 内部作用域声明的变量成为列表的第一个元素。
@@ -2117,7 +2133,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 }
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 
 @racketblock[
 
@@ -2182,8 +2198,9 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 }
 
 过程 @tt{translation-of-program} 在适当的初始静态环境中执行 @tt{translation-of}。
+@eopl-index[#:range-mark 'end "Environments" "static"]
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure{
 
 @racketblock[
 @#,elem{@bold{@tt{translation-of}} : @${\mathit{Exp} \times \mathit{Senv} \to \mathit{Nameless\mbox{-}exp}}}
@@ -2267,6 +2284,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 }
 
+@eopl-index[#:range-mark 'start "Environments" "nameless"]
 我们不用全功能的环境，而是用无名环境，其接口如下：
 
 @eopl-code{
@@ -2301,7 +2319,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 }|
 }
 
-@eopl-figure[#:position "!t"]{
+@eopl-figure[#:position "!ht"]{
 
 @racketblock[
 @#,elem{@bold{@tt{nameless-environment?}} : @${\mathit{SchemeVal} \to \mathit{Bool}}}
@@ -2324,7 +2342,8 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
     (list-ref nameless-env n)))
 ]
 
-@eopl-caption["fig-3.17"]{无名环境}
+@eopl-caption["fig-3.17"]{无名环境
+                          @eopl-index[#:range-mark 'end "Environments" "nameless"]}
 }
 
 这一规范的实现可定义为：
@@ -2357,7 +2376,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 做相同，只是没有变量。@tt{nameless-proc} 生成一个 @tt{proc}，随后可供
 @tt{apply-procedure} 调用。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 
 @racketblock[
 @#,elem{@bold{@tt{value-of}} : @${\mathit{Nameless\mbox{-}exp} \times \mathit{Nameless\mbox{-}env} \to \mathit{ExpVal}}}
@@ -2429,10 +2448,12 @@ htt]{nameless-letrec-var-exp}。
 
 @exercise[#:level 2 #:tag "ex3.41"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.34"] "Environments" "ribcage representation of"]
 修改词法地址翻译器和解释器，像@exercise-ref{ex3.21} 那样处理多参数的 @tt{let} 表
 达式、过程和过程调用。用肋排表示法（@exercise-ref{ex2.21}）表示无名环境。在这种
 表示法中，词法地址包含两个非负数：词深，指明跨越的等深线数目，与之前相同；位置，
 指明变量在声明中的位置。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.34"] "Environments" "ribcage representation of"]
 
 }
 

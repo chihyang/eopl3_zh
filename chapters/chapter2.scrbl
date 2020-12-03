@@ -195,10 +195,12 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @section[#:style section-title-style-numbered #:tag "s2.2"]{数据类型的表示策略}
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{Environment ADT (@${\mathit{Env}})} "EnvironmentADT"]]
 使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关，甚至
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
 质。
 
+@eopl-index["Environments"]
 本节介绍几种数据类型的表示策略。我们用数据类型@term["environment"]{环境} 解释这
 些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语言的实
 现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关联起来。
@@ -220,6 +222,9 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 这一数据类型的接口有三个过程，定义如下：
 
  @nested{
+ @eopl-index[@eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
+ @eopl-index[@eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
+ @eopl-index[@eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
  @envalign*{&@tt{(empty-env)} &= &\ \lceil \emptyset \rceil \\
             &@tt{(apply-env @m{\lceil f \rceil} @m{var})} &= &\ f(var) \\
             &@tt{(extend-env @m{var} @m{v} @m{\lceil f \rceil})} &= &\ \lceil g \rceil \\
@@ -250,6 +255,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 如同前一个例子，可以将接口中的过程分为构造器和观测器。本例中，@tt{empty-env}和
 @tt{extend-env}是构造器，@tt{apply-env}是唯一的观测器。
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{Environment ADT (@${\mathit{Env}})} "EnvironmentADT"]]
 
 @exercise[#:level 2 #:tag "ex2.4"]{
 
@@ -262,6 +268,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @subsection[#:style section-title-style-numbered #:tag "s2.2.2"]{数据结构表示法}
 
 @eopl-index[#:range-mark 'start "Data structure representation" @eopl-index-entry["of environments" "environments"]]
+@eopl-index[#:range-mark 'start "Environments" "data structure representation of"]
 观察可知，每个环境都能从空环境开始，@${n} 次调用 @tt{extend-env} 得到，其中 @${n
 \geqslant 0}。例如，
 
@@ -310,16 +317,19 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @#,elem{@${\mathit{Env} = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
 @#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
 (define empty-env
   (lambda () (list 'empty-env)))
 
-@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
 @#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
 (define extend-env
   (lambda (var val env)
     (list 'extend-env var val env)))
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
 @#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
 (define apply-env
   (lambda (env search-var)
@@ -348,23 +358,28 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @eopl-caption["fig-2.1"]{环境的数据结构表示}
 }
 @eopl-index[#:range-mark 'end "Data structure representation" @eopl-index-entry["of environments" "environments"]]
+@eopl-index[#:range-mark 'end "Environments" "data structure representation of"]
 
 @exercise[#:level 1 #:tag "ex2.5"]{
 
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5"] "Association list (a-list)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5"] "Environments" "association-list representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Environments" "data structure representation of"]
 只要能区分空环境和非空环境，并能从后者中提取出数据片段，就能用任何数据结构表示环
 境。按这种方式实现环境：空环境由空列表表示，@tt{extend-env}生成如下环境：
 
+@nested{
 @centered{
 @(image "../images/alist-env"
   #:suffixes (list ".pdf" ".svg")
   "关联列表表示法")
 }
 
-@nested[#:style 'noindent]{这叫 @term[#f]{a-list} 或@term["association-list"]{关
-联列表} 表示法。}
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5"] "Association list (a-list)"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5"] "Environments" "association-list representation of"]
+这叫 @term[#f]{a-list} 或@term["association-list"]{关联列表} 表示法。
+}
 
 }
 
@@ -383,6 +398,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @exercise[#:level 1 #:tag "ex2.8"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Environments" "association-list representation of"]
 给环境接口添加观测器 @tt{empty-env?}，用 a-list 表示法实现它。
 
 }
@@ -396,6 +412,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.10"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.10" "ex2.11"] @eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
 给环境接口添加构造器 @tt{extend-env*}，用 a-list 表示法实现它。这个构造器取一变
 量列表和一长度相等的值列表，以及一环境，其定义为：
 
@@ -408,6 +425,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
     }
  }
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Association list (a-list)"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.8" "ex2.9" "ex2.10"] "Environments" "association-list representation of"]
 
 }
 
@@ -434,11 +452,14 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
   "肋排环境表示法")
 }
 
+@eopl-index["Environments" "ribcage representation of"]
 这叫做@term["ribcage"]{肋排} 表示法。环境由名为@term["rib"]{肋骨} 的序对列表表示；
 每根左肋是变量列表，右肋是对应的值列表。
 
 用这种表示实现 @tt{extend-env*} 和其他环境接口。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Data structure representation" @eopl-index-entry["of environments" "environments"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.5" "ex2.11"] "Environments" "data structure representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.10" "ex2.11"] @eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
 
 }
 
@@ -446,6 +467,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @subsection[#:style section-title-style-numbered #:tag "s2.2.3"]{过程表示法}
 
+@eopl-index[#:range-mark 'start "Environments" "procedural representation of"]
 环境接口有一条重要性质：它只有 @tt{apply-env} 一个观测器。这样就能用取一变量，返
 回绑定值的 Scheme 过程表示环境。
 
@@ -457,12 +479,14 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @#,elem{@${\mathit{Env} = \mathit{Var} \to \mathit{SchemeVal}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
 @#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
 (define empty-env
   (lambda ()
     (lambda (search-var)
       (report-no-binding-found search-var))))
 
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
 @#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
 (define extend-env
   (lambda (saved-var saved-val saved-env)
@@ -512,9 +536,11 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @eopl-index["Defunctionalization"]
 环境的数据结构表示中，各种变体都是消函的简单例子。过程表示法和消函表示法的关系将
 是本书反复出现的主题。
+@eopl-index[#:range-mark 'end "Environments" "procedural representation of"]
 
 @exercise[#:level 1 #:tag "ex2.12"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Environments" "procedural representation of"]
 用过程表示法实现@exercise-ref{ex2.4} 中的堆栈数据类型。
 
 }
@@ -530,6 +556,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 扩展前一题中的表示法，加入第三个过程，用它来 @tt{has-binding?} （见
 @exercise-ref{ex2.9}）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Environments" "procedural representation of"]
 
 }
 
@@ -570,6 +597,7 @@ lambda 演算表达式的语法：
 }|
 }
 
+@eopl-index[#:range-mark 'start "Extractors"]
 提取器有：
 
 @nested[#:style 'inset]{
@@ -617,9 +645,8 @@ lambda 演算表达式的语法：
 
   @item{为数据类型的每种变体加入一个谓词。}
 
-  @item{为传给数据类型构造器的每段数据加入一个提取器。}
-
-   ]}}
+  @item{为传给数据类型构造器的每段数据加入一个提取器。
+  @eopl-index[#:range-mark 'end "Extractors"]}]}}
 
 @exercise[#:level 1 #:tag "ex2.15"]{
 
@@ -1042,8 +1069,10 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.21"] @eopl-index-entry[@elem{Environment ADT (@${\mathit{Env}})} "EnvironmentADT"]]
 用 @tt{define-datatype} 实现@secref{s2.2.2}中的环境数据类型。然后
 实现@exercise-ref{ex2.9} 中的 @tt{has-binding?}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.21"] @eopl-index-entry[@elem{Environment ADT (@${\mathit{Env}})} "EnvironmentADT"]]
 
 }
 

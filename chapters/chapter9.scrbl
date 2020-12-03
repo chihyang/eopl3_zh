@@ -477,6 +477,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 @section[#:style section-title-style-numbered #:tag "s9.4"]{解释器}
 
 @eopl-index["Class environment"]
+@eopl-index["Environments" "class environment"]
 我们求程序的值时，首先用 @tt{initialize-class-env!} 处理所有类声明，然后求表达式
 的值。过程 @tt{initialize-class-env!} 创建一个全局@term["class environment"]{类
 环境}，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme变量表示
@@ -663,6 +664,7 @@ in send o3 m1(7,8)
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.2"]{方法}
 
+@eopl-index[#:range-mark 'start "Environments" @eopl-index-entry["for method call" "methodcall"]]
 接下来我们处理方法。方法就像过程，但是它们不保存环境，而是记录所引用的字段名。方
 法调用在如下环境中执行其主体：
 
@@ -736,18 +738,21 @@ in send o3 m1(7,8)
   "方法调用时的环境")
 }
 
+@eopl-index[@eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
 @eopl-caption["fig-9.10"]{方法调用时的环境}
 }
 
 当 @tt{self} 的持有类和所属类相同时，变量列表的长度通常与字段引用列表相同。如果
 持有类位于类链的上端，那么位置数可能多于字段变量，但对应于字段变量的值位于列表开
 头，其余值则不可见。
+@eopl-index[#:range-mark 'end "Environments" @eopl-index-entry["for method call" "methodcall"]]
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.3"]{类和类环境}
 
 @eopl-index[#:range-mark 'start "Class environment"]
 @eopl-index[#:range-mark 'start "Classes"]
 @eopl-index["Classes" "host"]
+@eopl-index[#:range-mark 'start "Environments" "class environment"]
 迄今为止，我们的实现都依赖从类名获取与类相关的信息。所以，我们需要
 一个@term["class environment"]{类环境} 完成这一工作。类环境将每个类名与描述类的
 数据结构关联起来。
@@ -851,9 +856,11 @@ in send o3 m1(7,8)
 ]}
 @eopl-index[#:range-mark 'end "Class environment"]
 @eopl-index[#:range-mark 'end "Classes"]
+@eopl-index[#:range-mark 'end "Environments" "class environment"]
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.4"]{方法环境}
 
+@eopl-index[#:range-mark 'start "Environments" "method environments"]
 剩下的只有 @tt{find-method} 和 @tt{merge-method-envs} 了。
 
 像处理类那样，我们用列表 @tt{(方法名,方法)} 的列表表示方法环境，用
@@ -903,6 +910,7 @@ in send o3 m1(7,8)
 ]}
 
 构建方法环境还有其他一些方式，它们在方法查询时更高效（@exercise-ref{ex9.18}）。}
+@eopl-index[#:range-mark 'end "Environments" "method environments"]
 
 @eopl-figure{
 @racketblock[
@@ -949,7 +957,8 @@ in send o3 m1(7,8)
 
 @eopl-caption["fig-9.11"]{@figure-ref{fig-9.8} 中的类环境
                           @eopl-index["Class environment"]
-                          @eopl-index["Classes"]}
+                          @eopl-index["Classes"]
+                          @eopl-index["Environments" "class environment"]}
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.5"]{练习}
@@ -1637,6 +1646,7 @@ interface stringable
 个过程主体。最后，我们在 @tt{tenv-for-letrec-body} 中检查 @tt{letrec} 的主体。
 
 @eopl-index[#:range-mark 'start "Class environment"]
+@eopl-index[#:range-mark 'start "Environments" "class environment"]
 这里，我们首先调用 @tt{initialize-static-class-env!}，遍历类声明，将所有类型收集
 到一个静态类环境中。由于这个环境是全局的，且不会改变，我们不是将其作参数传递，而
 是把它存储在一个 Scheme 变量中。然后，我们用 @tt{check-class-decl!} 检查每个类声
@@ -1685,6 +1695,7 @@ interface stringable
 解释器求出参数的值，并用它执行 @tt{object->class-name}，所以我们也必须确保操作数
 类型正常，且返回值是一个对象。这三种情况的代码如@figure-ref{fig-9.14} 所示。
 @eopl-index[#:range-mark 'end "Class environment"]
+@eopl-index[#:range-mark 'end "Environments" "class environment"]
 
 @eopl-figure[#:position "!t"]{
 @codeblock[#:indent racket-block-offset]{
@@ -1897,6 +1908,7 @@ interface stringable
 TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环境。
 
 @eopl-index["Class environment"]
+@eopl-index["Environments" "class environment"]
 要构建静态类环境，@tt{initialize-static-class-env!} 首先将其设置为空，然后为类
 @tt{object} 添加绑定。接着，它遍历各个类和接口声明，给静态类环境添加适当的内容。
 
@@ -1986,6 +1998,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @eopl-index[#:range-mark 'start "Class environment"]
 @eopl-index["Classes" "declaration of"]
 @eopl-index["Declaration" "of classes"]
+@eopl-index[#:range-mark 'start "Environments" "class environment"]
 一旦建立了静态类环境，我们可以检查每个类声明。这由
 @tt{check-class-decl!}（@figure-ref{fig-9.19}）完成。对接口，什么都不必检查。对
 类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
@@ -2018,7 +2031,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 @eopl-caption["fig-9.19"]{@tt{check-class-decl!}
                           @eopl-index[#:range-mark 'end "Class environment"]
                           @eopl-index["Classes" "declaration of"]
-                          @eopl-index["Declaration" "of classes"]}
+                          @eopl-index[#:range-mark 'end "Declaration" "of classes"]}
 }
 
 @eopl-index["Declaration" "of method"]
@@ -2154,7 +2167,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 ]
 
 @eopl-caption["fig-9.22"]{为示例程序生成的静态类环境
-                          @eopl-index["Class environment"]}
+                          @eopl-index["Class environment"]
+                          @eopl-index["Environments" "class environment"]}
 }
 
 @exercise[#:level 1 #:tag "ex9.33"]{

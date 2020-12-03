@@ -1676,6 +1676,7 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
@@ -1685,6 +1686,7 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Binding" "extent of"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
 
 }
 
@@ -1720,6 +1722,7 @@ odd:  if (x=0) then return(0)
 
 @section[#:style section-title-style-numbered #:tag "s5.4"]{异常}
 
+@eopl-index[#:range-mark 'start "Exception handling"]
 迄今为止，我们只用续文管理语言中的普通控制流。但是续文还能让我们修改控制上下文。让
 我们来给我们的语言添加@term["exception handling"]{异常处理}。我们给语言新
 增两个生成式：
@@ -2043,7 +2046,7 @@ in ((index 5) list(2, 3))
 
 如果列表包含期望值，那么我们不需调用 @tt{apply-handler}，而是调用
 @tt{apply-cont}，并执行续文中所有待完成的 @tt{diff}。
-
+@eopl-index[#:range-mark 'end "Exception handling"]
 
 @exercise[#:level 2 #:tag "ex5.35"]{
 

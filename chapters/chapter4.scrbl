@@ -14,6 +14,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s4.1"]{计算的效果}
 
+@eopl-index["Effects, computational"]
 到目前为止，我们只考虑了计算产生的@term["value"]{值}，但是计算也
 有@term["effect"]{效果}：它可以读取，打印，修改内存或者文件系统的状态。在现实世
 界中，我们@emph{总是}对效果很感兴趣：如果一次计算不显示答案，那对我们完全没用！
@@ -45,6 +46,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
 
+@eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
 在这种设计中，我们添加引用，作为另一种表达值。那么，我们有：
 
 @nested{
@@ -339,6 +341,8 @@ end
 以此更新存储器。@tt{setref-exp} 应该返回什么呢？它可以返回任何值。为了强调这一选
 择的随意性，我们让它返回 23。因为我们对 @tt{setref-exp} 的返回值不感兴趣，我们说
 这个表达式的执行@term["for effect"]{求效果} 而不求值。
+@eopl-index["Effects, computational"]
+@eopl-index["Execution for effect"]
 
 @exercise[#:level 1 #:tag "ex4.6"]{
 
@@ -402,6 +406,7 @@ end
 程把环境、过程和存储器转换为更易读的形式。得出的日志详细描述了系统的动作。典型例
 子如@figure-ref{fig-4.4} 和 @countref{fig-4.5} 所示。此外，这一跟踪日志还表明，
 差值表达式的参数按从左到右的顺序求值。
+@eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
 
 @eopl-figure{
 @racketblock[
@@ -1790,6 +1795,7 @@ in let swap = proc (x) proc (y)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.5.2"]{懒求值：按名调用和按需调用}
 
+@eopl-index["Eager evaluation"]
 迄今为止，我们讨论的所有参数传递机制都是@term["eager"]{即时}的：它们总是找出每个
 操作数的值。现在我们来看另一种截然不同的传参机制，名叫@term["lazy
 evaluation"]{懒求值}。在懒求值中，操作数的值直到过程主体需要时才会求取。如果过程

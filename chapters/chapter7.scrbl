@@ -277,6 +277,7 @@ proc (f)
 
 更准确地说，我们的目标是写出过程 @tt{type-of}。给定一个表达式（名为 @${exp}）和
 一个将变量映射到某一类型的@term["type environment"]{类型环境}（名为@${tenv}），
+@eopl-index[#:range-mark 'start "Environments" "type environment"]
 它赋给 @${exp} 一个类型 @${t}，且 @${t} 具有性质：
 
 @big-bracket[#:title @elem{@tt{type-of} 规范}]{
@@ -730,6 +731,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 2 #:tag "ex7.10"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.10"] "EXPLICIT-REFS"]
 扩展检查器，处理 EXPLICIT-REFS。你需要这样做：
 
 @itemlist[
@@ -744,7 +746,8 @@ in |@${e_{letrec\mbox{-}body}}
 
  @item{写出 @tt{newref}、@tt{deref} 和 @tt{setref} 的判类规则。}
 
- @item{在检查器中实现这些规则。}
+ @item{在检查器中实现这些规则。
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.10"] "EXPLICIT-REFS"]}
 
 ]
 
@@ -2053,7 +2056,9 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @exercise[#:level 2 #:tag "ex7.26"]{
 
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.26"] "EXPLICIT-REFS"]
 扩展推导器，像@exercise-ref{ex7.10} 那样处理 EXPLICIT-REFS。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.26"] "EXPLICIT-REFS"]
 
 }
 
@@ -2131,6 +2136,7 @@ in letrec
 
 @exercise[#:level 3 #:tag "ex7.30"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.30"] "Effects, computational"]
 多态和副作用之间的相互作用很微妙。考虑以下文开头的一段程序
 
 @eopl-code{
@@ -2145,7 +2151,8 @@ in ...
  @item{完成这段程序，使之通过推导器的检查，但根据本章开头的定义，求值不安全。}
 
  @item{限制 @tt{let} 声明的右边，不允许出现作用于存储器的效果，从而避免这一问题。
- 这叫做@term["value restriction"]{值约束}。}
+ 这叫做@term["value restriction"]{值约束}。
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.30"] "Effects, computational"]}
 
 ]
 

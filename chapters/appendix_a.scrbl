@@ -94,9 +94,10 @@ interpreter"]{自循环解释器}（用被定语言本身写就的解释器）�
 要先理解这种语言。确实，即使解释器不是自循环的，也会面临同样的问题。读者理解被定
 义的事物之前，仍需理解书写定义用的语言。
 
-这些年来，大量技术用来解决这一难题。我们把解释器视为方程定义的转写
+这些年来，大量技术用来解决这一难题。我们把解释器视为方程式规范的转写
+@eopl-index["Equational specification"]
 (@author-ref{Goguen} et al., 1977) 或者 @author-ref{Plotkin} (1975, 1981) 式的大
-步操作语义。这依赖相当直观的数学。
+步操作语义。这只需要非常直观的数学。
 
 @eopl-index["Denotational semantics"]
 指称语义是另一种用数学定义语言的技术。这种方法将解释器替换为一个函数，该函数把每
@@ -109,6 +110,7 @@ interpreter"]{自循环解释器}（用被定语言本身写就的解释器）�
 Scheme 的存储器来解释存储器的概念，但它们只用了一个全局可变对象，而不是 Scheme
 可变变量的所有能力。
 
+@eopl-index["EXPLICIT-REFS"]
 将计算视为操作存储器的思想可追溯到现代计算（参见 @author-ref{von Neumann}, 1945）
 的开端。EXPLICIT-REFS 的设计基于 ML (@author-ref{Milner} et al., 1989) 的存储器
 模型，而后者与 Bliss (@author-ref{Wulf}, 1971) 类似。IMPLICIT-REFS 的设计类似于
@@ -126,6 +128,7 @@ Fortran (@author-ref{Backus} et al., 1957) 是第一种使用按指调用的语�
 Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实际语言。为了建
 模按名调用，@author-ref{Ingerman} (1961) 发明了@term["thunk"]{值箱}。我们用它们
 和效果建模按需调用。这与@term["memoization"]{助记法} (@author-ref{Michie}, 1968) 类似。
+@eopl-index["Effects, computational"]
 
 @emph{Monads} 由 @author-ref{Moggi} (1991) 提出，因 @author-ref{Wadler} (1992)
 流行。它提供了编程语言效果的通用模型。在函数式语言 Haskell (@author-ref{Peyton
@@ -139,6 +142,7 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 避免自循环的某些问题。将尾式程序翻译为命令式可追溯到 @author-ref{McCarthy}
 (1962)，@author-ref{Abelson} & @author-ref{Sussman} (1985, 1996) 强调了将其作为
 一种编程技术的重要性。
+@eopl-index["Expressions" "tail form"]
 
 @author-ref{Plotkin} (1975) 给出了相当清晰的 CPS 变换，发现了它的理论性质。
 @author-ref{Fischer} (1972) 提出了非常类似的变换。@author-ref{Wand} (1980b) 率先
