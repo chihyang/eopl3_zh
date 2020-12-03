@@ -485,8 +485,8 @@
                              (list k "@" v))]
                         [(? string?)
                          (let ((cstr (clean-up-index-string e)))
-                           (if (regexp-match? #px"[[:space:]-]" cstr)
-                               (list (regexp-replace* #px"[[:space:]-]" cstr "") "@" cstr)
+                           (if (regexp-match? #px"[[:space:]\\(\\):]|-" cstr)
+                               (list (regexp-replace* #px"[[:space:]\\(\\):]|-" cstr "") "@" cstr)
                                (list cstr)))]
                         [else (list e)]))
                     entries)
