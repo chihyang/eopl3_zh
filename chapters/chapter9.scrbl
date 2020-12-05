@@ -17,6 +17,7 @@
 必须协同修改那些变量。因此，我们需要某种技术，确保组成状态的多个变量能协同更新。
 @term["Object-oriented programming"]{面向对象编程} 正是用来完成此任务的技术。
 
+@eopl-index["Field of object"]
 在面向对象编程中，每个受管理的状态称为一个@term["object"]{对象}。一个对象中存有
 多个量，称为@term["field"]{字段}；有多个相关过程，称为@term["method"]{方法}，方
 法能够访问字段。调用方法常被视为将方法名和参数当作消息传给对象；有时，又说这是
@@ -57,14 +58,14 @@
 @eopl-index["Declaration" "of classes"]
 
 @figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于 @tt{object} 的
-类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。字段
-叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类@tt{c1} 支持
-三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
-@tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，
-若干@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），
-以及@term["method body"]{方法主体}。
-@eopl-index["Body" (eopl-index-entry "of method" "method")]
-方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
+类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。
+@eopl-index["Field of object"]
+字段叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类@tt{c1}
+支持三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
+@tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，若干
+@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），以及
+@term["method body"]{方法主体}。@eopl-index["Body" (eopl-index-entry "of method"
+"method")]方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 
 @eopl-figure[#:position "!ht"]{
@@ -277,9 +278,11 @@ in begin
 
 如果类 @${c_1} 的方法 @${m} 在某个子类 @${c_2} 中重新声明，我们说新的
 方法@term["override"]{覆盖} 旧的方法。我们将方法声明所在的类称为方法
+的@term["host class"]{持有类}。
 @eopl-index["Classes" "host"]
-的@term["host class"]{持有类}。类似地，我们将表达式的持有类定义为表达式所在方法
-（如果有的话）的持有类。我们还将方法或表达式的超类定义为持有类的父类。
+@eopl-index["Host class"]
+类似地，我们将表达式的持有类定义为表达式所在方法（如果有的话）的持有类。我们还将
+方法或表达式的超类定义为持有类的父类。
 @eopl-index["Classes" "superclass"]
 
 如果给类 @${c_2} 的对象发送消息 @${m}，应使用新的方法。这条规则很简单，结果却很
@@ -665,6 +668,7 @@ in send o3 m1(7,8)
 @subsection[#:style section-title-style-numbered #:tag "s9.4.2"]{方法}
 
 @eopl-index[#:range-mark 'start "Environments" @eopl-index-entry["for method call" "methodcall"]]
+@eopl-index[#:range-mark 'start "Field of object"]
 接下来我们处理方法。方法就像过程，但是它们不保存环境，而是记录所引用的字段名。方
 法调用在如下环境中执行其主体：
 
@@ -744,8 +748,9 @@ in send o3 m1(7,8)
 
 当 @tt{self} 的持有类和所属类相同时，变量列表的长度通常与字段引用列表相同。如果
 持有类位于类链的上端，那么位置数可能多于字段变量，但对应于字段变量的值位于列表开
-头，其余值则不可见。
+头，其余值则不可见。@eopl-index["Host class"]
 @eopl-index[#:range-mark 'end "Environments" @eopl-index-entry["for method call" "methodcall"]]
+@eopl-index[#:range-mark 'end "Field of object"]
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.3"]{类和类环境}
 

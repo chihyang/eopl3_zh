@@ -975,6 +975,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
 @eopl-index["Bound variable"]
+@eopl-index["Formal parameter"]
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是@term["bound variable"]{绑定
 变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
 @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
@@ -1314,6 +1315,7 @@ in ((f 3) 4)
 @exercise[#:level 2 #:tag "ex3.23"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.23"] "Currying"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.23"] "Factorial function"]
 下面的PROC程序值是什么？
 
 @eopl-code{
@@ -1331,6 +1333,7 @@ in let times4 = proc (x) ((makemult makemult) x)
 用这个程序里的小技巧写出PROC阶乘过程。提示：你可以使用@elemref["curry"]{咖
 喱化}（@exercise-ref{ex3.20}）定义双参数过程 @tt{times}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.23"] "Currying"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.23"] "Factorial function"]
 
 }
 
@@ -1695,6 +1698,7 @@ in (odd 13)
 @exercise[#:level 2 #:tag "ex3.37"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
 使用动态绑定（@exercise-ref{ex3.28}），不需要任何特殊机制，靠 @tt{let} 就能创建
 递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
 还鲜为人知。要验证动态绑定实现的递归，试试程序：
@@ -1713,6 +1717,7 @@ in let fact = proc (n)
 试试词法绑定，再试试动态绑定。用动态绑定的被定语言写出@secref{s3.4}中的互递归过
 程 @tt{even} 和 @tt{odd}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
 
 }
 

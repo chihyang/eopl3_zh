@@ -1013,8 +1013,9 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.21"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex4.21"] "Assignment"]
-@eopl-index[#:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Assignment"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
@@ -1040,6 +1041,9 @@ in let p = proc (y) -(y,x)
 
 @${x} 是过程 @tt{p} 中的自由变量，在调用 @tt{(p 22)} 中值为 17，在调用 @tt{(p
 13)} 中重设为 11，所以表达式的值为 @${5-2=3}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Assignment"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
 
 }
 
@@ -1138,7 +1142,7 @@ in let p = proc (y) -(y,x)
 
 @eopl-index[#:suffix @exer-ref-range["ex4.24"] (eopl-index-entry @elem{@tt{do-while} statement} "dowhilestatement")]
 @tt{do-while} 语句类似 @tt{while}，但是条件判断在其主体@emph{之后}执行。
-给@exercise-ref{ex4.22}中的语言添加 @tt{do-while} 语句。
+给@exercise-ref{ex4.22} 中的语言添加 @tt{do-while} 语句。
 
 }
 
@@ -1822,6 +1826,7 @@ in let f = proc (z) 11
 值。因此，我们将过程的绑定变量与未求值的操作数关联起来。当过程主体需要绑定变量的
 值时，我们先求对应操作数的值。有时，我们把不求操作数的值而传给过程
 叫做@term["frozen"]{冻结}，把过程求操作数的值叫做@term["thawed"]{解冻}。
+@eopl-index["Freeze"]
 
 当然，我们还要加入过程求值时的环境。要这样，我们引入一种新的数据类型，
 @term["thunk"]{值箱}。值箱包含一个表达式、一个环境。

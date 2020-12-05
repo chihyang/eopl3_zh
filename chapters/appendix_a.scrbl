@@ -38,6 +38,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 1997），@author-ref{Felleisen} et al. (2001) 也使用了这种技术。
 
 @eopl-index{Context-free grammar}
+@eopl-index["Grammars"]
 上下文无关语法是语言学和计算机科学的标准工具。大多数编译器书籍，比如
 @author-ref{Aho} et al. (2006)，都对语法和解析算法进行了大篇幅的讨论。
 @eopl-index{Abstract syntax}
@@ -45,12 +46,14 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 将具体语法和抽象语法分开的思想通常归功于@author-ref{McCarthy} (1962)。他强调用接
 口抽象语法树。
 
+@eopl-index["Follow the Grammar"]
 我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 @author-ref{Burstall}
 (1969) 提出。即使过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳}
 (@author-ref{Morris} & @author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效
 方法。过程的可能输入受不变式约束时，子目标归纳也有效。
 @eopl-index["Context-sensitive constraint"]
 
+@eopl-index["Generalization"]
 @term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
 更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法
 (@author-ref{Knuth}, 1968)中的@emph{继承属性} 启发。

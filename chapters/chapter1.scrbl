@@ -122,6 +122,7 @@
 称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
 @eopl-index["Conclusion"]
 @eopl-index["Consequent"]
+@eopl-index["Hypothesis"]
 线下部分称作@term["conclusion"]{结论} 或者@term["consequent"]{后件}。罗列两个或
 更多假设时，它们以隐含的@exact-elem{“}与@exact-elem{”}连接（见@definition-ref{d1.1.5}）。
 没有假设的规则称作@eopl-index{Axiom}@term["axiom"]{公理}。写公理时通常不加水平
@@ -272,6 +273,7 @@
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.2"]{语法定义法}
 
+@eopl-index[#:range-mark 'start "Grammars"]
 前述例子较为直观，但是不难想象，描述更复杂的数据类型会有多麻烦。为了方便，我们展
 示如何用@term["grammar"]{语法} 定义集合。语法通常用来指定字符串的集合，但也能用
 来定义值的集合。
@@ -522,6 +524,7 @@
 限制，但这些方法远比本章考虑的复杂。实际中，常用的方法是先定义上下文无关语法，随
 后再用其他方法添加上下文敏感限制。@secref{types}展示了这种技巧的一个例子。
 @eopl-index[#:range-mark 'end "Context-sensitive constraint"]
+@eopl-index[#:range-mark 'end "Grammars"]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
 
@@ -592,6 +595,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s1.2"]{推导递归程序}
 
+@eopl-index[#:range-mark 'start "Follow the Grammar" "examples of"]
 我们已经用归纳定义法描述了复杂集合。我们能够分析归纳式集合的元素，观察如何从较小
 元素构建集合。我们用这一想法写出了过程 @tt{in-S?}，用以判断自然数是否属于集合
 @${S}。现在，我们用同样的想法定义更通用的过程，以便对归纳式集合做运算。
@@ -895,6 +899,7 @@ C} 相同。
 表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
 量@term["occur free"]{自由出现} 于表达式 @${exp} 中。例如，
+@eopl-index["Free occurrence of variable"]
 
 @(define occurs-free?-eval
   (parameterize ([sandbox-output 'string]
@@ -1106,6 +1111,7 @@ C} 相同。
 
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
+@eopl-index[#:range-mark 'end "Follow the Grammar" "examples of"]
 
 @exercise[#:level 1 #:tag "ex1.11"]{
 
@@ -1132,7 +1138,7 @@ C} 相同。
 现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。@linebreak{}
 
 @nested[#:style tip]{
- @centered{@bold{遵循语法！}}
+ @centered{@bold{遵循语法！}@eopl-index["Follow the Grammar"]}
 
  @para[#:style tip-content]{定义过程处理归纳式数据时，程序的结构应当反映数据的结
  构。}}
@@ -1159,9 +1165,11 @@ C} 相同。
 我们用过的那种直拆法不凑效，因为没有明显的方法能从 @tt{(number-elements (cdr
 lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}）。
 
+@eopl-index[#:range-mark 'start "Generalization"]
 要解决这个问题，我们@term["generalize"]{放宽} 问题。我们写一个过程
 @tt{number-elements-from} ，它取一个额外参数 @${n}，指定起始编号。用递归处理列表，
 这个过程很容易写。
+@eopl-index[#:range-mark 'end "Generalization"]
 
 @eopl-code{
 @racketblock[
@@ -1230,16 +1238,16 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 但是无法按照这种方式处理向量，因为它们不能够很方便地拆解。
 
+@eopl-index[#:range-mark 'start "Generalization"]
 因为我们无法拆解向量，我们放宽问题，为向量某一部分求和。问题定义为，计算
-
+@nested{
 @$${\sum_{i=0}^{i=length(v)-1} v_i}
-
 其中，@${v} 是整数向量。通过把上界改为一个参数 @${n}，我们放宽了原问题，所以新的
 任务是计算
-
 @$${\sum_{i=0}^{i=n} v_i}
-
 其中，@${0 \leq n < length(v)}。
+@eopl-index[#:range-mark 'end "Generalization"]
+}
 
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 

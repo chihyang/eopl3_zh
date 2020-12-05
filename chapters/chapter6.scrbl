@@ -12,6 +12,7 @@
 
 @title[#:style part-title-style-numbered #:tag "cps"]{续文传递风格}
 
+@eopl-index[#:range-mark 'start "Factorial function"]
 在@secref{cpi}，我们把解释器中的所有主要过程调用重写成@emph{尾调用}。这样，我们
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
 叫做@emph{迭代性控制行为}。
@@ -267,7 +268,9 @@
 
 像@secref{s1.3}一样，这里的 @${g} 是上下文参数；性质 @tt{(fact/k @${n} @${g}) =
 (@${g} @${n!})} 作为独立规范，遵循我们的原则@elemref["no-myth"]{@bold{避免神秘小工具}}。
+@eopl-index[#:range-mark 'end "Factorial function"]
 
+@eopl-index[#:range-mark 'start "Fibonacci sequence"]
 现在，我们用同样的方式转换计算斐波那契数列的 @tt{fib}。我们从下面的过程开始：
 
 @eopl-code{
@@ -356,11 +359,10 @@
 
 @nested[#:style 'inset]{
 @emph{
-
 若 @${n < 2}，将 1 传给续文。否则，处理 @${n-1}，求值所在的续文取其结果
 @tt{val1}，然后处理 @tt{val2}，求值所在的续文取其结果 @tt{val2}，然后将 @tt{(+
 val1 val2)} 的值传给当前续文。
-
+@eopl-index[#:range-mark 'end "Fibonacci sequence"]
 }
 }
 
@@ -552,6 +554,7 @@ val1 val2)} 的值传给当前续文。
 
 }
 
+@eopl-index[#:range-mark 'start "Factorial function"]
 有时，我们能发现更巧妙的方式表示续文。我们重新考虑用过程表示续文的 @tt{fact}。其
 中，我们有两个续文构造器，写作：
 
@@ -610,6 +613,7 @@ val1 val2)} 的值传给当前续文。
 但是这和 @tt{fact-iter}（@pageref{fact-iter}）完全相同！所以我们明白了，
 @eopl-index{Accumulator}累加器通常只是续文的一种表示方式。这令人印象深刻。相当一
 部分经典的程序优化问题原来是这一思想的特例。
+@eopl-index[#:range-mark 'end "Factorial function"]
 
 @exercise[#:level 1 #:tag "ex6.9"]{
 
@@ -644,6 +648,7 @@ val1 val2)} 的值传给当前续文。
            @eopl-index["Control context"]}
 }
 
+@eopl-index[#:range-mark 'start "Factorial function"]
 那么，在
 
 @eopl-code{
@@ -664,7 +669,7 @@ val1 val2)} 的值传给当前续文。
 (define fact-iter-acc
   (lambda (n a)
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
-]}
+@#,eopl-index[#:range-mark 'end "Factorial function"]]}
 
 中， 过程调用都不在操作数位置。我们说这些调用在@term["tail position"]{尾端}，因
 为它们的值就是整个调用的结果。我们称之为@term["tail call"]{尾调用}。
@@ -1882,7 +1887,8 @@ in |@${T}
 
 @exercise[#:level 2 #:tag "ex6.34"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34"] "Fibonacci sequence"]
 我们把程序转换为 CPS 时，不仅将程序中的控制上下文变为显式的，而且还确定了操作的
 执行顺序，以及所有中间结果的名字。后者叫做@term["sequentialization"]{序列化}。如
 果我们不关心能否获得迭代性控制行为，我们序列化程序时可将其转换为
@@ -1907,6 +1913,7 @@ CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序
 用@exercise-ref{ex6.23} 中的方法处理）。然后，用修改后的 @tt{cps-of-exp} 处理例
 @tt{fib} 的定义，验证其结果是否为 @tt{fib/anf}。最后，验证对已经是 ANF 的输入程
 序，你的翻译器产生的程序与输入只有绑定变量名不同。
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34"] "Fibonacci sequence"]
 
 }
 
@@ -1914,6 +1921,7 @@ CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序
 
 用几个例子验证：若采用@exercise-ref{ex6.27} 中的优化方法，对 ANF 转换器
 （@exercise-ref{ex6.34}）的输入和输出程序进行 CPS 变换，所得结果相同。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
 
 }
 

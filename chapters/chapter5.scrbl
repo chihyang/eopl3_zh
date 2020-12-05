@@ -14,6 +14,7 @@
 @title[#:style part-title-style-numbered #:tag "cpi"]{传递续文的解释器}
 
 @eopl-index[#:range-mark 'start "Control context"]
+@eopl-index[#:range-mark 'start "Factorial function"]
 在@secref{expr}，我们用环境的概念探讨绑定行为，建立每部分程序执行的数据上下文。
 这里，我们将用类似方式探讨每部分程序执行的@term["control context"]{控制上下文}。
 我们将介绍@term["continuation"]{续文} 的概念，用来抽象控制上下文。我们将要编写的
@@ -92,6 +93,7 @@
 表达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对
 应返回的递归调用数目）增加时，系统不需要不断增长的内存存放控制上下文。只需使用有
 限内存存放控制信息的过程呈现出@term["iterative control behavior"]{迭代性控制行为}。
+@eopl-index[#:range-mark 'end "Factorial function"]
 
 为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程 @tt{fact}
 在@term["operand position"]{操作数位置} 调用。我们需要保存这个调用的上下文，
@@ -876,6 +878,7 @@
 
 @exercise[#:level 1 #:tag "ex5.13"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.13" "ex5.14"] "Factorial function"]
 把 @tt{fact} 和 @tt{fact-iter} 翻译为 LETREC 语言。你可以给语言添加乘法操作符。
 然后，用前一道练习中带有辅助组件的解释器计算 @tt{(fact 4)} 和 @tt{(fact-iter 4)}。
 将它们和本章开头的计算比较。在 @tt{(fact 4)} 的跟踪日志中找出 @tt{(* 4 (* 3 (* 2
@@ -890,16 +893,20 @@
 以@pageref{cps-computation}的计算中，续文最大尺寸是 3。然后，用 @tt{fact} 和
 @tt{fact-iter} 计算几个操作数的值。验证 @tt{fact} 使用的续文最大尺寸随其参数递增，
 但 @tt{fact-iter} 使用的续文最大尺寸是常数。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.13" "ex5.14"] "Factorial function"]
 
 }
 
 @exercise[#:level 1 #:tag "ex5.15"]{
 
-@eopl-index[#:suffix @elem{ex. @countref{ex5.15}} "Activation record"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.15"] "Activation record"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.15"] "Frame"]
 我们的续文数据类型只有一个常量 @tt{end-cont}，所有其他续文构造器都有一个续文参数。
 用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构
 （名为@term["frame"]{帧} 或@term["activation record"]{活跃记录}），余项为已保存
 续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.15"] "Activation record"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.15"] "Frame"]
 
 }
 
@@ -1157,6 +1164,7 @@
 器 @tt{x} 的值时，它是第二个计算的跟踪日志。
 
 而当我们记录程序计数器的位置和寄存器 @tt{x} 的内容时，这又可以解释为
+@eopl-index[@eopl-index-entry[@tt{goto} "goto"]]
 @emph{goto}（名为@term["flowchart program"]{流程图程序}）的跟踪日志。
 
 @eopl-figure{
@@ -1225,6 +1233,7 @@ odd:  if (x=0) then return(0)
 }
 
 @eopl-index["Control context"]
+@eopl-index["Factorial function"]
 能如此，只是因为原代码中 @tt{even} 和 @tt{odd} 的调用不扩大控制上下文：它们是尾
 调用。我们不能这样转换 @tt{fact}，因为 @tt{fact} 的跟踪日志无限增长：
 @exact-elem{“}程序计数器@exact-elem{”}不是像这里一样出现在跟踪日志的最外层，而
@@ -1667,6 +1676,7 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.29"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.29"] "Factorial function"]
 转换本节的 @tt{fact-iter}（@pageref{fact-iter}）。
 
 }
@@ -2735,8 +2745,11 @@ in let mut = mutex()
 
 @exercise[#:level 1 #:tag "ex5.49"]{
 
-@eopl-index[#:suffix @elem{"ex."@countref{ex5.49}} "Activation record"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.49"] "Activation record"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.49"] "Frame"]
 为 THREADS 完成@exercise-ref{ex5.15}（用堆栈上的帧表示续文）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.49"] "Activation record"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.49"] "Frame"]
 
 }
 

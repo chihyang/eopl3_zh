@@ -150,8 +150,10 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 1 #:tag "ex2.1"]{
 
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.1"] "Factorial function"]
  实现大数表示法的四种操作。然后用你的实现计算10的阶乘。随着参数改变，执行时间如
  何变化？随着进制改变，执行时间如何变化？解释原因。
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.1"] "Factorial function"]
 
 }
 

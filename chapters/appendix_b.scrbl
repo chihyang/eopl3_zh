@@ -141,6 +141,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 子。语言的语法结构通常由 BNF 定义，也叫做@term["context-free grammar"]{上下文无
 关语法}（@secref{s1.1.2}）。
 @eopl-index["Context-free grammar"]
+@eopl-index["Grammars"]
 
 @eopl-index["Abstract syntax tree"]解析器输入为词牌序列，输出为一棵抽象语法树
 （@secref{s2.5}）。SLLGEN 生成的抽象语法树可用 @tt{define-datatype} 描述。对给定
