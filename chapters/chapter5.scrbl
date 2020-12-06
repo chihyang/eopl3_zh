@@ -94,6 +94,7 @@
 应返回的递归调用数目）增加时，系统不需要不断增长的内存存放控制上下文。只需使用有
 限内存存放控制信息的过程呈现出@term["iterative control behavior"]{迭代性控制行为}。
 @eopl-index[#:range-mark 'end "Factorial function"]
+@eopl-index["Iterative control behavior"]
 
 为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程 @tt{fact}
 在@term["operand position"]{操作数位置} 调用。我们需要保存这个调用的上下文，
@@ -119,6 +120,7 @@
 @section[#:style section-title-style-numbered #:tag "s5.1"]{传递续文的解释器}
 
 @eopl-index[#:range-mark 'start "Continuations"]
+@eopl-index[#:range-mark 'start "Interpreter" "continuation-passing"]
 在我们的新解释器中，@tt{value-of} 等主要过程将取第三个参数。这一参数——@emph{续
 文}——用来抽象每个表达式求值时的控制上下文。
 
@@ -743,7 +745,8 @@
 ]
 
 @eopl-caption["fig-5.4"]{传递续文的解释器（第1部分）
-                         @eopl-index["Continuations"]}
+                         @eopl-index["Continuations"]
+                         @eopl-index["Interpreter" "continuation-passing"]}
 }
 
 @eopl-figure{
@@ -758,7 +761,8 @@
           cont)))))
 ]
 
-@eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）}
+@eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）
+                         @eopl-index["Interpreter" "continuation-passing"]}
 }
 
 @elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实参的求
@@ -794,6 +798,7 @@
 所以，过程调用时，过程主体在过程调用所在的续文中求值。操作数的求值需要控制上下文，
 进入过程主体则不需要。
 @eopl-index[#:range-mark 'end "Continuations"]
+@eopl-index[#:range-mark 'end "Interpreter" "continuation-passing"]
 
 @exercise[#:level 1 #:tag "ex5.1"]{
 
@@ -849,6 +854,7 @@
 
 @exercise[#:level 2 #:tag "ex5.9"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.9" "ex5.10"] "IMPLICIT-REFS" "continuation-passing interpreter for"]
 修改这个解释器，实现 IMPLICIT-REFS 语言。提示：添加新的续文构造器
 @tt{(set-rhs-cont env var cont)}。
 
@@ -857,6 +863,7 @@
 @exercise[#:level 2 #:tag "ex5.10"]{
 
 修改前一题的解答，不要在续文中保存环境。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.9" "ex5.10"] "IMPLICIT-REFS" "continuation-passing interpreter for"]
 
 }
 
@@ -888,12 +895,14 @@
 
 @exercise[#:level 1 #:tag "ex5.14"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.14"] "Iterative control behavior"]
 前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文
 的@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所
 以@pageref{cps-computation}的计算中，续文最大尺寸是 3。然后，用 @tt{fact} 和
 @tt{fact-iter} 计算几个操作数的值。验证 @tt{fact} 使用的续文最大尺寸随其参数递增，
 但 @tt{fact-iter} 使用的续文最大尺寸是常数。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.13" "ex5.14"] "Factorial function"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.14"] "Iterative control behavior"]
 
 }
 
@@ -961,7 +970,8 @@
 }|
 }
 
-@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范}
+@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范
+                         @eopl-index["Interpreter" "continuation-passing"]}
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}

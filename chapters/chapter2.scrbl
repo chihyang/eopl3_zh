@@ -23,6 +23,8 @@
 示方式，我们得能定位程序中所有依赖表示方式的部分。这就需要
 借助@term["data abstraction"]{数据抽象} 技术。
 
+@eopl-index["Implementation" "of ADT"]
+@eopl-index["Interface" "of ADT"]
 数据抽象将数据类型分为两部分：@term["interface"]{接口} 和@term["implementation"]{实现}。
 @term[#f]{接口}告诉我们某类型表示什么数据，能对数据做什么操作，以及可由这些操作得出
 的性质。@term[#f]{实现}给出数据的具体表示，以及处理数据表示的代码。
@@ -301,7 +303,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 这是一种常见的代码模式。我们叫它@term["interpreter recipe"]{解释器秘方}：
 
 @nested[#:style tip]{
- @centered{@bold{解释器秘方}}
+ @centered{@bold{解释器秘方}
+ @eopl-index["Interpreter Recipe"]}
 
  @nested[#:style tip-content]{
  @itemlist[#:style 'ordered
@@ -1372,6 +1375,8 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @exercise[#:level 1 #:tag "ex2.29"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.29"] "Kleene plus"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.29"] "Kleene star (closure)"]
 当具体语法使用克莱尼星号或加号（@pageref{kleene-star}）时，生成抽象语法树时最好
 使用相应子树的@emph{列表}。例如，如果 lambda 演算表达式的语法为：
 
@@ -1387,7 +1392,8 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 那么字段 @tt{bound-vars} 的谓词可写作 @tt{(list-of identifier?)}，@tt{rands} 的
 谓词可写作 @tt{(list-of lc-exp?)}。以这种方式写出该语法的 @tt{define-datatype}
 和解析器。
-
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.29"] "Kleene plus"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.29"] "Kleene star (closure)"]
 }
 }
 

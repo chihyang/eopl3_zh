@@ -677,6 +677,7 @@ newref: 分配位置 2
 
 @section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
 
+@eopl-index[#:range-mark 'start "IMPLICIT-REFS"]
 显式引用设计清晰描述了内存的分配、解引用和修改，因为显而易见，这些操作都在程序员
 的代码之中。
 
@@ -881,6 +882,7 @@ in let a = (g 11)
 
 @figure-ref{fig-4.8} 用@elemref["trace-instrument"]{前面}介绍的辅助组件，展示了
 IMPLICIT-REFS 求值的简单例子。
+@eopl-index[#:range-mark 'end "IMPLICIT-REFS"]
 
 @eopl-figure{
 @verbatim|{

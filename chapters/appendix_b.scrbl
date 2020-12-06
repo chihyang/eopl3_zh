@@ -76,7 +76,8 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
  @item{匹配 @${\mathit{R}^{*}} 的字符串由 @${n} (@${n \geq 0}) 个匹配
  @${\mathit{R}} 的字符串串联而得。这叫做 @${\mathit{R}} 的@term["Kleene
- closure"]{克莱尼闭包}。}
+ closure"]{克莱尼闭包}。
+ @eopl-index["Kleene star (closure)"]}
 
 ]
 

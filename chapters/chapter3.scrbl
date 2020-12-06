@@ -37,6 +37,7 @@
 端接收程序文本（由源语言写成的程序），将其转化为抽象语法树，然后将语法树传给解释
 器。解释器是一程序，它查看一段数据结构，根据结构执行一些动作。当然，解释器自身也
 由某种语言写成。我们把那种语言叫做@term["implementation language"]{实现语言}
+@eopl-index["Implementation language"]
 或@term["defining language"]{定义语言}。我们的大多数实现都遵照这种方式。
 
 @eopl-index["Compiler"]
@@ -2475,6 +2476,7 @@ htt]{nameless-letrec-var-exp}。
 @exercise[#:level 3 #:tag "ex3.43"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Known procedures"]
 翻译器不止能记录变量的名字。例如，考虑程序
 
 @eopl-code{
@@ -2497,5 +2499,6 @@ in let f = proc (y) -(y,x)
 在前一个例子中，@tt{f} 的唯一用途是作为一个已知过程。因此，由表达式 @tt{proc (y)
 -(y,x)} 产生的过程从未使用。修改翻译器，避免产生这样的过程。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Known procedures"]
 
 }

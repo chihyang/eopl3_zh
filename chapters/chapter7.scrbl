@@ -159,7 +159,8 @@ in (f 1)
 
  @itemlist[
 
-  @item{当且仅当表达值是一个 @tt{num-val}，其类型为 @tt{int}。}
+  @item{当且仅当表达值是一个 @tt{num-val}，其类型为 @tt{int}。
+  @eopl-index[@eopl-index-entry[@elem{@tt{int} type} "inttype"]]}
 
   @item{当且仅当表达值是一个 @tt{bool-val}，其类型为 @tt{bool}。
   @eopl-index[(eopl-index-entry @elem{@tt{bool} type} "booltype")]}
@@ -299,7 +300,7 @@ proc (f)
 
 如果我们可以赋予表达式一个类型，我们说该表达式是@term["well-typed"]{正常类型} 的，
 否则说它是@term["ill-typed"]{异常类型} 或@term[#:full #f "has no type"]{无类型}
-的。
+的。@eopl-index["Ill-typed"]
 
 我们的分析基于以下原则：如果我们能预测表达式中所有子表达式的值类型，就能预测表达
 式的值类型。
@@ -636,6 +637,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 1 #:tag "ex7.6"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex7.6"] "IMPLICIT-REFS"]
 扩展检查器，处理赋值（@secref{s4.3}）。
 
 }
@@ -761,6 +763,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @section[#:style section-title-style-numbered #:tag "s7.4"]{INFERRED：带有类型推导的语言}
 
+@eopl-index[#:range-mark 'start "INFERRED"]
 在程序中写出类型虽然有助于设计和文档，但很耗时。另一种设计是让编译器根据变量的使
 用以及程序员可能给出的信息，推断出所有变量的类型。令人惊讶的是，对设计严谨的语言，
 编译器@emph{总}能推断出变量的类型。这种策略叫做@emph{类型推导}。它适用于 LETREC
@@ -1811,6 +1814,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @tt{table}做累加器，即可直接递归。@tt{table} 的长度告诉我们已找出多少个不同的未
 知类型，我们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。
 这和我们在@figure-ref{fig-4.1} 中使用的 @tt{length} 类似。
+@eopl-index[#:range-mark 'end "INFERRED"]
 
 @eopl-figure{
 @racketblock[
@@ -1990,7 +1994,8 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
         (else table)))))
 ]
 
-@eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分}
+@eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分
+                          @eopl-index["INFERRED"]}
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -2026,7 +2031,8 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
       (string-append "tvar" (number->string n)))))
 ]
 
-@eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第 2 部分}
+@eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第 2 部分
+                          @eopl-index["INFERRED"]}
 }
 
 @exercise[#:level 2 #:tag "ex7.23"]{

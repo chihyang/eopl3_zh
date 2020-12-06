@@ -30,6 +30,8 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 何递归编程。
 
 @eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
+@eopl-index["Induction, proof by"]
+@eopl-index["Inductive specifications"]
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
 @exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}
@@ -52,6 +54,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 (@author-ref{Morris} & @author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效
 方法。过程的可能输入受不变式约束时，子目标归纳也有效。
 @eopl-index["Context-sensitive constraint"]
+@eopl-index["Invariant"]
 
 @eopl-index["Generalization"]
 @term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
@@ -84,6 +87,7 @@ Scheme} (@author-ref{Sperber} et al., 2007) 制定。
 
 @author-ref{Dybvig} (2003) 简短介绍了 Scheme，加入了许多富有洞见的例子。
 
+@eopl-index["Interpreter"]
 解释器思想至少能追溯到图灵，他定义了能够模拟任何图灵机的@exact-elem{“}通用
 @exact-elem{”}机器。这种通用机器实际上是一个解释器，取一套描述图灵机的编码，模
 拟解码机器 (Turing, 1936)。经典的冯诺依曼机 (@author-ref{von Neumann}, 1945) 同
@@ -114,6 +118,7 @@ Scheme 的存储器来解释存储器的概念，但它们只用了一个全局�
 可变变量的所有能力。
 
 @eopl-index["EXPLICIT-REFS"]
+@eopl-index["IMPLICIT-REFS"]
 将计算视为操作存储器的思想可追溯到现代计算（参见 @author-ref{von Neumann}, 1945）
 的开端。EXPLICIT-REFS 的设计基于 ML (@author-ref{Milner} et al., 1989) 的存储器
 模型，而后者与 Bliss (@author-ref{Wulf}, 1971) 类似。IMPLICIT-REFS 的设计类似于
@@ -207,6 +212,7 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 @eopl-index{Abstract data types (ADTs)}
 @eopl-index{Abstraction boundary}
 @eopl-index{Data abstraction}
+@eopl-index["Implementation" "of ADT"]
 
 用类型强制数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
 (@author-ref{Liskov} et al., 1977)。这发展为 Standard ML (@author-ref{Milner} et

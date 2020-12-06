@@ -16,6 +16,7 @@
 在@secref{cpi}，我们把解释器中的所有主要过程调用重写成@emph{尾调用}。这样，我们
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
 叫做@emph{迭代性控制行为}。
+@eopl-index["Iterative control behavior"]
 
 @eopl-index["Continuation-passing style"]
 我们通过给每个过程多传一个@emph{续文}参数实现这一目标。这种编程风格
@@ -155,6 +156,7 @@
 
 }
 
+@eopl-index["Inlining"]
 我们还可以更进一步，将程序中所有调用续文构造器的地方替换为其定义。因为定义在行内
 展开，这一转换叫做@term["inlining"]{内联}。我们还要内联 @tt{apply-cont} 的调用，
 不再写 @tt{(apply-cont cont val)}，而是直接写 @tt{(cont val)}。
@@ -210,6 +212,7 @@
 
 }
 
+@eopl-index["Inlining"]
 如果我们按这种方式内联所有用到续文的地方，我们得到：
 
 @eopl-code{
@@ -237,6 +240,7 @@
 }
 }
 
+@eopl-index["Induction, proof by"]
 过程 @tt{fact/k} 具有性质 @tt{(fact/k @${n} @${g}) = (@${g} @${n!})}。对 @${n}
 使用归纳法很容易证明这条性质。第一步，当 @${n = 0}，我们计算：
 
@@ -490,6 +494,7 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Inlining"]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -516,7 +521,8 @@ val1 val2)} 的值传给当前续文。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "data structure representation of"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"]
-             "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]}
+             "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]}
 
 ]
 
@@ -538,8 +544,12 @@ val1 val2)} 的值传给当前续文。
 
 @exercise[#:level 2 #:tag "ex6.7"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Inlining"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
 写出@figure-ref{fig-5.4}、@countref{fig-5.5} 和 @countref{fig-5.6} 中解释器的过
 程表示和内联过程表示。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Inlining"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
 
 }
 
@@ -1669,8 +1679,10 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 
 @exercise[#:level 1 #:tag "ex6.20"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.20"] "Induction, proof by"]
 我们的过程 @tt{cps-of-exps} 迫使子表达式按从左向右的顺序求值。修改
 @tt{cps-of-exps}，使子表达式从右向左求值。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.20"] "Induction, proof by"]
 
 }
 

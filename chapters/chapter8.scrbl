@@ -42,6 +42,7 @@
 是@term["simple module"]{简单模块}，类似环境，是一组绑定；也可能是@term["module
 procedure"]{模块过程}，取一模块，生成另一模块。
 
+@eopl-index["Interface" "of module"]
 每个模块都有一套@term["interface"]{接口}。作为一组绑定的模块具有@term["simple
 interface"]{简单接口}，接口列出模块提供的绑定及其类型。模块过程的接口指定模块的
 参数接口和返回模块的接口，就像过程的类型指定参数和结果的类型。
@@ -109,6 +110,8 @@ in -(-(from m1 take a,
 }
 
 @eopl-index["Body" (eopl-index-entry "of module" "module")]
+@eopl-index["Implementation" "of module interface"]
+@eopl-index["Interface" "of module"]
 这个程序从名为 @tt{m1} 的模块定义开始。像任何模块一样，它有@emph{接口}和@tt{主体}。
 主体@emph{实现}接口。接口@emph{声明}变量 @tt{a}、@tt{b} 和 @tt{c}。主体@emph{定
 义}了 @tt{a}、@tt{x}、@tt{b} 和 @tt{c} 的绑定。
@@ -2462,6 +2465,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 它关联起来。我们调用 @tt{extend-tenv-with-module} 比较结果的类型时，还要调用
 @tt{expand-iface} 维持不变式。
 
+@eopl-index["Ice cream sundaes"]
 现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
 足坚果接口的。怎么混合不要紧，好吃就行！
 

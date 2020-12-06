@@ -36,6 +36,7 @@
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.1"]{归纳定义法}
 
+@eopl-index[#:range-mark 'start "Inductive specifications"]
 归纳定义法是定义值集合的有效方法。为解释这一方法，我们用它来描述自然数 @${N =
 {0,1,2,...}} 的某一子集 @${S}。
 
@@ -68,6 +69,7 @@
 @; codeblock with contracts and usage
 @eopl-code{
 @racketblock[
+@#,eopl-index[@eopl-index-entry[@elem{@bold{@tt{is-S?}}} "inS"]]
 @#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
 (define in-S?
@@ -224,6 +226,7 @@
                   \infer{@tt{(14 . ())} \in @List-of-Int-$[]}
                         {@tt{14} \in \mathit{Int} & @tt{()} \in @List-of-Int-$[]}}
           }}
+@eopl-index[#:range-mark 'end "Inductive specifications"]
 
 @exercise[#:level 1 #:tag "ex1.1"]{
 
@@ -346,6 +349,7 @@
 
 @$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@Int-$[] . @List-of-Int-$[])}}
 
+@eopl-index["Kleene star (closure)"]
 另一种简写是@term[#:tag "kleene-star" "Kleene Star"]{克莱尼星号}，写作
 @${\{...\}^*}。当它出现在右边时，表示一个序列，由任意多个花括号之间的内容组成。
 用克莱尼星号，@List-of-Int-$[] 的定义可以简写为
@@ -354,6 +358,7 @@
 
 这也包含没有任何内容的情况。如果内容出现 0 次，得到的是空字符串。
 
+@eopl-index["Kleene plus"]
 星号的变体是@term["Kleene Plus"]{克莱尼加号} @${\{...\}^+}，表示一个或多个内容的
 序列。把上例中的 @${^*} 换成 @${^+}，定义的句法类别是非空整数列表。
 
@@ -513,6 +518,7 @@
 这如实反映了每个节点的结构，但是忽略了二叉搜索树的一个要点：所有左子树的键值都小
 于（或等于）当前节点，所有右子树的键值都大于当前节点。
 
+@eopl-index[#:range-mark 'start "Invariant"]
 因为这条额外限制，从 @${\mathit{Binary\mbox{-}search\mbox{-}tree}} 得出的句法推
 导并不都是正确的二叉搜索树。要判定某个生成式能否用于特定的句法推导，必须检查生成
 式用在哪种上下文。这种限制叫做@term["context-sensitive constraints"]{上下文敏感
@@ -525,6 +531,7 @@
 后再用其他方法添加上下文敏感限制。@secref{types}展示了这种技巧的一个例子。
 @eopl-index[#:range-mark 'end "Context-sensitive constraint"]
 @eopl-index[#:range-mark 'end "Grammars"]
+@eopl-index[#:range-mark 'end "Invariant"]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
 
@@ -540,6 +547,8 @@
 @; @{
 @parprf{
 
+ @eopl-index["Induction hypothesis"]
+ @eopl-index[#:range-mark 'start "Induction, proof by"]
  用归纳法证明 @${t} 的大小。令 @${t} 的大小等于 @${t} 中节点的个数。归纳假设为
  @${\mathit{IH}(k)}：树的大小@${\leq k}时有奇数个节点。依照归纳法的惯例：先证明
  @${\mathit{IH}(0)}为真，然后证明若对任一整数 @${k}，@${\mathit{IH}} 为真，则对
@@ -569,6 +578,7 @@
    也是一个奇数。}]}]
 
  陈述@exact-elem{“}@${\mathit{IH}(k + 1)} 成立@exact-elem{”}证毕，归纳完成。
+ @eopl-index[#:range-mark 'end "Induction, proof by"]
  }
 @; @}
 
@@ -596,6 +606,7 @@
 @section[#:style section-title-style-numbered #:tag "s1.2"]{推导递归程序}
 
 @eopl-index[#:range-mark 'start "Follow the Grammar" "examples of"]
+@eopl-index[#:range-mark 'start "Inductive specifications" "recursive procedures based on"]
 我们已经用归纳定义法描述了复杂集合。我们能够分析归纳式集合的元素，观察如何从较小
 元素构建集合。我们用这一想法写出了过程 @tt{in-S?}，用以判断自然数是否属于集合
 @${S}。现在，我们用同样的想法定义更通用的过程，以便对归纳式集合做运算。
@@ -767,6 +778,7 @@ C} 相同。
 如果排除错误检查，我们得靠 @tt{car} 和 @tt{cdr} 报错来获知传递了空列表，但它们的
 错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使用
 @tt{car} 的地方。
+@eopl-index[#:range-mark 'end "Inductive specifications" "recursive procedures based on"]
 
 @exercise[#:level 1 #:tag "ex1.6"]{
  如果调换 @tt{nth-element} 中两个检测的顺序，会有什么问题？
@@ -949,7 +961,8 @@ C} 相同。
  @${e_1} 或 @${e_2} 时，@${x} 自由出现于 @${e}。这里的@exact-elem{“}或
  @exact-elem{”}表示@term["inclusive or"]{涵盖或}，意为它包含 @${x} 同时自由出现
  于 @${e_1} 和 @${e_2} 的情况。我们通常用@exact-elem{“}或@exact-elem{”}表示这
- 种意思。}
+ 种意思。
+ @eopl-index["Inclusive or"]}
 
 ]
 
@@ -1122,9 +1135,11 @@ C} 相同。
 
 @exercise[#:level 1 #:tag "ex1.12"]{
 
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.12"] "Inlining"]
  用 @tt{subst-in-s-exp} 的定义替换 @tt{subst} 中的调用，从而排除这次调用，然后简
  化得到的过程。结果中的 @tt{subst} 应当不需要 @tt{subst-in-s-exp}。这种技巧
  叫做@term["inlining"]{内联}，用于优化编译器。
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.12"] "Inlining"]
 
 }
 
@@ -1286,10 +1301,11 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 还有许多情况下，引入辅助变量或过程来解决问题会有帮助，甚至必不可少。只要能对新过
 程做什么给出独立的定义，尽可以如此。
+@eopl-index[#:range-mark 'end "Auxiliary procedures"]
 
 @exercise[#:level 2 #:tag "ex1.14"]{
 
- @eopl-index[#:range-mark 'end "Auxiliary procedures"]
+ @eopl-index[#:suffix @exer-ref-range["ex1.14"] "Induction, proof by"]
  若 @m{0 \leq n < length(v)}，证明 @tt{partial-vector-sum} 的正确性。
 
 }
