@@ -121,6 +121,7 @@
 
 @eopl-index[#:range-mark 'start "Continuations"]
 @eopl-index[#:range-mark 'start "Interpreter" "continuation-passing"]
+@eopl-index[#:range-mark 'start "LETREC" "continuation-passing interpreter for"]
 在我们的新解释器中，@tt{value-of} 等主要过程将取第三个参数。这一参数——@emph{续
 文}——用来抽象每个表达式求值时的控制上下文。
 
@@ -762,7 +763,8 @@
 ]
 
 @eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）
-                         @eopl-index["Interpreter" "continuation-passing"]}
+                         @eopl-index["Interpreter" "continuation-passing"]
+                         @eopl-index["LETREC" "continuation-passing interpreter for"]}
 }
 
 @elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实参的求
@@ -799,6 +801,7 @@
 进入过程主体则不需要。
 @eopl-index[#:range-mark 'end "Continuations"]
 @eopl-index[#:range-mark 'end "Interpreter" "continuation-passing"]
+@eopl-index[#:range-mark 'end "LETREC" "continuation-passing interpreter for"]
 
 @exercise[#:level 1 #:tag "ex5.1"]{
 
@@ -835,8 +838,10 @@
 
 @exercise[#:level 2 #:tag "ex5.6"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.6"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 给语言添加@exercise-ref{ex3.10} 中的 @tt{list} 表达式。提示：添加两个续文构造器，
 一个用来求列表首元素的值，一个用来求列表剩余元素的值。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.6"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 
 }
 
@@ -971,7 +976,8 @@
 }
 
 @eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范
-                         @eopl-index["Interpreter" "continuation-passing"]}
+                         @eopl-index["Interpreter" "continuation-passing"]
+                         @eopl-index["LETREC" "continuation-passing interpreter for"]}
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
@@ -2122,8 +2128,10 @@ in ((index 5) list(2, 3))
 
 @exercise[#:level 2 #:tag "ex5.42"]{
 
-@eopl-index[#:range-mark 'start  #:suffix @exer-ref-range["ex5.42" "ex5.44"]
-            (eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
+@eopl-index[#:range-mark 'start  #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@tt{call-with-current-continuation} "Callwithcurrentcontinuation"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 前一道练习只在抛出异常时捕获续文。添加形式 @tt{letcc @${\mathit{Identifier}} in
 @${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
 
@@ -2169,8 +2177,10 @@ in ...
 给语言添加 @tt{call-with-current-continuation}。然后写一个翻译器，用只有
 @tt{call-with-current-continuation} 的语言翻译具有 @tt{letcc} 和 @tt{throw} 的语
 言。
-@eopl-index[#:range-mark 'end  #:suffix @exer-ref-range["ex5.42" "ex5.44"]
-            (eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
+@eopl-index[#:range-mark 'end  #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@tt{call-with-current-continuation} "Callwithcurrentcontinuation"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
@@ -2765,6 +2775,7 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.50"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.5"] "List operations"]
 寄存本节的解释器。必须寄存的互递归尾调用过程有哪些？
 
 }

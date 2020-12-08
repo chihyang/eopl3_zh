@@ -567,6 +567,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @section[#:style section-title-style-numbered #:tag "s2.3"]{递推数据类型的接口}
 
+@eopl-index[#:range-mark 'start "Lambda expression (LcExp)"]
 @secref{isd}大部分都在处理递推数据类型。例如，@definition-ref{d1.1.8} 给出了
 lambda 演算表达式的语法：
 
@@ -636,6 +637,7 @@ lambda 演算表达式的语法：
 }
 
 只要使用上述构造器，怎样表示 lambda 演算表达式都可以。
+@eopl-index[#:range-mark 'end "Lambda expression (LcExp)"]
 
 @eopl-index["Constructor"]
 我们可以写出设计递推数据类型接口的一般步骤：
@@ -655,6 +657,7 @@ lambda 演算表达式的语法：
 
 @exercise[#:level 1 #:tag "ex2.15"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.15" "ex2.16" "ex2.17"] "Lambda expression (LcExp)"]
 上述语法指定了 lambda 演算表达式的表示方式，实现其接口。
 
 }
@@ -668,6 +671,7 @@ lambda 演算表达式的语法：
 @exercise[#:level 1 #:tag "ex2.17"]{
 
 再发明至少两种方式来表示数据类型 lambda 演算表达式，实现它们。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.15" "ex2.16" "ex2.17"] "Lambda expression (LcExp)"]
 
 }
 
@@ -853,6 +857,7 @@ lambda 演算表达式的语法：
 计和实现接口的工具。这个工具产生的接口与前一节的虽不完全相同，却很类似。
 
 @eopl-index[#:range-mark 'start (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
+@eopl-index[#:range-mark 'start "Lambda expression (LcExp)" "Scheme implementation"]
 仍考虑前一节讨论的数据类型 lambda 演算表达式。lambda 演算表达式的接口可以这样写：
 
 @eopl-code{
@@ -1071,6 +1076,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 的不同变体，然后设计语言，描述这些变体。这种策略通常非常有效。
 @eopl-index[#:range-mark 'end (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
 @eopl-index[#:range-mark 'end "Domain-specific languages"]
+@eopl-index[#:range-mark 'end "Lambda expression (LcExp)" "Scheme implementation"]
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
@@ -1089,10 +1095,12 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.23"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.23"] "Lambda expression (LcExp)"]
 @tt{lc-exp} 的定义忽略了@definition-ref{d1.1.8} 中的条件：
 @exact-elem{“}@${\mathit{Identifier}} 是除 @tt{lambda} 之外的任何符号。
 @exact-elem{”}修改 @tt{identifier?} 的定义，补充这一条件。提示：任何谓词都能在
 @tt{define-datatype} 中使用，你定义的也能。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.23"] "Lambda expression (LcExp)"]
 
 }
 
@@ -1233,6 +1241,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
+@eopl-index[#:range-mark 'start "Lambda expression (LcExp)" "abstract vs. concrete syntax"]
 @eopl-figure[#:position "!t"]{
 @centered{
 @(image "../images/ast"
@@ -1344,13 +1353,14 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
         (list (unparse-lc-exp rator)
           (unparse-lc-exp rand))))))
 ]
-}
-
 @eopl-index[#:range-mark 'end "Abstract syntax"]
 @eopl-index[#:range-mark 'end "Abstract syntax tree"]
+@eopl-index[#:range-mark 'end "Lambda expression (LcExp)" "abstract vs. concrete syntax"]
+}
 
 @exercise[#:level 1 #:tag "ex2.27"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.27" "ex2.28" "ex2.29" "ex2.30"] "Lambda expression (LcExp)"]
 画出下面 lambda 演算表达式的抽象语法树：
 
 @eopl-code{
@@ -1403,6 +1413,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 如 @tt{(a b c)}，并且因其他表达式终止时给不出恰当的错误信息，如 @tt{(lambda)}。
 修改一下，使之更健壮，可接受任何s-exp，并且对不表示 lambda 演算表达式的 s-exp 给
 出恰当的错误信息。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.27" "ex2.28" "ex2.29" "ex2.30"] "Lambda expression (LcExp)"]
 
 }
 

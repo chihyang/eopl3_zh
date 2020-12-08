@@ -495,6 +495,7 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Inlining"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -522,10 +523,9 @@ val1 val2)} 的值传给当前续文。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Continuations" "procedural representation of"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"]
              "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]}
-
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]}
 ]
-
 }
 
 @exercise[#:level 1 #:tag "ex6.5"]{
@@ -633,6 +633,7 @@ val1 val2)} 的值传给当前续文。
 
 @exercise[#:level 1 #:tag "ex6.10"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.10"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
 给 @tt{list-sum} 设计一种简便的续文表示方式，就像上面的 @tt{fact/k} 那样。
 
 }
@@ -1739,6 +1740,7 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.24"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.24"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 给语言添加列表（@exercise-ref{ex3.10}）。记住：列表的参数不在尾端。
 
 }
@@ -2235,6 +2237,7 @@ newrefk(33, proc (loc1)
 }
 
 @eopl-index[#:range-mark 'start "Exception handling"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 最后是非局部控制流。我们来考虑@exercise-ref{ex5.42} 中的 @tt{letcc}。@tt{letcc}
 表达式 @tt{letcc @${var} in @${body}} 将当前续文绑定到变量 @${var}。@${body} 为
 该绑定的作用域。续文的唯一操作是 @tt{throw}。我们用语法 @tt{throw @${Expression}
@@ -2267,6 +2270,7 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 
 这个例子中，我们不需要给给 CPS-OUT 添加语法，因为我们操作的正是控制结构。
 @eopl-index[#:range-mark 'end "Exception handling"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 
 @exercise[#:level 1 #:tag "ex6.39"]{
 

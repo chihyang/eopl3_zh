@@ -132,6 +132,7 @@ in -(-(from m1 take a,
 供}（或称@term["export"]{输出}）这些值。当模块主体提供的值类型与接口命名变量时公
 布的类型相符时，主体@term[#f]{满足}其接口。
 
+@eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 在主体中，定义具有 @tt{let*} 那样的作用域，所以 @tt{x}、@tt{b} 和 @tt{c} 的定义
 在 @tt{a} 的作用域内。一些作用域如@figure-ref{fig-8.2} 所示。
 
@@ -217,6 +218,7 @@ from m1 take u
 }
 
 @example[#:tag "eg-8.5"]{
+@eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 在我们的语言中，模块具有 @tt{let*} 式的作用域（@exercise-ref{ex3.17}）。例如，
 
 @nested{
@@ -412,6 +414,7 @@ in -(z, -(from m1 take a, from m2 take a))
 的模块加入当前环境中，如@figure-ref{fig-8.3} 所示。
 
 @eopl-index["Body" (eopl-index-entry "of module" "module")]
+@eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 最后，要求模块主体的值，我们在适当的环境内求每个表达式的值，得到 @tt{let*} 式定
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
@@ -475,6 +478,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 检查器的工作是确保所有模块主体满足其接口，且所有变量的使用符合其类型。
 
+@eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 我们语言的定界规则很简单：模块遵循 @tt{let*} 式定界，依次进入模块输出绑定中的受
 限变量的作用域。接口告诉我们每个受限变量的类型。声明和定义也都遵循 @tt{let*} 式
 定界（如@figure-ref{fig-8.2}）。
@@ -1557,6 +1561,7 @@ type"]{展开类型}。}
 过程 @tt{expand-decls} 遍历声明集合，创建新的类型环境，其中的每个类型和变量名都
 绑定到一个展开类型。麻烦之处是声明遵循 @tt{let*} 式作用域：集合中的每个声明的作
 用域包含它之后的所有声明。
+@eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 
 要明白这意味着什么，考虑模块定义
 

@@ -686,6 +686,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 2 #:tag "ex7.9"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.9"] "List operations"]
 给语言添加类型 @tt{listof}，其操作与@exercise-ref{ex3.9} 类似。当且仅当值是列表，
 且所有元素类型均为 @${t} 时，值类型为 @tt{listof @${t}}。用下列生成式扩展语言：
 
@@ -728,6 +729,7 @@ in |@${e_{letrec\mbox{-}body}}
 用@exercise-ref{ex7.8} 中的小技巧避免与 @tt{proc-type-exp} 的冲突。这些规则应确
 保 @tt{car} 和 @tt{cdr} 应用于列表，但它们无法保证列表非空。为什么让规则确保列表
 非空不合理？为什么 @tt{emptylist} 中的类型参数是必需的？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.9"] "List operations"]
 
 }
 
@@ -2049,6 +2051,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @exercise[#:level 2 #:tag "ex7.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.25"] "List operations"]
 扩展推导器，像@exercise-ref{ex7.9} 那样处理列表类型。修改语言，用生成式
 
 @$${\mathit{Expression} ::= @tt{emptylist}}
@@ -2058,6 +2061,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 @$${\mathit{Expression} ::= @tt{emptylist_@${\mathit{Type}}}}
 
 提示：考虑用类型变量代替缺失的 @tt{_@${t}}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.25"] "List operations"]
 }
 
 @exercise[#:level 2 #:tag "ex7.26"]{

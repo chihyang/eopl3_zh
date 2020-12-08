@@ -67,12 +67,14 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 匹配工具启发，详见 @author-ref{Milner} et al. (1989) 及其修订版
 @author-ref{Milner} et al. (1997)。
 
+@eopl-index["Lambda calculus"]
 Lambda 演算由邱奇发明 (@author-ref{Church}, 1941)，用于研究数理逻辑，但已成为诸
 多现代编程语言理论的灵感来源。Lambda 演算的介绍参见 @author-ref{Hankin} (1994)、
 @author-ref{Peyton Jones} (1987) 或 @author-ref{Stoy} (1977)。
 @author-ref{Barendregt} (1981, 1991) 提供了百科全书式的参考。
 
 @eopl-index["Contour diagrams"]
+@eopl-index["Lexical scope rules"]
 @figure-ref{fig-3.13} 那样的等深线用来解释词法作用域，首先由
 @author-ref{Johnston} (1971) 提出。无名解释器和翻译器基于德布鲁金索引
 (@author-ref{de Bruijn}, 1972)。
@@ -124,6 +126,7 @@ Scheme 的存储器来解释存储器的概念，但它们只用了一个全局�
 模型，而后者与 Bliss (@author-ref{Wulf}, 1971) 类似。IMPLICIT-REFS 的设计类似于
 大多数具有可变局部值的标准编程语言，诸如 Pascal、Scheme 和 Java。
 
+@eopl-index["L-values"]
 术语@exact-elem{“}左值@exact-elem{”}和@exact-elem{“}右值@exact-elem{”}，以及
 内存的环境-存储器模型源自 @author-ref{Strachey} (1967)。
 
@@ -133,6 +136,7 @@ Fortran (@author-ref{Backus} et al., 1957) 是第一种使用按指调用的语�
 @eopl-index[(eopl-index-entry "Call-by-name" "Callbyname")]
 @author-ref{Friedman} & @author-ref{Wise} (1976) 较早介绍了全面使用懒求值的威力。
 @eopl-index[(eopl-index-entry "Call-by-need" "Callbyneed")]
+@eopl-index["Lazy evaluation"]
 Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实际语言。为了建
 模按名调用，@author-ref{Ingerman} (1961) 发明了@term["thunk"]{值箱}。我们用它们
 和效果建模按需调用。这与@term["memoization"]{助记法} (@author-ref{Michie}, 1968) 类似。

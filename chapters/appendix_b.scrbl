@@ -31,6 +31,7 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 
 字符流应如何分割为词条是语言规范的一部分。语言的这部分规范有时称为@term["lexical
 specification"]{词法规范}。典型的词法规范可能包括：
+@eopl-index["Lexical specification"]
 
 @itemlist[
 

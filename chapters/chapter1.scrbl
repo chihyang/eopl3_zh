@@ -142,6 +142,7 @@
 
 再来看几个运用这些的例子。
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]
 @definition[#:title "整数列表，自顶向下" #:tag "d1.1.3"]{
   Scheme列表是整数列表，当且仅当：
   @itemlist[#:style 'ordered
@@ -176,6 +177,7 @@
 
 @$${\infer{@tt{(@${n} . @${l})} \in @List-of-Int-${}}{n \in \mathit{Int} & l \in
 @List-of-Int-${}}} }
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]
 }
 
 这三个定义等价。来看看如何用它们生成一些 @List-of-Int-$[] 的元素。
@@ -281,6 +283,7 @@
 示如何用@term["grammar"]{语法} 定义集合。语法通常用来指定字符串的集合，但也能用
 来定义值的集合。
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]
 例如，集合 @List-of-Int-$[] 可用语法定义为：
 
 @; @grammar : (grammar production ...)
@@ -348,6 +351,7 @@
 
 
 @$${@List-of-Int-$[] ::= @tt{()} @$${\mid} @tt{(@Int-$[] . @List-of-Int-$[])}}
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]
 
 @eopl-index["Kleene star (closure)"]
 另一种简写是@term[#:tag "kleene-star" "Kleene Star"]{克莱尼星号}，写作
@@ -472,8 +476,10 @@
 
  @item{@term["lambda calculus"]{lambda 演算} 是一种简单语言，常用于研究编程语言
  理论。这一语言只包含变量引用，单参数过程，以及过程调用，可用语法定义为：
+ @eopl-index["Lambda calculus"]
 
  @definition[#:title "lambda 演算" #:tag "d1.1.8"]{
+ @eopl-index[#:range-mark 'start "Lambda expression (LcExp)"]
  @nested[#:style normalfont]{
  @nested[#:style small]{
   @envalign*{\mathit{LcExp} &::= \mathit{Identifier} \\[-3pt]
@@ -488,6 +494,7 @@
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
  达式的@term["bound variable"]{绑定变量}，因为它绑定（或称捕获）主体内出现的任何
  同名变量。出现在主体内的同名变量都指代这一个。
+ @eopl-index[#:range-mark 'end "Lambda expression (LcExp)"]
 
  要明白这怎么用，考虑用算术操作符扩展的 lambda 演算。在这种语言里，
 
@@ -599,6 +606,7 @@
 }
 
 @exercise[#:level 2 #:tag "ex1.5"]{
+ @eopl-index[#:suffix @exer-ref-range["ex1.5"] "Lambda expression (LcExp)"]
  证明若 @m{e \in \mathit{LcExp}}，则 @m{e} 中的左右括号数量相等。
 
 }
@@ -626,6 +634,8 @@
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.1"]{@tt{list-length}}
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{list-length}} "listlength"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
 标准的 Scheme 程序 @tt{length} 求出列表中的元素个数。
 
 @eopl-code{
@@ -697,6 +707,7 @@
 = (+ 1 (+ 1 (+ 1 0)))
 = 3
 }|
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{list-length}} "listlength"]]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.2"]{@tt{nth-element}}
@@ -793,6 +804,7 @@ C} 相同。
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.3"]{@tt{remove-first}}
 
+@eopl-index["List of symbols (List-of-Symbol)"]
 过程 @tt{remove-first} 取两个参数：符号 @${s} 和符号列表 @${los}。它返回一个列表，
 除了不含第一个出现在 @${los} 中的符号 @${s} 外，所含元素及其排列顺序与 @${los}
 相同。如果 @${s} 没有出现在 @${los} 中，则返回 @${los}。
@@ -888,7 +900,9 @@ C} 相同。
 @#,exact-elem{\begin{mdframed}[style=codediff]}
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
-]}
+]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
+}
 
 @exercise[#:level 1 #:tag "ex1.8"]{
 
@@ -907,6 +921,7 @@ C} 相同。
 @subsection[#:style section-title-style-numbered #:tag "s1.2.4"]{@tt{occurs-free?}}
 
 @eopl-index[#:range-mark 'start "Binding" "lambda"]
+@eopl-index[#:range-mark 'start "Lambda expression (LcExp)"]
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
 表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
@@ -968,6 +983,7 @@ C} 相同。
 
 你可以说服自己，这些规则涵盖了@exact-elem{“}@${x} 不在某一 lambda 绑定之中
 @exact-elem{”}表示的所有意思。
+@eopl-index[#:range-mark 'end "Lambda expression (LcExp)"]
 
 @exercise[#:level 1 #:tag "ex1.10"]{
 
@@ -1240,6 +1256,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 是：
 
 @eopl-code{
+@eopl-index[@eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
 @racketblock[
 @#,elem{@elemtag["list-sum"]{@bold{@tt{list-sum}}} : @m{\mathit{Listof}(\mathit{Int}) \to \mathit{Int}}}
 (define list-sum
@@ -1340,6 +1357,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
               '()
               (cons x (duple (- n 1) x))))))))
 @exercise[#:level 1 #:tag "ex1.15"]{
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
  @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
 @eopl-code{
@@ -1671,7 +1689,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  (flatten '(a b c))
  (flatten '((a) () (b ()) () (c)))
  (flatten '((a b) c (((d)) e)))
- (flatten '(a b (() (c))))]}
+ (flatten '(a b (() (c))))]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]}
 
 }
 
@@ -1703,6 +1722,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
         (sort-iter (merge loi1 (list (car loi2)))
                    (cdr loi2))))))))
 @exercise[#:level 2 #:tag "ex1.28"]{
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.28" "ex1.29" "ex1.30"]
+             @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]
  @tt{loi1} 和 @tt{loi2} 是元素按照升序排列的整数列表，@tt{(merge loi1 loi2)} 返
  回 @tt{loi1} 和 @tt{loi2} 中所有整数组成的的有序列表。
 
@@ -1761,7 +1782,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @examples[#:eval sort/predicate-eval
            #:label #f
  (sort/predicate < '(8 2 5 2 3))
- (sort/predicate > '(8 2 5 2 3))]}
+ (sort/predicate > '(8 2 5 2 3))]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.28" "ex1.29" "ex1.30"]
+            @eopl-index-entry[@elem{List of integers (@List-of-Int-$[])} "Listofintegers"]]}
 
 }
 

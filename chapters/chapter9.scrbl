@@ -423,6 +423,7 @@ in send o3 m3()
 @eopl-index["Declaration" "of method"]
 过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过程、
 多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
+@eopl-index["List operations"]
 列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
 @eopl-index[(eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的值。

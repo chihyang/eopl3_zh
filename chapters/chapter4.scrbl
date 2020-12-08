@@ -28,6 +28,7 @@
 部分计算之间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能
 共享信息。如果把信息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
 
+@eopl-index["Location"]
 我们把内存建模为从@term["location"]{位置} 到值集合的的有限映射，称值集合
 为@term["storable values"]{可存储值}。出于历史原因，我们称之为@term["store"]{存
 储器}。通常，一种语言中的可存储值与表达值相同，但不总是这样。这个选择是语言设计
@@ -38,6 +39,7 @@
 像一个URL。URL指向一个文件，文件包含一些数据。类似地，引用指代一个位置，位置包含
 一些数据。
 
+@eopl-index["L-values"]
 引用有时候又叫@term["L-values"]{左值}。这名字反映了这种数据结构与赋值语句左边变
 量的联系。类似地，表达值，比如赋值语句右边表达式的值，叫做@term["R-values"]{右值}。
 
@@ -286,6 +288,7 @@ end
 
 @exercise[#:level 2 #:tag "ex4.5"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.5"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 写出 @tt{list}（@exercise-ref{ex3.10}）的规范。
 
 }
@@ -497,6 +500,7 @@ end
 
 @exercise[#:level 1 #:tag "ex4.11"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.11"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 实现@exercise-ref{ex4.5} 中的 @tt{list}。
 
 }
@@ -996,6 +1000,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.20"]{
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 在本节的语言中，就像在 Scheme 中一样，所有变量都是可变的。另一种设计是同时允许可
 变和不可变的变量绑定：
 
@@ -1010,6 +1015,7 @@ in begin
 @tt{letmutable} 表达式引入，语法为：
 
 @$${\mathit{Expression} ::= @tt{letmutable @${\mathit{Identifier}} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 
 }
 
@@ -1802,6 +1808,7 @@ in let swap = proc (x) proc (y)
 @subsection[#:style section-title-style-numbered #:tag "s4.5.2"]{懒求值：按名调用和按需调用}
 
 @eopl-index["Eager evaluation"]
+@eopl-index[#:range-mark 'start "Lazy evaluation"]
 迄今为止，我们讨论的所有参数传递机制都是@term["eager"]{即时}的：它们总是找出每个
 操作数的值。现在我们来看另一种截然不同的传参机制，名叫@term["lazy
 evaluation"]{懒求值}。在懒求值中，操作数的值直到过程主体需要时才会求取。如果过程
@@ -1927,12 +1934,14 @@ in let f = proc (z) 11
 建模过程调用。这种求值策略是 lambda 演算的基础，在 lambda 演算中，它叫做
 @term[@elem{@${\beta}-reduction}]{@${\beta}-推导}。
 @eopl-index[(eopl-index-entry @elem{@${\beta}-reduction} "betareduction")]
+@eopl-index["Lambda calculus"]
 
 不幸的是，按名调用和按需调用使求值顺序难以确定，而这对理解有效果的程序至关重要。
 但没有效果时，这不成问题。所以懒求值盛行于函数式编程语言（没有计算效果的那些），
 在别处却杳无踪影。
 @eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-name" "Callbyname")]
 @eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-need" "Callbyneed")]
+@eopl-index[#:range-mark 'end "Lazy evaluation"]
 
 @exercise[#:level 1 #:tag "ex4.38"]{
 

@@ -19,6 +19,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s3.1"]{规范和实现策略}
 
+@eopl-index[#:range-mark 'start "Language processors"]
 我们的规范包含若干断言，形如：
 @nested{
 @$${@tt{(value-of @${exp} @${\rho})} = val}
@@ -65,6 +66,7 @@ code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词牌}。把程序分
 为词牌的方式叫做语言的@term["lexical specification"]{词法规范}。扫描器取一字符序
 列，生成词牌序列。
+@eopl-index["Lexical specification"]
 
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
@@ -106,9 +108,11 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 另一种方式是忽略具体语法的细节，把表达式写成列表结构，
 就像@secref{s2.5}和@exercise-ref{ex2.31}中，处理 lambda 演算表达式那样。
+@eopl-index[#:range-mark 'end "Language processors"]
 
 @section[#:style section-title-style-numbered #:tag "s3.2"]{LET：一门简单语言}
 
+@eopl-index[#:range-mark 'start "LET"]
 我们先来定义一种非常简单的语言，根据它最有趣的特性，将其命名为 LET。
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.1"]{定义语法}
@@ -680,6 +684,7 @@ in let y = 2
 兴趣的过程是 @tt{value-of}，它取一表达式和一环境，用解释器秘方计算规范所要求的答
 案。在代码中，我们插入了相关的推理规则定义，以便观察 @tt{value-of} 的代码如何与
 规范对应。
+@eopl-index[#:range-mark 'end "LET"]
 
 @nested[#:style 'noindent]{
 
@@ -805,6 +810,7 @@ in let y = 2
 
 @exercise[#:level 2 #:tag "ex3.9"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.9"] "List operations"]
 向该语言添加列表处理操作，包括 @tt{cons}、@tt{car}、@tt{cdr}、@tt{null?} 和
 @tt{emptylist}。列表可以包含任何表达值，包括其他列表。像@secref{s3.2.2}那样，给
 出语言表达值和指代值的定义。例如：
@@ -822,12 +828,14 @@ in cons(x,
 }
 
 应返回一表达值，表示列表 @tt{(4 (3))}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.9"] "List operations"]
 }
 
 }
 
 @exercise[#:level 2 #:tag "ex3.10"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.10"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 向该语言添加操作 @tt{list}。该操作取任意数量的参数，返回一表达值，包含由参数值组
 成的列表。例如：
 
@@ -839,6 +847,7 @@ in list(x, -(x,1), -(x,3))
 }
 
 应返回一表达值，表示列表 @tt{(4 3 1)}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.10"] @eopl-index-entry[@elem{@tt{list} expression} "listexpression"]]
 
 }
 
@@ -913,6 +922,7 @@ in let x = -(x,1)
 
 @exercise[#:level 2 #:tag "ex3.17"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.17"] @eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 扩展语言，添加表达式 @tt{let*}，像 Scheme 的 @tt{let*} 那样。则：
 
 @eopl-code{
@@ -924,6 +934,7 @@ in let* x = -(x,1) y = -(x,2)
 }
 
 值应为2。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.17"] @eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
 }
 
 @exercise[#:level 2 #:tag "ex3.18"]{
@@ -1019,6 +1030,7 @@ in let f = proc (z) -(z,x)
 }|
 }
 
+@eopl-index[#:range-mark 'start "Lexical scope rules"]
 这里我们两次求值表达式 @tt{proc (z) -(z,x)}。第一次求值时，@tt{x} 绑定到 200，所
 以根据词法绑定规则，得到的过程将实参减 200，我们将其命名为 @tt{f}。第二次求值时，
 @tt{x} 绑定到 100，得出的过程应将实参减 100，我们将该过程命名为 @tt{g}。
@@ -1069,6 +1081,7 @@ in let f = proc (z) -(z,x)
 = (value-of |@${body} [|@${var=val}]|@${\rho})
 }|
 @eopl-index[#:range-mark 'end "Declaration" "of procedures"]
+@eopl-index[#:range-mark 'end "Lexical scope rules"]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
@@ -1431,6 +1444,7 @@ in let p = proc (z) a
 
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{letrec} "letrec")]
 @eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index[#:range-mark 'start "LETREC"]
 现在我们来定义支持递归的新语言 LETREC。因为我们的语言只有单参数过程，所以我们降
 低难度，只让 @tt{letrec} 表达式声明一个单参数过程，例如：
 
@@ -1612,6 +1626,7 @@ in (double 6)
 
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{letrec} "letrec")]
 @eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{letrec} "letrec")]
+@eopl-index[#:range-mark 'end "LETREC"]
 
 @exercise[#:level 1 #:tag "ex3.30"]{
 
@@ -1820,8 +1835,10 @@ in let fact = proc (n)
 }|
 }
 
+@eopl-index["Lexical scope rules"]
 这样的定界规则叫做@term["lexical scoping"]{词法定界} 规则，这样声明的变量
 叫做@term["lexical variable"]{词法变量}。
+@eopl-index["Lexical variables"]
 
 使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
 @exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} 外层声明。例如，在上
@@ -1918,6 +1935,8 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
 @eopl-index[#:range-mark 'start (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
+@eopl-index[#:range-mark 'start "LETREC" "nameless version of"]
+@eopl-index[#:range-mark 'start "Lexical addressing"]
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
 能会跨越多条等深线。跨越的等深线数目叫做变量引用的@term["lexical
 depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{“}从0开始的
@@ -2055,6 +2074,7 @@ in proc (x) -(x,1)
 
 每个变量又一次出现在词深预测的环境位置。
 @eopl-index[#:range-mark 'end (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
+@eopl-index[#:range-mark 'end "Lexical addressing"]
 
 @section[#:style section-title-style-numbered #:tag "s3.7"]{实现词法地址}
 
@@ -2427,6 +2447,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
       (a-program (exp1)
         (value-of exp1 (init-nameless-env))))))
 ]
+@eopl-index[#:range-mark 'end "LETREC" "nameless version of"]
 }
 
 @exercise[#:level 1 #:tag "ex3.38"]{
