@@ -1000,7 +1000,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.20"]{
 
-@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 在本节的语言中，就像在 Scheme 中一样，所有变量都是可变的。另一种设计是同时允许可
 变和不可变的变量绑定：
 
@@ -1015,7 +1015,7 @@ in begin
 @tt{letmutable} 表达式引入，语法为：
 
 @$${\mathit{Expression} ::= @tt{letmutable @${\mathit{Identifier}} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
-@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 
 }
 

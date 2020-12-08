@@ -1431,6 +1431,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 那么 @tt{(- - 3 2 - 4 - 12 7)}是一个合法的前缀列表。有时为纪念其发明者Jan
 Łukasiewicz，称之为@term["Polish prefix notation"]{波兰前缀表示法}。写一个
 解析器，将前缀列表表示法转换为抽象语法：
+@eopl-index[#:suffix @exer-ref-range["ex2.31"] @eopl-index-entry["Łukasiewicz, Jan" "LukasiewiczJan"]]
 
 @eopl-code{
 @racketblock[
