@@ -1926,6 +1926,7 @@ in let f = proc (z) 11
 }
 
 这里用到了名为@term["memoization"]{助记法} 的通用策略。
+@eopl-index["Memoization"]
 
 }
 

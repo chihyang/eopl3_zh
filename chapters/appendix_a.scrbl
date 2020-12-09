@@ -94,9 +94,11 @@ Scheme} (@author-ref{Sperber} et al., 2007) 制定。
 @exact-elem{”}机器。这种通用机器实际上是一个解释器，取一套描述图灵机的编码，模
 拟解码机器 (Turing, 1936)。经典的冯诺依曼机 (@author-ref{von Neumann}, 1945) 同
 样是硬件实现的解释器，用来解释机器语言程序。
+@eopl-index["Machine language"]
 
 @eopl-index["Defined language"]
 @eopl-index["Defining language"]
+@eopl-index["Metacircularity"]
 对解释器的现代应用可追溯到 @author-ref{McCarthy} (1960)，他提出了@term["metacircular
 interpreter"]{自循环解释器}（用被定语言本身写就的解释器），用来解释 Lisp 的能力。
 当然，这样的解释器带来一大难题：如果被定语言由自身定义，我们要理解语言的定义，就
@@ -141,13 +143,16 @@ Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实�
 模按名调用，@author-ref{Ingerman} (1961) 发明了@term["thunk"]{值箱}。我们用它们
 和效果建模按需调用。这与@term["memoization"]{助记法} (@author-ref{Michie}, 1968) 类似。
 @eopl-index["Effects, computational"]
+@eopl-index["Memoization"]
 
+@eopl-index["Monads"]
 @emph{Monads} 由 @author-ref{Moggi} (1991) 提出，因 @author-ref{Wadler} (1992)
 流行。它提供了编程语言效果的通用模型。在函数式语言 Haskell (@author-ref{Peyton
 Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 
 @eopl-index["Continuation-passing style" "transformation to"]
 @eopl-index["Continuations"]
+@eopl-index["Metacircularity"]
 续文由多人独立发现，@author-ref{Reynolds} (1993) 介绍了这一迷人历史。
 @author-ref{Strachey} & @author-ref{Wadsworth} (1974) 或许是其中影响最大的。
 @author-ref{Reynolds} (1972) 将一个自循环解释器做了 CPS 变换，并展示了这样做如何
@@ -218,6 +223,7 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 @eopl-index{Data abstraction}
 @eopl-index["Implementation" "of ADT"]
 
+@eopl-index["Modules"]
 用类型强制数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
 (@author-ref{Liskov} et al., 1977)。这发展为 Standard ML (@author-ref{Milner} et
 al., 1989) （另见 @author-ref{Paulson}, 1996; @author-ref{Ullman}, 1998）的模块

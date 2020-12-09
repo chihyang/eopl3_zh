@@ -52,6 +52,7 @@
 同的硬件平台上执行。出于历史原因，常称这样的目标语言为@term["byte
 code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 @eopl-index["Byte code"]
+@eopl-index["Machine language"]
 
 编译器常常分为两部分：@term["analyzer"]{分析器}，尝试推断关于程序的有效信
 息；@term["translator"]{翻译器}，执行翻译，可能用到来自分析器的信息。这些

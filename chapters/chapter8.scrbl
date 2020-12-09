@@ -12,6 +12,7 @@
 
 @title[#:style part-title-style-numbered #:tag "modules"]{模块}
 
+@eopl-index[#:range-mark 'start "Modules"]
 要构建只有几百行代码的系统，我们介绍的语言特性已非常强大。如果我们要构建更大的系
 统，有数千行代码，我们就还需要一些别的佐料。
 
@@ -49,9 +50,11 @@ interface"]{简单接口}，接口列出模块提供的绑定及其类型。模�
 
 这些接口就像类型一样，决定了模块组合的方式。因为求出示例程序的值非常直接，因此我
 们关注其类型。如前所见，理解这种语言的定界和绑定规则是程序分析和求值的关键。
+@eopl-index[#:range-mark 'end "Modules"]
 
 @section[#:style section-title-style-numbered #:tag "s8.1"]{简单模块系统}
 
+@eopl-index[#:range-mark 'start "Modules" "simple"]
 我们的第一种语言名叫 SIMPLE-MODULES，只有简单模块。它没有模块过程，只创建非常简
 单的抽象边界。几种流行语言使用与之类似的模块系统。
 
@@ -648,6 +651,7 @@ z : int]} 公布的所有值。
 的内容。
 
 这样，简单模块系统就完成了。
+@eopl-index[#:range-mark 'end "Modules" "simple"]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -1851,6 +1855,8 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
 
+@eopl-index[#:range-mark 'start "Module procedures"]
+@eopl-index[#:range-mark 'start "Modules" "parameterized"]
 OPAQUE-TYPES 中的程序有固定的依赖关系。模块 @tt{m4} 可能依赖 @tt{m3} 和 @tt{m2}，
 @tt{m2} 依赖 @tt{m1}。有时，我们说依赖关系是@term["hard-coded"]{硬编码} 的。通常，
 这种硬编码的依赖关系会导致糟糕的程序设计，因为这使模块难以复用。本节，我们给系统
@@ -2460,7 +2466,9 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
           (proc-iface rand-name rand-iface body-iface))))))
 ]
 
-@eopl-caption["fig-8.15"]{PROC-MODULES的检查器，第1部分}
+@eopl-caption["fig-8.15"]{PROC-MODULES的检查器，第1部分
+                          @eopl-index["Module procedures"]
+                          @eopl-index["Modules" "parameterized"]}
 }
 
 判断这种关系的代码较为直白（@figure-ref{fig-8.16}）。判断
@@ -2473,6 +2481,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @eopl-index["Ice cream sundaes"]
 现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
 足坚果接口的。怎么混合不要紧，好吃就行！
+@eopl-index[#:range-mark 'end "Module procedures"]
+@eopl-index[#:range-mark 'end "Modules" "parameterized"]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2506,7 +2516,9 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
                       tenv)))))))))))
 ]
 
-@eopl-caption["fig-8.16"]{PROC-MODULES 的检查器，第 2 部分}
+@eopl-caption["fig-8.16"]{PROC-MODULES 的检查器，第 2 部分
+                          @eopl-index["Module procedures"]
+                          @eopl-index["Modules" "parameterized"]}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{

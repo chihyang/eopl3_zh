@@ -19,10 +19,13 @@
 @term["Object-oriented programming"]{面向对象编程} 正是用来完成此任务的技术。
 
 @eopl-index["Field of object"]
+@eopl-index["Member of object"]
+@eopl-index["Method of object"]
 在面向对象编程中，每个受管理的状态称为一个@term["object"]{对象}。一个对象中存有
 多个量，称为@term["field"]{字段}；有多个相关过程，称为@term["method"]{方法}，方
 法能够访问字段。调用方法常被视为将方法名和参数当作消息传给对象；有时，又说这是
 从@term["message-psasing"]{消息传递} 的视角看待面向对象编程。
+@eopl-index["Message passing, object-oriented (method calls)"]
 
 在@secref{state}那样的有状态语言中，过程同样展现了用对象编程的优势。过程是一种对
 象，其状态包含于自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
@@ -48,10 +51,12 @@
 者控制。例如，猫能吃，打呼噜，跳，躺下，这些活动都由猫当前的状态控制，包括有多饿，
 有多累。
 
-@eopl-index["Abstract type"]对象和模块颇多相似，但又截然不同。模块和类都提供了定
-义模糊类型的机制。但对象是一种具有行为的数据结构，模块只是一组绑定。同一个类可以
-有很多个对象；大多数模块系统没有提供相仿的能力。但是，PROC-MODULES 这样的模块系
-统提供了更为灵活的方式来控制名字的可见性。模块和类可以相得益彰。
+对象和模块颇多相似，但又截然不同。模块和类都提供了定义模糊类型的机制。但对象是一
+种具有行为的数据结构，模块只是一组绑定。同一个类可以有很多个对象；大多数模块系统
+没有提供相仿的能力。但是，PROC-MODULES 这样的模块系统提供了更为灵活的方式来控制
+名字的可见性。模块和类可以相得益彰。
+@eopl-index["Modules"]
+@eopl-index["Abstract type"]
 
 @section[#:style section-title-style-numbered #:tag "s9.1"]{面向对象编程}
 
@@ -60,10 +65,12 @@
 @eopl-index["Classes" "declaration of"]
 @eopl-index["Declaration" "of classes"]
 
+@eopl-index[#:range-mark 'start "Method of object"]
 @figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于 @tt{object} 的
 类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。
 @eopl-index["Field of object"]
 @eopl-index["Instance variables"]
+@eopl-index["Member of object"]
 字段叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类@tt{c1}
 支持三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
 @tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，若干
@@ -71,6 +78,8 @@
 @term["method body"]{方法主体}。@eopl-index["Body" (eopl-index-entry "of method"
 "method")]方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
+@eopl-index["Message passing, object-oriented (method calls)"]
+@eopl-index[#:range-mark 'end "Method of object"]
 
 @eopl-figure[#:position "!ht"]{
 @eopl-code{
@@ -419,10 +428,12 @@ in send o3 m3()
 @eopl-index["Classes" "declaration of"]
 @eopl-index["Declaration" "of classes"]
 程序中首先是一些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超
-类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec} 中的
+类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec}
 @eopl-index["Declaration" "of method"]
-过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过程、
-多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
+@eopl-index["Method of object" "declaration of"]
+中的过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过
+程、多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和
+@tt{list}。
 @eopl-index["List operations"]
 列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
 @eopl-index[(eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
@@ -479,10 +490,12 @@ in send o3 m3()
 
 @tt{self} 表达式返回当前方法操作的对象。
 
+@eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
 @tt{send} 表达式包含一值为对象的表达式，一个方法名，以及 0 或多个操作数。它从对
 象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像
 IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引
 用绑定起来，并在这个词法绑定作用域内求方法主体的值。
+@eopl-index[#:range-mark 'end "Message passing, object-oriented (method calls)"]
 
 @tt{super-call} 表达式包含一个方法名和 0 或多个参数。它从表达式持有类的超类开始，
 找出指定的方法，然后以当前对象为 @tt{self}，求出方法主体的值。
@@ -527,6 +540,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
   (apply-env env '%self))
 }}
 
+@eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
 求 @tt{send} 表达式的值时，操作数和对象表达式都需要求值。我们从对象中找出它的类
 名，然后用 @tt{find-method} 找出方法。@tt{find-method} 取一个类名和一个方法名，
 返回一个方法。接着，我们用当前对象和方法的参数调用这个方法。
@@ -542,7 +556,9 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
         method-name)
       obj
       args)))
-}}
+}
+@eopl-index[#:range-mark 'end "Message passing, object-oriented (method calls)"]
+}
 
 超类调用与普通方法调用类似，不同之处是，要在表达式持有类的超类中查找方法。
 它在 @tt{value-of} 中的对应语句是：
@@ -679,6 +695,8 @@ in send o3 m1(7,8)
 
 @eopl-index[#:range-mark 'start "Environments" @eopl-index-entry["for method call" "methodcall"]]
 @eopl-index[#:range-mark 'start "Field of object"]
+@eopl-index[#:range-mark 'start "Member of object"]
+@eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
 接下来我们处理方法。方法就像过程，但是它们不保存环境，而是记录所引用的字段名。方
 法调用在如下环境中执行其主体：
 
@@ -761,6 +779,8 @@ in send o3 m1(7,8)
 头，其余值则不可见。@eopl-index["Host class"]
 @eopl-index[#:range-mark 'end "Environments" @eopl-index-entry["for method call" "methodcall"]]
 @eopl-index[#:range-mark 'end "Field of object"]
+@eopl-index[#:range-mark 'end "Member of object"]
+@eopl-index[#:range-mark 'end "Message passing, object-oriented (method calls)"]
 
 @subsection[#:style section-title-style-numbered #:tag "s9.4.3"]{类和类环境}
 
@@ -876,6 +896,7 @@ in send o3 m1(7,8)
 @subsection[#:style section-title-style-numbered #:tag "s9.4.4"]{方法环境}
 
 @eopl-index[#:range-mark 'start "Environments" "method environments"]
+@eopl-index[#:range-mark 'start "Method environments"]
 剩下的只有 @tt{find-method} 和 @tt{merge-method-envs} 了。
 
 像处理类那样，我们用列表 @tt{(方法名,方法)} 的列表表示方法环境，用
@@ -926,6 +947,7 @@ in send o3 m1(7,8)
 
 构建方法环境还有其他一些方式，它们在方法查询时更高效（@exercise-ref{ex9.18}）。}
 @eopl-index[#:range-mark 'end "Environments" "method environments"]
+@eopl-index[#:range-mark 'end "Method environments"]
 
 @eopl-figure{
 @racketblock[
@@ -1146,12 +1168,14 @@ in list(send o1 get-serial-number(),
 
 @exercise[#:level 2 #:tag "ex9.16"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.16"] "Method of object" "overloading of"]
 面向对象编程语言常允许@term["overloading"]{重载} 方法。这一特性允许类有多个同名
 方法，只要它们有不同的@term["signature"]{签名}。方法签名通常是方法名加上参数类型。
 由于 CLASSES 中没有类型，我们只能依靠方法名和参数个数重载方法。例如，某个类可能
 有两个 @tt{initialize} 方法，一个没有参数，用它来初始化时，需要给字段默认值；另
 一个有一个参数，用它来初始化时，需要给字段特定值。扩展我们的解释器，允许通过方法
 的参数个数重载方法。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.16"] "Method of object" "overloading of"]
 
 }
 
@@ -1199,12 +1223,14 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 
 @exercise[#:level 2 #:tag "ex9.22"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.22"] "Method of object" "overloading of"]
 在@exercise-ref{ex9.16} 中，我们扩展解释器，给语言添加了重载。另一种支持重载的方
 式不需修改解释器，而是用语法预处理器。写一个预处理器，将每个方法 @${m} 重命名为
 @$["m:@n"] 的形式，其中，@${n} 是方法声明中参数的数量。同时，它还必须根据操作数
 的数量改变每个方法调用的名字。我们假定程序员在方法名中不使用 @$[":@"]，但解释器
 接受使用 @$[":@"] 的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧
 的例子，名为@term["name mangling"]{名称混淆}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.22"] "Method of object" "overloading of"]
 
 }
 
@@ -1737,6 +1763,7 @@ interface stringable
 @eopl-caption["fig-9.14"]{面向对象表达式在 @tt{type-of} 中的对应语句，第 1 部分}
 }
 
+@eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
 接下来我们考虑方法调用。现在，我们的语言中有三种调用：过程调用、方法调用和超类调
 用。我们抽象出一个过程来检查它们。
 
@@ -1812,6 +1839,7 @@ interface stringable
 列表长度相同且对应元素满足谓词时，返回 @tt{#t}，否则返回 @tt{#f}。
 @eopl-index[#:range-mark 'end "Contravariant subtyping"]
 @eopl-index[#:range-mark 'end "Covariant subtyping"]
+@eopl-index[#:range-mark 'end "Message passing, object-oriented (method calls)"]
 
 @eopl-figure{
 @racketblock[
@@ -2055,6 +2083,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 }
 
 @eopl-index["Declaration" "of method"]
+@eopl-index["Method of object" "declaration of"]
 要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
 境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
 的子类型。
@@ -2106,7 +2135,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 ]
 
 @eopl-caption["fig-9.20"]{@tt{check-method-decl!}
-                          @eopl-index["Declaration" "of method"]}
+                          @eopl-index["Declaration" "of method"]
+                          @eopl-index["Method of object" "declaration of"]}
 }
 
 @eopl-figure[#:position "!ht"]{
