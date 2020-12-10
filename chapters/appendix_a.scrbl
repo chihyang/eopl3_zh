@@ -172,12 +172,14 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 @tt{call-with-current-continuation}，始见于 @author-ref{Clinger} et al. (1985b)。
 @eopl-index[(eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
 
+@eopl-index[#:range-mark 'start "Multithreaded programs"]
 @author-ref{Wand} (1980a) 展示了如何用续文建模轻量级进程或线程。续文用途广泛，远
 超本书讨论范围，如@term["coroutine"]{协程} (@author-ref{Haynes} et al., 1986)。
 
 我们对线程的讨论模拟了 POSIX 线程 （例如，参见 @author-ref{Lewis} &
 @author-ref{Berg}, 1998）。@exercise-ref{ex5.56} 基于 Erlang 的消息传递并发模型
 (@author-ref{Armstrong}, 2007)。
+@eopl-index[#:range-mark 'end "Multithreaded programs"]
 
 @author-ref{Steele} 的 RABBIT 编译器 (@author-ref{Steele}, 1978) 以 CPS 变换为基
 础。这一编译器首先对源程序做 CPS 变换，然后以数据结构表示续文。得出的程序像我们

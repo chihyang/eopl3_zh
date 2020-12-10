@@ -642,9 +642,10 @@ val1 val2)} 的值传给当前续文。
 
 @eopl-index[#:range-mark 'start "Expressions" "tail form"]
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择 LETREC 作为
-输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。其语法如@figure-ref{fig-6.3}
-所示，我们称之为 CPS-IN。为了区分这种语言和输出语言的表达式，我们把这些
-叫做@term["input expression"]{输入表达式}。
+输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。
+@eopl-index["Multiple-procedure declaration"]
+其语法如@figure-ref{fig-6.3} 所示，我们称之为 CPS-IN。为了区分这种语言和输出语言
+的表达式，我们把这些叫做@term["input expression"]{输入表达式}。
 
 @eopl-index["CPS-IN"]
 要定义 CPS 变换算法的可能输出，我们要找出 CPI-IN 的子集，在这个集合中，过程调用
@@ -1747,7 +1748,9 @@ in ...
 
 @exercise[#:level 2 #:tag "ex6.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.25"] "Multiple-variable declaration"]
 扩展 CPS-IN，让 @tt{let} 表达式声明任意数量的变量（@exercise-ref{ex3.16}）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.25"] "Multiple-variable declaration"]
 
 }
 

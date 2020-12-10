@@ -902,6 +902,7 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 2 #:tag "ex3.16"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.16"] "Multiple-variable declaration"]
 扩展语言，允许 @tt{let} 声明任意数量的变量，语法为：@linebreak[]
 
 @$${\mathit{Expression} ::= @tt{let @${\{}@${\mathit{Identifier}} = @${\mathit{Expression}\}^*} in @${\mathit{Expression}}}}
@@ -919,6 +920,7 @@ in let x = -(x,1)
 }
 
 值应为1。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.16"] "Multiple-variable declaration"]
 }
 
 @exercise[#:level 2 #:tag "ex3.17"]{
@@ -1289,6 +1291,7 @@ in let f = proc (z) -(z,x)
 @exercise[#:level 1 #:tag "ex3.20"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.20"] "Currying"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.20" "ex3.21"] "Multiple-argument procedures"]
 在PROC中，过程只能有一个参数，但是可以用返回其他过程的过程来模拟多参数过程。例如，
 可以写出这样的代码：
 
@@ -1317,6 +1320,7 @@ in ((f 3) 4)
         \mathit{Expression} &::= @tt{proc (@m{\{\mathit{Identifier}\}^{*(,)}}) @m{\mathit{Expression}}} \\[-3pt]
         \mathit{Expression} &::= @tt{(@m{\mathit{Expression}} @m{\mathit{\{Expression\}^{*}}})}
 }
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.20" "ex3.21"] "Multiple-argument procedures"]
 }
 
 @exercise[#:level 3 #:tag "ex3.22"]{
@@ -1637,12 +1641,15 @@ in (double 6)
 
 @exercise[#:level 1 #:tag "ex3.31"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.31"] "Multiple-argument procedures"]
 扩展上面的语言，允许声明任意数量参数的过程，像@exercise-ref{ex3.21} 那样。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.31"] "Multiple-argument procedures"]
 
 }
 
 @exercise[#:level 1 #:tag "ex3.32"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
 扩展上面的语言，允许声明任意数量的单参数互递归过程，例如：
 
 @eopl-code{
@@ -1658,8 +1665,11 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.33"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.33"] "Multiple-argument procedures"]
 扩展上面的语言，允许声明任意数量的互递归过程，每个过程的参数数量也任意，就
 像@exercise-ref{ex3.21} 那样。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.33"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
 
 }
 
@@ -1707,6 +1717,7 @@ in (odd 13)
 
 @exercise[#:level 2 #:tag "ex3.36"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
 扩展这种实现，处理@exercise-ref{ex3.32} 中的语言。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
 
@@ -1735,6 +1746,7 @@ in let fact = proc (n)
 程 @tt{even} 和 @tt{odd}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
 
 }
 

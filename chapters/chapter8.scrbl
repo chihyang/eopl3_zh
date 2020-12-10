@@ -707,8 +707,14 @@ z : int]} 公布的所有值。
 
 @exercise[#:level 1 #:tag "ex8.4"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.4"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.4"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.4"] "Multiple-variable declaration"]
 修改语言的表达式，像@exercise-ref{ex7.24} 那样，加入多声明 @tt{let}、多参数过程
 和多声明 @tt{letrec}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.4"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.4"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.4"] "Multiple-variable declaration"]
 
 }
 
@@ -1797,8 +1803,14 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 @exercise[#:level 1 #:tag "ex8.16"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.16"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.16"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.16"] "Multiple-variable declaration"]
 用@exercise-ref{ex7.24} 中的语言扩展本节的系统，然后重写@exercise-ref{ex8.15}，
 用多参数过程代替返回过程的过程。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.16"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.16"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.16"] "Multiple-variable declaration"]
 
 }
 
@@ -2530,7 +2542,9 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 
 @exercise[#:level 1 #:tag "ex8.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.25"] "Multiple-argument procedures"]
 扩展 PROC-MODULES，像@exercise-ref{ex3.21} 那样，允许模块取多个参数。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.25"] "Multiple-argument procedures"]
 
 }
 

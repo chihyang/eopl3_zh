@@ -629,9 +629,15 @@ in |@${e_{letrec\mbox{-}body}}
 @eopl-index[#:range-mark 'end "CHECKED"]
 @exercise[#:level 2 #:tag "ex7.5"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.5"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.5"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.5"] "Multiple-variable declaration"]
 扩展检查器，处理多声明 @tt{let}、多参数过程、以及多声明 @tt{letrec}。你需要添加
 形如 @tt{@${t_1} * @${t_2} * @${\dots} * @${t_n} -> @${t}} 的类型来处理多参数过
 程。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.5"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.5"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.5"] "Multiple-variable declaration"]
 
 }
 
@@ -1449,6 +1455,7 @@ in letrec
 
 @exercise[#:level 2 #:tag "ex7.15"]{
 
+@eopl-index["Multiple-procedure declaration"]
 写出 @tt{letrec} 表达式的类型推导规则。你的规则应能处理多声明的 @tt{letrec}。用
 你的规则推导下列每个表达式的类型，或者判定表达式无类型。
 
@@ -2045,7 +2052,13 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @exercise[#:level 2 #:tag "ex7.24"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.24"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.24"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.24"] "Multiple-variable declaration"]
 扩展推导器，处理多声明 @tt{let}、多参数过程和多声明 @tt{letrec}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.24"] "Multiple-argument procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.24"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.24"] "Multiple-variable declaration"]
 
 }
 

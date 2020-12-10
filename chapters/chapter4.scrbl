@@ -520,7 +520,9 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
 
 @exercise[#:level 3 #:tag "ex4.13"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.13"] "Multiple-argument procedures"]
 扩展前一道练习中的解释器，支持多参数过程。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.13"] "Multiple-argument procedures"]
 
 }
 
@@ -980,12 +982,15 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.17"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.17"] "Multiple-argument procedures"]
 写出规则并实现多参数过程和声明多变量的 @tt{let}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.17"] "Multiple-argument procedures"]
 
 }
 
 @exercise[#:level 2 #:tag "ex4.18"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.18" "ex4.19"] "Multiple-procedure declaration"]
 写出规则并实现声明多过程的 @tt{letrec} 表达式。
 
 }
@@ -995,6 +1000,7 @@ in begin
 @eopl-index[#:suffix @exer-ref-range["ex4.19"] "Closures"]
 修改声明多过程的 @tt{letrec} 实现，让每个闭包只生成一次，并且只分配一个位置。本
 题类似@exercise-ref{ex3.35}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.18" "ex4.19"] "Multiple-procedure declaration"]
 
 }
 

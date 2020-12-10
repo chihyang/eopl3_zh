@@ -847,13 +847,17 @@
 
 @exercise[#:level 2 #:tag "ex5.7"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.7"] "Multiple-variable declaration"]
 给解释器添加多声明的 @tt{let}（@exercise-ref{ex3.16}）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.7"] "Multiple-variable declaration"]
 
 }
 
 @exercise[#:level 2 #:tag "ex5.8"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.8"] "Multiple-argument procedures"]
 给解释器添加多参数过程（@exercise-ref{ex3.21}）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.8"] "Multiple-argument procedures"]
 
 }
 
@@ -1657,7 +1661,9 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 2 #:tag "ex5.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.25"] "Multiple-argument procedures"]
 寄存支持多参数过程的解释器（@exercise-ref{ex3.21}）。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.25"] "Multiple-argument procedures"]
 
 }
 
@@ -2185,6 +2191,7 @@ in ...
 
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
 
+@eopl-index[#:range-mark 'start "Multithreaded programs"]
 许多编程任务中，可能需要一次进行多项计算。当这些计算作为同一进程的一部分，运行在
 同一地址空间，通常称它们为@term["thread"]{线程}。本节，我们将看到如何修改解释器，
 模拟多线程程序的执行。
@@ -2733,6 +2740,7 @@ in let mut = mutex()
 }
 
 @eopl-index[#:range-mark 'end "Binary semaphore"]
+@eopl-index[#:range-mark 'end "Multithreaded programs"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 

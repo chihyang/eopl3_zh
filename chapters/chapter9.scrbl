@@ -199,6 +199,7 @@ in send o1 odd(13)}|
 的所有类都有唯一父类，但可以有多个子类。因此，由@tt{extends} 得出的关系在类与类
 之间产生了树状结构，其根为 @tt{object}。因为每个类至多只有一个直接超类，这是
 一种@term["single-inheritance"]{单继承} 语言。有些语言允许类继承自多个超类。
+@eopl-index["Multiple inheritance"]
 @term["multiple inheritance"]{多继承} 虽然强大，却不无问题。在练习中，我们考虑一
 些不便之处。
 
@@ -431,6 +432,9 @@ in send o3 m3()
 类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec}
 @eopl-index["Declaration" "of method"]
 @eopl-index["Method of object" "declaration of"]
+@eopl-index["Multiple-argument procedures"]
+@eopl-index["Multiple-procedure declaration"]
+@eopl-index["Multiple-variable declaration"]
 中的过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过
 程、多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和
 @tt{list}。
