@@ -1755,6 +1755,7 @@ odd:  if (x=0) then return(0)
 @section[#:style section-title-style-numbered #:tag "s5.4"]{异常}
 
 @eopl-index[#:range-mark 'start "Exception handling"]
+@eopl-index[#:range-mark 'start "Nonstandard control flow"]
 迄今为止，我们只用续文管理语言中的普通控制流。但是续文还能让我们修改控制上下文。让
 我们来给我们的语言添加@term["exception handling"]{异常处理}。我们给语言新
 增两个生成式：
@@ -2079,6 +2080,7 @@ in ((index 5) list(2, 3))
 如果列表包含期望值，那么我们不需调用 @tt{apply-handler}，而是调用
 @tt{apply-cont}，并执行续文中所有待完成的 @tt{diff}。
 @eopl-index[#:range-mark 'end "Exception handling"]
+@eopl-index[#:range-mark 'end "Nonstandard control flow"]
 
 @exercise[#:level 2 #:tag "ex5.35"]{
 
@@ -2556,6 +2558,7 @@ in let mut = mutex()
 产者向共享缓存插入值时唤醒。
 
 @eopl-index[#:range-mark 'start "Binary semaphore"]
+@eopl-index[#:range-mark 'start "Mutation"]
 有许多方式设计这类同步组件。一种简单的方式是使用@term['("mutex exclusion"
 "mutex")]{互斥锁} 或@term["binary semaphore"]{二元信号量}。
 
@@ -2736,11 +2739,13 @@ in let mut = mutex()
 ]
 
 @eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}
-                          @eopl-index["Binary semaphore"]}
+                          @eopl-index["Binary semaphore"]
+                          @eopl-index["Mutation"]}
 }
 
 @eopl-index[#:range-mark 'end "Binary semaphore"]
 @eopl-index[#:range-mark 'end "Multithreaded programs"]
+@eopl-index[#:range-mark 'end "Mutation"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 

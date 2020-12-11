@@ -75,6 +75,7 @@ Lambda 演算由邱奇发明 (@author-ref{Church}, 1941)，用于研究数理逻
 
 @eopl-index["Contour diagrams"]
 @eopl-index["Lexical scope rules"]
+@eopl-index["Names, eliminating"]
 @figure-ref{fig-3.13} 那样的等深线用来解释词法作用域，首先由
 @author-ref{Johnston} (1971) 提出。无名解释器和翻译器基于德布鲁金索引
 (@author-ref{de Bruijn}, 1972)。

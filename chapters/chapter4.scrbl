@@ -71,7 +71,8 @@
  @item{@tt{deref}，@term["deference"]{解引用} ：返回引用指向位置处的内容。
  @eopl-index["Dereferencing"]}
 
- @item{@tt{setref}，改变引用指向位置处的内容。}
+ @item{@tt{setref}，改变引用指向位置处的内容。
+ @eopl-index[#:range-mark 'start "Mutation"]}
 
 ]
 
@@ -339,6 +340,7 @@ end
        \end{gathered}}
 }
 
+@eopl-index["Mutation"]
 这条规则是说：@tt{setref-exp} 从左到右求操作数的值。第一个操作数的值必须是某个位
 置 @${l} 的引用；然后 @tt{setref-exp} 把第二个参数的值 @${val} 放到位置 @${l} 处，
 以此更新存储器。@tt{setref-exp} 应该返回什么呢？它可以返回任何值。为了强调这一选
@@ -684,11 +686,13 @@ newref: 分配位置 2
 @section[#:style section-title-style-numbered #:tag "s4.3"]{IMPLICIT-REFS：隐式引用语言}
 
 @eopl-index[#:range-mark 'start "IMPLICIT-REFS"]
-显式引用设计清晰描述了内存的分配、解引用和修改，因为显而易见，这些操作都在程序员
+@eopl-index[#:range-mark 'start "Mutation"]
+显式引用设计清晰描述了内存的分配、解引用和变更，因为显而易见，这些操作都在程序员
 的代码之中。
 
-大多数编程语言都用共同的方式处理分配、解引用和修改，并把它们打包为语言的一部分。
+大多数编程语言都用共同的方式处理分配、解引用和变更，并把它们打包为语言的一部分。
 这样，由于这些操作存在于语言内部，程序员不需要担心何时执行它们。
+@eopl-index[#:range-mark 'end "Mutation"]
 
 在这种设计中，每个变量都表示一个引用。指代值是包含表达值的位置的引用。引用不再是
 表达值，只能作为变量绑定。@eopl-index["Allocation" (eopl-index-entry "in store" "store")]
@@ -1090,7 +1094,7 @@ in let p = proc (y) -(y,x)
                          }
 }
 
-非终止符 @${\mathit{Expression}} 指的是 IMPLICIT-REFS 语言中的表达式，可能稍有扩
+非终结符 @${\mathit{Expression}} 指的是 IMPLICIT-REFS 语言中的表达式，可能稍有扩
 展。
 
 }
@@ -1169,8 +1173,10 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 3 #:tag "ex4.26"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.26"] "Mutual recursion"]
 扩展前一道练习中的解答，允许同一块语句中声明的过程互递归。考虑给语言增加限制，块
 中的过程声明要在变量声明之后。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.26"] "Mutual recursion"]
 
 }
 
@@ -1211,6 +1217,7 @@ in let p = proc (y) -(y,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.1"]{实现}
 
+@eopl-index[#:range-mark 'start "MUTABLE-PAIRS"]
 我们可以直接用前例中的 @tt{reference} 数据类型实现可变序对。
 代码如@figure-ref{fig-4.9} 所示。
 
@@ -1420,8 +1427,11 @@ newref: 分配位置 7
     (setref! (+ 1 p) val)))
 ]
 
-@eopl-caption["fig-4.13"]{可变序对的另一种表示}
+@eopl-caption["fig-4.13"]{可变序对的另一种表示
+                          @eopl-index["MUTABLE-PAIRS"]}
 }
+
+@eopl-index[#:range-mark 'end "MUTABLE-PAIRS"]
 
 @exercise[#:level 2 #:tag "ex4.28"]{
 

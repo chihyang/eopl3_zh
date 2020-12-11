@@ -47,6 +47,7 @@
 那么所有关于数据表示的信息必然在实现代码之中。实现最重要的部分就是表示数据的规范。
 我们用符号 @${\lceil v \rceil} 指代@exact-elem{“}数据 @${v} 的表示@exact-elem{”}。
 
+@eopl-index[#:range-mark 'start "Natural numbers ADT"]
 要说得更明白些，来看一个简单例子：自然数类型。待表示的数据是自然数。接口由四个过
 程组成：@tt{zero}、@tt{is-zero?}、@tt{successor} 和 @tt{predecessor}。当然，不是
 随便几个过程都可以作为这一接口的实现。当且仅当一组过程满足如下四个方程时，可以作
@@ -88,12 +89,15 @@ y\rceil}}。}
 大多数接口都包含：若干@term["constructor"]{构造器}，用来产生数据类型的元素；
 若干@term["observer"]{观测器}，用来从数据类型的值中提取信息。这里有三个构造器，
 @tt{zero}、@tt{successor} 和 @tt{predecessor}；一个观测器，@tt{is-zero?}。
+@eopl-index[#:range-mark 'end "Natural numbers ADT"]
 
 可以用多种方式表示这套接口，我们考虑其中三种。
 
 @itemlist[#:style 'ordered
 
- @item{@term["Unary representation"]{一元表示法}：在一元表示法中，自然数@${n} 由
+ @item{@eopl-index[#:range-mark 'start "Natural numbers ADT"
+ @eopl-index-entry["with unary representation" "unaryrepresentation"]]
+ @term["Unary representation"]{一元表示法}：在一元表示法中，自然数@${n} 由
  @${n} 个 @tt{#t} 组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1} 表示为
  @tt{(#t)}，@${2} 表示为 @tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
 
@@ -107,9 +111,13 @@ y\rceil}}。}
  @racketblock[(define zero (lambda () '()))
  (define is-zero? (lambda (n) (null? n)))
  (define successor (lambda (n) (cons #t n)))
- (define predecessor (lambda (n) (cdr n)))]}}
+ (define predecessor (lambda (n) (cdr n)))]}
+ @eopl-index[#:range-mark 'start "Natural numbers ADT"
+ @eopl-index-entry["with unary representation" "unaryrepresentation"]]}
 
- @item{@term["Scheme number representation"]{Scheme 数字表示法}：在这种表示中，
+ @item{@eopl-index[#:range-mark 'start "Natural numbers ADT"
+ @eopl-index-entry["with Scheme numbers" "Schemenumbers"]]
+ @term["Scheme number representation"]{Scheme 数字表示法}：在这种表示中，
  只需用 Scheme 内置的数字表示法（本身可能十分复杂！）。令 @${\lceil n \rceil} 为
  Scheme 整数 @tt{n}，则所需的四个过程可以定义为：
 
@@ -117,12 +125,14 @@ y\rceil}}。}
  @racketblock[(define zero (lambda () 0))
  (define is-zero? (lambda (n) (zero? n)))
  (define successor (lambda (n) (+ n 1)))
- (define predecessor (lambda (n) (- n 1)))]}
-
+ (define predecessor (lambda (n) (- n 1)))]
+@eopl-index[#:range-mark 'end "Natural numbers ADT"
+@eopl-index-entry["with Scheme numbers" "Schemenumbers"]]}
  }
 
  @item{@term["Bignum representation"]{大数表示法}：
  @eopl-index["Bignum representation of natural numbers"]
+ @eopl-index[#:range-mark 'start "Natural numbers ADT" @eopl-index-entry["with bignum representation" "bignumrepresentation"]]
  在大数表示法中，数值以 @${N} 进制表示，@${N} 是某个大整数。该方法以 @${0} 到
  @${N-1} 之间的数字（有时不称数位，而称@term["bigits"]{大位}）组成的列表表示数值，
  这就很容易表示远超机器字长的整数。这里，为了便于使用，我们把最低位放在列表最前
@@ -134,7 +144,9 @@ y\rceil}}。}
  所以，如果 @${N = 16}，那么 @${\lceil 33 \rceil = @tt{(1 2)}}，@${\lceil 258
  \rceil = @tt{(2 0 1)}}，因为：
 
- @$${258 = 2 \times 16^0 + 0 \times 16^1 + 1 \times 16^2}}
+ @$${258 = 2 \times 16^0 + 0 \times 16^1 + 1 \times 16^2}
+ @eopl-index[#:range-mark 'end "Natural numbers ADT" @eopl-index-entry["with bignum representation" "bignumrepresentation"]]
+ }
 
 ]
 
@@ -167,6 +179,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.3"]{
 
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.3"]
+ "Natural numbers ADT" @eopl-index-entry["with diff-tree representation" "difftreerepresentation"]]
  用差分树表示所有整数（负数和非负数）。差分树是一列表，可用语法定义如下：
 
  @nested{@$${\mathit{Diff\mbox{-}tree} ::= @tt{(one)} \mid @tt{(diff
@@ -191,10 +205,10 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
    表示，可以给出不同的 @${2} 的合法表示。}
 
    @item{写出过程 @tt{diff-tree-plus}，用这种表示做加法。你的过程应针对不同的差
-   分树进行优化，并在常数时间内得出结果（即与输入大小无关）。注意，不可使用递归。}
-
-   ] }
-
+   分树进行优化，并在常数时间内得出结果（即与输入大小无关）。注意，不可使用递归。
+   @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.3"]
+   "Natural numbers ADT" @eopl-index-entry["with diff-tree representation" "difftreerepresentation"]]}
+   ]}
 }
 
 @section[#:style section-title-style-numbered #:tag "s2.2"]{数据类型的表示策略}
@@ -968,6 +982,7 @@ lambda 演算表达式的语法：
 @tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 
+@eopl-index["Mutual recursion"]
 由 @tt{define-datatype} 生成的数据结构可以互递归。例如，@secref{s1.1}中的 s-list
 语法为：
 
@@ -1277,14 +1292,16 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 达式，并提取出各部分。@pageref{lc-exp}的数据类型 @tt{lc-exp} 助我们轻松实现这些。
 
 @eopl-index[#:range-mark 'start "Abstract syntax tree"]
+@eopl-index[#:range-mark 'start "Nonterminal symbols"]
 将内在表示形象化为@term["abstract syntax tree"]{抽象语法树} 也很不错。
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
-字为标识。树枝以所出现的非终止符名字为标识。叶子对应终止符字符串。
+字为标识。树枝以所出现的非终结符名字为标识。叶子对应终止符字符串。
 
 要为某种具体语法设计抽象语法，需要给其中的每个生成式，以及生成式中出现的每个非终
-止符命名。很容易将抽象语法写成 @tt{define-datatype} 声明。我们为每个非终止符添加
+止符命名。很容易将抽象语法写成 @tt{define-datatype} 声明。我们为每个非终结符添加
 一个 @tt{define-datatype}，为每个生成式添加一个变体。
+@eopl-index[#:range-mark 'end "Nonterminal symbols"]
 
 @figure-ref{fig-2.2} 中挑出的内容可以精确表示如下：
 

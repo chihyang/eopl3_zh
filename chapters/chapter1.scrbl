@@ -309,6 +309,7 @@
 
   @item{@bold{非终结符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
         可能会定义数个集合。这些集合有时称为@term["syntactic category"]{句法类别}。
+        @eopl-index["Nonterminal symbols"]
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
@@ -712,6 +713,7 @@
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.2"]{@tt{nth-element}}
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{nth-element}} "nth-element"]]
 标准的 Scheme 过程 @tt{list-ref} 取一列表 @tt{lst} 和从 0 开始计数的索引 @tt{n}，
 返回 @tt{lst} 的第 @tt{n} 个元素。
 
@@ -790,6 +792,7 @@ C} 相同。
 错误信息无甚帮助。例如，当我们收到 @tt{car} 的错误信息，可能得找遍整个程序中使用
 @tt{car} 的地方。
 @eopl-index[#:range-mark 'end "Inductive specifications" "recursive procedures based on"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{nth-element}} "nth-element"]]
 
 @exercise[#:level 1 #:tag "ex1.6"]{
  如果调换 @tt{nth-element} 中两个检测的顺序，会有什么问题？
@@ -1022,6 +1025,8 @@ C} 相同。
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.5"]{@tt{subst}}
 
+@eopl-index[#:range-mark 'start "Mutual recursion"]
+@eopl-index[#:range-mark 'start "Nonterminal symbols"]
 过程 @tt{subst} 取三个参数：两个符号 @tt{new} 和 @tt{old}，一个 s-list，
 @tt{slist}。它检查 @tt{slist} 的所有元素，返回类似 @tt{slist} 的新列表，但把其中
 所有的 @tt{old} 替换为 @tt{new}。
@@ -1141,6 +1146,8 @@ C} 相同。
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
 @eopl-index[#:range-mark 'end "Follow the Grammar" "examples of"]
+@eopl-index[#:range-mark 'end "Mutual recursion"]
+@eopl-index[#:range-mark 'end "Nonterminal symbols"]
 
 @exercise[#:level 1 #:tag "ex1.11"]{
 
@@ -1178,17 +1185,20 @@ C} 相同。
 
 @itemlist[
 
- @item{为语法中的每个非终结符编写一个过程。这一过程负责处理相应非终结符的数据，
+ @item{@eopl-index[#:range-mark 'start "Nonterminal symbols"]
+ 为语法中的每个非终结符编写一个过程。这一过程负责处理相应非终结符的数据，
  不做其他。}
 
  @item{在每个过程中，为相应非终结符的每一生成式写一分支。你可能需要额外的分支结
- 构，但这样才能起步。对生成式右边出现的每个非终结符，递归调用相应的过程。}
+ 构，但这样才能起步。对生成式右边出现的每个非终结符，递归调用相应的过程。
+ @eopl-index[#:range-mark 'end "Nonterminal symbols"]}
 
 ]
 
 @section[#:style section-title-style-numbered #:tag "s1.3"]{辅助过程和上下文参数}
 
 @eopl-index[#:range-mark 'start "Auxiliary procedures"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]
 窍门@term[#f]{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这
 一过程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0
 @${v_0}) (1 @${v_1}) (2 @${v_2}) ...)}。
@@ -1227,6 +1237,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
   (lambda (lst n)
     (number-elements-from lst 0)))
 ]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]
 }
 
 这里有两个要点。首先，过程 @tt{number-elements-from} 的定义独立于
@@ -1235,7 +1246,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 什么。这给了我们一条口诀：
 
 @nested[#:style tip]{
- @centered{@elemtag["no-myth"]{@bold{避免神秘小工具！}}}
+ @centered{@elemtag["no-myth"]{@bold{避免神秘小工具！}}
+ @eopl-index["No Mysterious Auxiliaries"]}
 
  @para[#:style tip-content]{定义辅助过程时，总是指明它对所有参数值做什么，而不只
  是初始值。}}
@@ -1914,6 +1926,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 3 #:tag "ex1.36"]{
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.36"] @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]
  写出过程 @tt{g}，则@pageref{n-e}的 @tt{number-elements} 可以定义为：
 
  @eopl-code{
@@ -1923,5 +1936,6 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
      (if (null? lst) '()
          (g (list 0 (car lst))
             (number-elements (cdr lst))))))
- }}
+ }
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.36"] @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]}
 }

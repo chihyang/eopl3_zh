@@ -1203,6 +1203,8 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.19" "ex9.20"]
             (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.19" "ex9.20"]
+            "Names, eliminating" "from CLASSES"]
 为 CLASSES 实现词法寻址。首先，为本节语言写出类似@secref{s3.7}的词法地址计算器。
 然后修改环境的实现，去掉其中的名字。接着修改 @tt{value-of} 和 @tt{apply-env}，不
 再取符号，而是像@secref{s3.7.2}那样取一词法地址。
@@ -1215,6 +1217,8 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 么不能。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.19" "ex9.20"]
             (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.19" "ex9.20"]
+            "Names, eliminating" "from CLASSES"]
 
 }
 
@@ -1228,6 +1232,7 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 @exercise[#:level 2 #:tag "ex9.22"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.22"] "Method of object" "overloading of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.22"] "Nameless environment"]
 在@exercise-ref{ex9.16} 中，我们扩展解释器，给语言添加了重载。另一种支持重载的方
 式不需修改解释器，而是用语法预处理器。写一个预处理器，将每个方法 @${m} 重命名为
 @$["m:@n"] 的形式，其中，@${n} 是方法声明中参数的数量。同时，它还必须根据操作数
@@ -1235,6 +1240,7 @@ method-envs}，保证每个方法名只出现一次，而且总是出现在最�
 接受使用 @$[":@"] 的方法名。编译器经常使用这种技术实现方法重载。这是一种通用技巧
 的例子，名为@term["name mangling"]{名称混淆}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.22"] "Method of object" "overloading of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.22"] "Nameless environment"]
 
 }
 

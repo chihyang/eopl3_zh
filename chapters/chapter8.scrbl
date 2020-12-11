@@ -2134,6 +2134,8 @@ module from-int-maker
 
 @exercise[#:level 1 #:tag "ex8.20"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.20" "ex8.21" "ex8.22"]
+            "Natural numbers ADT" "module implementation of"]
 完成模块定义
 
 @eopl-code{
@@ -2191,6 +2193,8 @@ body
 }
 
 定义一个模块过程，它取一算术操作的实现，生成一过程，用这种实现做相等比较。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.20" "ex8.21" "ex8.22"]
+            "Natural numbers ADT" "module implementation of"]
 
 }
 

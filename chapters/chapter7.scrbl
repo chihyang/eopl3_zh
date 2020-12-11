@@ -300,7 +300,7 @@ proc (f)
 
 如果我们可以赋予表达式一个类型，我们说该表达式是@term["well-typed"]{正常类型} 的，
 否则说它是@term["ill-typed"]{异常类型} 或@term[#:full #f "has no type"]{无类型}
-的。@eopl-index["Ill-typed"]
+的。@eopl-index["Ill-typed"]@eopl-index["No type"]
 
 我们的分析基于以下原则：如果我们能预测表达式中所有子表达式的值类型，就能预测表达
 式的值类型。
@@ -765,6 +765,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 2 #:tag "ex7.11"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex7.11"] "MUTABLE-PAIRS"]
 扩展检查器，处理 MUTABLE-PAIRS。
 
 }
@@ -806,7 +807,7 @@ in (odd 13)
 }|
 }
 
-要定义这种语法，我们新添一个非终止符，@${\mathit{Optional\mbox{-}type}}，并修改
+要定义这种语法，我们新添一个非终结符，@${\mathit{Optional\mbox{-}type}}，并修改
 @tt{proc} 和 @tt{letrec} 的生成式，令其用可选类型替代类型。
 
 @nested[#:style small]{

@@ -883,7 +883,7 @@ in list(x, -(x,1), -(x,3))
 
 @eopl-index[#:suffix @exer-ref-range["ex3.14"]
             (eopl-index-entry @elem{Boolean expressions (@${\mathit{Bool\mbox{-}exp}})} "Booleanexpressions")]
-前一题的另一做法是给语言添加新的非终止符 @${\mathit{Bool\mbox{-}exp}}，作为布尔
+前一题的另一做法是给语言添加新的非终结符 @${\mathit{Bool\mbox{-}exp}}，作为布尔
 值表达式。修改条件表达式的生成式：
 
 @$${\mathit{Expression} ::= @tt{if @${\mathit{Bool\mbox{-}exp}} then @${\mathit{Expression}} else @${\mathit{Expression}}}}
@@ -1358,6 +1358,7 @@ in let times4 = proc (x) ((makemult makemult) x)
 
 @exercise[#:level 2 #:tag "ex3.24"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.24"] "Mutual recursion"]
 用上述程序里的小技巧写出@exercise-ref{ex3.32} 中的互递归程序 @tt{odd} 和 @tt{even}。
 
 }
@@ -1650,6 +1651,7 @@ in (double 6)
 @exercise[#:level 1 #:tag "ex3.32"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Mutual recursion"]
 扩展上面的语言，允许声明任意数量的单参数互递归过程，例如：
 
 @eopl-code{
@@ -1670,6 +1672,7 @@ in (odd 13)
 像@exercise-ref{ex3.21} 那样。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.33"] "Multiple-argument procedures"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Mutual recursion"]
 
 }
 
@@ -1718,6 +1721,7 @@ in (odd 13)
 @exercise[#:level 2 #:tag "ex3.36"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Mutual recursion"]
 扩展这种实现，处理@exercise-ref{ex3.32} 中的语言。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
 
@@ -1747,6 +1751,7 @@ in let fact = proc (n)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Mutual recursion"]
 
 }
 
@@ -1950,6 +1955,7 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 @eopl-index[#:range-mark 'start (eopl-index-entry "de Bruijin indices" "Bruijinindices")]
 @eopl-index[#:range-mark 'start "LETREC" "nameless version of"]
 @eopl-index[#:range-mark 'start "Lexical addressing"]
+@eopl-index[#:range-mark 'start "Names, eliminating" "from LETREC"]
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
 能会跨越多条等深线。跨越的等深线数目叫做变量引用的@term["lexical
 depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{“}从0开始的
@@ -2324,6 +2330,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 }
 
 @eopl-index[#:range-mark 'start "Environments" "nameless"]
+@eopl-index[#:range-mark 'start "Nameless environment"]
 我们不用全功能的环境，而是用无名环境，其接口如下：
 
 @eopl-code{
@@ -2382,7 +2389,8 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 
 @eopl-caption["fig-3.17"]{无名环境
-                          @eopl-index[#:range-mark 'end "Environments" "nameless"]}
+                          @eopl-index[#:range-mark 'end "Environments" "nameless"]
+                          @eopl-index[#:range-mark 'end "Nameless environment"]}
 }
 
 这一规范的实现可定义为：
@@ -2461,6 +2469,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
         (value-of exp1 (init-nameless-env))))))
 ]
 @eopl-index[#:range-mark 'end "LETREC" "nameless version of"]
+@eopl-index[#:range-mark 'end "Names, eliminating" "from LETREC"]
 }
 
 @exercise[#:level 1 #:tag "ex3.38"]{

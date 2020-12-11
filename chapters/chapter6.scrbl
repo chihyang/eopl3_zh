@@ -273,6 +273,7 @@
 像@secref{s1.3}一样，这里的 @${g} 是上下文参数；性质 @tt{(fact/k @${n} @${g}) =
 (@${g} @${n!})} 作为独立规范，遵循我们的原则@elemref["no-myth"]{@bold{避免神秘小工具}}。
 @eopl-index[#:range-mark 'end "Factorial function"]
+@eopl-index["No Mysterious Auxiliaries"]
 
 @eopl-index[#:range-mark 'start "Fibonacci sequence"]
 现在，我们用同样的方式转换计算斐波那契数列的 @tt{fib}。我们从下面的过程开始：
@@ -556,11 +557,13 @@ val1 val2)} 的值传给当前续文。
 @exercise[#:level 3 #:tag "ex6.8"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.8"] "Exception handling"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.8"] "Nonstandard control flow"]
 写出@secref{s5.4}解释器的过程表示和内联过程表示。这极富挑战性，因为我们实际上有
 两个观测器，@tt{apply-cont} 和 @tt{apply-handler}。提示：考虑修改
 @pageref{cps-recipe}的秘方，给每个过程添加两个参数，一个表示 @tt{apply-cont} 中
 续文的行为，一个表示 @tt{apply-handler} 中续文的行为。@linebreak[]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.8"] "Exception handling"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.8"] "Nonstandard control flow"]
 
 }
 
@@ -789,7 +792,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 名字总以 @tt{cps-} 开头，这样它们不会与 CPS-IN 中生成式的名字混淆。
 
 @eopl-index["Expressions" "simple"]
-新的语法有两个非终止符，@${\mathit{SimpleExp}} 和 @${\mathit{TfExp}}。这种设计中，
+新的语法有两个非终结符，@${\mathit{SimpleExp}} 和 @${\mathit{TfExp}}。这种设计中，
 @${\mathit{SimpleExp}} 表达式不包含任何过程调用，@${\mathit{TfExp}} 表达式一定是
 尾式。
 
@@ -2109,6 +2112,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
  @eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
  @eopl-index[#:range-mark 'start "Dereferencing"]
  @eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
+ @eopl-index[#:range-mark 'start "Mutation"]
 
  @nested[#:style small]{
  @envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
@@ -2216,6 +2220,7 @@ newrefk(33, proc (loc1)
 @eopl-index[#:range-mark 'end "Allocation" (eopl-index-entry "in store" "store")]
 @eopl-index[#:range-mark 'end "Dereferencing"]
 @eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
+@eopl-index[#:range-mark 'end "Mutation"]
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 
@@ -2241,6 +2246,7 @@ newrefk(33, proc (loc1)
 
 @eopl-index[#:range-mark 'start "Exception handling"]
 @eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'start "Nonstandard control flow"]
 最后是非局部控制流。我们来考虑@exercise-ref{ex5.42} 中的 @tt{letcc}。@tt{letcc}
 表达式 @tt{letcc @${var} in @${body}} 将当前续文绑定到变量 @${var}。@${body} 为
 该绑定的作用域。续文的唯一操作是 @tt{throw}。我们用语法 @tt{throw @${Expression}
@@ -2274,6 +2280,7 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 这个例子中，我们不需要给给 CPS-OUT 添加语法，因为我们操作的正是控制结构。
 @eopl-index[#:range-mark 'end "Exception handling"]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'end "Nonstandard control flow"]
 
 @exercise[#:level 1 #:tag "ex6.39"]{
 
