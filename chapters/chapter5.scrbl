@@ -96,13 +96,15 @@
 @eopl-index[#:range-mark 'end "Factorial function"]
 @eopl-index["Iterative control behavior"]
 
+@eopl-index["Operand position"]
 为什么这些程序呈现出不同的控制行为呢？在阶乘的递归定义中，过程 @tt{fact}
 在@term["operand position"]{操作数位置} 调用。我们需要保存这个调用的上下文，
 因为我们需要记住，过程调用执行完毕之后，仍需求出操作数的值，并执行外层调用，在本
 例中，是完成待做的乘法。这给出一条重要原则：
 
 @nested[#:style tip]{
- @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}}
+ @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}
+ @eopl-index["Operands"]}
 }
 
 本章，我们学习如何跟踪和操作控制上下文。我们的核心工具是
@@ -676,6 +678,7 @@
 }|
 }
 
+@eopl-index[#:range-mark 'start "Operands"]
 当 @tt{rand-cont} 收到一个值，它就可以调用过程了：
 
 @eopl-equation{
@@ -802,6 +805,7 @@
 @eopl-index[#:range-mark 'end "Continuations"]
 @eopl-index[#:range-mark 'end "Interpreter" "continuation-passing"]
 @eopl-index[#:range-mark 'end "LETREC" "continuation-passing interpreter for"]
+@eopl-index[#:range-mark 'end "Operands"]
 
 @exercise[#:level 1 #:tag "ex5.1"]{
 

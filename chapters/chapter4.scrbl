@@ -1825,6 +1825,7 @@ in let swap = proc (x) proc (y)
 
 @eopl-index["Eager evaluation"]
 @eopl-index[#:range-mark 'start "Lazy evaluation"]
+@eopl-index[#:range-mark 'start "Operands"]
 迄今为止，我们讨论的所有参数传递机制都是@term["eager"]{即时}的：它们总是找出每个
 操作数的值。现在我们来看另一种截然不同的传参机制，名叫@term["lazy
 evaluation"]{懒求值}。在懒求值中，操作数的值直到过程主体需要时才会求取。如果过程
@@ -1959,6 +1960,7 @@ in let f = proc (z) 11
 @eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-name" "Callbyname")]
 @eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-need" "Callbyneed")]
 @eopl-index[#:range-mark 'end "Lazy evaluation"]
+@eopl-index[#:range-mark 'end "Operands"]
 
 @exercise[#:level 1 #:tag "ex4.38"]{
 

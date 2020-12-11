@@ -497,6 +497,7 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Inlining"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -525,7 +526,8 @@ val1 val2)} 的值传给当前续文。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"]
              "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]}
 ]
 }
 
@@ -660,7 +662,8 @@ val1 val2)} 的值传给当前续文。
 @nested{
 @nested[#:style tip]{
  @centered{@bold{不是过程调用，而是操作数的求值导致控制上下文扩大。}
-           @eopl-index["Control context"]}
+           @eopl-index["Control context"]
+           @eopl-index["Operands"]}
 }
 
 @eopl-index[#:range-mark 'start "Factorial function"]
@@ -783,7 +786,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 }
 
 @eopl-caption["fig-6.4"]{CPS-IN 中的尾端和操作数位置。尾端记为 @${T}。操作数位置
-记为 @${O}。}
+记为 @${O}。@eopl-index["Operand position"]}
 }
 
 @eopl-index["CPS-OUT"]
@@ -1266,6 +1269,7 @@ proc (|@${var_1}, ..., |@${var_n}, k) (cps-of-exp |@${exp} k)
 
 其中，@tt{k} 是新变量，@${K} 表示续文，是任意简单表达式。
 
+@eopl-index[#:range-mark 'start "Operands"]
 有操作数的表达式呢？我们暂时给语言添加任意多个操作数的求和表达式。要添加这种表达
 式，我们给 CPS-IN 的语法添加生成式：
 
@@ -1553,7 +1557,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
         (cps-call-exp
           (car simples)
           (append (cdr simples) (list k-exp)))))))
-]}
+]
+@eopl-index[#:range-mark 'end "Operands"]}
 
 现在，我们可以写出 CPS 翻译器的剩余部分
 （@figure-ref{fig-6.10}--@countref{fig-6.12}）。它@emph{跟随语法}。当表达式总是

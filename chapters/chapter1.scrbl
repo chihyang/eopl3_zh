@@ -347,7 +347,7 @@
 }}
 
 给同一句法类别编写一组规则时，也可以只写一次 @${::=} 和左边内容，随后的各个右边
-内容用特殊符号@exact-elem{“}@${\mid}@exact-elem{”}（竖线，读作@term[#f]{或}）
+内容用特殊符号@exact-elem{“}@${\mid}@exact-elem{”}（竖线，读作@term[#f]{或}@eopl-index["Or"]）
 分隔。用@exact-elem{“}@${\mid}@exact-elem{”}，@List-of-Int-$[] 的语法可写成：
 
 
@@ -925,6 +925,7 @@ C} 相同。
 
 @eopl-index[#:range-mark 'start "Binding" "lambda"]
 @eopl-index[#:range-mark 'start "Lambda expression (LcExp)"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 过程 @tt{occurs-free?} 取一个变量 @${var}，由 Scheme 符号表示；一个 lambda 演算
 表达式 @${exp}，形如@definition-ref{d1.1.8}；判断 @${var} 是否自由出现于 @${exp}。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
@@ -980,7 +981,8 @@ C} 相同。
  @exact-elem{”}表示@term["inclusive or"]{涵盖或}，意为它包含 @${x} 同时自由出现
  于 @${e_1} 和 @${e_2} 的情况。我们通常用@exact-elem{“}或@exact-elem{”}表示这
  种意思。
- @eopl-index["Inclusive or"]}
+ @eopl-index["Inclusive or"]
+ @eopl-index["Or"]}
 
 ]
 
@@ -1022,6 +1024,7 @@ C} 相同。
 中的变量声明，或者 @tt{(caddr exp)} 指代 @tt{lambda} 表达式的主体。在
 @secref{s2.5}，我们展示如何显著改善这种情况。
 @eopl-index[#:range-mark 'end "Binding" "lambda"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.2.5"]{@tt{subst}}
 

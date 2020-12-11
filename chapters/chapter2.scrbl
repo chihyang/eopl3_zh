@@ -86,6 +86,7 @@
 y\rceil}}。}
 
 @eopl-index["Constructor"]
+@eopl-index["Observers"]
 大多数接口都包含：若干@term["constructor"]{构造器}，用来产生数据类型的元素；
 若干@term["observer"]{观测器}，用来从数据类型的值中提取信息。这里有三个构造器，
 @tt{zero}、@tt{successor} 和 @tt{predecessor}；一个观测器，@tt{is-zero?}。
@@ -156,6 +157,7 @@ y\rceil}}。}
 何操作而暴露（包括打印），那就说该类型是@term["opaque"]{模糊} 的，否则称之为
 @term["transparent"]{透明} 的。
 @eopl-index["Concrete types"]
+@eopl-index["Opaque type"]
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
 程序的作者小心行事，只使用接口中定义的过程。
@@ -634,6 +636,7 @@ lambda 演算表达式的语法：
 @tt{occurs-free?}。
 
 @eopl-code{
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 @racketblock[
 @#,elem{@elemtag["occurs-free?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
 (lambda (search-var exp)
@@ -648,6 +651,7 @@ lambda 演算表达式的语法：
         (occurs-free? search-var (app-exp->rator exp))
         (occurs-free? search-var (app-exp->rand exp))))))
 ]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 }
 
 只要使用上述构造器，怎样表示 lambda 演算表达式都可以。
@@ -899,6 +903,7 @@ lambda 演算表达式的语法：
 其所有子表达式合法。如此一来，处理 lambda 表达式时就能跳过许多检查。
 
 @eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 我们用形式 @tt{cases} 代替谓词和提取器，判断数据类型的实例属于哪种变体，并提取出
 它的组件。为解释这一形式，我们用数据类型 @tt{lc-exp} 重写
 @tt{occurs-free?}（@pageref{occurs-free?}）：
@@ -952,7 +957,7 @@ lambda 演算表达式的语法：
 }
 
 递归调用 @tt{occurs-free?} 像这样完成运算。
-
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 }
 
 一般的 @tt{define-datatype} 声明形如：

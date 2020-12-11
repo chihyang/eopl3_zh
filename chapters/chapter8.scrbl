@@ -876,6 +876,7 @@ module m
 
 @section[#:style section-title-style-numbered #:tag "s8.2"]{声明类型的模块}
 
+@eopl-index[#:range-mark 'start "OPAQUE-TYPES"]
 @eopl-index{Abstract type}至今为止，我们的接口只声明了普通变量及其类型。在下面这
 种模块语言 OPAQUE-TYPES 中，我们还允许接口声明类型。例如，在定义
 
@@ -894,6 +895,7 @@ body
 }|
 }
 
+@eopl-index["Opaque type"]
 中，接口声明了类型 @tt{t}，以及该类型值的操作 @tt{zero}、@tt{succ}、@tt{pred} 和
 @tt{is-zero}。如同@secref{s2.1}，这套接口可能与算术操作的实现相关。这里的声明
 @tt{t} 为@term["opaque type"]{模糊类型}，意为，模块之外的代码不知道这种类型的值
@@ -1048,6 +1050,7 @@ take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我�
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
 @eopl-index[#:range-mark 'start "Abstract type"]
+@eopl-index[#:range-mark 'start "Opaque type"]
 模块还可以用 @tt{opaque-type} 声明输出@emph{模糊}类型。模糊类型有时又
 称作@term["abstract type"]{抽象类型}。
 
@@ -1297,6 +1300,7 @@ in let false = from mybool take false
 }
 
 @eopl-index[#:range-mark 'end "Abstract type"]
+@eopl-index[#:range-mark 'end "Opaque type"]
 
 @exercise[#:level 1 #:tag "ex8.12"]{
 
@@ -1785,7 +1789,8 @@ f : (t -> u)]                   f : (t -> (int -> int))]
           tenv)))))
 ]
 
-@eopl-caption["fig-8.11"]{OPAQUE-TYPES 的检查器，第 3 部分}
+@eopl-caption["fig-8.11"]{OPAQUE-TYPES 的检查器，第 3 部分
+                          @eopl-index["OPAQUE-TYPES"]}
 }
 
 这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?} 的定义扩展其类
@@ -1826,6 +1831,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 我们代码依赖的不变式是：类型环境中的所有类型均已展开。我们在代码中多次调用
 @tt{expand-type} 来维持这一不变式。这就很容易因忘记调用 @tt{expand-type} 而破坏
 系统。重构代码，减少 @tt{expand-type} 的调用，以便更稳定地维持不变式。
+@eopl-index[#:range-mark 'end "OPAQUE-TYPES"]
 
 }
 
@@ -1862,7 +1868,8 @@ f : (t -> u)]                   f : (t -> (int -> int))]
       (expand-type ty2 tenv))))
 ]
 
-@eopl-caption["fig-8.12"]{OPAQUE-TYPES 的检查器，第 4 部分}
+@eopl-caption["fig-8.12"]{OPAQUE-TYPES 的检查器，第 4 部分
+                          @eopl-index["OPAQUE-TYPES"]}
 }
 
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
