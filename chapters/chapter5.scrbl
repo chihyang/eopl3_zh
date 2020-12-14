@@ -2215,6 +2215,7 @@ in ...
 此外，它保存一个计时器，当一个线程完成若干步（即线程的@term["time slice"]{时间片}
 或@term["quantum"]{量子}）时，它中断线程，将其放入就绪队列中，并从就绪队列中选出
 一个新的线程来运行。这叫做@term["pre-emptive scheduling"]{抢占式调度}。
+@eopl-index["Quantum"]
 
 我们的新语言基于 IMPLICIT-REFS，名叫 THREADS。在 THREADS 中，新线程由名为
 @tt{spawn} 的结构创建。@tt{spawn} 取一参数，该参数的值应为一个过程。新创建的线程

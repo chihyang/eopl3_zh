@@ -125,6 +125,7 @@ in -(-(from m1 take a,
 义之后。由于 @tt{from m1 take x} 未在接口中声明，所以它的作用域不包含模块定义之
 后。
 
+@eopl-index["Qualified variable"]
 为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量为
 @term["qualified variables"]{受限变量}。在一般的语言中，受限变量可能写作
 @tt{m1.a}、@tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，
@@ -398,6 +399,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 }
 
+@eopl-index["Qualified variable"]
 我们用 @tt{lookup-qualified-var-in-env} 求受限变量 @tt{from @${m} take @${var}}
 引用的值。它在当前环境中查找模块 @${m}，然后在得到的环境中查找 @${var}。
 
@@ -1035,8 +1037,10 @@ module m1
 
 在接口的剩余部分中，声明 @tt{transparent t = int} 将 @tt{t} 绑定到类型 @tt{int}，
 所以我们可以写 @tt{z : t}。更重要的是，在程序的剩余部分中，声明也将 @tt{from m1
-take t} 绑定到 @tt{int}。我们称之为@emph{受限类型}。这里，我们用它声明了绑定到变
-量 @tt{z} 的类型。声明的作用域是接口的剩余部分，以及模块定义之后程序的剩余部分。
+take t} 绑定到 @tt{int}。我们称之为@term["qualified type"]{受限类型}。
+@eopl-index["Qualified type"]
+这里，我们用它声明了绑定到变量 @tt{z} 的类型。声明的作用域是接口的剩余部分，以及
+模块定义之后程序的剩余部分。
 
 模块主体中的定义 @tt{type t = int} 在主体的剩余部分中，将 @tt{t} 绑定到 @tt{int}，
 所以我们可以写 @tt{s = proc (x : t) ...}。像之前那样，定义的作用域是主体的剩余部
@@ -1393,6 +1397,7 @@ in let add-binding = from tables take add-to-table
 
 @subsubsection[#:style section-title-style-unumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
 
+@eopl-index["Qualified type"]
 我们给两种新类型添加语法：有名类型（如 @tt{t}）和受限类型（如 @tt{from m1 take
 t}）。
 
