@@ -139,6 +139,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
 @section[#:style section-title-style-numbered #:tag "B.2"]{解析}
 
+@eopl-index[#:range-mark 'start "Parsing"]
 解析过程将词牌序列组织成有层次的语法结构，如表达式，语句和块。这就像用从句组织句
 子。语言的语法结构通常由 BNF 定义，也叫做@term["context-free grammar"]{上下文无
 关语法}（@secref{s1.1.2}）。
@@ -205,9 +206,9 @@ specification"]{词法规范}。典型的词法规范可能包括：
          #(struct:diff-exp
             #(struct:var-exp x)
             #(struct:var-exp bar)))))
-]}
-
-}
+]
+@eopl-index[#:range-mark 'end "Parsing"]
+}}
 
 @section[#:style section-title-style-numbered #:tag "B.3"]{SLLGEN 中的扫描器和解析器}
 
@@ -276,6 +277,7 @@ SLLGEN 中的扫描器定义是满足如下语法的列表：
 
 @subsection[#:style section-title-style-unumbered #:tag "B.3-grammars"]{定义语法}
 
+@eopl-index[#:range-mark 'start "Parsing"]
 SLLGEN 还包含一种定义语法的语言。上面的简单语法用 SLLGEN 写作
 
 @eopl-code{
@@ -592,6 +594,7 @@ Nonterminal <seplist3> can’t begin with string "}"
 这里，@tt{compound-statement} 有两个字段：标识符列表的列表，对应的表达式列表的列
 表。本例中，我们用 @tt{separated-list} 代替了 @tt{arbno}，但是 @tt{arbno} 也会生
 成同样的数据。
+@eopl-index[#:range-mark 'end "Parsing"]
 
 @exercise[#:level 1 #:tag "exB.1"]{
 

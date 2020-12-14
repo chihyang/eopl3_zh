@@ -1296,6 +1296,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 @eopl-index[#:range-mark 'end "Generalization"]
 }
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{partial-vector-sum}} "partialvectorsum"]]
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
 @eopl-code{
@@ -1309,7 +1310,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
         (+ (vector-ref v n)
            (partial-vector-sum v (- n 1))))))
 ]
-}
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{partial-vector-sum}} "partialvectorsum"]]}
 
 由于 @${n} 一定会递减至零，证明此程序的正确性需要用归纳法处理 @${n}。由 @${0
 \leq n} 且 @${n \neq 0}，可得 @${0 \leq (n - 1)}，所以递归调用过程

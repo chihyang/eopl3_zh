@@ -45,6 +45,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @author-ref{Aho} et al. (2006)，都对语法和解析算法进行了大篇幅的讨论。
 @eopl-index{Abstract syntax}
 @eopl-index{Concrete syntax}
+@eopl-index["Parsing"]
 将具体语法和抽象语法分开的思想通常归功于@author-ref{McCarthy} (1962)。他强调用接
 口抽象语法树。
 

@@ -192,6 +192,7 @@ in send o1 odd(13)}|
 
 @eopl-index["Child class"]
 @eopl-index["Classes" "parent"]
+@eopl-index["Parent class"]
 如果类 @${c_2} 扩展类 @${c_1}，我们说 @${c_1} 是 @${c_2} 的@term["parent"]{父类}
 @eopl-index["Classes" "superclass"]
 或@term["superclass"]{超类}，@${c_2} 是 @${c_1} 的@term["child"]{子类}。在继承中，
@@ -498,6 +499,7 @@ in send o3 m3()
 @tt{self} 表达式返回当前方法操作的对象。
 
 @eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
+@eopl-index[#:range-mark 'start "Parameter passing"]
 @tt{send} 表达式包含一值为对象的表达式，一个方法名，以及 0 或多个操作数。它从对
 象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像
 IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引
@@ -506,6 +508,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 @tt{super-call} 表达式包含一个方法名和 0 或多个参数。它从表达式持有类的超类开始，
 找出指定的方法，然后以当前对象为 @tt{self}，求出方法主体的值。
+@eopl-index[#:range-mark 'end "Parameter passing"]
 
 @section[#:style section-title-style-numbered #:tag "s9.4"]{解释器}
 

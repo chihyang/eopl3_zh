@@ -1876,6 +1876,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 @eopl-index[#:range-mark 'start "Module procedures"]
 @eopl-index[#:range-mark 'start "Modules" "parameterized"]
+@eopl-index[#:range-mark 'start "Parameterized modules"]
 OPAQUE-TYPES 中的程序有固定的依赖关系。模块 @tt{m4} 可能依赖 @tt{m3} 和 @tt{m2}，
 @tt{m2} 依赖 @tt{m1}。有时，我们说依赖关系是@term["hard-coded"]{硬编码} 的。通常，
 这种硬编码的依赖关系会导致糟糕的程序设计，因为这使模块难以复用。本节，我们给系统
@@ -2491,7 +2492,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
 
 @eopl-caption["fig-8.15"]{PROC-MODULES的检查器，第1部分
                           @eopl-index["Module procedures"]
-                          @eopl-index["Modules" "parameterized"]}
+                          @eopl-index["Modules" "parameterized"]
+                          @eopl-index["Parameterized modules"]}
 }
 
 判断这种关系的代码较为直白（@figure-ref{fig-8.16}）。判断
@@ -2506,6 +2508,7 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 足坚果接口的。怎么混合不要紧，好吃就行！
 @eopl-index[#:range-mark 'end "Module procedures"]
 @eopl-index[#:range-mark 'end "Modules" "parameterized"]
+@eopl-index[#:range-mark 'end "Parameterized modules"]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2541,7 +2544,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 
 @eopl-caption["fig-8.16"]{PROC-MODULES 的检查器，第 2 部分
                           @eopl-index["Module procedures"]
-                          @eopl-index["Modules" "parameterized"]}
+                          @eopl-index["Modules" "parameterized"]
+                          @eopl-index["Parameterized modules"]}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{

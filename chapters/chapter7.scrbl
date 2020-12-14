@@ -658,6 +658,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 @exercise[#:level 2 #:tag "ex7.8"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.8"] "Pair types"]
 给语言添加类型 @tt{pairof}。比如，当且仅当一个值是序对，且所含值类型为 @${t_1}
 和 @${t_2} 时，其类型为 @tt{pairof @${t_1} * @${t_2}}。给语言添加下列生成式：
 
@@ -687,6 +688,7 @@ in |@${e_{letrec\mbox{-}body}}
 
 扩展 CHECKED，实现这些规则。在 @tt{type-to-external-form} 中，用列表 @tt{(pairof
 @${t_1} @${t_2})} 表示序对。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.8"] "Pair types"]
 
 }
 

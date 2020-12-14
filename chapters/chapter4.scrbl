@@ -778,6 +778,7 @@ in let a = (g 11)
       {@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
 }
 
+@eopl-index[#:range-mark 'start "Parameter passing"]
 我们还要重写过程调用和 @tt{let} 规则，体现出对存储器的修改。对过程调用，规则变成：
 @eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
 @eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
@@ -791,7 +792,7 @@ in let a = (g 11)
 }
 
 其中，@${l} 是不在 @${\sigma} 定义域中的某一位置。
-
+@eopl-index[#:range-mark 'end "Parameter passing"]
 }
 
 @eopl-index["Binding" (eopl-index-entry @tt{let} "let")]
@@ -850,8 +851,9 @@ in let a = (g 11)
 }
 }
 
-@eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
-@eopl-index["Body" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'start "Parameter passing"]
 对过程调用，我们同样修改 @tt{apply-procedure}，调用 @tt{newref}。
 
 @eopl-code{
@@ -864,6 +866,9 @@ in let a = (g 11)
         (value-of body
           (extend-env var (newref val) saved-env))))))
 ]
+@eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{proc} "proc")]
+@eopl-index[#:range-mark 'end "Parameter passing"]
 }
 
 @eopl-index["Binding" (eopl-index-entry @tt{letrec} "letrec")]

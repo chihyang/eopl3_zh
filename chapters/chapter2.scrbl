@@ -1324,9 +1324,11 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 当具体语法是个字符串集合，推导出对应的抽象语法树可能相当棘手。这一任务
 叫做@term["parsing"]{解析}，由@term["parser"]{解析器} 完成。因为写解析器通常比较
-麻烦，所以最好借由工具@term["parser generator"]{解析器生成器} 完成。解析器生成器
-以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需以某种机器能
-够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
+麻烦，所以最好借由工具@term["parser generator"]{解析器生成器} 完成。
+@eopl-index["Parser generator"]
+@eopl-index["Parsing"]
+解析器生成器以一套语法作为输入，产生一个解析器。由于语法是由工具处理的，它们必需
+以某种机器能够理解的语言写成，即写语法用的特定领域语言。有很多现成的解析器生成器。
 @eopl-index["Domain-specific languages"]
 
 @eopl-index[#:range-mark 'end "Concrete syntax"]
@@ -1337,6 +1339,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 法树就容易多了，就像 @tt{parse-expression} 这样。
 
 @eopl-code{
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{parse-expression}} "parseexpression"]]
 @racketblock[
 @#,elem{@bold{@tt{parse-expression}} : @${\mathit{SchemeVal} \to \mathit{LcExp}}}
 (define parse-expression
@@ -1353,6 +1356,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
             (parse-expression (cadr datum)))))
       (else (report-invalid-concrete-syntax datum)))))
  ]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{parse-expression}} "parseexpression"]]
 }
 
 通常，很容易把抽象语法树重新转换为列表-符号表示。我们这样做了，Scheme 的打印过程
@@ -1409,6 +1413,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.29"] "Kleene plus"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.29"] "Kleene star (closure)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.29" "ex2.30"] @eopl-index-entry[@bold{@tt{parse-expression}} "parseexpression"]]
 当具体语法使用克莱尼星号或加号（@pageref{kleene-star}）时，生成抽象语法树时最好
 使用相应子树的@emph{列表}。例如，如果 lambda 演算表达式的语法为：
 
@@ -1436,6 +1441,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 修改一下，使之更健壮，可接受任何s-exp，并且对不表示 lambda 演算表达式的 s-exp 给
 出恰当的错误信息。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.27" "ex2.28" "ex2.29" "ex2.30"] "Lambda expression (LcExp)"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.29" "ex2.30"] @eopl-index-entry[@bold{@tt{parse-expression}} "parseexpression"]]
 
 }
 
