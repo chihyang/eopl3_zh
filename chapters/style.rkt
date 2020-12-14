@@ -389,7 +389,7 @@
     (cons first last)))
 
 (define (construct-author-key first last)
-  (let* ((f-part (if (regexp-match-positions #px"[[:lower:]]$" (car first))
+  (let* ((f-part (if (regexp-match-positions #px"^[[:lower:]]" (car first))
                      (cdr first)
                      first))
          (l-string (string-append* (add-between last " ")))
