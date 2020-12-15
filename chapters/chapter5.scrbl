@@ -2382,7 +2382,7 @@ in let producer = proc (n)
 @; TODO: format for interface in figure 5.18
 @eopl-figure[#:position "!ht"]{
 
-@big-bracket[#:title "调度器的内部状态"]{
+@big-bracket[#:breakable #f #:title "调度器的内部状态"]{
 @tabular[#:row-properties (list (make-table-row-skip "2pt")) #:sep @hspace[1]
 (list (list @tt{the-ready-queue} "就绪队列")
       (list @tt{the-final-answer} "主线程结束时的值")
@@ -2390,7 +2390,7 @@ in let producer = proc (n)
       (list @tt{the-time-remaining} "当前运行线程剩余的步数"))]
 }
 
-@big-bracket[#:title "调度器的接口"]{
+@big-bracket[#:breakable #f #:title "调度器的接口"]{
 @tabular[#:row-properties (list (make-table-row-skip "2pt")) #:sep @hspace[1]
 (list (list @tt{@bold{initialize-scheduler!}} @${: \mathit{Int} \to \mathit{Unspecified}})
       (list "" "初始化调度器状态")
