@@ -258,14 +258,18 @@
   (make-element (make-style #f '(exact-chars)) c))
 
 ;;; for interface
-(define (big-bracket #:title [title #f] . c)
+(define (big-bracket #:breakable [breakable #t] #:title [title #f] . c)
   (nested
-   (exact-elem "\\begin{cornerbox}")
+   (if breakable
+       (exact-elem "\\begin{cornertext}")
+       (exact-elem "\\begin{cornerbox}"))
    (when title
      (exact-elem "[title=" title "]"))
    (exact-elem "\n")
    c
-   (exact-elem "\n\\end{cornerbox}")))
+   (if breakable
+       (exact-elem "\n\\end{cornertext}")
+       (exact-elem "\n\\end{cornerbox}"))))
 
 ;;; for margin page
 ;;; margin-page, every call to this increments the internal counter
