@@ -2845,7 +2845,7 @@ in let mut = mutex()
 
 }
 
-@exercise[#:level 2 #:tag "ex5.57"]{
+@exercise[#:level 3 #:tag "ex5.57"]{
 
 在你最爱的操作系统教材中，有各种各样的同步机制。挑出三种，在本节的框架下实现它们。
 
