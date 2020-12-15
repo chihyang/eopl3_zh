@@ -98,6 +98,7 @@ y\rceil}}。}
 
  @item{@eopl-index[#:range-mark 'start "Natural numbers ADT"
  @eopl-index-entry["with unary representation" "unaryrepresentation"]]
+ @eopl-index["Unary representation of natural numbers"]
  @term["Unary representation"]{一元表示法}：在一元表示法中，自然数@${n} 由
  @${n} 个 @tt{#t} 组成的列表表示。所以，@${0} 表示为 @tt{()}，@${1} 表示为
  @tt{(#t)}，@${2} 表示为 @tt{(#t #t)}，等等。可以用归纳法定义这种表示方式：
@@ -1359,6 +1360,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 @eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{parse-expression}} "parseexpression"]]
 }
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{unparse-lc-exp}} "unparselcexp"]]
 通常，很容易把抽象语法树重新转换为列表-符号表示。我们这样做了，Scheme 的打印过程
 就会将其显示为列表形式的具体语法。这由 @tt{unparse-lc-exp} 完成：
 
@@ -1382,6 +1384,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 @eopl-index[#:range-mark 'end "Abstract syntax"]
 @eopl-index[#:range-mark 'end "Abstract syntax tree"]
 @eopl-index[#:range-mark 'end "Lambda expression (LcExp)" "abstract vs. concrete syntax"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{unparse-lc-exp}} "unparselcexp"]]
 }
 
 @exercise[#:level 1 #:tag "ex2.27"]{
@@ -1404,6 +1407,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @exercise[#:level 1 #:tag "ex2.28"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex2.28"] @eopl-index-entry[@bold{@tt{unparse-lc-exp}} "unparselcexp"]]
 写出反向解析器，将lc-exp的抽象语法转换为符合本节第二个语法
 （@pageref{lc-grammar2}）的字符串。
 

@@ -298,6 +298,7 @@ proc (f)
 }
 }
 
+@eopl-index["Well-typed"]
 如果我们可以赋予表达式一个类型，我们说该表达式是@term["well-typed"]{正常类型} 的，
 否则说它是@term["ill-typed"]{异常类型} 或@term[#:full #f "has no type"]{无类型}
 的。@eopl-index["Ill-typed"]@eopl-index["No type"]
@@ -937,6 +938,7 @@ in (odd 13)
 左边的变量@term["bound"]{绑定} 于代换式。
 @eopl-index["Binding" (eopl-index-entry "of type variables" "typevariables")]
 
+@eopl-index["Unification"]
 我们可以按部就班地求解这些方程。这一过程叫做@term["unification"]{合一}。
 
 我们把计算分为两种状态，一种是待求解的方程，一种是已发现的代换式。最开始，所有方
@@ -1639,6 +1641,7 @@ in letrec
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.2"]{合一器}
 
+@eopl-index[#:range-mark 'start "Unification"]
 合一器的主要过程是 @tt{unifier}。合一器执行上述推导流程中的这一的步骤：取两个类
 型 @tt{t_1} 和 @tt{t_2}，满足无存不变式的代换式组 @${\sigma}，以及表达式
 @tt{exp}，将 @${t_1 = t_2} 添加到 @${\sigma}，返回得到的代换式组。这是合并
@@ -1677,6 +1680,7 @@ in letrec
 个新的存储器。
 
 最后，我们必须验存。直接递归处理类型即可，如@figure-ref{fig-7.5} 所示。
+@eopl-index[#:range-mark 'end "Unification"]
 
 @exercise[#:level 1 #:tag "ex7.19"]{
 

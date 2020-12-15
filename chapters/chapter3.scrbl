@@ -946,6 +946,7 @@ in let* x = -(x,1) y = -(x,2)
 
 @exercise[#:level 2 #:tag "ex3.18"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.18"] @eopl-index-entry[@elem{@tt{unpack} expression} "unpackexpression"]]
 向该语言添加表达式：
 
 @$${\mathit{Expression} ::= @tt{unpack @${\{\mathit{Identifier}\}^*} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
@@ -962,6 +963,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 }
 
 值应为4。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.18"] @eopl-index-entry[@elem{@tt{unpack} expression} "unpackexpression"]]
 }
 
 @section[#:style section-title-style-numbered #:tag "s3.3"]{PROC：有过程的语言}
@@ -2489,6 +2491,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 @exercise[#:level 1 #:tag "ex3.39"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex3.39"] @eopl-index-entry[@elem{@tt{unpack} expression} "unpackexpression"]]
 扩展词法地址翻译器和解释器，处理@exercise-ref{ex3.18} 中的 @tt{unpack}。
 
 }
