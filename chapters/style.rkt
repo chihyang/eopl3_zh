@@ -172,13 +172,18 @@
                               (string-append exercise-level-mark str))))
   (make-level-mark-iter l ""))
 
-(define (make-marker level)
+(define (make-exer-marker level)
   ($ "\\textnormal{[}" (make-level-mark level) "\\textnormal{]}"))
 
-(define (exercise #:level [level 1] #:tag [tag ""] . c)
+(define (make-exer-decorator c)
+  ($ "\\textnormal{[}" c "\\textnormal{]}"))
+
+(define (exercise #:decorator [decorator #f] #:level [level 1] #:tag [tag ""] . c)
   (nested #:style eopl-exercise
           (elemtag tag "")
-          (make-marker level)
+          (if decorator
+              (make-exer-decorator decorator)
+              (make-exer-marker level))
           (hspace 1)
           (remove-leading-newlines c)))
 
