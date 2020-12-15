@@ -2851,8 +2851,8 @@ in let mut = mutex()
 
 }
 
-@exercise[#:level 1 #:tag "ex5.58"]{
+@exercise[#:decorator @elem{@emph{绝对} @${@make-level-mark[1]}} #:tag "ex5.58"]{
 
-（绝对@${@exercise-level-mark}）和朋友吃些披萨吧，但是一人一次一定只拿一块！
+和朋友吃些披萨吧，但是一人一次一定只拿一块！
 
 }
