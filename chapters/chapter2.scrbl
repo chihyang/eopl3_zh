@@ -597,6 +597,7 @@ lambda 演算表达式的语法：
 @tt{occurs-free?} 的定义不大容易读懂。比如，很难搞明白 @tt{(car (cadr exp))} 指
 代 @tt{lambda} 表达式中的变量声明，或者 @tt{(caddr exp)} 指代表达式的主体。
 
+@eopl-index[#:range-mark 'start "Predicates"]
 要改善这种情况，可以给 lambda 演算表达式添加一套接口。我们的接口有几个构造器，以
 及两种观测器：谓词和提取器。
 
@@ -672,7 +673,8 @@ lambda 演算表达式的语法：
   @item{为数据类型的每种变体加入一个谓词。}
 
   @item{为传给数据类型构造器的每段数据加入一个提取器。
-  @eopl-index[#:range-mark 'end "Extractors"]}]}}
+  @eopl-index[#:range-mark 'end "Extractors"]
+  @eopl-index[#:range-mark 'end "Predicates"]}]}}
 
 @exercise[#:level 1 #:tag "ex2.15"]{
 
@@ -1451,6 +1453,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 @exercise[#:level 2 #:tag "ex2.31"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.31"] @eopl-index-entry[@elem{Prefix lists (@${\mathit{Prefix\mbox{-}list}})} "Prefixlists"]]
 有时，把具体语法定义为括号包围的符号和整数序列很有用。例如，可以把
 集合@term["prefix list"]{前缀列表} 定义为：
 
@@ -1464,6 +1467,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 Łukasiewicz，称之为@term["Polish prefix notation"]{波兰前缀表示法}。写一个
 解析器，将前缀列表表示法转换为抽象语法：
 @eopl-index[#:suffix @exer-ref-range["ex2.31"] @eopl-index-entry["Łukasiewicz, Jan" "LukasiewiczJan"]]
+@eopl-index[#:suffix @exer-ref-range["ex2.31"] "Polish prefix notation"]
 
 @eopl-code{
 @racketblock[
@@ -1494,6 +1498,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 
 提示：想想如何写一个过程，取一列表，产生一个 @tt{prefix-exp} 和列表剩余元素组成
 的列表。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.31"] @eopl-index-entry[@elem{Prefix lists (@${\mathit{Prefix\mbox{-}list}})} "Prefixlists"]]
 
 }
 

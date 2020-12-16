@@ -2216,6 +2216,7 @@ in ...
 或@term["quantum"]{量子}）时，它中断线程，将其放入就绪队列中，并从就绪队列中选出
 一个新的线程来运行。这叫做@term["pre-emptive scheduling"]{抢占式调度}。
 @eopl-index["Quantum"]
+@eopl-index["Pre-emptive scheduling"]
 
 我们的新语言基于 IMPLICIT-REFS，名叫 THREADS。在 THREADS 中，新线程由名为
 @tt{spawn} 的结构创建。@tt{spawn} 取一参数，该参数的值应为一个过程。新创建的线程
@@ -2853,6 +2854,7 @@ in let mut = mutex()
 
 @exercise[#:decorator @elem{@emph{绝对} @${@make-level-mark[1]}} #:tag "ex5.58"]{
 
+@eopl-index["Pizza"]
 和朋友吃些披萨吧，但是一人一次一定只拿一块！
 
 }

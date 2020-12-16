@@ -1990,6 +1990,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 @itemlist[
 
  @item{我们给 CPS-IN 添加 @tt{print} 表达式：
+ @eopl-index[#:range-mark 'start "Printing"]
 
  @nested[#:style small]{
  @envalign*{\mathit{InpExp} &::= @tt{print (@m{\mathit{InpExp}})} \\[-3pt]
@@ -2050,8 +2051,8 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
          (car simples)
          (make-send-to-cont k-exp
            (cps-const-exp 38))))))
- ]}
- }
+ ]
+ @eopl-index[#:range-mark 'end "Printing"]}}
 ]
 
 来看一个更复杂的例子。

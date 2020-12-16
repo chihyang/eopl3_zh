@@ -217,7 +217,7 @@ in send o1 odd(13)}|
 除非在 @${c_2} 中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例
 可以在任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实
 例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
-择这种设计，其他面向对象语言可能有不同的可见性规则。
+择这种设计，其他面向对象语言可能有不同的可见性规则。@eopl-index["Polymorphic"]
 
 @eopl-figure[#:position "!ht"]{
 @eopl-code{
@@ -1468,6 +1468,7 @@ TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
 
 ]
 
+@eopl-index["Polymorphic"]
 第二条性质叫做@term["subclass polymorphism"]{子类多态}。第三条性质
 叫做@term["interface polymorphism"]{接口多态}。
 @eopl-index["Interface polymorphism"]

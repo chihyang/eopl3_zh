@@ -899,8 +899,10 @@ in list(x, -(x,1), -(x,3))
 
 @exercise[#:level 1 #:tag "ex3.15"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.15"] "Printing"]
 扩展语言，添加新操作 @tt{print}，它取一参数，打印出来，返回整数1。在我们的规范框
 架下，为什么不能表示这一操作？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.15"] "Printing"]
 
 }
 
@@ -968,6 +970,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 @section[#:style section-title-style-numbered #:tag "s3.3"]{PROC：有过程的语言}
 
+@eopl-index[#:range-mark 'start "PROC"]
 目前为止，我们的语言只能进行定义好的操作。要想让这种解释性语言更有用，必须能创建
 新过程。我们把新语言叫做 PROC。
 
@@ -1287,6 +1290,7 @@ in let f = proc (z) -(z,x)
 
 记住：一定要给语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
 @eopl-index[#:range-mark 'end "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'end "PROC"]
 
 }
 

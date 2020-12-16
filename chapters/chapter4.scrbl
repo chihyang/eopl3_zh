@@ -123,6 +123,7 @@ expression} "beginexpression")]。@tt{begin} 表达式按顺序求每个子表�
 同样地，一个过程可能通过一长串调用间接调用另一过程。二者可以通过一个共享变量直接
 交换数据，居间的过程不需要知道它。因此，以共享变量通信可作为一种隐藏信息的方式。
 
+@eopl-index["Private variables"]
 赋值的另一用途是通过私有变量创建隐藏状态。例如：
 
 @eopl-code{

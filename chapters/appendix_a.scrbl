@@ -211,6 +211,7 @@ al. (1993) 提出。
 1978 年的论文发表之前，类型推导从未广泛应用。
 
 @author-ref{Wand} (1987) 率先阐明了如何将类型推导分为方程构建和求解。名为
+@eopl-index["Polymorphic"]
 Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.28} 中
 的系统基本相同。@author-ref{Pierce} (2002, 2004) 的两卷著作对类型做了百科全书式
 的讨论。
