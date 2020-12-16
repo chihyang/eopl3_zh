@@ -2618,7 +2618,7 @@ in let mut = mutex()
 器一定能够到达终值 3。
 @eopl-index[#:range-mark 'end "Critical region"]
 
-@eopl-figure{
+@eopl-figure[#:position "!t"]{
 @eopl-code{
 @verbatim|{
 let x = 0
