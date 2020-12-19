@@ -220,7 +220,7 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 @author-ref{Parnas} (1972)，他强调了以接口作为信息隐藏边界的重要性。数据类型的实
 现是满足该类型定义的任意值和操作的集合。@author-ref{Goguen} et al. (1977) 证明，
 任意数据类型都能以树的集合实现，树中记录了值如何构建，且从一个树的集合到该数据类
-型另一实现的集合具有唯一映射。相对地，任意数据类型都能以过程表示法实现，且从该数
+型另一实现的集合具有唯一映射。相应地，任意数据类型都能以过程表示法实现，且从该数
 据类型的任何其他实现到过程表示法都有唯一映射 (@author-ref{Giarratana} et al.,
 1976; @author-ref{Wand}, 1979; @author-ref{Kamin}, 1980)。
 @eopl-index{Abstract data types (ADTs)}
