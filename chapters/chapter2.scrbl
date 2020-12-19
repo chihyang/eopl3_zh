@@ -993,11 +993,11 @@ lambda 演算表达式的语法：
 @${type\mbox{-}predicate\mbox{-}name} 绑定到一个谓词。这个谓词判断其参数值是否是
 相应的类型。
 
-@eopl-index["Record"]
-记录可以用只有一种变体的数据类型定义。为了区分只有一种变体的数据类型，我们遵循一
-种命名惯例：当只有一个变体时，我们以 @tt{a-@${type\mbox{-}name}}
-@eopl-index[@eopl-index-entry[@elem{@tt{a(n)-@${\mathit{type\mbox{-}name}}} constructor} "antypename"]] 或
-@tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
+@term["record"]{记录}@eopl-index["Record"] 可以用只有一种变体的数据类型定义。为
+了区分只有一种变体的数据类型，我们遵循一种命名惯例：当只有一个变体时，我们以
+@tt{a-@${type\mbox{-}name}}
+@eopl-index[@eopl-index-entry[@elem{@tt{a(n)-@${\mathit{type\mbox{-}name}}} constructor} "antypename"]]
+或 @tt{an-@${type\mbox{-}name}} 命名构造器；否则，以
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 
 @eopl-index["Mutual recursion"]
