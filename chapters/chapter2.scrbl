@@ -490,6 +490,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @subsection[#:style section-title-style-numbered #:tag "s2.2.3"]{过程表示法}
 
 @eopl-index[#:range-mark 'start "Environments" "procedural representation of"]
+@eopl-index[#:range-mark 'start "Procedural representation" "of environments"]
 环境接口有一条重要性质：它只有 @tt{apply-env} 一个观测器。这样就能用取一变量，返
 回绑定值的 Scheme 过程表示环境。
 
@@ -559,10 +560,13 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 环境的数据结构表示中，各种变体都是消函的简单例子。过程表示法和消函表示法的关系将
 是本书反复出现的主题。
 @eopl-index[#:range-mark 'end "Environments" "procedural representation of"]
+@eopl-index[#:range-mark 'end "Procedural representation" "of environments"]
 
 @exercise[#:level 1 #:tag "ex2.12"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Environments" "procedural representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Procedural representation" "of environments"]
+@eopl-index[#:suffix @exer-ref-range["ex2.12"] "Procedural representation" "of stacks"]
 用过程表示法实现@exercise-ref{ex2.4} 中的堆栈数据类型。
 
 }
@@ -579,6 +583,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 扩展前一题中的表示法，加入第三个过程，用它来 @tt{has-binding?} （见
 @exercise-ref{ex2.9}）。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Environments" "procedural representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Procedural representation" "of environments"]
 
 }
 
@@ -1301,6 +1306,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @eopl-index[#:range-mark 'start "Abstract syntax tree"]
 @eopl-index[#:range-mark 'start "Nonterminal symbols"]
+@eopl-index[#:range-mark 'start "Production of grammar"]
 将内在表示形象化为@term["abstract syntax tree"]{抽象语法树} 也很不错。
 @figure-ref{fig-2.2} 展示了一棵抽象语法树，它代表数据类型 @tt{lc-exp} 表示的
 lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以相应的生成式名
@@ -1310,6 +1316,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
 止符命名。很容易将抽象语法写成 @tt{define-datatype} 声明。我们为每个非终结符添加
 一个 @tt{define-datatype}，为每个生成式添加一个变体。
 @eopl-index[#:range-mark 'end "Nonterminal symbols"]
+@eopl-index[#:range-mark 'end "Production of grammar"]
 
 @figure-ref{fig-2.2} 中挑出的内容可以精确表示如下：
 

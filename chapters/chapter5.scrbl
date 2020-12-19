@@ -387,7 +387,7 @@
 }
 
 @tt{let} 表达式主体的值成为 @tt{let} 表达式的值，所以求 @tt{let} 表达式主体时的
-续文与求整个 @tt{let} 表达式的相同。这是@bold{尾调用不扩大续文}原则的又一例子。
+续文与求整个 @tt{let} 表达式的相同。这是@bold{尾调用不扩大续文}的又一例子。
 
 @eopl-index["Conditionals"]
 下面我们处理 @tt{if} 表达式。在 @tt{if} 表达式中，我们首先求条件的值，但条件的结
@@ -415,6 +415,7 @@
 }
 }
 
+@eopl-index["Procedural representation" "of continuations"]
 现在，我们有了四个续文构造器。我们可以用过程表示法或者数据结构表示法实现它们。过
 程表示法如@figure-ref{fig-5.2} 所示，数据结构表示法使用 @tt{define-datatype}，
 如@figure-ref{fig-5.3} 所示。
@@ -464,7 +465,8 @@
 ]
 
 @eopl-caption["fig-5.2"]{用过程表示续文
-                         @eopl-index["Continuations" "procedural representation of"]}
+                         @eopl-index["Continuations" "procedural representation of"]
+                         @eopl-index["Procedural representation" "of continuations"]}
 }
 
 @eopl-figure{
@@ -642,6 +644,7 @@
 
 }
 
+@eopl-index[#:range-mark 'start "Procedure call"]
 我们的语言中最后要处理的是过程调用。在传递环境的解释器中，我们写：
 
 @eopl-code{
@@ -702,6 +705,7 @@
           (extend-env var val saved-env)
           cont)))))
 ]
+@eopl-index[#:range-mark 'end "Procedure call"]
 }
 }
 
@@ -810,6 +814,7 @@
 @exercise[#:level 1 #:tag "ex5.1"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex5.1"] "Continuations" "procedural representation of"]
+@eopl-index[#:suffix @exer-ref-range["ex5.1"] "Procedural representation" "of continuations"]
 用过程表示法实现续文数据类型。
 
 }
@@ -1121,7 +1126,8 @@
         (... (value-of/k ...))))))
 ]
 
-@eopl-caption["fig-5.7"]{用过程表示跳床}
+@eopl-caption["fig-5.7"]{用过程表示跳床
+                         @eopl-index["Procedural representation" "of trampolining"]}
 }
 @eopl-index[#:range-mark 'end "Defunctionalization"]
 
@@ -2130,11 +2136,13 @@ in ((index 5) list(2, 3))
 @exercise[#:level 3 #:tag "ex5.41"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.41"] "Continuations" "procedural representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.41"] "Procedural representation" "of continuations"]
 我们展示了如何用数据结构表示的续文实现异常。我们没办法马上用@secref{s2.2.3}中的
 步骤得到过程表示法，因为我们现在有两个观测器：@tt{apply-handler} 和
 @tt{apply-cont}。用一对过程实现本节的续文：一个单参数过程，表示 @tt{apply-cont}
 中续文的动作；一个无参数过程，表示 @tt{apply-handler} 中续文的动作。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.41"] "Continuations" "procedural representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.41"] "Procedural representation" "of continuations"]
 
 }
 

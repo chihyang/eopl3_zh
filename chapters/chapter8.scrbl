@@ -1882,6 +1882,7 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 @eopl-index[#:range-mark 'start "Module procedures"]
 @eopl-index[#:range-mark 'start "Modules" "parameterized"]
 @eopl-index[#:range-mark 'start "Parameterized modules"]
+@eopl-index[#:range-mark 'start "PROC-MODULES"]
 OPAQUE-TYPES 中的程序有固定的依赖关系。模块 @tt{m4} 可能依赖 @tt{m3} 和 @tt{m2}，
 @tt{m2} 依赖 @tt{m1}。有时，我们说依赖关系是@term["hard-coded"]{硬编码} 的。通常，
 这种硬编码的依赖关系会导致糟糕的程序设计，因为这使模块难以复用。本节，我们给系统
@@ -2241,6 +2242,7 @@ module mybool-tables
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-syntax"]{语法}
 
+@eopl-index[#:range-mark 'start "Procedure types" "for module procedures"]
 给我们的语言添加模块过程就像添加过程一样。模块过程的接口很像 @tt{proc} 的类型。
 
 @nested[#:style small]{
@@ -2283,6 +2285,7 @@ module mybool-tables
 [to-int : (from ints2 take t -> int)]
 }|
 }
+@eopl-index[#:range-mark 'end "Procedure types" "for module procedures"]
 }
 
 我们扩展 @tt{expand-iface} 来处理这些新接口，并按已展开处理。这样行得通是因为参
@@ -2300,6 +2303,7 @@ module mybool-tables
 ]}
 
 @eopl-index["Body" (eopl-index-entry "of module" "module")]
+@eopl-index[#:range-mark 'start "Procedure types" "for module procedures"]
 我们需要新的模块主体来创建模块过程，引用模块过程的绑定变量，以及调用模块过程。
 
 @nested[#:style small]{
@@ -2330,12 +2334,6 @@ module mybool-tables
 我们扩展 @tt{value-of-module-body} 处理新的模块主体。代码与表达式中的变量引用和
 过程调用十分类似（@figure-ref{fig-8.13}）。
 
-@subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
-
-我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则
-如@figure-ref{fig-8.14} 所示。为了能在一页纸内写下规则，我们用 @tt{(@${\rhd}
-@${body} @${tenv}) = @${i}} 代替 @tt{(interface-of @${body} @${tenv}) = @${i}}。
-
 @eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{value-of-module-body}} : @${\mathit{ModuleBody} \times \mathit{Env} \to \mathit{TypedModule}}}
@@ -2364,7 +2362,9 @@ module mybool-tables
 @eopl-caption["fig-8.13"]{@tt{value-of-module-body}}
 }
 
-@eopl-figure[#:position "!htb"]{
+@subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
+
+@eopl-figure[#:position "!ht"]{
 @$${\begin{array}{l}
      \small{\textrm{IFACE-M-VAR}} \\
      @tt{(@${\rhd} @${m} @${tenv})} = tenv@tt{(@${m})}
@@ -2387,6 +2387,10 @@ module mybool-tables
 
 @eopl-caption["fig-8.14"]{新模块主体的判类规则}
 }
+
+我们可以给新的模块主体写出@secref{s7.2}那样的规则。这些规则
+如@figure-ref{fig-8.14} 所示。为了能在一页纸内写下规则，我们用 @tt{(@${\rhd}
+@${body} @${tenv}) = @${i}} 代替 @tt{(interface-of @${body} @${tenv}) = @${i}}。
 
 正如预想的那样，模块变量的类型从类型环境中取得。就像 CHECKED 中的过程那样，
 @tt{module-proc} 的类型根据参数类型和主体类型得到。
@@ -2433,34 +2437,6 @@ module mybool-tables
 
 }
 
-用这些规则，很容易写出 @tt{interface-of} 的代码（@figure-ref{fig-8.15}）。当我们
-检查 @tt{module-proc} 的主体时，我们把参数添加到类型环境中，就好像它是位于顶层的
-模块。这段代码用过程 @tt{rename-in-iface} 对得到的接口进行代换。
-
-最后，我们扩展 @tt{<:-iface}，处理新的类型。用来比较 @tt{proc-iface} 的规则为
-
-@nested[#:style small]{
-@$${\infer{@tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})} <: @tt{((@${m_2} : @${i_2}) => @${i^{\prime}_{2}})}}
-          {i_2 <: i_1 &
-           i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <: i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]} &
-           m^{\prime} 不在 i^{\prime}_{1} 或 i^{\prime}_{2} 中}}}
-
-要使 @tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})}，满足第一个接口的模块
-@${m_0} 也必须满足第二个接口。这就是说，接口为 @${i_2} 的任何模块都能作为参数，
-传给 @${m_0}，@${m_0} 产生的任何模块都满足 @${i^{\prime}_{2}}。
-
-为满足第一个要求，我们要求 @${i_2 <: i_1}。这保证了满足 @${i_2} 的任何模块都能作
-为参数传给 @${m_0}。注意逆序：我们说参数类型的@term["subtyping"]{子类型判定}
-是@term["contravariant"]{逆变的}。
-@eopl-index["Contravariant subtyping"]
-
-结果的类型呢？我们可以要求 @${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行
-不通。@${i^{\prime}_{1}} 中，可能出现模块变量 @${m_1}，@${i^{\prime}_{2}} 中，可
-能出现模块变量 @${m_2} 的实例。所以，要比较它们，我们得将 @${m_1} 和 @${m_2} 重
-命名为新的模块变量 @${m^{\prime}}。一旦完成这一步，我们就能照常比较它们了。这就
-得出条件 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
-i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
-
 @eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{interface-of}} : @${\mathit{ModuleBody} \times \mathit{Tenv} \to \mathit{Iface}}}
@@ -2501,6 +2477,34 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
                           @eopl-index["Parameterized modules"]}
 }
 
+用这些规则，很容易写出 @tt{interface-of} 的代码（@figure-ref{fig-8.15}）。当我们
+检查 @tt{module-proc} 的主体时，我们把参数添加到类型环境中，就好像它是位于顶层的
+模块。这段代码用过程 @tt{rename-in-iface} 对得到的接口进行代换。
+
+最后，我们扩展 @tt{<:-iface}，处理新的类型。用来比较 @tt{proc-iface} 的规则为
+
+@nested[#:style small]{
+@$${\infer{@tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})} <: @tt{((@${m_2} : @${i_2}) => @${i^{\prime}_{2}})}}
+          {i_2 <: i_1 &
+           i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <: i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]} &
+           m^{\prime} 不在 i^{\prime}_{1} 或 i^{\prime}_{2} 中}}}
+
+要使 @tt{((@${m_1} : @${i_1}) => @${i^{\prime}_{1}})}，满足第一个接口的模块
+@${m_0} 也必须满足第二个接口。这就是说，接口为 @${i_2} 的任何模块都能作为参数，
+传给 @${m_0}，@${m_0} 产生的任何模块都满足 @${i^{\prime}_{2}}。
+
+为满足第一个要求，我们要求 @${i_2 <: i_1}。这保证了满足 @${i_2} 的任何模块都能作
+为参数传给 @${m_0}。注意逆序：我们说参数类型的@term["subtyping"]{子类型判定}
+是@term["contravariant"]{逆变的}。
+@eopl-index["Contravariant subtyping"]
+
+结果的类型呢？我们可以要求 @${i^{\prime}_{1} <: i^{\prime}_{2}}。不幸的是，这行
+不通。@${i^{\prime}_{1}} 中，可能出现模块变量 @${m_1}，@${i^{\prime}_{2}} 中，可
+能出现模块变量 @${m_2} 的实例。所以，要比较它们，我们得将 @${m_1} 和 @${m_2} 重
+命名为新的模块变量 @${m^{\prime}}。一旦完成这一步，我们就能照常比较它们了。这就
+得出条件 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
+i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}}。
+
 判断这种关系的代码较为直白（@figure-ref{fig-8.16}）。判断
 @${i^{\prime}_{1}@tt{[@${m^{\prime}/m_{1}}]} <:
 i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
@@ -2514,6 +2518,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @eopl-index[#:range-mark 'end "Module procedures"]
 @eopl-index[#:range-mark 'end "Modules" "parameterized"]
 @eopl-index[#:range-mark 'end "Parameterized modules"]
+@eopl-index[#:range-mark 'end "Procedure types" "for module procedures"]
+@eopl-index[#:range-mark 'end "PROC-MODULES"]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2550,7 +2556,9 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @eopl-caption["fig-8.16"]{PROC-MODULES 的检查器，第 2 部分
                           @eopl-index["Module procedures"]
                           @eopl-index["Modules" "parameterized"]
-                          @eopl-index["Parameterized modules"]}
+                          @eopl-index["Parameterized modules"]
+                          @eopl-index["Procedure types" "for module procedures"]
+                          @eopl-index["PROC-MODULES"]}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{

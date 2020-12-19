@@ -303,6 +303,7 @@ SLLGEN 还包含一种定义语法的语言。上面的简单语法用 SLLGEN �
 SLLGEN 中的语法是由下列语法描述的列表：
 
 @nested[#:style small]{
+@eopl-index["Production of grammar"]
 @envalign*{
             \mathit{Grammar} &::= @tt{(@m{\{\mathit{Production}\}^{*}})} \\[-3pt]
          \mathit{Production} &::= @tt{(@m{\mathit{Lhs}} (@m{\{\mathit{Rhs\mbox{-}item}\}^{*}}) @m{\mathit{Prod\mbox{-}name}})} \\[-3pt]

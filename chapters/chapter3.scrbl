@@ -974,6 +974,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 目前为止，我们的语言只能进行定义好的操作。要想让这种解释性语言更有用，必须能创建
 新过程。我们把新语言叫做 PROC。
 
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]]
 按照 Scheme 的设计，我们把过程作为语言的表达值，则：
 
 @nested{
@@ -989,6 +990,8 @@ in unpack x y = cons(u,cons(3,emptylist))
 
 @eopl-index["Binding" (eopl-index-entry @tt{proc} "proc")]
 @eopl-index[#:range-mark 'start "Declaration" "of procedures"]
+@eopl-index[#:range-mark 'start "Procedure call"]
+@eopl-index[#:range-mark 'start "Procedure declaration"]
 我们还需要语法来创建和调用过程。对应的生成式为：
 
 @envalign*{
@@ -1098,6 +1101,9 @@ in let f = proc (z) -(z,x)
 @eopl-index[#:range-mark 'end "Declaration" "of procedures"]
 @eopl-index[#:range-mark 'end "Lexical scope rules"]
 @eopl-index[#:range-mark 'end "Parameter passing"]
+@eopl-index[#:range-mark 'end "Procedure call"]
+@eopl-index[#:range-mark 'end "Procedure declaration"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
@@ -1184,7 +1190,10 @@ in let f = proc (z) -(z,x)
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.2"]{表示过程}
 
-@eopl-index[#:range-mark 'start "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start "Procedural representation" "of procedure values"]
+@eopl-index[#:range-mark 'start
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "procedural representation of"]
 根据@secref{s2.2.3}中介绍的方法，我们可以按照过程表示法，用过程在
 @tt{apply-procedure} 中的动作表示它们。欲如此，我们将 @tt{procedure} 的值定义为
 实现语言的过程，它取一实参，返回下面规范要求的值：
@@ -1229,9 +1238,14 @@ in let f = proc (z) -(z,x)
 
 这里定义的函数 @tt{proc?} 不完全准确，因为不是每个 Scheme 过程都能作为我们语言中
 的过程。我们需要它，只是为了定义数据类型 @tt{expval}。
-
+@eopl-index[#:range-mark 'end "Procedural representation" "of procedure values"]
+@eopl-index[#:range-mark 'end
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "procedural representation of"]
 }
 
+@eopl-index[#:range-mark 'start "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
 另一种方式是用@secref{s2.2.2}那样的数据结构表示法。
 
 @eopl-code{
@@ -1291,12 +1305,14 @@ in let f = proc (z) -(z,x)
 记住：一定要给语言的每个扩展写出规范。参见@pageref{ex-note}的说明。
 @eopl-index[#:range-mark 'end "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 @eopl-index[#:range-mark 'end "PROC"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
 
 }
 
 @exercise[#:level 1 #:tag "ex3.19"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex3.19"] "Declaration" "of procedures"]
+@eopl-index[#:suffix @exer-ref-range["ex3.19"] "Procedure declaration"]
 在很多语言中，过程创建和命名必须同时进行。修改本节的语言，用 @tt{letproc} 替换
 @tt{proc}，以支持此性质。
 
@@ -1403,6 +1419,7 @@ in let maketimes4 = proc (f)
 @exercise[#:level 2 #:tag "ex3.26"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex3.26"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:suffix @exer-ref-range["ex3.26"] @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
 我们用数据结构表示过程时，在闭包中记录了整个环境。但是显然，我们只需要自由变量的
 绑定。修改过程的表示，只保留自由变量。
 
@@ -1419,6 +1436,13 @@ in let maketimes4 = proc (f)
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28" "ex3.29"] "Dynamic binding (dynamic scope)"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"] "Procedural representation" "of procedure values"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "data structure representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "procedural representation of"]
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
@@ -1434,7 +1458,13 @@ in let p = proc (x) -(x,a)
 中，过程主体内的 @tt{a} 绑定到 5，而不是 3。修改语言，使用动态绑定。做两次，一次
 用过程表示法表示过程，一次用数据结构表示法。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
-
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28"] "Procedural representation" "of procedure values"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "data structure representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "procedural representation of"]
 }
 
 @exercise[#:level 2 #:tag "ex3.29"]{
@@ -1693,6 +1723,7 @@ in (odd 13)
 @exercise[#:level 3 #:tag "ex3.34"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex3.34"] "Environments" "procedural representation of"]
+@eopl-index[#:suffix @exer-ref-range["ex3.34"] "Procedural representation" "of environments"]
 用@secref{s2.2.3}中环境的过程表示法实现 @tt{extend-env-rec}。
 
 }
@@ -2524,10 +2555,14 @@ htt]{nameless-letrec-var-exp}。
 @exercise[#:level 3 #:tag "ex3.42"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.42"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
 修改词法地址翻译器和解释器，使用@exercise-ref{ex3.26} 中的瘦身过程表示法。要如此，
 你不能在 @tt{(extend-senv @${var} @${senv})} 中翻译过程的主体，而是在一个新的静
 态环境中，它指明了各个变量在瘦身表示中的位置。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.42"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
 
 }
 
@@ -2535,6 +2570,7 @@ htt]{nameless-letrec-var-exp}。
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Known procedures"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Procedure declaration"]
 翻译器不止能记录变量的名字。例如，考虑程序
 
 @eopl-code{
@@ -2558,5 +2594,6 @@ in let f = proc (y) -(y,x)
 -(y,x)} 产生的过程从未使用。修改翻译器，避免产生这样的过程。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Declaration" "of procedures"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Known procedures"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.43" "ex3.44"] "Procedure declaration"]
 
 }

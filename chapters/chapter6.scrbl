@@ -98,6 +98,7 @@
 我们甚至能将其转为跳跃式，如@figure-ref{fig-6.2} 所示。如果用普通的指令式语言，
 我们自然能将跳床替换为适当的循环。
 
+@eopl-index["Procedural representation" "of continuations"]
 但是，本章我们主要关心，用过程表示法（如@figure-ref{fig-5.2}）时会发生什么。回忆
 一下，在过程表示法中，续文用它在 @tt{apply-cont} 中的动作表示。过程表示为：
 @eopl-index["Continuations" "procedural representation of"]
@@ -317,8 +318,9 @@
 }|
 }
 
-在过程表示法中，我们有：
 @eopl-index["Continuations" "procedural representation of"]
+@eopl-index["Procedural representation" "of continuations"]
+在过程表示法中，我们有：
 
 @eopl-code{
 @racketblock[
@@ -498,6 +500,7 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Inlining"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -527,7 +530,8 @@ val1 val2)} 的值传给当前续文。
              "Data structure representation" @eopl-index-entry["of continuations" "continuations"]]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]}
 ]
 }
 
@@ -549,10 +553,12 @@ val1 val2)} 的值传给当前续文。
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Inlining"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Procedural representation" "of continuations"]
 写出@figure-ref{fig-5.4}、@countref{fig-5.5} 和 @countref{fig-5.6} 中解释器的过
 程表示和内联过程表示。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Inlining"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Procedural representation" "of continuations"]
 
 }
 
@@ -1236,6 +1242,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 但是在规范中，我们仍然使用具体语法，因为具体语法通常更容易读懂。
 
 @eopl-index["Declaration" "of procedures"]
+@eopl-index["Procedure declaration"]
 过程呢？我们转换@figure-ref{fig-6.7} 中那样的 @tt{(lambda (x) ...)} 过程时，为其
 新增一个参数 @tt{k}，然后转换主体，并将主体的值传给续文 @tt{k}。我们
 在@figure-ref{fig-6.7} 中正是这样做的。所以
@@ -1371,6 +1378,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 }|
 }
 
+@eopl-index[#:range-mark 'start "Procedure call"]
 过程调用与之类似。如果操作符和操作数都是简单的，那么我们添加续文参数，直接调用过
 程，就像 @tt{(= x 2)} 这行。
 
@@ -1558,7 +1566,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
           (car simples)
           (append (cdr simples) (list k-exp)))))))
 ]
-@eopl-index[#:range-mark 'end "Operands"]}
+@eopl-index[#:range-mark 'end "Operands"]
+@eopl-index[#:range-mark 'end "Procedure call"]}
 
 现在，我们可以写出 CPS 翻译器的剩余部分
 （@figure-ref{fig-6.10}--@countref{fig-6.12}）。它@emph{跟随语法}。当表达式总是
@@ -1899,6 +1908,9 @@ in |@${T}
 
 @exercise[#:level 3 #:tag "ex6.32"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.32"]
+            @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
+            "data structure representation of"]
 写一个翻译器，它类似@exercise-ref{ex6.31}，但把所有过程表示为数据结构。
 
 }
@@ -1958,6 +1970,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 显式的，就像我们在@secref{cpi}中处理非局部控制流一样。
 
 @eopl-index["Expressions" "simple"]
+@eopl-index["Procedure call"]
 用 CPS 建模效果时，我们的基本原则是简单表达式不应有任何效果。简单表达式不应含有
 过程调用也是基于这一原则，因为过程调用可能不终止（这当然是一种效果！）。
 

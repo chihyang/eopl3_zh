@@ -166,7 +166,7 @@ in (f 1)
   @eopl-index[(eopl-index-entry @elem{@tt{bool} type} "booltype")]}
 
   @item{当且仅当表达值是一个 @tt{proc-val}，且给定类型为 @${t_1} 的参数时，发生
-  如下之一：@eopl-index["Polymorphic"]
+  如下之一：@eopl-index["Polymorphic"]@eopl-index["Procedure types"]
 
   @itemlist[#:style 'ordered
 
@@ -344,6 +344,7 @@ proc (f)
 @${exp} 的值保证是安全的，我们知道 @${exp} 的值一定是由符合类型 @${t} 的操作符产
 生的。在@secref{modules}，我们更细致地思考数据抽象时，这种观点会很有帮助。
 
+@eopl-index[#:range-mark 'start "Procedure types"]
 过程呢？如果 @tt{proc(@${var}) @${body}} 类型为 @${t_1 \to t_2}，那么应该用类型
 为 @${t_1} 的参数调用它。求 @${body} 的值时，绑定到变量 @${var} 的值类型为
 @${t_1}。
@@ -368,7 +369,8 @@ proc (f)
 
  @item{@term["Type Inference"]{类型推导}：按这种方法，类型检查器根据程序中变量的
  使用，尝试@term["infer"]{推断} 绑定变量的类型。如果语言设计得当，类型检查器可以
- 推断出大多数甚至所有这样的类型。}
+ 推断出大多数甚至所有这样的类型。
+ @eopl-index[#:range-mark 'end "Procedure types"]}
 
 ]
 
@@ -407,6 +409,7 @@ proc (f : (bool -> int)) proc (n : int) (f zero?(n))
 @tt{double} 结果的类型为 @tt{int}，但 @tt{double} 本身的类型为 @tt{(int -> int)}，
 因为它是一个过程，取一整数，返回一整数。
 
+@eopl-index[#:range-mark 'start "Procedure types"]
 要定义这种语言的语法，我们改变 @tt{proc} 和 @tt{letrec} 表达式的生成式。
 
 @big-bracket[#:title "修改后的生成式，适用于 CHECKED"]{
@@ -472,6 +475,7 @@ in |@${e_{letrec\mbox{-}body}}
            \end{gathered}}}
 
 现在我们已经写出了所有规则，可以实现语言的类型检查器了。
+@eopl-index[#:range-mark 'end "Procedure types"]
 
 @subsection[#:style section-title-style-numbered #:tag "s7.3.1"]{检查器}
 

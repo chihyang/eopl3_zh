@@ -536,9 +536,10 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 我们依次考虑新增的每种表达式。
 
+@eopl-index["Pseudo-variable"]
+@eopl-index["Binding" (eopl-index-entry "of pseudo-variables" "pseudo-variables")]
 求表达式的值通常是因为它是操作某个对象的方法的一部分。在当前环境中，这个对象绑定
 到伪变量 @tt{%self}。我们称之为@term["pseudo-variable"]{伪变量} 是因为它虽然像普
-@eopl-index["Binding" (eopl-index-entry "of pseudo-variables" "pseudo-variables")]
 通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，当前
 方法持有类的超类名字绑定到伪变量 @tt{%super}。
 
@@ -716,7 +717,8 @@ in send o3 m1(7,8)
  @item{方法的形参绑定到新引用，引用初始化为实参的值。这与 IMPLICIT-REFS 中的
  @tt{apply-procedure} 行为类似。}
 
- @item{伪变量 @tt{%self} 和 @tt{%super} 分别绑定到当前对象和方法的超类。}
+ @item{伪变量 @tt{%self} 和 @tt{%super} 分别绑定到当前对象和方法的超类。
+ @eopl-index["Pseudo-variable"]}
 
  @item{可见字段名绑定到当前对象的字段。要实现这点，我们定义
 
@@ -1106,6 +1108,7 @@ bogus-oddeven() in send o1 odd (13)} 给出错误的答案。
 
 @exercise[#:level 2 #:tag "ex9.11"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.11" "ex9.12" "ex9.13"] "Protection in object-oriented programming"]
 允许 CLASSES 指定每个方法是@term["private"]{私有的}，只能在持有类内访问；
 或@term["protected"]{受保护的}，只能在持有类及其后代中访问；或@term["public"]{公
 有的}，在所有位置都能访问。许多面向对象编程语言都包含了这一特性的某种版本。
@@ -1133,6 +1136,7 @@ class oddeven extends object
  final method odd (n)
   if zero?(n) then 0 else send self even(-(n,1))
 }|
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.11" "ex9.12" "ex9.13"] "Protection in object-oriented programming"]
 }
 
 }
@@ -1388,6 +1392,7 @@ in let o1 = (make-oddeven) in (getmethod(o1,odd) 13)
 
 @exercise[#:level 3 #:tag "ex9.29"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.29"] "Prototype objects"]
 设计和实现不需写明类的面向对象语言，让每个对象包含自身的方法环境。这种对象
 叫做@term["prototype"]{原型}。把类 @tt{object} 替换为没有方法和字段的原型对象。
 扩展类时，给其原型添加方法和字段，得到新的原型。这样，我们就能用 @tt{let c2 =
@@ -1396,6 +1401,7 @@ extend c1 ...} 替代 @tt{class c2 extends c1 ...}。把操作 @tt{new} 替换�
 作用域中，所以应该能像通常那样访问词法上可见的变量以及字段变量。
 当@term["superprototype"]{超型} 的字段变量与当前所在词法作用域的变量同名时，遮蔽
 关系是怎样的？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.29"] "Prototype objects"]
 
 }
 

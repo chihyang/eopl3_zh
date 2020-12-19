@@ -227,6 +227,7 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 @eopl-index{Abstraction boundary}
 @eopl-index{Data abstraction}
 @eopl-index["Implementation" "of ADT"]
+@eopl-index["Procedural representation"]
 
 @eopl-index["Modules"]
 用类型强制数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
