@@ -40,6 +40,7 @@
 示，只关心能否可靠地执行算术操作。
 
 @eopl-index["Client of ADT"]
+@eopl-index["Representation independence"]
 当客户只能通过接口提供的过程处理某类型的数据时，我们说客户代码
 与@term["representation-independent"]{表示无关}，因为这些代码不依赖数据类型值的
 表示。
@@ -217,6 +218,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @section[#:style section-title-style-numbered #:tag "s2.2"]{数据类型的表示策略}
 
 @eopl-index[#:range-mark 'start @eopl-index-entry[@elem{Environment ADT (@${\mathit{Env}})} "EnvironmentADT"]]
+@eopl-index["Representation independence"]
 使用数据抽象的程序具有表示无关性：与用来实现抽象数据类型的具体表示方式无关，甚至
 可以通过重新定义接口中的一小部分过程来改变表示。在后面的章节中我们常会用到这条性
 质。
@@ -475,6 +477,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 }
 
 @eopl-index["Environments" "ribcage representation of"]
+@eopl-index["Ribcage representation"]
 这叫做@term["ribcage"]{肋排} 表示法。环境由名为@term["rib"]{肋骨} 的序对列表表示；
 每根左肋是变量列表，右肋是对应的值列表。
 
@@ -879,6 +882,7 @@ lambda 演算表达式的语法：
 
 @section[#:style section-title-style-numbered #:tag "s2.4"]{定义递推数据类型的工具}
 
+@eopl-index[#:range-mark 'start "Recursive data types" "programs that manipulate"]
 对复杂的数据类型，按照上述步骤设计接口很快就会使人厌倦。本节介绍用 Scheme 自动设
 计和实现接口的工具。这个工具产生的接口与前一节的虽不完全相同，却很类似。
 
@@ -989,6 +993,7 @@ lambda 演算表达式的语法：
 @${type\mbox{-}predicate\mbox{-}name} 绑定到一个谓词。这个谓词判断其参数值是否是
 相应的类型。
 
+@eopl-index["Record"]
 记录可以用只有一种变体的数据类型定义。为了区分只有一种变体的数据类型，我们遵循一
 种命名惯例：当只有一个变体时，我们以 @tt{a-@${type\mbox{-}name}}
 @eopl-index[@eopl-index-entry[@elem{@tt{a(n)-@${\mathit{type\mbox{-}name}}} constructor} "antypename"]] 或
@@ -996,6 +1001,7 @@ lambda 演算表达式的语法：
 @${variant\mbox{-}name\mbox{-}type\mbox{-}name} 命名构造器。
 
 @eopl-index["Mutual recursion"]
+@eopl-index["Recursive programs" "mutual recursion"]
 由 @tt{define-datatype} 生成的数据结构可以互递归。例如，@secref{s1.1}中的 s-list
 语法为：
 
@@ -1105,6 +1111,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @eopl-index[#:range-mark 'end (eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]
 @eopl-index[#:range-mark 'end "Domain-specific languages"]
 @eopl-index[#:range-mark 'end "Lambda expression (LcExp)" "Scheme implementation"]
+@eopl-index[#:range-mark 'end "Recursive data types" "programs that manipulate"]
 
 @exercise[#:level 1 #:tag "ex2.21"]{
 
@@ -1254,6 +1261,8 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 2 #:tag "ex2.26"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.26"]
+            @eopl-index-entry[@elem{Red-blue trees (@${\mathit{Red\mbox{-}blue\mbox{-}tree}})} "Redbluetrees"]]
 @exercise-ref{ex1.33} 还有一种写法。树的集合可以用下列语法定义：
 
 @envalign*{\mathit{Red\mbox{-}blue\mbox{-}tree} &::= \mathit{Red\mbox{-}blue\mbox{-}subtree} \\
@@ -1264,6 +1273,8 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 用 @tt{define-datatype} 写出等价定义，用得到的接口写出一个过程，它取一棵树，生成
 形状相同的另一棵树，但把每片叶子的值改为从当前叶子节点到树根之间红色节点的数目。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.26"]
+            @eopl-index-entry[@elem{Red-blue trees (@${\mathit{Red\mbox{-}blue\mbox{-}tree}})} "Redbluetrees"]]
 
 }
 

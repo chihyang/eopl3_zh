@@ -32,6 +32,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
 @eopl-index["Induction, proof by"]
 @eopl-index["Inductive specifications"]
+@eopl-index["Rules-of-inference definition"]
 用归纳法定义集合和关系，是数理逻辑中久已存在的技术。我们的自底向上和推理规则式归
 纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
 @exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}
@@ -50,6 +51,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 口抽象语法树。
 
 @eopl-index["Follow the Grammar"]
+@eopl-index["Recursive programs" "design and implementation of"]
 我们的口号@emph{遵循语法}基于@emph{结构化归纳法}，由 @author-ref{Burstall}
 (1969) 提出。即使过程没有@bold{遵循语法}，@term["subgoal induction"]{子目标归纳}
 (@author-ref{Morris} & @author-ref{Wegbreit}, 1977) 仍是证明递归过程正确性的有效
@@ -101,6 +103,7 @@ Scheme} (@author-ref{Sperber} et al., 2007) 制定。
 @eopl-index["Defined language"]
 @eopl-index["Defining language"]
 @eopl-index["Metacircularity"]
+@eopl-index["Recursive programs" "design and implementation of"]
 对解释器的现代应用可追溯到 @author-ref{McCarthy} (1960)，他提出了@term["metacircular
 interpreter"]{自循环解释器}（用被定语言本身写就的解释器），用来解释 Lisp 的能力。
 当然，这样的解释器带来一大难题：如果被定语言由自身定义，我们要理解语言的定义，就
@@ -131,6 +134,7 @@ Scheme 的存储器来解释存储器的概念，但它们只用了一个全局�
 大多数具有可变局部值的标准编程语言，诸如 Pascal、Scheme 和 Java。
 
 @eopl-index["L-values"]
+@eopl-index["R-values"]
 术语@exact-elem{“}左值@exact-elem{”}和@exact-elem{“}右值@exact-elem{”}，以及
 内存的环境-存储器模型源自 @author-ref{Strachey} (1967)。
 

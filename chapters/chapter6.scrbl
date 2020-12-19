@@ -93,6 +93,7 @@
 ]
 }
 
+@eopl-index["Registerization"]
 我们还能以多种方式转换这一程序，比如寄存它，如@figure-ref{fig-6.1} 所示。
 
 我们甚至能将其转为跳跃式，如@figure-ref{fig-6.2} 所示。如果用普通的指令式语言，
@@ -153,7 +154,8 @@
         (apply-cont)))))
 ]
 
-@eopl-caption["fig-6.1"]{寄存后的 @tt{fact/k}}
+@eopl-caption["fig-6.1"]{寄存后的 @tt{fact/k}
+                         @eopl-index["Registerization"]}
 
 }
 
@@ -501,6 +503,8 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Registerization"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -531,7 +535,9 @@ val1 val2)} 的值传给当前续文。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Inlining"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{list-sum}} "listsum"]]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Registerization"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]}
 ]
 }
 
@@ -1115,6 +1121,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.16"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.16"] "Registerization"]
 寄存@figure-ref{fig-6.6} 中的解释器。
 
 }
@@ -1917,8 +1924,10 @@ in |@${T}
 
 @exercise[#:level 3 #:tag "ex6.33"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.33"] "Registerization"]
 写一个翻译器，它取@exercise-ref{ex6.32} 的输出，将其转换为@figure-ref{fig-6.1}
 那样的寄存器程序。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.33"] "Registerization"]
 
 }
 
@@ -2120,6 +2129,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 续文，下一续文把 @tt{v2} 绑定到实参（也是 38），然后用 @tt{v1}，@tt{v3} 和 @${K}
 调用 @tt{f}。
 
+@eopl-index[#:range-mark 'start "References" "explicit"]
 我们按照同样的步骤建模显式引用（@secref{s4.2}）。我们给 CPS-IN 和 CPS-OUT 添加新
 的语法，给 CPS-OUT 的解释器添加代码，处理新的语法，给 @tt{cps-of-exp} 添加代码，
 将新的 CPS-IN 语法翻译为 CPS-OUT。对显式引用，我们需要添加创建引用，解引用和赋值
@@ -2240,6 +2250,7 @@ newrefk(33, proc (loc1)
 @eopl-index[#:range-mark 'end "Dereferencing"]
 @eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
 @eopl-index[#:range-mark 'end "Mutation"]
+@eopl-index[#:range-mark 'end "References" "explicit"]
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 
@@ -2250,9 +2261,11 @@ newrefk(33, proc (loc1)
 
 @exercise[#:level 3 #:tag "ex6.37"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.37"] "References" "implicit"]
 给 CPS-IN 添加隐式引用（@secref{s4.3}）。用和显式引用相同的 CPS-OUT，确保翻译器
 在适当的地方插入分配和解引用。提示：回忆一下，在隐式引用出现的地方，@tt{var-exp}
 不再是简单的，因为它需要读取存储器。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.37"] "References" "implicit"]
 
 }
 

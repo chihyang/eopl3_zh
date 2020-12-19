@@ -15,6 +15,7 @@
 @section[#:style section-title-style-numbered #:tag "s4.1"]{计算的效果}
 
 @eopl-index["Effects, computational"]
+@eopl-index[#:range-mark 'start "References"]
 到目前为止，我们只考虑了计算产生的@term["value"]{值}，但是计算也
 有@term["effect"]{效果}：它可以读取，打印，修改内存或者文件系统的状态。在现实世
 界中，我们@emph{总是}对效果很感兴趣：如果一次计算不显示答案，那对我们完全没用！
@@ -42,13 +43,16 @@
 @eopl-index["L-values"]
 引用有时候又叫@term["L-values"]{左值}。这名字反映了这种数据结构与赋值语句左边变
 量的联系。类似地，表达值，比如赋值语句右边表达式的值，叫做@term["R-values"]{右值}。
+@eopl-index["R-values"]
 
 我们考虑两种带有存储器的语言设计。这些设计叫做@term["explicit reference"]{显式引
 用} 和@term["implicit reference"]{隐式引用}。
+@eopl-index[#:range-mark 'end "References"]
 
 @section[#:style section-title-style-numbered #:tag "s4.2"]{EXPLICIT-REFS：显式引用语言}
 
 @eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
+@eopl-index[#:range-mark 'start "References" "explicit"]
 在这种设计中，我们添加引用，作为另一种表达值。那么，我们有：
 
 @nested{
@@ -382,39 +386,7 @@ end
 更新存储器则建模为按需复制列表的一大部分。代码如@figure-ref{fig-4.1} 和
 @countref{fig-4.2} 所示。
 
-这种表示极其低效。一般的内存操作大致在常数时间内完成，但是采用我们的表示，这些操
-作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但这足以达到我们的
-目的。
-
-我们给表达值数据类型新增一种变体 @tt{ref-val}，然后修改 @tt{value-of-program}，
-在每次求值之前初始化存储器。
-
-@nested{
-@eopl-code{
-@racketblock[
-@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{SchemeVal}}}
-(define value-of-program
-  (lambda (pgm)
-    (initialize-store!)
-    (cases program pgm
-      (a-program (exp1)
-        (value-of exp1 (init-env))))))
-]
-}
-
-现在，我们可以写出 @tt{value-of} 中与 @tt{newref}、@tt{deref} 和 @tt{setref} 相
-关的语句。这些语句如@figure-ref{fig-4.3} 所示。
-
-}
-
-我们可以给该系统添加一些@elemtag["trace-instrument"]{辅助过程}，把环境、过程和存
-储器转换为更易读的形式，也可以改善系统，在代码中的关键位置打印消息。我们还使用过
-程把环境、过程和存储器转换为更易读的形式。得出的日志详细描述了系统的动作。典型例
-子如@figure-ref{fig-4.4} 和 @countref{fig-4.5} 所示。此外，这一跟踪日志还表明，
-差值表达式的参数按从左到右的顺序求值。
-@eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
-
-@eopl-figure{
+@eopl-figure[#:position "!ht"]{
 @racketblock[
 @#,elem{@bold{@tt{empty-store}} : @${() \to \mathit{Sto}}}
 (define empty-store
@@ -481,6 +453,38 @@ end
 
 @eopl-caption["fig-4.2"]{拙劣的存储器模型，续}
 }
+
+这种表示极其低效。一般的内存操作大致在常数时间内完成，但是采用我们的表示，这些操
+作所需的时间与存储器大小成正比。当然，真正实现起来不会这么做，但这足以达到我们的
+目的。
+
+我们给表达值数据类型新增一种变体 @tt{ref-val}，然后修改 @tt{value-of-program}，
+在每次求值之前初始化存储器。
+
+@nested{
+@eopl-code{
+@racketblock[
+@#,elem{@bold{@tt{value-of-program}} : @${\mathit{Program} \to \mathit{SchemeVal}}}
+(define value-of-program
+  (lambda (pgm)
+    (initialize-store!)
+    (cases program pgm
+      (a-program (exp1)
+        (value-of exp1 (init-env))))))
+]
+}
+
+现在，我们可以写出 @tt{value-of} 中与 @tt{newref}、@tt{deref} 和 @tt{setref} 相
+关的语句。这些语句如@figure-ref{fig-4.3} 所示。
+}
+
+我们可以给该系统添加一些@elemtag["trace-instrument"]{辅助过程}，把环境、过程和存
+储器转换为更易读的形式，也可以改善系统，在代码中的关键位置打印消息。我们还使用过
+程把环境、过程和存储器转换为更易读的形式。得出的日志详细描述了系统的动作。典型例
+子如@figure-ref{fig-4.4} 和 @countref{fig-4.5} 所示。此外，这一跟踪日志还表明，
+差值表达式的参数按从左到右的顺序求值。
+@eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
+@eopl-index[#:range-mark 'end "References" "explicit"]
 
 @exercise[#:level 1 #:tag "ex4.8"]{
 
@@ -688,6 +692,7 @@ newref: 分配位置 2
 
 @eopl-index[#:range-mark 'start "IMPLICIT-REFS"]
 @eopl-index[#:range-mark 'start "Mutation"]
+@eopl-index[#:range-mark 'start "References" "implicit"]
 显式引用设计清晰描述了内存的分配、解引用和变更，因为显而易见，这些操作都在程序员
 的代码之中。
 
@@ -899,6 +904,7 @@ in let a = (g 11)
 @figure-ref{fig-4.8} 用@elemref["trace-instrument"]{前面}介绍的辅助组件，展示了
 IMPLICIT-REFS 求值的简单例子。
 @eopl-index[#:range-mark 'end "IMPLICIT-REFS"]
+@eopl-index[#:range-mark 'end "References" "implicit"]
 
 @eopl-figure{
 @verbatim|{
@@ -960,6 +966,7 @@ newref: 分配位置 5
 
 @exercise[#:level 1 #:tag "ex4.16"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.16"] "Recursive programs" "design and implementation of"]
 既然变量是可变的，我们可以靠赋值产生递归过程。例如：
 
 @eopl-code{
@@ -987,6 +994,7 @@ in begin
 }
 
 手动跟踪这个程序，验证这种翻译可行。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.16"] "Recursive programs" "design and implementation of"]
 
 }
 
@@ -1019,17 +1027,14 @@ in begin
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 在本节的语言中，就像在 Scheme 中一样，所有变量都是可变的。另一种设计是同时允许可
 变和不可变的变量绑定：
-
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
 \mathit{DenVal} &= \mathit{Ref(ExpVal)} + \mathit{ExpVal}
 }
-
 只有变量绑定可变时，才能赋值。当指代值是引用时，解引用自动进行。
 
 修改本节的语言，让 @tt{let} 像之前那样引入不可变变量，可变变量则由
 @tt{letmutable} 表达式引入，语法为：
-
 @$${\mathit{Expression} ::= @tt{letmutable @${\mathit{Identifier}} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
 
@@ -1157,6 +1162,7 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 1 #:tag "ex4.23"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex4.23"] @eopl-index-entry[@elem{@tt{read} statement} "readstatement"]]
 给@exercise-ref{ex4.22} 中的语言添加 @tt{read} 语句，形如 @tt{read @${var}}。这
 一语句从输入读取一个非负数，存入指定的变量中。
 
@@ -1180,9 +1186,11 @@ in let p = proc (y) -(y,x)
 @exercise[#:level 3 #:tag "ex4.26"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.26"] "Mutual recursion"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.26"] "Recursive programs" "mutual recursion"]
 扩展前一道练习中的解答，允许同一块语句中声明的过程互递归。考虑给语言增加限制，块
 中的过程声明要在变量声明之后。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.26"] "Mutual recursion"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.26"] "Recursive programs" "mutual recursion"]
 
 }
 

@@ -31,6 +31,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s1.1"]{递推定义的数据}
 
+@eopl-index[#:range-mark 'start "Recursive data types" "specifying"]
 编写过程代码时，必须明确知道什么样的值能作为过程的参数，什么样的值是过程的合法返
 回值。这些值的集合通常很复杂。本节介绍定义值集合的形式化技术。
 
@@ -119,6 +120,7 @@
 @; @infer[${(n + 3) \in S}]{$@{n \in S}}
 @$${\infer{(n + 3) \in S}{n \in S}}
 
+@eopl-index["Rules of inference"]
 这只是前一定义的简便表示。每个条目称为一条@term["rule of inference"]{推理规则}，
 或称@term["rule"]{规则}；水平线读作@exact-elem{“}若-则@exact-elem{”}。线上部分
 称作@term["hypothesis"]{假设}或者@eopl-index{Antecedent}@term["antecedent"]{前件}；
@@ -139,6 +141,7 @@
 @eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
 这些定义意思相同。我们把版本一称作@term["top-down"]{自顶向下} 的定义，版本二
 称作@term["bottom-up"]{自底向上} 的定义，版本三称作@term[#f]{推理规则}定义。
+@eopl-index["Rules-of-inference definition"]
 
 再来看几个运用这些的例子。
 
@@ -173,6 +176,7 @@
 
 @definition[#:title "整数列表，推理规则" #:tag "d1.1.5"]{
 @nested[#:style normalfont]{
+@eopl-index["Rules-of-inference definition"]
 @$${\infer{@tt{()} \in @List-of-Int-${}}{}}
 
 @$${\infer{@tt{(@${n} . @${l})} \in @List-of-Int-${}}{n \in \mathit{Int} & l \in
@@ -520,9 +524,8 @@
 以在任何引用它的上下文中使用。有时这不够严格。考虑@elemtag["bst"]{二叉搜索树}。
 其节点或者为空，或者包含一个整数和两棵子树
 @eopl-index[(eopl-index-entry @elem{Binary search tree (@${\mathit{Binary\mbox{-}search\mbox{-}tree}})} "Binarysearchtree")]
-
 @$${\mathit{Binary\mbox{-}search\mbox{-}tree} ::= @tt{()} \mid
-    @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-} \\-tree}})}}
+    @tt{(@Int-$[] @${\mathit{Binary\mbox{-}search\mbox{-}tree}} @${\mathit{Binary\mbox{-}search\mbox{-}tree}})}}
 
 这如实反映了每个节点的结构，但是忽略了二叉搜索树的一个要点：所有左子树的键值都小
 于（或等于）当前节点，所有右子树的键值都大于当前节点。
@@ -541,9 +544,11 @@
 @eopl-index[#:range-mark 'end "Context-sensitive constraint"]
 @eopl-index[#:range-mark 'end "Grammars"]
 @eopl-index[#:range-mark 'end "Invariant"]
+@eopl-index[#:range-mark 'end "Recursive data types" "specifying"]
 
 @subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
 
+@eopl-index[#:range-mark 'start "Recursive data types" "proving properties of"]
 用归纳法描述的集合，其定义有两种用法：证明关于集合元素的定理，写出操作集合元素的
 程序。这里给出一个此类证明的例子，写程序留作下节的主题。
 
@@ -603,7 +608,8 @@
  @itemlist[#:style 'ordered
    @item{@${\mathit{IH}} 对简单结构（没有子结构）为真。}
 
-   @item{若 @${\mathit{IH}} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。}
+   @item{若 @${\mathit{IH}} 对 @${s} 的子结构为真，则对 @${s} 本身也为真。
+   @eopl-index[#:range-mark 'end "Recursive data types" "proving properties of"]}
  ]
 }
 
@@ -617,6 +623,9 @@
 
 @eopl-index[#:range-mark 'start "Follow the Grammar" "examples of"]
 @eopl-index[#:range-mark 'start "Inductive specifications" "recursive procedures based on"]
+@eopl-index[#:range-mark 'start "Recursive data types" "programs that manipulate"]
+@eopl-index[#:range-mark 'start "Recursive programs" "deriving"]
+@eopl-index[#:range-mark 'start "Recursive programs" "examples of"]
 我们已经用归纳定义法描述了复杂集合。我们能够分析归纳式集合的元素，观察如何从较小
 元素构建集合。我们用这一想法写出了过程 @tt{in-S?}，用以判断自然数是否属于集合
 @${S}。现在，我们用同样的想法定义更通用的过程，以便对归纳式集合做运算。
@@ -631,6 +640,8 @@
 
 已求得的子问题解随后可用来求解原问题。这可行，因为每次过程调用都是针对较小的子问
 题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
+@eopl-index[#:range-mark 'end "Recursive data types" "programs that manipulate"]
+@eopl-index[#:range-mark 'end "Recursive programs" "deriving"]
 
 我们用一些例子解释这一想法。
 
@@ -764,6 +775,7 @@ C} 相同。
 
 @eopl-index[(eopl-index-entry @elem{@tt{eopl:error} procedure} "eoplerrorprocedure")]
 @eopl-index[#:range-mark 'start "Error handling"]
+@eopl-index[@eopl-index-entry[@elem{@tt{report-} procedures} "reportprocedure"]]
 过程 @tt{report-list-too-short} 调用 @tt{eopl:error} 来报告错误，后者会终止计算。
 它的首个参数是一符号，用于在错误信息中指示调用 @tt{eopl:error} 的过程。第二个参
 数是一个字符串，会打印为错误信息。对应于字符串中的每个字符序列 @tt{~s}，都必须有
@@ -809,6 +821,7 @@ C} 相同。
 @subsection[#:style section-title-style-numbered #:tag "s1.2.3"]{@tt{remove-first}}
 
 @eopl-index["List of symbols (List-of-Symbol)"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
 过程 @tt{remove-first} 取两个参数：符号 @${s} 和符号列表 @${los}。它返回一个列表，
 除了不含第一个出现在 @${los} 中的符号 @${s} 外，所含元素及其排列顺序与 @${los}
 相同。如果 @${s} 没有出现在 @${los} 中，则返回 @${los}。
@@ -906,6 +919,7 @@ C} 相同。
 @#,exact-elem{\end{mdframed}}
 ]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
 }
 
 @exercise[#:level 1 #:tag "ex1.8"]{
@@ -1031,6 +1045,7 @@ C} 相同。
 
 @eopl-index[#:range-mark 'start "Mutual recursion"]
 @eopl-index[#:range-mark 'start "Nonterminal symbols"]
+@eopl-index[#:range-mark 'start "Recursive programs" "mutual recursion"]
 过程 @tt{subst} 取三个参数：两个符号 @tt{new} 和 @tt{old}，一个 s-list，
 @tt{slist}。它检查 @tt{slist} 的所有元素，返回类似 @tt{slist} 的新列表，但把其中
 所有的 @tt{old} 替换为 @tt{new}。
@@ -1146,12 +1161,14 @@ C} 相同。
 因为我们严格依照 @${\mathit{S\mbox{-}list}} 和 @${\mathit{S\mbox{-}exp}} 的定义，
 这个递归一定会终止。因为 @tt{subst} 和 @tt{subst-in-s-exp} 递归调用彼此，我们称
 之为@term["mutually recursive"]{互递归}。
+@eopl-index[#:range-mark 'end "Recursive programs" "mutual recursion"]
 
 把 @tt{subst} 拆解为两个过程——每个处理一种句法类别——是个重要技巧。对更为复杂的程
 序，我们得以每次考虑一个句法类别，从而化繁为简。
 @eopl-index[#:range-mark 'end "Follow the Grammar" "examples of"]
 @eopl-index[#:range-mark 'end "Mutual recursion"]
 @eopl-index[#:range-mark 'end "Nonterminal symbols"]
+@eopl-index[#:range-mark 'end "Recursive programs" "examples of"]
 
 @exercise[#:level 1 #:tag "ex1.11"]{
 
@@ -1177,7 +1194,8 @@ C} 相同。
 
 }
 
-现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。@linebreak{}
+@eopl-index[#:range-mark 'start "Recursive programs" "deriving"]
+现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。
 
 @nested[#:style tip]{
  @centered{@bold{遵循语法！}@eopl-index["Follow the Grammar"]}
@@ -1195,7 +1213,8 @@ C} 相同。
 
  @item{在每个过程中，为相应非终结符的每一生成式写一分支。你可能需要额外的分支结
  构，但这样才能起步。对生成式右边出现的每个非终结符，递归调用相应的过程。
- @eopl-index[#:range-mark 'end "Nonterminal symbols"]}
+ @eopl-index[#:range-mark 'end "Nonterminal symbols"]
+ @eopl-index[#:range-mark 'end "Recursive programs" "deriving"]}
 
 ]
 
@@ -1203,6 +1222,7 @@ C} 相同。
 
 @eopl-index[#:range-mark 'start "Auxiliary procedures"]
 @eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]
+@eopl-index[#:range-mark 'start "Recursive data types" "programs that manipulate"]
 窍门@term[#f]{遵循语法}很有效，有时却还是不够。考虑过程 @tt{number-elements}。这
 一过程取任何列表 @tt{(@${v_0} @${v_1} @${v_2} ...)} ，返回一列表 @tt{((0
 @${v_0}) (1 @${v_1}) (2 @${v_2}) ...)}。
@@ -1336,6 +1356,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 还有许多情况下，引入辅助变量或过程来解决问题会有帮助，甚至必不可少。只要能对新过
 程做什么给出独立的定义，尽可以如此。
 @eopl-index[#:range-mark 'end "Auxiliary procedures"]
+@eopl-index[#:range-mark 'end "Recursive data types" "programs that manipulate"]
 
 @exercise[#:level 2 #:tag "ex1.14"]{
 
@@ -1346,6 +1367,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 
 @section[#:style section-title-style-numbered #:tag "s1.4"]{练习}
 
+@eopl-index[#:range-mark 'start "Recursive programs" "examples of"]
 学写递归程序需要练习，那么我们拿几道习题结束本章。
 
 每道习题都假定 @tt{s} 是一个符号，@tt{n} 是一个非负整数，@tt{lst} 是一个列表，
@@ -1821,6 +1843,8 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @exercise[#:level 2 #:tag "ex1.33"]{
+ @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.33"]
+             @eopl-index-entry[@elem{Red-blue trees (@${\mathit{Red\mbox{-}blue\mbox{-}tree}})} "Redbluetrees"]]
  写出过程 @tt{mark-leaves-with-red-depth}，它取一棵二叉树（@definition-ref{d1.1.7}），生成与
  原树形状相同的另一棵二叉树，但在新的二叉树中，每个叶子中的整数表示它和树根之间
  含有 @tt{red} 符号的节点数。例如，表达式
@@ -1846,7 +1870,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  (red
   (bar 1 1)
   (red 2 (quux 2 2)))
- }}
+ }
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.33"]
+             @eopl-index-entry[@elem{Red-blue trees (@${\mathit{Red\mbox{-}blue\mbox{-}tree}})} "Redbluetrees"]]}
 
 }
 
@@ -1942,5 +1968,6 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
          (g (list 0 (car lst))
             (number-elements (cdr lst))))))
  }
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.36"] @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.36"] @eopl-index-entry[@bold{@tt{number-elements}} "number-elements"]]
+ @eopl-index[#:range-mark 'end "Recursive programs" "examples of"]}
 }

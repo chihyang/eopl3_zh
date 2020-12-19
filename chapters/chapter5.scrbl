@@ -88,6 +88,7 @@
 当 @tt{fact} 这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到
 调用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现
 出@term["recursive control behavior"]{递归性控制行为}。
+@eopl-index["Recursive control behavior"]
 
 与之相对，@tt{fact-iter-acc} 调用自身时，不需记录额外的控制信息。递归调用发生在
 表达式的同一层（上述推导的最外层）反映了这一点。在这种情况下，当递归深度（没有对
@@ -841,6 +842,7 @@
 
 @exercise[#:level 1 #:tag "ex5.5"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex5.5"] "List operations"]
 给语言添加@exercise-ref{ex3.9} 中的列表。
 
 }
@@ -914,6 +916,7 @@
 @exercise[#:level 1 #:tag "ex5.14"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.14"] "Iterative control behavior"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.14"] "Recursive control behavior"]
 前面练习中的辅助组件产生大量输出。修改辅助组件，只跟踪计算过程中最大续文
 的@emph{尺寸}。我们用续文构造器的使用次数衡量续文的大小，所
 以@pageref{cps-computation}的计算中，续文最大尺寸是 3。然后，用 @tt{fact} 和
@@ -921,6 +924,7 @@
 但 @tt{fact-iter} 使用的续文最大尺寸是常数。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.13" "ex5.14"] "Factorial function"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.14"] "Iterative control behavior"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.14"] "Recursive control behavior"]
 
 }
 
@@ -1182,6 +1186,7 @@
 
 @section[#:style section-title-style-numbered #:tag "s5.3"]{指令式解释器}
 
+@eopl-index[#:range-mark 'start "Registerization"]
 在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。
 考虑@figure-ref{fig-5.8} 顶部的老例子 @tt{even} 和 @tt{odd}。
 
@@ -1489,6 +1494,7 @@ odd:  if (x=0) then return(0)
 
 翻译完的解释器如@figure-ref{fig-5.11}--@countref{fig-5.14} 所示。这个过程
 叫做@term["registerization"]{寄存}。很容易用支持跳转的指令式语言翻译它。
+@eopl-index[#:range-mark 'end "Registerization"]
 
 @eopl-figure{
 @racketblock[
@@ -1535,7 +1541,8 @@ odd:  if (x=0) then return(0)
 \smallskip}
 ]
 
-@eopl-caption["fig-5.11"]{指令式解释器（第1部分）}
+@eopl-caption["fig-5.11"]{指令式解释器（第1部分）
+                          @eopl-index["Registerization"]}
 
 }
 
@@ -1567,7 +1574,8 @@ odd:  if (x=0) then return(0)
         (value-of/k)))))
 ]
 
-@eopl-caption["fig-5.12"]{指令式解释器（第2部分）}
+@eopl-caption["fig-5.12"]{指令式解释器（第2部分）
+                          @eopl-index["Registerization"]}
 
 }
 
@@ -1605,7 +1613,8 @@ odd:  if (x=0) then return(0)
 \smallskip}
 ]
 
-@eopl-caption["fig-5.13"]{指令式解释器（第3部分）}
+@eopl-caption["fig-5.13"]{指令式解释器（第3部分）
+                          @eopl-index["Registerization"]}
 
 }
 
@@ -1652,7 +1661,8 @@ odd:  if (x=0) then return(0)
         (value-of/k)))))
 ]
 
-@eopl-caption["fig-5.14"]{指令式解释器（第4部分）}
+@eopl-caption["fig-5.14"]{指令式解释器（第4部分）
+                          @eopl-index["Registerization"]}
 
 }
 
@@ -2802,7 +2812,7 @@ in let mut = mutex()
 
 @exercise[#:level 2 #:tag "ex5.50"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex5.5"] "List operations"]
+@eopl-index[#:suffix @exer-ref-range["ex5.50"] "Registerization"]
 寄存本节的解释器。必须寄存的互递归尾调用过程有哪些？
 
 }

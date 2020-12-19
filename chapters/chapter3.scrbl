@@ -423,6 +423,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
       {@tt{(value-of @${exp_1} @${\rho}) = @${val_1}}}
 }
 
+@eopl-index["Rules of inference"]
 用这种推理规则很容易指定任意表达式的期望行为，但却不适合展示推理过程。像
 @tt{(value-of @${exp_1} @${\rho})} 这样的前件表示一部分计算，所以一个计算过程应
 该是一棵树，就像@pageref{deriv-tree}那种。很不幸的是，这样的树极为晦涩。因此，我
@@ -1389,12 +1390,14 @@ in let times4 = proc (x) ((makemult makemult) x)
 @exercise[#:level 2 #:tag "ex3.24"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex3.24"] "Mutual recursion"]
+@eopl-index[#:suffix @exer-ref-range["ex3.24"] "Recursive programs" "mutual recursion"]
 用上述程序里的小技巧写出@exercise-ref{ex3.32} 中的互递归程序 @tt{odd} 和 @tt{even}。
 
 }
 
 @exercise[#:level 1 #:tag "ex3.25"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.25"] "Recursive programs" "design and implementation of"]
 提炼上述练习中的技巧，用它在 PROC 中定义任意递归过程。考虑下面的代码：
 
 @eopl-code{
@@ -1414,6 +1417,7 @@ in let maketimes4 = proc (f)
 }
 
 证明它返回12。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.25"] "Recursive programs" "design and implementation of"]
 }
 
 @exercise[#:level 2 #:tag "ex3.26"]{
@@ -1696,6 +1700,7 @@ in (double 6)
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Mutual recursion"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Recursive programs" "mutual recursion"]
 扩展上面的语言，允许声明任意数量的单参数互递归过程，例如：
 
 @eopl-code{
@@ -1717,6 +1722,7 @@ in (odd 13)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.33"] "Multiple-argument procedures"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Multiple-procedure declaration"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Mutual recursion"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.32" "ex3.33"] "Recursive programs" "mutual recursion"]
 
 }
 
@@ -1767,6 +1773,7 @@ in (odd 13)
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Mutual recursion"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Recursive programs" "mutual recursion"]
 扩展这种实现，处理@exercise-ref{ex3.32} 中的语言。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.35" "ex3.36"] "Closures"]
 
@@ -1776,6 +1783,7 @@ in (odd 13)
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Recursive programs" "design and implementation of"]
 使用动态绑定（@exercise-ref{ex3.28}），不需要任何特殊机制，靠 @tt{let} 就能创建
 递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
 还鲜为人知。要验证动态绑定实现的递归，试试程序：
@@ -1797,6 +1805,8 @@ in let fact = proc (n)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Multiple-procedure declaration"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Mutual recursion"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Recursive programs" "design and implementation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Recursive programs" "mutual recursion"]
 
 }
 
@@ -1804,6 +1814,7 @@ in let fact = proc (n)
 
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry "of variables" "variables")]
 @eopl-index[#:range-mark 'start "Declaration" "of variables"]
+@eopl-index[#:range-mark 'start "References"]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1994,6 +2005,7 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry "of variables" "variables")]
 @eopl-index[#:range-mark 'end "Declaration" "of variables"]
 @eopl-index[#:range-mark 'end "Dynamic properties of programs"]
+@eopl-index[#:range-mark 'end "References"]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
@@ -2543,12 +2555,14 @@ htt]{nameless-letrec-var-exp}。
 
 @exercise[#:level 2 #:tag "ex3.41"]{
 
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.34"] "Environments" "ribcage representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.41"] "Environments" "ribcage representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.41"] "Ribcage representation"]
 修改词法地址翻译器和解释器，像@exercise-ref{ex3.21} 那样处理多参数的 @tt{let} 表
 达式、过程和过程调用。用肋排表示法（@exercise-ref{ex2.21}）表示无名环境。在这种
 表示法中，词法地址包含两个非负数：词深，指明跨越的等深线数目，与之前相同；位置，
 指明变量在声明中的位置。
-@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.34"] "Environments" "ribcage representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.41"] "Environments" "ribcage representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.41"] "Ribcage representation"]
 
 }
 

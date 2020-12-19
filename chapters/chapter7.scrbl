@@ -649,6 +649,7 @@ in |@${e_{letrec\mbox{-}body}}
 @exercise[#:level 1 #:tag "ex7.6"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex7.6"] "IMPLICIT-REFS"]
+@eopl-index[#:suffix @exer-ref-range["ex7.6"] "References" "implicit"]
 扩展检查器，处理赋值（@secref{s4.3}）。
 
 }
@@ -749,6 +750,7 @@ in |@${e_{letrec\mbox{-}body}}
 @exercise[#:level 2 #:tag "ex7.10"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.10"] "EXPLICIT-REFS"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.10"] "References" "explicit"]
 扩展检查器，处理 EXPLICIT-REFS。你需要这样做：
 
 @itemlist[
@@ -764,7 +766,8 @@ in |@${e_{letrec\mbox{-}body}}
  @item{写出 @tt{newref}、@tt{deref} 和 @tt{setref} 的判类规则。}
 
  @item{在检查器中实现这些规则。
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.10"] "EXPLICIT-REFS"]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.10"] "EXPLICIT-REFS"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.10"] "References" "explicit"]}
 
 ]
 
@@ -2082,13 +2085,9 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.25"] "List operations"]
 扩展推导器，像@exercise-ref{ex7.9} 那样处理列表类型。修改语言，用生成式
-
 @$${\mathit{Expression} ::= @tt{emptylist}}
-
 代替
-
 @$${\mathit{Expression} ::= @tt{emptylist_@${\mathit{Type}}}}
-
 提示：考虑用类型变量代替缺失的 @tt{_@${t}}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.25"] "List operations"]
 }
