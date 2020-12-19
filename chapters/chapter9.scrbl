@@ -2081,7 +2081,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 类声明，我们传递从静态类环境收集到的信息，检查每个方法。最后，我们检查类是否实现
 了它声称实现的每个接口。
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{check-class-decl!}} : @${\mathit{ClassDecl} \to \mathit{Unspecified}}}
 (define check-class-decl!
@@ -2106,9 +2106,9 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 ]
 
 @eopl-caption["fig-9.19"]{@tt{check-class-decl!}
-                          @eopl-index[#:range-mark 'end "Class environment"]
+                          @eopl-index["Class environment"]
                           @eopl-index["Classes" "declaration of"]
-                          @eopl-index[#:range-mark 'end "Declaration" "of classes"]}
+                          @eopl-index["Declaration" "of classes"]}
 }
 
 @eopl-index["Declaration" "of method"]
@@ -2116,22 +2116,6 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 要检查方法声明，我们首先检查其主体是否符合声明类型。要这样做，我们建立一个类型环
 境，该环境与主体求值时的环境相符。然后我们检查主体的结果类型是否为声明中结果类型
 的子类型。
-
-但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
-类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
-型。这条规则的唯一例外是 @tt{initialize}，它只在当前类中调用，且随继承改变类型
-（见@figure-ref{fig-9.12}）。要这样做，它调用 @tt{maybe-find-method-type}，后者
-返回已绑定方法的类型，或者 @tt{#f}。见@figure-ref{fig-9.20}。
-
-如@figure-ref{fig-9.21}，过程 @tt{check-if-implements?} 取两个符号，分别为类名和
-接口名。它首先检查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查
-类是否提供了同名且类型兼容的方法。
-
-为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。
-静态类是逆序的，这反映了生成类环境的顺序。三个类中的方法顺序相同，且类型相同，符
-合期望。
-
-这样，检查器就完成了。
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2168,7 +2152,24 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
                           @eopl-index["Method of object" "declaration of"]}
 }
 
-@eopl-figure[#:position "!ht"]{
+但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
+类型。之所以如此，是因为这个方法可能由另一方法调用，而另一方法只知道超类方法的类
+型。这条规则的唯一例外是 @tt{initialize}，它只在当前类中调用，且随继承改变类型
+（见@figure-ref{fig-9.12}）。要这样做，它调用 @tt{maybe-find-method-type}，后者
+返回已绑定方法的类型，或者 @tt{#f}。见@figure-ref{fig-9.20}。
+
+如@figure-ref{fig-9.21}，过程 @tt{check-if-implements?} 取两个符号，分别为类名和
+接口名。它首先检查两个符号确实为类名和接口名。然后，它遍历接口中的每个方法，检查
+类是否提供了同名且类型兼容的方法。
+
+为@figure-ref{fig-9.12} 中示例程序生成的静态类环境如@figure-ref{fig-9.22} 所示。
+静态类是逆序的，这反映了生成类环境的顺序。三个类中的方法顺序相同，且类型相同，符
+合期望。
+
+这样，检查器就完成了。
+@eopl-index[#:range-mark 'end "Class environment"]
+
+@eopl-figure[#:position "!t"]{
 @racketblock[
 @#,elem{@bold{@tt{check-if-implements!}} : @${\mathit{ClassName} \times \mathit{InterfaceName} \to \mathit{Bool}}}
 (define check-if-implements!
