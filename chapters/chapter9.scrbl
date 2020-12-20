@@ -190,35 +190,6 @@ in send o1 odd(13)}|
 通过继承，程序员能够增量式地修改旧类，得到新类。在实践中，这十分有用。例如，有色
 点与点类似，但是它还有处理颜色的方法，如@figure-ref{fig-9.3} 中的经典例子所示。
 
-@eopl-index["Child class"]
-@eopl-index["Classes" "parent"]
-@eopl-index["Parent class"]
-如果类 @${c_2} 扩展类 @${c_1}，我们说 @${c_1} 是 @${c_2} 的@term["parent"]{父类}
-@eopl-index["Classes" "superclass"]
-或@term["superclass"]{超类}，@${c_2} 是 @${c_1} 的@term["child"]{子类}。在继承中，
-由于 @${c_2} 定义为 @${c_1} 的扩展，所以 @${c_1}必须在@${c_2} 之前定义。在此之前，
-语言包含了一个预先定义的类，名为 @tt{object}，它没有任何方法或字段。由于类
-@tt{object} 没有 @tt{initialize} 方法，因此无法创建它的对象。除 @tt{object} 之外
-的所有类都有唯一父类，但可以有多个子类。因此，由@tt{extends} 得出的关系在类与类
-之间产生了树状结构，其根为 @tt{object}。因为每个类至多只有一个直接超类，这是
-一种@term["single-inheritance"]{单继承} 语言。有些语言允许类继承自多个超类。
-@eopl-index["Multiple inheritance"]
-@term["multiple inheritance"]{多继承} 虽然强大，却不无问题。在练习中，我们考虑一
-些不便之处。
-
-术语@emph{继承}源于宗谱的类比。我们常常引申这一类比，说类的@term["ancestor"]{祖
-先}@eopl-index{Ancestor class}（从类的父类到根类 @tt{object}）
-@eopl-index["Descendant class"]
-和@term["descendant"]{后代}。如果 @${c_2} 是@${c_1} 的后代，我们有时说 @${c_2}
-是@${c_1} 的@term["subclass"]{子类}，写作@${c_2 < c_1}。
-@eopl-index["Classes" "subclass"]
-
-如果类 @${c_2} 继承自类 @${c_1}，@${c_1} 的所有字段和方法都对 @${c_2}的方法可见，
-除非在 @${c_2} 中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例
-可以在任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实
-例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
-择这种设计，其他面向对象语言可能有不同的可见性规则。@eopl-index["Polymorphic"]
-
 @eopl-figure[#:position "!ht"]{
 @eopl-code{
 @verbatim|{
@@ -256,14 +227,25 @@ in begin
 @eopl-caption["fig-9.3"]{继承的经典例子：@tt{colorpoint}}
 }
 
-接下来，我们考虑重新声明类的字段或方法时会发生什么。如果 @${c_1} 的某个字段在某
-个子类 @${c_2} 中重新声明，新的声明@term["shadow"]{遮蔽} 旧的，就像词法定界一样。
-例如，考虑@figure-ref{fig-9.4}。类 @tt{c2} 的对象有两个名为 @tt{y} 的字段：
-@tt{c1} 中声明的和 @tt{c2} 中声明的。@tt{c1} 中声明的方法能看到 @tt{c1} 的字段
-@tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
-@tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
+@eopl-index["Child class"]
+@eopl-index["Classes" "parent"]
+@eopl-index["Parent class"]
+如果类 @${c_2} 扩展类 @${c_1}，我们说 @${c_1} 是 @${c_2} 的@term["parent"]{父类}
+@eopl-index["Classes" "superclass"]
+@eopl-index["Superclass"]
+或@term["superclass"]{超类}，@${c_2} 是 @${c_1} 的@term["child"]{子类}。在继承中，
+由于 @${c_2} 定义为 @${c_1} 的扩展，所以 @${c_1}必须在@${c_2} 之前定义。在此之前，
+语言包含了一个预先定义的类，名为 @tt{object}，它没有任何方法或字段。由于类
+@tt{object} 没有 @tt{initialize} 方法，因此无法创建它的对象。除 @tt{object} 之外
+的所有类都有唯一父类，但可以有多个子类。因此，由@tt{extends} 得出的关系在类与类
+之间产生了树状结构，其根为 @tt{object}。因为每个类至多只有一个直接超类，这是一种
+@term["single-inheritance"]{单继承} 语言。有些语言允许类继承自多个
+超类。@term["multiple inheritance"]{多继承} 虽然强大，却不无问题。在练习中，我们
+考虑一些不便之处。
+@eopl-index["Single inheritance"]
+@eopl-index["Multiple inheritance"]
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @eopl-code{
 @verbatim|{
 |@elemtag["field-shadowing"]{}class c1 extends object
@@ -294,6 +276,29 @@ in begin
 
 @eopl-caption["fig-9.4"]{字段遮蔽的例子}
 }
+
+术语@emph{继承}源于宗谱的类比。我们常常引申这一类比，说类的@term["ancestor"]{祖
+先}@eopl-index{Ancestor class}（从类的父类到根类 @tt{object}）
+@eopl-index["Descendant class"]
+和@term["descendant"]{后代}。如果 @${c_2} 是@${c_1} 的后代，我们有时说 @${c_2}
+是@${c_1} 的@term["subclass"]{子类}，写作@${c_2 < c_1}。
+@eopl-index["Classes" "subclass"]
+@eopl-index["Subclass"]
+
+如果类 @${c_2} 继承自类 @${c_1}，@${c_1} 的所有字段和方法都对 @${c_2}的方法可见，
+除非在 @${c_2} 中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例
+可以在任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实
+例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
+择这种设计，其他面向对象语言可能有不同的可见性规则。@eopl-index["Polymorphic"]
+@eopl-index["Subclass polymorphism"]
+
+接下来，我们考虑重新声明类的字段或方法时会发生什么。如果 @${c_1} 的某个字段在某
+个子类 @${c_2} 中重新声明，新的声明@term["shadow"]{遮蔽} 旧的，就像词法定界一样。
+@eopl-index["Shadowing"]
+例如，考虑@figure-ref{fig-9.4}。类 @tt{c2} 的对象有两个名为 @tt{y} 的字段：
+@tt{c1} 中声明的和 @tt{c2} 中声明的。@tt{c1} 中声明的方法能看到 @tt{c1} 的字段
+@tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
+@tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
 如果类 @${c_1} 的方法 @${m} 在某个子类 @${c_2} 中重新声明，我们说新的
 方法@term["override"]{覆盖} 旧的方法。我们将方法声明所在的类称为方法
@@ -330,34 +335,7 @@ m2()} 呢？方法 @tt{m2} 直接调用方法 @tt{m1}，但它调用的是哪个
 动态分发告诉我们，应查看绑定到 @tt{self} 的对象属于哪个类。@tt{self} 的值是
 @tt{o2}，属于类 @tt{c2}。因此，调用 @tt{send self m1()} 应返回 22。
 
-我们的语言还有一个重要特性：@term["super call"]{超类调用}。
-考虑@figure-ref{fig-9.5} 中的程序。其中，我们在类 @tt{colorpoint} 中重写了
-@tt{initialize} 方法，同时设置字段 @tt{x}、@tt{y} 和 @tt{color}。但是，新方法的
-主体复制了原方法的代码。在我们的小例子中，这尚可接受，但在大型例子中，这显然是一
-种坏的做法（为什么？）。而且，如果 @tt{colorpoint} 声明了字段 @tt{x}，就没法初始
-化 @tt{point} 的字段 @tt{x}，正如@pageref{field-shadowing}的例子中，没法初始化第
-一个 @tt{y} 一样。
-
-解决方案是，把 @tt{colorpoint} 的 @tt{initialize} 方法主体中的重复代码替换
-为@emph{超类调用}，形如 @tt{super initialize()}。那么 @tt{colorpoint} 中的
-@tt{initialize} 方法写作：
-
-@eopl-code{
-@verbatim|{
-method initialize (initx, inity, initcolor)
- begin
-  super initialize(initx, inity);
-  set color = initcolor
- end
-}|
-}
-
-方法 @${m} 主体中的超类调用 @tt{super @${n}(...)} 使用的是 @${m} 持有类父类的方
-法 @${n}。这不一定是 @tt{self} 所指类的父类。@tt{self} 所指类总是 @${m} 持有类的
-子类，但不一定是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为
-@${m} 可能在目标对象的某个祖先中声明。
-
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @eopl-code{
 @verbatim|{
 class point extends object
@@ -392,6 +370,34 @@ in send o1 get-color()}|
                          @eopl-index["Inheritance"]}
 }
 
+@eopl-index[#:range-mark 'start "Super calls"]
+我们的语言还有一个重要特性：@term["super call"]{超类调用}。
+考虑@figure-ref{fig-9.5} 中的程序。其中，我们在类 @tt{colorpoint} 中重写了
+@tt{initialize} 方法，同时设置字段 @tt{x}、@tt{y} 和 @tt{color}。但是，新方法的
+主体复制了原方法的代码。在我们的小例子中，这尚可接受，但在大型例子中，这显然是一
+种坏的做法（为什么？）。而且，如果 @tt{colorpoint} 声明了字段 @tt{x}，就没法初始
+化 @tt{point} 的字段 @tt{x}，正如@pageref{field-shadowing}的例子中，没法初始化第
+一个 @tt{y} 一样。
+
+解决方案是，把 @tt{colorpoint} 的 @tt{initialize} 方法主体中的重复代码替换
+为@emph{超类调用}，形如 @tt{super initialize()}。那么 @tt{colorpoint} 中的
+@tt{initialize} 方法写作：
+
+@eopl-code{
+@verbatim|{
+method initialize (initx, inity, initcolor)
+ begin
+  super initialize(initx, inity);
+  set color = initcolor
+ end
+}|
+}
+
+方法 @${m} 主体中的超类调用 @tt{super @${n}(...)} 使用的是 @${m} 持有类父类的方
+法 @${n}。这不一定是 @tt{self} 所指类的父类。@tt{self} 所指类总是 @${m} 持有类的
+子类，但不一定是同一个，@note{任何类都是自身的子类，故有此说。——@emph{译注}}因为
+@${m} 可能在目标对象的某个祖先中声明。
+
 要解释这种区别，考虑@figure-ref{fig-9.6}。给类 @tt{c3} 的对象 @tt{o3} 发送消息
 @tt{m3}，找到的是 @tt{c2} 的方法 @tt{m3}，它执行 @tt{super m1()}。@tt{o3} 的类是
 @tt{c3}，其父类是 @tt{c2}，但方法的持有类是 @tt{c2}，@tt{c2} 的超类是 @tt{c1}。
@@ -403,7 +409,7 @@ in send o1 get-color()}|
 以使用动态分发，找出的是 @tt{c3} 的方法 @tt{m2}，返回 33。
 @eopl-index[#:range-mark 'end "Inheritance"]
 
-@eopl-figure[#:position "!ht"]{
+@eopl-figure[#:position "!t"]{
 @eopl-code{
 @verbatim|{
 class c1 extends object
