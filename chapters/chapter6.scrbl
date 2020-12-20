@@ -504,7 +504,9 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] "Registerization"]
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{remove-first}} "removefirst"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4" "ex6.5"] "Sequentialization"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{subst}} "subst"]]
 把下面的所有过程重写为续文传递风格。表示每个过程的续文时，先用数据结构表示法，然
 后用过程表示法，然后用内联过程表示法。最后，写出寄存版本。照@secref{cpi}那样定义
 @tt{end-cont}，验证你实现的这四个版本是尾调用：
@@ -537,7 +539,8 @@ val1 val2)} 的值传给当前续文。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Procedural representation" "of continuations"]
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] "Registerization"]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{remove-first}} "removefirst"]]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4"] @eopl-index-entry[@bold{@tt{subst}} "subst"]]}
 ]
 }
 
@@ -545,6 +548,7 @@ val1 val2)} 的值传给当前续文。
 
 当我们把表达式重写为CPS时，我们就为表达式中的过程选择了一种求值顺序。把前面的每
 个例子重写为CPS，且使过程调用从右向左求值。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.4" "ex6.5"] "Sequentialization"]
 
 }
 
@@ -807,13 +811,15 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 名字总以 @tt{cps-} 开头，这样它们不会与 CPS-IN 中生成式的名字混淆。
 
 @eopl-index["Expressions" "simple"]
+@eopl-index[#:range-mark 'start "Simple expressions"]
 新的语法有两个非终结符，@${\mathit{SimpleExp}} 和 @${\mathit{TfExp}}。这种设计中，
 @${\mathit{SimpleExp}} 表达式不包含任何过程调用，@${\mathit{TfExp}} 表达式一定是
 尾式。
 
 因为 @${\mathit{SimpleExp}} 表达式不包含任何过程调用，它们大致可以看成只有一行的
 简单代码，对我们来说，它们简单到不需使用控制堆栈。简单表达式包括 @tt{proc} 表达
-式，因为 @tt{proc} 表达式立即返回一个过程值，但过程的主体必须是尾式。
+式，因为 @tt{proc} 表达式直接返回一个过程值，但过程的主体必须是尾式。
+@eopl-index[#:range-mark 'end "Simple expressions"]
 
 尾表达式的传递续文解释器如@figure-ref{fig-6.6} 所示。由于这种语言的过程取多个参
 数，我们用@exercise-ref{ex2.10} 中的 @tt{extend-env*} 创建多个绑定，并用类似方式
@@ -1706,9 +1712,11 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 @exercise[#:level 1 #:tag "ex6.20"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.20"] "Induction, proof by"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.20"] "Sequentialization"]
 我们的过程 @tt{cps-of-exps} 迫使子表达式按从左向右的顺序求值。修改
 @tt{cps-of-exps}，使子表达式从右向左求值。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.20"] "Induction, proof by"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.20"] "Sequentialization"]
 
 }
 
@@ -1935,6 +1943,7 @@ in |@${T}
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34"] "Fibonacci sequence"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.34" "ex6.35"] "Sequentialization"]
 我们把程序转换为 CPS 时，不仅将程序中的控制上下文变为显式的，而且还确定了操作的
 执行顺序，以及所有中间结果的名字。后者叫做@term["sequentialization"]{序列化}。如
 果我们不关心能否获得迭代性控制行为，我们序列化程序时可将其转换为
@@ -1968,6 +1977,7 @@ CPS 程序传递命名中间结果的续文，从而序列化计算；ANF 程序
 用几个例子验证：若采用@exercise-ref{ex6.27} 中的优化方法，对 ANF 转换器
 （@exercise-ref{ex6.34}）的输入和输出程序进行 CPS 变换，所得结果相同。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.34" "ex6.35"] @eopl-index-entry["A-normal form (ANF)" "Anormalform"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.34" "ex6.35"] "Sequentialization"]
 
 }
 
@@ -1980,6 +1990,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 
 @eopl-index["Expressions" "simple"]
 @eopl-index["Procedure call"]
+@eopl-index["Simple expressions"]
 用 CPS 建模效果时，我们的基本原则是简单表达式不应有任何效果。简单表达式不应含有
 过程调用也是基于这一原则，因为过程调用可能不终止（这当然是一种效果！）。
 
@@ -2130,6 +2141,7 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 调用 @tt{f}。
 
 @eopl-index[#:range-mark 'start "References" "explicit"]
+@eopl-index[#:range-mark 'start "Store"]
 我们按照同样的步骤建模显式引用（@secref{s4.2}）。我们给 CPS-IN 和 CPS-OUT 添加新
 的语法，给 CPS-OUT 的解释器添加代码，处理新的语法，给 @tt{cps-of-exp} 添加代码，
 将新的 CPS-IN 语法翻译为 CPS-OUT。对显式引用，我们需要添加创建引用，解引用和赋值
@@ -2137,37 +2149,37 @@ CPS 的另一重要应用是提供模型，将计算效果变为显式的。计�
 
 @itemlist[
 
- @item{我们给 CPS-IN 添加语法：
- @eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
- @eopl-index[#:range-mark 'start "Dereferencing"]
- @eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
- @eopl-index[#:range-mark 'start "Mutation"]
+@item{我们给 CPS-IN 添加语法：
+@eopl-index[#:range-mark 'start "Allocation" (eopl-index-entry "in store" "store")]
+@eopl-index[#:range-mark 'start "Dereferencing"]
+@eopl-index[#:range-mark 'start "EXPLICIT-REFS"]
+@eopl-index[#:range-mark 'start "Mutation"]
 
- @nested[#:style small]{
- @envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
-          &\mathrel{\phantom{::=}} \fbox{@tt{newref-exp (exp1)}} \\[5pt]
-            \mathit{InpExp} &::= @tt{deref (@m{\mathit{InpExp}})} \\[-3pt]
-          &\mathrel{\phantom{::=}} \fbox{@tt{deref-exp (exp1)}} \\[5pt]
-          \mathit{InpExp} &::= @tt{setref (@m{\mathit{InpExp}} , @m{\mathit{InpExp}})} \\[-3pt]
-          &\mathrel{\phantom{::=}} \fbox{@tt{setref-exp (exp1 exp2)}}}}
- }
+@nested[#:style small]{
+@envalign*{\mathit{InpExp} &::= @tt{newref (@m{\mathit{InpExp}})} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{newref-exp (exp1)}} \\[5pt]
+           \mathit{InpExp} &::= @tt{deref (@m{\mathit{InpExp}})} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{deref-exp (exp1)}} \\[5pt]
+         \mathit{InpExp} &::= @tt{setref (@m{\mathit{InpExp}} , @m{\mathit{InpExp}})} \\[-3pt]
+         &\mathrel{\phantom{::=}} \fbox{@tt{setref-exp (exp1 exp2)}}}}
+}
 
- @item{我们给 CPS-OUT 添加语法：
+@item{我们给 CPS-OUT 添加语法：
 
- @nested[#:style small]{
- @envalign*{\mathit{TfExp} &::= @tt{newrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
-         &\mathrel{\phantom{::=}} \fbox{@tt{cps-newrefk-exp (simple1 simpe2)}} \\[5pt]
-            \mathit{TfExp} &::= @tt{derefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
-         &\mathrel{\phantom{::=}} \fbox{@tt{cps-derefk-exp (simple1 simpe2)}} \\[5pt]
-            \mathit{TfExp} &::= @tt{setrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}}) ; @m{\mathit{TfExp}}} \\[-3pt]
-         &\mathrel{\phantom{::=}} \fbox{@tt{cps-setrefk-exp (simple1 simpe2)}}}}
+@nested[#:style small]{
+@envalign*{\mathit{TfExp} &::= @tt{newrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{cps-newrefk-exp (simple1 simpe2)}} \\[5pt]
+           \mathit{TfExp} &::= @tt{derefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}})} \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{cps-derefk-exp (simple1 simpe2)}} \\[5pt]
+           \mathit{TfExp} &::= @tt{setrefk (@m{\mathit{simple\mbox{-}exp}}, @m{\mathit{simple\mbox{-}exp}}) ; @m{\mathit{TfExp}}} \\[-3pt]
+        &\mathrel{\phantom{::=}} \fbox{@tt{cps-setrefk-exp (simple1 simpe2)}}}}
 
- @tt{newrefk} 表达式取两个参数：放入新分配单元的值，接收新位置引用的续文。
- @tt{derefk} 与之类似。由于 @tt{setrefk} 的执行通常只求效果，@tt{setrefk} 的设计
- 与 @tt{printk} 类似。它将第二个参数的值赋给第一个参数的值，后者应是一个引用，然
- 后尾递归式地执行第三个参数。
+@tt{newrefk} 表达式取两个参数：放入新分配单元的值，接收新位置引用的续文。
+@tt{derefk} 与之类似。由于 @tt{setrefk} 的执行通常只求效果，@tt{setrefk} 的设计
+与 @tt{printk} 类似。它将第二个参数的值赋给第一个参数的值，后者应是一个引用，然
+后尾递归式地执行第三个参数。
 
- 在这门语言中，我们写：
+在这门语言中，我们写：
 
 @eopl-code{
 @verbatim|{
@@ -2179,12 +2191,12 @@ newrefk(33, proc (loc1)
 }|
 }
 
- 这个程序新分配一个位置，值为 33，把 @tt{loc1} 绑定到那个位置。然后，它新分配一
- 个位置，值为 44，把 @tt{loc2} 绑定到那个位置。然后，它把位置 @tt{loc1} 的内容设
- 为 22。最后，它取出 @tt{loc1} 的值，把结果（应为 22）绑定到 @tt{val}，求出并返
- 回@tt{-(val,1)} 的结果 21。
+这个程序新分配一个位置，值为 33，把 @tt{loc1} 绑定到那个位置。然后，它新分配一个
+位置，值为 44，把 @tt{loc2} 绑定到那个位置。然后，它把位置 @tt{loc1} 的内容设为
+22。最后，它取出 @tt{loc1} 的值，把结果（应为 22）绑定到 @tt{val}，求出并返回
+@tt{-(val,1)} 的结果 21。
 
- 要得到这种行为，我们给 CPS-OUT 的解释器添加这几行代码：
+要得到这种行为，我们给 CPS-OUT 的解释器添加这几行代码：
 
 @eopl-code{
 @racketblock[
@@ -2218,7 +2230,7 @@ newrefk(33, proc (loc1)
 
  }
 
- @item{最后，我们给 @tt{cps-of-exp} 添加这几行代码来做翻译：
+@item{最后，我们给 @tt{cps-of-exp} 添加这几行代码来做翻译：
 
 @eopl-code{
 @racketblock[
@@ -2242,15 +2254,15 @@ newrefk(33, proc (loc1)
           (cps-const-exp 23))))))
 ]}
 
- 在最后一行，我们让 @tt{setref} 返回 23，这与 EXPLICIT-REFS 一致。
- }
-]
-
+在最后一行，我们让 @tt{setref} 返回 23，这与 EXPLICIT-REFS 一致。
 @eopl-index[#:range-mark 'end "Allocation" (eopl-index-entry "in store" "store")]
 @eopl-index[#:range-mark 'end "Dereferencing"]
 @eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
 @eopl-index[#:range-mark 'end "Mutation"]
 @eopl-index[#:range-mark 'end "References" "explicit"]
+@eopl-index[#:range-mark 'end "Store"]
+}
+]
 
 @exercise[#:level 2 #:tag "ex6.36"]{
 

@@ -33,6 +33,7 @@
 @eopl-index[#:range-mark 'start "Abstract syntax tree"]而我们的目标是写出程序，
 @eopl-index["Defined language"]
 @eopl-index["Defining language"]
+@eopl-index["Source language"]
 实现语言。概况如@figure-ref{fig-3.1-a} 所示。首先是程序，由我们要实现的语言写出。
 这叫做@term["source language"]{源语言} 或@term["defined language"]{被定语言}。前
 端接收程序文本（由源语言写成的程序），将其转化为抽象语法树，然后将语法树传给解释
@@ -63,6 +64,7 @@ code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 不论采用哪种实现策略，我们都需要一个@term["front end"]{前端}，将程序转换为
 抽象语法树。因为程序只是字符串，我们的前端要将这些字符组成有意义的单元。分组通常
 分为两个阶段：@term["scanning"]{扫描} 和@term["parsing"]{解析}。
+@eopl-index["Scanning"]
 
 扫描就是将字符序列分为单词、数字、标点、注释等等。这些单元叫做@term["lexical
 item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词牌}。把程序分
@@ -1447,6 +1449,8 @@ in let maketimes4 = proc (f)
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28"]
             @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]
             "procedural representation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.28" "ex3.29"]
+            "Scope of variable declaration" "dynamic"]
 设计过程的另一种方法是@term["dynamic binding"]{动态绑定}（或称@term["dynamic
 scoping"]{动态定界}）：求值过程主体的环境由调用处的环境扩展而得。例如，在
 
@@ -1491,7 +1495,8 @@ in let p = proc (z) a
 
 返回 5，因为调用处 @tt{a} 的值为 5。如果 @tt{f} 的形参为 @tt{a} 呢？
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28" "ex3.29"] "Dynamic binding (dynamic scope)"]
-
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.28" "ex3.29"]
+            "Scope of variable declaration" "dynamic"]
 }
 
 @section[#:style section-title-style-numbered #:tag "s3.4"]{LETREC：支持递归过程的语言}
@@ -1784,6 +1789,7 @@ in (odd 13)
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Factorial function"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Recursive programs" "design and implementation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.37"] "Scope of variable declaration" "dynamic"]
 使用动态绑定（@exercise-ref{ex3.28}），不需要任何特殊机制，靠 @tt{let} 就能创建
 递归过程。这是出于历史兴趣。在早年的编程语言设计中，@secref{s3.4}讨论的那些方法
 还鲜为人知。要验证动态绑定实现的递归，试试程序：
@@ -1807,6 +1813,7 @@ in let fact = proc (n)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Mutual recursion"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Recursive programs" "design and implementation of"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.36" "ex3.37"] "Recursive programs" "mutual recursion"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.37"] "Scope of variable declaration" "dynamic"]
 
 }
 
@@ -1815,6 +1822,7 @@ in let fact = proc (n)
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry "of variables" "variables")]
 @eopl-index[#:range-mark 'start "Declaration" "of variables"]
 @eopl-index[#:range-mark 'start "References"]
+@eopl-index[#:range-mark 'start "Scope of variable declaration"]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1867,6 +1875,7 @@ in let fact = proc (n)
 
 我们可以不加执行地判断程序中的各个变量引用对应于哪个声明。这样的性质不必执行程序
 就能计算出来，名为@term["static"]{静态} 性质。
+@eopl-index["Static properties of programs"]
 
 要找出某个变量引用对应于哪一声明，我们@term["outward"]{向外} 查找，直到找
 出变量的声明。这里是一个简单的 Scheme 示例。
@@ -1915,8 +1924,8 @@ in let fact = proc (n)
 @eopl-index["Lexical variables"]
 
 使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
-@exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} 外层声明。例如，在上
-例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
+@exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} @eopl-index["Shadowing"]
+外层声明。 例如，在上例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
 
 @eopl-index["Contour diagrams"]
 词法作用域是嵌套式的：每个作用域完全包裹在另一个里面。我们用@term["contour
@@ -1990,6 +1999,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @eopl-index["Binding" "extent of"]
 @eopl-index[#:range-mark 'start "Dynamic properties of programs"]
 @eopl-index["Extent of variable binding"]
+@eopl-index["Semi-infinite extent"]
 绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
 Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
@@ -1999,13 +2009,15 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 很可惜的是，@exact-elem{“}动态@exact-elem{”}有时表示@exact-elem{“}在表达式求
 值期间@exact-elem{”}，有时又表示@exact-elem{“}无法事先计算@exact-elem{”}。如
 果我们不允许 @tt{let} 的值为过程，那么 let 绑定会在 @tt{let} 主体求值结束时到期。
-这叫做@emph{动态}期限，而它是一条@emph{静态}性质。因为这种期限是一条静态性质，所
-以我们可以准确预测绑定何时可以抛弃。@countref{ex3.28} 等几道练习中的动态绑定表现
-类似。
+这叫做@emph{动态}期限，而它是一条@emph{静态}性质。
+@eopl-index["Static properties of programs"]
+因为这种期限是一条静态性质，所以我们可以准确预测绑定何时可以抛弃。
+@countref{ex3.28} 等几道练习中的动态绑定表现类似。
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry "of variables" "variables")]
 @eopl-index[#:range-mark 'end "Declaration" "of variables"]
 @eopl-index[#:range-mark 'end "Dynamic properties of programs"]
 @eopl-index[#:range-mark 'end "References"]
+@eopl-index[#:range-mark 'end "Scope of variable declaration"]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
@@ -2218,6 +2230,7 @@ in proc (y)
 要计算任何变量引用的词法地址，我们需要它所在的作用域。这是一种@term["context"]{上下文} 信息，所以它和@secref{s1.3}的继承属性类似。
 
 @eopl-index[#:range-mark 'start "Environments" "static"]
+@eopl-index[#:range-mark 'start "Static environment"]
 所以 @tt{translation-of-program} 将取两个参数：一个表达式和一个@term["static
 environment"]{静态环境}。静态环境是一个变量列表，表示当前表达式所在的作用域。最
 内部作用域声明的变量成为列表的第一个元素。
@@ -2301,6 +2314,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 过程 @tt{translation-of-program} 在适当的初始静态环境中执行 @tt{translation-of}。
 @eopl-index[#:range-mark 'end "Environments" "static"]
+@eopl-index[#:range-mark 'end "Static environment"]
 
 @eopl-figure{
 

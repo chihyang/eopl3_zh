@@ -12,6 +12,7 @@
 
 @title[#:style part-title-style-numbered #:tag "types"]{类型}
 
+@eopl-index[#:range-mark 'start "Safe evaluation" "type safety"]
 我们已理解如何用解释器建模程序的运行时行为。现在，我们用同样的技术不加运行
 地@emph{分析}或@emph{预测}程序的行为。
 
@@ -55,6 +56,7 @@
 我们的目标是写出过程，查看程序文本，接受或者拒绝它。而且，我们希望我们的分析过程
 保守一点：如果分析接受程序，那么我们确保求程序的值是安全的。如果分析不能确定求值
 是否安全，它必须拒绝程序。我们称这样的分析是@term["sound"]{健壮的}。
+@eopl-index["Sound type system"]
 
 拒绝所有程序的分析仍是健壮的，可我们还是想让我们的分析接受一大批程序。本章的分析
 将接受足够多的程序，因此是有用的。
@@ -91,6 +93,7 @@ in (f 1)
 
 虽然最后一个例子求值不终止，但根据上述定义，求值仍是安全的，所以我们的分析可以接
 受它。之所以接受它，是因为我们的分析器不够好，不足以判定这个程序不会终止。
+@eopl-index[#:range-mark 'end "Safe evaluation" "type safety"]
 
 @section[#:style section-title-style-numbered #:tag "s7.1"]{值及其类型}
 
@@ -940,6 +943,7 @@ in (odd 13)
 }|
 }
 
+@eopl-index[#:range-mark 'start "Substitution" "type"]
 我们的目标是找出变量的值，使所有方程成立。我们可以把这样的解表示为一组方程，方程
 的左边都是变量。我们称这组方程为一组@term["substitution"]{代换式}，称代换式方程
 左边的变量@term["bound"]{绑定} 于代换式。
@@ -1141,6 +1145,7 @@ in (odd 13)
            (list @${t_x = @tt{int}}))]))]
 
 最后一个方程 @${@tt{int} = @tt{int}} 总是成立，所以可以丢弃。
+@eopl-index[#:range-mark 'end "Substitution" "type"]
 
 @tabular[#:style 'inset #:sep @hspace[8] #:column-properties '(baseline baseline)
 (list
@@ -1418,6 +1423,7 @@ in (odd 13)
 
 @big-bracket[#:title "无存不变式"]{
 代换式中绑定的变量不应出现在任何代换式的右边。
+@eopl-index["Substitution" "type"]
 }
 
 我们解方程的代码极度依赖这个不变式。
@@ -1507,6 +1513,7 @@ in letrec
 
 @subsection[#:style section-title-style-numbered #:tag "s7.4.1"]{代换式}
 
+@eopl-index[#:range-mark 'start "Substitution" "type"]
 我们按自底向上的方式实现。我们首先来考虑代换式。
 
 我们将类型变量表示为数据类型 @tt{type} 的新变体。这里用到的技术和@secref{s3.7}中
@@ -1620,6 +1627,7 @@ in letrec
 ]}
 
 这一实现保持无存不变式，但既不依赖它，也不强制它。那是下一节中合一器的工作。
+@eopl-index[#:range-mark 'end "Substitution" "type"]
 
 
 @exercise[#:level 2 #:tag "ex7.17"]{

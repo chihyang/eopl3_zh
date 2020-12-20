@@ -96,7 +96,7 @@
 @${S} 又能够定义为：
 
 @definition[#:title #f #:tag "d1.1.2"]{
- 集合 @${S} 为 @${N} 所包含的集合中，满足如下两条性质的最小集合：
+ 集合 @${S} 为 @${N} 所包含的集合中，满足如下两条性质的最小集合：@eopl-index["Smallest set"]
 
  @itemlist[#:style 'ordered
   @item{@${0 \in S}，且}
@@ -275,8 +275,10 @@
 
 @exercise[#:level 1 #:tag "ex1.3"]{
 
- 找出自然数的子集 @m{T}，满足 @m{0 \in T}，且对任何 @m{n \in T}，都有 @m{n + 3
- \in T}，但 @m{T \neq S}，@m{S} 是由@definition-ref{d1.1.2} 给出的集合。
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.3"] "Smallest set"]
+找出自然数的子集 @m{T}，满足 @m{0 \in T}，且对任何 @m{n \in T}，都有 @m{n + 3
+\in T}，但 @m{T \neq S}，@m{S} 是由@definition-ref{d1.1.2} 给出的集合。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.3"] "Smallest set"]
 
 }
 
@@ -314,6 +316,7 @@
   @item{@bold{非终结符}。这些是所定义的集合名。本例中只定义了一个集合，但是通常，
         可能会定义数个集合。这些集合有时称为@term["syntactic category"]{句法类别}。
         @eopl-index["Nonterminal symbols"]
+        @eopl-index["Syntactic categories"]
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
         用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
@@ -372,6 +375,7 @@
 星号的变体是@term["Kleene Plus"]{克莱尼加号} @${\{...\}^+}，表示一个或多个内容的
 序列。把上例中的 @${^*} 换成 @${^+}，定义的句法类别是非空整数列表。
 
+@eopl-index[#:range-mark 'start "Separated list notation"]
 星号的另一变体是@term["separated list"]{分隔表} 表示法。例如，
 @${\mathit{Int}^{*(c)}} 表示一个序列，包含任意数量的非终结符 @Int-$[] 元素，以非
 空字符序列 @${c} 分隔。这也包含没有元素的情况。如果有 0 个元素，得到的是空字符串。
@@ -394,12 +398,13 @@
 14; 12
 7; 3; 14; 16
 }|
-}
+@eopl-index[#:range-mark 'end "Separated list notation"]}
 }
 
 这些简写不是必需的，总能够不用它们重写语法。
 
 @eopl-index["Derivation, syntactic"]
+@eopl-index["Syntactic derivation"]
 对由语法定义的集合，可以用@term["syntactic derivation"]{句法推导} 证明给定值是其
 元素。这样的推导从集合对应的非终结符开始，在由箭头@${\Rightarrow} 指示的每一步中，
 如果非终结符对应的句法类别未做定义，则将其代换为该类别的已知元素，否则代换为对应
@@ -431,7 +436,9 @@
 
 @itemlist[#:style 'ordered
 
- @item{许多符号操作过程用于处理只包含符号和具有类似限制的列表。我们把这些叫做
+ @item{@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+ @eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+ 许多符号操作过程用于处理只包含符号和具有类似限制的列表。我们把这些叫做
  @tt{s-list}，定义如下：
 
  @definition[#:title "s-list，s-exp" #:tag "d1.1.6"]{
@@ -452,7 +459,8 @@
  }
 
  有时也使用更宽松的 s-list 定义，既允许整数，也允许符号。
-
+ @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+ @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
  }
 
  @item{使用三元素列表表示内部节点，则以数值为叶子，以符号标示内部节点的二叉树可
@@ -630,6 +638,7 @@
 元素构建集合。我们用这一想法写出了过程 @tt{in-S?}，用以判断自然数是否属于集合
 @${S}。现在，我们用同样的想法定义更通用的过程，以便对归纳式集合做运算。
 
+@eopl-index[#:range-mark 'start "Smaller-Subproblem Principle"]
 递归过程依赖于一条重要原则：
 
 @nested[#:style tip]{
@@ -642,6 +651,7 @@
 题，直至最终调用，针对一个可以直接求解的问题，不需再次调用自身。
 @eopl-index[#:range-mark 'end "Recursive data types" "programs that manipulate"]
 @eopl-index[#:range-mark 'end "Recursive programs" "deriving"]
+@eopl-index[#:range-mark 'end "Smaller-Subproblem Principle"]
 
 我们用一些例子解释这一想法。
 
@@ -821,7 +831,7 @@ C} 相同。
 @subsection[#:style section-title-style-numbered #:tag "s1.2.3"]{@tt{remove-first}}
 
 @eopl-index["List of symbols (List-of-Symbol)"]
-@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{remove-first}} "removefirst"]]
 过程 @tt{remove-first} 取两个参数：符号 @${s} 和符号列表 @${los}。它返回一个列表，
 除了不含第一个出现在 @${los} 中的符号 @${s} 外，所含元素及其排列顺序与 @${los}
 相同。如果 @${s} 没有出现在 @${los} 中，则返回 @${los}。
@@ -919,7 +929,7 @@ C} 相同。
 @#,exact-elem{\end{mdframed}}
 ]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
-@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@bold{@tt{remove-first}}} "removefirst"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{remove-first}} "removefirst"]]
 }
 
 @exercise[#:level 1 #:tag "ex1.8"]{
@@ -1046,6 +1056,11 @@ C} 相同。
 @eopl-index[#:range-mark 'start "Mutual recursion"]
 @eopl-index[#:range-mark 'start "Nonterminal symbols"]
 @eopl-index[#:range-mark 'start "Recursive programs" "mutual recursion"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{subst}} "subst"]]
+@eopl-index[#:range-mark 'start "Substitution" "in s-lists"]
+@eopl-index[#:range-mark 'start "Syntactic categories"]
 过程 @tt{subst} 取三个参数：两个符号 @tt{new} 和 @tt{old}，一个 s-list，
 @tt{slist}。它检查 @tt{slist} 的所有元素，返回类似 @tt{slist} 的新列表，但把其中
 所有的 @tt{old} 替换为 @tt{new}。
@@ -1169,6 +1184,11 @@ C} 相同。
 @eopl-index[#:range-mark 'end "Mutual recursion"]
 @eopl-index[#:range-mark 'end "Nonterminal symbols"]
 @eopl-index[#:range-mark 'end "Recursive programs" "examples of"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{subst}} "subst"]]
+@eopl-index[#:range-mark 'end "Substitution" "in s-lists"]
+@eopl-index[#:range-mark 'end "Syntactic categories"]
 
 @exercise[#:level 1 #:tag "ex1.11"]{
 
@@ -1195,6 +1215,7 @@ C} 相同。
 }
 
 @eopl-index[#:range-mark 'start "Recursive programs" "deriving"]
+@eopl-index[#:range-mark 'start "Syntactic categories"]
 现在，我们有了编写过程处理归纳数据集的窍门，来把它总结成一句口诀。
 
 @nested[#:style tip]{
@@ -1214,7 +1235,8 @@ C} 相同。
  @item{在每个过程中，为相应非终结符的每一生成式写一分支。你可能需要额外的分支结
  构，但这样才能起步。对生成式右边出现的每个非终结符，递归调用相应的过程。
  @eopl-index[#:range-mark 'end "Nonterminal symbols"]
- @eopl-index[#:range-mark 'end "Recursive programs" "deriving"]}
+ @eopl-index[#:range-mark 'end "Recursive programs" "deriving"]
+ @eopl-index[#:range-mark 'end "Syntactic categories"]}
 
 ]
 
@@ -1475,17 +1497,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
            (cons (swapper s1 s2 (car slist))
                  (swapper s1 s2 (cdr slist))))))))))
 @exercise[#:level 1 #:tag "ex1.18"]{
- @tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换
- 为 @tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.18"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+@tt{(swapper s1 s2 slist)} 返回一列表，将 @tt{slist} 中出现的所有 @tt{s1} 替换为
+@tt{s2}，所有 @tt{s2} 替换为 @tt{s1}。
 
 @eopl-code{
 @examples[#:eval swapper-eval
            #:label #f
  (swapper 'a 'd '(a b c d))
  (swapper 'a 'd '(a d () c d))
- (swapper 'x 'y '((x) y (z (x))))]}
-
-}
+ (swapper 'x 'y '((x) y (z (x))))]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.18"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+}}
 
 @(define list-set-eval
   (parameterize ([sandbox-output 'string]
@@ -1530,16 +1553,18 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
            (+ (count-occurrences s (car slist))
               (count-occurrences s (cdr slist))))))))))
 @exercise[#:level 1 #:tag "ex1.20"]{
- @tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
+
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.20"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+@tt{(count-occurrences s slist)} 返回 @tt{slist} 中出现的 @tt{s} 个数。
 
 @eopl-code{
 @examples[#:eval count-occurrences-eval
            #:label #f
  (count-occurrences 'x '((f x) y (((x z) x))))
  (count-occurrences 'x '((f x) y (((x z) () x))))
- (count-occurrences 'w '((f x) y (((x z) x))))]}
-
-}
+ (count-occurrences 'w '((f x) y (((x z) x))))]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.20"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+}}
 
 @(define product-eval
   (parameterize ([sandbox-output 'string]
@@ -1719,8 +1744,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
             (cons (car slist)
                   (flatten (cdr slist))))))))))
 @exercise[#:level 2 #:tag "ex1.27"]{
- @tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直观上，
- @tt{flatten} 移除参数内的所有内层括号。
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.27"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
+@tt{(flatten slist)} 返回一列表，由 @tt{slist} 中的符号按出现顺序组成。直观上，
+@tt{flatten} 移除参数内的所有内层括号。
 
 @eopl-code{
 @examples[#:eval flatten-eval
@@ -1730,7 +1756,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  (flatten '((a b) c (((d)) e)))
  (flatten '(a b (() (c))))]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]}
-
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.27"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
 }
 
 @(define merge-eval

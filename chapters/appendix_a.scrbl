@@ -124,7 +124,7 @@ interpreter"]{自循环解释器}（用被定语言本身写就的解释器）�
 
 另一种方式是写出被定语言子集的解释器。例如，@secref{state}的几个解释器依靠
 Scheme 的存储器来解释存储器的概念，但它们只用了一个全局可变对象，而不是 Scheme
-可变变量的所有能力。
+可变变量的所有能力。@eopl-index["Store"]
 
 @eopl-index["EXPLICIT-REFS"]
 @eopl-index["IMPLICIT-REFS"]

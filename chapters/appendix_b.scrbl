@@ -26,6 +26,7 @@ SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录�
 
 @section[#:style section-title-style-numbered #:tag "B.1"]{扫描}
 
+@eopl-index[#:range-mark 'start "Scanning"]
 扫描问题如@figure-ref{fig-B.1} 所示。我们在其中展示了一小段程序，以及应如何将其
 分割为基本单元。
 
@@ -137,6 +138,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 ]
 
 通常，词牌的内部结构只与扫描器和解析器相关，所以我们不再详加介绍。
+@eopl-index[#:range-mark 'end "Scanning"]
 
 @section[#:style section-title-style-numbered #:tag "B.2"]{解析}
 
@@ -146,6 +148,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 关语法}（@secref{s1.1.2}）。
 @eopl-index["Context-free grammar"]
 @eopl-index["Grammars"]
+@eopl-index["Syntactic categories"]
 
 @eopl-index["Abstract syntax tree"]解析器输入为词牌序列，输出为一棵抽象语法树
 （@secref{s2.5}）。SLLGEN 生成的抽象语法树可用 @tt{define-datatype} 描述。
@@ -215,6 +218,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
 @subsection[#:style section-title-style-unumbered #:tag "B.3-scanners"]{定义扫描器}
 
+@eopl-index[#:range-mark 'start "Scanning"]
 在 SLLGEN 中，扫描器用正则表达式定义。我们的例子用 SLLGEN，要写成下面这样：
 
 @eopl-code{
@@ -275,6 +279,7 @@ SLLGEN 中的扫描器定义是满足如下语法的列表：
 
 如果两个正则表达式同时为最长匹配，@tt{string} 优先于 @tt{symbol}。这条规则意味着
 关键字会按关键字处理，而非标识符。
+@eopl-index[#:range-mark 'end "Scanning"]
 
 @subsection[#:style section-title-style-unumbered #:tag "B.3-grammars"]{定义语法}
 

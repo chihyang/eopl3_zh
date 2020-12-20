@@ -55,6 +55,7 @@ interface"]{简单接口}，接口列出模块提供的绑定及其类型。模�
 @section[#:style section-title-style-numbered #:tag "s8.1"]{简单模块系统}
 
 @eopl-index[#:range-mark 'start "Modules" "simple"]
+@eopl-index[#:range-mark 'start "SIMPLE-MODULES"]
 我们的第一种语言名叫 SIMPLE-MODULES，只有简单模块。它没有模块过程，只创建非常简
 单的抽象边界。几种流行语言使用与之类似的模块系统。
 
@@ -654,6 +655,7 @@ z : int]} 公布的所有值。
 
 这样，简单模块系统就完成了。
 @eopl-index[#:range-mark 'end "Modules" "simple"]
+@eopl-index[#:range-mark 'end "SIMPLE-MODULES"]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[

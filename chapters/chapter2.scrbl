@@ -282,9 +282,11 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 
 @exercise[#:level 2 #:tag "ex2.4"]{
 
- 考虑数据类型@term["stack"]{堆栈}，其接口包含过程 @tt{empty-stack}、@tt{push}、
- @tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操作的定义。哪
- 些操作是构造器？哪些是观测器？
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.4"] "Stacks"]
+考虑数据类型@term["stack"]{堆栈}，其接口包含过程 @tt{empty-stack}、@tt{push}、
+@tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操作的定义。哪
+些操作是构造器？哪些是观测器？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.4"] "Stacks"]
 
 }
 
@@ -570,6 +572,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Environments" "procedural representation of"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Procedural representation" "of environments"]
 @eopl-index[#:suffix @exer-ref-range["ex2.12"] "Procedural representation" "of stacks"]
+@eopl-index[#:suffix @exer-ref-range["ex2.12"] "Stacks"]
 用过程表示法实现@exercise-ref{ex2.4} 中的堆栈数据类型。
 
 }
@@ -763,6 +766,7 @@ lambda 演算表达式的语法：
 @exercise[#:level 1 #:tag "ex2.18"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.18"] "Sequences, bidirectional"]
 我们常用列表表示值的序列。在这种表示法中，很容易从序列中的一个元素移动到下一个，
 但是不借助上下文参数，很难从一个元素移动到上一个。实现非空双向整数序列，语法为：
 
@@ -793,6 +797,7 @@ lambda 演算表达式的语法：
 如果参数在序列最右端，过程@tt{move-to-right}应失败。如果参数在序列最左端，过程
 @tt{move-to-left}应失败。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.18"] "Bidirectional sequences"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.18"] "Sequences, bidirectional"]
 
 }
 
@@ -1002,6 +1007,8 @@ lambda 演算表达式的语法：
 
 @eopl-index["Mutual recursion"]
 @eopl-index["Recursive programs" "mutual recursion"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
 由 @tt{define-datatype} 生成的数据结构可以互递归。例如，@secref{s1.1}中的 s-list
 语法为：
 
@@ -1048,7 +1055,8 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 这里 @tt{(list-of @${pred})} 生成一个谓词，检查其参数值是否是一个列表，且列表的
 每个元素都满足 @${pred}。
-
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-exp (@${\mathit{S\mbox{-}exp}})} "Sexp"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
 }
 
 @eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
@@ -1124,6 +1132,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @exercise[#:level 1 #:tag "ex2.22"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex2.22"] "Stacks"]
 用 @tt{define-datatype} 实现@exercise-ref{ex2.4} 中的堆栈数据类型。
 
 }
@@ -1281,6 +1290,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @section[#:style section-title-style-numbered #:tag "s2.5"]{抽象语法及其表示}
 
 @eopl-index[#:range-mark 'start "Lambda expression (LcExp)" "abstract vs. concrete syntax"]
+@eopl-index[#:range-mark 'start "Syntactic categories"]
 @eopl-figure[#:position "!t"]{
 @centered{
 @(image "../images/ast"
@@ -1339,6 +1349,7 @@ lambda 演算表达式 @tt{(lambda (x) (f (f x)))}。树的每个内部节点以
                                   &\mathrel{\phantom{::=}} \fbox{@tt{app-exp (rator rand)}}}
 
 本书采用这种表示，同时指明具体语法和抽象语法。
+@eopl-index[#:range-mark 'end "Syntactic categories"]
 
 具体语法主要供人使用，抽象语法主要供计算机使用，既已区分二者，现在来看看如何将一
 种语法转换为另一种。

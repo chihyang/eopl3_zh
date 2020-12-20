@@ -945,6 +945,7 @@
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Continuations" "command continuations"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.16"] "Statements"]
 扩展传递续文的解释器，处理@exercise-ref{ex4.22} 中的语言。给 @tt{result-of} 传递
 一个续文参数，确保 @tt{result-of} 不在扩大控制上下文的位置调用。因为语句不返回值，
 需要区分普通续文和语句续文；后者通常叫@term["command continuation"]{命令续文}。
@@ -952,6 +953,7 @@
 无参数过程两种方式实现命令续文。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Command continuations"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Continuations" "command continuations"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.16"] "Statements"]
 
 }
 
@@ -1189,6 +1191,7 @@
 @eopl-index[#:range-mark 'start "Registerization"]
 在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。
 考虑@figure-ref{fig-5.8} 顶部的老例子 @tt{even} 和 @tt{odd}。
+@eopl-index["Shared variables"]
 
 可以用@figure-ref{fig-5.8} 中间的程序替代它们。其中，共享变量 @tt{x} 供两个过程
 交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们从存
@@ -1729,6 +1732,8 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Scope of variable declaration" "dynamic"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Semi-infinite extent"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
@@ -1739,6 +1744,8 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic binding (dynamic scope)"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Dynamic extent"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Scope of variable declaration" "dynamic"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Semi-infinite extent"]
 
 }
 
@@ -2220,8 +2227,9 @@ in ...
 同一地址空间，通常称它们为@term["thread"]{线程}。本节，我们将看到如何修改解释器，
 模拟多线程程序的执行。
 
-我们的多线程解释器不是做单线程计算，而且维护多个线程。就像本章之前展示的那样，每
+我们的多线程解释器不做单线程计算，而且维护多个线程。就像本章之前展示的那样，每
 个线程包含一项正在进行的计算。线程使用@secref{state}中的赋值，通过共享内存通信。
+@eopl-index["Shared variables"]
 
 在我们的系统中，整个计算包含一个线程@term["pool"]{池}。每个
 线程@term["running"]{在运行}、@@term["runnable"]{可运行} 或者@term["blocked"]{受
@@ -2230,6 +2238,7 @@ in ...
 程因为种种原因未能就绪，我们说这些线程@emph{受阻塞}。本节稍后介绍受阻塞线程。
 
 线程调度由@term["scheduler"]{调度器} 执行，它将就绪队列保存为自身状态的一部分。
+@eopl-index["Scheduler"]
 此外，它保存一个计时器，当一个线程完成若干步（即线程的@term["time slice"]{时间片}
 或@term["quantum"]{量子}）时，它中断线程，将其放入就绪队列中，并从就绪队列中选出
 一个新的线程来运行。这叫做@term["pre-emptive scheduling"]{抢占式调度}。
@@ -2425,7 +2434,8 @@ in let producer = proc (n)
       (list "" @elem{递减@tt{the-time-remaining}}))]
 }
 
-@eopl-caption["fig-5.18"]{调度器的状态和接口}
+@eopl-caption["fig-5.18"]{调度器的状态和接口
+                          @eopl-index["Scheduler"]}
 
 }
 
@@ -2478,7 +2488,8 @@ in let producer = proc (n)
     (set! the-time-remaining (- the-time-remaining 1))))
 ]
 
-@eopl-caption["fig-5.19"]{调度器}
+@eopl-caption["fig-5.19"]{调度器
+                          @eopl-index["Scheduler"]}
 
 }
 
@@ -2572,10 +2583,13 @@ in let mut = mutex()
 ]
 }
 
+@eopl-index[#:range-mark 'start "Shared variables"]
+@eopl-index[#:range-mark 'start "Synchronization"]
 共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，
 考虑@figure-ref{fig-5.20} 中的程序。这里，我们创建了三个线程，试图累加同一个计数
 器 @tt{x}。如果一个线程读取了计数器，但在更新计数器之前被打断，那么两个线程将把
 计数器设置成同样的值。因此，计数器可能变成 2，甚至是 1，而不是 3。
+@eopl-index[#:range-mark 'start "Safe evaluation" "thread synchronization"]
 
 我们想要确保不会发生这种混乱。同样地，我们想要组织我们的程序，
 避免@figure-ref{fig-5.17} 中的程序空转。恰恰相反，它应该能够进入休眠状态，并在生
@@ -2583,6 +2597,7 @@ in let mut = mutex()
 
 @eopl-index[#:range-mark 'start "Binary semaphore"]
 @eopl-index[#:range-mark 'start "Mutation"]
+@eopl-index[#:range-mark 'start "Semaphore"]
 有许多方式设计这类同步组件。一种简单的方式是使用@term['("mutex exclusion"
 "mutex")]{互斥锁} 或@term["binary semaphore"]{二元信号量}。
 
@@ -2764,12 +2779,17 @@ in let mut = mutex()
 
 @eopl-caption["fig-5.22"]{@tt{wait-for-mutex} 和 @tt{signal-mutex}
                           @eopl-index["Binary semaphore"]
-                          @eopl-index["Mutation"]}
+                          @eopl-index["Mutation"]
+                          @eopl-index["Semaphore"]}
 }
 
 @eopl-index[#:range-mark 'end "Binary semaphore"]
 @eopl-index[#:range-mark 'end "Multithreaded programs"]
 @eopl-index[#:range-mark 'end "Mutation"]
+@eopl-index[#:range-mark 'end "Safe evaluation" "thread synchronization"]
+@eopl-index[#:range-mark 'end "Semaphore"]
+@eopl-index[#:range-mark 'end "Shared variables"]
+@eopl-index[#:range-mark 'end "Synchronization"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 

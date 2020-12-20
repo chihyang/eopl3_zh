@@ -24,16 +24,18 @@
 果@emph{感染}整个计算（故意用双关语）。
 
 @eopl-index["Binding" (eopl-index-entry "of variables" "variables")]
+@eopl-index["Shared variables"]
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
 是局部的，但@eopl-index["Assignment"]变量赋值有可能是全局的。那是在本不相关的几
 部分计算之间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能
 共享信息。如果把信息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
 
 @eopl-index["Location"]
+@eopl-index["Storable values"]
 我们把内存建模为从@term["location"]{位置} 到值集合的的有限映射，称值集合
 为@term["storable values"]{可存储值}。出于历史原因，我们称之为@term["store"]{存
 储器}。通常，一种语言中的可存储值与表达值相同，但不总是这样。这个选择是语言设计
-的一部分。
+的一部分。@eopl-index["Store"]
 
 代表内存位置的数据结构叫做@term["reference"]{引用}。位置是内存中可用来存值的地方，
 引用是指向那个地方的数据结构。位置和引用的区别可以这样类比：位置就像文件，引用就
@@ -84,7 +86,7 @@
 
 下面是两个过程 @tt{even} 和 @tt{odd}。它们取一参数，但是忽略它，并根据位置
 @tt{x} 处的内容是偶数还是奇数返回 1 或 0。它们不是通过直接传递数据来通信，而是改
-变共享变量的内容。
+变共享变量的内容。@eopl-index["Shared variables"]
 
 这个程序判断 13 是否为奇数，并返回 1。过程 @tt{even} 和 @tt{odd} 不引用它们的实
 参，而是查看绑定到 @tt{x} 的位置中的内容。
@@ -147,6 +149,7 @@ in let a = (g 11)
 这里，过程 @tt{g} 保留了一个私有变量，用来存储 @tt{g} 被调用的次数。因此，第一次
 调用 @tt{g} 返回 1，第二次返回 2，整个程序的值为 -1。
 
+@eopl-index[#:range-mark 'start "Shared variables"]
 下图是 @tt{g} 绑定时所在的环境。可以认为，这是在 @tt{g} 的不同调用之间共享信息。
 Scheme 过程 @tt{gensym} 用这种技术创建唯一符号。
 
@@ -157,7 +160,7 @@ Scheme 过程 @tt{gensym} 用这种技术创建唯一符号。
   #:suffixes (list ".pdf" ".svg")
   "g绑定时的环境")
 }
-}
+@eopl-index[#:range-mark 'end "Shared variables"]}
 
 @exercise[#:level 1 #:tag "ex4.1"]{
 
@@ -180,7 +183,7 @@ in let a = (g 11)
 }
 
 在EXPLICIT-REFS中，我们可以存储任何表达值。引用也是表达值。这意味着我们可以在一
-个位置存储引用。考虑下面的程序：
+个位置存储引用。考虑下面的程序：@eopl-index["Storable values"]
 
 @eopl-code{
 @verbatim|{
@@ -207,7 +210,7 @@ end
 
 我们使用@term["store-passing specifications"]{存储器传递规范}。在存储器传递规范
 中，存储器作为显式参数传递给 @tt{value-of}，并作为 @tt{value-of} 的结果返回。那
-么我们可以写：
+么我们可以写：@eopl-index["Store-passing specifications"]
 
 @nested{
 
@@ -369,6 +372,7 @@ end
 
 @subsection[#:style section-title-style-numbered #:tag "s4.2.3"]{实现}
 
+@eopl-index[#:range-mark 'start "Store"]
 迄今为止，我们使用的规范语言可以轻松描述有效果计算的期望行为，但是它没有体现存储
 器的一个要点：引用最终指向现实世界的内存中某一真实的位置。因为我们只有一个现实世
 界，我们的程序只能记录存储器的一个状态 @${\sigma}。
@@ -485,6 +489,7 @@ end
 差值表达式的参数按从左到右的顺序求值。
 @eopl-index[#:range-mark 'end "EXPLICIT-REFS"]
 @eopl-index[#:range-mark 'end "References" "explicit"]
+@eopl-index[#:range-mark 'end "Store"]
 
 @exercise[#:level 1 #:tag "ex4.8"]{
 
@@ -1045,6 +1050,8 @@ in begin
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Assignment"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] @eopl-index-entry[@elem{@tt{setdynamic} expression} "setdynamicexpression"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Shared variables"]
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
@@ -1073,11 +1080,14 @@ in let p = proc (y) -(y,x)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Assignment"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Binding" "fluid"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] @eopl-index-entry[@elem{@tt{setdynamic} expression} "setdynamicexpression"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Shared variables"]
 
 }
 
 @exercise[#:level 2 #:tag "ex4.22"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.22" "ex4.27"] "Statements"]
 迄今为止，我们的语言都是@term["expression-oriented"]{面向表达式}的：我们感兴趣的
 主要是表达式这种句法类别和它们的值。扩展语言，建模简单
 的@term["statement-oriented"]{面向语句} 的语言，其规范概述如下。一定要@emph{遵循
@@ -1196,10 +1206,12 @@ in let p = proc (y) -(y,x)
 
 @exercise[#:level 3 #:tag "ex4.27"]{
 
+@eopl-index["Subroutines"]
 扩展前一道练习中的解答，增加@term["subroutine"]{子程序}。我们把子程序当过程用，
 但是它不返回值，且其主体为语句而非表达式。然后增加子程序调用，作为一种新语句。扩
 展块的语法，允许同时声明过程和子程序。这将如何影响指代值和表达值？如果在子程序调
 用中使用过程会怎样？反过来呢？
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.22" "ex4.27"] "Statements"]
 
 }
 
