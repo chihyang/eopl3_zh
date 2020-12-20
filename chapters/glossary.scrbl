@@ -87,7 +87,11 @@
 
 @list[@elem{Call by value} @elem{按值调用}]
 
+@list[@elem{car} @elem{首项，或不译}]
+
 @list[@elem{Casting} @elem{强制转换}]
+
+@list[@elem{cdr} @elem{余项，或不译}]
 
 @list[@elem{Child} @elem{子类}]
 
@@ -313,6 +317,8 @@
 
 @list[@elem{Lexical variable} @elem{词法变量}]
 
+@list[@elem{list} @elem{列表}]
+
 @list[@elem{Location} @wrappable-cell{位置@glossary-note{特指存储器中的位置}}]
 
 @list[@elem{Member} @elem{成员}]
@@ -372,6 +378,8 @@
 
 @list[@elem{Override} @elem{覆盖}]
 
+@list[@elem{pair} @elem{序对}]
+
 @list[@elem{Parameterized module} @elem{参数化模块}]
 
 @list[@elem{Parent} @elem{父类}]
@@ -419,6 +427,8 @@
 @list[@elem{R-value} @elem{右值}]
 
 @list[@elem{Ready queue} @elem{就绪队列}]
+
+@list[@elem{Record} @elem{记录表}]
 
 @list[@elem{Recursive control behavior} @elem{递归性控制行为}]
 
@@ -595,13 +605,5 @@ bounce 可以视为这一游戏的类比——或者说，这一游戏生动说�
 @list[@elem{Virtual machine} @elem{虚拟机}]
 
 @list[@elem{Well-typed} @elem{正常类型}]
-
-@list[@elem{car} @elem{首项，或不译}]
-
-@list[@elem{cdr} @elem{余项，或不译}]
-
-@list[@elem{list} @elem{列表}]
-
-@list[@elem{pair} @elem{序对}]
 
 )]
