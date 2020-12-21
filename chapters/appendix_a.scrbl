@@ -37,6 +37,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 纳大致效仿 @author-ref{Plotkin} (1975, 1981) 的工作。我们的@exact-elem{“}自顶向下
 @exact-elem{”}式归纳效仿另一种技术，名为@term["coinduction"]{余归纳}
 @eopl-index["Coinduction"]
+@eopl-index["Top-down definition"]
 （参见@author-ref{Gordon}, 1995; @author-ref{Jacobs} & @author-ref{Rutten},
 1997），@author-ref{Felleisen} et al. (2001) 也使用了这种技术。
 
@@ -145,6 +146,7 @@ Fortran (@author-ref{Backus} et al., 1957) 是第一种使用按指调用的语�
 @author-ref{Friedman} & @author-ref{Wise} (1976) 较早介绍了全面使用懒求值的威力。
 @eopl-index[(eopl-index-entry "Call-by-need" "Callbyneed")]
 @eopl-index["Lazy evaluation"]
+@eopl-index["Thunk"]
 Haskell (@author-ref{Hudak} et al., 1990) 是第一种使用按需调用的实际语言。为了建
 模按名调用，@author-ref{Ingerman} (1961) 发明了@term["thunk"]{值箱}。我们用它们
 和效果建模按需调用。这与@term["memoization"]{助记法} (@author-ref{Michie}, 1968) 类似。
@@ -166,6 +168,7 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 (1962)，@author-ref{Abelson} & @author-ref{Sussman} (1985, 1996) 强调了将其作为
 一种编程技术的重要性。
 @eopl-index["Expressions" "tail form"]
+@eopl-index["Tail-form expressions"]
 
 @author-ref{Plotkin} (1975) 给出了相当清晰的 CPS 变换，发现了它的理论性质。
 @author-ref{Fischer} (1972) 提出了非常类似的变换。@author-ref{Wand} (1980b) 率先
@@ -179,6 +182,7 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 @eopl-index[(eopl-index-entry @tt{call-with-current-continuation} "Callwithcurrentcontinuation")]
 
 @eopl-index[#:range-mark 'start "Multithreaded programs"]
+@eopl-index[#:range-mark 'start "Threads"]
 @author-ref{Wand} (1980a) 展示了如何用续文建模轻量级进程或线程。续文用途广泛，远
 超本书讨论范围，如@term["coroutine"]{协程} (@author-ref{Haynes} et al., 1986)。
 
@@ -186,6 +190,7 @@ Jones}, 2001) 中，monads 提供了非函数式行为的组织原则。
 @author-ref{Berg}, 1998）。@exercise-ref{ex5.56} 基于 Erlang 的消息传递并发模型
 (@author-ref{Armstrong}, 2007)。
 @eopl-index[#:range-mark 'end "Multithreaded programs"]
+@eopl-index[#:range-mark 'end "Threads"]
 
 @author-ref{Steele} 的 RABBIT 编译器 (@author-ref{Steele}, 1978) 以 CPS 变换为基
 础。这一编译器首先对源程序做 CPS 变换，然后以数据结构表示续文。得出的程序像我们
@@ -209,16 +214,19 @@ al. (1993) 提出。
 此做了精辟的介绍。更多讨论参见 @author-ref{Felleisen} & @author-ref{Friedman}
 (1996)，另见 @author-ref{Paulson} (1996); @author-ref{Smith} (2006)。
 
+@eopl-index[#:range-mark 'start "Type inference"]
 人们多次发现了类型推导。标准参考书是 @author-ref{Hindley} (1969)，但
 @author-ref{Hindley} 提到，@eopl-index{Curry, Haskell}Curry 在 1950 年代已经知道
 了这些结论。@author-ref{Morris} (1968) 也提出了类型推导，但在@author-ref{Milner}
 1978 年的论文发表之前，类型推导从未广泛应用。
 
+@eopl-index["Type equations"]
 @author-ref{Wand} (1987) 率先阐明了如何将类型推导分为方程构建和求解。名为
 @eopl-index["Polymorphic"]
 Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.28} 中
 的系统基本相同。@author-ref{Pierce} (2002, 2004) 的两卷著作对类型做了百科全书式
 的讨论。
+@eopl-index[#:range-mark 'end "Type inference"]
 
 广为论述的数据抽象思想是 1970 年代的一大创举。这里我们仅仅提及
 @author-ref{Parnas} (1972)，他强调了以接口作为信息隐藏边界的重要性。数据类型的实

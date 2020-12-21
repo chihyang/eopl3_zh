@@ -97,6 +97,7 @@ in (f 1)
 
 @section[#:style section-title-style-numbered #:tag "s7.1"]{值及其类型}
 
+@eopl-index[#:range-mark 'start "Type structure" @eopl-index-entry["of basic values" "basicvalues"]]
 由于安全条件只涉及 @tt{num-val}、@tt{bool-val} 和 @tt{proc-val}，有人可能以为记
 录这三种类型就足够了。但那是不够的：如果我们只知道 @tt{f} 绑定到一个
 @tt{proc-val}，我们根本无法确认 @tt{(f 1)} 的值。从这个角度来看，我们需要更细致
@@ -194,6 +195,7 @@ in (f 1)
 在该系统中，值 @${v} 可以有多个类型。比如，值 @tt{proc (x) x} 类型为 @tt{(@${t
 \to t})}，@${t} 是任意类型。有些值可能没有类型，比如 @tt{proc (x) if x then 11
 else zero?(11)}。
+@eopl-index[#:range-mark 'end "Type structure" @eopl-index-entry["of basic values" "basicvalues"]]
 
 @exercise[#:level 1 #:tag "ex7.1"]{
 
@@ -277,11 +279,13 @@ proc (f)
 
 @section[#:style section-title-style-numbered #:tag "s7.2"]{赋予表达值类型}
 
+@eopl-index[#:range-mark 'start "Type structure" @eopl-index-entry["of basic values" "basicvalues"]]
 现在，我们只解决了表达值的类型。为了分析程序，我们要写出过程，预测表达式值的类型。
 
 更准确地说，我们的目标是写出过程 @tt{type-of}。给定一个表达式（名为 @${exp}）和
 一个将变量映射到某一类型的@term["type environment"]{类型环境}（名为@${tenv}），
 @eopl-index[#:range-mark 'start "Environments" "type environment"]
+@eopl-index["Type environment"]
 它赋给 @${exp} 一个类型 @${t}，且 @${t} 具有性质：
 
 @big-bracket[#:title @elem{@tt{type-of} 规范}]{
@@ -373,11 +377,13 @@ proc (f)
  @item{@term["Type Inference"]{类型推导}：按这种方法，类型检查器根据程序中变量的
  使用，尝试@term["infer"]{推断} 绑定变量的类型。如果语言设计得当，类型检查器可以
  推断出大多数甚至所有这样的类型。
+ @eopl-index["Type inference" @eopl-index-entry["for expressions" "expressions"]]
  @eopl-index[#:range-mark 'end "Procedure types"]}
 
 ]
 
 我们依次研究它们。
+@eopl-index[#:range-mark 'end "Type structure" @eopl-index-entry["of basic values" "basicvalues"]]
 
 @exercise[#:level 1 #:tag "ex7.4"]{
 
@@ -390,6 +396,7 @@ proc (f)
 @section[#:style section-title-style-numbered #:tag "s7.3"]{CHECKED：带有类型检查的语言}
 
 @eopl-index[#:range-mark 'start "CHECKED"]
+@eopl-index[#:range-mark 'start "Type checking" @eopl-index-entry["for expressions" "expressions"]]
 除了要求程序员写出所有绑定变量的类型之外，我们的新语言和 LETREC 相同。对由
 @tt{letrec} 绑定的变量，我们还要求程序员指定过程结果的类型。
 
@@ -573,7 +580,8 @@ in |@${e_{letrec\mbox{-}body}}
 ]
 
 @eopl-caption["fig-7.1"]{CHECKED 的 @tt{type-of}
-                         @eopl-index["CHECKED"]}
+                         @eopl-index["CHECKED"]
+                         @eopl-index["Type checking" @eopl-index-entry["for expressions" "expressions"]]}
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -604,7 +612,8 @@ in |@${e_{letrec\mbox{-}body}}
 ]
 
 @eopl-caption["fig-7.2"]{CHECKED 的 @tt{type-of}，续
-              @eopl-index["CHECKED"]}
+              @eopl-index["CHECKED"]
+              @eopl-index["Type checking" @eopl-index-entry["for expressions" "expressions"]]}
 
 }
 
@@ -631,10 +640,12 @@ in |@${e_{letrec\mbox{-}body}}
 ]
 
 @eopl-caption["fig-7.3"]{CHECKED 的 @tt{type-of}，续
-              @eopl-index["CHECKED"]}
+              @eopl-index["CHECKED"]
+              @eopl-index["Type checking" @eopl-index-entry["for expressions" "expressions"]]}
 }
 
 @eopl-index[#:range-mark 'end "CHECKED"]
+@eopl-index[#:range-mark 'end "Type checking" @eopl-index-entry["for expressions" "expressions"]]
 @exercise[#:level 2 #:tag "ex7.5"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.5"] "Multiple-argument procedures"]
@@ -786,6 +797,7 @@ in |@${e_{letrec\mbox{-}body}}
 @section[#:style section-title-style-numbered #:tag "s7.4"]{INFERRED：带有类型推导的语言}
 
 @eopl-index[#:range-mark 'start "INFERRED"]
+@eopl-index[#:range-mark 'start "Type inference" @eopl-index-entry["for expressions" "expressions"]]
 在程序中写出类型虽然有助于设计和文档，但很耗时。另一种设计是让编译器根据变量的使
 用以及程序员可能给出的信息，推断出所有变量的类型。令人惊讶的是，对设计严谨的语言，
 编译器@emph{总}能推断出变量的类型。这种策略叫做@emph{类型推导}。它适用于 LETREC
@@ -848,6 +860,7 @@ in (odd 13)
 要理解这一流程，我们需要给未知类型起名字。对每个表达式 @${e} 或绑定变量 @${var}，
 设 @${t_e} 或 @${t_{var}} 表示表达式或绑定变量的类型。
 
+@eopl-index[#:range-mark 'start "Type equations"]
 对表达式抽象语法树中的每个节点，类型规则决定了类型之间必须成立的某些方程。对我们
 的 PROC 语言，这些方程是：
 
@@ -883,7 +896,11 @@ in (odd 13)
 
 要推导表达式的类型，我们为所有子表达式和绑定变量分配一个类型变量，给出所有子表达
 式的约束条件，然后求解得出的方程。要理解这一流程，我们来推导几个示例表达式的类型。
+@eopl-index[#:range-mark 'end "Type equations"]
+@eopl-index[#:range-mark 'end "Type inference" @eopl-index-entry["for expressions" "expressions"]]
+@eopl-index["Type variable"]
 
+@eopl-index[#:range-mark 'start "Type inference" "examples of"]
 我们从表达式 @tt{proc(f) proc(x) -((f 3),(f x))} 开始。我们首先做一张表，涵盖这
 个表达式中的所有绑定变量、@tt{proc} 表达式、@tt{if} 表达式和过程调用，并给它们分
 别分配一个变量。
@@ -950,6 +967,7 @@ in (odd 13)
 @eopl-index["Binding" (eopl-index-entry "of type variables" "typevariables")]
 
 @eopl-index["Unification"]
+@eopl-index["Type equations" "solving"]
 我们可以按部就班地求解这些方程。这一过程叫做@term["unification"]{合一}。
 
 我们把计算分为两种状态，一种是待求解的方程，一种是已发现的代换式。最开始，所有方
@@ -1414,6 +1432,7 @@ in (odd 13)
 问题来了。我们推导出 @${t_f = t_f \to @tt{int}}。但没有一种类型具有这种性质，因
 为这个方程的右边总是比左边大：如果 @${t_f} 的语法树包含 @${k} 个节点，那么方程右
 边总是包含 @${k+2} 个节点。
+@eopl-index[#:range-mark 'end "Type inference" "examples of"]
 
 所以，如果我们推导的方程形如 @${tv = t}，且类型变量 @${tv} 出现在类型 @${t} 中，
 我们只能得出结论：原方程无解。这个附加条件叫做@term["occurrence check"]{验存}。
@@ -1426,6 +1445,7 @@ in (odd 13)
 @eopl-index["Substitution" "type"]
 }
 
+@eopl-index["Type equations" "solving"]
 我们解方程的代码极度依赖这个不变式。
 
 @exercise[#:level 1 #:tag "ex7.12"]{
@@ -1523,10 +1543,11 @@ in letrec
 @envalign*{\mathit{Type} &::= @tt{%tvar-type} \ \mathit{Number} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{tvar-type (serial-number)}}}}
 
-我们把这些扩展后的类型称为@term["type expression"]{类型表达式}。类型表达式的基本
-操作是用类型代换类型变量，由 @tt{apply-one-subst}定义。@tt{(apply-one-subst
-@${t_0} @${tv} @${t_1})} 将 @${t_0} 中出现的每个@${tv} 代换为 @${t_1}，返回代换
-后的表达式。有时，这写作 @tt{@${t_0}[@${tv=t_1}]}。
+我们把这些扩展后的类型称为@term["type expression"]{类型表达式}。
+@eopl-index["Type expression"]类型表达式的基本操作是用类型代换类型变量，由
+@tt{apply-one-subst} 定义。@tt{(apply-one-subst @${t_0} @${tv} @${t_1})} 将
+@${t_0} 中出现的每个@${tv} 代换为 @${t_1}，返回代换后的表达式。有时，这写作
+@tt{@${t_0}[@${tv=t_1}]}。
 
 @eopl-code{
 @racketblock[
@@ -1820,6 +1841,7 @@ in letrec
             (number->string serial-number)))))))
 ]}
 
+@eopl-index[#:range-mark 'start "Type inference" @eopl-index-entry["for expressions" "expressions"]]
 现在我们可以写 @tt{type-of} 了。它取一表达式，一个将程序变量映射到类型表达式的类
 型环境，和一个满足无存不变式的代换式组，返回一个类型和满足无存不变式的新代换式组。
 
@@ -1977,7 +1999,8 @@ in letrec
 ]
 
 @eopl-caption["fig-7.9"]{INFERRED 的 @tt{type-of}，第 4 部分
-@eopl-index[#:range-mark 'end "Polymorphic"]}
+                         @eopl-index[#:range-mark 'end "Polymorphic"]
+                         @eopl-index["Type inference" @eopl-index-entry["for expressions" "expressions"]]}
 }
 
 @eopl-index["Polymorphic"]
@@ -1996,6 +2019,7 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 知类型，我们可以用其长度给@exact-elem{“}下一个@exact-elem{”}@tt{ty}符号编号。
 这和我们在@figure-ref{fig-4.1} 中使用的 @tt{length} 类似。
 @eopl-index[#:range-mark 'end "INFERRED"]
+@eopl-index[#:range-mark 'end "Type inference" @eopl-index-entry["for expressions" "expressions"]]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2031,7 +2055,8 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 ]
 
 @eopl-caption["fig-7.10"]{@tt{equal-up-to-gensyms?}，第 1 部分
-                          @eopl-index["INFERRED"]}
+                          @eopl-index["INFERRED"]
+                          @eopl-index["Type inference" @eopl-index-entry["for expressions" "expressions"]]}
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -2068,7 +2093,8 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 ]
 
 @eopl-caption["fig-7.11"]{@tt{equal-up-to-gensyms?}，第 2 部分
-                          @eopl-index["INFERRED"]}
+                          @eopl-index["INFERRED"]
+                          @eopl-index["Type inference" @eopl-index-entry["for expressions" "expressions"]]}
 }
 
 @exercise[#:level 2 #:tag "ex7.23"]{
@@ -2110,8 +2136,10 @@ tvar2)} 或 @tt{(tvar3 -> tvar3)}，等等。每次调用推导器结果都可�
 
 @exercise[#:level 2 #:tag "ex7.27"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.27"] "Type equations" "solving"]
 重写推导器，将其分为两步。第一步生成一系列方程，第二步重复调用 @tt{unify} 求解它
 们。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.27"] "Type equations" "solving"]
 
 }
 

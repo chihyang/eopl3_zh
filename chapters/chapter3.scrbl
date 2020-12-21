@@ -47,6 +47,7 @@
 抽象语法树翻译为另一种语言（称为@term["target language"]{目标语言}）写成的
 程序，然后执行。目标语言可能像@figure-ref{fig-3.1-b} 那样，由一个解释器执行，也
 可能翻译成更底层的语言执行。
+@eopl-index["Target language"]
 
 通常，目标语言是一种机器语言，由硬件解释。但目标语言也可能是一种特定用途的语言，
 比原本的语言简单，为它写一个解释器相对容易。这样，程序可以编译一次，然后在多种不
@@ -71,6 +72,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 为词牌的方式叫做语言的@term["lexical specification"]{词法规范}。扫描器取一字符序
 列，生成词牌序列。
 @eopl-index["Lexical specification"]
+@eopl-index["Token"]
 
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英
@@ -2166,6 +2168,7 @@ in proc (x) -(x,1)
 
 @section[#:style section-title-style-numbered #:tag "s3.7"]{实现词法地址}
 
+@eopl-index[#:range-mark 'start "Translation" "nameful to nameless LETREC"]
 现在，我们来实现上述词法地址分析。我们写出过程 @tt{translation-of-program}，它取
 一程序，从声明中移除所有变量，并将每个变量引用替换为词深。
 
@@ -2357,7 +2360,8 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
         (report-invalid-source-expression exp)))))
 ]
 
-@eopl-caption["fig-3.16"]{词法地址翻译器}
+@eopl-caption["fig-3.16"]{词法地址翻译器
+                          @eopl-index["Translation" "nameful to nameless LETREC"]}
 }
 
 @eopl-code{
@@ -2378,7 +2382,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
         (extend-senv 'x
           (empty-senv))))))
 ]
-}
+@eopl-index[#:range-mark 'end "Translation" "nameful to nameless LETREC"]}
 
 @subsection[#:style section-title-style-numbered #:tag "s3.7.2"]{无名解释器}
 
@@ -2559,6 +2563,8 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 
 @exercise[#:level 2 #:tag "ex3.40"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex3.40" "ex3.41" "ex3.42"]
+            "Translation" "nameful to nameless LETREC"]
 扩展词法地址翻译器和解释器，处理 @tt{letrec}。修改 @tt{translation-of} 的上下文
 参数，不仅记录每个绑定变量的名字，也记录变量是否由 @tt{letrec} 绑定。对
 @tt{letrec} 绑定变量的引用，生成一种新的引用，名为 @tt{nameless-letrec-var-exp}。
@@ -2591,6 +2597,8 @@ htt]{nameless-letrec-var-exp}。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.42"] "Data structure representation" @eopl-index-entry["of procedure values" "procedurevalues"]]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.42"]
             @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"] "data structure representation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex3.40" "ex3.41" "ex3.42"]
+            "Translation" "nameful to nameless LETREC"]
 
 }
 

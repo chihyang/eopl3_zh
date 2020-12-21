@@ -160,6 +160,8 @@ y\rceil}}。}
 @term["transparent"]{透明} 的。
 @eopl-index["Concrete types"]
 @eopl-index["Opaque type"]
+@eopl-index["Transparent type"]
+@eopl-index["Type abbreviations"]
 
 Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而求其次：定义接口，靠客户
 程序的作者小心行事，只使用接口中定义的过程。

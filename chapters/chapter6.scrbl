@@ -13,6 +13,7 @@
 @title[#:style part-title-style-numbered #:tag "cps"]{续文传递风格}
 
 @eopl-index[#:range-mark 'start "Factorial function"]
+@eopl-index["Tail calls"]
 在@secref{cpi}，我们把解释器中的所有主要过程调用重写成@emph{尾调用}。这样，我们
 保证任何时候，不论执行的程序多大或多复杂，解释器只使用有限的控制上下文。这种性质
 叫做@emph{迭代性控制行为}。
@@ -96,8 +97,10 @@
 @eopl-index["Registerization"]
 我们还能以多种方式转换这一程序，比如寄存它，如@figure-ref{fig-6.1} 所示。
 
+@eopl-index[#:range-mark 'start "Trampolining"]
 我们甚至能将其转为跳跃式，如@figure-ref{fig-6.2} 所示。如果用普通的指令式语言，
 我们自然能将跳床替换为适当的循环。
+@eopl-index[#:range-mark 'end "Trampolining"]
 
 @eopl-index["Procedural representation" "of continuations"]
 但是，本章我们主要关心，用过程表示法（如@figure-ref{fig-5.2}）时会发生什么。回忆
@@ -211,7 +214,8 @@
         (set! pc apply-cont)))))
 ]
 
-@eopl-caption["fig-6.2"]{寄存后的跳跃式 @tt{fact/k}}
+@eopl-caption["fig-6.2"]{寄存后的跳跃式 @tt{fact/k}
+                         @eopl-index["Trampolining"]}
 
 }
 
@@ -662,6 +666,7 @@ val1 val2)} 的值传给当前续文。
 @section[#:style section-title-style-numbered #:tag "s6.2"]{尾式}
 
 @eopl-index[#:range-mark 'start "Expressions" "tail form"]
+@eopl-index[#:range-mark 'start "Tail-form expressions"]
 要写出程序来做续文传递风格变换，我们需要找出输入和输出语言。我们选择 LETREC 作为
 输入语言，并补充多参数过程和多声明的 @tt{letrec} 表达式。
 @eopl-index["Multiple-procedure declaration"]
@@ -705,6 +710,7 @@ val1 val2)} 的值传给当前续文。
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
 @#,eopl-index[#:range-mark 'end "Factorial function"]]}
 
+@eopl-index[#:range-mark 'start "Tail position"]
 中， 过程调用都不在操作数位置。我们说这些调用在@term["tail position"]{尾端}，因
 为它们的值就是整个调用的结果。我们称之为@term["tail call"]{尾调用}。
 
@@ -741,7 +747,9 @@ val1 val2)} 的值传给当前续文。
 再回忆一下原则@bold{尾调用不扩大续文}：
 
 @nested[#:style tip]{
- @centered{@bold{尾调用不扩大续文}}
+ @centered{@bold{尾调用不扩大续文}
+           @eopl-index["Tail calls"]
+           @eopl-index["Tail Calls Don't Grow the Continuation"]}
 
  @para[#:style tip-content]{若 @${exp_1} 的值作为 @${exp_2} 的值返回，则
  @${exp_1} 和@${exp_2} 应在同样的续文中执行。} }
@@ -787,6 +795,7 @@ val1 val2)} 的值传给当前续文。
 CPS-IN 中的尾端如@figure-ref{fig-6.4} 所示。尾端每个子表达式的值都可能成为整个表
 达式的值。在传递续文的解释器中，操作数位置的子表达式会产生新的续文。尾端的子表达
 式在原表达式的续文中求值，如@pageref{tail-call-explain}所述。
+@eopl-index[#:range-mark 'end "Tail position"]
 
 @eopl-figure[#:position "!t"]{
 @eopl-equation{
@@ -848,6 +857,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 式的。但即使能查看 @tt{strange-predicate?} 的代码，也可能无法判断这一条件的真假。
 因此，我们最多只能寄希望于程序中的过程调用不产生控制上下文，而不论其是否执行。
 @eopl-index[#:range-mark 'end "Expressions" "tail form"]
+@eopl-index[#:range-mark 'end "Tail-form expressions"]
 
 }
 
@@ -1134,6 +1144,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @exercise[#:level 1 #:tag "ex6.17"]{
 
+@eopl-index[#:suffix @exer-ref-range["ex6.17"] "Trampolining"]
 把@figure-ref{fig-6.6} 中的解释器转换为跳跃式。
 
 }
@@ -1156,6 +1167,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 @section[#:style section-title-style-numbered #:tag "s6.3"]{转换为续文传递风格}
 
 @eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]
+@eopl-index[#:range-mark 'start "Translation" @eopl-index-entry["to CPS" "CPS"]]
 本节，我们开发算法，将任意程序从 CPS-IN 转换为 CPS-OUT。
 
 就像传递续文的解释器一样，我们的翻译器@emph{跟随语法}。也像传递续文的解释器一样，
@@ -1589,6 +1601,7 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 器构造 CPS 输出的最内部。一个例外是 @tt{cps-of-letrec-exp}，它没有紧邻的子表达式，
 所以它直接生成 CPS 输出。最后，我们调用 @tt{cps-of-exps} 翻译整个程序，它取一生
 成器，该生成器直接返回一个简单表达式。
+@eopl-index[#:range-mark 'end "Translation" @eopl-index-entry["to CPS" "CPS"]]
 
 在下面的练习中，用 CPS-OUT 的语法和解释器运行输出表达式，确保它们是尾式。
 
@@ -1635,7 +1648,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 ]
 
 @eopl-caption["fig-6.10"]{@tt{cps-of-exp}，第1部分
-                          @eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]}
+                          @eopl-index[#:range-mark 'start "Continuation-passing style" "transformation to"]
+                          @eopl-index[#:range-mark 'start "Translation" @eopl-index-entry["to CPS" "CPS"]]}
 }
 
 @eopl-figure{
@@ -1704,7 +1718,8 @@ proc (|@${var_2}) (|@${K} +(|@${simp_1}, |@${var_2}, ..., |@${simp_n}))
 ]
 
 @eopl-caption["fig-6.12"]{@tt{cps-of-exp}，第3部分
-                          @eopl-index[#:range-mark 'end "Continuation-passing style" "transformation to"]}
+                          @eopl-index[#:range-mark 'end "Continuation-passing style" "transformation to"]
+                          @eopl-index[#:range-mark 'end "Translation" @eopl-index-entry["to CPS" "CPS"]]}
 }
 
 @eopl-index[#:range-mark 'end "Continuation-passing style" "transformation to"]
@@ -2291,6 +2306,7 @@ newrefk(33, proc (loc1)
 @eopl-index[#:range-mark 'start "Exception handling"]
 @eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 @eopl-index[#:range-mark 'start "Nonstandard control flow"]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{throw} expression} "throwexpression"]]
 最后是非局部控制流。我们来考虑@exercise-ref{ex5.42} 中的 @tt{letcc}。@tt{letcc}
 表达式 @tt{letcc @${var} in @${body}} 将当前续文绑定到变量 @${var}。@${body} 为
 该绑定的作用域。续文的唯一操作是 @tt{throw}。我们用语法 @tt{throw @${Expression}
@@ -2325,6 +2341,7 @@ to @${Expression}}，它需要求出两个子表达式的值。第二个表达�
 @eopl-index[#:range-mark 'end "Exception handling"]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
 @eopl-index[#:range-mark 'end "Nonstandard control flow"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{throw} expression} "throwexpression"]]
 
 @exercise[#:level 1 #:tag "ex6.39"]{
 

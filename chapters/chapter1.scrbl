@@ -42,7 +42,7 @@
 {0,1,2,...}} 的某一子集 @${S}。
 
 @; definition: (def #:title title #:tag tag pre-flow ...)
-@definition[#:title #f #:tag "d1.1.1"]{
+@definition[#:title #f #:tag "d1.1.1"]{@eopl-index["Top-down definition"]
 
 自然数 @${n} 属于 @${S}，当且仅当：
  @itemlist[#:style 'ordered
@@ -139,6 +139,7 @@
 的最小集合。
 
 @eopl-index[(eopl-index-entry "Bottom-up definition" "Bottomupdefinition")]
+@eopl-index["Top-down definition"]
 这些定义意思相同。我们把版本一称作@term["top-down"]{自顶向下} 的定义，版本二
 称作@term["bottom-up"]{自底向上} 的定义，版本三称作@term[#f]{推理规则}定义。
 @eopl-index["Rules-of-inference definition"]
@@ -332,7 +333,7 @@
         @exact-elem{“}@tt{.}@exact-elem{”}、
         @exact-elem{“}@tt{(}@exact-elem{”}和
         @exact-elem{“}@tt{)}@exact-elem{”}。这些常用打字机字体写出，如
-        @tt{lambda}。}
+        @tt{lambda}。@eopl-index["Terminal symbols"]}
 
   @item{@bold{生成式}。规则叫做@term["production"]{生成式}。
         @eopl-index["Production of grammar"]每个生成式的左边是一个非终结符，右边

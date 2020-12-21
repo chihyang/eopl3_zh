@@ -83,7 +83,7 @@
 文。当 @tt{fact-iter-acc} 调用自身时，它在 @tt{fact-iter-acc} 执行的
 @exact-elem{“}尾端@exact-elem{”}，除了把返回值作为 @tt{fact-iter-acc} 调用的结
 果，不需再做任何保证。我们称之为@term["tail call"]{尾调用}。这样，上述推导中的每
-一步都形如 @tt{(fact-iter-acc @${n} @${a})}。
+一步都形如 @tt{(fact-iter-acc @${n} @${a})}。@eopl-index["Tail calls"]
 
 当 @tt{fact} 这样的过程执行时，每次递归调用都要记录额外的控制信息，此信息保留到
 调用返回为止。在上面的第一个推导中，这反映了控制上下文的增长。这样的过程呈现
@@ -279,7 +279,9 @@
 这解释了一条通用原则：
 
 @nested[#:style tip]{
- @centered{@bold{尾调用不扩大续文}}
+ @centered{@bold{尾调用不扩大续文
+           @eopl-index["Tail calls"]
+           @eopl-index["Tail Calls Don't Grow the Continuation"]}}
 
  @para[#:style tip-content]{若 @${exp_1} 的值作为 @${exp_2} 的值返回，则
  @${exp_1} 和@${exp_2} 应在同样的续文中执行。} }
@@ -389,6 +391,7 @@
 
 @tt{let} 表达式主体的值成为 @tt{let} 表达式的值，所以求 @tt{let} 表达式主体时的
 续文与求整个 @tt{let} 表达式的相同。这是@bold{尾调用不扩大续文}的又一例子。
+@eopl-index["Tail Calls Don't Grow the Continuation"]
 
 @eopl-index["Conditionals"]
 下面我们处理 @tt{if} 表达式。在 @tt{if} 表达式中，我们首先求条件的值，但条件的结
@@ -812,6 +815,48 @@
 @eopl-index[#:range-mark 'end "LETREC" "continuation-passing interpreter for"]
 @eopl-index[#:range-mark 'end "Operands"]
 
+@eopl-figure{
+@eopl-equation{
+@verbatim|{
+(apply-cont (end-cont) |@${val})
+= (begin
+    (eopl:printf
+      "计算结束.~%")
+    |@${val})
+
+(apply-cont (diff1-cont |@${exp_2} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${exp_2} |@${env} (diff2-cont |@${val1} |@${cont}))
+
+(apply-cont (diff2-cont |@${val1} |@${cont}) |@${val2})
+= (let ((num1 (expval->num |@${val1}))
+        (num2 (expval->num |@${val2})))
+    (apply-cont |@${cont} (num-val (- num1 num2))))
+
+(apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${rand} |@${env} (rand-cont |@${val1} |@${cont}))
+
+(apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
+= (let ((proc1 (expval->proc |@${val1})))
+    (apply-procedure/k proc1 |@${val2} |@${cont}))
+
+(apply-cont (zero1-cont |@${cont}) |@${val})
+= (apply-cont |@${cont} (bool-val (zero? (expval->num |@${val}))))
+
+(apply-cont (if-test-cont |@${exp_2} |@${exp_3} |@${env} |@${cont}) |@${val})
+= (if (expval->bool |@${val})
+    (value-of/k |@${exp_2} |@${env} |@${cont})
+    (value-of/k |@${exp_3} |@${env} |@${cont}))
+
+(apply-cont (let-exp-cont |@${var} |@${body} |@${env} |@${cont}) |@${val1})
+= (value-of/k |@${body} (extend-env |@${var} |@${val1} |@${env}) |@${cont})
+}|
+}
+
+@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范
+                         @eopl-index["Interpreter" "continuation-passing"]
+                         @eopl-index["LETREC" "continuation-passing interpreter for"]}
+}
+
 @exercise[#:level 1 #:tag "ex5.1"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex5.1"] "Continuations" "procedural representation of"]
@@ -957,51 +1002,10 @@
 
 }
 
-@eopl-figure{
-@eopl-equation{
-@verbatim|{
-(apply-cont (end-cont) |@${val})
-= (begin
-    (eopl:printf
-      "计算结束.~%")
-    |@${val})
-
-(apply-cont (diff1-cont |@${exp_2} |@${env} |@${cont}) |@${val1})
-= (value-of/k |@${exp_2} |@${env} (diff2-cont |@${val1} |@${cont}))
-
-(apply-cont (diff2-cont |@${val1} |@${cont}) |@${val2})
-= (let ((num1 (expval->num |@${val1}))
-        (num2 (expval->num |@${val2})))
-    (apply-cont |@${cont} (num-val (- num1 num2))))
-
-(apply-cont (rator-cont |@${rand} |@${env} |@${cont}) |@${val1})
-= (value-of/k |@${rand} |@${env} (rand-cont |@${val1} |@${cont}))
-
-(apply-cont (rand-cont |@${val1} |@${cont}) |@${val2})
-= (let ((proc1 (expval->proc |@${val1})))
-    (apply-procedure/k proc1 |@${val2} |@${cont}))
-
-(apply-cont (zero1-cont |@${cont}) |@${val})
-= (apply-cont |@${cont} (bool-val (zero? (expval->num |@${val}))))
-
-(apply-cont (if-test-cont |@${exp_2} |@${exp_3} |@${env} |@${cont}) |@${val})
-= (if (expval->bool |@${val})
-    (value-of/k |@${exp_2} |@${env} |@${cont})
-    (value-of/k |@${exp_3} |@${env} |@${cont}))
-
-(apply-cont (let-exp-cont |@${var} |@${body} |@${env} |@${cont}) |@${val1})
-= (value-of/k |@${body} (extend-env |@${var} |@${val1} |@${env}) |@${cont})
-}|
-}
-
-@eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范
-                         @eopl-index["Interpreter" "continuation-passing"]
-                         @eopl-index["LETREC" "continuation-passing interpreter for"]}
-}
-
 @section[#:style section-title-style-numbered #:tag "s5.2"]{跳跃式解释器}
 
 @eopl-index["Defunctionalization"]
+@eopl-index[#:range-mark 'start "Trampolining"]
 有人可能想用普通的过程式语言转译解释器，使用数据结构表示续文，从而避免高阶函数。
 但是，用大多数过程式语言做这种翻译都很困难：@elemtag["imper-reason"]{它们}不只在
 必要时才扩大控制上下文，而且在每个函数调用处扩大控制上下文（即堆栈！）。在我们的
@@ -1025,6 +1029,7 @@
 个过程，我们得重写它和它所调用所有过程的合约。所以，我们必须检查解释器中所有过程
 的合约。
 
+@eopl-index[#:range-mark 'start "Type inference" "examples of"]
 我们从 @tt{value-of-program} 开始。由于这是调用解释器的过程，它的合约保持不变。
 它调用 @tt{value-of/k}，把结果传给 @tt{trampoline}。因为我们要操作
 @tt{value-of/k} 的结果，所以它不是 @${\mathit{FinalAnswer}}。我们明明没有修改
@@ -1033,12 +1038,12 @@
 @tt{apply-procedure/k} 的任何结果都可能成为 @tt{value-of/k} 的结果。而我们修改了
 @tt{apply-procedure/k}，它的返回值与之前不同。
 
-我们引入@term[@${\mathit{Bounce}}]{弹球}，作为 @tt{value-of/k}的可能结果（我们叫
-它弹球，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归调
-用自身和 @tt{apply-cont}，这些是它里面所有的尾递归。所以能成为 @tt{value-of/k}结
-果的值只能是 @tt{apply-cont} 的结果。而且，@tt{apply-procedure/k} 在尾部递归调用
-@tt{value-of/k}，所以不论 @${\mathit{Bounce}} 是什么，它是 @tt{value-of/k}、
-@tt{apply-cont}和 @tt{apply-procedure/k} 结果的集合。
+我们引入@term[@${\mathit{Bounce}}]{弹球}，作为 @tt{value-of/k} 的可能结果（我们
+叫它弹球，因为它是跳床的输入）。这一集合的值是什么呢？@tt{value-of/k} 在尾部递归
+调用自身和 @tt{apply-cont}，这些是它里面所有的尾递归。所以能成为 @tt{value-of/k}
+结果的值只能是 @tt{apply-cont} 的结果。而且，@tt{apply-procedure/k} 在尾部递归调
+用 @tt{value-of/k}，所以不论 @${\mathit{Bounce}} 是什么，它是 @tt{value-of/k}、
+@tt{apply-cont} 和 @tt{apply-procedure/k} 结果的集合。
 
 过程 @tt{value-of/k} 和 @tt{apply-cont} 只是在尾部调用其他过程。真正把值放入
 @${\mathit{Bounce}} 中的是 @tt{apply-procedure/k}。这些是什么样的值呢？我们来看
@@ -1057,16 +1062,11 @@
 @${\mathit{ExpVal}}，或调用 @tt{value-of/k}、@tt{apply-cont} 或
 @tt{apply-procedure/k} 之一的结果，也就是 @${\mathit{Bounce}}。所以，
 @tt{apply-procedure/k} 可能的取值由如下集合描述：
-
-@nested{
 @$${\mathit{ExpVal} \cup (() \to \mathit{Bounce})}
-
+@nested{
 这和 @tt{value-of/k} 的可能结果相同，所以我们得出结论：
-
 @$${\mathit{Bounce} = \mathit{ExpVal} \cup (() \to \mathit{Bounce})}
-
 合约为：
-
 @$${
 \begin{alignedat}{-1}
 &@tt{@bold{value-of-program}} : \mathit{Program} \to \mathit{FinalAnswer} \\
@@ -1076,7 +1076,7 @@
 &@tt{@bold{apply-procedure/k}} : \mathit{Proc} \times \mathit{ExpVal} \times \mathit{FinalAnswer} \to \mathit{Bounce}
 \end{alignedat}
 }
-
+@eopl-index[#:range-mark 'end "Type inference" "examples of"]
 }
 
 过程 @tt{trampoline} 满足其合约：首先给它传入一个 @${\mathit{Bounce}}。如果其参
@@ -1133,9 +1133,11 @@
 ]
 
 @eopl-caption["fig-5.7"]{用过程表示跳床
-                         @eopl-index["Procedural representation" "of trampolining"]}
+                         @eopl-index["Procedural representation" "of trampolining"]
+                         @eopl-index["Trampolining" "procedural representation of"]}
 }
 @eopl-index[#:range-mark 'end "Defunctionalization"]
+@eopl-index[#:range-mark 'end "Trampolining"]
 
 @exercise[#:level 1 #:tag "ex5.17"]{
 
@@ -1147,6 +1149,7 @@
 @exercise[#:level 1 #:tag "ex5.18"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.18" "ex5.20"] "Data structure representation" @eopl-index-entry["of trampolining" "trampolining"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.18" "ex5.19" "ex5.20"] "Trampolining" "data structure representation of"]
 @figure-ref{fig-5.7} 中的跳床系统使用过程表示 @${\mathit{Bounce}}。改用数据结构
 表示法。
 
@@ -1167,6 +1170,7 @@
 最后一颗弹球形如 @tt{(apply-cont (end-cont) @${val})}，其中，@${val} 是
 @${\mathit{ExpVal}}。利用这一点优化@exercise-ref{ex5.19} 中弹球的表示。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.18" "ex5.20"] "Data structure representation" @eopl-index-entry["of trampolining" "trampolining"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.18" "ex5.19" "ex5.20"] "Trampolining" "data structure representation of"]
 
 }
 
@@ -1280,7 +1284,8 @@ odd:  if (x=0) then return(0)
 任何不需要控制上下文的程序都可以这样转换。这给了我们一条重要原理：
 
 @nested[#:style tip]{
- @centered{@bold{无参数的尾调用等同于跳转。}}
+ @centered{@bold{无参数的尾调用等同于跳转。
+           @eopl-index["Tail calls"]}}
 }
 
 如果一组过程只通过尾调用互相调用，那么我们可以像像@figure-ref{fig-5.8} 那样，翻
@@ -1692,6 +1697,7 @@ odd:  if (x=0) then return(0)
 
 @exercise[#:level 1 #:tag "ex5.26"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.26"] "Trampolining"]
 用跳床转换这个解释器，用 @tt{(set! pc apply-procedure/k)} 替换
 @tt{apply-procedure/k} 的调用，并使用下面这样的驱动器：
 
@@ -1701,9 +1707,7 @@ odd:  if (x=0) then return(0)
   (lambda (pc)
     (if pc (trampoline (pc)) val)))
 ]
-}
-
-}
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.26"] "Trampolining"]}}
 
 @exercise[#:level 1 #:tag "ex5.27"]{
 
@@ -2169,6 +2173,8 @@ in ((index 5) list(2, 3))
             @eopl-index-entry[@tt{call-with-current-continuation} "Callwithcurrentcontinuation"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
             @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@elem{@tt{throw} expression} "throwexpression"]]
 前一道练习只在抛出异常时捕获续文。添加形式 @tt{letcc @${\mathit{Identifier}} in
 @${\mathit{Expression}}}，允许在语言中的任意位置捕获续文，其规范为：
 
@@ -2218,11 +2224,14 @@ in ...
             @eopl-index-entry[@tt{call-with-current-continuation} "Callwithcurrentcontinuation"]]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
             @eopl-index-entry[@elem{@tt{letcc} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.42" "ex5.43" "ex5.44"]
+            @eopl-index-entry[@elem{@tt{throw} expression} "throwexpression"]]
 }
 
 @section[#:style section-title-style-numbered #:tag "s5.5"]{线程}
 
 @eopl-index[#:range-mark 'start "Multithreaded programs"]
+@eopl-index[#:range-mark 'start "Threads"]
 许多编程任务中，可能需要一次进行多项计算。当这些计算作为同一进程的一部分，运行在
 同一地址空间，通常称它们为@term["thread"]{线程}。本节，我们将看到如何修改解释器，
 模拟多线程程序的执行。
@@ -2240,6 +2249,7 @@ in ...
 线程调度由@term["scheduler"]{调度器} 执行，它将就绪队列保存为自身状态的一部分。
 @eopl-index["Scheduler"]
 此外，它保存一个计时器，当一个线程完成若干步（即线程的@term["time slice"]{时间片}
+@eopl-index["Time slice"]
 或@term["quantum"]{量子}）时，它中断线程，将其放入就绪队列中，并从就绪队列中选出
 一个新的线程来运行。这叫做@term["pre-emptive scheduling"]{抢占式调度}。
 @eopl-index["Quantum"]
@@ -2790,6 +2800,7 @@ in let mut = mutex()
 @eopl-index[#:range-mark 'end "Semaphore"]
 @eopl-index[#:range-mark 'end "Shared variables"]
 @eopl-index[#:range-mark 'end "Synchronization"]
+@eopl-index[#:range-mark 'end "Threads"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 

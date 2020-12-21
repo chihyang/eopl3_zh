@@ -1427,6 +1427,8 @@ extend c1 ...} 替代 @tt{class c2 extends c1 ...}。把操作 @tt{new} 替换�
 
 @section[#:style section-title-style-numbered #:tag "s9.5"]{带有类型的语言}
 
+@eopl-index[#:range-mark 'start "Type checking" "object-oriented"]
+@eopl-index[#:range-mark 'start "TYPED-OO"]
 在@secref{types}，我们展示了如何用类型系统检查程序，保证程序执行时不会进行不当操
 作。通过检查器的程序不会调用非过程处理实参，调用过程或其他操作符时，也不会使用错
 误数量或类型的实参。
@@ -1468,6 +1470,7 @@ TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
 
 @definition[#:title #f #:tag "d9.5.1"]{定义类型为 @${t} 的表达值 @${v} 具有如下
 性质：
+@eopl-index[#:range-mark 'start "Type structure" @eopl-index-entry["of objects and classes" "objectsandclasses"]]
 
  @itemlist[
 
@@ -1478,7 +1481,8 @@ TYPED-OO 中的新生成式如@figure-ref{fig-9.13} 所示。我们添加一种�
   @${I}。当且仅当类具有 @tt{implements @${I}} 声明，或其祖先实现了 @${I} 时，类
   实现了 @${I}。}
 
-  @item{若 @${t} 为其他类型，则用@definition-ref{d7.1.1} 中的规则。}
+  @item{若 @${t} 为其他类型，则用@definition-ref{d7.1.1} 中的规则。
+  @eopl-index[#:range-mark 'end "Type structure" @eopl-index-entry["of objects and classes" "objectsandclasses"]]}
  ]}
 
 对象只能是一个类的实例，但可以有很多类型。
@@ -1667,6 +1671,7 @@ method bool equal(t : tree)
 ]}
 
 这样，本节语言的解释器就修改完成了。
+@eopl-index[#:range-mark 'end "TYPED-OO"]
 
 @exercise[#:level 1 #:tag "ex9.30"]{
 
@@ -2175,7 +2180,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 @eopl-caption["fig-9.20"]{@tt{check-method-decl!}
                           @eopl-index["Declaration" "of method"]
-                          @eopl-index["Method of object" "declaration of"]}
+                          @eopl-index["Method of object" "declaration of"]
+                          @eopl-index["Type checking" "object-oriented"]}
 }
 
 但还没完：如果这个方法覆盖了超类中的某个方法，我们要确保它的类型兼容超类中的方法
@@ -2194,6 +2200,7 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 这样，检查器就完成了。
 @eopl-index[#:range-mark 'end "Class environment"]
+@eopl-index[#:range-mark 'end "Type checking" "object-oriented"]
 
 @eopl-figure[#:position "!t"]{
 @racketblock[
@@ -2226,7 +2233,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 ]
 
 @eopl-caption["fig-9.21"]{@tt{check-if-implements!}
-                          @eopl-index["Interface" "of class"]}
+                          @eopl-index["Interface" "of class"]
+                          @eopl-index["Type checking" "object-oriented"]}
 }
 
 @eopl-figure{
@@ -2275,7 +2283,8 @@ TYPED-OO 中表达式的检查讨论完了，我们接着来构建静态类环�
 
 @eopl-caption["fig-9.22"]{为示例程序生成的静态类环境
                           @eopl-index["Class environment"]
-                          @eopl-index["Environments" "class environment"]}
+                          @eopl-index["Environments" "class environment"]
+                          @eopl-index["Type checking" "object-oriented"]}
 }
 
 @exercise[#:level 1 #:tag "ex9.33"]{

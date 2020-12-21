@@ -1879,7 +1879,9 @@ in let f = proc (z) 11
 值时，我们先求对应操作数的值。有时，我们把不求操作数的值而传给过程
 叫做@term["frozen"]{冻结}，把过程求操作数的值叫做@term["thawed"]{解冻}。
 @eopl-index["Freeze"]
+@eopl-index["Thaw"]
 
+@eopl-index[#:range-mark 'start "Thunk"]
 当然，我们还要加入过程求值时的环境。要这样，我们引入一种新的数据类型，
 @term["thunk"]{值箱}。值箱包含一个表达式、一个环境。
 
@@ -1947,7 +1949,7 @@ in let f = proc (z) 11
       (a-thunk (exp1 saved-env)
         (value-of exp1 saved-env)))))
 ]
-}
+@eopl-index[#:range-mark 'end "Thunk"]}
 
 或者，一旦发现值箱的值，我们可以把表达值放到同一个位置，这样就不需要再次求值箱的
 值。这种方式叫做@term["call by need"]{按需调用}。

@@ -482,6 +482,7 @@ in -(z, -(from m1 take a, from m2 take a))
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.1-checker"]{检查器}
 
+@eopl-index[#:range-mark 'start "Type checking" @eopl-index-entry["for modules" "modules"]]
 检查器的工作是确保所有模块主体满足其接口，且所有变量的使用符合其类型。
 
 @eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
@@ -558,6 +559,7 @@ in -(z, -(from m1 take a, from m2 take a))
 @tt{add-module-defns-to-tenv} 用 @tt{<:-iface} 检查各模块主体产生的接口与提出的
 接口是否相符；如果相符，就将模块加入到类型环境中；否则报错。
 
+@eopl-index[#:range-mark 'start "Type structure" @eopl-index-entry["of module interfaces" "moduleinterfaces"]]
 模块主体的接口将主体中定义的各个变量与定义中的类型关联起来。例如，如果我们查看第
 一个例子的主体，
 
@@ -656,6 +658,8 @@ z : int]} 公布的所有值。
 这样，简单模块系统就完成了。
 @eopl-index[#:range-mark 'end "Modules" "simple"]
 @eopl-index[#:range-mark 'end "SIMPLE-MODULES"]
+@eopl-index[#:range-mark 'end "Type checking" @eopl-index-entry["for modules" "modules"]]
+@eopl-index[#:range-mark 'end "Type structure" @eopl-index-entry["of module interfaces" "moduleinterfaces"]]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -851,6 +855,7 @@ import m3, m1
 
 @exercise[#:level 3 #:tag "ex8.11"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.11"] "Type inference" @eopl-index-entry["for modules" "modules"]]
 修改检查器，用 INFERRED 作为语言的表达式。这道练习中，你需要修改 @tt{<:-decls}，
 不能用 @tt{equal?} 比较类型。例如，在
 
@@ -875,6 +880,7 @@ module m
 }
 
 即使类型推导器报告的类型仍为 @tt{(tvar07 -> tvar07)}。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.11"] "Type inference" @eopl-index-entry["for modules" "modules"]]
 
 }
 
@@ -910,6 +916,8 @@ succ} 等过程处理 @tt{from m1 take t} 类型的值。这样，@tt{from m1 ta
 }
 
 @eopl-index["Concrete types"]
+@eopl-index["Transparent type"]
+@eopl-index["Type abbreviations"]
 我们将介绍两种类型声明：@term["transparent"]{透明} 类型和@term["opaque"]{模糊}
 类型。好的模块系统中，二者缺一不可。
 
@@ -997,6 +1005,8 @@ Alices-points take get-x} 和 @tt{from Alices-points take increment-x} 处理点
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-transparent-types"]{透明类型}
 
 @eopl-index[#:range-mark 'start "Concrete types"]
+@eopl-index[#:range-mark 'start "Transparent type"]
+@eopl-index[#:range-mark 'start "Type abbreviations"]
 我们首先讨论透明类型声明。有时这些又称作@term["concrete"]{具体} 类型
 或@term["type abbreviation"]{类型缩写}。
 
@@ -1052,6 +1062,8 @@ take t} 绑定到 @tt{int}。我们称之为@term["qualified type"]{受限类型
 位置，只要每个声明都先于使用。
 
 @eopl-index[#:range-mark 'end "Concrete types"]
+@eopl-index[#:range-mark 'end "Transparent type"]
+@eopl-index[#:range-mark 'end "Type abbreviations"]
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.2-opaque-types"]{模糊类型}
 
@@ -1357,6 +1369,7 @@ module mybool
 @exercise[#:level 2 #:tag "ex8.15"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.15"] "Currying"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.15"] "Tables"]
 写一个模块，实现抽象表。你实现的表应类似环境，但不是把符号绑定到 Scheme 值，而是
 把整数值绑定到整数值。接口提供一个值，表示空表；两个过程 @tt{add-to-table} 和
 @tt{lookup-in-table} 类似 @tt{extend-env} 和 @tt{apply-env}。由于我们的语言只有
@@ -1390,6 +1403,7 @@ in let add-binding = from tables take add-to-table
 这个程序类型应为 @tt{int}。表 @tt{table1} 把 4 绑定到 400，把 3 绑定到 300，所以
 程序的值应为 100。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.15"] "Currying"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.15"] "Tables"]
 
 }
 
@@ -1417,6 +1431,7 @@ t}）。
            \mathit{Decl} &::= @tt{transparent @m{\mathit{Identifier}} = @m{\mathit{Type}}} \\[-3pt]
        &\mathrel{\phantom{::=}} \fbox{@tt{transparent-type-decl (t-name ty)}}}}
 
+@eopl-index["Type definition"]
 我们还要新增一种定义：类型定义，用来定义模糊类型和透明类型。
 
 @nested[#:style small]{
@@ -1440,6 +1455,8 @@ t}）。
 
 @subsubsection[#:style section-title-style-unumbered #:tag "the-checker"]{检查器}
 
+@eopl-index[#:range-mark 'start "Type checking" @eopl-index-entry["for modules" "modules"]]
+@eopl-index[#:range-mark 'start "Type structure" "opaque and transparent types"]
 检查器的改动就多多了，因为所有关于类型的操作都要扩展，以便处理新的类型。
 
 首先，我们介绍一种系统性的方法来处理模糊类型和透明类型。模糊类型就像 @tt{int} 或
@@ -1739,17 +1756,13 @@ f : (t -> u)]                   f : (t -> (int -> int))]
  }
 
  需要检查
-
  @$${@tt{(transparent @${t} = int)} <: @tt{(opaque @${t})}}
-
  是否成立。
 
  由于这一模块应被接受，该项测试应返回真。
 
  这告诉我们，类型已知的对象总能作为类型未知的对象。反之则不然。例如，
-
  @$${@tt{(opaque @${t})} <: @tt{(transparent @${t} = int)}}
-
  应为假，因为模糊类型值的实际类型可能不是 @tt{int}，而且满足 @tt{opaque t} 的模
  块可能无法满足 @tt{transparent t = int}。}
 
@@ -1802,16 +1815,11 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 
 这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?} 的定义扩展其类
 型，所以，在上面的例子
-
+@nested[#:style small]{@centered{@tt{[transparent t = int x : bool y : t] <: [y : int]}}}
 @nested{
-@eopl-code{
-@verbatim|{
-[transparent t = int x : bool y : t] <: [y : int]
-}|
-}
-
 中，左边的 @tt{t} 展开为 @tt{int}，匹配成功。
-}
+@eopl-index[#:range-mark 'end "Type checking" @eopl-index-entry["for modules" "modules"]]
+@eopl-index[#:range-mark 'end "Type structure" "opaque and transparent types"]}
 
 @exercise[#:level 1 #:tag "ex8.16"]{
 
@@ -1876,7 +1884,9 @@ f : (t -> u)]                   f : (t -> (int -> int))]
 ]
 
 @eopl-caption["fig-8.12"]{OPAQUE-TYPES 的检查器，第 4 部分
-                          @eopl-index["OPAQUE-TYPES"]}
+                          @eopl-index["OPAQUE-TYPES"]
+                          @eopl-index["Type checking" @eopl-index-entry["for modules" "modules"]]
+                          @eopl-index["Type structure" "opaque and transparent types"]}
 }
 
 @section[#:style section-title-style-numbered #:tag "s8.3"]{模块过程}
@@ -2216,6 +2226,7 @@ body
 
 @exercise[#:level 1 #:tag "ex8.23"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex8.23"] "Tables"]
 写出模块 @tt{table-of}，它与@exercise-ref{ex8.15} 中的 @tt{table} 模块类似，只是
 将表的内容参数化，这样就能用
 
@@ -2237,6 +2248,7 @@ module mybool-tables
 }
 
 定义包含 @tt{from mybool take t} 类型值的表。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex8.23"] "Tables"]
 
 }
 
@@ -2366,6 +2378,8 @@ module mybool-tables
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}
 
+@eopl-index[#:range-mark 'start "Type checking" @eopl-index-entry["for module procedures" "moduleprocedures"]]
+@eopl-index[#:range-mark 'start "Type structure" @eopl-index-entry["of module procedures" "moduleprocedures"]]
 @eopl-figure[#:position "!ht"]{
 @$${\begin{array}{l}
      \small{\textrm{IFACE-M-VAR}} \\
@@ -2522,6 +2536,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @eopl-index[#:range-mark 'end "Parameterized modules"]
 @eopl-index[#:range-mark 'end "Procedure types" "for module procedures"]
 @eopl-index[#:range-mark 'end "PROC-MODULES"]
+@eopl-index[#:range-mark 'end "Type checking" @eopl-index-entry["for module procedures" "moduleprocedures"]]
+@eopl-index[#:range-mark 'end "Type structure" @eopl-index-entry["of module procedures" "moduleprocedures"]]
 
 @eopl-figure[#:position "!ht"]{
 @racketblock[
@@ -2560,7 +2576,9 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
                           @eopl-index["Modules" "parameterized"]
                           @eopl-index["Parameterized modules"]
                           @eopl-index["Procedure types" "for module procedures"]
-                          @eopl-index["PROC-MODULES"]}
+                          @eopl-index["PROC-MODULES"]
+                          @eopl-index["Type checking" @eopl-index-entry["for module procedures" "moduleprocedures"]]
+                          @eopl-index["Type structure" @eopl-index-entry["of module procedures" "moduleprocedures"]]}
 }
 
 @exercise[#:level 1 #:tag "ex8.24"]{

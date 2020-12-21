@@ -17,6 +17,7 @@
 程序只是字符串。要处理程序，需要将这些字符归类为有意义的单元。这种归类通常分为两
 个阶段：@term[#:full #f "scanning"]{扫描} 和@term[#:full #f "parsing"]{解析}。
 
+@eopl-index["Token"]
 扫描过程将字符序列分为单词，标点等等。这些单元叫做@term[#f]{词条}、@term[#f]{词
 素}，或者最常见的@term[#f]{词牌}。解析过程将词牌序列组织成有层次的语法结构，如表
 达式、语句和块。这就像用从句组织句子。
@@ -116,6 +117,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 }|
 }
 
+@eopl-index[#:range-mark 'start "Token"]
 扫描器用正则表达式获取词牌时，规则总是取@emph{最长}匹配。所以 @tt{xyz} 扫描为一
 个标识符，而非三个。
 
@@ -139,6 +141,7 @@ specification"]{词法规范}。典型的词法规范可能包括：
 
 通常，词牌的内部结构只与扫描器和解析器相关，所以我们不再详加介绍。
 @eopl-index[#:range-mark 'end "Scanning"]
+@eopl-index[#:range-mark 'end "Token"]
 
 @section[#:style section-title-style-numbered #:tag "B.2"]{解析}
 
