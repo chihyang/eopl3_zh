@@ -1596,6 +1596,54 @@ type"]{展开类型}。}
 @eopl-caption["fig-8.9"]{OPAQUE-TYPES 的检查器，第 1 部分}
 }
 
+@eopl-figure{
+@racketblock[
+@#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
+(define expand-iface
+  (lambda (m-name iface tenv)
+    (cases interface iface
+      (simple-iface (decls)
+        (simple-iface
+          (expand-decls m-name decls tenv))))))
+
+@#,elem{@bold{@tt{expand-decls}} : @${\mathit{Sym} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Listof(Decl)}}}
+(define expand-decls
+  (lambda (m-name decls internal-tenv)
+    (if (null? decls) ()
+      (cases declaration (car decls)
+        (opaque-type-decl (t-name)
+          (let ((expanded-type
+                  (qualified-type m-name t-name)))
+            (let ((new-env
+                    (extend-tenv-with-type
+                      t-name expanded-type internal-tenv)))
+              (cons
+                (transparent-type-decl t-name expanded-type)
+                (expand-decls
+                  m-name (cdr decls) new-env)))))
+        (transparent-type-decl (t-name ty)
+          (let ((expanded-type
+                  (expand-type ty internal-tenv)))
+            (let ((new-env
+                    (extend-tenv-with-type
+                      t-name expanded-type internal-tenv)))
+              (cons
+                (transparent-type-decl t-name expanded-type)
+                (expand-decls
+                  m-name (cdr decls) new-env)))))
+        (val-decl (var-name ty)
+          (let ((expanded-type
+                  (expand-type ty internal-tenv)))
+            (cons
+              (val-decl var-name expanded-type)
+              (expand-decls
+                m-name (cdr decls) internal-tenv))))))))
+]
+
+@eopl-caption["fig-8.10"]{OPAQUE-TYPES 的检查器，第 2 部分
+                          @eopl-index[#:range-mark 'end "Expanded type"]}
+}
+
 过程 @tt{expand-decls} 遍历声明集合，创建新的类型环境，其中的每个类型和变量名都
 绑定到一个展开类型。麻烦之处是声明遵循 @tt{let*} 式作用域：集合中的每个声明的作
 用域包含它之后的所有声明。
@@ -1650,54 +1698,6 @@ module m1
 最后，我们修改 @tt{<:-decls}，处理两种新声明。我们必须处理声明集合内部的作用域关
 系。例如，如果我们比较
 
-@eopl-figure{
-@racketblock[
-@#,elem{@bold{@tt{expand-iface}} : @${\mathit{Sym} \times \mathit{Iface} \times \mathit{Tenv} \to \mathit{Iface}}}
-(define expand-iface
-  (lambda (m-name iface tenv)
-    (cases interface iface
-      (simple-iface (decls)
-        (simple-iface
-          (expand-decls m-name decls tenv))))))
-
-@#,elem{@bold{@tt{expand-decls}} : @${\mathit{Sym} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Listof(Decl)}}}
-(define expand-decls
-  (lambda (m-name decls internal-tenv)
-    (if (null? decls) ()
-      (cases declaration (car decls)
-        (opaque-type-decl (t-name)
-          (let ((expanded-type
-                  (qualified-type m-name t-name)))
-            (let ((new-env
-                    (extend-tenv-with-type
-                      t-name expanded-type internal-tenv)))
-              (cons
-                (transparent-type-decl t-name expanded-type)
-                (expand-decls
-                  m-name (cdr decls) new-env)))))
-        (transparent-type-decl (t-name ty)
-          (let ((expanded-type
-                  (expand-type ty internal-tenv)))
-            (let ((new-env
-                    (extend-tenv-with-type
-                      t-name expanded-type internal-tenv)))
-              (cons
-                (transparent-type-decl t-name expanded-type)
-                (expand-decls
-                  m-name (cdr decls) new-env)))))
-        (val-decl (var-name ty)
-          (let ((expanded-type
-                  (expand-type ty internal-tenv)))
-            (cons
-              (val-decl var-name expanded-type)
-              (expand-decls
-                m-name (cdr decls) internal-tenv))))))))
-]
-
-@eopl-caption["fig-8.10"]{OPAQUE-TYPES 的检查器，第 2 部分
-                          @eopl-index[#:range-mark 'end "Expanded type"]}
-}
-
 @nested{
 @eopl-code{
 @verbatim|{
@@ -1712,6 +1712,51 @@ y : t]
 @tt{internal-tenv} 一样。我们调用 @tt{extend-tenv-with-decl} 处理这些，它取一声
 明，根据类型环境将其展开为适当的类型（@figure-ref{fig-8.11}）。
 
+}
+
+@eopl-figure{
+@racketblock[
+@#,elem{@bold{@tt{<:-decls}} : @${\mathit{Listof(Decl)} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Bool}}}
+(define <:-decls
+  (lambda (decls1 decls2 tenv)
+    (cond
+      ((null? decls2) #t)
+      ((null? decls1) #f)
+      (else
+        (let ((name1 (decl->name (car decls1)))
+              (name2 (decl->name (car decls2))))
+          (if (eqv? name1 name2)
+            (and
+              (<:-decl
+                (car decls1) (car decls2) tenv)
+              (<:-decls
+                (cdr decls1) (cdr decls2)
+                (extend-tenv-with-decl
+                  (car decls1) tenv)))
+            (<:-decls
+              (cdr decls1) decls2
+              (extend-tenv-with-decl
+                (car decls1) tenv))))))))
+
+@#,elem{@bold{@tt{extend-tenv-with-decl}} : @${\mathit{Decl} \times \mathit{Tenv} \to \mathit{Tenv}}}
+(define extend-tenv-with-decl
+  (lambda (decl tenv)
+    (cases declaration decl
+      (val-decl (name ty) tenv)
+      (transparent-type-decl (name ty)
+        (extend-tenv-with-type
+          name
+          (expand-type ty tenv)
+          tenv))
+      (opaque-type-decl (name)
+        (extend-tenv-with-type
+          name
+          (qualified-type (fresh-module-name '%unknown) name)
+          tenv)))))
+]
+
+@eopl-caption["fig-8.11"]{OPAQUE-TYPES 的检查器，第 3 部分
+                          @eopl-index["OPAQUE-TYPES"]}
 }
 
 在展开过程中，我们总是用 @tt{decls1}。欲知其原因，考虑比较
@@ -1767,51 +1812,6 @@ f : (t -> u)]                   f : (t -> (int -> int))]
  块可能无法满足 @tt{transparent t = int}。}
 
 ]
-
-@eopl-figure{
-@racketblock[
-@#,elem{@bold{@tt{<:-decls}} : @${\mathit{Listof(Decl)} \times \mathit{Listof(Decl)} \times \mathit{Tenv} \to \mathit{Bool}}}
-(define <:-decls
-  (lambda (decls1 decls2 tenv)
-    (cond
-      ((null? decls2) #t)
-      ((null? decls1) #f)
-      (else
-        (let ((name1 (decl->name (car decls1)))
-              (name2 (decl->name (car decls2))))
-          (if (eqv? name1 name2)
-            (and
-              (<:-decl
-                (car decls1) (car decls2) tenv)
-              (<:-decls
-                (cdr decls1) (cdr decls2)
-                (extend-tenv-with-decl
-                  (car decls1) tenv)))
-            (<:-decls
-              (cdr decls1) decls2
-              (extend-tenv-with-decl
-                (car decls1) tenv))))))))
-
-@#,elem{@bold{@tt{extend-tenv-with-decl}} : @${\mathit{Decl} \times \mathit{Tenv} \to \mathit{Tenv}}}
-(define extend-tenv-with-decl
-  (lambda (decl tenv)
-    (cases declaration decl
-      (val-decl (name ty) tenv)
-      (transparent-type-decl (name ty)
-        (extend-tenv-with-type
-          name
-          (expand-type ty tenv)
-          tenv))
-      (opaque-type-decl (name)
-        (extend-tenv-with-type
-          name
-          (qualified-type (fresh-module-name '%unknown) name)
-          tenv)))))
-]
-
-@eopl-caption["fig-8.11"]{OPAQUE-TYPES 的检查器，第 3 部分
-                          @eopl-index["OPAQUE-TYPES"]}
-}
 
 这样，我们就得出@figure-ref{fig-8.12} 中的代码。@tt{equiv-type?} 的定义扩展其类
 型，所以，在上面的例子
