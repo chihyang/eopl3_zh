@@ -211,37 +211,26 @@ end
 我们使用@term["store-passing specifications"]{存储器传递规范}。在存储器传递规范
 中，存储器作为显式参数传递给 @tt{value-of}，并作为 @tt{value-of} 的结果返回。那
 么我们可以写：@eopl-index["Store-passing specifications"]
-
-@nested{
-
 @$${@tt{(value-of @${exp_1} @${\rho} @${\sigma_0})} = @tt{(@${val_1},@${\sigma_1})}}
-
+@nested{
 它断言在环境为 @${\rho}，存储器状态为 @${\sigma_0} 时，表达式 @${exp_1} 的返回值
 为 @${val_1}，并且可能把存储器修改为另一状态 @${\sigma_1}。
-
 }
 
 这样我们就能写出 @tt{const-exp} 之类的无效果操作：
-
-@nested{
-
 @$${@tt{(value-of (const-exp @${n}) @${\rho} @${\sigma})} = @tt{(@${n},@${\sigma})}}
-
+@nested{
 以此表明求表达式的值不会修改存储器。
-
 }
 
 @tt{diff-exp} 的规范展示了如何定义有顺序的行为。
-
-@nested{
-
 @$${\infer{@tt{(value-of (diff-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0})} =
            @tt{(@${\lceil\lfloor val_1 \rfloor - \lfloor val_2 \rfloor\rceil},@${\sigma_2})}}
           {\begin{alignedat}{-1}
              @tt{(value-of (diff-exp @${exp_1}) @${\rho} @${\sigma_0})} &= @tt{(@${val_1},@${\sigma_1})} \\
              @tt{(value-of (diff-exp @${exp_2}) @${\rho} @${\sigma_1})} &= @tt{(@${val_2},@${\sigma_2})}
            \end{alignedat}}}
-
+@nested{
 这里，我们从状态为 @${\sigma_0} 的存储器开始，首先求 @${exp_1} 的值。@${exp_1}
 返回值为 @${val_1}，但它可能有效果，把存储器状态修改为 @${\sigma_1}。然后我们从
 @${exp_1} 修改过的存储器——也就是 @${\sigma_1}——开始，求 @${exp_2} 的值。
@@ -252,7 +241,6 @@ end
 }
 
 再来试试条件表达式。
-
 @$${
 \infer{\begin{alignedat}{-1}
          &@tt{ (value-of (if-exp @${exp_1} @${exp_2} @${exp_3}) @${\rho} @${\sigma_0}) } \\
@@ -285,10 +273,7 @@ end
 
 @eopl-index[#:suffix @exer-ref-range["ex4.4"] (eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 写出 @tt{begin} 表达式的规范。
-
-@nested{
 @$${\mathit{Expression} ::= @tt{begin @${\mathit{Expression}} @${\{}@tt{; }@${\mathit{Expression}}@${\}^{*}} end}}
-}
 
 @tt{begin} 表达式包含一个或多个分号分隔的子表达式，按顺序求这些子表达的值，并返
 回最后一个的结果。
@@ -317,7 +302,6 @@ end
           &\mathrel{\phantom{::=}} \fbox{@tt{setref-exp (exp1 exp2)}}}
 
 这些操作的行为定义如下。
-
 @$${
 \infer{@tt{(value-of (newref-exp @${exp}) @${\rho} @${\sigma_0}) =
            ((ref-val @${l}),[@${l}=@${val}]@${\sigma_1})}}
@@ -328,7 +312,6 @@ end
 @${l}，将参数值 @${val} 放到这一位置，以此来扩展那个存储器。然后它返回新位置
 @${l} 的引用。这意味着 @${l} 不在 @${\sigma_1} 的定义域内。
 @eopl-index["Dereferencing"]
-
 @$${
 \infer{@tt{(value-of (deref-exp @${exp}) @${\rho} @${\sigma_0}) =
            (@${\sigma_1(l)},@${\sigma_1})}}
@@ -338,7 +321,6 @@ end
 这条规则是说：@tt{deref-exp} 求出操作数的值，然后把存储器状态改为 @${\sigma_1}。
 参数的值应是位置 @${l} 的引用。然后 @tt{deref-exp} 返回 @${\sigma_1} 中 @${l} 处
 的内容，不再更改存储器。
-
 @$${
 \infer{@tt{(value-of (setref-exp @${exp_1} @${exp_2}) @${\rho} @${\sigma_0}) =
            (@${\lceil 23 \rceil},[@${l}=@${val}]@${\sigma_2})}}
@@ -776,13 +758,11 @@ in let a = (g 11)
 
 我们可以轻松写出解引用和 @tt{set} 的规则。现在，环境总是把变量绑定到位置，所以当
 变量作为表达式时，我们需要将其解引用：
-
 @$${@tt{(value-of (var-exp @${var}) @${\rho} @${\sigma})} = @tt{(@${\sigma(\rho(var))},@${\sigma})}}
 
 赋值就像我们预想的那样：我们在环境中查找式子左侧的标识符，获取一个位置，在环境中
 求右边表达式的值，修改指定位置的内容。就像 @tt{setref}，@tt{set} 表达式的返回值
 任意。我们让它返回表达值 27。
-
 @$${
 \infer{@tt{(value-of (assign-exp @${var} @${exp_1}) @${\rho} @${\sigma_0}) =
            (@${\lceil 27 \rceil},[@${\rho(var)}=@${val_1}]@${\sigma_1})}}
@@ -1129,7 +1109,6 @@ in let p = proc (y) -(y,x)
 变量绑定到一个未初始化的引用，然后执行块主体。这些绑定的作用域是块主体。
 
 用如下断言写出语句的规范：
-
 @$${@tt{(result-of @${stmt} @${\rho} @${\sigma_0})} = \sigma_0}
 
 }
