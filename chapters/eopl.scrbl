@@ -1,6 +1,5 @@
 #lang scribble/book
-@(require "style.rkt"
-          "bibliography.rkt")
+@(require "style.rkt")
 
 @title[#:style book-title-style]{编程语言要素}
 @author{Daniel P. Friedman}
