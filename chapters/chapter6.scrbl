@@ -568,11 +568,13 @@ val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Inlining"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] "Procedural representation" "of continuations"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex6.7"] @idx-value-of "continuation-passing version of"]
 写出@figure-ref{fig-5.4}、@countref{fig-5.5} 和 @countref{fig-5.6} 中解释器的过
 程表示和内联过程表示。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Inlining"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Interpreter" "continuation-passing"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] "Procedural representation" "of continuations"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex6.7"] @idx-value-of "continuation-passing version of"]
 
 }
 
@@ -890,6 +892,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 
 @eopl-caption["fig-6.5"]{CPS-OUT 的语法
                          @eopl-index["CPS-OUT"]}
+@eopl-index[@idx-value-of @eopl-index-entry["for CPS-OUT" "CPSOUT"]]
 }
 
 @eopl-figure{
@@ -937,6 +940,7 @@ proc (|@${\{Var\}^{*(,)}}) = |@${T}
 ]
 
 @eopl-caption["fig-6.6"]{CPS-OUT 中的尾式解释器}
+@eopl-index[@idx-value-of @eopl-index-entry["for CPS-OUT" "CPSOUT"]]
 }
 
 @exercise[#:level 1 #:tag "ex6.11"]{

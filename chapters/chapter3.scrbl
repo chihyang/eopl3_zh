@@ -55,6 +55,7 @@
 code"]{字节码}，称其解释器称为@term["virtual machine"]{虚拟机}。
 @eopl-index["Byte code"]
 @eopl-index["Machine language"]
+@eopl-index["Virtual machine"]
 
 编译器常常分为两部分：@term["analyzer"]{分析器}，尝试推断关于程序的有效信
 息；@term["translator"]{翻译器}，执行翻译，可能用到来自分析器的信息。这些
@@ -247,6 +248,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @eopl-index[#:range-mark 'start "Difference expressions"]
 @eopl-index[#:range-mark 'start "Expressions" "LET"]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for LET" "LET"]]
 我们语言中的六种表达式各对应一个左边为 @${\mathit{Expression}} 的生成式。表达式
 接口包含七个过程，六个是构造器，一个是观测器。我们用 @${\mathit{ExpVal}} 表示表
 达值的集合。
@@ -297,6 +299,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 \rfloor = n}。
 @eopl-index[#:range-mark 'end "Difference expressions"]
 @eopl-index[#:range-mark 'end "Expressions" "LET"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for LET" "LET"]]
 
 @exercise[#:level 1 #:tag "ex3.1"]{
 
@@ -481,6 +484,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 @eopl-index[#:range-mark 'start "Binding" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'start "Body" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'start "Expressions" "LET"]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for LET" "LET"]]
 接下来我们处理用 @tt{let} 表达式创建新变量绑定的问题。我们给这门解释性语言添加语
 法，以关键字 @tt{let} 起始，然后是一个声明，关键字 @tt{in}，及其主体。例如，
 
@@ -605,6 +609,7 @@ in let y = 2
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{let} "let")]
 @eopl-index[#:range-mark 'end "Expressions" "LET"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for LET" "LET"]]
 
 @subsection[#:style section-title-style-numbered #:tag "s3.2.8"]{实现 LET 规范}
 
@@ -687,6 +692,7 @@ in let y = 2
 ]
 
 @eopl-caption["fig-3.7"]{LET 语言的表达值}
+@eopl-index[@idx-value-of @eopl-index-entry["for LET" "LET"]]
 }
 
 现在我们可以写出解析器，如@figure-ref{fig-3.8} 和@countref{fig-3.9} 所示。主过程
@@ -744,6 +750,7 @@ in let y = 2
 ]
 
 @eopl-caption["fig-3.8"]{LET 语言的解释器}
+@eopl-index[@idx-value-of @eopl-index-entry["for LET" "LET"]]
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -774,6 +781,7 @@ in let y = 2
 ]
 
 @eopl-caption["fig-3.9"]{LET 语言的解释器，续}
+@eopl-index[@idx-value-of @eopl-index-entry["for LET" "LET"]]
 }
 
 @exercise[#:level 1 #:tag "ex3.3"]{
@@ -1010,6 +1018,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 @eopl-index["Formal parameter"]
 @eopl-index["Operands"]
 @eopl-index["Operator"]
+@eopl-index["Variable(s)" "bound variable"]
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是@term["bound variable"]{绑定
 变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
 @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
@@ -1058,12 +1067,12 @@ in let f = proc (z) -(z,x)
 以根据词法绑定规则，得到的过程将实参减 200，我们将其命名为 @tt{f}。第二次求值时，
 @tt{x} 绑定到 100，得出的过程应将实参减 100，我们将该过程命名为 @tt{g}。
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for PROC" "PROC"]]
 这两个过程由同一个表达式生成，而行为不同。由此可得，@tt{proc} 表达式的值一定以某
 种方式依赖求值环境。因此，构造器 @tt{procedure} 必定取三个参数：绑定变量、主体以
 及环境。@tt{proc} 表达式定义为：
 
 @nested{
-
 @eopl-equation{
 @verbatim|{
 (value-of (proc-exp |@${var} |@${body}) |@${\rho})
@@ -1078,7 +1087,6 @@ in let f = proc (z) -(z,x)
 们要以操作数的值调用它。
 
 @nested{
-
 @eopl-equation{
 @verbatim|{
 (value-of (call-exp |@${rator} |@${rand}) |@${\rho})
@@ -1109,6 +1117,7 @@ in let f = proc (z) -(z,x)
 @eopl-index[#:range-mark 'end "Procedure call"]
 @eopl-index[#:range-mark 'end "Procedure declaration"]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@elem{Procedure values (@${\mathit{Proc}})} "Procedurevalues"]]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for PROC" "PROC"]]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s3.3.1"]{一个例子}
@@ -1546,6 +1555,7 @@ in (double 6)
 
 }
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for LETREC" "LETREC"]]
 我们定义该环境的行为如下：设 @${\rho_1} 为 @tt{(extend-env-rec
 @${proc\mbox{-}name} @${bound\mbox{-}var} @${proc\mbox{-}body} @${\rho})} 产生的
 环境。那么 @tt{(apply-env @${\rho_1} @${var})} 应返回什么？
@@ -1688,6 +1698,7 @@ in (double 6)
 @eopl-index[#:range-mark 'end "Binding" (eopl-index-entry @tt{letrec} "letrec")]
 @eopl-index[#:range-mark 'end "Body" (eopl-index-entry @tt{letrec} "letrec")]
 @eopl-index[#:range-mark 'end "LETREC"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for LETREC" "LETREC"]]
 
 @exercise[#:level 1 #:tag "ex3.30"]{
 
@@ -1825,6 +1836,7 @@ in let fact = proc (n)
 @eopl-index[#:range-mark 'start "Declaration" "of variables"]
 @eopl-index[#:range-mark 'start "References"]
 @eopl-index[#:range-mark 'start "Scope of variable declaration"]
+@eopl-index[#:range-mark 'start "Variable(s)" "declarations"]
 我们已经在很多地方见到过变量的声明和使用，现在我们来系统讨论这些思想。
 
 在大多数编程语言中，变量只能以两种方式出现：@term["reference"]{引用}
@@ -1924,9 +1936,11 @@ in let fact = proc (n)
 这样的定界规则叫做@term["lexical scoping"]{词法定界} 规则，这样声明的变量
 叫做@term["lexical variable"]{词法变量}。
 @eopl-index["Lexical variables"]
+@eopl-index["Variable(s)" "lexical"]
 
 使用词法定界，我们可以重新声明一个变量，给作用域戳个@exact-elem{“}洞
 @exact-elem{”}。这样的内层声明@term["shadow"]{遮蔽} @eopl-index["Shadowing"]
+@eopl-index["Variable(s)" "shadowing of"]
 外层声明。 例如，在上例的乘式 @tt{(* x y)} 中，内层的 @tt{x} 遮蔽了外层的。
 
 @eopl-index["Contour diagrams"]
@@ -2002,6 +2016,7 @@ diagram"]{等深线} 解释这点。@figure-ref{fig-3.13} 展示了上例的等�
 @eopl-index[#:range-mark 'start "Dynamic properties of programs"]
 @eopl-index["Extent of variable binding"]
 @eopl-index["Semi-infinite extent"]
+@eopl-index["Variable(s)" "extent of"]
 绑定的@term["extent"]{期限} 指绑定保持的时长。在我们的语言中，就像在
 Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，意思是变量
 一旦绑定，该绑定就要（至少是有可能）无限期地保留。这是因为绑定可能隐藏在已返回的
@@ -2020,6 +2035,7 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 @eopl-index[#:range-mark 'end "Dynamic properties of programs"]
 @eopl-index[#:range-mark 'end "References"]
 @eopl-index[#:range-mark 'end "Scope of variable declaration"]
+@eopl-index[#:range-mark 'end "Variable(s)" "declarations"]
 
 @section[#:style section-title-style-numbered #:tag "s3.6"]{消除变量名}
 
@@ -2027,6 +2043,7 @@ Scheme 中一样，所有的绑定都是@term["semi-infinite"]{半无限} 的，
 @eopl-index[#:range-mark 'start "LETREC" "nameless version of"]
 @eopl-index[#:range-mark 'start "Lexical addressing"]
 @eopl-index[#:range-mark 'start "Names, eliminating" "from LETREC"]
+@eopl-index[#:range-mark 'start "Variable(s)" "declarations"]
 定界算法的执行过程可以看作始自变量引用的外出旅行。在旅途中，到达对应的声明之前可
 能会跨越多条等深线。跨越的等深线数目叫做变量引用的@term["lexical
 depth"]{词深}（或@term["static depth"]{静深}）。由于惯用@exact-elem{“}从0开始的
@@ -2489,6 +2506,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 }
 
+@eopl-index[#:range-mark 'start @idx-value-of "nameless version"]
 现在，我们可以写出 @tt{value-of}。它的大部分与前一个解释器相同，只是原先使用
 @tt{env} 的地方现在用 @tt{nameless-env}。但我们要处理新的部分：
 @tt{nameless-var-exp}、@tt{nameless-let-exp} 和 @tt{nameless-proc-exp}，它们分别
@@ -2497,6 +2515,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 @${exp_1}，然后用式子右边的值扩展环境，并在新环境内求主体的值。这和 @tt{let} 所
 做相同，只是没有变量。@tt{nameless-proc} 生成一个 @tt{proc}，随后可供
 @tt{apply-procedure} 调用。
+@eopl-index[#:range-mark 'end @idx-value-of "nameless version"]
 
 @eopl-figure[#:position "!t"]{
 
@@ -2530,6 +2549,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 
 @eopl-caption["fig-3.18"]{无名解释器的 @tt{value-of}}
+@eopl-index[@idx-value-of "nameless version"]
 }
 
 最后是新的 @tt{value-of-program}：
@@ -2545,6 +2565,7 @@ environment"]{静态环境}。静态环境是一个变量列表，表示当前�
 ]
 @eopl-index[#:range-mark 'end "LETREC" "nameless version of"]
 @eopl-index[#:range-mark 'end "Names, eliminating" "from LETREC"]
+@eopl-index[#:range-mark 'end "Variable(s)" "declarations"]
 }
 
 @exercise[#:level 1 #:tag "ex3.38"]{

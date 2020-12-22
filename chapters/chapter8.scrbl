@@ -127,6 +127,7 @@ in -(-(from m1 take a,
 后。
 
 @eopl-index["Qualified variable"]
+@eopl-index["Variable(s)" "qualified"]
 为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量为
 @term["qualified variables"]{受限变量}。在一般的语言中，受限变量可能写作
 @tt{m1.a}、@tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，
@@ -320,6 +321,7 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.1-the-interpreter"]{解释器}
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for SIMPLE-MODULES" "SIMPLEMODULES"]]
 求模块主体的值会得到一个@emph{模块}。在我们的简单模块语言中，模块是一个环境，包
 含模块输出的所有绑定。我们用数据类型 @tt{typed-module} 表示这些。
 
@@ -424,6 +426,7 @@ in -(z, -(from m1 take a, from m2 take a))
 最后，要求模块主体的值，我们在适当的环境内求每个表达式的值，得到 @tt{let*} 式定
 界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for SIMPLE-MODULES" "SIMPLEMODULES"]]
 
 @eopl-figure[#:position "!t"]{
 @racketblock[
@@ -451,6 +454,7 @@ in -(z, -(from m1 take a, from m2 take a))
 ]
 
 @eopl-caption["fig-8.3"]{SIMPLE-MODULES 的解释器，第 1 部分}
+@eopl-index[@idx-value-of @eopl-index-entry["for SIMPLE-MODULES" "SIMPLEMODULES"]]
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -478,6 +482,7 @@ in -(z, -(from m1 take a, from m2 take a))
 ]
 
 @eopl-caption["fig-8.4"]{SIMPLE-MODULES 的解释器，第 2 部分}
+@eopl-index[@idx-value-of @eopl-index-entry["for SIMPLE-MODULES" "SIMPLEMODULES"]]
 }
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.1-checker"]{检查器}
@@ -1414,6 +1419,7 @@ in let add-binding = from tables take add-to-table
 @subsubsection[#:style section-title-style-unumbered #:tag "syntax-and-the-interpreter"]{语法和解释器}
 
 @eopl-index["Qualified type"]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for OPAQUE-TYPES" "OPAQUETYPES"]]
 我们给两种新类型添加语法：有名类型（如 @tt{t}）和受限类型（如 @tt{from m1 take
 t}）。
 
@@ -1451,7 +1457,8 @@ t}）。
         (val-defn (var exp) ...as before...)
         (type-defn (type-name type)
           (defns-to-env (cdr defns) env))))))
-]}
+]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for OPAQUE-TYPES" "OPAQUETYPES"]]}
 
 @subsubsection[#:style section-title-style-unumbered #:tag "the-checker"]{检查器}
 
@@ -2332,6 +2339,7 @@ module mybool-tables
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-interpreter"]{解释器}
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for PROC-MODULES" "PROCMODULES"]]
 首先，类似过程，我们新增一种模块。
 
 @eopl-code{
@@ -2347,6 +2355,7 @@ module mybool-tables
 
 我们扩展 @tt{value-of-module-body} 处理新的模块主体。代码与表达式中的变量引用和
 过程调用十分类似（@figure-ref{fig-8.13}）。
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for PROC-MODULES" "PROCMODULES"]]
 
 @eopl-figure[#:position "!t"]{
 @racketblock[
@@ -2374,6 +2383,7 @@ module mybool-tables
 ]
 
 @eopl-caption["fig-8.13"]{@tt{value-of-module-body}}
+@eopl-index[@idx-value-of @eopl-index-entry["for PROC-MODULES" "PROCMODULES"]]
 }
 
 @subsubsection[#:style section-title-style-unumbered #:tag "s8.3-checker"]{检查器}

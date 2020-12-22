@@ -899,6 +899,7 @@ in (odd 13)
 @eopl-index[#:range-mark 'end "Type equations"]
 @eopl-index[#:range-mark 'end "Type inference" @eopl-index-entry["for expressions" "expressions"]]
 @eopl-index["Type variable"]
+@eopl-index["Variable(s)" "type variable"]
 
 @eopl-index[#:range-mark 'start "Type inference" "examples of"]
 我们从表达式 @tt{proc(f) proc(x) -((f 3),(f x))} 开始。我们首先做一张表，涵盖这
@@ -2212,6 +2213,7 @@ in letrec
 @exercise[#:level 3 #:tag "ex7.30"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.30"] "Effects, computational"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex7.30"] "Value restriction"]
 多态和副作用之间的相互作用很微妙。考虑以下文开头的一段程序
 
 @eopl-code{
@@ -2228,7 +2230,8 @@ in ...
  @item{限制 @tt{let} 声明的右边，不允许出现作用于存储器的效果，从而避免这一问题。
  这叫做@term["value restriction"]{值约束}。
  @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.30"] "Effects, computational"]
- @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.28" "ex7.30"] "Polymorphic"]}
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.28" "ex7.30"] "Polymorphic"]
+ @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex7.30"] "Value restriction"]}
 
 ]
 

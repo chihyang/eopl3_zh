@@ -506,6 +506,7 @@
 
  @eopl-index["Binding" "lambda"]
  @eopl-index["Bound variable"]
+ @eopl-index["Variable(s)" "bound variable"]
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
  达式的@term["bound variable"]{绑定变量}，因为它绑定（或称捕获）主体内出现的任何
  同名变量。出现在主体内的同名变量都指代这一个。
@@ -957,6 +958,7 @@ C} 相同。
 如果一个变量出现于表达式 @${exp} 中，但不在某一 @tt{lambda} 绑定之内，我们说该变
 量@term["occur free"]{自由出现} 于表达式 @${exp} 中。例如，
 @eopl-index["Free occurrence of variable"]
+@eopl-index["Variable(s)" "free"]
 
 @(define occurs-free?-eval
   (parameterize ([sandbox-output 'string]
@@ -1341,6 +1343,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 @eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{partial-vector-sum}} "partialvectorsum"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{vector-sum}} "vectorsum"]]
 按照定义，用归纳法处理第二个参数 @${n}，可以直接写出此过程。
 
 @eopl-code{
@@ -1374,7 +1377,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
           0
           (partial-vector-sum v (- n 1))))))
 ]
-}
+@eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{vector-sum}} "vectorsum"]]}
 
 还有许多情况下，引入辅助变量或过程来解决问题会有帮助，甚至必不可少。只要能对新过
 程做什么给出独立的定义，尽可以如此。

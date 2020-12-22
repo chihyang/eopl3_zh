@@ -27,8 +27,9 @@
 @eopl-index["Shared variables"]
 我们主要关心一种效果：给内存中的位置赋值。赋值与绑定有何区别？我们已经知道，绑定
 是局部的，但@eopl-index["Assignment"]变量赋值有可能是全局的。那是在本不相关的几
-部分计算之间@term["share"]{共享} 值。如果两个过程知道内存中的同一位置，它们就能
-共享信息。如果把信息留在已知位置，同一个过程就能在当前调用和后续调用之间共享信息。
+部分计算之间@term["share"]{共享} @eopl-index["Variable(s)" "shared"]
+值。如果两个过程知道内存中的同一位置，它们就能共享信息。如果把信息留在已知位置，
+同一个过程就能在当前调用和后续调用之间共享信息。
 
 @eopl-index["Location"]
 @eopl-index["Storable values"]
@@ -86,7 +87,7 @@
 
 下面是两个过程 @tt{even} 和 @tt{odd}。它们取一参数，但是忽略它，并根据位置
 @tt{x} 处的内容是偶数还是奇数返回 1 或 0。它们不是通过直接传递数据来通信，而是改
-变共享变量的内容。@eopl-index["Shared variables"]
+变共享变量的内容。@eopl-index["Shared variables"]@eopl-index["Variable(s)" "shared"]
 
 这个程序判断 13 是否为奇数，并返回 1。过程 @tt{even} 和 @tt{odd} 不引用它们的实
 参，而是查看绑定到 @tt{x} 的位置中的内容。
@@ -130,6 +131,7 @@ expression} "beginexpression")]。@tt{begin} 表达式按顺序求每个子表�
 交换数据，居间的过程不需要知道它。因此，以共享变量通信可作为一种隐藏信息的方式。
 
 @eopl-index["Private variables"]
+@eopl-index["Variable(s)" "private"]
 赋值的另一用途是通过私有变量创建隐藏状态。例如：
 
 @eopl-code{
@@ -160,7 +162,8 @@ Scheme 过程 @tt{gensym} 用这种技术创建唯一符号。
   #:suffixes (list ".pdf" ".svg")
   "g绑定时的环境")
 }
-@eopl-index[#:range-mark 'end "Shared variables"]}
+@eopl-index[#:range-mark 'end "Shared variables"]
+@eopl-index["Variable(s)" "shared"]}
 
 @exercise[#:level 1 #:tag "ex4.1"]{
 
@@ -201,6 +204,7 @@ end
 
 @subsection[#:style section-title-style-numbered #:tag "s4.2.1"]{存储器传递规范}
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for EXPLICIT-REFS" "EXPLICITREFS"]]
 在我们的语言中，任何表达式都可以有效果。要定义这些效果，我们需要描述每次求值使用
 什么样的存储器，以及求值如何修改存储器。
 
@@ -338,6 +342,7 @@ end
 这个表达式的执行@term["for effect"]{求效果} 而不求值。
 @eopl-index["Effects, computational"]
 @eopl-index["Execution for effect"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for EXPLICIT-REFS" "EXPLICITREFS"]]
 
 @exercise[#:level 1 #:tag "ex4.6"]{
 
@@ -501,6 +506,7 @@ end
 
 @exercise[#:level 3 #:tag "ex4.12"]{
 
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.12"] @idx-value-of @eopl-index-entry["for EXPLICIT-REFS" "EXPLICITREFS"]]
 像解释器中展示的，我们对存储器的理解基于 Scheme 效果的含义。具体地说，我们得知道
 在 Scheme 程序中这些效果@emph{何时}产生。我们可以写出更贴合规范的解释器，从而避
 免这种依赖。在这一解释器中，@tt{value-of} 同时返回值和存储器，就像规范中那样。这
@@ -509,6 +515,7 @@ interpreter"]{传递存储器的解释器}。补全这个解释器，处理整�
 
 过程可能修改存储器时，不仅返回通常的值，还要返回一个新存储器。它们包含在名为
 @tt{answer} 的数据类型之中。完成这个 @tt{value-of} 的定义。
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.12"] @idx-value-of @eopl-index-entry["for EXPLICIT-REFS" "EXPLICITREFS"]]
 
 }
 
@@ -710,7 +717,7 @@ newref: 分配位置 2
           &\mathrel{\phantom{::=}} \fbox{@tt{assign-exp (var exp1)}}}
 
 这里的 @${\mathit{Identifier}} 不是表达式的一部分，所以无法解引用。在这种设计中，
-我们说变量是@term["mutable"]{可变的}，意为可以修改。
+我们说变量是@term["mutable"]{可变的}，意为可以修改。@eopl-index["Variable(s)" "mutable"]
 
 @eopl-index[(eopl-index-entry "Call-by-value" "Callbyvalue")]
 这种设计叫做@term["call-by-value"]{按值调用}，或@term["implicit reference"]{隐式
@@ -756,6 +763,7 @@ in let a = (g 11)
 
 @subsection[#:style section-title-style-numbered #:tag "s4.3.1"]{规范}
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for IMPLICIT-REFS" "IMPLICITREFS"]]
 我们可以轻松写出解引用和 @tt{set} 的规则。现在，环境总是把变量绑定到位置，所以当
 变量作为表达式时，我们需要将其解引用：
 @$${@tt{(value-of (var-exp @${var}) @${\rho} @${\sigma})} = @tt{(@${\sigma(\rho(var))},@${\sigma})}}
@@ -791,6 +799,7 @@ in let a = (g 11)
 @tt{(let-exp @${var} @${exp_1} @${body})} 的规则类似。我们首先求右边 @${exp_1}
 的值，然后将该值放入一个新位置，将变量 @${var} 绑定到这个位置，在得到的环境中求
 @tt{let} 主体的值，作为整个表达式的值。
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for IMPLICIT-REFS" "IMPLICITREFS"]]
 
 @exercise[#:level 1 #:tag "ex4.14"]{
 
@@ -952,6 +961,7 @@ newref: 分配位置 5
 @exercise[#:level 1 #:tag "ex4.16"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.16"] "Recursive programs" "design and implementation of"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.16"] "Variable(s)" "mutable"]
 既然变量是可变的，我们可以靠赋值产生递归过程。例如：
 
 @eopl-code{
@@ -980,6 +990,7 @@ in begin
 
 手动跟踪这个程序，验证这种翻译可行。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.16"] "Recursive programs" "design and implementation of"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.16"] "Variable(s)" "mutable"]
 
 }
 
@@ -1032,6 +1043,7 @@ in begin
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] @eopl-index-entry[@elem{@tt{setdynamic} expression} "setdynamicexpression"]]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Shared variables"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.21"] "Variable(s)" "shared"]
 之前，我们建议两个相去很远的过程通过赋值交换信息，避免居间的过程知晓，从而使程序
 更加模块化。这样的赋值常常应该是临时的，只在执行函数调用时生效。向语言
 添加@term["dynamic assignment"]{动态赋值}（又称@term["fluid binding"]{流式绑定}）
@@ -1062,6 +1074,7 @@ in let p = proc (y) -(y,x)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Fluid binding"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] @eopl-index-entry[@elem{@tt{setdynamic} expression} "setdynamicexpression"]]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Shared variables"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.21"] "Variable(s)" "shared"]
 
 }
 
@@ -1196,6 +1209,7 @@ in let p = proc (y) -(y,x)
 
 @section[#:style section-title-style-numbered #:tag "s4.4"]{MUTABLE-PAIRS：可变序对语言}
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for MUTABLE-PAIRS" "MUTABLEPAIRS"]]
 在@exercise-ref{ex3.9} 中，我们给语言添加了列表，但它们是不可变的：不像 Scheme
 中，有 @tt{set-car!} 和 @tt{set-cdr!} 处理它们。
 
@@ -1219,6 +1233,7 @@ in let p = proc (y) -(y,x)
 }
 
 我们把这种语言叫做 MUTABLE-PAIRS。
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for MUTABLE-PAIRS" "MUTABLEPAIRS"]]
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.1"]{实现}
 
@@ -1313,6 +1328,7 @@ in let p = proc (y) -(y,x)
 }
 
 @eopl-caption["fig-4.10"]{给解释器添加可变序对模块}
+@eopl-index[@idx-value-of @eopl-index-entry["for MUTABLE-PAIRS" "MUTABLEPAIRS"]]
 }
 
 @subsection[#:style section-title-style-numbered #:tag "s4.4.2"]{可变序对的另一种表示}
@@ -1503,6 +1519,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 @subsection[#:style section-title-style-numbered #:tag "s4.5.1"]{按指调用}
 
 @eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-reference" "Callbyreference")]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for CALL-BY-REFERENCE" "CALLBYREFERENCE"]]
 考虑下面的表达式：
 
 @nested{
@@ -1655,6 +1672,7 @@ in let p = proc (x) proc(y)
 
 它的值为 4，因为 @tt{x} 和 @tt{y} 指向同一个位置，即 @tt{b} 的绑定。这种现象叫
 做@eopl-index{Aliases}@term["variable aliasing"]{变量别名}。这里的 @tt{x} 和
+@eopl-index["Variable(s)" "aliasing of"]
 @tt{y} 是同一个位置的别名（名字）。通常，我们在给一个变量赋值时并不想改变另一个
 变量的值，所以别名会导致程序难以理解。
 
@@ -1741,6 +1759,7 @@ newref: 分配位置 5
 }
 
 @eopl-index[#:range-mark 'end (eopl-index-entry "Call-by-reference" "Callbyreference")]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for CALL-BY-REFERENCE" "CALLBYREFERENCE"]]
 
 @exercise[#:level 1 #:tag "ex4.31"]{
 
@@ -1904,6 +1923,7 @@ in let f = proc (z) 11
 求 @tt{var-exp} 的值时，我们首先找到变量绑定的位置。如果该位置是一个表达值，那么
 返回这个值，作为 @tt{var-exp} 的值。如果它包含一个值箱，那么我们求取并返回值箱的
 值。这叫做@term["call by name"]{按名调用}。
+@eopl-index[@idx-value-of @eopl-index-entry["for CALL-BY-NAME" "CALLBYNAME"]]
 @eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-name" "Callbyname")]
 
 @eopl-code{
@@ -1933,6 +1953,7 @@ in let f = proc (z) 11
 或者，一旦发现值箱的值，我们可以把表达值放到同一个位置，这样就不需要再次求值箱的
 值。这种方式叫做@term["call by need"]{按需调用}。
 @eopl-index[#:range-mark 'start (eopl-index-entry "Call-by-need" "Callbyneed")]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for CALL-BY-NEED" "CALLBYNEED"]]
 
 @nested{
 @eopl-code{
@@ -1951,6 +1972,7 @@ in let f = proc (z) 11
 
 这里用到了名为@term["memoization"]{助记法} 的通用策略。
 @eopl-index["Memoization"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for CALL-BY-NEED" "CALLBYNEED"]]
 
 }
 

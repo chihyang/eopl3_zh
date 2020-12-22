@@ -226,6 +226,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 质。
 
 @eopl-index["Environments"]
+@eopl-index["Variable(s)" @eopl-index-entry["in environments" "environments"]]
 本节介绍几种数据类型的表示策略。我们用数据类型@term["environment"]{环境} 解释这
 些选择。对有限个变量组成的集合，环境将值与其中的每个元素关联起来。在编程语言的实
 现之中，环境可用来维系变量与值的关系。编译器也能用环境将变量名与变量信息关联起来。
@@ -242,6 +243,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 有集合。其中，@${var_i} 是某一变量，@${val_i} 是任意 Scheme 值。有时称环境
 @${env} 中变量 @${var} 的值 @${val} 为其在 @${env} 中的@term["binding"]{绑定}。
 @eopl-index["Binding" (eopl-index-entry "in environment" "environment")]
+@eopl-index["Variable(s)" @eopl-index-entry["in environments" "environments"]]
 
 
 这一数据类型的接口有三个过程，定义如下：
@@ -989,9 +991,9 @@ lambda 演算表达式的语法：
 }
 
 这新定义了一种数据类型，名为 @${type\mbox{-}name}，它有一些@term["variants"]{变
-体}。每个变体有一变体名，以及 0 或多个字段，每个字段各有其字段名和相应的谓词。不
-论是否属于不同的类型，变体都不能重名。类型也不能重名，且类型名不能用作变体名。每
-个字段的谓词必须是一个 Scheme 谓词。
+体}。@eopl-index["Variant"]每个变体有一变体名，以及 0 或多个字段，每个字段各有其
+字段名和相应的谓词。不论是否属于不同的类型，变体都不能重名。类型也不能重名，且类
+型名不能用作变体名。每个字段的谓词必须是一个 Scheme 谓词。
 
 每个变体都有一个构造器过程，用于创建该变体的值。这些过程的名字与对应的变体相同。
 如果一个变体有 @${n} 个字段，那么它的构造器取 @${n} 个参数，用对应的谓词检查每个

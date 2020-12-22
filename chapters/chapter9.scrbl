@@ -525,6 +525,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 
 @eopl-index["Class environment"]
 @eopl-index["Environments" "class environment"]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for CLASSES" "CLASSES"]]
 我们求程序的值时，首先用 @tt{initialize-class-env!} 处理所有类声明，然后求表达式
 的值。过程 @tt{initialize-class-env!} 创建一个全局@term["class environment"]{类
 环境}，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme变量表示
@@ -977,6 +978,7 @@ in send o3 m1(7,8)
 构建方法环境还有其他一些方式，它们在方法查询时更高效（@exercise-ref{ex9.18}）。}
 @eopl-index[#:range-mark 'end "Environments" "method environments"]
 @eopl-index[#:range-mark 'end "Method environments"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for CLASSES" "CLASSES"]]
 
 @eopl-figure{
 @racketblock[
@@ -1168,6 +1170,8 @@ class oddeven extends object
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.15"] "Class variables"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.15"] "Static variables"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.15"] "Variable(s)" "class"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex9.15"] "Variable(s)" "static"]
 很多面向对象编程语言都提供@emph{静态}变量或者@emph{类}变量。静态变量与类的某些状
 态相关联；类的所有实例共享这一状态。例如，我们可以写：
 
@@ -1196,6 +1200,8 @@ in list(send o1 get-serial-number(),
 时，应使用什么环境？
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.15"] "Class variables"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.15"] "Static variables"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.15"] "Variable(s)" "class"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex9.15"] "Variable(s)" "static"]
 
 }
 
@@ -1636,6 +1642,7 @@ method bool equal(t : tree)
 }
 
 @eopl-index["Implementation" "of object-oriented interface"]
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for TYPED-OO" "TYPEDOO"]]
 我们的实现从@secref{s9.4.1}中的解释器开始。我们给 @tt{value-of} 添加两条语句，求
 @tt{instanceof} 和 @tt{cast} 表达式的值：
 
@@ -1672,6 +1679,7 @@ method bool equal(t : tree)
 
 这样，本节语言的解释器就修改完成了。
 @eopl-index[#:range-mark 'end "TYPED-OO"]
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for TYPED-OO" "TYPEDOO"]]
 
 @exercise[#:level 1 #:tag "ex9.30"]{
 

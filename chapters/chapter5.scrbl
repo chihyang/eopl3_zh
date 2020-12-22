@@ -125,6 +125,7 @@
 @eopl-index[#:range-mark 'start "Continuations"]
 @eopl-index[#:range-mark 'start "Interpreter" "continuation-passing"]
 @eopl-index[#:range-mark 'start "LETREC" "continuation-passing interpreter for"]
+@eopl-index[#:range-mark 'start @idx-value-of "continuation-passing version of"]
 在我们的新解释器中，@tt{value-of} 等主要过程将取第三个参数。这一参数——@emph{续
 文}——用来抽象每个表达式求值时的控制上下文。
 
@@ -182,6 +183,7 @@
 ]
 
 @eopl-caption["fig-5.1"]{传递环境的解释器}
+@eopl-index[@idx-value-of @eopl-index-entry["for LETREC" "LETREC"]]
 }
 
 我们的目标是重写解释器，避免在调用 @tt{value-of} 时产生控制上下文。当控制上下文
@@ -759,6 +761,7 @@
 @eopl-caption["fig-5.4"]{传递续文的解释器（第1部分）
                          @eopl-index["Continuations"]
                          @eopl-index["Interpreter" "continuation-passing"]}
+@eopl-index[@idx-value-of "continuation-passing version of"]
 }
 
 @eopl-figure{
@@ -776,6 +779,7 @@
 @eopl-caption["fig-5.5"]{传递续文的解释器（第2部分）
                          @eopl-index["Interpreter" "continuation-passing"]
                          @eopl-index["LETREC" "continuation-passing interpreter for"]}
+@eopl-index[@idx-value-of "continuation-passing version of"]
 }
 
 @elemtag["tail-call-explain"]{现在我们可以验证断言}：不是过程调用，而是实参的求
@@ -814,6 +818,7 @@
 @eopl-index[#:range-mark 'end "Interpreter" "continuation-passing"]
 @eopl-index[#:range-mark 'end "LETREC" "continuation-passing interpreter for"]
 @eopl-index[#:range-mark 'end "Operands"]
+@eopl-index[#:range-mark 'end @idx-value-of "continuation-passing version of"]
 
 @eopl-figure{
 @eopl-equation{
@@ -855,6 +860,7 @@
 @eopl-caption["fig-5.6"]{@figure-ref{fig-5.4} 中续文的规范
                          @eopl-index["Interpreter" "continuation-passing"]
                          @eopl-index["LETREC" "continuation-passing interpreter for"]}
+@eopl-index[@idx-value-of "continuation-passing version of"]
 }
 
 @exercise[#:level 1 #:tag "ex5.1"]{
@@ -1017,6 +1023,7 @@
 赋值。因此，体系结构为这种最常见的情形做了优化。而且，由于大多数语言在堆栈中存储
 环境信息，所有过程调用生成的控制上下文都不能忘了移除这一信息。
 
+@eopl-index[#:range-mark 'start @idx-value-of "trampolined version"]
 在这种语言中，一种解决方案是使用@term["trampolining"]{跳跃} 技术。为了避免产生无
 限长的调用链，我们把调用链打断，让解释器中的某个过程返回一个无参数过程。调用这个
 过程在将继续进行计算。整个计算由一个名叫@term["trampoline"]{跳床} 的过程驱动，它
@@ -1135,9 +1142,11 @@
 @eopl-caption["fig-5.7"]{用过程表示跳床
                          @eopl-index["Procedural representation" "of trampolining"]
                          @eopl-index["Trampolining" "procedural representation of"]}
+@eopl-index[@idx-value-of "trampolined version"]
 }
 @eopl-index[#:range-mark 'end "Defunctionalization"]
 @eopl-index[#:range-mark 'end "Trampolining"]
+@eopl-index[#:range-mark 'end @idx-value-of "trampolined version"]
 
 @exercise[#:level 1 #:tag "ex5.17"]{
 
@@ -1193,9 +1202,10 @@
 @section[#:style section-title-style-numbered #:tag "s5.3"]{指令式解释器}
 
 @eopl-index[#:range-mark 'start "Registerization"]
+@eopl-index[#:range-mark 'start @idx-value-of "registerized version"]
 在@secref{state}中我们看到，给共享变量赋值有时可以替代绑定。
 考虑@figure-ref{fig-5.8} 顶部的老例子 @tt{even} 和 @tt{odd}。
-@eopl-index["Shared variables"]
+@eopl-index["Shared variables"]@eopl-index["Variable(s)" "shared"]
 
 可以用@figure-ref{fig-5.8} 中间的程序替代它们。其中，共享变量 @tt{x} 供两个过程
 交换信息。在顶部的例子中，过程主体在环境中查找相关数据；在另一个程序中，它们从存
@@ -1503,6 +1513,7 @@ odd:  if (x=0) then return(0)
 翻译完的解释器如@figure-ref{fig-5.11}--@countref{fig-5.14} 所示。这个过程
 叫做@term["registerization"]{寄存}。很容易用支持跳转的指令式语言翻译它。
 @eopl-index[#:range-mark 'end "Registerization"]
+@eopl-index[#:range-mark 'end @idx-value-of "registerized version"]
 
 @eopl-figure{
 @racketblock[
@@ -1551,7 +1562,7 @@ odd:  if (x=0) then return(0)
 
 @eopl-caption["fig-5.11"]{指令式解释器（第1部分）
                           @eopl-index["Registerization"]}
-
+@eopl-index[@idx-value-of "registerized version"]
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -1584,7 +1595,7 @@ odd:  if (x=0) then return(0)
 
 @eopl-caption["fig-5.12"]{指令式解释器（第2部分）
                           @eopl-index["Registerization"]}
-
+@eopl-index[@idx-value-of "registerized version"]
 }
 
 @eopl-figure[#:position "!ht"]{
@@ -1623,7 +1634,7 @@ odd:  if (x=0) then return(0)
 
 @eopl-caption["fig-5.13"]{指令式解释器（第3部分）
                           @eopl-index["Registerization"]}
-
+@eopl-index[@idx-value-of "registerized version"]
 }
 
 @eopl-figure{
@@ -1671,7 +1682,7 @@ odd:  if (x=0) then return(0)
 
 @eopl-caption["fig-5.14"]{指令式解释器（第4部分）
                           @eopl-index["Registerization"]}
-
+@eopl-index[@idx-value-of "registerized version"]
 }
 
 @exercise[#:level 1 #:tag "ex5.23"]{
@@ -1738,6 +1749,7 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Scope of variable declaration" "dynamic"]
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Semi-infinite extent"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.30"] "Variable(s)" "extent of"]
 修改本节的解释器，让过程使用@exercise-ref{ex3.28} 中的动态绑定。提示：像本章这样
 转换@exercise-ref{ex3.28} 中的解释器；二者不同的部分转换后才会不同。
 像@exercise-ref{ex5.28} 那样给解释器添加辅助组件。观察可知，就像当前状态中只有一
@@ -1750,6 +1762,7 @@ odd:  if (x=0) then return(0)
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Extent of variable binding"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Scope of variable declaration" "dynamic"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Semi-infinite extent"]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.30"] "Variable(s)" "extent of"]
 
 }
 
@@ -2238,7 +2251,7 @@ in ...
 
 我们的多线程解释器不做单线程计算，而且维护多个线程。就像本章之前展示的那样，每
 个线程包含一项正在进行的计算。线程使用@secref{state}中的赋值，通过共享内存通信。
-@eopl-index["Shared variables"]
+@eopl-index["Shared variables"]@eopl-index["Variable(s)" "shared"]
 
 在我们的系统中，整个计算包含一个线程@term["pool"]{池}。每个
 线程@term["running"]{在运行}、@@term["runnable"]{可运行} 或者@term["blocked"]{受
@@ -2388,6 +2401,7 @@ in let producer = proc (n)
 @tt{the-ready-queue} 设置为剩余线程队列。如果就绪队列为空，@tt{run-next-thread}
 返回 @tt{the-final-answer}，计算至此全部终止。
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for THREADS" "THREADS"]]
 然后我们来看解释器。@tt{spawn} 表达式在某个续文中求参数的值，这个续文执行时，将
 一个新线程放入就绪队列，并将 73 返回给 @tt{spawn} 的调用者。新的线程执行时，将一
 个任意值（这里选 28）传给 @tt{spawn} 参数求值得到的过程。要完成这些，我们给
@@ -2415,7 +2429,7 @@ in let producer = proc (n)
           (end-subthread-cont))))
     (apply-cont saved-cont (num-val 73))))
 }
-}
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for THREADS" "THREADS"]]}
 
 @; TODO: format for interface in figure 5.18
 @eopl-figure[#:position "!ht"]{
@@ -2541,6 +2555,7 @@ in let mut = mutex()
 
 ]
 
+@eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for THREADS" "THREADS"]]
 由此我们得出两种新续文，其行为由 @tt{apply-cont} 中的以下几行实现：
 
 @eopl-code{
@@ -2591,10 +2606,11 @@ in let mut = mutex()
         (cases continuation cont
           ...)))))
 ]
-}
+@eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for THREADS" "THREADS"]]}
 
 @eopl-index[#:range-mark 'start "Shared variables"]
 @eopl-index[#:range-mark 'start "Synchronization"]
+@eopl-index[#:range-mark 'start "Variable(s)" "shared"]
 共享变量不是可靠的通信方式，因为多个线程可能试图写同一变量。例如，
 考虑@figure-ref{fig-5.20} 中的程序。这里，我们创建了三个线程，试图累加同一个计数
 器 @tt{x}。如果一个线程读取了计数器，但在更新计数器之前被打断，那么两个线程将把
@@ -2801,6 +2817,7 @@ in let mut = mutex()
 @eopl-index[#:range-mark 'end "Shared variables"]
 @eopl-index[#:range-mark 'end "Synchronization"]
 @eopl-index[#:range-mark 'end "Threads"]
+@eopl-index[#:range-mark 'end "Variable(s)" "shared"]
 
 @exercise[#:level 1 #:tag "ex5.45"]{
 
