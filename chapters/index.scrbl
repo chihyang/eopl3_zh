@@ -15,7 +15,7 @@
 @eopl-index[#:decorator 'seealso #:prefix "Assignment" "Mutation"]
 @eopl-index[#:decorator 'seealso #:prefix "Recursive data types" "Abstract data types (ADTs)"]
 
-@eopl-index[#:decorator 'see #:prefix "Method of object" '("Member function")]
+@eopl-index[#:decorator 'see #:prefix "Method of object" "Member function"]
 @eopl-index[#:decorator 'see #:prefix "EXPLICIT-REFS; IMPLICITREFS" "State"]
 @eopl-index[#:decorator 'see #:prefix "Binding" "Variable(s)" "binding of"]
 @eopl-index[#:decorator 'see #:prefix "Scope of variable declaration" "Variable(s)" "scope of"]
