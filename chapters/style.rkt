@@ -465,7 +465,7 @@
                     . entries)
   (elem
    (exact-elem "\\index{")
-   (make-entry-list (if (list? entries) entries (list entries)))
+   (make-entry-list (map make-an-index-entry entries))
    (exact-elem "|"
                (cond [(equal? range-mark 'start) "("]
                      [(equal? range-mark 'end) ")"]
@@ -485,27 +485,34 @@
                         [else "seealsoSubSublevel{"])]
                      [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
    (unless (equal? prefix #f) prefix)
-   (when (equal? decorator #f)
-     (exact-elem "}{"))
+   (when (equal? decorator #f) (exact-elem "}{"))
    (unless (equal? suffix #f) suffix)
    (exact-elem "}}")))
 
-;;; content is a list of eopl index entry item
+;; content is a list of eopl index entry item
 (define (make-entry-list entries)
   (add-between (map (lambda (e)
-                      (match e
-                        [(struct eopl-index-entry (v k))
-                         (if (equal? k #f)
-                             (if (string? v) (clean-up-index-string v) v)
-                             (list k "@" v))]
-                        [(? string?)
-                         (let ((cstr (clean-up-index-string e)))
-                           (if (regexp-match? #px"[[:space:]\\(\\):']|-" cstr)
-                               (list (regexp-replace* #px"[[:space:]\\(\\):']|-" cstr "") "@" cstr)
-                               (list cstr)))]
-                        [else (list e)]))
+                      (let ((value (eopl-index-entry-value e))
+                            (key (eopl-index-entry-key e)))
+                        (if (equal? key #f)
+                            value
+                            (list key "@" value))))
                     entries)
                "!"))
+
+;; make-an-index-entry : eopl-index-entry | string -> eopl-index-entry
+(define (make-an-index-entry entry)
+  (match entry
+    [(struct eopl-index-entry (v k)) entry]
+    [(? string?)
+     (let ((cstr (clean-up-index-string entry)))
+       (if (regexp-match? #px"[[:space:]\\(\\):']|-" cstr)
+           (eopl-index-entry cstr (regexp-replace* #px"[[:space:]\\(\\):']|-" cstr ""))
+           (eopl-index-entry cstr #f)))]
+    [else
+     (error 'eopl-index
+            "Invalid eopl index entry ~a, expenct an eopl-index-entry or a string"
+            entry)]))
 
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
