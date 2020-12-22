@@ -130,6 +130,9 @@
   (make-style "EoplExerRefRange" (list (make-tex-addition "../style/exercise.tex"))))
 
 ;;; for code
+(define (eopl-proc . c)
+  (bold (tt c)))
+
 (define eopl-samepage
   (make-style "Samepage" (list (make-tex-addition "../style/samepage.tex"))))
 
@@ -444,13 +447,16 @@
                author))))))
 
 ;;; for indexing
+(define-struct eopl-index-entry (value key))
+
 (define (exer-ref-range . tags)
   (elem #:style eopl-exer-ref-range
         (add-between (map (lambda (t) (countref #:style eopl-plain-label t))
                           tags)
                      ",")))
 
-(define-struct eopl-index-entry (value key))
+(define idx-value-of
+  (eopl-index-entry (eopl-proc "value-of") "valueof"))
 
 (define (eopl-index #:prefix [prefix #f]
                     #:suffix [suffix #f]
