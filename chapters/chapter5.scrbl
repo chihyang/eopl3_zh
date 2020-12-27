@@ -985,8 +985,8 @@
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex5.15"] "Frame"]
 我们的续文数据类型只有一个常量 @tt{end-cont}，所有其他续文构造器都有一个续文参数。
 用列表表示和实现续文。用空列表表示 @tt{end-cont}，用首项为其他数据结构
-（名为@term["frame"]{帧} 或@term["activation record"]{活跃记录}），余项为已保存
-续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
+（名为@term["frame"]{帧} 或@term["activation record"]{活跃记录表}），余项为已保
+存续文的非空列表表示其他续文。观察可知，解释器把这些列表当成（帧的）堆栈。
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.15"] "Activation record"]
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex5.15"] "Frame"]
 

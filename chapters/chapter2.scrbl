@@ -544,8 +544,8 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 为@term["procedural representation"]{过程表示法}。
 
 数据类型只有一个观测器的情形并非想象中那般少见。比如，当数据是一组函数，就能用调
-用时执行的动作表示。这种情况下，可以按照下列步骤提炼出接口和过程表示法：
-@eopl-index{Action under application}
+用时执行的动作@eopl-index{Action under application}表示。这种情况下，可以按照下
+列步骤提炼出接口和过程表示法：
 
 @itemlist[#:style 'ordered
 

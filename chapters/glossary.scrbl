@@ -21,7 +21,7 @@
 
 @list[@elem{Abstraction boundary} @elem{抽象边界}]
 
-@list[@elem{Activation record} @elem{活跃记录}]
+@list[@elem{Activation record} @elem{活跃记录表}]
 
 @list[@elem{Actual parameter} @wrappable-cell{实际参数，简称实参
 @glossary-note{同 argument}}]
