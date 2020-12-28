@@ -544,6 +544,13 @@
             entry)]))
 
 ;;; for index translation
+;; eopl-translation-block: wrap all the translation into a block, for doing
+;; some cleaning work
+(define (eopl-translation-block . c)
+  (para (filter (lambda (c)
+                  (not (and (string? c) (string=? c "\n"))))
+                c)))
+
 ;; eopl-index-translation : eopl-index-entry x eopl-index-entry -> traverse-element
 ;; taken a entry and its translation, records the translation as a traverse
 ;; element
