@@ -156,8 +156,8 @@ y\rceil}}。}
 @eopl-index{Abstract type}这些实现都没有强制数据抽象：无法防止客户程序查验表示用
 的是列表还是 Scheme 整数。与之相对，有些语言直接支持数据抽象：它们允许程序员创建
 新的接口，确保只能通过接口提供的过程处理新数据。如果类型的表示隐藏起来，不会因任
-何操作而暴露（包括打印），那就说该类型是@term["opaque"]{模糊} 的，否则称之为
-@term["transparent"]{透明} 的。
+何操作而暴露（包括打印），那就说该类型是@term["opaque"]{模糊} 的，否则称之
+为@term["transparent"]{透明} 的。
 @eopl-index["Concrete types"]
 @eopl-index["Opaque type"]
 @eopl-index["Transparent type"]
