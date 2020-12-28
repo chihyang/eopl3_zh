@@ -5,7 +5,8 @@
          scribble/html-properties
          scribble/decode
          scriblib/render-cond
-         scribble-math)
+         scribble-math
+         pinyin)
 
 (define book-prefix-and-style
   (make-latex-defaults+replacements
@@ -541,6 +542,55 @@
      (error 'eopl-index
             "Invalid eopl index entry ~a, expect an eopl-index-entry or a string"
             entry)]))
+
+;;; for index translation
+;; eopl-index-translation : eopl-index-entry x eopl-index-entry -> traverse-element
+;; taken a entry and its translation, records the translation as a traverse
+;; element
+(define (eopl-index-entry-translate original translation)
+  (traverse-element
+   (lambda (get set)
+     (set (eopl-index-entry->key (make-an-index-entry original))
+          (let ((et (make-an-index-entry translation)))
+            (eopl-index-entry
+             (eopl-index-entry-value et)
+             (if (eopl-index-entry-key et)
+                 (eopl-index-entry-key-translate (eopl-index-entry-key et))
+                 (eopl-index-entry-key-translate (eopl-index-entry-value et))))))
+     (elem))))
+
+(define (eopl-index-entry-key-translate key)
+  (string-append* (map (lambda (c)
+                         (let ((p (hash-ref pinyin-hash-table c (string c))))
+                           (if (and (list? p) (not (null? p)))
+                               (pinyin->key (car p))
+                               p)))
+                       (string->list key))))
+
+(define (pinyin->key pinyin)
+  (let ((tone 0))
+    ;; for searching the tone
+    (define (pinyin->tone c)
+      (case c
+        [(#\ā #\ē #\ī #\ō #\ū #\ǖ) 1]
+        [(#\á #\é #\í #\ó #\ú #\ǘ #\ń) 2]
+        [(#\ǎ #\ě #\ǐ #\ǒ #\ǔ #\ǚ #\ň) 3]
+        [(#\à #\è #\ì #\ò #\ù #\ǜ #\ǹ) 4]
+        [else 0]))
+    ;; for searching the special char
+    (define (pinyin->letter c)
+      (case c
+        [(#\ā #\á #\ǎ #\à) (set! tone (pinyin->tone c)) #\a]
+        [(#\ē #\é #\ě #\è) (set! tone (pinyin->tone c)) #\e]
+        [(#\ī #\í #\ǐ #\ì) (set! tone (pinyin->tone c)) #\i]
+        [(#\ō #\ó #\ǒ #\ò) (set! tone (pinyin->tone c)) #\o]
+        [(#\ū #\ú #\ǔ #\ù) (set! tone (pinyin->tone c)) #\u]
+        [(#\ü #\ǖ #\ǘ #\ǚ #\ǜ) (set! tone (pinyin->tone c)) #\v]
+        [(#\ń #\ň #\ǹ) (set! tone (pinyin->tone c)) #\n]
+        [else c]))
+    (let* ((chars (string->list pinyin)))
+      (string-append (list->string (map pinyin->letter chars))
+                     (if (eq? tone 0) "" (format "~a" tone))))))
 
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
