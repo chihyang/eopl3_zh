@@ -70,7 +70,7 @@
 @; codeblock with contracts and usage
 @eopl-code{
 @racketblock[
-@#,eopl-index[@eopl-index-entry[@elem{@bold{@tt{is-S?}}} "inS"]]
+@#,eopl-index[#:delayed #f @eopl-index-entry[@elem{@bold{@tt{is-S?}}} "inS"]]
 @#,elem{@bold{@tt{in-S?}} : @${\mathit{N} \to \mathit{Bool}}}
 @#,elem{@bold{用法} : @tt{(in-S? n) = #t 若 n 属于 S，否则 #f}}
 (define in-S?

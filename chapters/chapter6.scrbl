@@ -710,7 +710,8 @@ val1 val2)} 的值传给当前续文。
 (define fact-iter-acc
   (lambda (n a)
     (if (zero? n) a (fact-iter-acc (- n 1) (* n a)))))
-@#,eopl-index[#:range-mark 'end "Factorial function"]]}
+]
+@eopl-index[#:range-mark 'end "Factorial function"]}
 
 @eopl-index[#:range-mark 'start "Tail position"]
 中， 过程调用都不在操作数位置。我们说这些调用在@term["tail position"]{尾端}，因

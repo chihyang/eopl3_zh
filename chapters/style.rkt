@@ -423,31 +423,52 @@
          (last (if (and key index) #f (cdr purged-name)))
          (key (if key key (construct-author-key first last)))
          (index (if index index (construct-author-index first last)))
-         (author-index (eopl-index (eopl-index-entry (if index index content)
-                                                     (if (string=? key index) #f key)))))
-    (traverse-element
-     (lambda (get set)
-       (set (string->symbol (if first
-                                (regexp-replace #rx"([^,]+),.*$"
-                                                (string-append* (add-between first " "))
-                                                "\\1")
-                                ;; this assumes the specified key is two words
-                                ;; separated by comma
-                                (regexp-replace #rx"([^,]+),.*$" index "\\1")))
-            author-index)
-       (elem author-index content)))))
-
-(define (author-ref . author)
-  (let ((author (content->string author)))
+         ;; author-key is the first name of the author, used as the key to
+         ;; search the index entry
+         (author-key (if first
+                         (regexp-replace #rx"([^,]+),.*$"
+                                         (string-append* (add-between first " "))
+                                         "\\1")
+                         ;; this assumes the specified key is two words
+                         ;; separated by comma
+                         (regexp-replace #rx"([^,]+),.*$" index "\\1")))
+         (author-index (eopl-index-entry (if index index content)
+                                         (if (string=? key index) #f key))))
     (traverse-element
      (lambda (get set)
        (lambda (get set)
-         (elem (get (string->symbol (regexp-replace #px"[[:space:]]+" author " "))
-                    (format "(Unknown author ~a)" author))
-               author))))))
+         (set (string->symbol author-key) author-index)
+         (elem (eopl-index-internal #f #f #f #f (list author-index)) content))))))
+
+(define (author-ref . author)
+  (let* ((author (content->string author))
+         (author-key (regexp-replace #px"[[:space:]]+" author " ")))
+    (traverse-element
+     (lambda (get set)
+       (lambda (get set)
+         (lambda (get set)
+           (let* ((author-index-entry (get (string->symbol author-key)
+                                           (format "(Unknown author ~a)" author-key))))
+             (elem (eopl-index-internal #f #f #f #f (list author-index-entry))
+                   author))))))))
 
 ;;; for indexing
 (define-struct eopl-index-entry (value key))
+
+(define (eopl-index-entry-print entry)
+  (match entry
+    [(struct eopl-index-entry (v k))
+     (if (equal? k #f)
+         v
+         (list k "@" v))]))
+
+(define (eopl-index-entry->key entry)
+  (match entry
+    [(struct eopl-index-entry (v k))
+     (string->symbol
+      (string-append
+       (content->string v)
+       (if k k "#f")))]))
 
 (define (exer-ref-range . tags)
   (elem #:style eopl-exer-ref-range
@@ -462,10 +483,24 @@
                     #:suffix [suffix #f]
                     #:range-mark [range-mark #f]
                     #:decorator [decorator #f]
+                    #:delayed [delayed #t]
                     . entries)
+  (let ((index-entries (map make-an-index-entry entries)))
+    (if delayed
+        (traverse-element
+         (lambda (get set)
+           (lambda (get set)
+             (let ((index-entries
+                    (map (lambda (e)
+                           (get (eopl-index-entry->key e) e))
+                         index-entries)))
+               (eopl-index-internal prefix suffix range-mark decorator index-entries)))))
+        (eopl-index-internal prefix suffix range-mark decorator index-entries))))
+
+(define (eopl-index-internal prefix suffix range-mark decorator entries)
   (elem
    (exact-elem "\\index{")
-   (make-entry-list (map make-an-index-entry entries))
+   (make-entry-list (map eopl-index-entry-print entries))
    (exact-elem "|"
                (cond [(equal? range-mark 'start) "("]
                      [(equal? range-mark 'end) ")"]
@@ -491,14 +526,7 @@
 
 ;; content is a list of eopl index entry item
 (define (make-entry-list entries)
-  (add-between (map (lambda (e)
-                      (let ((value (eopl-index-entry-value e))
-                            (key (eopl-index-entry-key e)))
-                        (if (equal? key #f)
-                            value
-                            (list key "@" value))))
-                    entries)
-               "!"))
+  (add-between entries "!"))
 
 ;; make-an-index-entry : eopl-index-entry | string -> eopl-index-entry
 (define (make-an-index-entry entry)
@@ -511,7 +539,7 @@
            (eopl-index-entry cstr #f)))]
     [else
      (error 'eopl-index
-            "Invalid eopl index entry ~a, expenct an eopl-index-entry or a string"
+            "Invalid eopl index entry ~a, expect an eopl-index-entry or a string"
             entry)]))
 
 (provide (except-out (all-defined-out)
