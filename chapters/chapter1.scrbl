@@ -10,11 +10,6 @@
           scribble/example
           scriblib/footnote
           racket/sandbox)
-@(define (Int-$) @${\mathit{Int}})
-@(define (Int-m) @m{\mathit{Int}})
-@(define (List-of-Int-$) @${\mathit{List\mbox{-}of\mbox{-}Int}})
-@(define (List-of-Int-m) @m{\mathit{List\mbox{-}of\mbox{-}Int}})
-@(define (List-of-Int-raw) "\\mathit{List\\mbox{-}of\\mbox{-}Int}")
 
 @mainmatter
 

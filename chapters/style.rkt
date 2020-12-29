@@ -6,6 +6,7 @@
          scribble/decode
          scriblib/render-cond
          scribble-math
+         latex-utils/scribble/math
          pinyin)
 
 (define book-prefix-and-style
@@ -31,6 +32,13 @@
         (string-append (string (char-upcase (string-ref str 0)))
                        (substring str 1))
         str)))
+
+;;; constants
+(define (Int-$) ($ "\\mathit{Int}"))
+(define (Int-m) (m "\\mathit{Int}"))
+(define (List-of-Int-$) ($ "\\mathit{List\\mbox{-}of\\mbox{-}Int}"))
+(define (List-of-Int-m) (m "\\mathit{List\\mbox{-}of\\mbox{-}Int}"))
+(define (List-of-Int-raw) "\\mathit{List\\mbox{-}of\\mbox{-}Int}")
 
 ;;; options
 (define racket-block-offset 4)
@@ -486,7 +494,11 @@
                     #:decorator [decorator #f]
                     #:delayed [delayed #t]
                     . entries)
-  (let ((index-entries (map make-an-index-entry entries)))
+  (let ((index-entries (map make-an-index-entry entries))
+        (delayed-prefix (if (and delayed
+                                 (or (equal? decorator 'see) (equal? decorator 'seealso)))
+                            (make-an-index-entry prefix)
+                            prefix)))
     (if delayed
         (traverse-element
          (lambda (get set)
@@ -494,8 +506,12 @@
              (let ((index-entries
                     (map (lambda (e)
                            (get (eopl-index-entry->key e) e))
-                         index-entries)))
-               (eopl-index-internal prefix suffix range-mark decorator index-entries)))))
+                         index-entries))
+                   (actual-prefix
+                    (if (or (equal? decorator 'see) (equal? decorator 'seealso))
+                        (eopl-index-entry-value (get (eopl-index-entry->key delayed-prefix) delayed-prefix))
+                        prefix)))
+               (eopl-index-internal actual-prefix suffix range-mark decorator index-entries)))))
         (eopl-index-internal prefix suffix range-mark decorator index-entries))))
 
 (define (eopl-index-internal prefix suffix range-mark decorator entries)
@@ -535,8 +551,8 @@
     [(struct eopl-index-entry (v k)) entry]
     [(? string?)
      (let ((cstr (clean-up-index-string entry)))
-       (if (regexp-match? #px"[[:space:]\\(\\):']|-" cstr)
-           (eopl-index-entry cstr (regexp-replace* #px"[[:space:]\\(\\):']|-" cstr ""))
+       (if (regexp-match? #px"[[:space:]\\(\\):'（）]|-" cstr)
+           (eopl-index-entry cstr (regexp-replace* #px"[[:space:]\\(\\):'（）]|-" cstr ""))
            (eopl-index-entry cstr #f)))]
     [else
      (error 'eopl-index
@@ -547,9 +563,7 @@
 ;; eopl-translation-block: wrap all the translation into a block, for doing
 ;; some cleaning work
 (define (eopl-translation-block . c)
-  (para (filter (lambda (c)
-                  (not (and (string? c) (string=? c "\n"))))
-                c)))
+  (elem c))
 
 ;; eopl-index-translation : eopl-index-entry x eopl-index-entry -> traverse-element
 ;; taken a entry and its translation, records the translation as a traverse
