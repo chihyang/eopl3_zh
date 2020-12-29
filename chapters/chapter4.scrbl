@@ -116,9 +116,9 @@ in letrec even(dummy)
 }
 
 这个程序使用多声明的 @tt{letrec}（@exercise-ref{ex3.32}）和 @tt{begin} 表达式
-（@exercise-ref{ex4.4}）@eopl-index[(eopl-index-entry @elem{@tt{begin}
-expression} "beginexpression")]。@tt{begin} 表达式按顺序求每个子表达式的值，并返
+（@exercise-ref{ex4.4}）。@tt{begin} 表达式按顺序求每个子表达式的值，并返
 回最后一个表达式的值。
+@eopl-index[(eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
 
 }
 
@@ -1020,7 +1020,7 @@ in begin
 
 @exercise[#:level 2 #:tag "ex4.20"]{
 
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letmutableexpression"]]
 在本节的语言中，就像在 Scheme 中一样，所有变量都是可变的。另一种设计是同时允许可
 变和不可变的变量绑定：
 @envalign*{
@@ -1032,7 +1032,7 @@ in begin
 修改本节的语言，让 @tt{let} 像之前那样引入不可变变量，可变变量则由
 @tt{letmutable} 表达式引入，语法为：
 @$${\mathit{Expression} ::= @tt{letmutable @${\mathit{Identifier}} = @${\mathit{Expression}} in @${\mathit{Expression}}}}
-@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letccexpression"]]
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex4.20"] @eopl-index-entry[@elem{@tt{letmutable} expression} "letmutableexpression"]]
 
 }
 
@@ -1462,7 +1462,7 @@ newref: 分配位置 7
 
 @exercise[#:level 2 #:tag "ex4.29"]{
 
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.29" "ex4.30"] "Array"]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex4.29" "ex4.30"] "Arrays"]
 给语言添加数组。添加新操作符 @tt{newarray}、@tt{arrayref} 和 @tt{arrayset}，用它
 们来创建、解引用和更新数组。这需要：
 
@@ -1492,7 +1492,7 @@ in begin arrayset(a,1,0); (p a); (p a); arrayref(a,1) end
 
 @exercise[#:level 2 #:tag "ex4.30"]{
 
-@eopl-index[#:range-mark 'end "Array"]
+@eopl-index[#:range-mark 'end "Arrays"]
 给@exercise-ref{ex4.29} 的语言添加过程 @tt{arraylength}，返回数组的长度。你的过
 程运行时间应为常数。@tt{arrayref} 和 @tt{arrayset} 一定要查验索引，确保索引值在
 数组长度之内。
@@ -1818,7 +1818,7 @@ in let swap = proc (x) proc (y)
 
 @exercise[#:level 1 #:tag "ex4.36"]{
 
-@eopl-index[#:suffix @exer-ref-range["ex4.36"] "Array"]
+@eopl-index[#:suffix @exer-ref-range["ex4.36"] "Arrays"]
 大多数语言支持数组，在按指调用中，数组引用通常以类似变量引用的方式处理。如果操作
 数是数组引用，那就不给被调过程传递它的内容，而是传递引用指向的位置。比如，需要调
 用对换过程的常见情形是交换数组元素，传递数组引用就能用上对换过程。给按指调用语言

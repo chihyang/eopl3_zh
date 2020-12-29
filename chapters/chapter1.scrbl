@@ -655,7 +655,7 @@
 @subsection[#:style section-title-style-numbered #:tag "s1.2.1"]{@tt{list-length}}
 
 @eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{list-length}} "listlength"]]
-@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{Lists (@${\mathit{List}})} "Listlist"]]
 标准的 Scheme 程序 @tt{length} 求出列表中的元素个数。
 
 @eopl-code{
@@ -925,7 +925,7 @@ C} 相同。
             (cons (car los) (remove-first s (cdr los)))))))
 @#,exact-elem{\end{mdframed}}
 ]
-@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{Lists (@${\mathit{List}})} "Listlist"]]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{remove-first}} "removefirst"]]
 }
 
@@ -1417,7 +1417,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
               '()
               (cons x (duple (- n 1) x))))))))
 @exercise[#:level 1 #:tag "ex1.15"]{
-@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]
+@eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{Lists (@${\mathit{List}})} "Listlist"]]
  @tt{(duple n x)} 返回包含 @tt{n} 个 @tt{x} 的列表。
 
 @eopl-code{
@@ -1754,7 +1754,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  (flatten '((a) () (b ()) () (c)))
  (flatten '((a b) c (((d)) e)))
  (flatten '(a b (() (c))))]
-@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{List (@${\mathit{List}})} "Listlist"]]}
+@eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.15" "ex1.27"] @eopl-index-entry[@elem{Lists (@${\mathit{List}})} "Listlist"]]}
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex1.27"] @eopl-index-entry[@elem{S-list (@${\mathit{S\mbox{-}list}})} "Slist"]]
 }
 
