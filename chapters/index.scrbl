@@ -112,6 +112,7 @@
 @eopl-index-entry-translate[@eopl-index-entry[@elem{@tt{cond} expression} "condexpression"]
                             @eopl-index-entry[@elem{@tt{cond} 表达式} "cond表达式"]]
 @eopl-index-entry-translate["Concrete syntax" "具体语法"]
+@eopl-index-entry-translate["Concrete types" "具体类型"]
 @eopl-index-entry-translate["Conditionals" "条件表达式"]
 @eopl-index-entry-translate["Consequent" "后件"]
 @eopl-index-entry-translate["Constructors" "构造器"]
