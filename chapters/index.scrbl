@@ -302,7 +302,7 @@
 
 @eopl-index-entry-translate["Nameless environment" "无名环境"]
 @eopl-index-entry-translate["Name mangling" "名称混淆"]
-@eopl-index-entry-translate["Names, eliminating" "去名"]
+@eopl-index-entry-translate["Names, eliminating" "消除名字"]
 @eopl-index-entry-translate["from LETREC" "LETREC"]
 @eopl-index-entry-translate["from CLASSES" "CLASSES"]
 @eopl-index-entry-translate["Natural numbers ADT" "自然数 ADT"]
