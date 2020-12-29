@@ -13,6 +13,8 @@
 
 @list[@wrappable-cell{} @wrappable-cell{}]
 
+@list[@elem{Abstract data type (ADT)} @elem{抽象数据类型}]
+
 @list[@elem{Abstract syntax tree} @elem{抽象语法树}]
 
 @list[@elem{Abstract syntax} @elem{抽象语法}]
