@@ -501,7 +501,7 @@
 
  @eopl-index["Binding" "lambda"]
  @eopl-index["Bound variable"]
- @eopl-index["Variable(s)" "bound variable"]
+ @eopl-index["Variable(s)" "bound"]
  第二个生成式中的 identifier 是 @tt{lambda} 表达式主体内的变量名。这一变量叫做表
  达式的@term["bound variable"]{绑定变量}，因为它绑定（或称捕获）主体内出现的任何
  同名变量。出现在主体内的同名变量都指代这一个。

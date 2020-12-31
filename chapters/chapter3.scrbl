@@ -1018,7 +1018,7 @@ in unpack x y = cons(u,cons(3,emptylist))
 @eopl-index["Formal parameter"]
 @eopl-index["Operands"]
 @eopl-index["Operator"]
-@eopl-index["Variable(s)" "bound variable"]
+@eopl-index["Variable(s)" "bound"]
 在 @tt{(proc @${var} @${body})} 中，变量 @${var} 是@term["bound variable"]{绑定
 变量} 或@term["formal parameter"]{形参}。在过程调用 @tt{(call-exp @${exp_1}
 @${exp_2})} 中，表达式 @${exp_1} 是@term["operator"]{操作符}，表达式 @${exp_2}
