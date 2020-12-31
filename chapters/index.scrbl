@@ -22,7 +22,7 @@
 @eopl-index[#:decorator 'see #:prefix "Scope of variable declaration" "Variable(s)" "scope of"]
 
 @eopl-translation-block[
-@eopl-index-entry-translate["Abstract data types (ADTs)" "抽象数据类型 (ADTs)"]
+@eopl-index-entry-translate["Abstract data types (ADTs)" "抽象数据类型 (ADT)"]
 @eopl-index-entry-translate["Abstraction boundary" "抽象边界"]
 @eopl-index-entry-translate["Abstract syntax" "抽象语法"]
 @eopl-index-entry-translate["Abstract syntax tree" "抽象语法树"]
