@@ -580,13 +580,30 @@
                  (eopl-index-entry-key-translate (eopl-index-entry-value et))))))
      (elem))))
 
+(define (char->pinyin c)
+  (let ((p (hash-ref pinyin-hash-table c (string c))))
+    (if (and (list? p) (not (null? p)))
+        (cons (pinyin->key (car p)) #t)
+        (cons p #f))))
+
+(define (add-z-to-pinyin key)
+  (let ((chars (string->list key)))
+    (list->string (cons (car chars)
+                        (cons #\z
+                              (cdr chars))))))
+
+(define (decorate-pinyin keys)
+  (cond [(null? keys) keys]
+        [(cdar keys) (cons
+                      (cons (add-z-to-pinyin (caar keys))
+                            (cdar keys))
+                      (cdr keys))]
+        [else (cons (car keys)
+                    (decorate-pinyin (cdr keys)))]))
+
 (define (eopl-index-entry-key-translate key)
-  (string-append* (map (lambda (c)
-                         (let ((p (hash-ref pinyin-hash-table c (string c))))
-                           (if (and (list? p) (not (null? p)))
-                               (pinyin->key (car p))
-                               p)))
-                       (string->list key))))
+  (let* ((keys (decorate-pinyin (map char->pinyin (string->list key)))))
+    (string-append* (map car keys))))
 
 (define (pinyin->key pinyin)
   (let ((tone 0))
