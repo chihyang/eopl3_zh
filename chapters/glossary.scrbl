@@ -541,6 +541,9 @@
 
 @list[@elem{Syntactic derivation} @elem{句法推导}]
 
+@list[@elem{Table} @wrappable-cell{表@glossary-note{特指哈希表，或与之类似的数据
+结构。@secref{da}中的 Record 与之类似。}}]
+
 @list[@elem{Tail call} @elem{尾调用}]
 
 @list[@elem{Tail form} @elem{尾式}]
