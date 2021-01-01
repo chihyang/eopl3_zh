@@ -31,7 +31,7 @@
 值。如果两个过程知道内存中的同一位置，它们就能共享信息。如果把信息留在已知位置，
 同一个过程就能在当前调用和后续调用之间共享信息。
 
-@eopl-index["Location"]
+@eopl-index["Locations"]
 @eopl-index["Storable values"]
 我们把内存建模为从@term["location"]{位置} 到值集合的的有限映射，称值集合
 为@term["storable values"]{可存储值}。出于历史原因，我们称之为@term["store"]{存

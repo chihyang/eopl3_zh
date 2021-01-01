@@ -86,7 +86,7 @@
 都满足 @tt{(plus @${\lceil x \rceil} @${\lceil y \rceil}) @${=} @${\lceil x +
 y\rceil}}。}
 
-@eopl-index["Constructor"]
+@eopl-index["Constructors"]
 @eopl-index["Observers"]
 大多数接口都包含：若干@term["constructor"]{构造器}，用来产生数据类型的元素；
 若干@term["observer"]{观测器}，用来从数据类型的值中提取信息。这里有三个构造器，
@@ -674,7 +674,7 @@ lambda 演算表达式的语法：
 只要使用上述构造器，怎样表示 lambda 演算表达式都可以。
 @eopl-index[#:range-mark 'end "Lambda expression (LcExp)"]
 
-@eopl-index["Constructor"]
+@eopl-index["Constructors"]
 我们可以写出设计递推数据类型接口的一般步骤：
 
 @nested[#:style tip]{

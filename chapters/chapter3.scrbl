@@ -73,7 +73,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 为词牌的方式叫做语言的@term["lexical specification"]{词法规范}。扫描器取一字符序
 列，生成词牌序列。
 @eopl-index["Lexical specification"]
-@eopl-index["Token"]
+@eopl-index["Tokens"]
 
 解析就是将词牌序列组成有层次的语法结构，如表达式、语句和块。这就像用从句组织（或
 称图解@note{西方有diagram sentence之说，以树状图表示句子结构，如我国中学生学习英

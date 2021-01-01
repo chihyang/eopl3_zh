@@ -319,8 +319,7 @@
         @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
         expression@exact-elem{”}。
 
-        @eopl-index[(eopl-index-entry "Backus-Naur Form (BNF)"
-        "BackusNaurForm")]另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺
+        @eopl-index["Backus-Naur Form (BNF)"]另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺
         尔范式} 或@term[#f]{BNF}，是在词周围加尖括号，如
         @${\langle}expression@${\rangle}。}
 
