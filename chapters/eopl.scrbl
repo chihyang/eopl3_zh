@@ -7,6 +7,7 @@
 
 @table-of-contents[]
 
+@include-section["foreword-by-translator.scrbl"]
 @include-section["glossary.scrbl"]
 @include-section["foreword.scrbl"]
 @include-section["preface.scrbl"]
