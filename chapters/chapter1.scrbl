@@ -781,7 +781,7 @@ C} 相同。
 
 @eopl-index[(eopl-index-entry @elem{@tt{eopl:error} procedure} "eoplerrorprocedure")]
 @eopl-index[#:range-mark 'start "Error handling"]
-@eopl-index[@eopl-index-entry[@elem{@tt{report-} procedures} "reportprocedure"]]
+@eopl-index[#:range-mark 'start @eopl-index-entry[@elem{@tt{report-} procedures} "reportprocedure"]]
 过程 @tt{report-list-too-short} 调用 @tt{eopl:error} 来报告错误，后者会终止计算。
 它的首个参数是一符号，用于在错误信息中指示调用 @tt{eopl:error} 的过程。第二个参
 数是一个字符串，会打印为错误信息。对应于字符串中的每个字符序列 @tt{~s}，都必须有
@@ -790,6 +790,7 @@ C} 相同。
 数 Scheme 实现提供这样的组件。在本书中，我们以类似方式，用名字含 @tt{report-} 的
 过程报告错误。
 @eopl-index[#:range-mark 'end "Error handling"]
+@eopl-index[#:range-mark 'end @eopl-index-entry[@elem{@tt{report-} procedures} "reportprocedure"]]
 
 来看看 @tt{nth-element} 如何算出答案：
 
