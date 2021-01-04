@@ -63,7 +63,7 @@ MLer} (@author-ref{Felleisen} & @author-ref{Friedman}, 1996)，或者有考据�
 @eopl-index["Generalization"]
 @term["generalization"]{泛化} 是源自数学的标准技术，常用来证明某个特定陈述是某个
 更通用陈述的特例。我们把额外参数描述为上下文的抽象，是受到属性语法
-(@author-ref{Knuth}, 1968)中的@emph{继承属性} 启发。
+(@author-ref{Knuth}, 1968)中的@emph{继承属性} 启发。@eopl-index["Inherited attribute"]
 
 @eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
 @eopl-index[(eopl-index-entry @elem{@tt{define-datatype} form} "definedatatypeform")]

@@ -315,13 +315,13 @@
         @eopl-index["Syntactic categories"]
 
         依照惯例，我们将非终结符和集合名的首字母大写，在文中提及它们的元素时，则
-        用小写。这要比听起来容易。例如， @${Expression} 是非终结符，但我们写作
-        @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
+        用小写。这要比听起来容易。例如， @${\mathit{Expression}} 是非终结符，但
+        我们写作 @${e \in \mathit{Expression}} 或 @exact-elem{“}@${e} 是一个
         expression@exact-elem{”}。
 
-        @eopl-index["Backus-Naur Form (BNF)"]另一常见做法，名叫@term["Backus-Naur Form"]{巴科斯-诺
-        尔范式} 或@term[#f]{BNF}，是在词周围加尖括号，如
-        @${\langle}expression@${\rangle}。}
+        另一常见写法，名叫@term["Backus-Naur Form"]{巴科斯-诺尔范
+        式}@eopl-index["Backus-Naur Form (BNF)"] 或@term[#f]{BNF}，是在词周围加
+        尖括号，如@${\langle}expression@${\rangle}。}
 
   @item{@bold{终结符}。这些是集合外在表示中的字符，在本例中，是
         @exact-elem{“}@tt{.}@exact-elem{”}、
@@ -1284,9 +1284,9 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 }
 
 这里有两个要点。首先，过程 @tt{number-elements-from} 的定义独立于
-@tt{number-elements}。程序员经常要写一些过程，只调用一些传递额外常量参数的辅助过
-程。除非我们理解辅助过程对参数的@emph{每个}值做什么，我们很难理解调用它的过程做
-什么。这给了我们一条口诀：
+@tt{number-elements}。程序员经常要写一个过程，只调用某个辅助过程，并传递额外的常
+量参数。除非我们理解辅助过程对参数的@emph{每个}值做什么，我们很难理解调用它的过
+程做什么。这给了我们一条口诀：
 
 @nested[#:style tip]{
  @centered{@elemtag["no-myth"]{@bold{避免神秘小工具！}}
@@ -1296,6 +1296,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
  是初始值。}}
 
 @eopl-index[#:range-mark 'start "Context argument"]
+@eopl-index[#:range-mark 'start "Inherited attribute"]
 其次，@tt{number-elements-from} 的两个参数各有作用。第一个参数是我们要处理的列表，
 随每一次递归调用而减小。而第二个参数，则是对我们当前任务@term["context"]{上下文}
 的抽象。在本例中，当调用 @tt{number-elements} 时，我们最终调用
@@ -1303,6 +1304,7 @@ lst))} 得出 @tt{(number-elements lst)} （但是，看看@exercise-ref{ex1.36}
 表中的位置。随递归调用，它不减反增，因为我们每次经过原列表的一个元素。有时我们称
 之为@term["context argument"]{上下文参数}，或者@term["inherited attribute"]{继承
 属性}。
+@eopl-index[#:range-mark 'end "Inherited attribute"]
 @eopl-index[#:range-mark 'end "Context argument"]
 
 另一个例子是向量求和。
