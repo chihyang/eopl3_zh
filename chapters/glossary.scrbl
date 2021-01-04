@@ -319,7 +319,7 @@
 
 @list[@elem{Lexical variable} @elem{词法变量}]
 
-@list[@elem{list} @elem{列表}]
+@list[@elem{List} @elem{列表}]
 
 @list[@elem{Location} @wrappable-cell{位置@glossary-note{特指存储器中的位置}}]
 
@@ -404,7 +404,9 @@
 
 @list[@elem{Private} @elem{私有的}]
 
-@list[@elem{Procedural} @wrappable-cell{过程@glossary-note{文中使用 procedure 表
+@list[@elem{Procedural} @wrappable-cell{过程式}]
+
+@list[@elem{Procedure} @wrappable-cell{过程@glossary-note{文中使用 procedure 表
 示编程语言中的函数；使用 function 时，一般表示数学中的函数，这里将前者译作
 @exact-elem{“}过程@exact-elem{”}，以示区别}}]
 
@@ -486,7 +488,7 @@
 
 @list[@elem{Source language} @elem{源语言}]
 
-@list[@elem{Stack} @elem{堆栈}]
+@list[@elem{Stack} @elem{栈}]
 
 @list[@elem{Statement-oriented} @elem{面向语句}]
 
@@ -571,7 +573,8 @@ Windows XP 系统自带的@exact-elem{“三维弹球”}游戏仍有印象，�
 bounce 可以视为这一游戏的类比——或者说，这一游戏生动说明了 trampoline 和 bounce
 的作用}}]
 
-@list[@elem{Trampolining} @elem{跳跃}]
+@list[@elem{Trampolining} @wrappable-cell{跳跃@glossary-note{视语境，有时也将这
+一术语直接翻译为跳床}}]
 
 @list[@elem{Translator} @elem{翻译器}]
 

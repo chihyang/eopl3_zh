@@ -287,7 +287,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @exercise[#:level 2 #:tag "ex2.4"]{
 
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.4"] "Stacks"]
-考虑数据类型@term["stack"]{堆栈}，其接口包含过程 @tt{empty-stack}、@tt{push}、
+考虑数据类型@term["stack"]{栈}，其接口包含过程 @tt{empty-stack}、@tt{push}、
 @tt{pop}、@tt{top} 和 @tt{empty-stack?}。按照示例中的方式写出这些操作的定义。哪
 些操作是构造器？哪些是观测器？
 @eopl-index[#:range-mark 'end #:suffix @exer-ref-range["ex2.4"] "Stacks"]
@@ -577,7 +577,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @eopl-index[#:range-mark 'start #:suffix @exer-ref-range["ex2.12" "ex2.13" "ex2.14"] "Procedural representation" "of environments"]
 @eopl-index[#:suffix @exer-ref-range["ex2.12"] "Procedural representation" "of stacks"]
 @eopl-index[#:suffix @exer-ref-range["ex2.12"] "Stacks"]
-用过程表示法实现@exercise-ref{ex2.4} 中的堆栈数据类型。
+用过程表示法实现@exercise-ref{ex2.4} 中的栈数据类型。
 
 }
 
@@ -1137,7 +1137,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 @exercise[#:level 1 #:tag "ex2.22"]{
 
 @eopl-index[#:suffix @exer-ref-range["ex2.22"] "Stacks"]
-用 @tt{define-datatype} 实现@exercise-ref{ex2.4} 中的堆栈数据类型。
+用 @tt{define-datatype} 实现@exercise-ref{ex2.4} 中的栈数据类型。
 
 }
 
