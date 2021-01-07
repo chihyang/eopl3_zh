@@ -550,7 +550,7 @@
 @eopl-index[#:range-mark 'end "Invariant"]
 @eopl-index[#:range-mark 'end "Recursive data types" "specifying"]
 
-@subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳法}
+@subsection[#:style section-title-style-numbered #:tag "s1.1.3"]{归纳证明法}
 
 @eopl-index[#:range-mark 'start "Recursive data types" "proving properties of"]
 用归纳法描述的集合，其定义有两种用法：证明关于集合元素的定理，写出操作集合元素的
@@ -619,7 +619,7 @@
 
 @exercise[#:level 2 #:tag "ex1.5"]{
  @eopl-index[#:suffix @exer-ref-range["ex1.5"] "Lambda expression (LcExp)"]
- 证明若 @m{e \in \mathit{LcExp}}，则 @m{e} 中的左右括号数量相等。
+ 证明：若 @m{e \in \mathit{LcExp}}，则 @m{e} 中的左右括号数量相等。
 
 }
 

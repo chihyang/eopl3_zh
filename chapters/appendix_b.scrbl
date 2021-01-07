@@ -22,8 +22,8 @@
 素}，或者最常见的@term[#f]{词牌}。解析过程将词牌序列组织成有层次的语法结构，如表
 达式、语句和块。这就像用从句组织句子。
 
-SLLGEN 是一个 Scheme 包，用来生成解析器和扫描器。在本附录中，我们首先介绍扫描和
-解析的基础，然后考虑如何用 SLLGEN 实现这些功能。
+SLLGEN 是一个 Scheme @term["package"]{扩展包}，用来生成解析器和扫描器。在本附录
+中，我们首先介绍扫描和解析的基础，然后考虑如何用 SLLGEN 实现这些功能。
 
 @section[#:style section-title-style-numbered #:tag "B.1"]{扫描}
 
