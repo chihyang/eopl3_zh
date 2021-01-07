@@ -815,7 +815,7 @@ C} 相同。
 @eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{nth-element}} "nth-element"]]
 
 @exercise[#:level 1 #:tag "ex1.6"]{
- 如果调换 @tt{nth-element} 中两个检测的顺序，会有什么问题？
+ 如果调换 @tt{nth-element} 中两个条件的顺序，会有什么问题？
 
 }
 
