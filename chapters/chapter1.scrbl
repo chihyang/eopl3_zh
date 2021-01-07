@@ -938,8 +938,8 @@ C} 相同。
 
 @exercise[#:level 2 #:tag "ex1.9"]{
 
- 定义 @tt{remove}。它类似于 @tt{remove-first}，但会从符号列表中移除出现的所有给
- 定符号，而不只是第一个。
+ 定义 @tt{remove}。它类似于 @tt{remove-first}，但会从符号列表中移除所有给定符号，
+ 而不只是第一个。
 
 }
 
