@@ -242,7 +242,7 @@ Hindley-Milner 多态的 @author-ref{Milner} (1978) 系统与@exercise-ref{ex7.2
 @eopl-index["Procedural representation"]
 
 @eopl-index["Modules"]
-用类型强制数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
+用类型强化数据抽象始见于 @author-ref{Reynolds} (1975)，类型应用于 CLU
 (@author-ref{Liskov} et al., 1977)。这发展为 Standard ML (@author-ref{Milner} et
 al., 1989) （另见 @author-ref{Paulson}, 1996; @author-ref{Ullman}, 1998）的模块
 系统。我们的模块系统基于 @author-ref{Leroy} (1994)，它应用于 CAML（参见
