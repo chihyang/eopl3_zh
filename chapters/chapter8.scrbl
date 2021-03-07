@@ -128,8 +128,8 @@ in -(-(from m1 take a,
 
 @eopl-index["Qualified variable"]
 @eopl-index["Variable(s)" "qualified"]
-为了同@term["simple variable"]{简单变量} 区别，我们称这些新变量为
-@term["qualified variables"]{受限变量}。在一般的语言中，受限变量可能写作
+为了同@term["simple variables"]{简单变量} 区别，我们称这些新变量
+为@term["qualified variables"]{受限变量}。在一般的语言中，受限变量可能写作
 @tt{m1.a}、@tt{m1:a} 或 @tt{m1::a}。在@secref{oac}探讨的面向对象语言中，
 @tt{m1.a} 通常另有含义。
 
@@ -219,7 +219,7 @@ from m1 take u
 }|
 }
 
-类型异常。可以避免如此（@exercise-ref{ex8.8}、@countref{ex8.17}）。
+类型异常。可以免除这一限制（@exercise-ref{ex8.8}、@countref{ex8.17}）。
 }
 }
 
@@ -246,7 +246,7 @@ module m2
 }|
 }
 
-类型为 @tt{int}。但如果我们交换定义的顺序，得
+类型为 @tt{int}。但如果我们交换定义的顺序，
 
 @eopl-code{
 @verbatim|{
@@ -266,7 +266,7 @@ module m1
 }|
 }
 
-它类型异常，因为 @tt{m2} 主体中使用 @tt{from m1 take u} 的地方不在后者的作用域
+则类型异常，因为 @tt{m2} 主体中使用 @tt{from m1 take u} 的地方不在后者的作用域
 内。
 }}
 
@@ -285,7 +285,7 @@ SIMPLE-MODULES 的程序包含一串模块定义，然后是一个表达式。
 
 @nested[#:style small]{
 @envalign*{
-           \mathit{ModuleDefn} &::= @tt{module} \mathit{Identifier} @tt{interface} \mathit{Iface} @tt{body} \mathit{ModuleBody} \\[-3pt]
+           \mathit{ModuleDefn} &::= @tt{module} \ \mathit{Identifier} \ @tt{interface} \ \mathit{Iface} \ @tt{body} \ \mathit{ModuleBody} \\[-3pt]
             &\mathrel{\phantom{::=}} \fbox{@tt{a-module-definition (m-name expected-iface m-body)}}}}
 
 简单模块的接口包含任意数量的声明。每个声明指定程序中一个变量的类型。
@@ -423,8 +423,8 @@ in -(z, -(from m1 take a, from m2 take a))
 
 @eopl-index["Body" (eopl-index-entry "of module" "module")]
 @eopl-index[@eopl-index-entry[@elem{@tt{let*} scope} "letstarscope"]]
-最后，要求模块主体的值，我们在适当的环境内求每个表达式的值，得到 @tt{let*} 式定
-界，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
+最后，要求模块主体的值，我们按照 @tt{let*} 式定界，在适当的环境内求每个表达式的
+值，得出一环境。过程 @tt{defns-to-env} 生成的环境只包含定义 @tt{defns} 产生的绑
 定（@figure-ref{fig-8.4}）。
 @eopl-index[#:range-mark 'end @idx-value-of @eopl-index-entry["for SIMPLE-MODULES" "SIMPLEMODULES"]]
 
@@ -1976,8 +1976,8 @@ module-proc (|@${m} : [...]) [...]
 }
 
 本例中，爱丽丝选择 @tt{m} 作为模块过程中绑定变量的名字；它不必和接口中的局部名字
-相同。我们需要再写一遍参数的接口，因为模块接口的作用域不包含模块主体。可以避免这
-样（见@exercise-ref{ex8.27}）。
+相同。我们需要再写一遍参数的接口，因为模块接口的作用域不包含模块主体。可以免除这
+一限制（见@exercise-ref{ex8.27}）。
 
 现在，爱丽丝把她的模块重写为
 
@@ -2539,8 +2539,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @tt{expand-iface} 维持不变式。
 
 @eopl-index["Ice cream sundaes"]
-现在，完成了。吃杯圣代吧，放些佐料，有满足奶油接口的，有满足热浇汁接口的，还有满
-足坚果接口的。怎么混合不要紧，好吃就行！
+现在，完成了。吃杯圣代吧，放些奶油口味儿、热浇汁口味儿、还有坚果口味儿的佐料。怎
+么组合不要紧，好吃就行！
 @eopl-index[#:range-mark 'end "Module procedures"]
 @eopl-index[#:range-mark 'end "Modules" "parameterized"]
 @eopl-index[#:range-mark 'end "Parameterized modules"]
