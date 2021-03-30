@@ -30,8 +30,8 @@
 
 在@secref{state}那样的有状态语言中，过程同样展现了用对象编程的优势。过程是一种对
 象，其状态包含于自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
-@pageref{g-counter}的 @tt{g} 控制计数器的状态，对这一状态，唯一能做的就是将其递
-增。但是，更常见的是让一个对象具有多种行为。面向对象编程语言提供这种能力。
+@pageref{g-counter}的 @tt{g} 控制计数器的状态，此状态的唯一操作就是递增。但是，
+更常见的是让一个对象具有多种行为。面向对象编程语言提供这种能力。
 
 同一方法通常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
 面向对象编程系统通常提供名为@term["class"]{类} 的结构，用来指定某种对象的字段及
@@ -75,9 +75,9 @@
 @eopl-index["Member of object"]
 字段叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类@tt{c1}
 支持三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
-@tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，若干
-@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），以及
-@term["method body"]{方法主体}。@eopl-index["Body" (eopl-index-entry "of method"
+@tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，
+若干@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），
+以及@term["method body"]{方法主体}。@eopl-index["Body" (eopl-index-entry "of method"
 "method")]方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
 @exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
 @eopl-index["Message passing, object-oriented (method calls)"]
