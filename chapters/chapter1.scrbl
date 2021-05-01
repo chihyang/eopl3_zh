@@ -38,7 +38,6 @@
 
 @; definition: (def #:title title #:tag tag pre-flow ...)
 @definition[#:title #f #:tag "d1.1.1"]{@eopl-index["Top-down definition"]
-
 自然数 @${n} 属于 @${S}，当且仅当：
  @itemlist[#:style 'ordered
   @item{@${n = 0}，或}
