@@ -1112,7 +1112,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 
 @tt{define-datatype} 和 @tt{cases} 形式提供了一种简洁的方式来定义递推数据类型，
 但这种方式并不是唯一的。根据使用场景，可能得用专门的表示方式，它们利用数据的特殊
-性质，更紧凑或者更高效。要获得这些优势，代价是不得不动手实现接口中的过程。
+性质，更紧凑或者更高效。获得这些优势的代价是必须动手实现接口中的过程。
 
 @eopl-index[#:range-mark 'start "Domain-specific languages"]
 @tt{define-datatype} 形式是@term["domain-specific language"]{特定领域语言} 的例
