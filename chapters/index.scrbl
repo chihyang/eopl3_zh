@@ -9,7 +9,7 @@
 @; collect all the see and seealso here to make sure they appear after all the
 @; page numbers
 @eopl-index[#:decorator 'seealso #:prefix "Procedural representation" "Action under application"]
-@eopl-index[#:decorator 'seealso #:prefix "Abstract data types" "Recursive data types"]
+@eopl-index[#:decorator 'seealso #:prefix "Abstract data types (ADTs)" "Recursive data types"]
 @eopl-index[#:decorator 'seealso #:prefix "Or" "Alternation"]
 @eopl-index[#:decorator 'seealso #:prefix "Mutation" "Assignment"]
 @eopl-index[#:decorator 'seealso #:prefix "References" "L-values"]
