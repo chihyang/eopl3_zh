@@ -4,7 +4,7 @@
 
 @index-prefix
 
-@title[#:style part-title-style-unnumbered #:tag "index"]{索引}
+@title[#:style part-title-style-unnumbered #:tag "indices"]{索引}
 
 @; collect all the see and seealso here to make sure they appear after all the
 @; page numbers
