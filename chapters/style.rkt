@@ -447,7 +447,9 @@
      (lambda (get set)
        (lambda (get set)
          (set (string->symbol author-key) author-index)
-         (elem (eopl-index-internal #f #f #f #f (list author-index)) content))))))
+         (elem (eopl-index-internal #f #f #f #f (list author-index)
+                                    (get 'scribble:current-render-mode #f))
+               content))))))
 
 (define (author-ref . author)
   (let* ((author (content->string author))
@@ -458,7 +460,8 @@
          (lambda (get set)
            (let* ((author-index-entry (get (string->symbol author-key)
                                            (format "(Unknown author ~a)" author-key))))
-             (elem (eopl-index-internal #f #f #f #f (list author-index-entry))
+             (elem (eopl-index-internal #f #f #f #f (list author-index-entry)
+                                        (get 'scribble:current-render-mode #f))
                    author))))))))
 
 ;;; for indexing
@@ -510,39 +513,58 @@
                    (actual-prefix
                     (if (or (equal? decorator 'see) (equal? decorator 'seealso))
                         (eopl-index-entry-value (get (eopl-index-entry->key delayed-prefix) delayed-prefix))
-                        prefix)))
-               (eopl-index-internal actual-prefix suffix range-mark decorator index-entries)))))
-        (eopl-index-internal prefix suffix range-mark decorator index-entries))))
+                        prefix))
+                   (render (get 'scribble:current-render-mode #f)))
+               (eopl-index-internal actual-prefix suffix range-mark decorator index-entries render)))))
+        ;; wrap traverse element into element to avoid direct print of a
+        ;; traverse print in code block
+        (elem
+         (traverse-element
+          (lambda (get set)
+            (eopl-index-internal prefix suffix range-mark decorator index-entries
+                                 (get 'scribble:current-render-mode #f))))))))
 
-(define (eopl-index-internal prefix suffix range-mark decorator entries)
-  (elem
-   (exact-elem "\\index{")
-   (make-entry-list (map eopl-index-entry-print entries))
-   (exact-elem "|"
-               (cond [(equal? range-mark 'start) "("]
-                     [(equal? range-mark 'end) ")"]
-                     [else ""])
-               (cond [(equal? decorator #f) "idxdecorator{"]
-                     [(equal? decorator 'see)
-                      (case (length entries)
-                        [(1) "see{"]
-                        [(2) "seeSublevel{"]
-                        [(3) "seeSubSublevel{"]
-                        [else "seeSubSublevel{"])]
-                     [(equal? decorator 'seealso)
-                      (case (length entries)
-                        [(1) "seealso{"]
-                        [(2) "seealsoSublevel{"]
-                        [(3) "seealsoSubSublevel{"]
-                        [else "seealsoSubSublevel{"])]
-                     [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
-   (unless (equal? prefix #f) prefix)
-   (when (equal? decorator #f) (exact-elem "}{"))
-   (unless (equal? suffix #f) suffix)
-   (exact-elem "}}")))
+(define (eopl-index-internal prefix suffix range-mark decorator entries render)
+  (case render
+    ['(latex)
+     (elem
+      (exact-elem "\\index{")
+      (make-latex-entry-list (map eopl-index-entry-print entries))
+      (exact-elem "|"
+                  (cond [(equal? range-mark 'start) "("]
+                        [(equal? range-mark 'end) ")"]
+                        [else ""])
+                  (cond [(equal? decorator #f) "idxdecorator{"]
+                        [(equal? decorator 'see)
+                         (case (length entries)
+                           [(1) "see{"]
+                           [(2) "seeSublevel{"]
+                           [(3) "seeSubSublevel{"]
+                           [else "seeSubSublevel{"])]
+                        [(equal? decorator 'seealso)
+                         (case (length entries)
+                           [(1) "seealso{"]
+                           [(2) "seealsoSublevel{"]
+                           [(3) "seealsoSubSublevel{"]
+                           [else "seealsoSubSublevel{"])]
+                        [else (error 'eopl-index "Unknown decorator, expect 'see or 'seealso or #f, given ~a" decorator)]))
+      (unless (equal? prefix #f) prefix)
+      (when (equal? decorator #f) (exact-elem "}{"))
+      (unless (equal? suffix #f) suffix)
+      (exact-elem "}}"))]
+    ['(html)
+     (elem
+      (index* (map (lambda (e)
+                     (if (equal? (eopl-index-entry-key e) #f)
+                         (eopl-index-entry-value e)
+                         (eopl-index-entry-key e)))
+                   entries)
+              (map eopl-index-entry-value entries)))]
+    ;; TODO: for other renders, how should indices be output?
+    [else (elem)]))
 
 ;; content is a list of eopl index entry item
-(define (make-entry-list entries)
+(define (make-latex-entry-list entries)
   (add-between entries "!"))
 
 ;; make-an-index-entry : eopl-index-entry | string -> eopl-index-entry
@@ -633,4 +655,4 @@
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
                      origin-page-number
-                     make-entry-list))
+                     make-latex-entry-list))
