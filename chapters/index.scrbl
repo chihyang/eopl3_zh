@@ -533,5 +533,3 @@
 ]
 
 @print-index
-
-@index-suffix

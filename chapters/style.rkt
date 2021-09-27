@@ -314,10 +314,10 @@
                    (exact-elem "\\twocolumn"))))
 
 (define print-index
-  (make-element (make-style "printindex" '(exact-chars)) '()))
-
-(define index-suffix
-  (make-element (make-style "onecolumn" '(exact-chars)) '()))
+  (elem
+   (exact-elem "\\printindex")
+   "\n"
+   (exact-elem "\\onecolumn")))
 
 ;;; for glossary table
 ;;; term: content | #f x content -> content
