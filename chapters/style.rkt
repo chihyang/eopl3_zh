@@ -502,27 +502,22 @@
                                  (or (equal? decorator 'see) (equal? decorator 'seealso)))
                             (make-an-index-entry prefix)
                             prefix)))
-    (if delayed
-        (traverse-element
-         (lambda (get set)
-           (lambda (get set)
-             (let ((index-entries
-                    (map (lambda (e)
-                           (get (eopl-index-entry->key e) e))
-                         index-entries))
-                   (actual-prefix
-                    (if (or (equal? decorator 'see) (equal? decorator 'seealso))
-                        (eopl-index-entry-value (get (eopl-index-entry->key delayed-prefix) delayed-prefix))
-                        prefix))
-                   (render (get 'scribble:current-render-mode #f)))
-               (eopl-index-internal actual-prefix suffix range-mark decorator index-entries render)))))
-        ;; wrap traverse element into element to avoid direct print of a
-        ;; traverse print in code block
-        (elem
-         (traverse-element
-          (lambda (get set)
-            (eopl-index-internal prefix suffix range-mark decorator index-entries
-                                 (get 'scribble:current-render-mode #f))))))))
+    ;; wrap traverse element into element to avoid direct print of a
+    ;; traverse print in code block
+    (elem
+     (traverse-element
+      (lambda (get set)
+        (lambda (get set)
+          (let ((index-entries
+                 (map (lambda (e)
+                        (get (eopl-index-entry->key e) e))
+                      index-entries))
+                (actual-prefix
+                 (if (or (equal? decorator 'see) (equal? decorator 'seealso))
+                     (eopl-index-entry-value (get (eopl-index-entry->key delayed-prefix) delayed-prefix))
+                     prefix))
+                (render (get 'scribble:current-render-mode #f)))
+            (eopl-index-internal actual-prefix suffix range-mark decorator index-entries render))))))))
 
 (define (eopl-index-internal prefix suffix range-mark decorator entries render)
   (case render

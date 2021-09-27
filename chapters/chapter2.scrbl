@@ -347,19 +347,19 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @#,elem{@${\mathit{Env} = @tt{(empty-env)} \mid @tt{(extend-env @${\mathit{Var}} @${\mathit{SchemeVal}} @${\mathit{Env}})}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
 @#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
 (define empty-env
   (lambda () (list 'empty-env)))
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env*}} "extendenvasterisk"]]
 @#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
 (define extend-env
   (lambda (var val env)
     (list 'extend-env var val env)))
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
 @#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
 (define apply-env
   (lambda (env search-var)
@@ -511,14 +511,14 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
 @#,elem{@${\mathit{Env} = \mathit{Var} \to \mathit{SchemeVal}}}
 @#,elem{@${\mathit{Var} = \mathit{Sym}}}
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{empty-env}} "empty-env"]]
 @#,elem{@bold{@tt{empty-env}} : @${() \to \mathit{Env}}}
 (define empty-env
   (lambda ()
     (lambda (search-var)
       (report-no-binding-found search-var))))
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{extend-env}} "extendenv"]]
 @#,elem{@bold{@tt{extend-env}} : @${\mathit{Var} \times \mathit{SchemeVal} \times \mathit{Env} \to \mathit{Env}}}
 (define extend-env
   (lambda (saved-var saved-val saved-env)
@@ -527,7 +527,7 @@ Scheme 没有提供标准机制来创建新的模糊类型，所以我们退而�
         saved-val
         (apply-env saved-env search-var)))))
 
-@#,eopl-index[#:delayed #f @eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
+@#,eopl-index[@eopl-index-entry[@bold{@tt{apply-env}} "applyenv"]]
 @#,elem{@bold{@tt{apply-env}} : @${\mathit{Env} \times \mathit{Var} \to \mathit{SchemeVal}}}
 (define apply-env
   (lambda (env search-var)
