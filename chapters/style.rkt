@@ -650,4 +650,5 @@
 (provide (except-out (all-defined-out)
                      remove-leading-newlines
                      origin-page-number
-                     make-latex-entry-list))
+                     make-latex-entry-list
+                     extract-name-part))
