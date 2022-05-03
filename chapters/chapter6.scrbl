@@ -241,8 +241,8 @@
 @nested[#:style 'inset]{
 @emph{
 
-若 @${n} 为 0，将 1 传给续文；否则，求 @${n-1} 的 @tt{fact}，求值所在的续文取其
-结果 @tt{val}，然后将 @tt{(* @${n} val)} 的值传给当前续文。
+若 @${n} 为 0，将 1 传给续文；否则，求 @${n-1} 的 @tt{fact}，求值所在的续文，取
+其结果 @tt{val}，然后将 @tt{(* @${n} val)} 的值传给当前续文。
 
 }
 }
@@ -372,8 +372,8 @@
 
 @nested[#:style 'inset]{
 @emph{
-若 @${n < 2}，将 1 传给续文。否则，处理 @${n-1}，求值所在的续文取其结果
-@tt{val1}，然后处理 @tt{val2}，求值所在的续文取其结果 @tt{val2}，然后将 @tt{(+
+若 @${n < 2}，将 1 传给续文。否则，处理 @${n-1}，求值所在的续文，取其结果
+@tt{val1}，然后处理 @tt{val2}，求值所在的续文，取其结果 @tt{val2}，然后将 @tt{(+
 val1 val2)} 的值传给当前续文。
 @eopl-index[#:range-mark 'end "Fibonacci sequence"]
 }
