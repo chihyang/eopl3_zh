@@ -13,10 +13,10 @@
 @title[#:style part-title-style-numbered #:tag "oac"]{对象和类}
 
 @eopl-index["Instance variables"]
-许多编程任务都需要程序通过接口管理某些状态。例如，文件系统具有内部状态，但访问和
-修改那一状态只能通过文件系统的接口。状态常常涉及多个变量，为了维护状态的一致性，
-必须协同修改那些变量。因此，我们需要某种技术，确保组成状态的多个变量能协同更新。
-@term["Object-oriented programming"]{面向对象编程} 正是用来完成此任务的技术。
+在许多编程工作中，程序都要用接口管理某些状态。例如，文件系统内部状态的访问和修改
+只能通过系统的接口。状态常常涉及多个变量，为了维护状态的一致性，必须协同修改那些
+变量。因此，我们需要某种技术，确保组成状态的多个变量能协同更新。
+@term["Object-oriented programming"]{面向对象编程} 技术正是为了完成这一任务。
 
 @eopl-index["Field of object"]
 @eopl-index["Member of object"]
@@ -28,35 +28,35 @@
 从@term["message-psasing"]{消息传递} 的视角看待面向对象编程。
 @eopl-index["Message passing, object-oriented (method calls)"]
 
-在@secref{state}那样的有状态语言中，过程同样展现了用对象编程的优势。过程是一种对
-象，其状态包含于自由变量之中。闭包只有一种行为：用某些参数调用它。例如，
-@pageref{g-counter}的 @tt{g} 控制计数器的状态，此状态的唯一操作就是递增。但是，
-更常见的是让一个对象具有多种行为。面向对象编程语言提供这种能力。
+在@secref{state}那样的有状态语言中，过程也能体现用对象编程的优势。过程是一种对象，
+其状态包含于自由变量之中。闭包只有一种行为：拿参数调用。例如，
+@pageref{g-counter}的 @tt{g} 控制计数器的状态，此状态的唯一操作就是递增。但更常
+见的是，一个对象具有多种行为。面向对象的编程语言具有这种能力。
 
-同一方法通常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
+一个方法通常需要管理多重状态，例如多个文件系统或程序中的多个队列。为便于方法共享，
 面向对象编程系统通常提供名为@term["class"]{类} 的结构，用来指定某种对象的字段及
 方法。每个对象都创建为类的@term["instance"]{实例}。
 @eopl-index["Instance of class"]
 
 @eopl-index["Inheritance"]
 类似地，多个类可能有相似而不相同的字段和方法。为便于共享实现，面向对象编程语言通
-常提供@term["inheritance"]{继承}，允许程序员增改某些方法的行为，添加字段，对现有
+常支持@term["inheritance"]{继承}，允许程序员增改某些方法的行为，添加字段，对现有
 类小做修改，就能定义新类。这时，由于新类的其他行为从原类继承而得，我们说
 新类@term["inherit from"]{继承于} 或@term["extend"]{扩展} 旧类。
 
-不论程序元素是在建模真实世界中的对象还是人工层面的系统状态，通常都要阐明：程序结
-构能否由结合行为和状态的对象组成。将行为类似的对象与同一个类关联起来，也是自然而
-然的。
+不论是用代码建模真实世界中的对象还是人工层面的系统状态，一旦程序能由结合行为和状
+态的对象组成，其结构通常都清晰明了。将行为类似的对象与同一个类关联起来，也是自然
+而然的。
 
-真实世界中的对象通常具有某种@emph{状态}和@emph{行为}，后者要么控制前者，要么受前
-者控制。例如，猫能吃，打呼噜，跳，躺下，这些活动都由猫当前的状态控制，包括有多饿，
-有多累。
+真实世界中的对象通常兼具@emph{状态}和@emph{行为}，后者要么控制前者，要么受前者控
+制。例如，猫能吃，打呼噜，跳，躺下，这些活动都由猫当前的状态控制，包括有多饿，有
+多累。
 
 @eopl-index["Opaque type"]
-对象和模块颇多相似，但又截然不同。模块和类都提供了定义模糊类型的机制。但对象是一
-种具有行为的数据结构，模块只是一组绑定。同一个类可以有很多个对象；大多数模块系统
-没有提供相仿的能力。但是，PROC-MODULES 这样的模块系统提供了更为灵活的方式来控制
-名字的可见性。模块和类可以相得益彰。
+对象和模块既相似，又不同。模块和类都提供了定义模糊类型的机制，但对象是一种具有行
+为的数据结构，模块只是一组绑定。同一个类可以有很多个对象；大多数模块系统没有提供
+相仿的能力。但 PROC-MODULES 这样的模块系统提供了更为灵活的方式来控制名字的可见性。
+模块和类能够相得益彰。
 @eopl-index["Modules"]
 @eopl-index["Abstract type"]
 
@@ -68,18 +68,18 @@
 @eopl-index["Declaration" "of classes"]
 
 @eopl-index[#:range-mark 'start "Method of object"]
-@figure-ref{fig-9.1} 展示了这种语言的一个简单程序。它定义了继承于 @tt{object} 的
-类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。
+@figure-ref{fig-9.1} 展示了用这种语言写成的简单程序。它定义了继承于 @tt{object}
+的类 @tt{c1}。类 @tt{c1} 的每个对象都包含两个字段，名为 @tt{i} 和 @tt{j}。
 @eopl-index["Field of object"]
 @eopl-index["Instance variables"]
 @eopl-index["Member of object"]
-字段叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类@tt{c1}
-支持三个@emph{方法}或@term["member function"]{成员函数}，名为@tt{initialize}、
+字段叫做@term["member"]{成员} 或@term["instance variable"]{实例变量}。类 @tt{c1}
+支持三个@emph{方法}或@term["member function"]{成员函数}，名为 @tt{initialize}、
 @tt{countup} 和 @tt{getstate}。每个方法包含@term["method name"]{方法名}，
 若干@term["method var"]{方法变量}（又称@term["method parameters"]{方法参数}），
 以及@term["method body"]{方法主体}。@eopl-index["Body" (eopl-index-entry "of method"
-"method")]方法名对应于 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
-@exact-elem{“}@tt{c1}的方法@tt{countup}@exact-elem{”}。
+"method")]方法名对应 @tt{c1} 实例能够响应的@emph{消息}种类。有时，我们称之为
+@exact-elem{“}@tt{c1} 的方法 @tt{countup}@exact-elem{”}。
 @eopl-index["Message passing, object-oriented (method calls)"]
 @eopl-index[#:range-mark 'end "Method of object"]
 
@@ -126,8 +126,9 @@ in begin
 例}。对象通过 @tt{new} 操作创建。它会触发调用类的方法 @tt{initialize}，在本例中，
 是将对象的字段 @tt{i} 设置为 3，字段 @tt{j} 设置为 -3。然后，程序调用 @tt{o1} 的
 方法 @tt{getstate}，返回列表 @tt{(3 -3)}。接着，它调用 @tt{o1} 的方法
-@tt{countup}，将两个字段的值改为 5 和 -5，然后再次调用 @tt{getstate}，返回@tt{(5
--5)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))} 成为整段程序的返回值。
+@tt{countup}，将两个字段的值改为 5 和 -5，然后再次调用 @tt{getstate}，返回
+@tt{(5 -5)}。最后，值 @tt{list(t1,t2)}，即 @tt{((3 -3) (5 -5))}，成为整段程序的
+返回值。
 
 @eopl-figure[#:position "!ht"]{
 @eopl-code{
@@ -158,8 +159,8 @@ in send o1 sum()
 }
 
 @figure-ref{fig-9.2} 解释了面向对象编程中的关键思想：@term["dynamic
-dispatch"]{动态分发}。在这段程序中，我们的树有两种节点，@tt{interior-node}和
-@tt{leaf-node}。通常，我们不知道是在给哪种节点发送消息。相反，每个节点接受
+dispatch"]{动态分发}。在这段程序中，树有两种节点，@tt{interior-node} 和
+@tt{leaf-node}。通常，我们不知道是在给哪种节点发送消息。相反，每个节点接收
 @tt{sum} 消息，并用自身的 @tt{sum} 方法做适当操作。这叫做@emph{动态分发}。这里，
 表达式生成一棵树，有两个内部节点，三个叶节点。它将 @tt{sum} 消息发给节点 @tt{o1}；
 @tt{o1} 将 @tt{sum} 消息发给子树，依此类推，最终返回 12。这段程序也表明：所有方
@@ -189,8 +190,8 @@ in send o1 odd(13)}|
 @section[#:style section-title-style-numbered #:tag "s9.2"]{继承}
 
 @eopl-index[#:range-mark 'start "Inheritance"]
-通过继承，程序员能够增量式地修改旧类，得到新类。在实践中，这十分有用。例如，有色
-点与点类似，但是它还有处理颜色的方法，如@figure-ref{fig-9.3} 中的经典例子所示。
+通过继承，程序员能够渐进地修改旧类，得到新类。在实践中，这十分有用。
+例如@figure-ref{fig-9.3} 中的经典例子：有色点与点类似，但多了处理颜色的方法。
 
 @eopl-figure[#:position "!ht"]{
 @eopl-code{
@@ -236,14 +237,14 @@ in begin
 @eopl-index["Classes" "superclass"]
 @eopl-index["Superclass"]
 或@term["superclass"]{超类}，@${c_2} 是 @${c_1} 的@term["child"]{子类}。在继承中，
-由于 @${c_2} 定义为 @${c_1} 的扩展，所以 @${c_1}必须在@${c_2} 之前定义。在此之前，
-语言包含了一个预先定义的类，名为 @tt{object}，它没有任何方法或字段。由于类
-@tt{object} 没有 @tt{initialize} 方法，因此无法创建它的对象。除 @tt{object} 之外
-的所有类都有唯一父类，但可以有多个子类。因此，由@tt{extends} 得出的关系在类与类
-之间产生了树状结构，其根为 @tt{object}。因为每个类至多只有一个直接超类，这是一种
+由于 @${c_2} 定义为 @${c_1} 的扩展，所以 @${c_1} 必须在 @${c_2} 之前定义。作为起始，
+语言还包含一个预先定义的类，名为 @tt{object}，它没有任何方法或字段。由于类
+@tt{object} 没有 @tt{initialize} 方法，因此无法用它创建对象。除 @tt{object} 之外
+的所有类都有唯一父类，但可以有多个子类。因此，由 @tt{extends} 得出的关系在类与类
+之间产生了树状结构，根为 @tt{object}。因为每个类至多只有一个直接超类，这是一种
 @term["single-inheritance"]{单继承} 语言。有些语言允许类继承自多个
 超类。@term["multiple inheritance"]{多继承} 虽然强大，却不无问题。在练习中，我们
-考虑一些不便之处。
+会看到一些不便之处。
 @eopl-index["Single inheritance"]
 @eopl-index["Multiple inheritance"]
 
@@ -282,25 +283,25 @@ in begin
 术语@emph{继承}源于宗谱的类比。我们常常引申这一类比，说类的@term["ancestor"]{祖
 先}@eopl-index{Ancestor class}（从类的父类到根类 @tt{object}）
 @eopl-index["Descendant class"]
-和@term["descendant"]{后代}。如果 @${c_2} 是@${c_1} 的后代，我们有时说 @${c_2}
-是@${c_1} 的@term["subclass"]{子类}，写作@${c_2 < c_1}。
+和@term["descendant"]{后代}。如果 @${c_2} 是 @${c_1} 的后代，可以说 @${c_2} 是
+@${c_1} 的@term["subclass"]{子类}，写作 @${c_2 < c_1}。
 @eopl-index["Classes" "subclass"]
 @eopl-index["Subclass"]
 
-如果类 @${c_2} 继承自类 @${c_1}，@${c_1} 的所有字段和方法都对 @${c_2}的方法可见，
-除非在 @${c_2} 中重新声明它们。由于一个类继承了父类的所有方法和字段，子类的实例
-可以在任何能够使用父类实例的地方使用。类似地，类后代的实例可以在任何能够使用类实
-例的地方使用。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选
-择这种设计，其他面向对象语言可能有不同的可见性规则。@eopl-index["Polymorphic"]
+如果类 @${c_2} 继承自 @${c_1}，除非在 @${c_2} 中重新声明，@${c_1} 的所有字段和方
+法都对 @${c_2} 的方法可见。由于一个类继承了父类的所有方法和字段，任何能够使用父
+类实例的地方都可以使用子类实例。类似地，任何能够使用类实例的地方都可以使用其后代
+的实例。有时，这叫做@term["subclass polymorphism"]{子类多态}。我们的语言选择这种
+设计，其他面向对象语言可能选择不同的可见性规则。@eopl-index["Polymorphic"]
 @eopl-index["Subclass polymorphism"]
 
 接下来，我们考虑重新声明类的字段或方法时会发生什么。如果 @${c_1} 的某个字段在某
 个子类 @${c_2} 中重新声明，新的声明@term["shadow"]{遮蔽} 旧的，就像词法定界一样。
 @eopl-index["Shadowing"]
-例如，考虑@figure-ref{fig-9.4}。类 @tt{c2} 的对象有两个名为 @tt{y} 的字段：
-@tt{c1} 中声明的和 @tt{c2} 中声明的。@tt{c1} 中声明的方法能看到 @tt{c1} 的字段
-@tt{x} 和 @tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段
-@tt{x}，但 @tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
+例如@figure-ref{fig-9.4}。类 @tt{c2} 的对象有两个名为 @tt{y} 的字段：@tt{c1} 中
+声明的和 @tt{c2} 中声明的。@tt{c1} 中声明的方法能看到 @tt{c1} 的字段 @tt{x} 和
+@tt{y}。在 @tt{c2} 中，@tt{getx2} 中的 @tt{x} 指代 @tt{c1} 的字段 @tt{x}，但
+@tt{gety2} 中的 @tt{y} 指代 @tt{c2} 的字段 @tt{y}。
 
 如果类 @${c_1} 的方法 @${m} 在某个子类 @${c_2} 中重新声明，我们说新的
 方法@term["override"]{覆盖} 旧的方法。我们将方法声明所在的类称为方法
@@ -313,8 +314,8 @@ in begin
 @eopl-index["Classes" "superclass"]
 @eopl-index["Superclass"]
 
-如果给类 @${c_2} 的对象发送消息 @${m}，应使用新的方法。这条规则很简单，结果却很
-微妙。考虑下面的例子：
+如果给类 @${c_2} 的对象发送消息 @${m}，应使用新的方法。这条规则很简单，结果却不
+简单。考虑下面的例子：
 
 @nested{
 @eopl-code{
@@ -375,7 +376,7 @@ in send o1 get-color()}|
 
 @eopl-index[#:range-mark 'start "Super calls"]
 我们的语言还有一个重要特性：@term["super call"]{超类调用}。
-考虑@figure-ref{fig-9.5} 中的程序。其中，我们在类 @tt{colorpoint} 中重写了
+考虑@figure-ref{fig-9.5} 中的程序。我们在类 @tt{colorpoint} 中重写了
 @tt{initialize} 方法，同时设置字段 @tt{x}、@tt{y} 和 @tt{color}。但是，新方法的
 主体复制了原方法的代码。在我们的小例子中，这尚可接受，但在大型例子中，这显然是一
 种坏的做法（为什么？）。而且，如果 @tt{colorpoint} 声明了字段 @tt{x}，就没法初始
@@ -406,7 +407,7 @@ method initialize (initx, inity, initcolor)
 @tt{c3}，其父类是 @tt{c2}，但方法的持有类是 @tt{c2}，@tt{c2} 的超类是 @tt{c1}。
 所以，执行的是 @tt{c1} 的方法 @tt{m1}。这是@term["static method dispatch"]{静态
 方法分发} @eopl-index["Static method dispatch"]的例子。虽然进行超类方法调用的对
-象是 @tt{self}，方法分发却是静态的，因为要使用的方法可以从程序文本中判断，与
+象是 @tt{self}，方法分发却是静态的，因为要调用的方法可以从程序文本中推断出来，与
 @tt{self} 所指类无关。
 
 本例中，@tt{c1} 的方法 @tt{m1} 调用 @tt{o3} 的方法 @tt{m2}。这是普通方法调用，所
