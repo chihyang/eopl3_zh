@@ -29,7 +29,7 @@
 @eopl-index["Message passing, object-oriented (method calls)"]
 
 在@secref{state}那样的有状态语言中，过程也能体现用对象编程的优势。过程是一种对象，
-其状态包含于自由变量之中。闭包只有一种行为：拿参数调用。例如，
+其状态包含于自由变量之中。闭包只有一种行为：拿参数调用它。例如，
 @pageref{g-counter}的 @tt{g} 控制计数器的状态，此状态的唯一操作就是递增。但更常
 见的是，一个对象具有多种行为。面向对象的编程语言具有这种能力。
 
@@ -445,20 +445,19 @@ in send o3 m3()
 所示。
 @eopl-index["Classes" "declaration of"]
 @eopl-index["Declaration" "of classes"]
-程序中首先是一些类声明，然后是一个待执行的表达式。类声明有名字，最接近的超
-类名，0 个或多个字段声明，以及 0 个或多个方法声明。方法声明类似 @tt{letrec}
+程序开头是一些类声明，然后是一个待执行的表达式。类声明有名字，最相近的超类名，0
+或多个字段声明，以及 0 或多个方法声明。方法声明类似 @tt{letrec} 中的过程声明，
 @eopl-index["Declaration" "of method"]
 @eopl-index["Method of object" "declaration of"]
 @eopl-index["Multiple-argument procedures"]
 @eopl-index["Multiple-procedure declaration"]
 @eopl-index["Multiple-variable declaration"]
-中的过程声明，有一个名字、一个形参列表，以及主体。同时我们扩展语言，支持多参数过
-程、多声明 @tt{let} 和多声明 @tt{letrec} 表达式，还有些其他操作，如加法和
-@tt{list}。
+有名字、形参列表以及主体。同时我们扩展语言，支持多参数过程、多声明 @tt{let} 和多
+声明 @tt{letrec} 表达式，还有些其他操作，如加法和 @tt{list}。
 @eopl-index["List operations"]
 列表操作同@exercise-ref{ex3.9}。最后，我们增加 @tt{begin} 表达式，
 @eopl-index[(eopl-index-entry @elem{@tt{begin} expression} "beginexpression")]
-同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个的值。
+同@exercise-ref{ex4.4}，它从左到右求出子表达式的值，返回最后一个表达式的值。
 
 我们新增对象和列表表达值，于是有
 @nested[#:style small]{
@@ -471,8 +470,8 @@ in send o3 m3()
 }
 
 我们将在@secref{s9.4.1}考察 @${\mathit{Obj}}。在我们的语言中，类既不是指代值，也
-不是表达值：它们作为对象的一部分，但不能做变量的绑定或表达式的值，不过，
-看看@exercise-ref{ex9.29}。
+不是表达值：它们能作为对象的一部分，但不能绑定到变量或是成为表达式的值（但要
+看看@exercise-ref{ex9.29}）。
 
 @eopl-figure[#:position "!ht"]{
 
@@ -511,8 +510,8 @@ in send o3 m3()
 
 @eopl-index[#:range-mark 'start "Message passing, object-oriented (method calls)"]
 @eopl-index[#:range-mark 'start "Parameter passing"]
-@tt{send} 表达式包含一值为对象的表达式，一个方法名，以及 0 或多个操作数。它从对
-象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像
+@tt{send} 表达式包含一个值为对象的表达式，一个方法名，以及 0 或多个操作数。它从
+对象的类中找出指定的方法，然后求操作数的值，将得到的实参传给该方法。就像
 IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方法的形参与对应位置的引
 用绑定起来，并在这个词法绑定作用域内求方法主体的值。
 @eopl-index[#:range-mark 'end "Message passing, object-oriented (method calls)"]
@@ -529,7 +528,7 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 @eopl-index[#:range-mark 'start @idx-value-of @eopl-index-entry["for CLASSES" "CLASSES"]]
 我们求程序的值时，首先用 @tt{initialize-class-env!} 处理所有类声明，然后求表达式
 的值。过程 @tt{initialize-class-env!} 创建一个全局@term["class environment"]{类
-环境}，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme变量表示
+环境}，将各个类名映射到类的方法。因为这个环境是全局的，我们用一个 Scheme 变量表示
 它。在@secref{s9.4.3}我们再详细讨论类环境。
 
 @eopl-code{
@@ -547,17 +546,18 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 像之前那样，语言中的各种表达式——包括四种新生成式——在过程 @tt{value-of} 里都有对
 应的语句。
 
-我们依次考虑新增的每种表达式。
+我们依次考虑各个新增的表达式。
 
 @eopl-index["Pseudo-variable"]
 @eopl-index["Binding" (eopl-index-entry "of pseudo-variables" "pseudo-variables")]
-求表达式的值通常是因为它是操作某个对象的方法的一部分。在当前环境中，这个对象绑定
-到伪变量 @tt{%self}。我们称之为@term["pseudo-variable"]{伪变量} 是因为它虽然像普
-通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，当前
-方法持有类的超类名字绑定到伪变量 @tt{%super}。
+表达式需要求值，通常是因为它是操作某个对象的方法的一部分。在当前环境中，这个对象
+绑定到伪变量 @tt{%self}。我们称之为@term["pseudo-variable"]{伪变量} 是因为它虽然
+像普通变量那样遵循词法绑定，但却像下面将要探讨的那样，具有一些独特性质。类似地，
+当前方法持有类的超类名字绑定到伪变量 @tt{%super}。
 
 @eopl-index[#:range-mark 'start @eopl-index-entry[@tt{self} "self"]]
-求 @tt{self} 表达式的值时，返回的是 @tt{%self} 的值。这句话在 @tt{value-of} 中写作
+求 @tt{self} 表达式的值时，返回的是 @tt{%self} 的值。这对应 @tt{value-of} 中的语
+句
 
 @eopl-code{
 @codeblock[#:indent racket-block-offset]{
@@ -602,9 +602,9 @@ IMPLICIT-REFS 那样，它要为每个实参分配一个新位置，然后将方
 }
 @eopl-index[#:range-mark 'end "Super calls"]}
 
-我们的最后一项工作是创建对象。求 @tt{new} 表达式的值时，我们需要求操作数的值，并
-根据类名创建一个新对象。然后我们调用对象的初始化函数，但是忽略这个函数的值。最后，
-返回该对象。
+最后一项工作是创建对象。求 @tt{new} 表达式的值时，我们需要求操作数的值，并根据类
+名创建一个新对象。然后我们调用对象的初始化函数，但忽略这个函数的值。最后，返回
+该对象。
 
 @nested[#:style small]{
 @eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
@@ -691,19 +691,19 @@ in send o3 m1(7,8)
 象的字段排列为 @tt{(x y y)}，其中，第二个 @tt{y} 是 @tt{c2} 中的；类 @tt{c3} 对
 象的字段排列为 @tt{(x y y x z)}。@figure-ref{fig-9.8} 中对象 @tt{o3} 的表示
 如@figure-ref{fig-9.9} 所示。当然，我们想让类 @tt{c3} 中的方法使用 @tt{c3} 中声
-明的字段 @tt{x}，而不是 @tt{c1} 中声明的。我们在建立方法主体的求值环境时处理这一
-点。
+明的字段 @tt{x}，而不是 @tt{c1} 中声明的。在建立方法主体的求值环境时，我们要处理
+这一点。
 
-这种策略有一条有益的性质：对 @tt{c3} 的任何子类，列表中的相同位置具有相同字段，
-因为后添加的任何字段都会出现在这些字段的右边。在 @tt{c3} 任一子类定义的某个方法
-中，@tt{x} 在什么位置呢？我们知道，如果没有重定义，@tt{x} 在所有这些方法中的位置
-一定是 3。这样，在声明字段变量时，变量对应值的位置保持不变。这条性质使我们能静态
-地确定字段引用，就像在@secref{s3.6}中处理变量那样。
+这种方法有个好处：对 @tt{c3} 的任何子类，列表中的相同位置具有相同字段，因为后添
+加的任何字段都会出现在这些字段的右边。在 @tt{c3} 任一子类定义的某个方法中，
+@tt{x} 在什么位置呢？我们知道，如果没有重定义，@tt{x} 在所有这些方法中的位置一定
+是 3。这样，在声明字段变量时，变量对应值的位置保持不变。这一特点使字段引用的位置
+能够静态地确定，就像我们在@secref{s3.6}中处理变量那样。
 
 @eopl-index["Allocation" (eopl-index-entry "of objects" "objects")]
-创建新对象很容易。我们只需创建一个 @tt{an-object}，它有一个新引用列表，列表长度
-与对象的字段数目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用非
-法值初始化每个位置，以便识别程序对未初始化位置的解引用。
+创建新对象很容易。我们只需创建 @tt{an-object}，它有一个新引用列表，列表长度与对
+象的字段数目相等。要确定其数目，我们从对象所属类中取出字段变量列表。我们用不合法
+的值初始化所有位置，以便探知程序是否使用了未初始化的位置。
 
 @eopl-code{
 @racketblock[
@@ -734,7 +734,7 @@ in send o3 m1(7,8)
  @item{方法的形参绑定到新引用，引用初始化为实参的值。这与 IMPLICIT-REFS 中的
  @tt{apply-procedure} 行为类似。}
 
- @item{伪变量 @tt{%self} 和 @tt{%super} 分别绑定到当前对象和方法的超类。
+ @item{伪变量 @tt{%self} 绑定到当前对象，@tt{%super} 绑定到当前方法的超类。
  @eopl-index["Pseudo-variable"]}
 
  @item{可见字段名绑定到当前对象的字段。要实现这点，我们定义
@@ -771,7 +771,7 @@ in send o3 m1(7,8)
 
 要确保各方法看到正确的字段，我们在构建 @tt{field-names} 列表时需要小心。各方法只
 应见到最后一个声明的同名字段，其他同名字段应被遮蔽。所以，我们构建
-@tt{field-names} 列表时，将把最右边之外的出现的每个重复名字替换为新名。
+@tt{field-names} 列表时，把最右边之外的出现的每个重复名字替换为新名。
 @figure-ref{fig-9.8} 中的程序对应的 @tt{field-names} 如下
 
 @nested{
@@ -784,8 +784,8 @@ in send o3 m1(7,8)
 由于方法主体无从得知 @tt{x%1} 和 @tt{y%1}，所以它们只能见到各字段变量在最右边的
 声明，正合期望。}
 
-@figure-ref{fig-9.10} 展示了@figure-ref{fig-9.8} 中 @tt{send o3 m1(7,8)} 内的方
-法主体求值时创建的环境。这张图表明，引用列表可能比变量列表长：变量列表只是
+@figure-ref{fig-9.10} 展示的环境，是求@figure-ref{fig-9.8} 中 @tt{send o3 m1(7,8)} 内方
+法主体的值时创建的。这张图表明，引用列表可能比变量列表长：变量列表只是
 @tt{(x y%1 y)}，因为 @tt{c2} 的方法 @tt{m1} 只能见到这些字段变量，但
 @tt{(object->fields self)} 的值是对象中所有字段的列表。不过，由于三个可见字段变
 量的值是列表中的头三个元素，而且我们把第一个 @tt{y} 重命名为 @tt{y%1}（该方法对
@@ -806,8 +806,8 @@ in send o3 m1(7,8)
 
 @eopl-index[@eopl-index-entry[@tt{self} "self"]]
 当 @tt{self} 的持有类和所属类相同时，变量列表的长度通常与字段引用列表相同。如果
-持有类位于类链的上端，那么位置数可能多于字段变量，但对应于字段变量的值位于列表开
-头，其余值则不可见。@eopl-index["Host class"]
+持有类位于类链的上端，那么位置数可能多于字段变量数目，但对应于字段变量的值位于列
+表开头，其余值则不可见。@eopl-index["Host class"]
 @eopl-index[#:range-mark 'end "Environments" @eopl-index-entry["for method call" "methodcall"]]
 @eopl-index[#:range-mark 'end "Field of object"]
 @eopl-index[#:range-mark 'end "Member of object"]
