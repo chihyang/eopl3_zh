@@ -1601,7 +1601,7 @@ in let a = 33
 
 @envalign*{
 \mathit{ExpVal} &= \mathit{Int} + \mathit{Bool} + \mathit{Proc} \\
-\mathit{DenVal} &= \mathit{Ref(ExpVal)} + \mathit{ExpVal}
+\mathit{DenVal} &= \mathit{Ref(ExpVal)}
 }
 
 唯一需要改变的是新位置的分配。按值调用中，求每个操作数的值都要分配新位置；按指调
