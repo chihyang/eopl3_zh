@@ -154,6 +154,9 @@
 (define eopl-computation-inset
   (make-style "EoplComputationInset" (list (make-tex-addition "../style/code-inset.tex"))))
 
+(define eopl-proof-style
+  (make-style "EoplProof" (list (make-tex-addition "../style/proof.tex"))))
+
 ;; make sure the code title does not become orphan
 (define (samepage . c)
   (nested #:style eopl-samepage c))
@@ -171,6 +174,11 @@
 ;; used for code equation in a paragraph
 (define (eopl-equation . content)
   (nested #:style eopl-equation-inset
+          content))
+
+;; used for code equation in a paragraph
+(define (eopl-proof . content)
+  (nested #:style eopl-proof-style
           content))
 
 ;;; for exercise

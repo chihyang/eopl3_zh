@@ -560,9 +560,7 @@
  令 t 为二叉树，形如@definition-ref{d1.1.7}，则 t 包含奇数个节点。
 }
 
-@; @proof
-@; @{
-@parprf{
+@eopl-proof{
 
  @eopl-index["Induction hypothesis"]
  @eopl-index[#:range-mark 'start "Induction, proof by"]
