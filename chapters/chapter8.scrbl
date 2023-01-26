@@ -2539,8 +2539,8 @@ i^{\prime}_{2}@tt{[@${m^{\prime}/m_{2}}]}} 时，我们扩展类型环境，给
 @tt{expand-iface} 维持不变式。
 
 @eopl-index["Ice cream sundaes"]
-现在，完成了。吃杯圣代吧，放些奶油口味儿、热浇汁口味儿、还有坚果口味儿的佐料。怎
-么组合不要紧，好吃就行！
+现在，完成了。吃杯圣代吧，放些奶油@emph{口}味、热浇汁@emph{口}味、还有
+坚果@emph{口}味的佐料。怎么组合不要紧，好吃就行！
 @eopl-index[#:range-mark 'end "Module procedures"]
 @eopl-index[#:range-mark 'end "Modules" "parameterized"]
 @eopl-index[#:range-mark 'end "Parameterized modules"]
