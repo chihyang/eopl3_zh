@@ -439,7 +439,7 @@
  @nested[#:style normalfont]{
  @nested[#:style small]{
   @envalign*{\mathit{S\mbox{-}list} &::= @tt{(@m{\{\mathit{S\mbox{-}exp}\}^*})} \\[-3pt]
-             \mathit{S\mbox{-}list} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}}}
+             \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}}}
  }
 
  @elemtag["s-list"]{s-list} 是 s-exp 的列表，s-exp 或者是 s-list，或者是一个符号。
@@ -757,7 +757,7 @@
 @#,elem{@bold{@tt{nth-element}} : @${\mathit{List} \times \mathit{Int} \to \mathit{SchemeVal}}}
 @#,elem{@bold{用法} : @tt{(nth-element @${lst} @${n}) = @${lst} 的第 @${n} 个元素}}
 (define nth-element
-  (lambda (lst)
+  (lambda (lst n)
     (if (null? lst)
       (report-list-too-short n)
       (if (zero? n)
@@ -869,8 +869,8 @@ C} 相同。
 @#,elem{@elemtag["remove-first"]{@bold{@tt{remove-first}}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 @#,elem{@bold{用法} : @tt{(remove-first @${s} @${los}) 返回一列表，除了不含第一个出现在 @${los} 中的符号 @${s} 外，元素及其排列顺序与 @${los} 相同。}}
 (define remove-first
-  (lambda (s lst)
-    (if (null? lst)
+  (lambda (s los)
+    (if (null? los)
         '()
         ...)))
 ]
@@ -888,8 +888,8 @@ C} 相同。
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
-  (lambda (s lst)
-    (if (null? lst)
+  (lambda (s los)
+    (if (null? los)
         '()
 @#,exact-elem{\begin{mdframed}[style=codediff]}
         (if (eqv? (car los) s)
@@ -913,8 +913,8 @@ C} 相同。
 @racketblock[
 @#,elem{@bold{@tt{remove-first}} : @${\mathit{Sym} \times \mathit{Listof}(\mathit{Sym}) \to \mathit{Listof}(\mathit{Sym})}}
 (define remove-first
-  (lambda (s lst)
-    (if (null? lst)
+  (lambda (s los)
+    (if (null? los)
         '()
         (if (eqv? (car los) s)
             (cdr los)
@@ -1086,7 +1086,7 @@ C} 相同。
 
 @nested[#:style normalfont]{
 @envalign*{\mathit{S\mbox{-}list} &::= @tt{(@m{\{\mathit{S\mbox{-}exp}\}^*})} \\
-           \mathit{S\mbox{-}list} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
+           \mathit{S\mbox{-}exp} &::= \mathit{Symbol} \mid \mathit{S\mbox{-}list}}
 }
 
 克莱尼星号简洁地描述了集合 s-list，但对写程序没什么用。因此我们的第一步是抛开克
