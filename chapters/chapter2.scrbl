@@ -31,8 +31,7 @@
 
 @eopl-index{Abstract data types (ADTs)}
 这样抽象出的数据类型称为@term["abstract data type"]{抽象数据类型}。程序的其余部
-@eopl-index["Client of ADT"]
-分——数据类型的@term["client"]{客户} ——只能通过接口中指定的操作处理新数据。这样一
+分——数据类型的@term["client"]{客户}@eopl-index["Client of ADT"] ——只能通过接口中指定的操作处理新数据。这样一
 来，如果我们希望改变数据的表示，只需改变数据处理接口的实现。
 
 这一想法并不陌生：我们写程序处理文件时，多数时候只关心能否调用过程来打开，关闭，
@@ -1065,7 +1064,7 @@ s-list中的数据可以用数据类型 @tt{s-list}表示为：
 }
 
 @eopl-index[(eopl-index-entry @elem{@tt{cases} form} "Casesform")]
-一般的 @tt{cases} 语法为：
+@tt{cases} 语法的一般姓形式为：
 
 @nested[#:style 'noindent]{
 @racketblock[
