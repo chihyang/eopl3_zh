@@ -641,7 +641,7 @@ lambda 演算表达式的语法：
 
 @nested[#:style 'inset]{
 @verbatim|{
-|@bold{@tt{var-exp->exp}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
+|@bold{@tt{var-exp->var}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
 |@bold{@tt{lambda-exp->bound-var}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Var}}
 |@bold{@tt{lambda-exp->body}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
 |@bold{@tt{app-exp->rator}}: |@${\mathit{Lc\mbox{-}Exp} \to \mathit{Lc\mbox{-}Exp}}
@@ -656,17 +656,18 @@ lambda 演算表达式的语法：
 @eopl-index[#:range-mark 'start @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 @racketblock[
 @#,elem{@elemtag["occurs-free?"]{@bold{@tt{occurs-free?}}} : @${\mathit{Sym} \times \mathit{LcExp} \to \mathit{Bool}}}
-(lambda (search-var exp)
-  (cond
-    ((var-exp? exp) (eqv? search-var (var-exp->var exp)))
-    ((lambda-exp? exp)
-      (and
-        (not (eqv? search-var (lambda-exp->bound-var exp)))
-        (occurs-free? search-var (lambda-exp->body exp))))
-    (else
-      (or
-        (occurs-free? search-var (app-exp->rator exp))
-        (occurs-free? search-var (app-exp->rand exp))))))
+(define occurs-free?
+  (lambda (search-var exp)
+    (cond
+      ((var-exp? exp) (eqv? search-var (var-exp->var exp)))
+      ((lambda-exp? exp)
+        (and
+          (not (eqv? search-var (lambda-exp->bound-var exp)))
+          (occurs-free? search-var (lambda-exp->body exp))))
+      (else
+        (or
+          (occurs-free? search-var (app-exp->rator exp))
+          (occurs-free? search-var (app-exp->rand exp)))))))
 ]
 @eopl-index[#:range-mark 'end @eopl-index-entry[@bold{@tt{occurs-free?}} "occursfree"]]
 }
