@@ -347,7 +347,7 @@ SLLGEN 包含几个过程，将扫描器和语法结合起来，形成可以执�
 的过程可以处理一个字符串，得到一个词牌列表。语法用来给得到的扫描过程添加关键字。
 这一过程主要用于调试。
 
-过程 @tt{sllgen:make-stream-parser} 生成一个解析器。解析器是一过程，它取一字符串，
+过程 @tt{sllgen:make-string-parser} 生成一个解析器。解析器是一过程，它取一字符串，
 用扫描器扫描它，用语法解析它，然后返回一棵抽象语法树。像
 @tt{sllgen:make-string-scanner} 一样，语法中的字符串字面值包含在扫描器中。
 
@@ -455,9 +455,9 @@ SLLGEN 也可以用来生成读入-求值-打印循环（@secref{s3.1}）。过�
 @racketblock[
 (define grammar-a3
   '((expression (identifier) var-exp)
-     (expression
-       ("let" (arbno identifier "=" expression) "in" expression)
-       let-exp)))
+    (expression
+      ("let" (arbno identifier "=" expression) "in" expression)
+      let-exp)))
 
 (define scan&parse3
   (sllgen:make-string-parser scanner-spec-a grammar-a3))
@@ -604,11 +604,11 @@ Nonterminal <seplist3> can’t begin with string "}"
 下列语法按照通常的算术操作符优先级，定义了算术操作表达式：
 
 @envalign*{
-         \mathit{Arith\mbox{-}exp} &::= \mathit{Arith\mbox{-}term} \ \{\mathit{Additive\mbox{-}op} \mathit{Arith\mbox{-}term}\}^{*} \\[-3pt]
-        \mathit{Arith\mbox{-}term} &::= \mathit{Arith\mbox{-}factor} \ \{\mathit{Multiplicative\mbox{-}op} \mathit{Arith\mbox{-}factor}\}^{*} \\[-3pt]
+         \mathit{Arith\mbox{-}expr} &::= \mathit{Arith\mbox{-}term} \ \{\mathit{Additive\mbox{-}op}\ \mathit{Arith\mbox{-}term}\}^{*} \\[-3pt]
+        \mathit{Arith\mbox{-}term} &::= \mathit{Arith\mbox{-}factor} \ \{\mathit{Multiplicative\mbox{-}op}\ \mathit{Arith\mbox{-}factor}\}^{*} \\[-3pt]
       \mathit{Arith\mbox{-}factor} &::= \mathit{Number} \\[-3pt]
                                    &::= @tt{( @m{\mathit{Arith\mbox{-}expr}} )} \\[-3pt]
-          \mathit{Arith\mbox{-}op} &::= @tt{+} \mid @tt{-} \\[-3pt]
+      \mathit{Additive\mbox{-}op} &::= @tt{+} \mid @tt{-} \\[-3pt]
  \mathit{Multiplicative\mbox{-}op} &::= @tt{*} \mid @tt{/}
                          }
 
