@@ -211,7 +211,7 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
  @item{@${\textnormal{[]}} 表示空环境。}
 
- @item{@${\text{[}var = val\text{]}rho} 表示 @tt{(extend-env @${var} @${val}
+ @item{@${\text{[}var = val\text{]}\rho} 表示 @tt{(extend-env @${var} @${val}
  @${\rho})}。}
 
  @item{@${\text{[}var_1 = val_1, var_2 = val2\text{]}\rho} 是 @${var_1 =
@@ -309,8 +309,8 @@ item"]{词条}、@term["lexeme"]{词素}、或者最常见的@term["token"]{词�
 
 @exercise[#:level 2 #:tag "ex3.2"]{
 
-给出一个表达值 @${val \in \mathit{ExpVal}}，且 @${\lceil \lfloor n \rfloor
-\rceil \neq n}。
+给出一个表达值 @${val \in \mathit{ExpVal}}，且 @${\lceil \lfloor val \rfloor
+\rceil \neq val}。
 
 }
 
